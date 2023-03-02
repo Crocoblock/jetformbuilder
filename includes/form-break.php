@@ -16,14 +16,21 @@ class Form_Break {
 
 	use Get_Template_Trait;
 
-	private $pages = 0;
-	private $form_breaks = array();
-	private $count_form_breaks = null;
-	private $current_page = 1;
+	private $pages              = 0;
+	private $form_breaks        = array();
+	private $count_form_breaks  = null;
+	private $current_page       = 1;
 	private $current_form_break = 0;
-	private $is_editor = false;
-	private $progress_type = 'default';
-	private $has_start = false;
+	private $is_editor          = false;
+	private $progress_type      = 'default';
+	private $has_start          = false;
+
+	/**
+	 * @since 3.0.1
+	 *
+	 * @var int
+	 */
+	private $page_offset        = 75;
 
 	public function get_pages() {
 		return $this->pages;
@@ -255,6 +262,24 @@ class Form_Break {
 		$this->has_start = false;
 
 		return $has_start;
+	}
+
+	/**
+	 * @since 3.0.1
+	 *
+	 * @return int
+	 */
+	public function get_page_offset(): int {
+		return $this->page_offset;
+	}
+
+	/**
+	 * @since 3.0.1
+	 *
+	 * @param int $offset
+	 */
+	public function set_page_offset( int $offset ) {
+		$this->page_offset = $offset;
 	}
 
 }

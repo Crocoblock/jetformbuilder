@@ -13,7 +13,8 @@ import {
 	getLanguage,
 	toHTML,
 	isEmpty,
-	getOffsetTop,
+	getOffsetTop, 
+	focusOnInvalidInput,
 	isVisible,
 } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
@@ -26,7 +27,10 @@ import {
 
 import './calc.module/main';
 import './switch-page-on-change/main';
-import { getParsedName } from './inputs/functions';
+import {
+	getParsedName,
+	populateInputs,
+} from './inputs/functions';
 import initForm from './init/initForm';
 import BaseHtmlAttr from './attrs/BaseHtmlAttr';
 
@@ -61,6 +65,8 @@ window.JetFormBuilderFunctions = {
 	isEmpty,
 	getValidateCallbacks,
 	getOffsetTop,
+	focusOnInvalidInput,
+	populateInputs,
 	isVisible,
 };
 

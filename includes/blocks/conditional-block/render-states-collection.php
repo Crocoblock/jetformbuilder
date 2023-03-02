@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Blocks\Conditional_Block;
 
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Base_Render_State;
+use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Custom_Render_State;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 
 // If this file is called directly, abort.
@@ -16,12 +17,23 @@ class Render_States_Collection extends Collection {
 	private $exclude_list = array();
 
 	/**
-	 * @param Base_Render_State $item
+	 * @param Base_Render_State|string $item
 	 *
 	 * @return Collection
 	 */
-	public function push( Base_Render_State $item ): Collection {
-		array_push( $this->exclude_list, ...$item->exclude_states() );
+	public function push( $item ): Collection {
+		if ( ! is_object( $item ) ) {
+			$custom = new Custom_Render_State();
+			$custom->set_id( $item );
+
+			return $this->push( $custom );
+		}
+
+		$states = $item->exclude_states();
+
+		if ( count( $states ) ) {
+			array_push( $this->exclude_list, ...$states );
+		}
 
 		return $this->add( $item );
 	}

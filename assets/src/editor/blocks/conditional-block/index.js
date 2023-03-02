@@ -3,7 +3,7 @@ import metadata from '@blocks/conditional-block/block.json';
 import ConditionalSave from './save';
 import v3 from './deprecations/v3';
 
-const { __ } = wp.i18n;
+const { __, sprintf } = wp.i18n;
 
 const { createBlock, createBlocksFromInnerBlocksTemplate } = wp.blocks;
 
@@ -21,6 +21,34 @@ const settings = {
 	edit: ConditionalBlockEdit,
 	save: ConditionalSave,
 	useEditProps: [ 'uniqKey' ],
+	jfbGetFields: () => [],
+	/**
+	 * @param attributes
+	 * @param context {{|'accessibility'|'visual'|'list-view'}}
+	 * @returns {*}
+	 * @private
+	 */
+	__experimentalLabel: ( attributes, { context } ) => {
+		if ( context !== 'list-view' ) {
+			return;
+		}
+		const funcObject = wp.data.select( 'jet-forms/block-conditions' ).
+			getFunction(
+				attributes?.func_type,
+			);
+
+		const funcLabel       = funcObject?.label;
+		const conditionsCount = attributes?.conditions?.reduce(
+			( prev, current ) => current?.or_operator ? prev : prev + 1,
+			0,
+		) ?? 0;
+
+		return sprintf(
+			__( '%s %d condition(s)', 'jet-form-builder' ),
+			funcLabel,
+			conditionsCount,
+		);
+	},
 	example: {
 		innerBlocks: [
 			{
@@ -55,13 +83,15 @@ const settings = {
 						innerBlocks,
 					} ) => [ name, { ...attributes }, innerBlocks ] );
 
-					return createBlock( name, {}, createBlocksFromInnerBlocksTemplate( innerBlocksTemplate ) );
+					return createBlock( name, {},
+						createBlocksFromInnerBlocksTemplate(
+							innerBlocksTemplate ) );
 				},
 				priority: 0,
 			},
 		],
 	},
-	deprecated: [ v3 ]
+	deprecated: [ v3 ],
 };
 
 export {

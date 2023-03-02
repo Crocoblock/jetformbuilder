@@ -17,8 +17,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Hidden_Field extends Base {
 
-	public $use_style_manager = false;
-	private $rendering = true;
+	public  $use_style_manager = false;
+	private $rendering         = true;
 
 	private function current_post() {
 		return Live_Form::instance()->post;
@@ -84,6 +84,22 @@ class Hidden_Field extends Base {
 		parent::set_preset();
 
 		$this->block_attrs['field_value'] = $this->get_hidden_field_value();
+
+		if ( ! $this->is_need_raw() || is_scalar( $this->block_attrs['field_value'] ) ) {
+			return;
+		}
+
+		$this->block_attrs['field_value'] = Tools::encode_json( $this->block_attrs['field_value'] );
+	}
+
+	public function expected_preset_type(): array {
+		return $this->is_need_raw()
+			? array( self::PRESET_EXACTLY )
+			: parent::expected_preset_type();
+	}
+
+	public function is_need_raw(): bool {
+		return $this->block_attrs['return_raw'] ?? false;
 	}
 
 	public function get_hidden_field_value() {

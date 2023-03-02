@@ -1,4 +1,4 @@
-import { createInput } from './inputs/functions';
+import { createInput, populateInputs } from './inputs/functions';
 import FormSubmit from './submit/FormSubmit';
 import {
 	iterateJfbComments,
@@ -7,6 +7,7 @@ import {
 	queryByAttrValue,
 } from './html.macro/functions';
 import { validateInputsAll } from './reporting/functions';
+import ReportingContext from './reporting/ReportingContext';
 
 const {
 	      doAction,
@@ -19,6 +20,13 @@ function Observable( parent = null ) {
 	this.multistep  = null;
 	this.rootNode   = null;
 	this.isObserved = false;
+
+	/**
+	 * @since 3.0.1
+	 *
+	 * @type {ReportingContext}
+	 */
+	this.context = this.parent ? null : new ReportingContext( this );
 }
 
 Observable.prototype = {
@@ -137,10 +145,9 @@ Observable.prototype = {
 	 * @return {Promise<Promise<never>|Promise<void>>}
 	 */
 	inputsAreValid: async function () {
-		for ( const input of this.getInputs() ) {
-			input.onForceValidate();
-		}
-		const invalid = await validateInputsAll( this.getInputs() );
+		const invalid = await validateInputsAll(
+			populateInputs( this.getInputs() ),
+		);
 
 		return Boolean( invalid.length )
 		       ? Promise.reject( invalid )
@@ -241,6 +248,9 @@ Observable.prototype = {
 	},
 	getSubmit: function () {
 		return this.form ? this.form : this.parent.root.form;
+	},
+	getContext: function () {
+		return this.context ?? this.parent.root.context;
 	},
 };
 

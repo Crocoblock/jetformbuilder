@@ -14,6 +14,7 @@ const {
 const {
 	      useInsertMacro,
 	      useIsAdvancedValidation,
+	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
 
 const { __ } = wp.i18n;
@@ -48,6 +49,8 @@ export default function TimeEdit( props ) {
 	const [ minInput, updateMin ] = useInsertMacro( 'min' );
 	const [ maxInput, updateMax ] = useInsertMacro( 'max' );
 	const isAdvancedValidation    = useIsAdvancedValidation();
+
+	useUniqueNameOnDuplicate();
 
 	return [
 		<ToolBarFields

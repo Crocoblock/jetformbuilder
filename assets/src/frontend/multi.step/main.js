@@ -5,9 +5,6 @@ const {
 	      addAction,
 	      addFilter,
       } = JetPlugins.hooks;
-const {
-	      getOffsetTop,
-      } = JetFormBuilderFunctions;
 
 addAction(
 	'jet.fb.observe.after',
@@ -46,5 +43,29 @@ addFilter(
 		items = [ ConditionPageStateItem, ...items ];
 
 		return items;
+	},
+);
+
+addAction(
+	'jet.fb.multistep.init',
+	'jet-form-builder/multi-step/autoscroll',
+	/**
+	 * @param multistep {MultiStepState}
+	 */
+	function ( multistep ) {
+		if ( !window?.JetFormBuilderSettings?.scroll_on_next ) {
+			return;
+		}
+		multistep.index.watch( () => {
+			/**
+			 * @type {PageState|boolean}
+			 */
+			const page = multistep.getCurrentPage();
+
+			window.scrollTo( {
+				top: page.getOffsetTop(),
+				behavior: 'smooth',
+			} );
+		} );
 	},
 );

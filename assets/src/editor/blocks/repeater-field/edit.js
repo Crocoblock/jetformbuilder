@@ -4,44 +4,44 @@ import {
 } from './options';
 
 const {
-	ToolBarFields,
-	GeneralFields,
-	AdvancedFields,
-	FieldWrapper,
-} = JetFBComponents;
+	      ToolBarFields,
+	      GeneralFields,
+	      AdvancedFields,
+	      FieldWrapper,
+      } = JetFBComponents;
 
 const {
-	getFieldsWithoutCurrent,
-	Tools,
-} = JetFBActions;
+	      Tools,
+      } = JetFBActions;
+
+const {
+	      useUniqueNameOnDuplicate,
+	      useFields,
+      } = JetFBHooks;
 
 const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	InnerBlocks,
-	useBlockProps,
-	RichText,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+	      InspectorControls,
+	      InnerBlocks,
+	      useBlockProps,
+	      RichText,
+      } = wp.blockEditor;
 
 const {
-	select,
-} = wp.data;
+	      useState,
+      } = wp.element;
 
 const {
-	useState,
-} = wp.element;
-
-const {
-	TextControl,
-	TextareaControl,
-	SelectControl,
-	PanelBody,
-	Button,
-	Popover,
-	BaseControl,
-	__experimentalNumberControl,
-} = wp.components;
+	      TextControl,
+	      TextareaControl,
+	      SelectControl,
+	      PanelBody,
+	      Button,
+	      Popover,
+	      BaseControl,
+	      __experimentalNumberControl,
+      } = wp.components;
 
 let { NumberControl } = wp.components;
 
@@ -53,15 +53,16 @@ export default function RepeaterEdit( props ) {
 	const blockProps = useBlockProps();
 
 	const [ showMacros, setShowMacros ] = useState( false );
+	useUniqueNameOnDuplicate();
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey },
-	} = props;
+		      attributes,
+		      setAttributes,
+		      isSelected,
+		      editProps: { uniqKey },
+	      } = props;
 
-	const formFields = getFieldsWithoutCurrent();
+	const formFields = useFields( { excludeCurrent: true } );
 
 	const insertMacros = ( macros ) => {
 		const formula = attributes.calc_formula || '';
@@ -79,7 +80,7 @@ export default function RepeaterEdit( props ) {
 					isTertiary
 					isSmall
 					icon={ showMacros ? 'no-alt' : 'admin-tools' }
-					onClick={ () => setShowMacros( toggle => ! toggle ) }
+					onClick={ () => setShowMacros( toggle => !toggle ) }
 				/>
 				{ showMacros && <Popover
 					key={ uniqKey( 'Popover' ) }
@@ -103,15 +104,15 @@ export default function RepeaterEdit( props ) {
 		isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }
 		>
-			<GeneralFields hasMacro={ false } />
+			<GeneralFields hasMacro={ false }/>
 			<PanelBody
 				title={ __( 'Field', 'jet-form-builder' ) }
 				key={ uniqKey( 'PanelBody' ) }
 			>
 				<SelectControl
-					key='manage_items_count'
+					key="manage_items_count"
 					label={ __( 'Manage repeater items count' ) }
-					labelPosition='top'
+					labelPosition="top"
 					value={ attributes.manage_items_count }
 					onChange={ newValue => {
 						props.setAttributes( { manage_items_count: newValue } );
@@ -119,43 +120,51 @@ export default function RepeaterEdit( props ) {
 					options={ manageItemsCount }
 				/>
 				{ 'manually' === attributes.manage_items_count && <TextControl
-					key='new_item_label'
+					key="new_item_label"
 					label={ __( 'Add New Item Label' ) }
 					value={ attributes.new_item_label }
 					onChange={ ( newValue ) => {
 						props.setAttributes( { new_item_label: newValue } );
 					} }
 				/> }
-				{ 'dynamically' === attributes.manage_items_count && <SelectControl
-					key='manage_items_count_field'
+				{ 'dynamically' === attributes.manage_items_count &&
+				<SelectControl
+					key="manage_items_count_field"
 					label={ __( 'Field items count' ) }
-					labelPosition='top'
+					labelPosition="top"
 					value={ attributes.manage_items_count_field }
 					onChange={ newValue => {
-						props.setAttributes( { manage_items_count_field: newValue } );
+						props.setAttributes(
+							{ manage_items_count_field: newValue } );
 					} }
 					options={ Tools.withPlaceholder( formFields ) }
 				/> }
 
 				<SelectControl
-					key='repeater_calc_type'
+					key="repeater_calc_type"
 					label={ __( 'Calculate repeater row value' ) }
-					labelPosition='top'
+					labelPosition="top"
 					value={ attributes.repeater_calc_type }
 					onChange={ newValue => {
 						props.setAttributes( { repeater_calc_type: newValue } );
 					} }
 					options={ calcType }
 				/>
-				{ 'custom' === attributes.repeater_calc_type && <div className="jet-form-editor__row-notice">
-					{ __( 'Set math formula to calculate field value.', 'jet-form-builder' ) }<br/>
+				{ 'custom' === attributes.repeater_calc_type &&
+				<div className="jet-form-editor__row-notice">
+					{ __( 'Set math formula to calculate field value.',
+						'jet-form-builder' ) }<br/>
 					{ __( 'For example:', 'jet-form-builder' ) }<br/><br/>
 					%FIELD::quantity%*%META::price%<br/><br/>
 					{ __( 'Where:', 'jet-form-builder' ) }<br/>
 					-
-					{ __( '%FIELD::quantity% - macro for form field value. "quantity" - is a field name to get value from', 'jet-form-builder' ) }<br/>
+					{ __(
+						'%FIELD::quantity% - macro for form field value. "quantity" - is a field name to get value from',
+						'jet-form-builder' ) }<br/>
 					-
-					{ __( '%META::price% - macro for current post meta value. "price" - is a meta key to get value from', 'jet-form-builder' ) }<br/><br/>
+					{ __(
+						'%META::price% - macro for current post meta value. "price" - is a meta key to get value from',
+						'jet-form-builder' ) }<br/><br/>
 				</div> }
 
 
@@ -166,7 +175,8 @@ export default function RepeaterEdit( props ) {
 			/>
 		</InspectorControls>,
 		<div key={ uniqKey( 'Fragment' ) } { ...blockProps }>
-			{ 'custom' === attributes.repeater_calc_type && <div className="jet-forms__calc-formula-editor">
+			{ 'custom' === attributes.repeater_calc_type &&
+			<div className="jet-forms__calc-formula-editor">
 				<div className="jet-form-editor__macros-wrap">
 					<TextareaControl
 						key="calc_formula"
@@ -181,7 +191,7 @@ export default function RepeaterEdit( props ) {
 			</div> }
 			<FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
-				childrenPosition='bottom'
+				childrenPosition="bottom"
 				{ ...props }
 			>
 				<InnerBlocks
@@ -202,10 +212,11 @@ export default function RepeaterEdit( props ) {
 						} }
 					>
 						<RichText
-							placeholder='Add New'
+							placeholder="Add New"
 							allowedFormats={ [] }
 							value={ attributes.new_item_label }
-							onChange={ new_item_label => setAttributes( { new_item_label } ) }
+							onChange={ new_item_label => setAttributes(
+								{ new_item_label } ) }
 						/>
 					</Button>
 				</div>

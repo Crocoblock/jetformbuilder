@@ -1,11 +1,15 @@
 import ReactiveVar from '../reactive/ReactiveVar';
 
+const { strict_mode = false } = window?.JetFormBuilderSettings;
+
+const STRICT_MODE = Boolean( strict_mode );
+
 function BaseSignal() {
 	this.input = null;
 	this.lock  = new ReactiveVar();
 	this.lock.make();
 
-	this.triggerjQuery = true;
+	this.triggerjQuery = !STRICT_MODE;
 }
 
 BaseSignal.prototype = {
@@ -62,8 +66,12 @@ BaseSignal.prototype = {
 	 * @since 3.0.1
 	 */
 	unlockTrigger: function () {
+		if ( STRICT_MODE ) {
+			return;
+		}
 		this.triggerjQuery = true;
 	},
 };
 
+export { STRICT_MODE };
 export default BaseSignal;

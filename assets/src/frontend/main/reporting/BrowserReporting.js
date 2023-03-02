@@ -5,12 +5,16 @@ import { createDefaultRestrictions } from './functions';
 function BrowserReporting() {
 	ReportingInterface.call( this );
 
-	this.isSupported      = function ( node, input ) {
+	this.isSupported = function ( node, input ) {
 		return true;
 	};
-	this.report           = function ( validationErrors ) {
+
+	this.reportRaw   = function ( validationErrors ) {
+	};
+	this.reportFirst = function ( validationErrors ) {
 		this.getNode().reportValidity();
 	};
+
 	this.setRestrictions  = function () {
 		const [ node ] = this.input.nodes;
 
@@ -24,13 +28,25 @@ function BrowserReporting() {
 	};
 
 	this.getErrorsRaw = async function ( promises ) {
+		const errors   = await allRejected( promises );
 		this.valuePrev = this.input.getValue();
 
-		return await allRejected( promises );
+		return errors;
 	};
 
-	this.validateOnChangeState = function ( silence = false ) {
-		return silence ? this.validate() : this.validateWithNotice();
+	this.validateOnChangeState = function () {
+		return this.validate();
+	};
+
+	this.hasAutoScroll = function () {
+		return this.input.hasAutoScroll();
+	};
+
+	/**
+	 * @returns {HTMLInputElement|HTMLElement}
+	 */
+	this.getNode = function () {
+		return this.input.getReportingNode();
 	};
 }
 

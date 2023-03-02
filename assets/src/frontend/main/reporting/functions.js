@@ -85,6 +85,8 @@ function createReport( input ) {
 function getValidateCallbacks( inputs, silence = false ) {
 	const callbacks = [];
 
+	inputs?.[ 0 ]?.getContext()?.reset( { silence } );
+
 	for ( const input of inputs ) {
 		if ( !(
 			input instanceof InputData
@@ -97,13 +99,9 @@ function getValidateCallbacks( inputs, silence = false ) {
 		}
 		callbacks.push(
 			( resolve, reject ) => {
-				input.reporting.validateOnChangeState( silence ).
+				input.reporting.validateOnChangeState().
 					then( resolve ).
-					catch( reject ).finally(
-					() => {
-						input.reporting.isSilence = null;
-					},
-				);
+					catch( reject );
 			},
 		);
 	}
@@ -117,9 +115,11 @@ function getValidateCallbacks( inputs, silence = false ) {
  * @return {Promise<unknown[]>}
  */
 function validateInputs( inputs, silence = false ) {
-	return Promise.all( getValidateCallbacks( inputs, silence ).map(
-		current => new Promise( current ),
-	) );
+	return Promise.all(
+		getValidateCallbacks( inputs, silence ).map(
+			current => new Promise( current ),
+		),
+	);
 }
 
 /**

@@ -12,6 +12,7 @@ const {
       } = JetFBComponents;
 const {
 	      useIsAdvancedValidation,
+	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
 const {
 	      __,
@@ -39,6 +40,7 @@ if ( typeof NumberControl === 'undefined' ) {
 export default function NumberEdit( props ) {
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
+	useUniqueNameOnDuplicate();
 
 	const {
 		      attributes,

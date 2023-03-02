@@ -1,38 +1,20 @@
 import MacrosFieldsTemplate from './MacrosFieldsTemplate';
-import PopoverItem from '../context/PopoverItem';
-
-const {
-	      useContext,
-      } = wp.element;
-const {
-	      Button,
-      } = wp.components;
-
-function FieldItem( { onClick } ) {
-	const field = useContext( PopoverItem );
-
-	const value = field.fullName
-	              ? field.fullName()
-	              : `%${ field.value }%`;
-
-	return <Button
-		isLink
-		onClick={ () => onClick( value ) }
-	>
-		{ value }
-	</Button>;
-}
+import MacroFieldItem from './MacroFieldItem';
+import useFields from '../../blocks/hooks/useFields';
 
 function MacrosFields( {
 	onClick = () => {},
 	withCurrent = false,
 	...props
 } ) {
+	const fields = useFields( { excludeCurrent: !withCurrent } );
+
 	return <MacrosFieldsTemplate
 		withCurrent={ withCurrent }
+		fields={ fields }
 		{ ...props }
 	>
-		<FieldItem onClick={ onClick }/>
+		<MacroFieldItem onClick={ onClick }/>
 	</MacrosFieldsTemplate>;
 }
 

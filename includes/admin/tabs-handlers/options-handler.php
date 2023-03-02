@@ -10,34 +10,34 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Options_Handler extends Base_Handler {
 
+	const OPTIONS = array(
+		'enable_dev_mode'     => false,
+		'clear_on_uninstall'  => false,
+		'disable_next_button' => true,
+		'scroll_on_next'      => false,
+		'auto_focus'          => false,
+	);
+
 	public function slug() {
 		return 'options-tab';
 	}
 
 	public function on_get_request() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$dev_mode           = 'true' === sanitize_key( $_POST['enable_dev_mode'] ?? '' );
-		$next_disable       = 'true' === sanitize_key( $_POST['disable_next_button'] ?? '' );
-		$clear_on_uninstall = 'true' === sanitize_key( $_POST['clear_on_uninstall'] ?? '' );
+		$options = array();
 
-		$result = $this->update_options(
-			array(
-				'enable_dev_mode'     => $dev_mode,
-				'disable_next_button' => $next_disable,
-				'clear_on_uninstall'  => $clear_on_uninstall,
-			)
-		);
+		foreach ( self::OPTIONS as $name => $default ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$options[ $name ] = array_key_exists( $name, $_POST )
+				? 'true' === sanitize_key( $_POST[ $name ] )
+				: $default;
+		}
+
+		$result = $this->update_options( $options );
 
 		$this->send_response( $result );
 	}
 
 	public function on_load() {
-		return $this->get_options(
-			array(
-				'enable_dev_mode'     => false,
-				'disable_next_button' => true,
-				'clear_on_uninstall'  => false,
-			)
-		);
+		return $this->get_options( self::OPTIONS );
 	}
 }

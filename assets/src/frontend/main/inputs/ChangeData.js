@@ -1,6 +1,7 @@
 import InputData from './InputData';
 import { isChangeType } from '../supports';
 import ReactiveHook from '../reactive/ReactiveHook';
+import { STRICT_MODE } from '../signals/BaseSignal';
 
 function ChangeData() {
 	InputData.call( this );
@@ -15,7 +16,10 @@ function ChangeData() {
 			this.value.current = event.target.value;
 		} );
 
-		jQuery( node ).on( 'change', event => {
+		!STRICT_MODE && jQuery( node ).on( 'change', event => {
+			if ( this.value.current == event.target.value ) {
+				return;
+			}
 			this.callable.lockTrigger();
 			this.value.current = event.target.value;
 			this.callable.unlockTrigger();

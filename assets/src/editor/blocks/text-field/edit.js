@@ -17,9 +17,11 @@ const {
 	      ValidationBlockMessage,
 	      BlockAdvancedValue,
 	      EditAdvancedRulesButton,
+	      BaseHelp,
       } = JetFBComponents;
 const {
 	      useIsAdvancedValidation,
+	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
 const {
 	      __,
@@ -39,9 +41,7 @@ const {
 
 let { NumberControl } = wp.components;
 
-if ( typeof NumberControl === 'undefined' ) {
-	NumberControl = __experimentalNumberControl;
-}
+NumberControl = NumberControl || __experimentalNumberControl;
 
 export default function TextEdit( props ) {
 	const {
@@ -61,6 +61,8 @@ export default function TextEdit( props ) {
 
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
+
+	useUniqueNameOnDuplicate();
 
 	return [
 		<ToolBarFields
@@ -116,6 +118,16 @@ export default function TextEdit( props ) {
 					} }
 				/>
 				{ attributes.enable_input_mask && <React.Fragment>
+					<ToggleControl
+						label={ __(
+							'Clear mask before submit',
+							'jet-form-builder',
+						) }
+						checked={ attributes.clear_on_submit }
+						onChange={ clear_on_submit => setAttributes(
+							{ clear_on_submit },
+						) }
+					/>
 					<SelectControl
 						key="mask_type"
 						label={ __( 'Mask type' ) }
@@ -136,19 +148,21 @@ export default function TextEdit( props ) {
 					/>
 					{ (
 						!attributes.mask_type
-					) && <div className={ 'help-input' }>
+					) && <BaseHelp style={ { marginBottom: '2em' } }>
 						{ attrHelp( 'input_mask_default' ) }
-					</div> }
+					</BaseHelp> }
 
-					{ 'datetime' === attributes.mask_type &&
-					<div className={ 'help-input' }>
-						{ __( 'Examples:', 'jet-form-builder' ) } dd/mm/yyyy,
-						mm/dd/yyyy<br/>
-						{ __( 'More info - ', 'jet-form-builder' ) }
-						<a href={ attrHelp( 'input_mask_datetime_link' ) }
-						   target="_blank">{ __( 'here',
-							'jet-form-builder' ) }</a>
-					</div> }
+					{ 'datetime' === attributes.mask_type && (
+						<BaseHelp style={ { marginBottom: '2em' } }>
+							{ __( 'Examples:',
+								'jet-form-builder' ) } dd/mm/yyyy,
+							mm/dd/yyyy<br/>
+							{ __( 'More info - ', 'jet-form-builder' ) }
+							<a href={ attrHelp( 'input_mask_datetime_link' ) }
+							   target="_blank">{ __( 'here',
+								'jet-form-builder' ) }</a>
+						</BaseHelp>
+					) }
 
 					<SelectControl
 						key="mask_visibility"

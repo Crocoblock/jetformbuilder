@@ -166,6 +166,8 @@ import useUpdateCurrentActionMeta
 import useActionsEdit from './actions/hooks/useActionsEdit';
 import useActionCallback from './actions/hooks/useActionCallback';
 import useActionDetail from './actions/hooks/useActionDetail';
+import useUniqueNameOnDuplicate from './blocks/hooks/useUniqueNameOnDuplicate';
+import useFields from './blocks/hooks/useFields';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -319,5 +321,7 @@ window.JetFBHooks = {
 	useActionsEdit,
 	useActionCallback,
 	useActionDetail,
+	useUniqueNameOnDuplicate,
+	useFields: useFields,
 };
 

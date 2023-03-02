@@ -15,15 +15,15 @@ function RepeaterData() {
 	this.lastObserved = new ReactiveVar();
 	this.lastObserved.make();
 
-	this.isSupported = function ( node ) {
+	this.isSupported  = function ( node ) {
 		return isRepeater( node );
 	};
-	this.valueType   = function () {
-		return false;
-	};
-
 	this.addListeners = function () {
 		// silence is golden
+	};
+
+	this.hasAutoScroll = function () {
+		return false;
 	};
 
 	this.setValue = function () {
@@ -113,15 +113,27 @@ function RepeaterData() {
 		this.value.current = [];
 	};
 
-	this.onForceValidate = function () {
-		this.reporting.valuePrev = null;
-
-		for ( const restriction of this.reporting.restrictions ) {
-			if ( !restriction.hasOwnProperty( 'silenceInner' ) ) {
-				continue;
-			}
-			restriction.silenceInner = false;
+	this.populateInner = function () {
+		if ( !this.value.current?.length ) {
+			return false;
 		}
+
+		const inputs = [];
+		/**
+		 * @type {ObservableRow[]}
+		 */
+		const rows   = this.value.current;
+
+		for ( const row of rows ) {
+			for ( const input of row.getInputs() ) {
+				if ( !input.reporting?.restrictions?.length ) {
+					continue;
+				}
+				inputs.push( input );
+			}
+		}
+
+		return inputs;
 	};
 }
 

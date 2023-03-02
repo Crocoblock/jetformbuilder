@@ -43,6 +43,7 @@ class Render_State implements Arrayable {
 
 		add_action( 'jet-form-builder/after-trigger-event', array( $this, 'execute_render_states_events' ) );
 		add_action( 'jet-form-builder/form-handler/before-send', array( $this, 'set_current' ) );
+		add_filter( 'jet-form-builder/frontend-settings', array( $this, 'add_built_in_states_to_script' ) );
 	}
 
 	/**
@@ -72,6 +73,20 @@ class Render_State implements Arrayable {
 		foreach ( $render_states as $state ) {
 			jet_fb_events()->execute( $state );
 		}
+	}
+
+	public function add_built_in_states_to_script( array $localize_data ): array {
+		$states = $this->rep_get_items();
+		$keys   = array();
+
+		/** @var Base_Render_State $state */
+		foreach ( $states as $state ) {
+			$keys[] = $state->get_id();
+		}
+
+		$localize_data['builtInStates'] = $keys;
+
+		return $localize_data;
 	}
 
 	/**
@@ -115,12 +130,13 @@ class Render_State implements Arrayable {
 		}
 
 		$this->current->confirm();
+		$this->set_states_from_url();
 		$this->set_current_default();
 
 		return $this;
 	}
 
-	public function set_current_default() {
+	protected function set_current_default() {
 		if ( count( $this->current ) ) {
 			return;
 		}
@@ -136,6 +152,27 @@ class Render_State implements Arrayable {
 		}
 
 		$this->current->push( $state );
+	}
+
+	protected function set_states_from_url() {
+		$custom         = self::get_states();
+		$raw_url_states = sanitize_text_field( $_GET['jfb'][ jet_fb_live()->form_id ]['state'] ?? '' );
+
+		if ( ! $raw_url_states || ! count( $custom ) ) {
+			return;
+		}
+
+		$url_states = array_map( 'trim', explode( ',', $raw_url_states ) );
+
+		foreach ( $custom as $item_state ) {
+			$slug = $item_state['value'] ?? '';
+
+			if ( ! in_array( $slug, $url_states, true ) ) {
+				continue;
+			}
+
+			$this->current->push( $slug );
+		}
 	}
 
 	public function to_array(): array {

@@ -52,6 +52,16 @@ function WysiwygData() {
 	};
 
 	this.initNotifyValue = () => {};
+
+	this.focusRaw = function () {
+		window.tinymce.get( this.textArea.id )?.getBody()?.focus(
+			{ preventScroll: true },
+		);
+	};
+
+	this.hasAutoScroll = function () {
+		return false;
+	};
 }
 
 WysiwygData.prototype = Object.create( InputData.prototype );

@@ -4,7 +4,8 @@ import ReactiveHook from '../reactive/ReactiveHook';
 import { getSignal } from '../signals/functions';
 import { createReport } from '../reporting/functions';
 import { getParsedName } from './functions';
-import { isVisible, setAttrs } from '../functions';
+import { getOffsetTop, setAttrs, isVisible } from '../functions';
+import { STRICT_MODE } from '../signals/BaseSignal';
 
 const { doAction } = JetPlugins.hooks;
 
@@ -28,13 +29,14 @@ const { doAction } = JetPlugins.hooks;
  * @constructor
  */
 function InputData() {
-	this.rawName   = '';
-	this.name      = '';
-	this.comment   = false;
-	this.nodes     = [];
-	this.attrs     = {};
-	this.enterKey  = null;
-	this.inputType = null;
+	this.rawName       = '';
+	this.name          = '';
+	this.comment       = false;
+	this.nodes         = [];
+	this.attrs         = {};
+	this.enterKey      = null;
+	this.inputType     = null;
+	this.offsetOnFocus = 75;
 
 	/**
 	 * @type {ReactiveVar}
@@ -79,7 +81,10 @@ InputData.prototype.addListeners = function () {
 	/**
 	 * @since 3.0.1
 	 */
-	jQuery( node ).on( 'change', event => {
+	!STRICT_MODE && jQuery( node ).on( 'change', event => {
+		if ( this.value.current == event.target.value ) {
+			return;
+		}
 		this.callable.lockTrigger();
 		this.value.current = event.target.value;
 		this.callable.unlockTrigger();
@@ -235,12 +240,6 @@ InputData.prototype.isArray = function () {
 	return this.rawName.includes( '[]' );
 };
 /**
- * @return {*}
- */
-InputData.prototype.valueType = function () {
-	return String;
-};
-/**
  * @param callable {Function|mixed}
  */
 InputData.prototype.beforeSubmit = function ( callable ) {
@@ -318,9 +317,6 @@ InputData.prototype.getWrapperNode = function () {
 	return this.nodes[ 0 ].closest( '.jet-form-builder-row' );
 };
 
-InputData.prototype.onForceValidate = function () {
-};
-
 InputData.prototype.handleEnterKey = function ( event ) {
 	// not enter
 	if ( +event.keyCode !== 13 ) {
@@ -342,6 +338,61 @@ InputData.prototype.onEnterKey = function () {
 
 InputData.prototype.initNotifyValue = function () {
 	this.silenceNotify();
+};
+
+InputData.prototype.onFocus  = function () {
+	this.scrollTo();
+	this.focusRaw();
+};
+InputData.prototype.focusRaw = function () {
+	const [ node ] = this.nodes;
+
+	/**
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/2265#issuecomment-1447988718
+	 */
+	if ( [ 'date', 'time', 'datetime-local' ].includes( node.type ) ) {
+		return;
+	}
+
+	node?.focus( { preventScroll: true } );
+};
+InputData.prototype.scrollTo = function () {
+	const wrapper = this.getWrapperNode();
+
+	window.scrollTo( {
+		top: getOffsetTop( wrapper ) - this.offsetOnFocus,
+		behavior: 'smooth',
+	} );
+};
+
+/**
+ * @return {ReportingContext}
+ */
+InputData.prototype.getContext = function () {
+	return this.root.getContext();
+};
+
+/**
+ * @return {boolean|InputData[]}
+ */
+InputData.prototype.populateInner = function () {
+	return false;
+};
+
+/**
+ * Executed with default browser validation
+ *
+ * @returns {boolean}
+ */
+InputData.prototype.hasAutoScroll = function () {
+	return true;
+};
+
+/**
+ * @returns {HTMLInputElement|HTMLElement}
+ */
+InputData.prototype.getReportingNode = function () {
+	return this.nodes[ 0 ];
 };
 
 export default InputData;

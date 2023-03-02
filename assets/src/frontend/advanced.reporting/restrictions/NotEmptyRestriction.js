@@ -8,10 +8,7 @@ function NotEmptyRestriction() {
 	AdvancedRestriction.call( this );
 
 	this.isSupported   = function ( node, reporting ) {
-		return reporting.input.isRequired &&
-			[ String, Array, FileList ].includes(
-				reporting.input.valueType(),
-			);
+		return reporting.input.isRequired;
 	};
 	this.validate      = function () {
 		const value = this.getValue();

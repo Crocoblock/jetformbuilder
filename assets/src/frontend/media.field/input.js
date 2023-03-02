@@ -50,9 +50,6 @@ function FileData() {
 
 		this.isMultiple = node.multiple;
 	};
-	this.valueType    = function () {
-		return FileList;
-	};
 
 	this.setValue = function () {
 		this.callable.loadFiles();

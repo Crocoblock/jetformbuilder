@@ -17,7 +17,7 @@ function AdvancedInspectorControl( {
 	onChangeMacros = false,
 } ) {
 
-	const instanceId = useInstanceId( FlexItem, 'jfb-AdvancedModalControl' );
+	const instanceId = useInstanceId( FlexItem, 'jfb-AdvancedInspectorControl' );
 
 	return <>
 		<Flex

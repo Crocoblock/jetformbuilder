@@ -51,6 +51,12 @@ class Post_Type {
 
 		add_filter( "manage_{$this->slug()}_posts_columns", array( $this, 'filter_columns' ) );
 		add_action( "manage_{$this->slug()}_posts_custom_column", array( $this, 'add_admin_column_content' ), 10, 2 );
+
+		/**
+		 * @since 3.0.1
+		 */
+		add_filter( 'gutenberg_can_edit_post_type', array( $this, 'can_edit_post_type' ), 150, 2 );
+		add_filter( 'use_block_editor_for_post_type', array( $this, 'can_edit_post_type' ), 150, 2 );
 	}
 
 	public function rep_instances(): array {
@@ -124,6 +130,17 @@ class Post_Type {
 
 	public function is_form_list_page() {
 		return ( "edit-{$this->slug()}" === $this->screen->id );
+	}
+
+	/**
+	 * @param $can
+	 * @param $post_type
+	 *
+	 * @return bool
+	 * @since 3.0.1
+	 */
+	public function can_edit_post_type( $can, $post_type ): bool {
+		return $this->slug() === $post_type ? true : $can;
 	}
 
 	/**

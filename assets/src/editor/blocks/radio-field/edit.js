@@ -25,6 +25,10 @@ const {
 	      PanelBody,
       } = wp.components;
 
+const {
+	      useUniqueNameOnDuplicate,
+      } = JetFBHooks;
+
 export default function RadioEdit( props ) {
 
 	const {
@@ -35,6 +39,7 @@ export default function RadioEdit( props ) {
 	      } = props;
 
 	const blockProps = useBlockProps();
+	useUniqueNameOnDuplicate();
 
 	return [
 		<ToolBarFields

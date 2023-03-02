@@ -5,6 +5,7 @@ import SignalHiddenArray from './SignalHiddenArray';
 import SignalRange from './SignalRange';
 import SignalWysiwyg from './SignalWysiwyg';
 import SignalText from './SignalText';
+import SignalRenderState from './SignalRenderState';
 
 const {
 	      applyFilters,
@@ -18,6 +19,7 @@ const getSignalTypes = () => applyFilters(
 		SignalSelect,
 		SignalCheckbox,
 		SignalRadio,
+		SignalRenderState,
 		SignalHiddenArray,
 		SignalText,
 	],

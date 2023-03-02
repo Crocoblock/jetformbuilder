@@ -78,4 +78,21 @@ function getParsedName( name ) {
 	return name;
 }
 
-export { getParsedName, createInput };
+/**
+ * @param inputs {InputData[]}
+ */
+function populateInputs( inputs ) {
+	const list = [];
+
+	for ( const input of inputs ) {
+		const inner = input.populateInner();
+
+		inner?.length && list.push( ...inner );
+
+		list.push( input );
+	}
+
+	return list;
+}
+
+export { getParsedName, createInput, populateInputs };

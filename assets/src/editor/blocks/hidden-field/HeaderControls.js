@@ -1,0 +1,38 @@
+const {
+	      ToggleControl,
+	      withFilters,
+      } = wp.components;
+
+const { __ } = wp.i18n;
+
+const {
+	      useBlockAttributes,
+      } = JetFBHooks;
+
+let HeaderControls = function () {
+	const [ attributes, setAttributes ] = useBlockAttributes();
+
+	return <>
+		{ 'referer_url' !== attributes.field_value && <ToggleControl
+			label={ __( 'Render in HTML', 'jet-form-builder' ) }
+			checked={ attributes.render }
+			onChange={ render => setAttributes(
+				{ render: Boolean( render ) } ) }
+		/> }
+		<ToggleControl
+			label={ __( 'Return the raw value', 'jet-form-builder' ) }
+			help={ __( `If this option is enabled, the value of the 
+field will be JSON-encoded if the value is an array or object`,
+				'jet-form-builder',
+			) }
+			checked={ attributes.return_raw }
+			onChange={ return_raw => setAttributes( { return_raw } ) }
+		/>
+	</>;
+};
+
+HeaderControls = withFilters(
+	'jfb.hidden-field.header.controls',
+)( HeaderControls );
+
+export default HeaderControls;

@@ -413,9 +413,13 @@ class Tools {
 	public static function sanitize_text_field( $source, $replace_enqueue = true ) {
 		$str = (string) $source;
 
-		$filtered = wp_check_invalid_utf8( $str );
-		if ( $replace_enqueue ) {
-			$filtered = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $filtered );
+		$filtered          = wp_check_invalid_utf8( $str );
+		$sanitize_callback = apply_filters( 'jet-form-builder/sanitize-string/callback', false );
+
+		if ( $sanitize_callback && is_callable( $sanitize_callback ) ) {
+			$filtered = call_user_func( $sanitize_callback, $filtered );
+		} else if ( $replace_enqueue && false !== strpos( $filtered, '<' ) ) {
+			$filtered = wp_kses_post( $filtered );
 		}
 
 		return trim( $filtered );

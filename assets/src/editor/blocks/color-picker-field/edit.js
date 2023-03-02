@@ -7,6 +7,7 @@ const {
       } = JetFBComponents;
 const {
 	      useUniqKey,
+	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
 
 const {
@@ -30,6 +31,7 @@ if ( typeof InputControl === 'undefined' ) {
 function ColorPickerEdit( props ) {
 	const blockProps = useBlockProps();
 	const uniqKey    = useUniqKey();
+	useUniqueNameOnDuplicate();
 
 	const { isSelected } = props;
 

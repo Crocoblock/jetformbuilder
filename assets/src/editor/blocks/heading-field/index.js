@@ -1,5 +1,5 @@
-import HeadingEdit from "./edit";
-import metadata from "@blocks/heading-field/block.json";
+import HeadingEdit from './edit';
+import metadata from '@blocks/heading-field/block.json';
 
 const { __ } = wp.i18n;
 
@@ -24,13 +24,26 @@ const settings = {
 			desc: 'Field description...',
 		},
 	},
+	/**
+	 * @param attributes
+	 * @param context {{|'accessibility'|'visual'|'list-view'}}
+	 * @returns {*}
+	 * @private
+	 */
+	__experimentalLabel: ( attributes, { context } ) => {
+		if ( context !== 'list-view' ) {
+			return;
+		}
+		return attributes.label || metadata.title;
+	},
 	transforms: {
 		to: [
 			{
 				type: 'block',
 				blocks: [ 'jet-forms/text-field' ],
 				transform: ( attributes ) => {
-					return createBlock( 'jet-forms/text-field', { ...attributes } );
+					return createBlock( 'jet-forms/text-field',
+						{ ...attributes } );
 				},
 				priority: 0,
 			},

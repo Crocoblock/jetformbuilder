@@ -1,6 +1,8 @@
 import LoadingReactiveVar from '../reactive/LoadingReactiveVar';
 import AjaxSubmit from './AjaxSubmit';
 import ReloadSubmit from './ReloadSubmit';
+import { focusOnInvalidInput } from '../functions';
+import { populateInputs } from '../inputs/functions';
 
 /**
  * @param observable {Observable}
@@ -11,6 +13,7 @@ function FormSubmit( observable ) {
 	this.observable = observable;
 	this.lockState  = new LoadingReactiveVar( false );
 	this.lockState.make();
+	this.autoFocus = window.JetFormBuilderSettings?.auto_focus;
 
 	/**
 	 * @param event {Event}
@@ -27,7 +30,11 @@ function FormSubmit( observable ) {
 			this.toggle();
 
 			this.submitter.submit();
-		} ).catch( () => {} );
+		} ).catch( () => {
+			this.autoFocus && focusOnInvalidInput(
+				populateInputs( this.observable.getInputs() ),
+			);
+		} );
 	};
 
 	this.clearErrors = function () {
@@ -78,6 +85,12 @@ function FormSubmit( observable ) {
 		const { rootNode } = this.observable;
 
 		return +rootNode.dataset.formId;
+	};
+
+	this.onEndSubmit = function ( callable ) {
+		this.submitter.hasOwnProperty( 'status' )
+		? this.submitter.status.watch( callable )
+		: this.submitter.onFailSubmit( callable );
 	};
 
 	this.observable.rootNode.addEventListener(

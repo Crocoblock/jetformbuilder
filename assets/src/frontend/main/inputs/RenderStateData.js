@@ -1,6 +1,8 @@
 import NoListenData from './NoListenData';
 import ReactiveSet from '../reactive/ReactiveSet';
 
+const { builtInStates } = window.JetFormBuilderSettings;
+
 /**
  * @property {ReactiveSet} value
  *
@@ -36,6 +38,10 @@ function RenderStateData() {
 	 */
 	this.toggle = function ( stateName, force = null ) {
 		this.value.toggle( stateName, force );
+	};
+
+	this.isCustom = function ( key ) {
+		return !builtInStates.includes( key );
 	};
 }
 

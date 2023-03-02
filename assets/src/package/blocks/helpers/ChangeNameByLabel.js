@@ -1,5 +1,4 @@
 import { getConvertedName } from '../../tools';
-import SanitizeFieldName from './SanitizeFieldName';
 
 function ChangeNameByLabel( attributes, setAttributes ) {
 	if ( 1 >= attributes.label.length
@@ -12,9 +11,7 @@ function ChangeNameByLabel( attributes, setAttributes ) {
 	}
 
 	setAttributes( {
-		name: SanitizeFieldName(
-			getConvertedName( attributes.label ),
-		),
+		name: getConvertedName( attributes.label ),
 	} );
 }
 

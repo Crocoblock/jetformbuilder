@@ -1,6 +1,7 @@
 import InputData from './InputData';
 import { isCheckbox } from '../supports';
 import ReactiveHook from '../reactive/ReactiveHook';
+import { STRICT_MODE } from '../signals/BaseSignal';
 
 function CheckboxData() {
 	InputData.call( this );
@@ -18,7 +19,7 @@ function CheckboxData() {
 				this.handleEnterKey.bind( this ),
 			);
 
-			jQuery( node ).on( 'change', event => {
+			!STRICT_MODE && jQuery( node ).on( 'change', event => {
 				this.callable.lockTrigger();
 				this.setValue();
 				this.callable.unlockTrigger();

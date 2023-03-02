@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Request;
 use Jet_Form_Builder\Actions\Events\Bad_Request\Bad_Request_Event;
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
+use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
 use Jet_Form_Builder\Classes\Security\Wp_Nonce_Tools;
 use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
@@ -159,6 +160,15 @@ class Request_Handler {
 	 */
 	public function get_files(): array {
 		return $this->files;
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return false|Media_Block_Value
+	 */
+	public function get_file( string $name ) {
+		return $this->files[ $name ] ?? false;
 	}
 
 	public function update_file( string $name, $file ): Request_Handler {

@@ -10,10 +10,9 @@ const {
 	      MacrosFields,
 	      ClientSideMacros,
       } = JetFBComponents;
-
 const {
-	      getFieldsWithoutCurrent,
-      } = JetFBActions;
+	      useUniqueNameOnDuplicate,
+      } = JetFBHooks;
 
 const { __ } = wp.i18n;
 
@@ -41,6 +40,7 @@ const help = {
 
 export default function EditCalculated( props ) {
 	const blockProps = useBlockProps();
+	useUniqueNameOnDuplicate();
 
 	const {
 		      attributes,

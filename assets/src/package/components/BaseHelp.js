@@ -1,6 +1,7 @@
 function BaseHelp( {
 	children,
 	style = {},
+	...props
 } ) {
 	return <p
 		className={ 'jet-fb-base-control__help' }
@@ -11,6 +12,7 @@ function BaseHelp( {
 			marginTop: '0px',
 			...style,
 		} }
+		{ ...props }
 	>
 		{ children }
 	</p>;

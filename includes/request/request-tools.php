@@ -4,8 +4,13 @@
 namespace Jet_Form_Builder\Request;
 
 use Jet_Form_Builder\Classes\Resources\File;
+use Jet_Form_Builder\Classes\Resources\File_Tools;
+use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
 use Jet_Form_Builder\Classes\Resources\Sanitize_File_Exception;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
+use Jet_Form_Builder\Classes\Resources\Uploaded_Collection;
+use Jet_Form_Builder\Classes\Resources\Uploaded_File;
+use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -107,6 +112,51 @@ class Request_Tools {
 		}
 
 		return $repeater;
+	}
+
+
+	/**
+	 * @param string $field_name
+	 *
+	 * @return false|Media_Block_Value
+	 */
+	public static function get_file( string $field_name ) {
+		$file = jet_fb_request_handler()->get_file( $field_name );
+
+		if ( false !== $file ) {
+			return $file;
+		}
+
+		$file_data = jet_fb_action_handler()->request_data[ $field_name ] ?? false;
+
+		// parse value in json format (both)
+		if ( is_string( $file_data ) && ! is_numeric( $file_data ) ) {
+			$decoded = Tools::decode_json( $file_data );
+
+			if ( ! is_null( $decoded ) ) {
+				$file_data = $decoded;
+			}
+		}
+
+		if ( is_string( $file_data ) ) {
+			$file_data = explode( ',', $file_data );
+		}
+
+		if ( ! is_array( $file_data ) ) {
+			return false;
+		}
+
+		if ( empty( $file_data[0] ) ) {
+			return File_Tools::create_uploaded_file( $file_data );
+		}
+
+		$collection = array();
+
+		foreach ( $file_data as $item ) {
+			$collection[] = File_Tools::create_uploaded_file( $item );
+		}
+
+		return new Uploaded_Collection( $collection );
 	}
 
 }

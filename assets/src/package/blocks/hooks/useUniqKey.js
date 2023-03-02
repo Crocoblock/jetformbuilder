@@ -1,12 +1,12 @@
 const {
-	      useBlockProps,
+	      useBlockEditContext,
       } = wp.blockEditor;
 
 function useUniqKey() {
-	const blockProps = useBlockProps();
+	const { clientId } = useBlockEditContext();
 
 	return slug => (
-		slug + '-' + blockProps[ 'data-block' ]
+		slug + '-' + clientId
 	);
 }
 

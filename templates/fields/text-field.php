@@ -34,6 +34,12 @@ if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {
 
 	$mask_type = ! empty( $args['mask_type'] ) ? $args['mask_type'] : '';
 
+	$clear = $this->args['clear_on_submit'] ?? '';
+
+	if ( $clear ) {
+		$this->add_attribute( 'data-clear-mask-on-submit', $clear );
+	}
+
 	if ( $mask_type ) {
 		$this->add_attribute( 'data-inputmask', '\'alias\': \'' . esc_attr( $mask_type ) . '\'' );
 		$this->add_attribute( 'data-inputmask-inputformat', esc_attr( $args['input_mask'] ) );

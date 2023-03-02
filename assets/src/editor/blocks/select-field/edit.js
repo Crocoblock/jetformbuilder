@@ -20,6 +20,10 @@ const {
       } = JetFBComponents;
 
 const {
+	      useUniqueNameOnDuplicate,
+      } = JetFBHooks;
+
+const {
 	      InspectorControls,
 	      useBlockProps,
       } = wp.blockEditor;
@@ -47,6 +51,8 @@ export default function SelectEdit( props ) {
 	      } = props;
 
 	const blockProps = useBlockProps();
+
+	useUniqueNameOnDuplicate();
 
 	return [
 		<ToolBarFields

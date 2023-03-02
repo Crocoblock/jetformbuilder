@@ -1,30 +1,35 @@
 const {
-	      useBlockProps,
+	      useBlockEditContext,
       } = wp.blockEditor;
 const {
 	      useSelect,
 	      useDispatch,
+	      select,
       } = wp.data;
 
 function useBlockAttributes() {
-	const blockProps = useBlockProps();
-	const clientId   = blockProps[ 'data-block' ];
+	const blockProps   = useBlockEditContext();
+	const { clientId } = blockProps;
 
 	const attributes      = useSelect( select => {
 		return select( 'core/block-editor' ).getBlockAttributes( clientId );
 	} );
 	const { updateBlock } = useDispatch( 'core/block-editor', [] );
 
+	/**
+	 * @param props {Object|Function}
+	 */
 	const updateAttributes = props => {
-		if ( 'object' === typeof props ) {
-			updateBlock( clientId, { attributes: props } );
+		props = 'object' === typeof props
+		        ? props
+		        : props( attributes );
 
-			return;
-		}
+		props = select( 'jet-forms/fields' ).getSanitizedAttributes(
+			props,
+			blockProps,
+		);
 
-		updateBlock( clientId, {
-			attributes: props( attributes ),
-		} );
+		updateBlock( clientId, { attributes: props } );
 	};
 
 	return [ attributes, updateAttributes ];

@@ -118,7 +118,7 @@ abstract class Base {
 		$label_text_tag = esc_attr( jet_fb_live_args()->fields_label_tag );
 
 		if ( 'label' === $label_text_tag ) {
-			$label_text->add_attribute( 'for', $this->block_type->get_field_id( $args ) );
+			$label_text->add_attribute( 'for', $this->block_type->get_field_id( $args, 'label' ) );
 		}
 
 		ob_start();

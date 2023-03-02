@@ -12,7 +12,11 @@ abstract class Base_Handler {
 	abstract public function on_get_request();
 
 	public function on_raw_request() {
-		if ( empty( $_POST['_nonce'] ) || ! wp_verify_nonce( $_POST['_nonce'], 'jfb-settings' ) ) {
+		if (
+			empty( $_POST['_nonce'] ) ||
+			! wp_verify_nonce( $_POST['_nonce'], 'jfb-settings' ) ||
+			! current_user_can( 'manage_options' )
+		) {
 			$this->send_response( false );
 
 			return;

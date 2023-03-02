@@ -77,14 +77,24 @@ class Builder_Helper {
 		return $result;
 	}
 
-	public static function get_unique_id( string $html_id ): string {
+	/**
+	 * @param string $html_id
+	 * @param string $for
+	 *
+	 * @return string
+	 */
+	public static function get_unique_id( string $html_id, string $for = 'input' ): string {
 		if ( ! array_key_exists( $html_id, self::$html_ids ) ) {
-			self::$html_ids[ $html_id ] = 0;
+			self::$html_ids[ $html_id ] = array();
+		}
+
+		if ( ! isset( self::$html_ids[ $html_id ][ $for ] ) ) {
+			self::$html_ids[ $html_id ][ $for ] = 0;
 
 			return $html_id;
 		}
 
-		return sprintf( '%1$s_%2$d', $html_id, ++ self::$html_ids[ $html_id ] );
+		return sprintf( '%1$s_%2$d', $html_id, ++ self::$html_ids[ $html_id ][ $for ] );
 	}
 
 }

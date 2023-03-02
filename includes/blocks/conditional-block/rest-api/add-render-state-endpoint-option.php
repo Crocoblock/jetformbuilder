@@ -23,6 +23,10 @@ class Add_Render_State_Endpoint_Option extends Rest_Api_Endpoint_Base {
 		return \WP_REST_Server::CREATABLE;
 	}
 
+	public function check_permission(): bool {
+		return current_user_can( 'manage_options' );
+	}
+
 	/**
 	 * @param \WP_REST_Request $request
 	 *
@@ -94,6 +98,8 @@ class Add_Render_State_Endpoint_Option extends Rest_Api_Endpoint_Base {
 
 	private function format_name( string $title ): string {
 		$name = preg_replace( '#[\s\-\_]+#', '.', $title );
+		$name = preg_replace( '#[^\w\.]+#', '', $name );
+		$name = trim( $name, '.' );
 
 		return strtoupper( $name );
 	}

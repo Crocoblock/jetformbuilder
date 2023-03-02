@@ -23,6 +23,10 @@ class Delete_Render_States_Endpoint extends Rest_Api_Endpoint_Base {
 		return \WP_REST_Server::CREATABLE;
 	}
 
+	public function check_permission(): bool {
+		return current_user_can( 'manage_options' );
+	}
+
 	/**
 	 * @param \WP_REST_Request $request
 	 *

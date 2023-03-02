@@ -8,7 +8,7 @@ const label = {
 		'jet-form-builder',
 	),
 	scroll_on_next: __(
-		'Scroll to top on switch page',
+		'Scroll to the top on page change',
 		'jet-form-builder',
 	),
 	auto_focus: __(
@@ -39,9 +39,8 @@ switching between form pages.`,
 		'jet-form-builder',
 	),
 	auto_focus: __(
-		`Focus on the field is activated when switching between 
-pages of the form. Also when trying to go to the next page or 
-submit a form with an invalid field.`,
+		`Indicates invalid field and prevents the user from 
+going to the next page or submitting the form unless filled.`,
 		'jet-form-builder',
 	),
 };

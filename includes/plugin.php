@@ -63,8 +63,6 @@ class Plugin {
 	public $admin_bar;
 	public $msg_router;
 
-	private $suffix;
-
 	public static $instance;
 
 	/**

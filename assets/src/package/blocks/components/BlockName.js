@@ -62,6 +62,7 @@ function BlockName( { label, help } ) {
 					icon={ 'warning' }
 					style={ {
 						color: 'orange',
+						cursor: 'help',
 					} }
 				/>
 			</Tooltip> }

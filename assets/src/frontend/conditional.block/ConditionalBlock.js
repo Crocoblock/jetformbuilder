@@ -134,12 +134,17 @@ ConditionalBlock.prototype = {
 		}
 	},
 	/**
+	 * Compatibility with Save Progress
+	 * @since 3.0.1 https://github.com/Crocoblock/issues-tracker/issues/2480
+	 *
 	 * @link https://github.com/Crocoblock/issues-tracker/issues/1553
 	 */
 	validateInputs() {
-		validateInputsAll( this.inputs, true ).
-			then( () => {} ).
-			catch( () => {} );
+		setTimeout( () => {
+			validateInputsAll( this.inputs, true ).
+				then( () => {} ).
+				catch( () => {} );
+		} );
 	},
 	showBlock( result ) {
 		if ( this.settings?.dom ) {

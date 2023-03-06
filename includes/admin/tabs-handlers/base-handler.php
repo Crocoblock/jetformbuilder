@@ -4,17 +4,26 @@
 namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-abstract class Base_Handler {
+abstract class Base_Handler implements Repository_Item_Instance_Trait {
 
 	private $prefix = 'jet_form_builder_settings__';
 
 	abstract public function slug();
 
 	abstract public function on_get_request();
+
+	abstract public function on_load();
+
+	public function after_install() {
+		add_action( "wp_ajax_jet_fb_save_tab__{$this->slug()}", array( $this, 'on_raw_request' ) );
+		add_action( 'jet-fb/admin-pages/before-assets/jfb-settings', array( $this, 'before_assets' ) );
+	}
 
 	public function on_raw_request() {
 		if (
@@ -28,12 +37,6 @@ abstract class Base_Handler {
 		}
 
 		$this->on_get_request();
-	}
-
-	abstract public function on_load();
-
-	public function __construct() {
-		add_action( 'jet-fb/admin-pages/before-assets/jfb-settings', array( $this, 'before_assets' ) );
 	}
 
 	/**
@@ -106,4 +109,9 @@ abstract class Base_Handler {
 
 		wp_send_json_error( $this->get_failed_response_data() );
 	}
+
+	public function rep_item_id() {
+		return $this->slug();
+	}
+
 }

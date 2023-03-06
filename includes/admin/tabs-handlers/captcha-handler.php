@@ -10,12 +10,6 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Captcha_Handler extends Base_Handler {
 
-	const OPTIONS = array(
-		'secret'    => '',
-		'key'       => '',
-		'threshold' => 0.5,
-	);
-
 	public function slug() {
 		return 'captcha-tab';
 	}

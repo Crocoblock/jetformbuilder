@@ -3,6 +3,9 @@
 
 namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 
+use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
@@ -10,33 +13,34 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+/**
+ * @method static Tab_Handler_Manager instance()
+ *
+ * Class Tab_Handler_Manager
+ * @package Jet_Form_Builder\Admin\Tabs_Handlers
+ */
 class Tab_Handler_Manager {
 
-	public static $instance;
-	private       $_tabs         = array();
-	private       $_tabs_options = array();
+	use Instance_Trait;
+	use Repository_Pattern_Trait;
 
-	public static function instance() {
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
-		}
+	private $_tabs         = array();
+	private $_tabs_options = array();
 
-		return self::$instance;
-	}
 
-	public static function get_options( string $slug ): array {
+	public static function get_options( string $slug, array $default = array() ): array {
 		$tab = static::instance()->tab( $slug );
-		$tab->save_global_options();
+		$tab->save_global_options( $default );
 
 		return $tab->get_global_options();
 	}
 
 	public function __construct() {
-		$this->register_tabs();
+		$this->rep_install();
 	}
 
-	public function register_tabs() {
-		$tabs = apply_filters(
+	public function rep_instances(): array {
+		return apply_filters(
 			'jet-form-builder/register-tabs-handlers',
 			array(
 				new Captcha_Handler(),
@@ -48,44 +52,41 @@ class Tab_Handler_Manager {
 				new Options_Handler(),
 			)
 		);
+	}
 
-		foreach ( $tabs as $tab ) {
-			if ( $tab instanceof Base_Handler ) {
-				$this->register_tab( $tab );
-			}
-		}
-
-		foreach ( $this->_tabs as $tab ) {
-			$this->register_hooks_for_tab( $tab );
+	/**
+	 * @param $item
+	 *
+	 * @throws Repository_Exception
+	 */
+	public function rep_before_install_item( $item ) {
+		if ( ! ( $item instanceof Base_Handler ) ) {
+			$this->_rep_abort_this();
 		}
 	}
 
 	/**
-	 * @param Base_Handler $tab
+	 * @param Base_Handler $item
 	 */
-	public function register_tab( Base_Handler $tab ) {
-		$default_options = $tab->save_global_default();
-
-		if ( ! empty( $default_options ) && is_array( $default_options ) ) {
-			$this->save_options_tab( $tab->slug(), $tab->get_options( $default_options ) );
-		}
-		$this->_tabs[ $tab->slug() ] = $tab;
-	}
-
-	private function register_hooks_for_tab( Base_Handler $tab ) {
-		add_action( "wp_ajax_jet_fb_save_tab__{$tab->slug()}", array( $tab, 'on_raw_request' ) );
-
+	public function rep_after_install_item( $item ) {
 		add_filter(
 			'jet-form-builder/page-config/jfb-settings',
-			function ( $page_config ) use ( $tab ) {
-				$page_config[ $tab->slug() ] = apply_filters(
-					"jet-form-builder/tab-config/{$tab->slug()}",
-					$tab->on_load()
-				);
-
-				return $page_config;
-			}
+			array( $this, 'modify_page_config' )
 		);
+
+		$item->after_install();
+	}
+
+	public function modify_page_config( array $page_config ): array {
+		/** @var Base_Handler $item */
+		foreach ( $this->rep_get_items() as $item ) {
+			$page_config[ $item->slug() ] = apply_filters(
+				"jet-form-builder/tab-config/{$item->slug()}",
+				$item->on_load()
+			);
+		}
+
+		return $page_config;
 	}
 
 	/**
@@ -93,29 +94,15 @@ class Tab_Handler_Manager {
 	 *
 	 * @return Base_Handler
 	 */
-	public function tab( $slug ) {
-		$this->isset_tab( $slug );
-
-		return $this->_tabs[ $slug ];
+	public function tab( $slug ): Base_Handler {
+		return $this->rep_get_item_or_die( $slug );
 	}
 
 	public function options( $slug, $default = array() ) {
-		$this->isset_tab( $slug );
-
-		return $this->_tabs[ $slug ]->get_options( $default );
+		return $this->tab( $slug )->get_options( $default );
 	}
 
-	public function isset_tab( $slug ) {
-		if ( ! isset( $this->_tabs[ $slug ] ) ) {
-			_doing_it_wrong(
-				__METHOD__,
-				esc_html( "Undefined tab: $slug" ),
-				esc_html( Plugin::instance()->get_version() )
-			);
-		}
-	}
-
-	public function all( $default_tabs = array() ) {
+	public function all( $default_tabs = array() ): array {
 		$response = array();
 
 		foreach ( $this->_tabs as $slug => $tab ) {

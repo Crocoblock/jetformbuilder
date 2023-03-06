@@ -2,13 +2,12 @@
 
 namespace Jet_Form_Builder\Integrations;
 
-use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
+use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha;
+use Jet_Form_Builder\Integrations\Re_Captcha_V3\Re_Captcha_V3;
 use Jet_Form_Builder\Plugin;
-
-/**
- * Captcha manager class
- */
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -20,21 +19,20 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Forms_Captcha {
 
-	const PREFIX = 'jet_form_builder_captcha__';
-
-	public static $script_rendered = false;
-
-	private $field_key = '_captcha_token';
-	private $api       = 'https://www.google.com/recaptcha/api/siteverify';
-	private $defaults  = array(
-		'enabled'   => false,
-		'key'       => '',
-		'secret'    => '',
-		'threshold' => 0.5,
-	);
+	use Repository_Pattern_Trait;
 
 	public function __construct() {
 		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'handle_request' ) );
+		add_filter( 'jet-form-builder/before-end-form', array( $this, 'handler_render_form' ) );
+	}
+
+	public function rep_instances(): array {
+		return apply_filters(
+			'jet-form-builder/captcha/types',
+			array(
+				new Re_Captcha_V3(),
+			)
+		);
 	}
 
 	/**
@@ -49,8 +47,10 @@ class Forms_Captcha {
 		return $request;
 	}
 
-	private function api_front_url( $key ): string {
-		return esc_url_raw( sprintf( 'https://www.google.com/recaptcha/api.js?render=%s', $key ) );
+	public function handler_render_form( string $content ): string {
+		$content .= $this->render();
+
+		return $content;
 	}
 
 	/**
@@ -59,104 +59,54 @@ class Forms_Captcha {
 	 * @throws Request_Exception
 	 */
 	protected function verify( $request ) {
-		$form_id = jet_fb_handler()->get_form_id();
-		$captcha = $this->get_data( $form_id );
-
-		if ( empty( $captcha['enabled'] ) ) {
+		try {
+			$captcha = $this->get_current();
+		} catch ( Repository_Exception $exception ) {
 			return;
 		}
 
-		if ( empty( $request[ $this->field_key ] ) ) {
-			return;
+		$captcha->verify( $request );
+	}
+
+	public function render(): string {
+		try {
+			$captcha = $this->get_current();
+		} catch ( Repository_Exception $exception ) {
+			return '';
 		}
 
-		$token    = sanitize_text_field( $request[ $this->field_key ] );
-		$response = wp_remote_post(
-			$this->api,
-			array(
-				'body' => array(
-					'secret'   => $captcha['secret'],
-					'response' => $token,
-				),
-			)
-		);
-
-		$body = wp_remote_retrieve_body( $response );
-		$body = json_decode( $body, true );
-
-		$action = $body['action'] ?? '';
-		$score  = $body['score'] ?? 0;
-
-		if ( ( self::PREFIX . $form_id ) === $action && $score > $captcha['threshold'] ) {
-			return;
-		}
-
-		throw new Request_Exception( 'captcha_failed', $body, $response );
+		return $captcha->render();
 	}
 
 	/**
-	 * Returns captcha settings for passed form ID
+	 * Returns captcha settings for current form ID
 	 *
-	 * @param  [type] $post_id [description]
-	 *
-	 * @return [type]          [description]
+	 * @return Base_Captcha
+	 * @throws Repository_Exception
 	 */
-	public function get_data( $form_id = null ) {
-		$captcha = Plugin::instance()->post_type->get_recaptcha( $form_id );
+	public function get_current(): Base_Captcha {
+		$settings = Plugin::instance()->post_type->get_recaptcha( jet_fb_live()->form_id );
 
-		if ( ! $captcha || ! is_array( $captcha ) ) {
-			return $this->defaults;
-		} elseif ( isset( $captcha['use_global'] ) && $captcha['use_global'] ) {
-			return Tab_Handler_Manager::instance()->options(
-				'captcha-tab',
-				array( 'enabled' => $captcha['enabled'] )
-			);
-
-		} else {
-			return wp_parse_args( $captcha, $this->defaults );
-		}
-	}
-
-	public function render( $form_id ) {
-
-		$captcha = $this->get_data( $form_id );
-
-		if ( empty( $captcha['enabled'] ) || empty( $captcha['key'] ) ) {
-			return;
+		if ( ! $settings || ! is_array( $settings ) ) {
+			throw new Repository_Exception( 'Empty captcha settings' );
 		}
 
-		$key = esc_attr( $captcha['key'] );
+		$captcha = $settings['captcha'] ?? false;
 
-		wp_enqueue_script(
-			'jet-form-builder-recaptcha',
-			$this->api_front_url( $key ),
-			array(),
-			jet_form_builder()->get_version(),
-			true
-		);
+		/**
+		 * For backward compatibility
+		 */
+		if ( false === $captcha && ! empty( $settings['enabled'] ) ) {
+			$captcha = Re_Captcha_V3::class;
+		}
 
-		wp_enqueue_script(
-			'jet-form-builder-recaptcha-handler',
-			jet_form_builder()->plugin_url( 'assets/js/re-captcha-v3.js' ),
-			array( 'jquery' ),
-			jet_form_builder()->get_version(),
-			true
-		);
+		/**
+		 * @var Base_Captcha $current
+		 */
+		$current = $this->rep_clone_item( $captcha );
 
-		$action_prefix = self::PREFIX;
-
-		wp_add_inline_script(
-			'jet-form-builder-recaptcha-handler',
-			"
-		    window.JetFormBuilderReCaptchaConfig = window.JetFormBuilderReCaptchaConfig || {};
-		    window.JetFormBuilderReCaptchaConfig[ $form_id ] = { key: '$key', action_prefix: '$action_prefix' };
-		",
-			'before'
-		);
-
-		?>
-        <input type="hidden" class="captcha-token" name="<?php echo esc_attr( $this->field_key ); ?>" value="">
-		<?php
+		return $current->sanitize_options( $settings );
 	}
+
 
 }

@@ -161,10 +161,6 @@ class Form_Builder {
 
 		ob_start();
 
-		if ( Plugin::instance()->captcha ) {
-			Plugin::instance()->captcha->render( $this->form_id );
-		}
-
 		include $this->get_global_template( 'common/end-form.php' );
 
 		$end_form .= ob_get_clean();

@@ -13,7 +13,8 @@ trait Import_Form_Trait {
 	/**
 	 * Import form by data
 	 *
-	 * @param  array $form_data [description]
+	 * @param array $form_data [description]
+	 *
 	 * @return [type]            [description]
 	 */
 	public function import_form( $form_data = array() ) {
@@ -25,6 +26,10 @@ trait Import_Form_Trait {
 				'post_status' => 'publish',
 			)
 		);
+
+		if ( isset( $form_data['meta_input'] ) && is_array( $form_data['meta_input'] ) ) {
+			$form_data['meta_input'] = wp_slash( $form_data['meta_input'] );
+		}
 
 		$post_id = wp_insert_post(
 			array_merge(

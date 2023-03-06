@@ -6,8 +6,8 @@ function createMultiStep( rootOrBlock ) {
 
 	const pages = [];
 
-	for ( const child of multistep.getScopeNode().children ) {
-		if ( !child.classList.contains( 'jet-form-builder-page' ) ) {
+	for ( const child of multistep.getScopeNode().childNodes ) {
+		if ( !child?.classList?.contains( 'jet-form-builder-page' ) ) {
 			continue;
 		}
 		pages.push( child );

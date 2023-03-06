@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Integrations\Re_Captcha_V3;
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha_From_Options;
 
@@ -31,12 +33,26 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 	}
 
 	public function verify( array $request ) {
+		$action = ( new Verify_Token_Action() )
+			->set_secret( $this->options['secret'] ?? '' )
+			->set_token( $request[ $this->field_key ] ?? '' )
+			->set_action( jet_fb_live()->form_id );
 
+		try {
+			$action->send_request();
+		} catch ( Gateway_Exception $exception ) {
+			throw new Request_Exception(
+				'captcha_failed',
+				$exception->getMessage(),
+				...$exception->get_additional()
+			);
+		}
 	}
 
 	public function render(): string {
-		$key = esc_attr( $this->options['key'] ?? '' );
-		$url = esc_url_raw( sprintf( 'https://www.google.com/recaptcha/api.js?render=%s', $key ) );
+		$key     = esc_attr( $this->options['key'] ?? '' );
+		$url     = esc_url_raw( sprintf( 'https://www.google.com/recaptcha/api.js?render=%s', $key ) );
+		$form_id = jet_fb_live()->form_id;
 
 		wp_enqueue_script(
 			'jet-form-builder-recaptcha',
@@ -52,6 +68,15 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 			array( 'jquery' ),
 			jet_form_builder()->get_version(),
 			true
+		);
+
+		wp_add_inline_script(
+			'jet-form-builder-recaptcha-handler',
+			"
+		    window.JetFormBuilderReCaptchaConfig = window.JetFormBuilderReCaptchaConfig || {};
+		    window.JetFormBuilderReCaptchaConfig[ $form_id ] = { key: '$key' };
+		",
+			'before'
 		);
 
 		return sprintf(

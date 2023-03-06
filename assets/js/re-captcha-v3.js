@@ -1,7 +1,7 @@
 (
 	function ( $ ) {
 		const CaptchaHandler = function (
-			formID, { action_prefix, key }, resolve, reject ) {
+			formID, { key }, resolve, reject ) {
 			var script  = document.querySelector(
 				'script#jet-form-builder-recaptcha-js' ),
 			    cpField = $( 'form[data-form-id="' + formID + '"]' ).
@@ -16,7 +16,7 @@
 					grecaptcha.execute(
 						key,
 						{
-							action: action_prefix + formID,
+							action: 'jet_form_builder_captcha__' + formID,
 						},
 					).then( function ( token ) {
 						cpField.val( token );
@@ -51,9 +51,9 @@
 
 		const setUpCaptcha = function ( formID, resolve, reject ) {
 			const current = window.JetFormBuilderReCaptchaConfig[ formID ] ||
-				false;
+				{};
 
-			if ( !current ) {
+			if ( !Object.values( current )?.length ) {
 				return resolve();
 			}
 
@@ -81,8 +81,11 @@
 				'jet-form-builder-recaptcha',
 				function ( promises, $form ) {
 					promises.push( new Promise( ( resolve, reject ) => {
-						setUpCaptcha( $form.data( 'form-id' ), resolve,
-							reject );
+						setUpCaptcha(
+							$form.data( 'form-id' ),
+							resolve,
+							reject,
+						);
 					} ) );
 
 					return promises;
@@ -96,8 +99,11 @@
 					const $form = $( event.target );
 
 					promises.push( new Promise( ( resolve, reject ) => {
-						setUpCaptcha( $form.data( 'form-id' ), resolve,
-							reject );
+						setUpCaptcha(
+							$form.data( 'form-id' ),
+							resolve,
+							reject,
+						);
 					} ) );
 
 					return promises;

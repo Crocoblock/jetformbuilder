@@ -35,10 +35,10 @@ class Verify_Token_Action extends Base_Gateway_Action {
 		$score  = $response['score'] ?? 0;
 
 		if ( $this->action === $action && $score > $this->threshold ) {
-			return;
+			return $response;
 		}
 
-		throw new Gateway_Exception( 'captcha_failed', $response );
+		throw new Gateway_Exception( 'captcha_failed', $response, $this->get_request_args() );
 	}
 
 	/**
@@ -89,5 +89,13 @@ class Verify_Token_Action extends Base_Gateway_Action {
 			'secret'   => $this->secret,
 			'response' => $this->token,
 		);
+	}
+
+	protected function is_body_ready(): bool {
+		return is_array( $this->body ) && ! empty( $this->body );
+	}
+
+	protected function to_json( $body ) {
+		return $body;
 	}
 }

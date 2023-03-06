@@ -22,6 +22,8 @@ class Forms_Captcha {
 	use Repository_Pattern_Trait;
 
 	public function __construct() {
+		$this->rep_install();
+
 		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'handle_request' ) );
 		add_filter( 'jet-form-builder/before-end-form', array( $this, 'handler_render_form' ) );
 	}

@@ -130,6 +130,15 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 	 * @see \Jet_Form_Builder\Integrations\Abstract_Captcha\Captcha_Settings_From_Options
 	 */
 	public function on_load_options(): array {
+		$parent = parent::on_load_options();
+
+		if ( ! empty( $parent ) ) {
+			return $parent;
+		}
+
+		/**
+		 * For backward compatibility
+		 */
 		$options = Tab_Handler_Manager::get_options( 'captcha-tab', self::OPTIONS );
 
 		return wp_array_slice_assoc( $options, array_keys( self::OPTIONS ) );

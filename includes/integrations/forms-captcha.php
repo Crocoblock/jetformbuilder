@@ -6,6 +6,8 @@ use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha;
+use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha_From_Options;
+use Jet_Form_Builder\Integrations\Abstract_Captcha\Captcha_Settings_From_Options;
 use Jet_Form_Builder\Integrations\Re_Captcha_V3\Re_Captcha_V3;
 use Jet_Form_Builder\Plugin;
 
@@ -15,7 +17,10 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Define Forms_Captcha class
+ * @method Base_Captcha[] rep_get_items()
+ *
+ * Class Forms_Captcha
+ * @package Jet_Form_Builder\Integrations
  */
 class Forms_Captcha {
 
@@ -25,6 +30,7 @@ class Forms_Captcha {
 		$this->rep_install();
 
 		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'handle_request' ) );
+		add_filter( 'jet-form-builder/page-config/jfb-settings', array( $this, 'handle_config' ) );
 		add_filter( 'jet-form-builder/before-end-form', array( $this, 'handler_render_form' ) );
 	}
 
@@ -53,6 +59,21 @@ class Forms_Captcha {
 		$content .= $this->render();
 
 		return $content;
+	}
+
+	public function handle_config( array $config ): array {
+		$captcha_config = array();
+
+		foreach ( $this->rep_get_items() as $slug => $captcha ) {
+			if ( ! ( $captcha instanceof Captcha_Settings_From_Options ) ) {
+				continue;
+			}
+			$captcha_config[ $slug ] = $captcha->to_array();
+		}
+
+		$config['captcha-tab-config'] = $captcha_config;
+
+		return $config;
 	}
 
 	/**

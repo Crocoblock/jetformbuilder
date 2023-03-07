@@ -109,10 +109,26 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 		return $this;
 	}
 
+	public function on_save_options( array $post_request ): array {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
+		$secret    = sanitize_text_field( $post_request['secret'] ?? '' );
+		$key       = sanitize_text_field( $post_request['key'] ?? '' );
+		$threshold = filter_var( $post_request['threshold'] ?? '', FILTER_VALIDATE_FLOAT );
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
-	public function on_save_options( array $options ) {
+		$threshold = false === $threshold ? self::OPTIONS['threshold'] : $threshold;
+
+		return array(
+			'secret'    => $secret,
+			'key'       => $key,
+			'threshold' => $threshold
+		);
 	}
 
+	/**
+	 * @return array
+	 * @see \Jet_Form_Builder\Integrations\Abstract_Captcha\Captcha_Settings_From_Options
+	 */
 	public function on_load_options(): array {
 		$options = Tab_Handler_Manager::get_options( 'captcha-tab', self::OPTIONS );
 

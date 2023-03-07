@@ -6,6 +6,11 @@ namespace Jet_Form_Builder\Integrations\Abstract_Captcha;
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 abstract class Base_Captcha_From_Options extends Base_Captcha
 	implements Captcha_Settings_From_Options {
 
@@ -22,14 +27,6 @@ abstract class Base_Captcha_From_Options extends Base_Captcha
 		);
 
 		return $this;
-	}
-
-	/**
-	 * Runs when settings are saved on the
-	 * JetFormBuilder -> Settings page
-	 */
-	public function on_save_options( array $options ) {
-
 	}
 
 	/**

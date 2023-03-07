@@ -3,6 +3,8 @@
 
 namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 
+use Jet_Form_Builder\Integrations\Abstract_Captcha\Captcha_Settings_From_Options;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -15,26 +17,35 @@ class Captcha_Handler extends Base_Handler {
 	}
 
 	public function on_get_request() {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing
-		$secret    = sanitize_text_field( wp_unslash( $_POST['secret'] ?? '' ) );
-		$key       = sanitize_text_field( wp_unslash( $_POST['key'] ?? '' ) );
-		$threshold = filter_var( wp_unslash( $_POST['threshold'] ?? '' ), FILTER_VALIDATE_FLOAT );
-		// phpcs:enable WordPress.Security.NonceVerification.Missing
+		$options = array();
 
-		$threshold = false === $threshold ? self::OPTIONS['threshold'] : $threshold;
+		foreach ( jet_form_builder()->captcha->rep_get_items() as $slug => $captcha ) {
+			if ( ! ( $captcha instanceof Captcha_Settings_From_Options ) ) {
+				continue;
+			}
+			if ( ! array_key_exists( $slug, $_POST ) ) {
+				$options[ $slug ] = $captcha->on_load_options();
+				continue;
+			}
 
-		$result = $this->update_options(
-			array(
-				'secret'    => $secret,
-				'key'       => $key,
-				'threshold' => $threshold
-			)
-		);
+			$options[ $slug ] = $captcha->on_save_options( wp_unslash( $_POST[ $slug ] ) );
+		}
+
+		$result = $this->update_options( $options );
 
 		$this->send_response( $result );
 	}
 
 	public function on_load() {
-		return $this->get_options( self::OPTIONS );
+		$options = array();
+
+		foreach ( jet_form_builder()->captcha->rep_get_items() as $slug => $captcha ) {
+			if ( ! ( $captcha instanceof Captcha_Settings_From_Options ) ) {
+				continue;
+			}
+			$options[ $slug ] = $captcha->on_load_options();
+		}
+
+		return $options;
 	}
 }

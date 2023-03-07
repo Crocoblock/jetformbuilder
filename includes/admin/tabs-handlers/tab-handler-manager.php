@@ -37,6 +37,11 @@ class Tab_Handler_Manager {
 
 	public function __construct() {
 		$this->rep_install();
+
+		add_filter(
+			'jet-form-builder/page-config/jfb-settings',
+			array( $this, 'modify_page_config' )
+		);
 	}
 
 	public function rep_instances(): array {
@@ -69,11 +74,6 @@ class Tab_Handler_Manager {
 	 * @param Base_Handler $item
 	 */
 	public function rep_after_install_item( $item ) {
-		add_filter(
-			'jet-form-builder/page-config/jfb-settings',
-			array( $this, 'modify_page_config' )
-		);
-
 		$item->after_install();
 	}
 

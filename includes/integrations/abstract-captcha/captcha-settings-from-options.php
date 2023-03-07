@@ -15,7 +15,7 @@ interface Captcha_Settings_From_Options {
 	 * Runs when settings are saved on the
 	 * JetFormBuilder -> Settings page
 	 */
-	public function on_save_options( array $options );
+	public function on_save_options( array $post_request ): array;
 
 	/**
 	 * Runs when the JetFormBuilder -> Settings page is loaded

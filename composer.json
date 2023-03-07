@@ -13,5 +13,10 @@
     "require-dev": {
         "wp-coding-standards/wpcs": "dev-develop",
         "wp-cli/wp-cli-bundle": "*"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }

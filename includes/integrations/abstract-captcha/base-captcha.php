@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Integrations\Abstract_Captcha;
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 
@@ -12,7 +13,9 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-abstract class Base_Captcha implements Repository_Item_Instance_Trait {
+abstract class Base_Captcha implements
+	Repository_Item_Instance_Trait,
+	Arrayable {
 
 	protected $options;
 
@@ -37,5 +40,12 @@ abstract class Base_Captcha implements Repository_Item_Instance_Trait {
 
 	public function rep_item_id() {
 		return $this->get_id();
+	}
+
+	public function to_array(): array {
+		return array(
+			'label' => $this->get_title(),
+			'value' => $this->get_id(),
+		);
 	}
 }

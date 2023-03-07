@@ -4,6 +4,21 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.0.1
+* ADD: Captcha score threshold
+* ADD: Option for clear input mask before submit
+* ADD: Changing the field name to `[name]_copy` in the duplicate/copy fields block
+* ADD: Warning in the editor if the field name is not unique
+* ADD: Ability to send email attachments from a hidden field
+* ADD: Option "Scroll to the top on page change" (JetFormBuilder -> Settings)
+* ADD: Option "Automatic focus" (JetFormBuilder -> Settings)
+* ADD: Saving render state as part of a URL request
+* FIX: Force Blocks Editor on JetFormBuilder post type
+* FIX: Conditional logic  with checkbox field
+* FIX: Improved the parser of the calculated field when using `%` as an operator sign
+* FIX: Save Progress compatibility
+* FIX: JS fatal error occurs while importing the form
+
 ## 3.0.0.3
 * UPD: Listen/trigger jQuery event when field value changes
 * UPD: Adding the default Send Email action to the new form only

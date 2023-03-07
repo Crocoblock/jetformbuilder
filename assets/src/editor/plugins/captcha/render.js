@@ -1,4 +1,4 @@
-import { labels } from './options';
+import { help, labels } from './options';
 
 const {
 	      __,
@@ -8,6 +8,7 @@ const {
       } = JetFBHooks;
 const {
 	      ToggleControl,
+	      BaseHelp,
       } = JetFBComponents;
 const {
 	      ToggleControl: CoreToggleControl,
@@ -102,6 +103,11 @@ function PluginCaptcha() {
 					}
 				) ) }
 			/>
+			<BaseHelp
+				style={ { marginTop: '-1em' } }
+			>
+				{ help.threshold }
+			</BaseHelp>
 			<span>{ 'Register reCAPTCHA v3 keys ' }
 				<a href="https://www.google.com/recaptcha/admin/create"
 				   target="_blank">here</a>

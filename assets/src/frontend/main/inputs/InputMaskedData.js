@@ -63,7 +63,6 @@ function InputMaskedData() {
 		this.silenceSet( '' );
 	};
 
-	this.report = () => {};
 }
 
 InputMaskedData.prototype = Object.create( InputData.prototype );

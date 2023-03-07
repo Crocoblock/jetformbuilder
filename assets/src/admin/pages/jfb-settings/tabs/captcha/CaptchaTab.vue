@@ -18,6 +18,7 @@
 			max="1"
 			step="0.1"
 			:label="label.threshold"
+			:description="help.threshold"
 			:wrapper-css="[ 'equalwidth' ]"
 			:size="'fullwidth'"
 			v-model="threshold"

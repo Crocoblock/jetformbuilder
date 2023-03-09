@@ -1,35 +1,43 @@
 import BaseHelp from './BaseHelp';
 
 const {
-	      ToggleControl: CoreToggleControl,
+	      FormToggle,
+	      BaseControl,
       } = wp.components;
+
+const {
+	      useInstanceId,
+      } = wp.compose;
 
 function ToggleControl( {
 	checked = false,
+	disabled = false,
 	onChange = () => {},
 	children = null,
 	help = null,
 } ) {
-
-	const main = <div className={ 'jet-fb flex' }>
-		<CoreToggleControl
-			checked={ checked }
-			onChange={ onChange }
-		/>
-		<div className={ 'jet-fb--label' }>
-			{ children }
-		</div>
-	</div>;
-
 	const Help = help;
 
-	return null === help ? main : <div>
-		{ main }
+	const instanceId = useInstanceId( ToggleControl );
+	const id         = `inspector-jfb-toggle-control-${ instanceId }`;
+
+	return <BaseControl id={ id }>
+		<div className={ 'jet-fb flex gap-default' }>
+			<FormToggle
+				id={ id }
+				checked={ checked }
+				onChange={ ( event ) => onChange( event.target.checked ) }
+				disabled={ disabled }
+			/>
+			<label htmlFor={ id }>
+				{ children }
+			</label>
+		</div>
 		{ 'string' === typeof Help
 		  ? <BaseHelp>{ Help }</BaseHelp>
-		  : <Help/>
+		  : Help && <Help/>
 		}
-	</div>;
+	</BaseControl>;
 }
 
 export default ToggleControl;

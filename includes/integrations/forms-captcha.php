@@ -29,9 +29,10 @@ class Forms_Captcha {
 	public function __construct() {
 		$this->rep_install();
 
-		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'handle_request' ) );
-		add_filter( 'jet-form-builder/page-config/jfb-settings', array( $this, 'handle_config' ) );
-		add_filter( 'jet-form-builder/before-end-form', array( $this, 'handler_render_form' ) );
+		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'on_request' ) );
+		add_filter( 'jet-form-builder/before-end-form', array( $this, 'on_render_form' ) );
+		add_filter( 'jet-form-builder/page-config/jfb-settings', array( $this, 'on_localize_config' ) );
+		add_filter( 'jet-form-builder/form-builder/config', array( $this, 'on_localize_config' ) );
 	}
 
 	public function rep_instances(): array {
@@ -49,26 +50,26 @@ class Forms_Captcha {
 	 * @return mixed
 	 * @throws Request_Exception
 	 */
-	public function handle_request( $request ) {
+	public function on_request( $request ) {
 		$this->verify( $request );
 
 		return $request;
 	}
 
-	public function handler_render_form( string $content ): string {
+	public function on_render_form( string $content ): string {
 		$content .= $this->render();
 
 		return $content;
 	}
 
-	public function handle_config( array $config ): array {
+	public function on_localize_config( array $config ): array {
 		$captcha_config = array();
 
 		foreach ( $this->rep_get_items() as $slug => $captcha ) {
 			if ( ! ( $captcha instanceof Captcha_Settings_From_Options ) ) {
 				continue;
 			}
-			$captcha_config[ $slug ] = $captcha->to_array();
+			$captcha_config[] = $captcha->to_array();
 		}
 
 		$config['captcha-tab-config'] = $captcha_config;

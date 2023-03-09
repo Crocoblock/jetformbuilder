@@ -392,22 +392,25 @@ class Editor {
 		wp_localize_script(
 			self::EDITOR_PACKAGE_HANDLE,
 			'JetFormEditorData',
-			array(
-				'presetConfig'            => $this->get_preset_config(),
-				'messagesDefault'         => $messages_meta->messages(),
-				'gateways'                => Gateway_Manager::instance()->editor_data(),
-				'helpForRepeaters'        => $this->get_help_for_repeaters(),
-				'global_settings'         => Tab_Handler_Manager::instance()->all(),
-				'global_settings_url'     => Pages_Manager::instance()->get_stable_url( 'jfb-settings' ),
-				'jetEngineVersion'        => Tools::get_jet_engine_version(),
-				'actionConditionSettings' => $conditions_settings,
-				'argumentsSource'         => Form_Arguments::get_options(),
-				'utmLinks'                => array(
-					'allProActions'  => $utm->set_campaign( 'pro-actions' )->add_query( $addons ),
-					'limitResponses' => $utm->set_campaign( 'responses-pricing' )->add_query( $pricing ),
-					'scheduleForm'   => $utm->set_campaign( 'schedule-pricing' )->add_query( $pricing ),
-				),
-				'isActivePro'             => jet_form_builder()->addons_manager->is_active(),
+			apply_filters(
+				'jet-form-builder/form-builder/config',
+				array(
+					'presetConfig'            => $this->get_preset_config(),
+					'messagesDefault'         => $messages_meta->messages(),
+					'gateways'                => Gateway_Manager::instance()->editor_data(),
+					'helpForRepeaters'        => $this->get_help_for_repeaters(),
+					'global_settings'         => Tab_Handler_Manager::instance()->all(),
+					'global_settings_url'     => Pages_Manager::instance()->get_stable_url( 'jfb-settings' ),
+					'jetEngineVersion'        => Tools::get_jet_engine_version(),
+					'actionConditionSettings' => $conditions_settings,
+					'argumentsSource'         => Form_Arguments::get_options(),
+					'utmLinks'                => array(
+						'allProActions'  => $utm->set_campaign( 'pro-actions' )->add_query( $addons ),
+						'limitResponses' => $utm->set_campaign( 'responses-pricing' )->add_query( $pricing ),
+						'scheduleForm'   => $utm->set_campaign( 'schedule-pricing' )->add_query( $pricing ),
+					),
+					'isActivePro'             => jet_form_builder()->addons_manager->is_active(),
+				)
 			)
 		);
 

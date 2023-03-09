@@ -168,6 +168,7 @@ import useActionCallback from './actions/hooks/useActionCallback';
 import useActionDetail from './actions/hooks/useActionDetail';
 import useUniqueNameOnDuplicate from './blocks/hooks/useUniqueNameOnDuplicate';
 import useFields from './blocks/hooks/useFields';
+import CaptchaOptions from './captcha/components/CaptchaOptions';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -252,6 +253,7 @@ window.JetFBComponents = {
 	ConditionsRepeaterContextProvider,
 	ServerSideMacros,
 	ActionsFlow,
+	CaptchaOptions,
 };
 
 // JFBFunctions

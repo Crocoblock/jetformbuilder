@@ -102,8 +102,9 @@ export default {
 			}
 
 			const { name } = tab.component;
+			const item     = this.settings.find( ( { value } ) => value === name );
 
-			return this.settings[ name ]?.label || 'Undefined captcha title';
+			return item?.label || 'Undefined captcha title';
 		},
 		onChangeActive( isActive, tabName ) {
 			let [ hash, ...others ] = window.location.hash.replace( '#', '' ).split( '__' );

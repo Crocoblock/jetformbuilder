@@ -737,6 +737,16 @@ ul.jet-fb-ul-revert-layer {
 	}
 }
 
+.edit-post-sidebar {
+	.components-panel {
+		& > .components-panel__body {
+			.components-base-control:not(:last-child) {
+				margin-bottom: 24px;
+			}
+		}
+	}
+}
+
 $sizes: ("xs":320px, "sm":576px, "md":768px, "lg":992px, "xl":1200px);
 
 @mixin media($minmax, $media) {

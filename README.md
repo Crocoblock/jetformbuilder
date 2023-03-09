@@ -4,6 +4,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.0.1.1
+* FIX: Captcha score validation
+
 ## 3.0.1
 * ADD: Captcha score threshold
 * ADD: Option for clear input mask before submit

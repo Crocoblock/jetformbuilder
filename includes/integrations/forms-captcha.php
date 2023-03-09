@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Integrations;
 
+use Jet_Form_Builder\Admin\Tabs_Handlers\Captcha_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Plugin;
@@ -87,7 +88,11 @@ class Forms_Captcha {
 		$action = $body['action'] ?? '';
 		$score  = $body['score'] ?? 0;
 
-		if ( ( self::PREFIX . $form_id ) === $action && $score > $captcha['threshold'] ) {
+		$threshold = empty( $captcha['threshold'] )
+			? Captcha_Handler::OPTIONS['threshold']
+			: $captcha['threshold'];
+
+		if ( ( self::PREFIX . $form_id ) === $action && $score > $threshold ) {
 			return;
 		}
 

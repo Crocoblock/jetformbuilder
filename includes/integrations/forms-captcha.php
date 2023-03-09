@@ -92,7 +92,11 @@ class Forms_Captcha {
 			? Captcha_Handler::OPTIONS['threshold']
 			: $captcha['threshold'];
 
-		if ( ( self::PREFIX . $form_id ) === $action && $score > $threshold ) {
+		if (
+			( self::PREFIX . $form_id ) === $action &&
+			! empty( $body['success'] ) &&
+			$score > $threshold
+		) {
 			return;
 		}
 

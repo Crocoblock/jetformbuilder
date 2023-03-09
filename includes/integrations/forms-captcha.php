@@ -68,7 +68,7 @@ class Forms_Captcha {
 		}
 
 		if ( empty( $request[ $this->field_key ] ) ) {
-			return;
+			throw new Request_Exception( 'captcha_failed', 'Empty token. Spam' );
 		}
 
 		$token    = sanitize_text_field( $request[ $this->field_key ] );

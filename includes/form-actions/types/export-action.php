@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Form_Actions\Types;
 
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Form_Actions\Base_Form_Action;
 use Jet_Form_Builder\Form_Actions\Get_Form_Data;
 
@@ -30,7 +31,7 @@ class Export_Action extends Base_Form_Action {
 		$form_id   = $this->get_post_id_from_request();
 		$form_data = $this->get_from_data( $form_id );
 
-		$this->_file = wp_json_encode( $form_data[1] );
+		$this->_file = Tools::encode_json( $form_data[1] );
 
 		$this->file_download( $form_data[0]->post_name . '.json' );
 	}

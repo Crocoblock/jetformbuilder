@@ -21,18 +21,7 @@ class Duplicate_Action extends Base_Form_Action {
 	}
 
 	public function parse_form_data( $data ) {
-		$data['post_title']   = "{$data['post_title']} (copy)";
-		$data['post_content'] = wp_slash( $data['post_content'] );
-
-		foreach ( $data['meta_input'] as &$meta_value ) {
-			$unserialized = maybe_unserialize( $meta_value );
-
-			if ( $unserialized !== $meta_value ) {
-				$meta_value = $unserialized;
-				continue;
-			}
-			$meta_value = wp_slash( $meta_value );
-		}
+		$data['post_title'] = "{$data['post_title']} (copy)";
 
 		return $data;
 	}

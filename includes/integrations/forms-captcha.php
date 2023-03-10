@@ -8,6 +8,7 @@ use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha_From_Options;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Captcha_Settings_From_Options;
+use Jet_Form_Builder\Integrations\Hcaptcha\Hcaptcha;
 use Jet_Form_Builder\Integrations\Re_Captcha_V3\Re_Captcha_V3;
 use Jet_Form_Builder\Plugin;
 
@@ -26,11 +27,16 @@ class Forms_Captcha {
 
 	use Repository_Pattern_Trait;
 
+	/**
+	 * @var Base_Captcha
+	 */
+	private $current;
+
 	public function __construct() {
 		$this->rep_install();
 
 		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'on_request' ) );
-		add_filter( 'jet-form-builder/before-end-form', array( $this, 'on_render_form' ) );
+		add_filter( 'jet-form-builder/before-render/submit-field', array( $this, 'on_render_submit' ), 10, 2 );
 		add_filter( 'jet-form-builder/page-config/jfb-settings', array( $this, 'on_localize_config' ) );
 		add_filter( 'jet-form-builder/form-builder/config', array( $this, 'on_localize_config' ) );
 	}
@@ -40,6 +46,7 @@ class Forms_Captcha {
 			'jet-form-builder/captcha/types',
 			array(
 				new Re_Captcha_V3(),
+				new Hcaptcha(),
 			)
 		);
 	}
@@ -56,7 +63,11 @@ class Forms_Captcha {
 		return $request;
 	}
 
-	public function on_render_form( string $content ): string {
+	public function on_render_submit( string $content, array $attrs ): string {
+		if ( 'submit' !== $attrs['action_type'] ?? '' ) {
+			return $content;
+		}
+
 		$content .= $this->render();
 
 		return $content;
@@ -65,7 +76,7 @@ class Forms_Captcha {
 	public function on_localize_config( array $config ): array {
 		$captcha_config = array();
 
-		foreach ( $this->rep_get_items() as $slug => $captcha ) {
+		foreach ( $this->rep_get_items() as $captcha ) {
 			if ( ! ( $captcha instanceof Captcha_Settings_From_Options ) ) {
 				continue;
 			}
@@ -84,22 +95,18 @@ class Forms_Captcha {
 	 */
 	protected function verify( $request ) {
 		try {
-			$captcha = $this->get_current();
+			$this->get_current()->verify( $request );
 		} catch ( Repository_Exception $exception ) {
 			return;
 		}
-
-		$captcha->verify( $request );
 	}
 
 	public function render(): string {
 		try {
-			$captcha = $this->get_current();
+			return $this->get_current()->render();
 		} catch ( Repository_Exception $exception ) {
 			return '';
 		}
-
-		return $captcha->render();
 	}
 
 	/**
@@ -109,6 +116,10 @@ class Forms_Captcha {
 	 * @throws Repository_Exception
 	 */
 	public function get_current(): Base_Captcha {
+		if ( $this->current ) {
+			return $this->current;
+		}
+
 		$settings = Plugin::instance()->post_type->get_recaptcha( jet_fb_live()->form_id );
 
 		if ( ! $settings || ! is_array( $settings ) ) {
@@ -129,7 +140,9 @@ class Forms_Captcha {
 		 */
 		$current = $this->rep_clone_item( $captcha );
 
-		return $current->sanitize_options( $settings );
+		$this->current = $current->sanitize_options( $settings );
+
+		return $this->current;
 	}
 
 

@@ -1,5 +1,6 @@
 import { captchaItems } from './options';
 import GoogleProvider from './google.provider';
+import HCaptchaProvider from './hcaptcha.provider';
 
 const {
 	      __,
@@ -32,11 +33,11 @@ function PluginCaptcha() {
 			} }
 		/>
 		{ Boolean( args.captcha ) && (
-			<CaptchaOptions.Slot fillProps={ { args, setArgs } } />
+			<CaptchaOptions.Slot fillProps={ { args, setArgs } }/>
 		) }
 		<GoogleProvider/>
+		<HCaptchaProvider/>
 	</>;
 }
-
 
 export default PluginCaptcha;

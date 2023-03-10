@@ -19,6 +19,11 @@ abstract class Base_Captcha implements
 
 	protected $options;
 
+	const FIELD_CLASS = 'captcha_token';
+	const FIELD       = '_captcha_token';
+	const HANDLE_API  = 'jet-form-builder-recaptcha';
+	const HANDLE_USER = self::HANDLE_API . '-handler';
+
 	abstract public function get_id(): string;
 
 	abstract public function get_title(): string;

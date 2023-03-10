@@ -12,31 +12,17 @@
 			:size="'fullwidth'"
 			v-model="storage.secret"
 		></cx-vui-input>
-		<cx-vui-input
-			type="number"
-			:min="0"
-			:max="1"
-			:step="0.1"
-			:label="label.threshold"
-			:description="help.threshold"
-			:wrapper-css="[ 'equalwidth' ]"
-			:size="'fullwidth'"
-			v-model="storage.threshold"
-		></cx-vui-input>
-		<p class="fb-description">{{ help.apiPref }} <a :href="help.apiLink" target="_blank">{{ help.apiLinkLabel }}</a>
-		</p>
 	</section>
 </template>
 
 <script>
 
 import {
-	help,
 	label,
-} from "./source";
+} from './source';
 
 export default {
-	name: 'google',
+	name: 'hcaptcha',
 	props: {
 		incoming: {
 			type: Object,
@@ -47,7 +33,7 @@ export default {
 	},
 	data() {
 		return {
-			label, help,
+			label,
 			storage: {},
 		};
 	},
@@ -64,6 +50,6 @@ export default {
 			};
 		},
 	},
-}
+};
 
 </script>

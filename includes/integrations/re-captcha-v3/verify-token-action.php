@@ -49,7 +49,7 @@ class Verify_Token_Action extends Base_Gateway_Action {
 			return;
 		}
 
-		throw new Gateway_Exception( 'captcha_failed' );
+		throw new Gateway_Exception( 'captcha_failed', 'Empty token. Spammer detected' );
 	}
 
 	public function set_secret( string $secret ): Verify_Token_Action {

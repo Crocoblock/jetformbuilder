@@ -31,6 +31,7 @@
 <script>
 
 import reCAPTCHAv3 from '../../captcha/google';
+import hCaptcha from '../../captcha/hCaptcha';
 
 const { applyFilters } = wp.hooks;
 
@@ -41,6 +42,7 @@ window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 
 const captchaTabs = applyFilters( 'jet.fb.register.captcha', [
 	reCAPTCHAv3,
+	hCaptcha,
 ] );
 
 let requestFunc = () => {

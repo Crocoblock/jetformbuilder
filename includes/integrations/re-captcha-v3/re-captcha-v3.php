@@ -16,8 +16,6 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Re_Captcha_V3 extends Base_Captcha_From_Options {
 
-	private $field_key = '_captcha_token';
-
 	const OPTIONS = array(
 		'secret'    => '',
 		'key'       => '',
@@ -35,7 +33,7 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 	public function verify( array $request ) {
 		$action = ( new Verify_Token_Action() )
 			->set_secret( $this->options['secret'] ?? '' )
-			->set_token( $request[ $this->field_key ] ?? '' )
+			->set_token( $request[ self::FIELD ] ?? '' )
 			->set_action( jet_fb_live()->form_id );
 
 		try {
@@ -55,7 +53,7 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 		$form_id = jet_fb_live()->form_id;
 
 		wp_enqueue_script(
-			'jet-form-builder-recaptcha',
+			Base_Captcha::HANDLE_API,
 			$url,
 			array(),
 			jet_form_builder()->get_version(),
@@ -63,7 +61,7 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 		);
 
 		wp_enqueue_script(
-			'jet-form-builder-recaptcha-handler',
+			Base_Captcha::HANDLE_USER,
 			jet_form_builder()->plugin_url( 'assets/js/re-captcha-v3.js' ),
 			array( 'jquery' ),
 			jet_form_builder()->get_version(),
@@ -71,7 +69,7 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 		);
 
 		wp_add_inline_script(
-			'jet-form-builder-recaptcha-handler',
+			Base_Captcha::HANDLE_USER,
 			"
 		    window.JetFormBuilderReCaptchaConfig = window.JetFormBuilderReCaptchaConfig || {};
 		    window.JetFormBuilderReCaptchaConfig[ $form_id ] = { key: '$key' };
@@ -80,8 +78,9 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 		);
 
 		return sprintf(
-			'<input type="hidden" class="captcha-token" name="%s" value="">',
-			esc_attr( $this->field_key )
+			'<input type="hidden" class="%1$s" name="%2$s" value=""/>',
+			self::FIELD_CLASS,
+			self::FIELD
 		);
 	}
 

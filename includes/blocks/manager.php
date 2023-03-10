@@ -358,7 +358,7 @@ class Manager {
 	}
 
 	public function render_callback( $instance ) {
-		return function ( array $attrs, $content = null, $wp_block = null ) use ( $instance ) {
+		return static function ( array $attrs, $content = null, $wp_block = null ) use ( $instance ) {
 			return call_user_func( array( clone $instance, 'render_callback_field' ), $attrs, $content, $wp_block );
 		};
 	}

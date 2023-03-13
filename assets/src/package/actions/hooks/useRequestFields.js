@@ -1,8 +1,13 @@
 import BaseAction from '../abstract/BaseAction';
+import CurrentActionEditContext from '../context/CurrentActionEditContext';
 
 const {
 	      useSelect,
       } = wp.data;
+
+const {
+	      useContext,
+      } = wp.element;
 
 const getRequestFields = actions => {
 	const requestFields = [];
@@ -110,12 +115,17 @@ function useRequestFields() {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 	}, [] );
 
-	const actions = JSON.parse( meta._jf_actions || '[]' );
-
+	const actionProps   = useContext( CurrentActionEditContext );
 	const currentAction = useSelect(
 		select => select( 'jet-forms/actions' ).getCurrentAction(),
 		[],
 	);
+
+	if ( !actionProps?.actionId ) {
+		return [];
+	}
+
+	const actions = JSON.parse( meta._jf_actions || '[]' );
 
 	actions.splice( currentAction.index );
 

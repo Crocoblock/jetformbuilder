@@ -1,5 +1,6 @@
 import { storeName } from '../store';
 import Tools from '../../tools';
+import useRequestFields from '../../actions/hooks/useRequestFields';
 
 const {
 	      useSelect,
@@ -19,7 +20,8 @@ const {
  * @returns {Array}
  */
 function useFields( options = {}, deps = undefined ) {
-	const blockProps = useBlockEditContext();
+	const blockProps   = useBlockEditContext();
+	const actionFields = useRequestFields();
 
 	if ( options.excludeCurrent && blockProps?.clientId?.length ) {
 		options.currentId = blockProps.clientId;
@@ -29,6 +31,8 @@ function useFields( options = {}, deps = undefined ) {
 		select => select( storeName ).getFields( options ),
 		deps,
 	);
+
+	fields.push( ...actionFields );
 
 	return options.placeholder
 	       ? Tools.withPlaceholder( fields, options.placeholder )

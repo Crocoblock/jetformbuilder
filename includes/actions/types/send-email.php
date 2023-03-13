@@ -17,12 +17,6 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-add_filter(
-	'jet-form-builder/send-email/message_content',
-	function ( $content ) {
-		return do_shortcode( $content );
-	}
-);
 
 /**
  * Define Base_Type class
@@ -55,6 +49,7 @@ class Send_Email extends Base {
 			'from_name'        => __( 'From Name:', 'jet-form-builder' ),
 			'from_address'     => __( 'From Email Address:', 'jet-form-builder' ),
 			'content_type'     => __( 'Content type:', 'jet-form-builder' ),
+			'disable_format'   => __( 'Disable Auto-Formatting', 'jet-form-builder' ),
 			'content'          => __( 'Content:', 'jet-form-builder' ),
 			'attachments'      => __( 'Attachments:', 'jet-form-builder' ),
 			'add_attachment'   => __( 'Add form field with attachment', 'jet-form-builder' ),
@@ -63,15 +58,21 @@ class Send_Email extends Base {
 
 	public function editor_labels_help() {
 		return array(
-			'custom_email' => __(
+			'custom_email'   => __(
 				'To apply multiple mailing addresses, separate them with commas',
 				'jet-form-builder'
 			),
-			'from_field'   => __(
+			'from_field'     => __(
 				'To apply multiple mailing addresses, you can select a "Checkbox Field" 
 				or a "Select field" with enabled "Is multiple" option.',
 				'jet-form-builder'
 			),
+			'disable_format' => __(
+				'By default, each new line in the email content field is changed 
+to a separate paragraph element. And each link turns into a clickable hyperlink. 
+To prevent this, enable this option.',
+				'jet-form-builder'
+			)
 		);
 	}
 
@@ -270,7 +271,7 @@ class Send_Email extends Base {
 		$message      = jet_fb_parse_macro( $message );
 		$message      = do_shortcode( $message );
 
-		if ( 'text/html' === $content_type ) {
+		if ( 'text/html' === $content_type && empty( $this->settings['disable_format'] ) ) {
 			$message = make_clickable( wpautop( $message ) );
 		}
 

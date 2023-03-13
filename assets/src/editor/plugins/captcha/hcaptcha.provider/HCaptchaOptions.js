@@ -13,7 +13,17 @@ let {
 
 NumberControl = NumberControl || __experimentalNumberControl;
 
+const { globalTab } = JetFBActions;
+
+const currentTab = globalTab( {
+	slug: 'captcha-tab',
+	element: 'hcaptcha',
+	empty: {},
+} );
+
 function HCaptchaOptions( { providerArgs, setProviderArgs } ) {
+	const currentArgs = providerArgs.use_global ? currentTab : providerArgs;
+
 	return <>
 		<ToggleControl
 			checked={ providerArgs.use_global }
@@ -28,13 +38,13 @@ function HCaptchaOptions( { providerArgs, setProviderArgs } ) {
 		</ToggleControl>
 		<TextControl
 			label={ __( 'Site Key:', 'jet-form-builder' ) }
-			value={ providerArgs.key }
+			value={ currentArgs.key }
 			disabled={ providerArgs.use_global }
 			onChange={ key => setProviderArgs( { key } ) }
 		/>
 		<TextControl
 			label={ __( 'Secret Key:', 'jet-form-builder' ) }
-			value={ providerArgs.secret }
+			value={ currentArgs.secret }
 			disabled={ providerArgs.use_global }
 			onChange={ secret => setProviderArgs( { secret } ) }
 		/>

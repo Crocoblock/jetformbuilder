@@ -24,9 +24,7 @@ class Tab_Handler_Manager {
 	use Instance_Trait;
 	use Repository_Pattern_Trait;
 
-	private $_tabs         = array();
 	private $_tabs_options = array();
-
 
 	public static function get_options( string $slug, array $default = array() ): array {
 		$tab = static::instance()->tab( $slug );
@@ -104,8 +102,9 @@ class Tab_Handler_Manager {
 
 	public function all( $default_tabs = array() ): array {
 		$response = array();
+		$tabs     = $this->rep_get_items();
 
-		foreach ( $this->_tabs as $slug => $tab ) {
+		foreach ( $tabs as $slug => $tab ) {
 			$default = array();
 			if ( isset( $default_tabs[ $slug ] ) ) {
 				$default = $default_tabs[ $slug ];

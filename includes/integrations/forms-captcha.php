@@ -6,8 +6,8 @@ use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha;
-use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha_From_Options;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Captcha_Settings_From_Options;
+use Jet_Form_Builder\Integrations\Friendly_Captcha\Friendly_Captcha;
 use Jet_Form_Builder\Integrations\Hcaptcha\Hcaptcha;
 use Jet_Form_Builder\Integrations\Re_Captcha_V3\Re_Captcha_V3;
 use Jet_Form_Builder\Plugin;
@@ -47,6 +47,7 @@ class Forms_Captcha {
 			array(
 				new Re_Captcha_V3(),
 				new Hcaptcha(),
+				new Friendly_Captcha(),
 			)
 		);
 	}

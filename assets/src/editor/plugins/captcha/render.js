@@ -1,6 +1,7 @@
 import { captchaItems } from './options';
 import GoogleProvider from './google.provider';
 import HCaptchaProvider from './hcaptcha.provider';
+import FriendlyCaptchaProvider from './friendly.provider';
 
 const {
 	      __,
@@ -37,6 +38,7 @@ function PluginCaptcha() {
 		) }
 		<GoogleProvider/>
 		<HCaptchaProvider/>
+		<FriendlyCaptchaProvider/>
 	</>;
 }
 

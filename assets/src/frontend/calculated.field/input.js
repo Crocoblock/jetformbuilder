@@ -22,10 +22,10 @@ function CalculatedData() {
 	this.visibleValNode = null;
 	this.valueTypeProp  = 'number';
 
-	this.isSupported  = function ( node ) {
+	this.isSupported = function ( node ) {
 		return isCalculated( node );
 	};
-	this.setValue     = function () {
+	this.setValue    = function () {
 		const formula = new CalculatedFormula( this, { forceFunction: true } );
 
 		formula.observe( this.formula );
@@ -68,7 +68,6 @@ function CalculatedData() {
 		                           : '';
 		formula.setResult();
 		this.value.current = this.value.applySanitizers( this.value.current );
-		this.onChange();
 
 		this.beforeSubmit( ( resolve ) => {
 			this.value.silence();
@@ -79,12 +78,7 @@ function CalculatedData() {
 			resolve();
 		} );
 	};
-	this.makeReactive = function () {
-		InputData.prototype.makeReactive.call( this );
 
-		// run signals
-		this.value.notify();
-	};
 	this.setNode      = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
 

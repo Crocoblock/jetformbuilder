@@ -7,14 +7,25 @@ const {
 	      isDev,
       } = require( './webpack.helper' );
 
+const dev = isDev();
+
 module.exports = {
 	name: 'js_bundle',
 	context: path.resolve( __dirname, 'src' ),
 	entry: getAllEntries(),
 	output: {
 		path: path.resolve( __dirname, 'js' ),
-		filename: isDev() ? '[name].js' : '[name].min.js',
-		chunkFilename: 'chunks/[name].[contenthash:8].chunk.js',
+		filename: dev ? '[name].js' : '[name].min.js',
+		chunkFilename: 'chunks/[name].[contenthash:8].js',
+		clean: {
+			keep( asset ) {
+				const regexp = dev
+				               ? /^chunks\/[a-z\-\_]+\.\w+\.js/g
+				               : /^chunks\/\d+\.\w+\.js$/g;
+
+				return !regexp.test( asset );
+			},
+		},
 	},
 	devtool: 'eval-source-map',
 	resolve: {
@@ -77,6 +88,6 @@ module.exports = {
 	},
 };
 
-if ( !isDev() ) {
+if ( !dev ) {
 	delete module.exports.devtool;
 }

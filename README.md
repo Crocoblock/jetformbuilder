@@ -4,6 +4,12 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.0.2
+* ADD: Option for Send Email "Disable Auto-Formatting"
+* FIX: Correct apply calculated value on page load
+* FIX: Importing/duplicating form in some cases
+* FIX: Captcha token verify
+
 ## 3.0.1.1
 * FIX: Captcha score validation
 

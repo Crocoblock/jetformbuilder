@@ -182,46 +182,52 @@ To prevent this, enable this option.',
 	 * @throws Action_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		$message      = apply_filters(
+		$message = apply_filters(
 			'jet-form-builder/send-email/message_content',
 			$this->settings['content'] ?? '',
 			$this
 		);
+		$this->set_content( $message );
+
 		$content_type = apply_filters(
 			'jet-form-builder/send-email/content-type',
 			$this->get_default_content_type(),
 			$this
 		);
-		$from_name    = apply_filters(
+		$this->set_content_type( $content_type );
+
+		$from_name = apply_filters(
 			'jet-form-builder/send-email/from-name',
 			$this->get_default_from_name(),
 			$this
 		);
-		$reply_to     = apply_filters(
+		$this->set_from_name( $from_name );
+
+		$reply_to = apply_filters(
 			'jet-form-builder/send-email/reply-to',
 			$this->get_default_reply_to(),
 			$this
 		);
-		$from_email   = apply_filters(
+		$this->set_reply_to( $reply_to );
+
+		$from_email = apply_filters(
 			'jet-form-builder/send-email/from-address',
 			$this->get_default_from_address(),
 			$this
 		);
-		$headers      = apply_filters(
+		$this->set_from_address( $from_email );
+
+
+		$this->set_mail_to( $this->get_default_mail_to() );
+		$this->set_subject( $this->get_default_subject() );
+		$this->set_attachments( $this->get_default_attachments() );
+
+		$headers = apply_filters(
 			'jet-form-builder/send-email/headers',
 			$this->get_default_headers(),
 			$this
 		);
-
-		$this->set_content( $message );
-		$this->set_content_type( $content_type );
-		$this->set_from_name( $from_name );
-		$this->set_reply_to( $reply_to );
-		$this->set_from_address( $from_email );
 		$this->set_headers( $headers );
-		$this->set_mail_to( $this->get_default_mail_to() );
-		$this->set_subject( $this->get_default_subject() );
-		$this->set_attachments( $this->get_default_attachments() );
 
 		/**
 		 * Hooks before the email is sent

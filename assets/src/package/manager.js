@@ -169,6 +169,8 @@ import useActionDetail from './actions/hooks/useActionDetail';
 import useUniqueNameOnDuplicate from './blocks/hooks/useUniqueNameOnDuplicate';
 import useFields from './blocks/hooks/useFields';
 import CaptchaOptions from './captcha/components/CaptchaOptions';
+import CaptchaBlockEdit from './captcha/components/CaptchaBlockEdit';
+import useCaptchaProvider from './captcha/hooks/useCaptchaProvider';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -254,6 +256,7 @@ window.JetFBComponents = {
 	ServerSideMacros,
 	ActionsFlow,
 	CaptchaOptions,
+	CaptchaBlockEdit,
 };
 
 // JFBFunctions
@@ -325,5 +328,6 @@ window.JetFBHooks = {
 	useActionDetail,
 	useUniqueNameOnDuplicate,
 	useFields: useFields,
+	useCaptchaProvider,
 };
 

@@ -1,3 +1,5 @@
+import useCaptchaProvider from '../hooks/useCaptchaProvider';
+
 const {
 	      createSlotFill,
       } = wp.components;
@@ -6,35 +8,15 @@ const { Slot, Fill } = createSlotFill( 'JFBCaptchaOptions' );
 
 function CaptchaOptions( { children, provider = false } ) {
 	return <Fill>{ ( { args, setArgs } ) => {
-		if ( 'function' !== typeof children ) {
-			return children;
-		}
-		const { captcha } = args;
-
-		if ( provider && provider !== captcha ) {
+		if ( provider && provider !== args.captcha ) {
 			return null;
 		}
 
-		const providerArgs = args?.[ captcha ] ?? false;
+		if ( 'function' !== typeof children ) {
+			return children;
+		}
 
-		const setProviderArgs = ( props = {} ) => {
-			if ( !captcha ) {
-				return;
-			}
-			setArgs( prev => (
-				{
-					...prev,
-					[ captcha ]: {
-						...(
-							providerArgs || {}
-						),
-						...props,
-					},
-				}
-			) );
-		};
-
-		return children( { args, providerArgs, setProviderArgs } );
+		return children( { args, setArgs } );
 	} }</Fill>;
 }
 

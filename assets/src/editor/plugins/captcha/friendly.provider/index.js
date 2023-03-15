@@ -1,6 +1,9 @@
 import FriendlyCaptchaOptions from './FriendlyCaptchaOptions';
 
-const { CaptchaOptions } = JetFBComponents;
+const {
+	      CaptchaOptions,
+	      CaptchaBlockEdit,
+      } = JetFBComponents;
 
 export default function FriendlyCaptchaProvider() {
 	return <CaptchaOptions provider={ 'friendly' }>

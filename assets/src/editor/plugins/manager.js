@@ -9,31 +9,35 @@ import scheduleAddon from './schedule-addon';
 import validation from './validation';
 
 const {
-	applyFilters,
-	addFilter,
-} = wp.hooks;
+	      applyFilters,
+	      addFilter,
+      } = wp.hooks;
 
 const {
-	registerPlugin,
-	getPlugin,
-	unregisterPlugin,
-} = wp.plugins;
+	      registerPlugin,
+	      getPlugin,
+	      unregisterPlugin,
+      } = wp.plugins;
 
 const {
-	PluginDocumentSettingPanel
-} = wp.editPost;
+	      PluginDocumentSettingPanel,
+      } = wp.editPost;
 
 const withPluginProps = ( settings, base ) => {
 	const PluginRender = settings.render;
-	return () => <PluginDocumentSettingPanel { ...base } key={ `plugin-panel-${ base.name }` }>
+	return () => <PluginDocumentSettingPanel
+		key={ `plugin-panel-${ base.name }` }
+		{ ...base }>
 		<PluginRender key={ `plugin-render-${ base.name }` }/>
 	</PluginDocumentSettingPanel>;
-}
+};
 
 const registerJfbPlugin = plugin => {
 	const { base, settings } = plugin;
 
-	settings.render = withPluginProps( settings, base );
+	if ( !base.jfbApiVersion || 1 === base.jfbApiVersion ) {
+		settings.render = withPluginProps( settings, base );
+	}
 
 	if ( getPlugin( base.name ) ) {
 		unregisterPlugin( base.name );
@@ -41,40 +45,43 @@ const registerJfbPlugin = plugin => {
 	registerPlugin( base.name, settings );
 };
 
-if ( ! JetFormEditorData.isActivePro ) {
-	addFilter( 'jet.fb.register.plugin.jf-actions-panel.after', 'jet-form-builder', plugins => {
-		plugins.push( scheduleAddon, limitAddon );
+if ( !JetFormEditorData.isActivePro ) {
+	addFilter( 'jet.fb.register.plugin.jf-actions-panel.after',
+		'jet-form-builder', plugins => {
+			plugins.push( scheduleAddon, limitAddon );
 
-		return plugins;
-	}, 0 );
+			return plugins;
+		}, 0 );
 }
 
 export default function RegisterPlugins() {
 	const sortedPlugins = [];
-	const jfbPlugins = applyFilters( 'jet.fb.register.plugins', [
+	const jfbPlugins    = applyFilters( 'jet.fb.register.plugins', [
 		args,
 		validation,
 		captcha,
 		gateways,
 		actions,
 		preset,
-		messages
+		messages,
 	] );
 
 	jfbPlugins.forEach( plugin => {
 		const { base: { name, condition = true } } = plugin;
 
-		if ( ! condition ) {
+		if ( !condition ) {
 			return false;
 		}
 
-		const beforePlugin = applyFilters( `jet.fb.register.plugin.${ name }.before`, [] );
+		const beforePlugin = applyFilters(
+			`jet.fb.register.plugin.${ name }.before`, [] );
 		if ( beforePlugin ) {
 			sortedPlugins.push( ...beforePlugin );
 		}
 		sortedPlugins.push( plugin );
 
-		const afterPlugin = applyFilters( `jet.fb.register.plugin.${ name }.after`, [] );
+		const afterPlugin = applyFilters(
+			`jet.fb.register.plugin.${ name }.after`, [] );
 		if ( afterPlugin ) {
 			sortedPlugins.push( ...afterPlugin );
 		}

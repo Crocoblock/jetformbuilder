@@ -5,6 +5,9 @@ const {
 	      ToggleControl,
 	      BaseHelp,
       } = JetFBComponents;
+const {
+	      useCaptchaProvider,
+      } = JetFBHooks;
 let {
 	    TextControl,
 	    NumberControl,
@@ -21,8 +24,12 @@ const currentTab = globalTab( {
 	empty: {},
 } );
 
-function HCaptchaOptions( { providerArgs, setProviderArgs } ) {
-	const currentArgs = providerArgs.use_global ? currentTab : providerArgs;
+function HCaptchaOptions() {
+	const [ providerArgs, setProviderArgs ] = useCaptchaProvider();
+
+	const currentArgs = providerArgs.use_global
+	                    ? currentTab
+	                    : providerArgs;
 
 	return <>
 		<ToggleControl

@@ -431,3 +431,16 @@ class Send_Email extends Base {
 	}
 
 }
+
+add_action(
+	'jet-form-builder/actions/register',
+	function () {
+		if ( ! class_exists( '\Jet_Form_Builder\Actions\Send_Email_Hooks' ) ) {
+			return;
+		}
+		remove_action(
+			'jet-form-builder/send-email/send-before',
+			array( \Jet_Form_Builder\Actions\Send_Email_Hooks::class, 'content_unslash' )
+		);
+	}
+);

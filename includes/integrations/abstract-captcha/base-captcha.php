@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Integrations\Abstract_Captcha;
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Exceptions\Request_Exception;
@@ -18,6 +19,7 @@ abstract class Base_Captcha implements
 	Arrayable {
 
 	protected $options;
+	protected $locked_render = false;
 
 	const FIELD_CLASS = 'captcha_token';
 	const FIELD       = '_captcha_token';
@@ -35,7 +37,22 @@ abstract class Base_Captcha implements
 	 */
 	abstract public function verify( array $request );
 
-	abstract public function render(): string;
+	abstract protected function render(): string;
+
+	public function get_output(): string {
+		if ( $this->is_locked_render() ) {
+			return '';
+		}
+
+		try {
+			$output = $this->render();
+		} catch ( Render_Empty_Field $exception ) {
+			return '';
+		}
+		$this->lock_render();
+
+		return $output;
+	}
 
 	public function sanitize_options( array $options ): Base_Captcha {
 		$this->options = $options[ $this->get_id() ] ?? array();
@@ -52,5 +69,13 @@ abstract class Base_Captcha implements
 			'label' => $this->get_title(),
 			'value' => $this->get_id(),
 		);
+	}
+
+	public function lock_render() {
+		$this->locked_render = true;
+	}
+
+	public function is_locked_render(): bool {
+		return $this->locked_render;
 	}
 }

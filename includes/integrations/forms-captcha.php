@@ -2,6 +2,8 @@
 
 namespace Jet_Form_Builder\Integrations;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
+use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
@@ -31,6 +33,7 @@ class Forms_Captcha {
 	 * @var Base_Captcha
 	 */
 	private $current;
+	private $exist_container;
 
 	public function __construct() {
 		$this->rep_install();
@@ -39,6 +42,8 @@ class Forms_Captcha {
 		add_filter( 'jet-form-builder/before-render/submit-field', array( $this, 'on_render_submit' ), 10, 2 );
 		add_filter( 'jet-form-builder/page-config/jfb-settings', array( $this, 'on_localize_config' ) );
 		add_filter( 'jet-form-builder/form-builder/config', array( $this, 'on_localize_config' ) );
+		add_filter( 'jet-form-builder/setup-blocks', array( $this, 'check_is_container_exist' ) );
+		add_filter( 'jet-form-builder/before-end-form', array( $this, 'on_end_render_form' ) );
 	}
 
 	public function rep_instances(): array {
@@ -64,8 +69,24 @@ class Forms_Captcha {
 		return $request;
 	}
 
+	/**
+	 * By default, the captcha is displayed before the submit button.
+	 * But if the Captcha Container block is present in the form, we can check it in advance.
+	 * This is necessary because the captcha and the button can be in parallel columns.
+	 *
+	 * @param string $content
+	 * @param array $attrs
+	 *
+	 * @return string
+	 * @see Forms_Captcha::check_is_container_exist
+	 */
 	public function on_render_submit( string $content, array $attrs ): string {
-		if ( 'submit' !== $attrs['action_type'] ?? '' ) {
+		$type = $attrs['action_type'] ?? '';
+
+		if (
+			'submit' !== $type ||
+			$this->exist_container
+		) {
 			return $content;
 		}
 
@@ -74,20 +95,24 @@ class Forms_Captcha {
 		return $content;
 	}
 
-	public function on_localize_config( array $config ): array {
-		$captcha_config = array();
+	/**
+	 * If for some reason the submit button has not been rendered in the form,
+	 * then to make sure that we have displayed the captcha,
+	 * we display it at the end of the rendering of the entire form.
+	 *
+	 * @param string $content
+	 *
+	 * @return string
+	 */
+	public function on_end_render_form( string $content ): string {
+		$content .= $this->render();
 
-		foreach ( $this->rep_get_items() as $captcha ) {
-			if ( ! ( $captcha instanceof Captcha_Settings_From_Options ) ) {
-				continue;
-			}
-			$captcha_config[] = $captcha->to_array();
-		}
+		$this->current         = null;
+		$this->exist_container = false;
 
-		$config['captcha-tab-config'] = $captcha_config;
-
-		return $config;
+		return $content;
 	}
+
 
 	/**
 	 * @param $request
@@ -104,14 +129,14 @@ class Forms_Captcha {
 
 	public function render(): string {
 		try {
-			return $this->get_current()->render();
+			return $this->get_current()->get_output();
 		} catch ( Repository_Exception $exception ) {
 			return '';
 		}
 	}
 
 	/**
-	 * Returns captcha settings for current form ID
+	 * Returns captcha settings for current form
 	 *
 	 * @return Base_Captcha
 	 * @throws Repository_Exception
@@ -144,6 +169,30 @@ class Forms_Captcha {
 		$this->current = $current->sanitize_options( $settings );
 
 		return $this->current;
+	}
+
+	public function on_localize_config( array $config ): array {
+		$captcha_config = array();
+
+		foreach ( $this->rep_get_items() as $captcha ) {
+			if ( ! ( $captcha instanceof Captcha_Settings_From_Options ) ) {
+				continue;
+			}
+			$captcha_config[] = $captcha->to_array();
+		}
+
+		$config['captcha-tab-config'] = $captcha_config;
+
+		return $config;
+	}
+
+	public function check_is_container_exist( array $blocks ): array {
+		$this->exist_container = ! empty( Block_Helper::find_by_block_name(
+			$blocks,
+			'jet-forms/captcha-container'
+		) );
+
+		return $blocks;
 	}
 
 

@@ -37,7 +37,7 @@ class Form_Builder_Blocks_Repository extends Blocks_Repository_Base {
 				new Types\Color_Picker_Field(),
 				new Types\Progress_Bar(),
 				new Types\Form_Break_Start(),
-				//new Types\Captcha_Container(),
+				new Types\Captcha_Container(),
 			)
 		);
 	}

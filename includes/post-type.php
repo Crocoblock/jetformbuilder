@@ -233,81 +233,85 @@ class Post_Type {
 	 * fields_layout, submit_type, captcha and required_mark
 	 * in assoc array
 	 *
-	 * @param $form_id
+	 * @param int|false $form_id
 	 *
 	 * @return array
 	 */
-	public function get_args( $form_id ): array {
+	public function get_args( $form_id = false ): array {
 		return $this->get_meta( Args_Meta::class )->query( $form_id );
 	}
 
 	/**
 	 * Returns form messages
 	 *
-	 * @param $form_id
+	 * @param int|false $form_id
 	 *
 	 * @return array
 	 */
-	public function get_messages( $form_id ) {
+	public function get_messages( $form_id = false ) {
 		return $this->get_meta( Messages_Meta::class )->query( $form_id );
 	}
 
 	/**
 	 * Returns form actions
 	 *
-	 * @param $form_id
+	 * @param int|false $form_id
 	 *
 	 * @return array
 	 */
-	public function get_actions( $form_id ) {
+	public function get_actions( $form_id = false ) {
 		return $this->get_meta( Actions_Meta::class )->query( $form_id );
 	}
 
 	/**
 	 * Returns form actions
 	 *
-	 * @param $form_id
+	 * @param int|false $form_id
 	 *
 	 * @return array
 	 */
-	public function get_preset( $form_id ) {
+	public function get_preset( $form_id = false ) {
 		return $this->get_meta( Preset_Meta::class )->query( $form_id );
 	}
 
 	/**
 	 * Returns captcha settings
 	 *
-	 * @param $form_id
+	 * @param int|false $form_id
 	 *
 	 * @return array
 	 */
-	public function get_recaptcha( $form_id ) {
+	public function get_recaptcha( $form_id = false ) {
 		return $this->get_meta( Recaptcha_Meta::class )->query( $form_id );
 	}
 
 	/**
 	 * Returns form gateways
 	 *
-	 * @param $form_id
+	 * @param int|false $form_id
 	 *
 	 * @return array
 	 */
-	public function get_gateways( $form_id ) {
+	public function get_gateways( $form_id = false ) {
 		return $this->get_meta( Gateways_Meta::class )->query( $form_id );
 	}
 
-	public function get_validation( $form_id ) {
+	public function get_validation( $form_id = false ) {
 		return $this->get_meta( Validation_Meta::class )->query( $form_id );
 	}
 
 	/**
 	 * @param $meta_key
-	 * @param $form_id
+	 * @param int|false $form_id
 	 *
 	 * @return array|mixed
 	 * @deprecated since 3.0.0
 	 */
-	public function get_form_meta( $meta_key, $form_id ) {
+	public function get_form_meta( $meta_key, $form_id = false ) {
+		if ( false === $form_id ) {
+			$form_id = jet_fb_live()->form_id;
+		}
+
 		return Tools::decode_json(
 			get_post_meta(
 				$form_id,

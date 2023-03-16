@@ -57,7 +57,7 @@ class Hcaptcha extends Base_Captcha_From_Options {
 		wp_register_script(
 			Base_Captcha::HANDLE_USER,
 			jet_form_builder()->plugin_url( 'assets/js/frontend/hcaptcha.js' ),
-			array(),
+			array( 'jet-plugins' ),
 			jet_form_builder()->get_version(),
 			true
 		);

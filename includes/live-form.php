@@ -48,6 +48,34 @@ class Live_Form {
 	private function __construct() {
 		$this->post      = $this->current_post();
 		$this->spec_data = new Form_Arguments();
+
+		add_filter(
+			'jet-form-builder/setup-blocks',
+			array( $this, 'remove_extra_page_breaks' )
+		);
+		add_filter(
+			'jet-form-builder/after-end-form',
+			array( self::class, 'on_end_render_form' )
+		);
+	}
+
+	public static function on_end_render_form( string $content ): string {
+		self::clear();
+
+		return $content;
+	}
+
+	public static function clear() {
+		remove_filter(
+			'jet-form-builder/setup-blocks',
+			array( self::$instance, 'remove_extra_page_breaks' )
+		);
+		remove_filter(
+			'jet-form-builder/after-end-form',
+			array( self::class, 'on_end_render_form' )
+		);
+
+		self::$instance = null;
 	}
 
 	public function set_form_id( $form_id ) {
@@ -75,11 +103,16 @@ class Live_Form {
 	 * @return array[]
 	 */
 	public function setup_fields(): array {
-		$this->blocks = $this->get_form_break()->set_pages(
+		$this->blocks = apply_filters(
+			'jet-form-builder/setup-blocks',
 			Block_Helper::get_blocks_by_post( $this->form_id )
 		);
 
 		return $this->blocks;
+	}
+
+	public function remove_extra_page_breaks( array $blocks ) {
+		return $this->get_form_break()->set_pages( $blocks );
 	}
 
 	public function maybe_progress_pages() {
@@ -176,6 +209,5 @@ class Live_Form {
 			return $post;
 		}
 	}
-
 
 }

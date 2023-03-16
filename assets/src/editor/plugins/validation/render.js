@@ -56,7 +56,6 @@ function ValidationPlugin() {
 		/>
 
 		<ToggleControl
-			key={ 'use_csrf' }
 			label={ __( 'Enable csrf protection', 'jet-form-builder' ) }
 			checked={ args.use_csrf }
 			onChange={ () => {
@@ -65,6 +64,18 @@ function ValidationPlugin() {
 
 					return { ...prev, use_csrf };
 				} );
+			} }
+		/>
+		<ToggleControl
+			label={ __( 'Enable Honeypot protection', 'jet-form-builder' ) }
+			checked={ args.use_honeypot }
+			onChange={ () => {
+				setArgs( prev => (
+					{
+						...prev,
+						use_csrf: !Boolean( prev.use_honeypot ),
+					}
+				) );
 			} }
 		/>
 		<ToggleGroupControl

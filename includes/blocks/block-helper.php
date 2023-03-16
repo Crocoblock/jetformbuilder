@@ -44,6 +44,15 @@ class Block_Helper {
 		);
 	}
 
+	public static function find_by_block_name( array $blocks, string $block_name ): array {
+		return self::find_block(
+			function ( $block ) use ( $block_name ) {
+				return ( ( $block['blockName'] ?? false ) === $block_name );
+			},
+			$blocks
+		);
+	}
+
 	public static function find_block( $callable, $blocks ): array {
 		if ( ! is_callable( $callable ) ) {
 			return array();
@@ -67,6 +76,7 @@ class Block_Helper {
 
 		return array();
 	}
+
 
 	/**
 	 * @param $blocks

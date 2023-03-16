@@ -91,7 +91,6 @@ export default function EditCaptchaContainer( props ) {
 		}
 	}, [ provider ] );
 
-
 	return !attributes.provider
 	       ? <Placeholder { ...props } />
 	       : <CaptchaBlockEdit.Slot fillProps={ props }/>;

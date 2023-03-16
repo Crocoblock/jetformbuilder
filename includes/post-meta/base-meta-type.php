@@ -27,6 +27,9 @@ abstract class Base_Meta_Type implements
 	}
 
 	public function query( $form_id ) {
+		if ( false === $form_id ) {
+			$form_id = jet_fb_live()->form_id;
+		}
 		return Tools::decode_json(
 			get_post_meta(
 				$form_id,

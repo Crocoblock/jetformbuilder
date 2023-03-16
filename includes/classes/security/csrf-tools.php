@@ -36,6 +36,9 @@ class Csrf_Tools {
 		// get hashed string with user-agent, ip address & form-id
 		$client_id = static::client_id( jet_fb_live()->form_id );
 
+		// delete all old tokens
+		Csrf_Token_Model::clear();
+
 		try {
 			// insert new token if client_id is not exist in table
 			$token = static::add( $csrf, $client_id );
@@ -92,6 +95,7 @@ class Csrf_Tools {
 	 * @param string $client_id
 	 *
 	 * New token or existed
+	 *
 	 * @return string
 	 * @throws Sql_Exception
 	 */

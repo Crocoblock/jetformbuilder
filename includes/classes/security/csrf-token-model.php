@@ -12,6 +12,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Csrf_Token_Model extends Base_Db_Model {
 
+	private static $deleted = false;
+
 	/**
 	 * @return string
 	 */
@@ -47,6 +49,12 @@ class Csrf_Token_Model extends Base_Db_Model {
 
 	public static function clear() {
 		global $wpdb;
+
+		if ( self::$deleted ) {
+			return;
+		}
+
+		self::$deleted = true;
 
 		/** @var \DateTimeImmutable $datetime_limit */
 		$datetime_limit = apply_filters(

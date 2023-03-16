@@ -11,6 +11,7 @@ use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Blocks\Switch_Page_On_Change;
 use Jet_Form_Builder\Blocks\Validation;
+use Jet_Form_Builder\Classes\Security\Honeypot;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Compatibility\Deprecated;
 use Jet_Form_Builder\Compatibility\Elementor\Elementor;
@@ -62,6 +63,7 @@ class Plugin {
 	public $addons_manager;
 	public $admin_bar;
 	public $msg_router;
+	public $honeypot;
 
 	public static $instance;
 
@@ -124,6 +126,7 @@ class Plugin {
 		$this->form_handler   = new Form_Handler();
 		$this->captcha        = new Forms_Captcha();
 		$this->addons_manager = new AddonsManager();
+		$this->honeypot       = new Honeypot();
 
 		/**
 		 * Modules & components

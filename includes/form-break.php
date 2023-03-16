@@ -123,7 +123,7 @@ class Form_Break {
 			$this->form_breaks[] = $form_break;
 		}
 		if ( $last_page_from_blocks && ! empty( $this->form_breaks ) ) {
-			$this->form_breaks[] = $last_break ? $last_break : array( 'label' => __( 'Last Page' ) );
+			$this->form_breaks[] = $last_break ?: array( 'label' => __( 'Last Page' ) );
 		}
 
 		return $blocks;

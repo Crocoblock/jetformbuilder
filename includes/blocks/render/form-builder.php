@@ -2,18 +2,14 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
-use Jet_Form_Builder\Blocks\Dynamic_Value;
-use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Compatibility\Jet_Plugins_Ajax\Jet_Plugins_Ajax;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
-use Jet_Form_Builder\Presets\Preset_Manager;
 use JET_SM\Gutenberg\Style_Manager;
 
 // If this file is called directly, abort.
@@ -86,8 +82,6 @@ class Form_Builder {
 
 		$form .= jet_fb_live()->maybe_end_page( true );
 		$form .= $this->end_form();
-
-		Live_Form::clear();
 
 		//Preset_Manager::clear();
 

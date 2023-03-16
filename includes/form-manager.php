@@ -43,6 +43,8 @@ class Form_Manager {
 				$this
 			);
 
+			$this->generators = array();
+
 			foreach ( $instances as $instance ) {
 				if ( $instance->can_generate() ) {
 					$this->generators[ $instance->get_id() ] = $instance;

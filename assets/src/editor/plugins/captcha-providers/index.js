@@ -1,11 +1,18 @@
-import CaptchaProviders from './render';
+import GoogleProvider from './google.provider';
+import HCaptchaProvider from './hcaptcha.provider';
+import FriendlyCaptchaProvider from './friendly.provider';
 
-export default {
-	base: {
-		name: 'jf-captcha-providers',
-		jfbApiVersion: 2,
+const {
+	      registerPlugin,
+      } = wp.plugins;
+
+registerPlugin(
+	'jf-captcha-providers',
+	{
+		render: () => <>
+			<GoogleProvider/>
+			<HCaptchaProvider/>
+			<FriendlyCaptchaProvider/>
+		</>,
 	},
-	settings: {
-		render: CaptchaProviders,
-	},
-};
+);

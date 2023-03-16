@@ -220,11 +220,9 @@ function EditFields() {
 			) }
 		/>
 		<RepeaterState state={ updateCurrentConditions }>
-			<SafeDeleteToggle>
-				<Repeater items={ currentAction.conditions ?? [] }>
-					<RepeaterItem formFields={ formFields }/>
-				</Repeater>
-			</SafeDeleteToggle>
+			<Repeater items={ currentAction.conditions ?? [] }>
+				<RepeaterItem formFields={ formFields }/>
+			</Repeater>
 			<RepeaterAddNew item={ { execute: true } }>
 				{ __( 'Add New Condition', 'jet-form-builder' ) }
 			</RepeaterAddNew>

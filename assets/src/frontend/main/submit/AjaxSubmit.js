@@ -19,12 +19,12 @@ function AjaxSubmit( form ) {
 				$form,
 			),
 		).then(
-			() => this.runSubmit(),
+			callbacks => this.runSubmit( callbacks ),
 		).catch(
 			() => this.form.toggle(),
 		);
 	};
-	this.runSubmit     = function () {
+	this.runSubmit     = function ( callbacks ) {
 		const { rootNode } = this.form.observable;
 
 		const formData = new FormData( rootNode );
@@ -50,7 +50,16 @@ function AjaxSubmit( form ) {
 			contentType: false,
 			processData: false,
 		} ).done(
-			response => this.onSuccess( response ),
+			response => {
+				this.onSuccess( response );
+				const $form = jQuery( rootNode );
+
+				callbacks.forEach( cb => {
+					if ( 'function' === typeof cb ) {
+						cb.call( $form, response );
+					}
+				} );
+			},
 		).fail(
 			this.onFail.bind( this ),
 		);

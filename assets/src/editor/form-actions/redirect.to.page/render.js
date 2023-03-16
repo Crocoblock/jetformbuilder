@@ -4,7 +4,6 @@ const {
 
 const {
 	      AdvancedModalControl,
-	      ServerSideMacros,
       } = JetFBComponents;
 
 /**
@@ -111,30 +110,27 @@ function RedirectToPageRender( props ) {
 					{ redirect_page } ) }
 			/> }
 
-			{ 'custom_url' === settings.redirect_type &&
-			<ServerSideMacros>
-				<AdvancedModalControl
+			{ 'custom_url' === settings.redirect_type && <AdvancedModalControl
+				value={ settings.redirect_url }
+				label={ label( 'redirect_url' ) }
+				macroWithCurrent
+				onChangePreset={ redirect_url => onChangeSettingObj(
+					{ redirect_url },
+				) }
+				onChangeMacros={ name => onChangeSettingObj( {
+					redirect_url: (
+						settings.redirect_url ?? ''
+					) + name,
+				} ) }
+			>
+				{ ( { instanceId } ) => <TextControl
+					id={ instanceId }
 					value={ settings.redirect_url }
-					label={ label( 'redirect_url' ) }
-					macroWithCurrent
-					onChangePreset={ redirect_url => onChangeSettingObj(
+					onChange={ redirect_url => onChangeSettingObj(
 						{ redirect_url },
 					) }
-					onChangeMacros={ name => onChangeSettingObj( {
-						redirect_url: (
-							settings.redirect_url ?? ''
-						) + name,
-					} ) }
-				>
-					{ ( { instanceId } ) => <TextControl
-						id={ instanceId }
-						value={ settings.redirect_url }
-						onChange={ redirect_url => onChangeSettingObj(
-							{ redirect_url },
-						) }
-					/> }
-				</AdvancedModalControl>
-			</ServerSideMacros> }
+				/> }
+			</AdvancedModalControl> }
 			<BaseControl
 				label={ label( 'redirect_args' ) }
 				key="redirect_args_control"

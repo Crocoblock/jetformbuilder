@@ -24,11 +24,22 @@ trait Import_Form_Trait {
 			array(
 				'post_title'  => 'New form',
 				'post_status' => 'publish',
+				'post_content' => '',
 			)
 		);
 
+		$form_data['post_content'] = wp_slash( $form_data['post_content'] );
+
 		if ( isset( $form_data['meta_input'] ) && is_array( $form_data['meta_input'] ) ) {
-			$form_data['meta_input'] = wp_slash( $form_data['meta_input'] );
+			foreach ( $form_data['meta_input'] as &$meta_value ) {
+				$unserialized = maybe_unserialize( $meta_value );
+
+				if ( $unserialized !== $meta_value ) {
+					$meta_value = $unserialized;
+					continue;
+				}
+				$meta_value = wp_slash( $meta_value );
+			}
 		}
 
 		$post_id = wp_insert_post(

@@ -2,7 +2,8 @@ const { __ } = wp.i18n;
 
 const base = {
 	name: 'jf-args-panel',
-	title: __( 'Form Settings' )
+	title: __( 'Form Settings' ),
+	jfbTest: 2,
 };
 
 const {
@@ -16,10 +17,10 @@ const settings = {
 	render: () => <Suspense fallback={ 'Loading...' }>
 		<PluginArgs/>
 	</Suspense>,
-	icon: 'admin-settings'
+	icon: 'admin-settings',
 };
 
 export default {
 	base,
-	settings
+	settings,
 };

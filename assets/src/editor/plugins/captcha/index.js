@@ -1,4 +1,4 @@
-import GeneralSettings from './settings';
+const { __ } = wp.i18n;
 
 const {
 	      lazy,
@@ -42,6 +42,9 @@ const settings = {
 };
 
 export default {
-	base: GeneralSettings,
+	base: {
+		name: 'jf-captcha-panel',
+		title: __( 'Captcha Settings', 'jet-form-builder' ),
+	},
 	settings,
 };

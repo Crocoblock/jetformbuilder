@@ -7,6 +7,7 @@ import messages from './messages';
 import limitAddon from './limit-addon';
 import scheduleAddon from './schedule-addon';
 import validation from './validation';
+import captchaProviders from './captcha-providers';
 
 const {
 	      applyFilters,
@@ -64,6 +65,7 @@ export default function RegisterPlugins() {
 		actions,
 		preset,
 		messages,
+		captchaProviders,
 	] );
 
 	jfbPlugins.forEach( plugin => {

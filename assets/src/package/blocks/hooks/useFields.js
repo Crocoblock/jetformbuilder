@@ -9,6 +9,8 @@ const {
 	      useBlockEditContext,
       } = wp.blockEditor;
 
+const { applyFilters } = wp.hooks;
+
 /**
  * @param options {{
  * withInner: Boolean|undefined,
@@ -27,10 +29,13 @@ function useFields( options = {}, deps = undefined ) {
 		options.currentId = blockProps.clientId;
 	}
 
-	const fields = useSelect(
+	let fields = useSelect(
 		select => select( storeName ).getFields( options ),
 		deps,
 	);
+
+	// should be deprecated
+	fields = applyFilters( 'jet.fb.getFormFieldsBlocks', fields );
 
 	fields.push( ...actionFields );
 

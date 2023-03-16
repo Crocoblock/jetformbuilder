@@ -54,7 +54,6 @@ function ValidationPlugin() {
 				setLoadNonce( prev => !prev );
 			} }
 		/>
-
 		<ToggleControl
 			label={ __( 'Enable csrf protection', 'jet-form-builder' ) }
 			checked={ args.use_csrf }
@@ -73,7 +72,7 @@ function ValidationPlugin() {
 				setArgs( prev => (
 					{
 						...prev,
-						use_csrf: !Boolean( prev.use_honeypot ),
+						use_honeypot: !Boolean( prev.use_honeypot ),
 					}
 				) );
 			} }

@@ -77,7 +77,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 * @throws Repository_Exception|Gateway_Exception
 	 */
 	public function create_resource() {
-		$payment = ( new Api_Actions\Pay_Now_Action() )
+		$action = ( new Api_Actions\Pay_Now_Action() )
 			->set_bearer_auth( jet_fb_gateway_current()->get_current_token() )
 			->set_app_context(
 				array(
@@ -92,12 +92,17 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 						'value'         => jet_fb_gateway_current()->get_price_var(),
 					),
 				)
-			)
-			->send_request();
+			);
+
+		do_action( 'jet-form-builder/gateways/before-create', $action );
+
+		$payment = $action->send_request();
 
 		if ( empty( $payment['id'] ) ) {
 			throw new Gateway_Exception( $payment['message'], $payment );
 		}
+
+		do_action( 'jet-form-builder/gateways/after-create', $action, $payment );
 
 		return $payment;
 	}

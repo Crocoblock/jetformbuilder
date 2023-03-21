@@ -90,7 +90,7 @@ class Messages_Meta extends Base_Meta_Type {
 			return $this->messages;
 		}
 
-		return $messages;
+		return array_merge( $this->messages, $messages );
 	}
 
 

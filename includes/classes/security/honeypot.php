@@ -7,6 +7,11 @@ namespace Jet_Form_Builder\Classes\Security;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 class Honeypot {
 
 	const FIELD = '_jfb_email_hp_';
@@ -19,6 +24,10 @@ class Honeypot {
 		add_filter(
 			'jet-form-builder/request-handler/request',
 			array( $this, 'handle_request' )
+		);
+		add_filter(
+			'jet-form-builder/message-types',
+			array( $this, 'handle_global_messages' )
 		);
 	}
 
@@ -65,6 +74,15 @@ class Honeypot {
 		unset( $request[ self::FIELD ] );
 
 		return $request;
+	}
+
+	public function handle_global_messages( array $types ): array {
+		$types['honeypot'] = array(
+			'label' => __( 'Honeypot validation failed', 'jet-form-builder' ),
+			'value' => __( 'You are not allowed to fill in the honeypot field', 'jet-form-builder' ),
+		);
+
+		return $types;
 	}
 
 }

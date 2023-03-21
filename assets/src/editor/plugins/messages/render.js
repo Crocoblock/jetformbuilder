@@ -1,64 +1,35 @@
-const { Tools } = JetFBActions;
 
 const {
-	useSelect,
-	useDispatch
-} = wp.data;
+	      Children,
+	      cloneElement,
+      } = wp.element;
 
 const {
-	useState,
-	useEffect
-} = wp.element;
+	      useState,
+	      useEffect,
+      } = wp.element;
 
 const {
-	TextControl
-} = wp.components;
+	      TextControl,
+      } = wp.components;
+
+const { useMetaState } = JetFBHooks;
 
 function PluginMessages() {
 
-	const meta = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
-
-	const {
-		editPost
-	} = useDispatch( 'core/editor' );
-
-	const getDefaultMessagesValues = () => {
-		const defaults = {};
-		Object.entries( JetFormEditorData.messagesDefault ).forEach( ( [ type, data ] ) => {
-			defaults[ type ] = data.value;
-		} );
-
-		return defaults;
-	}
-
-	const [ messages, setMessages ] = useState( () => {
-		const metaMessages = JSON.parse( meta._jf_messages || '{}' );
-		return Tools.isEmptyObject( metaMessages ) ? getDefaultMessagesValues() : metaMessages;
-	} );
-
-	useEffect( () => {
-		editPost( {
-			meta: ( {
-				...meta,
-				_jf_messages: JSON.stringify( messages )
-			} )
-		} );
-
-	} );
-
-	const onChangeMessage = ( type, value ) => {
-		setMessages( prev => ( { ...prev, [ type ]: value } ) );
-	}
+	const [ messages, setMessages ] = useMetaState( '_jf_messages' );
 
 	return <>
-		{ Object.entries( messages ).map( ( [ type, text ], id ) => {
-			return JetFormEditorData.messagesDefault[ type ] && <TextControl
+		{ Object.entries( JetFormEditorData.messagesDefault ).map(
+			( [ type, { label, value } ], id ) => <TextControl
 				key={ type + id }
-				label={ JetFormEditorData.messagesDefault[ type ].label }
-				value={ text }
-				onChange={ newValue => onChangeMessage( type, newValue ) }
-			/>;
-		} ) }
+				label={ label }
+				value={ messages[ type ] ?? value }
+				onChange={ newValue => setMessages( prev => (
+					{ ...prev, [ type ]: newValue }
+				) ) }
+			/>,
+		) }
 	</>;
 }
 

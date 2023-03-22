@@ -149,4 +149,15 @@
 			}
 		}
 	}
+
+	&.toggle-toolbar-group.components-toolbar-group {
+		.components-base-control__field {
+			margin-bottom: unset;
+		}
+
+		.components-base-control {
+			display: flex;
+			align-items: center;
+		}
+	}
 }

@@ -171,6 +171,8 @@ import useFields from './blocks/hooks/useFields';
 import CaptchaOptions from './captcha/components/CaptchaOptions';
 import CaptchaBlockEdit from './captcha/components/CaptchaBlockEdit';
 import useCaptchaProvider from './captcha/hooks/useCaptchaProvider';
+import SelectVariations from './blocks/components/SelectVariations';
+import ToggleGroupVariations from './blocks/components/ToggleGroupVariations';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -257,6 +259,8 @@ window.JetFBComponents = {
 	ActionsFlow,
 	CaptchaOptions,
 	CaptchaBlockEdit,
+	SelectVariations,
+	ToggleGroupVariations,
 };
 
 // JFBFunctions

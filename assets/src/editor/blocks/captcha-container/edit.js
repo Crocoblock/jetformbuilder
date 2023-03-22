@@ -2,6 +2,8 @@ import { name } from './index';
 
 const {
 	      CaptchaBlockEdit,
+	      SelectVariations,
+	      ToggleGroupVariations,
       } = JetFBComponents;
 
 const {
@@ -11,6 +13,7 @@ const {
 const { __ } = wp.i18n;
 
 const {
+	      InspectorControls,
 	      useBlockProps,
       } = wp.blockEditor;
 
@@ -26,6 +29,7 @@ const {
 let {
 	    __experimentalBlockVariationPicker,
 	    BlockVariationPicker,
+	    BlockControls,
     } = wp.blockEditor;
 
 BlockVariationPicker = (
@@ -91,7 +95,21 @@ export default function EditCaptchaContainer( props ) {
 		}
 	}, [ provider ] );
 
-	return !attributes.provider
-	       ? <Placeholder { ...props } />
-	       : <CaptchaBlockEdit.Slot fillProps={ props }/>;
+	return <>
+		<InspectorControls>
+			<div style={ { padding: '0 20px 20px 20px' } }>
+				<SelectVariations
+					value={ attributes.provider }
+				/>
+			</div>
+		</InspectorControls>
+		<BlockControls>
+			<ToggleGroupVariations
+				value={ attributes.provider }
+			/>
+		</BlockControls>
+		{ !attributes.provider
+		  ? <Placeholder { ...props } />
+		  : <CaptchaBlockEdit.Slot fillProps={ props }/> }
+	</>;
 }

@@ -1,3 +1,5 @@
+import FriendlyCaptchaOptions from './FriendlyCaptchaOptions';
+
 const {
 	      __,
       } = wp.i18n;
@@ -26,15 +28,19 @@ const currentTab = globalTab( {
 	empty: {},
 } );
 
-function FriendlyCaptchaBlockEdit( { attributes, setAttributes } ) {
+function FriendlyCaptchaBlockEdit( { isSelected } ) {
 	const blockProps = useBlockProps();
 
 	return <>
 		<div { ...blockProps }>
-			Hello to Friendly Captcha!
+			{ isSelected
+			  ? <FriendlyCaptchaOptions/>
+			  : 'Hello to Friendly Captcha!' }
 		</div>
 		<InspectorControls>
-			Hello to Friendly Captcha options!
+			<div style={ { padding: '20px' } }>
+				<FriendlyCaptchaOptions/>
+			</div>
 		</InspectorControls>
 	</>;
 }

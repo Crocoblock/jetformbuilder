@@ -1,3 +1,5 @@
+import HCaptchaOptions from './HCaptchaOptions';
+
 const {
 	      __,
       } = wp.i18n;
@@ -5,6 +7,9 @@ const {
 	      ToggleControl,
 	      BaseHelp,
       } = JetFBComponents;
+const {
+	      useCaptchaProvider,
+      } = JetFBHooks;
 let {
 	    TextControl,
 	    NumberControl,
@@ -26,15 +31,19 @@ const currentTab = globalTab( {
 	empty: {},
 } );
 
-function HCaptchaBlockEdit( { attributes, setAttributes } ) {
+function HCaptchaBlockEdit( { isSelected } ) {
 	const blockProps = useBlockProps();
 
 	return <>
 		<div { ...blockProps }>
-			Hello to hCaptcha!
+			{ isSelected
+			  ? <HCaptchaOptions/>
+			  : 'Hello to hCaptcha!' }
 		</div>
 		<InspectorControls>
-			Hello to hCaptcha options!
+			<div style={ { padding: '20px' } }>
+				<HCaptchaOptions/>
+			</div>
 		</InspectorControls>
 	</>;
 }

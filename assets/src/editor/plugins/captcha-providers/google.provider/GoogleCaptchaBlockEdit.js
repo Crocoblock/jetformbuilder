@@ -32,7 +32,7 @@ const currentTab = globalTab( {
 	empty: {},
 } );
 
-function GoogleCaptchaBlockEdit( { attributes, setAttributes, isSelected } ) {
+function GoogleCaptchaBlockEdit( { isSelected } ) {
 	const blockProps = useBlockProps();
 
 	const [ providerArgs, setProviderArgs ] = useCaptchaProvider();

@@ -53,6 +53,7 @@ function FetchApiButton( {
 				onFail( error );
 			} );
 		} }
+		isDestructive={ loadingState.buttonClassName.includes( 'is-invalid' ) }
 	>
 		<i className="dashicons"/>
 	</RequestButton>;

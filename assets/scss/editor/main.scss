@@ -410,22 +410,34 @@
 	animation: jet-form-editor-spin 2s infinite linear
 }
 
-.jet-form-validate-button.components-button i.dashicons:before {
-	content: "";
-}
+$valid-color: #46b450;
 
-.jet-form-validate-button.components-button i.dashicons {
-	margin-right: 4px;
-}
+.jet-form-validate-button.components-button {
+	i.dashicons {
+		margin-right: 4px;
 
-.jet-form-validate-button.components-button.is-valid i.dashicons:before {
-	content: "";
-	color: #46b450
-}
+		&:before {
+			content: "";
+		}
+	}
 
-.jet-form-validate-button.components-button.is-invalid i.dashicons:before {
-	content: "";
-	color: #a00
+	&.is-valid {
+		color: $valid-color;
+		box-shadow: inset 0 0 0 1px $valid-color;
+
+		&:hover:not(:disabled) {
+			color: darken($valid-color, 10%);
+			box-shadow: inset 0 0 0 1px darken($valid-color, 10%);
+		}
+
+		i.dashicons:before {
+			content: "";
+		}
+	}
+
+	&.is-invalid i.dashicons:before {
+		content: "";
+	}
 }
 
 @keyframes jet-form-editor-spin {

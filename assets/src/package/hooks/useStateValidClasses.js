@@ -10,14 +10,15 @@ function useStateValidClasses( initialValid ) {
 
 	const initStateClasses = () => {
 		if ( initialValid ) {
-			return [ ...initClasses, validClass ];
+			return [ validClass ];
 		}
-		else if ( !initialValid ) {
-			return [ ...initClasses, invalidClass ];
-		}
+
+		return false === initialValid ? [ invalidClass ] : [];
 	};
 
-	const [ classes, setClasses ] = useState( initStateClasses() );
+	const [ classes, setClasses ] = useState( () => (
+		[ ...initClasses, ...initStateClasses() ]
+	) );
 
 	const setValidClass   = () => {
 		setClasses( [ ...initClasses, validClass ] );

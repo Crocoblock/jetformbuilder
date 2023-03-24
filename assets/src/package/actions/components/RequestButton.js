@@ -1,8 +1,8 @@
 const { __ } = wp.i18n;
 
 const {
-	Button,
-} = wp.components;
+	      Button,
+      } = wp.components;
 
 const { useEffect } = wp.element;
 
@@ -21,8 +21,15 @@ function RequestButton( {
 	disabled = false,
 	customRequest = false,
 	isHidden = false,
-	hasFetched = -1
+	hasFetched = -1,
+	...buttonProps
 } ) {
+
+	className = (
+		'string' === typeof className
+		? className
+		: className.join( ' ' )
+	);
 
 	const defaultRequest = () => {
 		onLoading();
@@ -31,15 +38,21 @@ function RequestButton( {
 			url: ajaxurl,
 			type: 'POST',
 			data: ajaxArgs,
-		} ).done( response => response.success ? onSuccessRequest( response ) : onFailRequest() ).fail( () => onFailRequest() );
+		} ).
+			done( response => response.success
+			                  ? onSuccessRequest( response )
+			                  : onFailRequest() ).
+			fail( () => onFailRequest() );
 	};
 
 	const request = () => {
 		if ( false === customRequest ) {
 			defaultRequest();
-		} else if ( 'function' === typeof customRequest ) {
+		}
+		else if ( 'function' === typeof customRequest ) {
 			customRequest();
-		} else {
+		}
+		else {
 			onFailRequest();
 		}
 	};
@@ -57,9 +70,10 @@ function RequestButton( {
 	return <Button
 		disabled={ disabled }
 		key={ 'validate_api_key' }
-		isPrimary
 		onClick={ request }
-		className={ className }
+		className={ className + ' jet-fb-button line-with-input' }
+		variant={ 'secondary' }
+		{ ...buttonProps }
 	>
 		{ children && children }
 		{ label }

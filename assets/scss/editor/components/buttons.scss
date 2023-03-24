@@ -3,14 +3,21 @@
 		padding: unset;
 		min-width: unset;
 	}
+
 	&.is-tertiary {
 		box-shadow: none;
 	}
 }
+
 .jet-fb-button {
+	&.line-with-input {
+		height: 32px;
+	}
+
 	&.w-100.w-100.w-100 {
 		width: 100%;
 	}
+
 	&.jc-center.jc-center.jc-center {
 		justify-content: center;
 	}

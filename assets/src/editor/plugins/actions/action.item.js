@@ -136,18 +136,20 @@ function ListActionItem( props ) {
 			{ header }
 		</CardHeader> }
 		<CardBody>
-			<SelectControl
-				value={ action.type }
-				options={ actionTypes }
-				onChange={ type => updateActionObj( action.id, { type } ) }
-			>
-				{ actionTypes.map( type => <option
-					key={ action.id + '__' + type.value }
-					value={ type.value }
-					disabled={ type.disabled }
-					dangerouslySetInnerHTML={ { __html: type.label } }
-				/> ) }
-			</SelectControl>
+			<div>
+				<SelectControl
+					value={ action.type }
+					options={ actionTypes }
+					onChange={ type => updateActionObj( action.id, { type } ) }
+				>
+					{ actionTypes.map( type => <option
+						key={ action.id + '__' + type.value }
+						value={ type.value }
+						disabled={ type.disabled }
+						dangerouslySetInnerHTML={ { __html: type.label } }
+					/> ) }
+				</SelectControl>
+			</div>
 			{ applyFilters(
 				`jet.fb.section.actions.afterSelect.${ action.type }`, null,
 				action, actions ) }

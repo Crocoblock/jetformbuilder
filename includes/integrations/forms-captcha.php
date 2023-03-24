@@ -3,8 +3,8 @@
 namespace Jet_Form_Builder\Integrations;
 
 use Jet_Form_Builder\Blocks\Block_Helper;
-use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha;
@@ -12,6 +12,7 @@ use Jet_Form_Builder\Integrations\Abstract_Captcha\Captcha_Settings_From_Options
 use Jet_Form_Builder\Integrations\Friendly_Captcha\Friendly_Captcha;
 use Jet_Form_Builder\Integrations\Hcaptcha\Hcaptcha;
 use Jet_Form_Builder\Integrations\Re_Captcha_V3\Re_Captcha_V3;
+use Jet_Form_Builder\Integrations\Turnstile\Turnstile;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
@@ -28,6 +29,8 @@ if ( ! defined( 'WPINC' ) ) {
 class Forms_Captcha {
 
 	use Repository_Pattern_Trait;
+
+	const PREFIX = 'jet_form_builder_captcha__';
 
 	/**
 	 * @var Base_Captcha
@@ -52,6 +55,7 @@ class Forms_Captcha {
 			array(
 				new Re_Captcha_V3(),
 				new Hcaptcha(),
+				new Turnstile(),
 				new Friendly_Captcha(),
 			)
 		);
@@ -193,6 +197,29 @@ class Forms_Captcha {
 		) );
 
 		return $blocks;
+	}
+
+	/**
+	 * @param string|array $config
+	 * @param string $handle
+	 *
+	 * @return bool
+	 */
+	public function add_inline_config( $config, string $handle = '' ): bool {
+		$form_id = jet_fb_live()->form_id;
+
+		if ( ! is_string( $config ) ) {
+			$config = Tools::encode_json( $config );
+		}
+
+		return wp_add_inline_script(
+			$handle ?: Base_Captcha::HANDLE_USER,
+			"
+		    window.JetFormBuilderCaptchaConfig = window.JetFormBuilderCaptchaConfig || {};
+		    window.JetFormBuilderCaptchaConfig[ $form_id ] = {$config};
+		",
+			'before'
+		);
 	}
 
 

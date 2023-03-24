@@ -47,6 +47,7 @@ module.exports = {
 			'frontend/listing.options': './frontend/listing.options/main.js',
 			'frontend/hcaptcha': './frontend/hcaptcha/main.js',
 			'frontend/friendly.captcha': './frontend/friendly.captcha/main.js',
+			'frontend/turnstile': './frontend/turnstile/main.js',
 			'editor/form.builder': './editor/main.js',
 			'editor/default.builder': './editor/form-block.js',
 			'editor/package': './package/manager.js',

@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Gateways;
 
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use Jet_Form_Builder\Gateways\Actions_Abstract\Action_Application_Raw_Body_It;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -152,6 +153,10 @@ abstract class Base_Gateway_Action {
 	}
 
 	protected function is_body_ready(): bool {
+		if ( $this instanceof Action_Application_Raw_Body_It ) {
+			return is_array( $this->body ) && ! empty( $this->body );
+		}
+
 		return is_string( $this->body );
 	}
 
@@ -171,6 +176,10 @@ abstract class Base_Gateway_Action {
 	}
 
 	protected function to_json( $body ) {
+		if ( $this instanceof Action_Application_Raw_Body_It ) {
+			return $body;
+		}
+
 		return wp_unslash( Tools::encode_json( $body ) );
 	}
 

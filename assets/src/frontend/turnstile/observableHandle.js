@@ -31,15 +31,15 @@ function observableHandle( observable ) {
 	};
 
 	options = applyFilters(
-		'jet.fb.hCaptcha.options',
+		'jet.fb.turnstile.options',
 		options,
 		observable,
 	);
 
-	const widgetID = hcaptcha.render( container, options );
+	const widgetID = turnstile.render( container, options );
 
 	observable.getSubmit().submitter?.watchFail?.( () => {
-		hcaptcha.reset( widgetID );
+		turnstile.reset( widgetID );
 	} );
 }
 

@@ -32,6 +32,21 @@ and rewards websites. It is the most popular reCAPTCHA alternative.`,
 		},
 	},
 	{
+		name: 'turnstile',
+		title: __( 'Turnstile', 'jet-form-builder' ),
+		description: __(
+			`Turnstile is Cloudflare’s smart CAPTCHA alternative. 
+It can be embedded into any website without sending traffic through 
+Cloudflare and works without showing visitors a CAPTCHA.`,
+			'jet-form-builder',
+		),
+		icon: 'email-alt2',
+		scope: [ 'block', 'inserter' ],
+		attributes: {
+			'provider': 'turnstile',
+		},
+	},
+	{
 		name: 'friendly',
 		title: __( 'Friendly Captcha', 'jet-form-builder' ),
 		description: __(

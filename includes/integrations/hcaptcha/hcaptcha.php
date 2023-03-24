@@ -38,8 +38,6 @@ class Hcaptcha extends Base_Captcha_From_Options {
 	}
 
 	public function render(): string {
-		$form_id = jet_fb_live()->form_id;
-
 		$captcha_args = apply_filters(
 			'jet-form-builder/h-captcha/options',
 			array(
@@ -47,35 +45,26 @@ class Hcaptcha extends Base_Captcha_From_Options {
 			)
 		);
 
-		$config = Tools::encode_json( $captcha_args );
-
 		$captcha_url = apply_filters(
 			'jet-form-builder/h-captcha/url',
 			esc_url_raw( 'https://js.hcaptcha.com/1/api.js?onload=jfbHCaptchaOnLoad&render=explicit' )
 		);
 
 		wp_register_script(
-			Base_Captcha::HANDLE_USER,
+			 Base_Captcha::HANDLE_USER,
 			jet_form_builder()->plugin_url( 'assets/js/frontend/hcaptcha.js' ),
 			array( 'jet-plugins' ),
 			jet_form_builder()->get_version(),
 			true
 		);
 
-		wp_add_inline_script(
-			Base_Captcha::HANDLE_USER,
-			"
-		    window.JetFormBuilderCaptchaConfig = window.JetFormBuilderCaptchaConfig || {};
-		    window.JetFormBuilderCaptchaConfig[ $form_id ] = {$config};
-		",
-			'before'
-		);
+		jet_form_builder()->captcha->add_inline_config( $captcha_args );
 
 		wp_enqueue_script(
 			Base_Captcha::HANDLE_API,
 			$captcha_url,
 			array( Base_Captcha::HANDLE_USER ),
-			jet_form_builder()->get_version(),
+			'1.0.0',
 			true
 		);
 

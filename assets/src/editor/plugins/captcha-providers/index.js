@@ -1,6 +1,7 @@
 import GoogleProvider from './google.provider';
 import HCaptchaProvider from './hcaptcha.provider';
 import FriendlyCaptchaProvider from './friendly.provider';
+import TurnstileProvider from './turnstile.provider';
 
 const {
 	      registerPlugin,
@@ -13,6 +14,7 @@ registerPlugin(
 			<GoogleProvider/>
 			<HCaptchaProvider/>
 			<FriendlyCaptchaProvider/>
+			<TurnstileProvider/>
 		</>,
 	},
 );

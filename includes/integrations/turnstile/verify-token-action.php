@@ -1,41 +1,36 @@
 <?php
 
 
-namespace Jet_Form_Builder\Integrations\Re_Captcha_V3;
+namespace Jet_Form_Builder\Integrations\Turnstile;
 
+use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Gateways\Actions_Abstract\Action_Application_Raw_Body_It;
 use Jet_Form_Builder\Gateways\Base_Gateway_Action;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
-
 class Verify_Token_Action extends Base_Gateway_Action implements
 	Action_Application_Raw_Body_It {
 
 	private $secret;
-	private $token;
+	private $challenge;
+	private $ip;
 	private $action;
-	private $threshold = 0.5;
 
 	public function action_endpoint() {
 		return 'siteverify';
 	}
 
 	public function base_url(): string {
-		return 'https://www.google.com/recaptcha/api/';
+		return 'https://challenges.cloudflare.com/turnstile/v0/';
 	}
 
 	public function send_request() {
 		$response = parent::send_request();
 
 		$action = $response['action'] ?? '';
-		$score  = $response['score'] ?? 0;
 
-		if ( $this->action === $action && $score > $this->threshold ) {
+		if ( $this->action === $action && ! empty( $response['success'] ) ) {
 			return $response;
 		}
 
@@ -46,15 +41,19 @@ class Verify_Token_Action extends Base_Gateway_Action implements
 	 * @throws Gateway_Exception
 	 */
 	public function before_make_request() {
+		if ( ! $this->ip ) {
+			$this->set_ip( Http_Tools::get_ip_address() );
+		}
+
 		if ( ! $this->action ) {
 			$this->set_action( jet_fb_live()->form_id );
 		}
 
-		if ( $this->token && $this->secret ) {
+		if ( $this->ip && $this->secret && $this->challenge ) {
 			return;
 		}
 
-		throw new Gateway_Exception( 'captcha_failed', 'Empty token. Spammer detected' );
+		throw new Gateway_Exception( 'captcha_failed', 'Empty solution. Spammer detected' );
 	}
 
 	public function set_secret( string $secret ): Verify_Token_Action {
@@ -63,8 +62,14 @@ class Verify_Token_Action extends Base_Gateway_Action implements
 		return $this;
 	}
 
-	public function set_token( string $token ): Verify_Token_Action {
-		$this->token = $token;
+	public function set_challenge( string $challenge ): Verify_Token_Action {
+		$this->challenge = $challenge;
+
+		return $this;
+	}
+
+	public function set_ip( string $ip ): Verify_Token_Action {
+		$this->ip = $ip;
 
 		return $this;
 	}
@@ -72,7 +77,7 @@ class Verify_Token_Action extends Base_Gateway_Action implements
 	/**
 	 * @param string|int $action
 	 *
-	 * @return $this
+	 * @return Verify_Token_Action
 	 */
 	public function set_action( $action ): Verify_Token_Action {
 		$this->action = is_numeric( $action ) ? Forms_Captcha::PREFIX . $action : $action;
@@ -80,19 +85,11 @@ class Verify_Token_Action extends Base_Gateway_Action implements
 		return $this;
 	}
 
-	/**
-	 * @param float|string|int $threshold
-	 */
-	public function set_threshold( $threshold ): Verify_Token_Action {
-		$this->threshold = floatval( $threshold );
-
-		return $this;
-	}
-
 	public function action_body() {
 		return array(
 			'secret'   => $this->secret,
-			'response' => $this->token,
+			'response' => $this->challenge,
+			'remoteip' => $this->ip,
 		);
 	}
 

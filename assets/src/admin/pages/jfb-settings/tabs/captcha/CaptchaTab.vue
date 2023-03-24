@@ -33,6 +33,7 @@
 import reCAPTCHAv3 from '../../captcha/google';
 import hCaptcha from '../../captcha/hCaptcha';
 import friendlyCaptcha from '../../captcha/friendlyCaptcha';
+import turnstile from '../../captcha/turnstile';
 
 const { applyFilters } = wp.hooks;
 
@@ -45,6 +46,7 @@ const captchaTabs = applyFilters( 'jet.fb.register.captcha', [
 	reCAPTCHAv3,
 	hCaptcha,
 	friendlyCaptcha,
+	turnstile,
 ] );
 
 let requestFunc = () => {

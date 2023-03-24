@@ -4,10 +4,12 @@
 namespace Jet_Form_Builder\Integrations\Re_Captcha_V3;
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha_From_Options;
+use Jet_Form_Builder\Integrations\Forms_Captcha;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -33,8 +35,7 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 	public function verify( array $request ) {
 		$action = ( new Verify_Token_Action() )
 			->set_secret( $this->options['secret'] ?? '' )
-			->set_token( $request[ self::FIELD ] ?? '' )
-			->set_action( jet_fb_live()->form_id );
+			->set_token( $request[ self::FIELD ] ?? '' );
 
 		try {
 			$action->send_request();
@@ -48,15 +49,14 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 	}
 
 	public function render(): string {
-		$key     = esc_attr( $this->options['key'] ?? '' );
-		$url     = esc_url_raw( sprintf( 'https://www.google.com/recaptcha/api.js?render=%s', $key ) );
-		$form_id = jet_fb_live()->form_id;
+		$key = esc_attr( $this->options['key'] ?? '' );
+		$url = esc_url_raw( sprintf( 'https://www.google.com/recaptcha/api.js?render=%s', $key ) );
 
 		wp_enqueue_script(
 			Base_Captcha::HANDLE_API,
 			$url,
 			array(),
-			jet_form_builder()->get_version(),
+			'1.0.0',
 			true
 		);
 
@@ -68,14 +68,7 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 			true
 		);
 
-		wp_add_inline_script(
-			Base_Captcha::HANDLE_USER,
-			"
-		    window.JetFormBuilderReCaptchaConfig = window.JetFormBuilderReCaptchaConfig || {};
-		    window.JetFormBuilderReCaptchaConfig[ $form_id ] = { key: '$key' };
-		",
-			'before'
-		);
+		jet_form_builder()->captcha->add_inline_config( array( 'key' => $key ) );
 
 		return sprintf(
 			'<input type="hidden" class="%1$s" name="%2$s" value=""/>',

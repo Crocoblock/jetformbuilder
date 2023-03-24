@@ -1,4 +1,4 @@
-import HCaptchaOptions from './HCaptchaOptions';
+import TurnstileOptions from './TurnstileOptions';
 
 const {
 	      __,
@@ -25,25 +25,25 @@ NumberControl = NumberControl || __experimentalNumberControl;
 
 const currentTab = JetFBActions.globalTab( {
 	slug: 'captcha-tab',
-	element: 'hcaptcha',
+	element: 'turnstile',
 	empty: {},
 } );
 
-function HCaptchaBlockEdit( { isSelected } ) {
+function TurnstileBlockEdit( { isSelected } ) {
 	const blockProps = useBlockProps();
 
 	return <>
 		<div { ...blockProps }>
 			{ isSelected
-			  ? <HCaptchaOptions/>
-			  : 'Hello to hCaptcha!' }
+			  ? <TurnstileOptions/>
+			  : 'Hello to turnstile!' }
 		</div>
 		<InspectorControls>
 			<div style={ { padding: '20px' } }>
-				<HCaptchaOptions/>
+				<TurnstileOptions/>
 			</div>
 		</InspectorControls>
 	</>;
 }
 
-export default HCaptchaBlockEdit;
+export default TurnstileBlockEdit;

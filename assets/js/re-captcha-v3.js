@@ -8,11 +8,7 @@
 				    find( '.captcha-token' );
 
 			function setFormToken() {
-				if ( window.JetFormBuilderToken[ formID ] ) {
-					cpField.val( window.JetFormBuilderToken[ formID ] );
-					resolve();
-				}
-				else if ( window.grecaptcha ) {
+				if ( window.grecaptcha ) {
 					grecaptcha.execute(
 						key,
 						{
@@ -20,7 +16,6 @@
 						},
 					).then( function ( token ) {
 						cpField.val( token );
-						window.JetFormBuilderToken[ formID ] = token;
 						resolve();
 					} );
 				}
@@ -69,8 +64,6 @@
 			else {
 				addFilter = wp.hooks.addFilter;
 			}
-
-			window.JetFormBuilderToken = window.JetFormBuilderToken || {};
 
 			if ( !window.JetFormBuilderCaptcha ) {
 				window.JetFormBuilderCaptcha = CaptchaHandler;

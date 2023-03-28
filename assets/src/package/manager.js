@@ -322,6 +322,6 @@ window.JetFBHooks = {
 	useActionCallback,
 	useActionDetail,
 	useUniqueNameOnDuplicate,
-	useFields: useFields,
+	useFields,
 };
 

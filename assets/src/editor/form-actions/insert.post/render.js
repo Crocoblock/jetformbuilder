@@ -12,8 +12,8 @@ const {
 	      DynamicPropertySelect,
       } = JetFBComponents;
 const {
-	      withRequestFields,
 	      useSanitizeFieldsMap,
+	      useFields,
       } = JetFBHooks;
 
 /**
@@ -30,9 +30,6 @@ const {
 	      useState,
 	      useEffect,
       } = wp.element;
-const {
-	      withSelect,
-      } = wp.data;
 const {
 	      applyFilters,
       } = wp.hooks;
@@ -68,10 +65,10 @@ function InsertPostRender( props ) {
 		      source,
 		      help,
 		      label,
-		      requestFields,
 	      } = props;
 
-	const [ formFields, setFormFields ] = useState( [] );
+	const formFields = convertListToFieldsMap( useFields() );
+
 	const [ properties, setProperties ] = useState( () => {
 		const id = getActionModifierId( settings );
 
@@ -87,9 +84,6 @@ function InsertPostRender( props ) {
 		if ( settings.requestFields?.length ) {
 			onChangeSettingObj( { requestFields: null } );
 		}
-		setFormFields(
-			convertListToFieldsMap( getFormFieldsBlocks(), requestFields ),
-		);
 	}, [] );
 
 	useEffect( () => {
@@ -164,4 +158,4 @@ function InsertPostRender( props ) {
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-export default withSelect( withRequestFields )( InsertPostRender );
+export default InsertPostRender;

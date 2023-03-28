@@ -43,12 +43,7 @@ const getRequestFields = actions => {
 	return requestFields;
 };
 
-function getComputedFields( fields, actions ) {
-	const computed = useSelect(
-		select => select( 'jet-forms/actions' ).getComputedFields(),
-		[],
-	);
-
+function getComputedFields( fields, actions, computed ) {
 	/**
 	 * @type {BaseAction[]}
 	 */
@@ -115,9 +110,15 @@ function useRequestFields() {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 	}, [] );
 
-	const actionProps   = useContext( CurrentActionEditContext );
-	const currentAction = useSelect(
-		select => select( 'jet-forms/actions' ).getCurrentAction(),
+	const actionProps = useContext( CurrentActionEditContext );
+
+	const { currentAction, computed } = useSelect(
+		select => (
+			{
+				currentAction: select( 'jet-forms/actions' ).getCurrentAction(),
+				computed: select( 'jet-forms/actions' ).getComputedFields(),
+			}
+		),
 		[],
 	);
 
@@ -136,7 +137,7 @@ function useRequestFields() {
 	 */
 	const fields = getRequestFields( actions );
 
-	return getComputedFields( fields, actions );
+	return getComputedFields( fields, actions, computed );
 }
 
 export { getRequestFields, getComputedFields };

@@ -35,6 +35,7 @@
 	},
 	"dependencies": {
 		"friendly-challenge": "^0.9.11",
+		"portal-vue": "2.1.7",
 		"semver": "^7.3.5",
 		"svg-url-loader": "^7.1.1"
 	}

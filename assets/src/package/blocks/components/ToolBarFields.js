@@ -1,7 +1,7 @@
 import ToolBarDefault from './ToolBarDefault';
 import BlockRequired from './BlockRequired';
 
-function ToolBarFields( { children } ) {
+function ToolBarFields( { children = null } ) {
 	return <ToolBarDefault>
 		<BlockRequired/>
 		{ children }

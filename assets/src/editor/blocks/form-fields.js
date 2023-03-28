@@ -24,6 +24,8 @@ import * as formBreakStart from './form-break-start';
 import * as map from './map-field';
 import * as wrappers from './block-wrappers';
 import * as captchaContainer from './captcha-container';
+import * as choicesField from './choices-field';
+import * as choice from './choice';
 
 const {
 	      registerBlockType,
@@ -59,6 +61,8 @@ const fields = applyFilters( 'jet.fb.register.fields', [
 	formBreakStart,
 	map,
 	captchaContainer,
+	choicesField,
+	choice,
 ] );
 
 const registerFormField = block => {

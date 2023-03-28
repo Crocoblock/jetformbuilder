@@ -1,5 +1,8 @@
 <template>
 	<div :class="rootClasses">
+		<Portal to="scope-default/row-action-export">
+			<h2>Hello World!</h2>
+		</Portal>
 		<cx-vui-list-table
 			:is-empty="! list.length"
 			:empty-message="emptyMessage"
@@ -26,7 +29,7 @@
 							{{ columns[ column ] ? columns[ column ].label : '' }}
 						</template>
 						<svg v-if="columns[ column ].sortable" width="10"
-							 height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg"><path
+						     height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg"><path
 							d="M0.833374 0.333328L5.00004 4.5L9.16671 0.333328H0.833374Z" fill="#7B7E81"/></svg>
             		</span>
 				</cx-vui-list-table-heading>
@@ -53,7 +56,7 @@
 							{{ columns[ column ] ? columns[ column ].label : '' }}
 						</template>
 						<svg v-if="columns[ column ].sortable" width="10"
-							 height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg"><path
+						     height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg"><path
 							d="M0.833374 0.333328L5.00004 4.5L9.16671 0.333328H0.833374Z" fill="#7B7E81"/></svg>
             		</span>
 				</cx-vui-list-table-heading>
@@ -89,6 +92,14 @@
 							</a>
 						</span>
 					</div>
+					<div class="list-table-item-sub" v-if="currentProcessAction">
+						<PortalTarget
+							v-for="action in entry.actions.value"
+							:key="action.value"
+							v-if="action.value === currentProcessAction"
+							:name="scopedName( 'row-action-' + action.value )"
+						/>
+					</div>
 				</div>
 			</template>
 		</cx-vui-list-table>
@@ -101,22 +112,28 @@ import ScopePropMixin from '../mixins/ScopeStoreMixin';
 import GetColumnComponent from '../mixins/GetColumnComponent';
 import EntryColumnsTable from './EntryColumnsTable';
 import { getPrimaryId } from '../functions';
+import PortalTarget from 'portal-vue';
+import { Portal } from 'portal-vue';
 
 const {
-	CHOOSE_ACTION,
-	CLICK_ACTION,
-} = Constants;
+	      CHOOSE_ACTION,
+	      CLICK_ACTION,
+      } = Constants;
 
 const {
-	mapState,
-	mapGetters,
-	mapActions,
-	mapMutations,
-} = window.Vuex;
+	      mapState,
+	      mapGetters,
+	      mapActions,
+	      mapMutations,
+      } = window.Vuex;
 
 export default {
 	name: 'EntriesTableSkeleton',
-	components: { EntryColumnsTable },
+	components: {
+		EntryColumnsTable,
+		PortalTarget,
+		Portal,
+	},
 	props: {
 		list: {
 			type: Array,
@@ -164,6 +181,9 @@ export default {
 					)
 				);
 			} );
+		},
+		currentProcessAction() {
+			return this.getter( 'currentProcess' )?.action;
 		},
 
 		...mapGetters( [
@@ -226,7 +246,8 @@ export default {
 
 			try {
 				this.dispatch( 'beforeRowAction' );
-			} catch ( error ) {
+			}
+			catch ( error ) {
 				return;
 			}
 
@@ -345,6 +366,7 @@ body.rtl .cx-vue-list-table {
 				right: 5.2em;
 			}
 		}
+
 		&-actions {
 			right: 1.5em;
 		}

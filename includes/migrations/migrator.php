@@ -94,7 +94,7 @@ class Migrator {
 				)
 			)->query()->query_one();
 		} catch ( Query_Builder_Exception $exception ) {
-			$exception->unset_from_logger();
+			$exception->unset_log();
 			$installed = false;
 		}
 

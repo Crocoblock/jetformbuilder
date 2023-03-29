@@ -97,4 +97,10 @@ class Builder_Helper {
 		return sprintf( '%1$s_%2$d', $html_id, ++ self::$html_ids[ $html_id ][ $for ] );
 	}
 
+	public static function enqueue_global_styles() {
+		wp_enqueue_global_styles();
+		wp_enqueue_style( 'wp-block-library' );
+		wp_enqueue_style( 'jet-form-builder-frontend' );
+	}
+
 }

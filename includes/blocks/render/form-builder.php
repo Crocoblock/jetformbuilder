@@ -6,6 +6,7 @@ use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Attributes_Trait;
+use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
@@ -183,7 +184,8 @@ class Form_Builder {
 			return $this->get_inline_styles();
 		}
 
-		wp_enqueue_style( 'jet-form-builder-frontend' );
+		Builder_Helper::enqueue_global_styles();
+
 		wp_add_inline_style(
 			'jet-form-builder-frontend',
 			Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id )

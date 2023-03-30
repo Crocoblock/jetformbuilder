@@ -97,6 +97,11 @@ class Builder_Helper {
 		return sprintf( '%1$s_%2$d', $html_id, ++ self::$html_ids[ $html_id ][ $for ] );
 	}
 
+	/**
+	 * @since 3.0.3
+	 *
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/2636
+	 */
 	public static function enqueue_global_styles() {
 		wp_enqueue_global_styles();
 		wp_enqueue_style( 'wp-block-library' );

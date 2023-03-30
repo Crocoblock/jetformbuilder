@@ -16,6 +16,12 @@ let HeaderControls = function () {
 		{ 'referer_url' !== attributes.field_value && <ToggleControl
 			label={ __( 'Render in HTML', 'jet-form-builder' ) }
 			checked={ attributes.render }
+			help={ __(
+				`If you use this field in Calculated Field, Conditional Block, 
+Advanced Validation, Global Macros or Dynamic Value - 
+then the option must be enabled.`,
+				'jet-form-builder',
+			) }
 			onChange={ render => setAttributes(
 				{ render: Boolean( render ) } ) }
 		/> }

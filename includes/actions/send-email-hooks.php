@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Actions;
 
 
 use Jet_Form_Builder\Actions\Types\Send_Email;
+use Jet_Form_Builder\Classes\Http\Http_Tools;
 
 class Send_Email_Hooks {
 
@@ -42,6 +43,16 @@ class Send_Email_Hooks {
 		$email->set_reply_to(
 			jet_fb_parse_macro( $email->get_reply_to() )
 		);
+
+		if ( ! is_email( $email->get_reply_to() ) ) {
+			$email->set_reply_to( 'noreply@' . Http_Tools::get_site_host() );
+		}
+
+		if ( ! is_email( $email->get_from_address() ) ) {
+			$email->set_from_address( get_option( 'admin_email' ) );
+		}
+
+		$email->update_headers();
 	}
 
 	public static function basic_content_formatting( Send_Email $email ) {

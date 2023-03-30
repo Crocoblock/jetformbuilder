@@ -290,22 +290,17 @@ To prevent this, enable this option.',
 
 	public function get_default_reply_to(): string {
 		$reply_to = ! empty( $this->settings['reply_to'] ) ? $this->settings['reply_to'] : 'form';
-		$email    = '';
 
 		switch ( $reply_to ) {
 			case 'form':
 				$field = $this->settings['reply_from_field'] ?? '';
 
-				$email = jet_fb_action_handler()->request_data[ $field ] ?? '';
-				break;
+				return jet_fb_action_handler()->request_data[ $field ] ?? '';
 			case 'custom':
-				$email = ! empty( $this->settings['reply_to_email'] ) ? $this->settings['reply_to_email'] : '';
-				break;
+				return ! empty( $this->settings['reply_to_email'] ) ? $this->settings['reply_to_email'] : '';
+			default:
+				return '';
 		}
-
-		return ( ! is_string( $email ) || ! is_email( $email ) )
-			? 'noreply@' . Http_Tools::get_site_host()
-			: $email;
 	}
 
 	public function get_default_subject(): string {
@@ -330,9 +325,7 @@ To prevent this, enable this option.',
 	}
 
 	public function get_default_from_address(): string {
-		$address = ! empty( $this->settings['from_address'] ) ? $this->settings['from_address'] : '';
-
-		return $address && is_email( $address ) ? $address : get_option( 'admin_email' );
+		return ! empty( $this->settings['from_address'] ) ? $this->settings['from_address'] : '';
 	}
 
 	public function get_default_attachments(): array {
@@ -353,6 +346,10 @@ To prevent this, enable this option.',
 		}
 
 		return $attachments;
+	}
+
+	public function update_headers() {
+		$this->set_headers( $this->get_default_headers() );
 	}
 
 	/**
@@ -396,7 +393,7 @@ To prevent this, enable this option.',
 	}
 
 	public function set_reply_to( $email ) {
-		if ( ! is_string( $email ) || ! is_email( $email ) ) {
+		if ( ! is_string( $email ) ) {
 			return;
 		}
 
@@ -428,9 +425,6 @@ To prevent this, enable this option.',
 	}
 
 	public function set_from_address( string $email ) {
-		if ( ! is_email( $email ) ) {
-			return;
-		}
 		$this->from_email = $email;
 	}
 

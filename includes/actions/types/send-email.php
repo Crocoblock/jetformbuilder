@@ -5,9 +5,6 @@ namespace Jet_Form_Builder\Actions\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
-use Jet_Form_Builder\Classes\Macros_Parser;
-use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
-use Jet_Form_Builder\Classes\Resources\Uploaded_File_Path;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -23,7 +20,15 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Send_Email extends Base {
 
-	private $content_type;
+	private $content_type = '';
+	private $mail_to      = array();
+	private $reply_to     = '';
+	private $from_email   = '';
+	private $content      = '';
+	private $subject      = '';
+	private $from_name    = '';
+	private $attachments  = array();
+	private $headers      = '';
 
 	public function get_name() {
 		return __( 'Send Email', 'jet-form-builder' );
@@ -174,109 +179,60 @@ To prevent this, enable this option.',
 	 * @param array $request
 	 * @param Action_Handler $handler
 	 *
-	 * @return mixed|void
 	 * @throws Action_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		$mail_to     = ! empty( $this->settings['mail_to'] ) ? $this->settings['mail_to'] : 'admin';
-		$reply_to    = ! empty( $this->settings['reply_to'] ) ? $this->settings['reply_to'] : 'form';
-		$email       = false;
-		$reply_email = false;
-
-		switch ( $mail_to ) {
-			case 'form':
-				$field = ! empty( $this->settings['from_field'] ) ? $this->settings['from_field'] : '';
-
-				if ( $field && ! empty( $request[ $field ] ) ) {
-					$email = $request[ $field ];
-				}
-
-				break;
-
-			case 'custom':
-				$email = ! empty( $this->settings['custom_email'] ) ? $this->settings['custom_email'] : '';
-				break;
-
-			case 'admin':
-			default:
-				$email = get_option( 'admin_email' );
-				break;
-		}
-
-		switch ( $reply_to ) {
-
-			case 'form':
-				$field = ! empty( $this->settings['reply_from_field'] ) ? $this->settings['reply_from_field'] : '';
-
-				if ( $field && ! empty( $request[ $field ] ) ) {
-					$this->settings['reply_email'] = $request[ $field ];
-				}
-
-				break;
-
-			case 'custom':
-				$this->settings['reply_email'] = ! empty( $this->settings['reply_to_email'] ) ? $this->settings['reply_to_email'] : '';
-				break;
-		}
-
-		if ( ! is_array( $email ) ) {
-			$email = explode( ',', $email );
-		}
-
-		foreach ( $email as $value ) {
-			$value = trim( $value );
-
-			if ( ! $value || ! is_email( $value ) ) {
-				throw new Action_Exception( 'invalid_email' );
-			}
-		}
-
-		$subject = ! empty( $this->settings['subject'] ) ? $this->settings['subject'] : sprintf(
-			__( 'Form on %s Submitted', 'jet-form-builder' ),
-			home_url( '' )
+		$message = apply_filters(
+			'jet-form-builder/send-email/message_content',
+			$this->settings['content'] ?? '',
+			$this
 		);
+		$this->set_content( $message );
 
-		$message = ! empty( $this->settings['content'] ) ? apply_filters( 'jet-form-builder/send-email/message_content', $this->settings['content'], $this ) : '';
+		$content_type = apply_filters(
+			'jet-form-builder/send-email/content-type',
+			$this->get_default_content_type(),
+			$this
+		);
+		$this->set_content_type( $content_type );
 
-		$this->send_mail( $email, $subject, $message );
-	}
+		$from_name = apply_filters(
+			'jet-form-builder/send-email/from-name',
+			$this->get_default_from_name(),
+			$this
+		);
+		$this->set_from_name( $from_name );
+
+		$reply_to = apply_filters(
+			'jet-form-builder/send-email/reply-to',
+			$this->get_default_reply_to(),
+			$this
+		);
+		$this->set_reply_to( $reply_to );
+
+		$from_email = apply_filters(
+			'jet-form-builder/send-email/from-address',
+			$this->get_default_from_address(),
+			$this
+		);
+		$this->set_from_address( $from_email );
 
 
-	/**
-	 * Send the email
-	 *
-	 * The To address to send to.
-	 *
-	 * @param $to
-	 *
-	 * The subject line of the email to send.
-	 * @param $subject
-	 *
-	 * The body of the email to send.
-	 * @param $message
-	 *
-	 * @return void
-	 * @throws Action_Exception
-	 */
-	public function send_mail( $to, $subject, $message ) {
+		$this->set_mail_to( $this->get_default_mail_to() );
+		$this->set_subject( $this->get_default_subject() );
+		$this->set_attachments( $this->get_default_attachments() );
+
+		$headers = apply_filters(
+			'jet-form-builder/send-email/headers',
+			$this->get_default_headers(),
+			$this
+		);
+		$this->set_headers( $headers );
 
 		/**
 		 * Hooks before the email is sent
 		 */
-		$this->send_before();
 		do_action( 'jet-form-builder/send-email/send-before', $this );
-
-		$content_type = $this->get_content_type();
-		$subject      = jet_fb_parse_macro( $subject );
-		$message      = jet_fb_parse_macro( $message );
-		$message      = do_shortcode( $message );
-
-		if ( 'text/html' === $content_type && empty( $this->settings['disable_format'] ) ) {
-			$message = make_clickable( wpautop( $message ) );
-		}
-
-		$message = str_replace( '&#038;', '&amp;', $message );
-		$message = stripcslashes( $message );
 
 		if ( Dev_Mode\Manager::instance()->active() ) {
 			add_action(
@@ -288,9 +244,9 @@ To prevent this, enable this option.',
 		}
 
 		$sent = wp_mail(
-			$to,
-			$subject,
-			$message,
+			$this->get_mail_to(),
+			$this->get_subject(),
+			$this->get_content(),
 			$this->get_headers(),
 			$this->get_attachments()
 		);
@@ -299,8 +255,8 @@ To prevent this, enable this option.',
 			throw new Action_Exception(
 				'failed',
 				array(
-					'to'      => $to,
-					'subject' => $subject,
+					'to'      => $this->get_mail_to(),
+					'subject' => $this->get_subject(),
 					'message' => $message,
 					'headers' => $this->get_headers(),
 				)
@@ -312,25 +268,74 @@ To prevent this, enable this option.',
 		 *
 		 * @since 2.1
 		 */
-		$this->send_after();
 		do_action( 'jet-form-builder/send-email/send-after', $this );
 	}
 
 
-	/**
-	 * Get the email headers
-	 *
-	 * @since 2.1
-	 */
-	public function get_headers(): string {
-		$headers = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
-		$headers .= "Reply-To: {$this->get_reply_to()}\r\n";
-		$headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
+	public function get_default_mail_to() {
+		$mail_to = ! empty( $this->settings['mail_to'] ) ? $this->settings['mail_to'] : 'admin';
 
-		return apply_filters( 'jet-form-builder/send-email/headers', $headers, $this );
+		switch ( $mail_to ) {
+			case 'form':
+				$field = $this->settings['from_field'] ?? '';
+
+				return jet_fb_action_handler()->request_data[ $field ] ?? '';
+			case 'custom':
+				return ! empty( $this->settings['custom_email'] ) ? $this->settings['custom_email'] : '';
+			case 'admin':
+			default:
+				return get_option( 'admin_email' );
+		}
 	}
 
-	public function get_attachments(): array {
+	public function get_default_reply_to(): string {
+		$reply_to = ! empty( $this->settings['reply_to'] ) ? $this->settings['reply_to'] : 'form';
+		$email    = '';
+
+		switch ( $reply_to ) {
+			case 'form':
+				$field = $this->settings['reply_from_field'] ?? '';
+
+				$email = jet_fb_action_handler()->request_data[ $field ] ?? '';
+				break;
+			case 'custom':
+				$email = ! empty( $this->settings['reply_to_email'] ) ? $this->settings['reply_to_email'] : '';
+				break;
+		}
+
+		return ( ! is_string( $email ) || ! is_email( $email ) )
+			? 'noreply@' . Http_Tools::get_site_host()
+			: $email;
+	}
+
+	public function get_default_subject(): string {
+		return empty( $this->settings['subject'] )
+			? sprintf(
+				__( 'Form on %s Submitted', 'jet-form-builder' ),
+				home_url( '' )
+			)
+			: $this->settings['subject'];
+	}
+
+	public function get_default_content_type(): string {
+		$type = $this->settings['content_type'] ?? 'text/html';
+
+		return empty( $type ) ? 'text/html' : $type;
+	}
+
+	public function get_default_from_name(): string {
+		return empty( $this->settings['from_name'] )
+			? Tools::get_site_name()
+			: $this->settings['from_name'];
+	}
+
+	public function get_default_from_address(): string {
+		$address = ! empty( $this->settings['from_address'] ) ? $this->settings['from_address'] : '';
+
+		return $address && is_email( $address ) ? $address : get_option( 'admin_email' );
+	}
+
+	public function get_default_attachments(): array {
 		$fields      = $this->settings['attachments'] ?? array();
 		$attachments = array();
 
@@ -351,71 +356,139 @@ To prevent this, enable this option.',
 	}
 
 	/**
-	 * Add filters / actions before the email is sent
+	 * Get the email headers
 	 *
 	 * @since 2.1
 	 */
-	public function send_before() {
-		add_filter( 'wp_mail_from', array( $this, 'get_from_address' ) );
-		add_filter( 'wp_mail_from_name', array( $this, 'get_from_name' ) );
-		add_filter( 'wp_mail_content_type', array( $this, 'get_content_type' ) );
+	public function get_default_headers(): string {
+		$headers = array(
+			"From: {$this->get_from_name()} <{$this->get_from_address()}>",
+			"Reply-To: {$this->get_reply_to()}",
+			"Content-Type: {$this->get_content_type()}; charset=utf-8"
+		);
+
+		return implode( "\r\n", $headers );
 	}
 
 	/**
-	 * Remove filters / actions after the email is sent
+	 * @param string|array $email
 	 *
-	 * @since 2.1
+	 * @throws Action_Exception
 	 */
-	public function send_after() {
-		remove_filter( 'wp_mail_from', array( $this, 'get_from_address' ) );
-		remove_filter( 'wp_mail_from_name', array( $this, 'get_from_name' ) );
-		remove_filter( 'wp_mail_content_type', array( $this, 'get_content_type' ) );
+	public function set_mail_to( $email ) {
+		if ( ! is_array( $email ) && ! is_string( $email ) ) {
+			return;
+		}
 
-		// Reset heading to an empty string
-		$this->heading = '';
+		if ( ! is_array( $email ) ) {
+			$email = explode( ',', $email );
+		}
+
+		foreach ( $email as &$value ) {
+			$value = trim( $value );
+
+			if ( ! $value || ! is_email( $value ) ) {
+				throw new Action_Exception( 'invalid_email' );
+			}
+		}
+
+		$this->mail_to = $email;
+	}
+
+	public function set_reply_to( $email ) {
+		if ( ! is_string( $email ) || ! is_email( $email ) ) {
+			return;
+		}
+
+		$this->reply_to = $email;
+	}
+
+	public function set_content( $content ) {
+		if ( ! is_string( $content ) ) {
+			return;
+		}
+
+		$this->content = $content;
+	}
+
+	public function set_subject( $subject ) {
+		if ( ! is_string( $subject ) ) {
+			return;
+		}
+
+		$this->subject = $subject;
+	}
+
+	public function set_content_type( string $type ) {
+		$this->content_type = $type;
+	}
+
+	public function set_from_name( string $name ) {
+		$this->from_name = $name;
+	}
+
+	public function set_from_address( string $email ) {
+		if ( ! is_email( $email ) ) {
+			return;
+		}
+		$this->from_email = $email;
+	}
+
+	/**
+	 * @param array $attachments
+	 */
+	public function set_attachments( array $attachments ) {
+		$this->attachments = $attachments;
+	}
+
+	public function set_headers( string $headers ) {
+		$this->headers = $headers;
+	}
+
+	public function get_attachments(): array {
+		return $this->attachments;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_mail_to(): array {
+		return $this->mail_to;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_subject(): string {
+		return $this->subject;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_content(): string {
+		return $this->content;
 	}
 
 	/**
 	 * Get the email from name
 	 */
-	public function get_from_name() {
-		$name = ! empty( $this->settings['from_name'] ) ? $this->settings['from_name'] : Tools::get_site_name();
-		$name = jet_fb_parse_macro( $name );
-
-		return apply_filters( 'jet-form-builder/send-email/from-name', $name, $this );
+	public function get_from_name(): string {
+		return $this->from_name;
 	}
 
 	/**
 	 * Returns e-mail address to set into Reply-to email header
-	 *
-	 * @return [type] [description]
 	 */
-	public function get_reply_to() {
-
-		$address = ! empty( $this->settings['reply_email'] ) ? $this->settings['reply_email'] : '';
-		$address = jet_fb_parse_macro( $address );
-
-		if ( empty( $address ) || ! is_email( $address ) ) {
-			$address = 'noreply@' . Http_Tools::get_site_host();
-		}
-
-		return apply_filters( 'jet-form-builder/send-email/reply-to', $address, $this );
-
+	public function get_reply_to(): string {
+		return $this->reply_to;
 	}
 
 	/**
 	 * Get the email from address
 	 */
-	public function get_from_address() {
-
-		$address = ! empty( $this->settings['from_address'] ) ? $this->settings['from_address'] : '';
-		$address = jet_fb_parse_macro( $address );
-
-		if ( empty( $address ) || ! is_email( $address ) ) {
-			$address = get_option( 'admin_email' );
-		}
-
-		return apply_filters( 'jet-form-builder/send-email/from-address', $address, $this );
+	public function get_from_address(): string {
+		return $this->from_email;
 	}
 
 	public function is_html(): bool {
@@ -426,16 +499,14 @@ To prevent this, enable this option.',
 	 * Get the email content type
 	 */
 	public function get_content_type(): string {
-		if ( $this->content_type ) {
-			return $this->content_type;
-		}
-
-		$type = $this->settings['content_type'] ?? 'text/html';
-		$type = empty( $type ) ? 'text/html' : $type;
-
-		$this->content_type = apply_filters( 'jet-form-builder/send-email/content-type', $type, $this );
-
 		return $this->content_type;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_headers(): string {
+		return $this->headers;
 	}
 
 }

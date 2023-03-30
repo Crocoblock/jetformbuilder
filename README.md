@@ -4,6 +4,15 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.0.3
+* UPD: Loading css as early as possible on a single page
+* FIX: WP 6.2 compatibility (Editor error while editing action)
+* FIX: Loading css for all Gutenberg core blocks (compatibility with form display via shortcode in other page builders)
+* FIX: Allow re-submit form with reCaptcha v3
+* FIX: Compatibility of a formatted Calculated field with a Conditional block
+* Tweak: Backward compatibility for `jet.fb.submit.ajax.promises` hook
+* Tweak: added php-hook `jet-form-builder/send-email/send-before`
+
 ## 3.0.2
 * ADD: Option for Send Email "Disable Auto-Formatting"
 * FIX: Correct apply calculated value on page load

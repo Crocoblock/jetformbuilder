@@ -27,7 +27,7 @@ class Post_Title_Property extends Base_Object_Property {
 		$action = $modifier->get_action();
 
 		if ( ! is_a( $action, Insert_Action::class ) ||
-		     $this->value
+			$this->value
 		) {
 			return parent::get_value( $modifier );
 		}

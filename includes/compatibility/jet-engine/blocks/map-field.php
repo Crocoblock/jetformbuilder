@@ -39,7 +39,7 @@ class Map_Field extends Base {
 			self::HANDLE,
 			jet_form_builder()->plugin_url( 'assets/js/frontend/map.field{min}.js' ),
 			array(
-				Manager::MAIN_SCRIPT_HANDLE
+				Manager::MAIN_SCRIPT_HANDLE,
 			),
 			jet_form_builder()->get_version(),
 			true

@@ -3,6 +3,8 @@
 
 namespace Jet_Form_Builder\Wp_Cli;
 
+use ElementorPro\Modules\Forms\Submissions\Database\Query;
+use JET_APB\Plugin;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Action_Result_Model;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Model;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
@@ -100,6 +102,48 @@ class Database_Commands extends \WP_CLI_Command {
 		}
 
 		\WP_CLI::success( 'Executed successfully' );
+	}
+
+	public function seed_jet_apb() {
+		$sample_app = array(
+			'status'           => 'completed',
+			'service'          => 87,
+			'user_id'          => 1,
+			'user_email'       => 'sanko200065@gmail.com',
+			'date'             => 1660780800,
+			'slot'             => 1660809600,
+			'slot_end'         => 1660811400,
+			'type'             => 'range',
+			'appointment_date' => '2022-07-20 10:26:09',
+		);
+
+		foreach ( range( 0, 1000000 ) as $next ) {
+			Plugin::instance()->db->appointments->insert( $sample_app );
+		}
+	}
+
+	public function seed_elem() {
+
+		$sample_app = array(
+			'hash_id'                 => '0b618cad-3a30-4027-b3df-4236d0f33650',
+			'main_meta_id'            => 2,
+			'post_id'                 => 218,
+			'referer'                 => 'https://dev.loc.local/elementor/',
+			'referer_title'           => 'Front Page',
+			'element_id'              => 'ee7276d',
+			'form_name'               => 'test form',
+			'campaign_id'             => 0,
+			'user_id'                 => 1,
+			'user_ip'                 => '::1',
+			'user_agent'              => '',
+			'actions_count'           => 0,
+			'actions_succeeded_count' => 0,
+			'meta'                    => '{"edit_post_id":"218"}',
+		);
+
+		foreach ( range( 0, 1000000 ) as $next ) {
+			Query::get_instance()->add_submission( $sample_app, array() );
+		}
 	}
 
 }

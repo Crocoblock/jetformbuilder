@@ -34,7 +34,7 @@ trait View_Base_Count_Trait {
 	public function get_count(): int {
 		try {
 			return (int) $this->query()
-							  ->query_var();
+								->query_var();
 
 		} catch ( Query_Builder_Exception $exception ) {
 			return 0;

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views;
 
-
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 // If this file is called directly, abort.
@@ -20,8 +19,8 @@ class Record_View_Forms extends Record_View {
 	public function select_columns(): array {
 		return array(
 			array(
-				'as' => "DISTINCT {$this->column( 'form_id' )}"
-			)
+				'as' => "DISTINCT {$this->column( 'form_id' )}",
+			),
 		);
 	}
 

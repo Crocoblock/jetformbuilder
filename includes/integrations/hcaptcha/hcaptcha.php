@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Integrations\Hcaptcha;
 
-
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
@@ -41,7 +40,7 @@ class Hcaptcha extends Base_Captcha_From_Options {
 		$captcha_args = apply_filters(
 			'jet-form-builder/h-captcha/options',
 			array(
-				'sitekey' => $this->options['key'] ?? ''
+				'sitekey' => $this->options['key'] ?? '',
 			)
 		);
 
@@ -51,7 +50,7 @@ class Hcaptcha extends Base_Captcha_From_Options {
 		);
 
 		wp_register_script(
-			 Base_Captcha::HANDLE_USER,
+			Base_Captcha::HANDLE_USER,
 			jet_form_builder()->plugin_url( 'assets/js/frontend/hcaptcha.js' ),
 			array( 'jet-plugins' ),
 			jet_form_builder()->get_version(),

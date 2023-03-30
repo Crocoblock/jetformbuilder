@@ -55,7 +55,7 @@ class Actions_Tools {
 
 		$paths = array(
 			$flow_dir . 'flow.php',
-			$flow_dir . 'flow.json'
+			$flow_dir . 'flow.json',
 		);
 
 		foreach ( $paths as $path ) {

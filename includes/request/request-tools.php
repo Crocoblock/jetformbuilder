@@ -49,7 +49,7 @@ class Request_Tools {
 			$count_collection = count( $files['name'] );
 			$collection       = array();
 
-			for ( $index = 0; $index < $count_collection; $index ++ ) {
+			for ( $index = 0; $index < $count_collection; $index++ ) {
 				$file = array();
 
 				foreach ( self::FILE_PROPERTIES as $property ) {
@@ -69,7 +69,7 @@ class Request_Tools {
 		$rows     = count( $files['name'] );
 		$repeater = array();
 
-		for ( $current = 0; $current < $rows; $current ++ ) {
+		for ( $current = 0; $current < $rows; $current++ ) {
 			$row = array();
 
 			foreach ( self::FILE_PROPERTIES as $property ) {
@@ -81,7 +81,7 @@ class Request_Tools {
 					if ( is_array( $values ) ) {
 						$count_values = count( $values );
 
-						for ( $index_value = 0; $index_value < $count_values; $index_value ++ ) {
+						for ( $index_value = 0; $index_value < $count_values; $index_value++ ) {
 							if ( ! isset( $row[ $field_name ][ $index_value ] ) ) {
 								$row[ $field_name ][ $index_value ] = array();
 							}

@@ -1,6 +1,7 @@
 <?php
 /**
  * input[type="hidden"] template
+ *
  * @var \Jet_Form_Builder\Blocks\Render\Datetime_Field_Render $this
  */
 

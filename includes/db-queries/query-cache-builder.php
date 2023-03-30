@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Db_Queries;
 
-
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 
 // If this file is called directly, abort.

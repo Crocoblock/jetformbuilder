@@ -37,9 +37,9 @@ class Gateway_Manager {
 	private $gateways_form_data = array();
 	private $form_id;
 
-	public  $message = null;
-	public  $data    = null;
-	public  $is_sandbox;
+	public $message = null;
+	public $data    = null;
+	public $is_sandbox;
 	private $current_gateway_type;
 
 	/**
@@ -56,7 +56,8 @@ class Gateway_Manager {
 		add_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
 		add_filter(
 			'jet-form-builder/page-containers/jfb-records-single',
-			array( $this, 'add_box_to_single_record' ), 0
+			array( $this, 'add_box_to_single_record' ),
+			0
 		);
 		add_filter(
 			'jet-form-builder/default-process-event/executors',
@@ -226,7 +227,7 @@ class Gateway_Manager {
 		if ( ! jet_form_builder()->allow_gateways ) {
 			return false;
 		}
-		
+
 		$this->set_gateways_options_by_form_id( $form_id );
 
 		return $this->get_gateway_id( false );

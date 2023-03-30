@@ -478,7 +478,6 @@ class Repeater_Field extends Base {
 
 						return apply_filters( "jet-form-builder/calculated-data/$macros_name", $matches[0], $matches );
 				}
-
 			},
 			$this->block_attrs['calc_formula']
 		);

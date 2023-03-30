@@ -36,7 +36,6 @@ class Getresponse_Handler extends Integration_Base {
 				'Content-Type' => 'application/json',
 			),
 		);
-
 	}
 
 

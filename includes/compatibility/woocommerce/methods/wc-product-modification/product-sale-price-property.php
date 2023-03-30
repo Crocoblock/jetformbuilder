@@ -22,7 +22,6 @@ class Product_Sale_Price_Property extends Base_Product_Property {
 
 	/**
 	 * @param Abstract_Modifier|Wc_Product_Modifier $modifier
-	 *
 	 */
 	public function get_value( Abstract_Modifier $modifier ) {
 		parent::get_value( $modifier );

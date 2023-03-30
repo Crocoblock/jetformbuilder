@@ -13,7 +13,7 @@ trait Get_Form_Data {
 	/**
 	 * Get post ID from the current request and validate user acess to this post
 	 *
-	 * @return [type] [description]
+	 * @return false|int [type] [description]
 	 */
 	public function get_post_id_from_request() {
 
@@ -28,7 +28,6 @@ trait Get_Form_Data {
 		}
 
 		return $post_id;
-
 	}
 
 	/**
@@ -64,7 +63,7 @@ trait Get_Form_Data {
 		$response = array();
 
 		foreach ( $meta as $key => $value ) {
-			if ( in_array( $key, $exclude ) ) {
+			if ( in_array( $key, $exclude, true ) ) {
 				continue;
 			}
 			$response[ $key ] = $value[0];

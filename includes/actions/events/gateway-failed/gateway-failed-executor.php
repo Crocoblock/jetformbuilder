@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Events\Gateway_Failed;
 
-
 use Jet_Form_Builder\Actions\Events\Gateway_Base_Executor;
 
 // If this file is called directly, abort.

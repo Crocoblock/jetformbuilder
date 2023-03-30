@@ -247,7 +247,7 @@ class Manager {
 			self::LISTING_OPTIONS_HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/listing.options{min}.js' ),
 			array(
-				self::MAIN_SCRIPT_HANDLE
+				self::MAIN_SCRIPT_HANDLE,
 			),
 			Plugin::instance()->get_version(),
 			true

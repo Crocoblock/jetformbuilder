@@ -29,7 +29,7 @@ class Update_List_Status extends Base_Action {
 				'contact' => $this->contact,
 				'list'    => $this->list,
 				'status'  => 1,
-			)
+			),
 		);
 	}
 

@@ -15,7 +15,7 @@ class Postal_Code_Column extends Column_Advanced_Base {
 	protected $column = 'postal_code';
 
 	public function get_label(): string {
-		return __( 'Zip / Postal Code','jet-form-builder' );
+		return __( 'Zip / Postal Code', 'jet-form-builder' );
 	}
 
 }

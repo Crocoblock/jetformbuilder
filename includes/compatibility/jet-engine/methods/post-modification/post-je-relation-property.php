@@ -48,7 +48,6 @@ class Post_Je_Relation_Property extends Base_Object_Property implements
 			return;
 		}
 
-
 		foreach ( $this->relation as $rel_key => $rel_posts ) {
 			jet_engine()->relations->process_meta(
 				false,

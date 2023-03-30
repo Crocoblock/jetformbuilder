@@ -84,7 +84,6 @@ class CX_Loader {
 
 		add_action( 'after_setup_theme', array( $this, 'store_versions' ), - 10 );
 		add_action( 'after_setup_theme', array( $this, 'include_modules' ), - 1 );
-
 	}
 
 	/**
@@ -97,7 +96,6 @@ class CX_Loader {
 		foreach ( $this->modules as $module ) {
 			$this->store_module_version( $module );
 		}
-
 	}
 
 	/**
@@ -150,7 +148,6 @@ class CX_Loader {
 		}
 
 		return true;
-
 	}
 
 	/**
@@ -163,7 +160,6 @@ class CX_Loader {
 	public function get_included_module_data( $file ) {
 
 		return isset( $this->included_modules[ $file ] ) ? $this->included_modules[ $file ] : false;
-
 	}
 
 	/**
@@ -228,7 +224,6 @@ class CX_Loader {
 		wp_cache_set( $this->key, $modules_data, '', 1 );
 
 		return true;
-
 	}
 
 }

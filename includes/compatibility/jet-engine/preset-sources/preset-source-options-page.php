@@ -128,7 +128,6 @@ class Preset_Source_Options_Page extends Base_Source {
 		}
 
 		return $result;
-
 	}
 
 }

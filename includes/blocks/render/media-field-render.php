@@ -60,7 +60,8 @@ class Media_Field_Render extends Base {
 			$updated = str_replace(
 				'%file_name%',
 				$this->get_name_from_file( $file['url'] ),
-				$updated );
+				$updated
+			);
 
 			// preset field
 			$updated = str_replace( '<!-- field -->', $this->get_field_preset( $file ), $updated );

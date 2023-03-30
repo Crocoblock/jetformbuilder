@@ -41,7 +41,7 @@ class Jet_Booking {
 			Plugin::instance()->plugin_url( 'assets/js/frontend/jet-booking{min}.js' ),
 			array(
 				Deprecated::HANDLE,
-				Manager::MAIN_SCRIPT_HANDLE
+				Manager::MAIN_SCRIPT_HANDLE,
 			),
 			Plugin::instance()->get_version(),
 			true

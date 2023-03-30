@@ -15,7 +15,7 @@ class Post_Link_By_Id_Filter extends Base_Multiple_Filter {
 	public function get_id(): string {
 		return 'post_link_by_id';
 	}
-	
+
 	protected function apply_item( $item, ...$args ): string {
 		/** @var Send_Email $action */
 		$action = jet_fb_action_handler()->get_current_action();

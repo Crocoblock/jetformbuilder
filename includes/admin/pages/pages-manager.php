@@ -189,7 +189,7 @@ class Pages_Manager {
 			self::SCRIPT_PACKAGE,
 			'JetFBPageConfigPackage',
 			array(
-				'nonce' => wp_create_nonce( $this->current_page->slug() )
+				'nonce' => wp_create_nonce( $this->current_page->slug() ),
 			)
 		);
 

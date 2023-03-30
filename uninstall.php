@@ -2,6 +2,7 @@
 /**
  * @since 3.0.0
  */
+
 // phpcs:disable WordPress.DB.DirectDatabaseQuery
 
 // if uninstall.php is not called by WordPress, die
@@ -25,7 +26,7 @@ $opt_prefixes        = array(
 	'jet\_form\_builder\_settings\_\_',
 	'jet\_fb\_',
 	'jfb\-',
-	'jfb\_'
+	'jfb\_',
 );
 $additional_prefixes = array();
 
@@ -65,10 +66,9 @@ $tables = array(
 	'records',
 );
 
-/**
- * @var wpdb $wpdb
- */
 global $wpdb;
+
+// phpcs:disable WordPress.DB.PreparedSQL
 
 foreach ( $tables as $table_name ) {
 	$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'jet_fb_' . $table_name );
@@ -76,13 +76,15 @@ foreach ( $tables as $table_name ) {
 
 $wpdb->query( "DELETE FROM {$wpdb->options} WHERE {$options_condition}" );
 
+// phpcs:enable WordPress.DB.PreparedSQL
+
 $forms = get_posts(
-	[
-		'post_type'   => [ 'jet-form-builder' ],
+	array(
+		'post_type'   => array( 'jet-form-builder' ),
 		'post_status' => 'any',
 		'numberposts' => - 1,
 		'fields'      => 'ids',
-	]
+	)
 );
 if ( $forms ) {
 	foreach ( $forms as $form_id ) {

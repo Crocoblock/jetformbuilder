@@ -71,7 +71,6 @@ if ( ! class_exists( 'CX_Vue_UI' ) ) {
 			}
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
-
 		}
 
 		/**
@@ -112,7 +111,6 @@ if ( ! class_exists( 'CX_Vue_UI' ) ) {
 			add_action( 'admin_footer', array( $this, 'print_templates' ), 0 );
 
 			$this->assets_enqueued = true;
-
 		}
 
 		/**
@@ -187,7 +185,6 @@ if ( ! class_exists( 'CX_Vue_UI' ) ) {
 				);
 
 			}
-
 		}
 
 	}

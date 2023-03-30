@@ -26,7 +26,7 @@ class Mailchimp extends Integration_Base_Action {
 	 */
 	private $api_handler;
 	private $body_args = array();
-	private $tags = false;
+	private $tags      = false;
 
 	public $option_name = 'mailchimp-tab';
 

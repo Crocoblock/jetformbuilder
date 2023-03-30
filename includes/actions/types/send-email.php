@@ -71,7 +71,7 @@ class Send_Email extends Base {
 to a separate paragraph element. And each link turns into a clickable hyperlink. 
 To prevent this, enable this option.',
 				'jet-form-builder'
-			)
+			),
 		);
 	}
 
@@ -322,7 +322,7 @@ To prevent this, enable this option.',
 	 * @since 2.1
 	 */
 	public function get_headers(): string {
-		$headers = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
+		$headers  = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
 		$headers .= "Reply-To: {$this->get_reply_to()}\r\n";
 		$headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
 
@@ -399,7 +399,6 @@ To prevent this, enable this option.',
 		}
 
 		return apply_filters( 'jet-form-builder/send-email/reply-to', $address, $this );
-
 	}
 
 	/**

@@ -78,7 +78,7 @@ class Repeater_Field_Render extends Base {
 			return $response;
 		}
 
-		for ( $i = 0; $i < count( $values ); $i ++ ) {
+		for ( $i = 0; $i < count( $values ); $i++ ) {
 			$response .= $this->render_repeater_row( $wp_block, $i );
 		}
 

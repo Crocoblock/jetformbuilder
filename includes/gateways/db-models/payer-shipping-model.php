@@ -45,7 +45,7 @@ class Payer_Shipping_Model extends Base_Db_Model {
 	public static function schema_keys(): array {
 		return array(
 			'id'       => 'primary key',
-			'payer_id' => 'index'
+			'payer_id' => 'index',
 		);
 	}
 

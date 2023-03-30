@@ -101,7 +101,8 @@ class Records_Table_View extends View_Advanced_Base {
 			),
 			'messages'         => array(
 				'filter_form'       => __( 'Select Form', 'jet-form-builder' ),
-				'filter_form_title' => __( 'Filter by Form', 'jet-form-builder' ),
+				'filter_form_title' => __( 'All Forms', 'jet-form-builder' ),
+				'filter_date'       => __( 'All time', 'jet-form-builder' ),
 				'empty_checked'     => __( 'You have not selected any record.', 'jet-form-builder' ),
 				'empty_action'      => __( 'You have not selected an action.', 'jet-form-builder' ),
 			),

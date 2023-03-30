@@ -45,7 +45,7 @@ class Editor_Fetch_Endpoint extends Rest_Api_Endpoint_Base {
 				array(
 					'action'  => Retrieve_Custom_Fields_Action::class,
 					'message' => $exception->getMessage(),
-					'data'    => $exception->get_additional()
+					'data'    => $exception->get_additional(),
 				),
 				400
 			);
@@ -65,7 +65,7 @@ class Editor_Fetch_Endpoint extends Rest_Api_Endpoint_Base {
 				array(
 					'action'  => Retrieve_Lists_Action::class,
 					'message' => $exception->getMessage(),
-					'data'    => $exception->get_additional()
+					'data'    => $exception->get_additional(),
 				),
 				400
 			);

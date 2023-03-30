@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 ?>
 <input class="jet-form-builder-file-upload__value"
-       type="hidden"
-       name="<?php echo esc_attr( $this->block_type->get_field_name() ); ?>"
-       value="<?php echo esc_attr( Tools::encode_json( $file ) ); ?>"
+		type="hidden"
+		name="<?php echo esc_attr( $this->block_type->get_field_name() ); ?>"
+		value="<?php echo esc_attr( Tools::encode_json( $file ) ); ?>"
 />

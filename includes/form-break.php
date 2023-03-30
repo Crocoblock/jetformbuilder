@@ -30,7 +30,7 @@ class Form_Break {
 	 *
 	 * @var int
 	 */
-	private $page_offset        = 75;
+	private $page_offset = 75;
 
 	public function get_pages() {
 		return $this->pages;
@@ -119,7 +119,7 @@ class Form_Break {
 				continue;
 			}
 
-			$this->pages ++;
+			++$this->pages;
 			$this->form_breaks[] = $form_break;
 		}
 		if ( $last_page_from_blocks && ! empty( $this->form_breaks ) ) {
@@ -207,8 +207,8 @@ class Form_Break {
 			$this->current_page       = 1;
 			$this->current_form_break = 0;
 		} else {
-			$this->current_page ++;
-			$this->current_form_break ++;
+			++$this->current_page;
+			++$this->current_form_break;
 		}
 
 		ob_start();

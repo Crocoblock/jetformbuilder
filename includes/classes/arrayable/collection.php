@@ -14,7 +14,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 
 	protected $position = 0;
 	protected $items;
-	protected $groups   = array();
+	protected $groups = array();
 
 	public function __construct( array $items = array() ) {
 		$this->items = $items;
@@ -169,7 +169,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 
 	#[\ReturnTypeWillChange]
 	public function next() {
-		++ $this->position;
+		++$this->position;
 	}
 
 	/**

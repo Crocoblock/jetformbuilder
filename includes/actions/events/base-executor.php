@@ -97,7 +97,7 @@ abstract class Base_Executor implements \ArrayAccess, \Iterator, \Countable {
 
 	#[\ReturnTypeWillChange]
 	public function next() {
-		++ $this->position;
+		++$this->position;
 	}
 
 	/**

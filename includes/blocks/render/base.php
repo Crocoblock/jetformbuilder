@@ -126,7 +126,6 @@ abstract class Base {
 		include $this->block_type->get_common_template( 'field-label.php' );
 
 		return ob_get_clean();
-
 	}
 
 	/**
@@ -143,7 +142,6 @@ abstract class Base {
 		}
 
 		return ob_get_clean();
-
 	}
 
 	/**
@@ -241,17 +239,21 @@ abstract class Base {
 			$attrs = array(
 				sprintf(
 					'data-jfb-conditional="%s"',
-					Tools::esc_attr( array(
+					Tools::esc_attr(
 						array(
-							'page_state' => 'active'
-						),
-					) )
+							array(
+								'page_state' => 'active',
+							),
+						)
+					)
 				),
 				sprintf(
 					'data-jfb-func="%s"',
-					Tools::esc_attr( array(
-						'show' => array( 'dom' => true ),
-					) )
+					Tools::esc_attr(
+						array(
+							'show' => array( 'dom' => true ),
+						)
+					)
 				),
 			);
 

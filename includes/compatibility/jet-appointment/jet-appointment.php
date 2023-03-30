@@ -31,7 +31,8 @@ class Jet_Appointment {
 		add_filter(
 			'render_block_jet-forms/appointment-date',
 			array( $this, 'add_compatibility_script' ),
-			10, 3
+			10,
+			3
 		);
 	}
 

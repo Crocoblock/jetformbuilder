@@ -15,6 +15,6 @@ class Country_Column extends Column_Advanced_Base {
 	protected $column = 'country_code';
 
 	public function get_label(): string {
-		return __( 'Country','jet-form-builder' );
+		return __( 'Country', 'jet-form-builder' );
 	}
 }

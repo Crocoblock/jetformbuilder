@@ -74,7 +74,7 @@ if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
 <div class="jet-form-builder__field-wrap">
-    <input <?php $this->render_attributes_string(); ?>>
+	<input <?php $this->render_attributes_string(); ?>>
 	<?php echo Tools::esc_template_string( $this->maybe_render_error( $args ) ); ?>
 </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

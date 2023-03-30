@@ -253,7 +253,7 @@ abstract class Base_Db_Model {
 		$schema_keys = array_keys( static::schema() );
 
 		if ( in_array( self::UPDATED_AT, $schema_keys, true ) &&
-			 ! array_key_exists( self::UPDATED_AT, $columns )
+			! array_key_exists( self::UPDATED_AT, $columns )
 		) {
 			$columns[ self::UPDATED_AT ] = current_time( 'mysql' );
 		}

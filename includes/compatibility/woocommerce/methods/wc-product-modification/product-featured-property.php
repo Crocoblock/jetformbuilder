@@ -15,6 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Update `product_visibility` taxonomy
  *
  * Class Product_Featured_Property
+ *
  * @package Jet_Form_Builder\Actions\Methods\Wc_Product_Modification
  */
 class Product_Featured_Property extends Base_Product_Property {

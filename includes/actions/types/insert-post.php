@@ -128,7 +128,6 @@ class Insert_Post extends Base {
 	 *
 	 * @return Abstract_Post_Modifier[]
 	 * @since 2.1.4
-	 *
 	 */
 	public function get_modifiers(): array {
 		return apply_filters(
@@ -175,7 +174,6 @@ class Insert_Post extends Base {
 		);
 
 		return Tools::with_placeholder( apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-statuses', $result ) );
-
 	}
 
 }

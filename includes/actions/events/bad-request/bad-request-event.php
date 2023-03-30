@@ -37,8 +37,8 @@ exceeded file size limit, etc. The event passes through DEFAULT.PROCESS;',
 
 	public function to_array(): array {
 		return parent::to_array() + array(
-				'always' => true,
-			);
+			'always' => true,
+		);
 	}
 
 }

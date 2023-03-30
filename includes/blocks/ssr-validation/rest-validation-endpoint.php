@@ -45,7 +45,7 @@ class Rest_Validation_Endpoint extends Rest_Api_Endpoint_Base {
 				'attrs'     => array(
 					'name'        => $name,
 					'parent_name' => $parent_name,
-				)
+				),
 			)
 		);
 
@@ -68,7 +68,7 @@ class Rest_Validation_Endpoint extends Rest_Api_Endpoint_Base {
 
 		return new \WP_REST_Response(
 			array(
-				'result' => $result
+				'result' => $result,
 			),
 			200
 		);

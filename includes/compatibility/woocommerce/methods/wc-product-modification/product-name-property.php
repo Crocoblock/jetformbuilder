@@ -17,7 +17,6 @@ class Product_Name_Property extends Post_Title_Property {
 
 	/**
 	 * @param Abstract_Modifier $modifier
-	 *
 	 */
 	public function get_value( Abstract_Modifier $modifier ) {
 		$action = $modifier->get_action();
@@ -28,8 +27,8 @@ class Product_Name_Property extends Post_Title_Property {
 
 		// Check is it Insert action (not Update)
 		if ( ! is_a( $action, Save_Action::class ) ||
-		     0 < $product->get_id() ||
-		     $this->value
+			0 < $product->get_id() ||
+			$this->value
 		) {
 			if ( is_null( $this->value ) ) {
 				return;

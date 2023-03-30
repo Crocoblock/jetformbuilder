@@ -22,6 +22,7 @@ trait Attributes_Trait {
 		/**
 		 * Don't use wp_is_numeric_array function
 		 * for backward compatibility
+		 *
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/2392
 		 */
 		if ( is_array( $value ) ) {

@@ -18,7 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
 abstract class Base_Page_Action implements Arrayable {
 
 	const SECONDARY = 'secondary';
-	const PRIMARY = 'primary';
+	const PRIMARY   = 'primary';
 	const ON_UPDATE = 'update';
 
 	protected $page;

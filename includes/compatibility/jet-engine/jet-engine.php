@@ -43,7 +43,8 @@ class Jet_Engine {
 		);
 		add_filter(
 			'jet-form-builder/blocks/items',
-			array( $this, 'add_blocks' ), 0
+			array( $this, 'add_blocks' ),
+			0
 		);
 		add_action(
 			'jet-form-builder/actions/register',

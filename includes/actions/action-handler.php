@@ -25,8 +25,8 @@ class Action_Handler {
 	/**
 	 * @var Base[]
 	 */
-	public  $form_actions    = array();
-	public  $is_ajax         = false;
+	public $form_actions     = array();
+	public $is_ajax          = false;
 	private $form_conditions = array();
 	private $form_events     = array();
 
@@ -413,7 +413,7 @@ class Action_Handler {
 
 			if ( $is_class && is_a( $action, $class_slug_or_id ) ) {
 				return $action;
-			} else if ( $is_class ) {
+			} elseif ( $is_class ) {
 				continue;
 			}
 
@@ -429,9 +429,9 @@ class Action_Handler {
 
 	/**
 	 * Use jet_fb_handler()->refer
+	 *
 	 * @return mixed|string
 	 * @deprecated 2.1.3
-	 *
 	 */
 	public function get_refer() {
 		return $this->request_data['__refer'] ?? '';
@@ -564,7 +564,7 @@ class Action_Handler {
 			return $start_from;
 		}
 
-		return $this->get_unique_action_id( ++ $start_from );
+		return $this->get_unique_action_id( ++$start_from );
 	}
 
 	public function get_unique_field_id( string $computed_field ): string {

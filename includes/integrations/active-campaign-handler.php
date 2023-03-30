@@ -58,7 +58,6 @@ class Active_Campaign_Handler extends Integration_Base {
 		if ( empty( $data['result_code'] ) ) {
 			throw new Action_Exception( 'failed', $data );
 		}
-
 	}
 
 	/**

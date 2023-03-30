@@ -2,6 +2,12 @@
 	<FormBuilderPage
 		:title="__( 'JetFormBuilder Form Records', 'jet-form-builder' )"
 	>
+		<Portal to="scope-default/filters">
+			<FormFilter/>
+		</Portal>
+		<Portal to="scope-default/buttons">
+			<ClearFiltersButton/>
+		</Portal>
 		<ActionsWithFilters/>
 		<TablePagination/>
 		<EntriesTable/>
@@ -10,31 +16,36 @@
 </template>
 
 <script>
-import ActionsWithFilters from './ActionsWithFilters';
+import FormFilter from './filters/FormFilter';
 
 const {
-	TablePagination,
-	EntriesTable,
-	FormBuilderPage,
-} = JetFBComponents;
+	      TablePagination,
+	      EntriesTable,
+	      FormBuilderPage,
+	      ActionsWithFilters,
+	      ClearFiltersButton,
+	      Portal,
+      } = JetFBComponents;
 
 const {
-	i18n,
-	PromiseWrapper,
-} = JetFBMixins;
+	      i18n,
+	      PromiseWrapper,
+      } = JetFBMixins;
 
 const {
-	CHOOSE_ACTION,
-	CLICK_ACTION,
-} = JetFBConst;
+	      CHOOSE_ACTION,
+	      CLICK_ACTION,
+      } = JetFBConst;
 
-const { apiFetch } = wp;
 const {
-	mapMutations,
-	mapState,
-	mapActions,
-	mapGetters,
-} = Vuex;
+	      apiFetch,
+      } = wp;
+const {
+	      mapMutations,
+	      mapState,
+	      mapActions,
+	      mapGetters,
+      } = Vuex;
 
 export default {
 	name: 'jfb-records',
@@ -43,6 +54,9 @@ export default {
 		EntriesTable,
 		ActionsWithFilters,
 		FormBuilderPage,
+		Portal,
+		FormFilter,
+		ClearFiltersButton,
 	},
 	mixins: [
 		i18n,
@@ -76,7 +90,7 @@ export default {
 		] ),
 		...mapActions( 'scope-default', [
 			'updateList',
-			'apiFetch'
+			'apiFetch',
 		] ),
 		deleteAction( { resolve, reject } ) {
 			this.apiFetch().then( response => {

@@ -27,7 +27,7 @@ class Pay_Now_Action extends Base_Action {
 	public function action_headers() {
 		return array(
 			'Content-Type' => 'application/json',
-			'Prefer'       => 'return=representation'
+			'Prefer'       => 'return=representation',
 		);
 	}
 

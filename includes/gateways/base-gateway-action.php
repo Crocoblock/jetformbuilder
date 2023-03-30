@@ -25,8 +25,8 @@ abstract class Base_Gateway_Action {
 	);
 
 	protected $auth;
-	protected $method     = 'POST';
-	protected $body       = array();
+	protected $method = 'POST';
+	protected $body   = array();
 	protected $response;
 	protected $response_body;
 	protected $response_code;
@@ -84,7 +84,7 @@ abstract class Base_Gateway_Action {
 		$patterns = array();
 
 		foreach ( $this->path_parts as $key => $value ) {
-			$patterns["#\{($key)\}#"] = function ( $matches ) use ( $value ) {
+			$patterns[ "#\{($key)\}#" ] = function ( $matches ) use ( $value ) {
 				return $value;
 			};
 		}
@@ -300,10 +300,10 @@ abstract class Base_Gateway_Action {
 
 	public function response_message( $base_message ): string {
 		return $base_message . "\r\n" . sprintf(
-				'%d: %s',
-				$this->get_response_code(),
-				$this->get_response_message()
-			);
+			'%d: %s',
+			$this->get_response_code(),
+			$this->get_response_message()
+		);
 	}
 
 	/**

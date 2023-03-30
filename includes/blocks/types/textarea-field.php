@@ -126,7 +126,6 @@ class Textarea_Field extends Base {
 		);
 
 		$this->controls_manager->end_section();
-
 	}
 
 	/**

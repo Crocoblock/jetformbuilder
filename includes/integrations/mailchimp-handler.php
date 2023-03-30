@@ -38,7 +38,6 @@ class MailChimp_Handler extends Integration_Base {
 				'Authorization' => 'Basic ' . base64_encode( 'user:' . $this->api_key ),
 			),
 		);
-
 	}
 
 	public function get_all_data() {

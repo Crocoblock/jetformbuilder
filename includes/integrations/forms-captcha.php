@@ -191,10 +191,12 @@ class Forms_Captcha {
 	}
 
 	public function check_is_container_exist( array $blocks ): array {
-		$this->exist_container = ! empty( Block_Helper::find_by_block_name(
-			$blocks,
-			'jet-forms/captcha-container'
-		) );
+		$this->exist_container = ! empty(
+			Block_Helper::find_by_block_name(
+				$blocks,
+				'jet-forms/captcha-container'
+			)
+		);
 
 		return $blocks;
 	}

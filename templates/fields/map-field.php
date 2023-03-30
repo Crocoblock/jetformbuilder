@@ -28,22 +28,22 @@ $this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
 $this->add_attribute( 'data-jfb-sync' );
 ?>
 <div class="jet-fb-map-field">
-    <input <?php $this->render_attributes_string(); ?> />
-    <input
-            type="hidden"
-            name="<?php echo esc_attr( $this->block_type->get_field_name( $name . '_lat' ) ); ?>"
-            value="<?php echo esc_attr( $args['default']['lat'] ?? '' ); ?>"
-            data-map-field="lat"
-    />
-    <input
-            type="hidden"
-            name="<?php echo esc_attr( $this->block_type->get_field_name( $name . '_lng' ) ); ?>"
-            value="<?php echo esc_attr( $args['default']['lng'] ?? '' ); ?>"
-            data-map-field="lng"
-    />
-    <input
-            type="hidden"
-            name="<?php echo esc_attr( $this->block_type->get_field_name( $name . '_hash' ) ); ?>"
-            data-map-field="hash"
-    />
+	<input <?php $this->render_attributes_string(); ?> />
+	<input
+			type="hidden"
+			name="<?php echo esc_attr( $this->block_type->get_field_name( $name . '_lat' ) ); ?>"
+			value="<?php echo esc_attr( $args['default']['lat'] ?? '' ); ?>"
+			data-map-field="lat"
+	/>
+	<input
+			type="hidden"
+			name="<?php echo esc_attr( $this->block_type->get_field_name( $name . '_lng' ) ); ?>"
+			value="<?php echo esc_attr( $args['default']['lng'] ?? '' ); ?>"
+			data-map-field="lng"
+	/>
+	<input
+			type="hidden"
+			name="<?php echo esc_attr( $this->block_type->get_field_name( $name . '_hash' ) ); ?>"
+			data-map-field="hash"
+	/>
 </div>

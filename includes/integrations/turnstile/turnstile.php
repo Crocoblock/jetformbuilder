@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Integrations\Turnstile;
 
-
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;

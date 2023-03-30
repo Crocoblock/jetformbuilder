@@ -15,6 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 /**
  * Class Base_Preset
+ *
  * @package Jet_Form_Builder\Presets\Types
  */
 abstract class Base_Preset {

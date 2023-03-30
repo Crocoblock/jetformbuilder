@@ -114,7 +114,6 @@ class Gallery {
 		}
 
 		echo '</div>';
-
 	}
 
 	/**
@@ -190,7 +189,6 @@ class Gallery {
 		echo '</div>';
 
 		return ob_get_clean();
-
 	}
 
 	/**

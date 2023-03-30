@@ -292,22 +292,26 @@ class Manager {
 		$data = ( ! empty( $_POST['data'] ) ) ? Tools::sanitize_recursive( $_POST['data'] ) : false;
 
 		if ( ! $data ) {
-			wp_send_json( [
-				'success'  => false,
-				'message' => __( 'Server error. Please, try again later', 'jet-form-builder' ),
-				'data'    => [],
-			] );
+			wp_send_json(
+				array(
+					'success' => false,
+					'message' => __( 'Server error. Please, try again later', 'jet-form-builder' ),
+					'data'    => array(),
+				)
+			);
 		}
 
 		$plugin = $data['plugin'];
 
 		$this->activate_plugin( $plugin );
 
-		wp_send_json( [
-			'success' => true,
-			'message' => __( 'Success', 'jet-form-builder' ),
-			'data'    => [],
-		] );
+		wp_send_json(
+			array(
+				'success' => true,
+				'message' => __( 'Success', 'jet-form-builder' ),
+				'data'    => array(),
+			)
+		);
 	}
 
 	/**
@@ -318,22 +322,26 @@ class Manager {
 		$data = ( ! empty( $_POST['data'] ) ) ? Tools::sanitize_recursive( $_POST['data'] ) : false;
 
 		if ( ! $data ) {
-			wp_send_json( [
-				'success'  => false,
-				'message' => __( 'Server error. Please, try again later', 'jet-form-builder' ),
-				'data'    => [],
-			] );
+			wp_send_json(
+				array(
+					'success' => false,
+					'message' => __( 'Server error. Please, try again later', 'jet-form-builder' ),
+					'data'    => array(),
+				)
+			);
 		}
 
 		$plugin = $data['plugin'];
 
 		$this->deactivate_plugin( $plugin );
 
-		wp_send_json( [
-			'success' => true,
-			'message' => __( 'Success', 'jet-form-builder' ),
-			'data'    => [],
-		] );
+		wp_send_json(
+			array(
+				'success' => true,
+				'message' => __( 'Success', 'jet-form-builder' ),
+				'data'    => array(),
+			)
+		);
 	}
 
 	/**
@@ -344,11 +352,13 @@ class Manager {
 		$status = array();
 
 		if ( ! current_user_can( 'activate_plugins' ) ) {
-			wp_send_json( [
-				'success'  => false,
-				'message' => __( 'Sorry, you are not allowed to install plugins on this site.', 'jet-form-builder' ),
-				'data'    => [],
-			] );
+			wp_send_json(
+				array(
+					'success' => false,
+					'message' => __( 'Sorry, you are not allowed to install plugins on this site.', 'jet-form-builder' ),
+					'data'    => array(),
+				)
+			);
 		}
 
 		$activate = null;
@@ -358,18 +368,22 @@ class Manager {
 		}
 
 		if ( is_wp_error( $activate ) ) {
-			wp_send_json( [
-				'success'  => false,
-				'message' => $activate->get_error_message(),
-				'data'    => [],
-			] );
+			wp_send_json(
+				array(
+					'success' => false,
+					'message' => $activate->get_error_message(),
+					'data'    => array(),
+				)
+			);
 		}
 
-		wp_send_json( [
-			'success'  => true,
-			'message' => __( 'The addon has been activated', 'jet-form-builder' ),
-			'data'    => $this->get_addon_data( $plugin_file ),
-		] );
+		wp_send_json(
+			array(
+				'success' => true,
+				'message' => __( 'The addon has been activated', 'jet-form-builder' ),
+				'data'    => $this->get_addon_data( $plugin_file ),
+			)
+		);
 	}
 
 	/**
@@ -377,14 +391,16 @@ class Manager {
 	 */
 	public function deactivate_plugin( $plugin_file ) {
 
-		$status = [];
+		$status = array();
 
 		if ( ! current_user_can( 'activate_plugins' ) ) {
-			wp_send_json( [
-				'success' => false,
-				'message' => __( 'Sorry, you are not allowed to install plugins on this site.', 'jet-form-builder' ),
-				'data'    => [],
-			] );
+			wp_send_json(
+				array(
+					'success' => false,
+					'message' => __( 'Sorry, you are not allowed to install plugins on this site.', 'jet-form-builder' ),
+					'data'    => array(),
+				)
+			);
 		}
 
 		$deactivate_handler = null;
@@ -394,18 +410,22 @@ class Manager {
 		}
 
 		if ( is_wp_error( $deactivate_handler ) ) {
-			wp_send_json( [
-				'success' => false,
-				'message' => $deactivate_handler->get_error_message(),
-				'data'    => [],
-			] );
+			wp_send_json(
+				array(
+					'success' => false,
+					'message' => $deactivate_handler->get_error_message(),
+					'data'    => array(),
+				)
+			);
 		}
 
-		wp_send_json( [
-			'success'  => true,
-			'message' => __( 'The addon has been deactivated', 'jet-form-builder' ),
-			'data'    => $this->get_addon_data( $plugin_file ),
-		] );
+		wp_send_json(
+			array(
+				'success' => true,
+				'message' => __( 'The addon has been deactivated', 'jet-form-builder' ),
+				'data'    => $this->get_addon_data( $plugin_file ),
+			)
+		);
 	}
 
 	/**
@@ -482,7 +502,8 @@ class Manager {
 
 			$plugin_slug = $this->get_addon_slug_by_filename( $plugin_data['slug'] );
 
-			$plugin_meta['view-details'] = sprintf( '<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
+			$plugin_meta['view-details'] = sprintf(
+				'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
 				esc_url_raw( network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin_slug . '&TB_iframe=true&width=600&height=550' ) ),
 				esc_attr( sprintf( __( 'More information about %s', 'jet-form-builder' ), $plugin_data['name'] ) ),
 				esc_attr( $plugin_data['name'] ),
@@ -523,15 +544,15 @@ class Manager {
 				$registered_plugin_data                  = $addon_data;
 				$registered_plugin_data['plugin_slug']   = $addon_slug;
 				$registered_plugin_data['transient_key'] = $addon_slug . '_addon_info_data';
-				$registered_plugin_data['banners'] = [];
+				$registered_plugin_data['banners']       = array();
 
 				if ( ! empty( $user_installed_plugins[ $addon_data['slug'] ] ) ) {
 					$installed_plugin_data = $user_installed_plugins[ $addon_data['slug'] ];
 
 					$registered_plugin_data['author']     = $installed_plugin_data['Author'];
 					$registered_plugin_data['plugin_url'] = $installed_plugin_data['PluginURI'];
-					$registered_plugin_data['requires'] = $installed_plugin_data['RequiresWP'];
-					$registered_plugin_data['tested'] = $installed_plugin_data['RequiresPHP'];
+					$registered_plugin_data['requires']   = $installed_plugin_data['RequiresWP'];
+					$registered_plugin_data['tested']     = $installed_plugin_data['RequiresPHP'];
 				}
 
 				break;
@@ -614,6 +635,7 @@ class Manager {
 
 	/**
 	 * [allow_unsafe_urls description]
+	 *
 	 * @param  [type] $args [description]
 	 * @return [type]       [description]
 	 */
@@ -652,6 +674,5 @@ class Manager {
 		add_filter( 'plugins_api', array( $this, 'plugins_api_filter' ), 10, 3 );
 
 		add_filter( 'http_request_args', array( $this, 'allow_unsafe_urls' ) );
-
 	}
 }

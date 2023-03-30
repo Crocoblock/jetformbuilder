@@ -372,7 +372,6 @@ class Form extends Base {
 		);
 
 		$this->controls_manager->end_section();
-
 	}
 
 	public function get_name() {

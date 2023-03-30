@@ -285,7 +285,6 @@ class Tools {
 		}
 
 		return $result;
-
 	}
 
 	public static function with_placeholder( $array, $label = '--' ) {
@@ -306,8 +305,8 @@ class Tools {
 	 */
 	public static function is_valid_timestamp( $timestamp ): bool {
 		return ( (string) (int) $timestamp === $timestamp || (int) $timestamp === $timestamp )
-		       && ( $timestamp <= PHP_INT_MAX )
-		       && ( $timestamp >= ~PHP_INT_MAX );
+				&& ( $timestamp <= PHP_INT_MAX )
+				&& ( $timestamp >= ~PHP_INT_MAX );
 	}
 
 	public static function array_merge_intersect_key( $source, $arrays ) {
@@ -418,7 +417,7 @@ class Tools {
 
 		if ( $sanitize_callback && is_callable( $sanitize_callback ) ) {
 			$filtered = call_user_func( $sanitize_callback, $filtered );
-		} else if ( $replace_enqueue && false !== strpos( $filtered, '<' ) ) {
+		} elseif ( $replace_enqueue && false !== strpos( $filtered, '<' ) ) {
 			$filtered = wp_kses_post( $filtered );
 		}
 
@@ -563,7 +562,7 @@ class Tools {
 
 	public static function esc_attr( $value ) {
 		if ( ! is_scalar( $value ) && $value ) {
-			return esc_attr( Tools::encode_json( $value ) );
+			return esc_attr( self::encode_json( $value ) );
 		}
 
 		return esc_attr( $value );
@@ -575,6 +574,7 @@ class Tools {
 
 	/**
 	 * Get from function below
+	 *
 	 * @return string
 	 * @see \retrieve_password
 	 */

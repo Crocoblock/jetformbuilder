@@ -119,7 +119,8 @@ class Form extends Widget_Base implements Widget_Base_It {
 		return array( 'jet-form-builder' );
 	}
 
-	/*public function get_script_depends() {
+	/*
+	public function get_script_depends() {
 		return array( 'jet-form-builder-frontend-forms' );
 	}*/
 
@@ -682,15 +683,15 @@ class Form extends Widget_Base implements Widget_Base_It {
 			'active-separator' => "$wrapper.active-page .%s-progress-pages__separator",
 			'active-circle'    => "$wrapper.active-page .%s$item--circle",
 
-			'next-wrapper'   => "$wrapper:not(.passed-page):not(.active-page)",
-			'next-item'      => "$wrapper:not(.passed-page):not(.active-page) .%s$item",
-			'next-separator' => "$wrapper:not(.passed-page):not(.active-page) .%s-progress-pages__separator",
-			'next-circle'    => "$wrapper:not(.passed-page):not(.active-page) .%s$item--circle",
+			'next-wrapper'     => "$wrapper:not(.passed-page):not(.active-page)",
+			'next-item'        => "$wrapper:not(.passed-page):not(.active-page) .%s$item",
+			'next-separator'   => "$wrapper:not(.passed-page):not(.active-page) .%s-progress-pages__separator",
+			'next-circle'      => "$wrapper:not(.passed-page):not(.active-page) .%s$item--circle",
 
-			'prev-wrapper'   => "$wrapper.passed-page",
-			'prev-item'      => "$wrapper.passed-page .%s$item",
-			'prev-separator' => "$wrapper.passed-page .%s-progress-pages__separator",
-			'prev-circle'    => "$wrapper.passed-page .%s$item--circle",
+			'prev-wrapper'     => "$wrapper.passed-page",
+			'prev-item'        => "$wrapper.passed-page .%s$item",
+			'prev-separator'   => "$wrapper.passed-page .%s-progress-pages__separator",
+			'prev-circle'      => "$wrapper.passed-page .%s$item--circle",
 		);
 
 		/**
@@ -1100,7 +1101,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 					'label'   => __( 'Fields label HTML tag', 'jet-form-builder' ),
 					'type'    => Controls_Manager::SELECT,
 					'default' => 'div',
-					'options' => $options['fields_label_tag']
+					'options' => $options['fields_label_tag'],
 				)
 			);
 
@@ -1723,7 +1724,6 @@ class Form extends Widget_Base implements Widget_Base_It {
 			);
 
 			$this->end_controls_section();
-
 		};
 		$closure();
 

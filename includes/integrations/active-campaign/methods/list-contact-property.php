@@ -45,7 +45,7 @@ class List_Contact_Property extends Base_Object_Property {
 			->set_base( $modifier->url );
 
 		$api->set_list( (int) $this->value )
-		    ->set_contact( $action->contact_id );
+			->set_contact( $action->contact_id );
 
 		try {
 			$api->send_request();

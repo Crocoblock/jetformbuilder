@@ -38,7 +38,7 @@ class Form_Break_Field extends Base {
 			Plugin::instance()->plugin_url( 'assets/js/frontend/multi.step{min}.js' ),
 			array(
 				Conditional_Block::HANDLE,
-				Manager::MAIN_SCRIPT_HANDLE
+				Manager::MAIN_SCRIPT_HANDLE,
 			),
 			Plugin::instance()->get_version(),
 			true

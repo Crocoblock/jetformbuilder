@@ -26,7 +26,7 @@ class Field_Name_Column extends Column_Advanced_Base {
 
 		return array(
 			'name'  => $name,
-			'label' => $attrs['label'] ?? ''
+			'label' => $attrs['label'] ?? '',
 		);
 	}
 }

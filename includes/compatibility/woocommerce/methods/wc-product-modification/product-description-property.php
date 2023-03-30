@@ -16,6 +16,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Update `post_content` \WP_Post property
  *
  * Class Product_Description_Property
+ *
  * @package Jet_Form_Builder\Actions\Methods\Wc_Product_Modification
  */
 class Product_Description_Property extends Post_Content_Property {

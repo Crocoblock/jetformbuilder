@@ -23,22 +23,22 @@
 import Constants from '../constants';
 import ScopeStoreMixin from '../mixins/ScopeStoreMixin';
 
-const { i18n } = JetFBMixins;
+const { i18n }         = JetFBMixins;
 const { applyFilters } = wp.hooks;
 
 const {
-	CHOOSE_ACTION,
-	CLICK_ACTION,
-} = Constants;
+	      CHOOSE_ACTION,
+	      CLICK_ACTION,
+      } = Constants;
 
 window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 
 const {
-	mapState,
-	mapGetters,
-	mapMutations,
-	mapActions,
-} = Vuex;
+	      mapState,
+	      mapGetters,
+	      mapMutations,
+	      mapActions,
+      } = Vuex;
 
 export default {
 	name: 'ChooseAction',
@@ -84,7 +84,7 @@ export default {
 				{
 					action: this.currentAction,
 					context: CHOOSE_ACTION,
-					payload: [ this.getChecked, CHOOSE_ACTION ]
+					payload: [ this.getChecked, CHOOSE_ACTION ],
 				},
 			);
 
@@ -97,7 +97,8 @@ export default {
 
 			try {
 				this.getActionPromise().finally( finish );
-			} catch ( error ) {
+			}
+			catch ( error ) {
 				this.onFinish();
 			}
 

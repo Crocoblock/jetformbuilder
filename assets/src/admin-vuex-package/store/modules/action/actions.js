@@ -22,7 +22,7 @@ export default {
 		const onFinish = () => {
 			commit( 'toggleLoading', 'page' );
 			commit( 'toggleDoingAction', null, { root: true } );
-			commit( 'clearProcess' );
+			//commit( 'clearProcess' );
 		};
 
 		try {

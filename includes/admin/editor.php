@@ -68,7 +68,6 @@ class Editor {
 		}
 
 		return $result;
-
 	}
 
 	public function get_preset_config() {
@@ -462,7 +461,6 @@ class Editor {
 		);
 
 		do_action( 'jet-form-builder/other-editor-assets/after', $this, $handle );
-
 	}
 
 }

@@ -73,7 +73,6 @@ class Get_From_Field extends Base {
 		}
 
 		return $result;
-
 	}
 
 }

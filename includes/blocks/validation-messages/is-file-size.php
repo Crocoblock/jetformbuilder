@@ -22,7 +22,7 @@ class Is_File_Size extends Base_Message {
 
 	public function supported_blocks(): array {
 		return array(
-			Media_Field::class
+			Media_Field::class,
 		);
 	}
 

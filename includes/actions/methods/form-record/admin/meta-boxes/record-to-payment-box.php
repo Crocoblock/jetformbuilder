@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Meta_Boxes;
 
-
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages\Single_Form_Record_Page;
 use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_By_Payment;
 use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;

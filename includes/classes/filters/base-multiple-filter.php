@@ -30,9 +30,12 @@ abstract class Base_Multiple_Filter extends Base_Filter {
 		return wp_kses_post(
 			implode(
 				$delimiter,
-				array_map( function ( $item ) use ( $args ) {
-					return $this->apply_item( $item, ...$args );
-				}, $value )
+				array_map(
+					function ( $item ) use ( $args ) {
+						return $this->apply_item( $item, ...$args );
+					},
+					$value
+				)
 			)
 		);
 	}

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Gateways\Pages;
 
-
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;

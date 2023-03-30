@@ -133,7 +133,7 @@ class Media_Field extends Base {
 			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field{min}.js' ),
 			array(
 				Manager::MAIN_SCRIPT_HANDLE,
-				'jet-form-builder-sortable'
+				'jet-form-builder-sortable',
 			),
 			Plugin::instance()->get_version(),
 			true

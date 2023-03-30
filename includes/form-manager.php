@@ -73,7 +73,6 @@ class Form_Manager {
 		}
 
 		return $result;
-
 	}
 
 	public function get_only_form_fields( $form_id ): array {

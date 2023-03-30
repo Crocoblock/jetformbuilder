@@ -8,7 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-trait Column_Heading_Trait  {
+trait Column_Heading_Trait {
 
 	public function get_heading(): array {
 		return array(

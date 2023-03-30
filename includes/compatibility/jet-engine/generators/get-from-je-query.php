@@ -78,7 +78,6 @@ class Get_From_Je_Query extends Base {
 		}
 
 		return $result;
-
 	}
 
 	private function get_handler( $object ): Base_Object_Handler {

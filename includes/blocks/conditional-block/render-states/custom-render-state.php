@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Render_States;
 
-
 class Custom_Render_State extends Base_Render_State {
 
 	private $state_id = '';

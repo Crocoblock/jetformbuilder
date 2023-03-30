@@ -65,9 +65,9 @@ class Form_Builder {
 		}
 
 		$blocks = Live_Form::instance()
-		                   ->set_form_id( $this->form_id )
-		                   ->set_specific_data_for_render( $this->args )
-		                   ->setup_fields();
+							->set_form_id( $this->form_id )
+							->set_specific_data_for_render( $this->args )
+							->setup_fields();
 
 		$form = $this->start_form();
 
@@ -83,7 +83,7 @@ class Form_Builder {
 		$form .= jet_fb_live()->maybe_end_page( true );
 		$form .= $this->end_form();
 
-		//Preset_Manager::clear();
+		// Preset_Manager::clear();
 
 		return $form;
 	}

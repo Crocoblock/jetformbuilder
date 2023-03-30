@@ -113,7 +113,7 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 		return array(
 			'secret'    => $secret,
 			'key'       => $key,
-			'threshold' => $threshold
+			'threshold' => $threshold,
 		);
 	}
 

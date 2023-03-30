@@ -14,9 +14,9 @@ if ( ! defined( 'WPINC' ) ) {
 
 abstract class Abstract_Modifier {
 
-	public    $source_arr = array();
-	public    $fields_map = array();
-	protected $request    = array();
+	public $source_arr = array();
+	public $fields_map = array();
+	protected $request = array();
 
 	/** @var Object_Properties_Collection */
 	public $properties;

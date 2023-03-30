@@ -28,7 +28,7 @@ class Controller {
 	);
 	protected $columns  = array();
 	protected $record_id;
-	protected $is_new   = true;
+	protected $is_new = true;
 
 	public function get_record_id(): int {
 		return (int) $this->record_id;

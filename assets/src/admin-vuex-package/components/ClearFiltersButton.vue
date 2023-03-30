@@ -12,22 +12,23 @@
 
 import ScopeStoreMixin from '../mixins/ScopeStoreMixin';
 
+const { __ } = wp.i18n;
+
 const {
-	mapState,
-	mapGetters,
-	mapMutations,
-	mapActions,
-} = Vuex;
+	      mapState,
+	      mapGetters,
+	      mapMutations,
+	      mapActions,
+      } = Vuex;
 
 export default {
 	name: 'ClearFiltersButton',
 	props: {
-		label: String,
+		label: {
+			type: String,
+			default: __( 'Clear all filters', 'jet-form-builder' ),
+		},
 	},
 	mixins: [ ScopeStoreMixin ],
 };
 </script>
-
-<style>
-
-</style>

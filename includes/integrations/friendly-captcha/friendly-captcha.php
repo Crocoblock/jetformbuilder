@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Integrations\Friendly_Captcha;
 
-
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
@@ -41,7 +40,7 @@ class Friendly_Captcha extends Base_Captcha_From_Options {
 		$captcha_args = apply_filters(
 			'jet-form-builder/friendly-captcha/options',
 			array(
-				'sitekey' => $this->options['key'] ?? ''
+				'sitekey' => $this->options['key'] ?? '',
 			)
 		);
 

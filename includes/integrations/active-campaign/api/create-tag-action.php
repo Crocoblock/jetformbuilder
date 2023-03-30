@@ -26,7 +26,7 @@ class Create_Tag_Action extends Base_Action {
 		return array(
 			'tag' => array(
 				'tag'     => $this->tag,
-				'tagType' => 'contact'
+				'tagType' => 'contact',
 			),
 		);
 	}

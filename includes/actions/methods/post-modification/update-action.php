@@ -17,7 +17,7 @@ class Update_Action extends Base_Post_Action {
 		return 'update';
 	}
 
-	public static function  is_supported( Abstract_Modifier $modifier ): bool {
+	public static function is_supported( Abstract_Modifier $modifier ): bool {
 		return ! empty( $modifier->source_arr['ID'] ?? 0 );
 	}
 

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Integrations\Abstract_Captcha;
 
-
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;

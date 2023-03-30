@@ -41,8 +41,8 @@ $max_size = $this->block_type->get_max_size();
 $this->add_attribute( 'data-max_size', $max_size );
 $max_size_message = $this->block_type->get_max_size_message();
 
-//$value = File_Upload::instance()->get_result_value( $args );
-//$value = is_array( $value ) || ( 'url' === $format ) ? wp_json_encode( $value ) : $value;
+// $value = File_Upload::instance()->get_result_value( $args );
+// $value = is_array( $value ) || ( 'url' === $format ) ? wp_json_encode( $value ) : $value;
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
 <div class="jet-form-builder__field-wrap jet-form-builder-file-upload">

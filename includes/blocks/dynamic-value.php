@@ -27,7 +27,8 @@ class Dynamic_Value {
 		add_filter(
 			'jet-form-builder/render/hidden-field',
 			array( $this, 'on_render_hidden_field' ),
-			10, 2
+			10,
+			2
 		);
 		add_action(
 			'wp_enqueue_scripts',

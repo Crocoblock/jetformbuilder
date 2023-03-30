@@ -17,7 +17,7 @@ class Relation {
 	public $foreign;
 
 	public $condition = '';
-	protected $type = 'INNER';
+	protected $type   = 'INNER';
 
 	public function type( string $type ): Relation {
 		$this->type = $type;
@@ -29,7 +29,7 @@ class Relation {
 		if ( ! $this->local ) {
 			$this->local = (object) array(
 				'table' => $view_base->table(),
-				'key'   => $foreign_key
+				'key'   => $foreign_key,
 			);
 		}
 
@@ -40,7 +40,7 @@ class Relation {
 		if ( ! $this->foreign ) {
 			$this->foreign = (object) array(
 				'table' => $view_base->table(),
-				'key'   => $primary_key
+				'key'   => $primary_key,
 			);
 		}
 

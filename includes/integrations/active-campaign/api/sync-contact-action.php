@@ -31,7 +31,7 @@ class Sync_Contact_Action extends Base_Action {
 
 	public function action_body() {
 		return array(
-			'contact' => $this->contact
+			'contact' => $this->contact,
 		);
 	}
 

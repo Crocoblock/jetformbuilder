@@ -148,7 +148,6 @@ trait Base_Select_Radio_Check {
 				$options[] = $item;
 
 			}
-
 		} elseif ( 'terms' === $options_from ) {
 
 			$tax = ! empty( $args['field_options_tax'] ) ? $args['field_options_tax'] : false;
@@ -194,7 +193,6 @@ trait Base_Select_Radio_Check {
 
 				$options[] = $item;
 			}
-
 		} elseif ( 'generate' === $options_from ) {
 
 			$generator = ! empty( $args['generator_function'] ) ? $args['generator_function'] : false;
@@ -243,14 +241,13 @@ trait Base_Select_Radio_Check {
 					$options[] = $item;
 
 				}
-
 			} else {
 				return array_map( array( $this, 'prepare_option' ), $generated );
 			}
 		} elseif ( 'glossary' === $options_from ) {
 			if ( ! empty( $args['glossary_id'] )
-			     && false !== Tools::get_jet_engine_version()
-			     && isset( jet_engine()->glossaries )
+				&& false !== Tools::get_jet_engine_version()
+				&& isset( jet_engine()->glossaries )
 			) {
 				$glossary = jet_engine()->glossaries->data->get_item_for_edit( absint( $args['glossary_id'] ) );
 
@@ -269,7 +266,6 @@ trait Base_Select_Radio_Check {
 		}
 
 		return array_map( array( $this, 'prepare_option' ), $options );
-
 	}
 
 
@@ -326,7 +322,6 @@ trait Base_Select_Radio_Check {
 		}
 
 		return $result;
-
 	}
 
 	/**
@@ -352,7 +347,6 @@ trait Base_Select_Radio_Check {
 		}
 
 		return $result;
-
 	}
 
 

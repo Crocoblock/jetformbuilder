@@ -1,8 +1,5 @@
 <template>
 	<div :class="rootClasses">
-		<Portal to="scope-default/row-action-export">
-			<h2>Hello World!</h2>
-		</Portal>
 		<cx-vui-list-table
 			:is-empty="! list.length"
 			:empty-message="emptyMessage"
@@ -86,19 +83,11 @@
 							<a
 								:href="getActionHref( action )"
 								:class="getActionClass( action )"
-								@click="onClickAction( action, entry )"
+								@click="onClickAction( action, entry, $event )"
 							>
 								{{ action.label }}
 							</a>
 						</span>
-					</div>
-					<div class="list-table-item-sub" v-if="currentProcessAction">
-						<PortalTarget
-							v-for="action in entry.actions.value"
-							:key="action.value"
-							v-if="action.value === currentProcessAction"
-							:name="scopedName( 'row-action-' + action.value )"
-						/>
 					</div>
 				</div>
 			</template>
@@ -112,8 +101,6 @@ import ScopePropMixin from '../mixins/ScopeStoreMixin';
 import GetColumnComponent from '../mixins/GetColumnComponent';
 import EntryColumnsTable from './EntryColumnsTable';
 import { getPrimaryId } from '../functions';
-import PortalTarget from 'portal-vue';
-import { Portal } from 'portal-vue';
 
 const {
 	      CHOOSE_ACTION,
@@ -131,8 +118,6 @@ export default {
 	name: 'EntriesTableSkeleton',
 	components: {
 		EntryColumnsTable,
-		PortalTarget,
-		Portal,
 	},
 	props: {
 		list: {
@@ -182,10 +167,6 @@ export default {
 				);
 			} );
 		},
-		currentProcessAction() {
-			return this.getter( 'currentProcess' )?.action;
-		},
-
 		...mapGetters( [
 			'isDoing',
 		] ),
@@ -226,10 +207,12 @@ export default {
 		columnType( entry, column ) {
 			return entry[ column ]?.type ?? 'string';
 		},
-		onClickAction( action, record ) {
-			if ( action?.href ) {
+		onClickAction( action, record, event ) {
+			if ( action?.href && '#' !== action.href ) {
 				return;
 			}
+			event.preventDefault();
+
 			this.commit(
 				'setProcess',
 				{

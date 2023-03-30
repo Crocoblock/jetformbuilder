@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
-
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;

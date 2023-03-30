@@ -344,7 +344,6 @@ class Checkbox_Field extends Base {
 		$this->controls_manager->end_tab();
 		$this->controls_manager->end_tabs();
 		$this->controls_manager->end_section();
-
 	}
 
 	public function expected_preset_type(): array {

@@ -17,8 +17,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Hidden_Field extends Base {
 
-	public  $use_style_manager = false;
-	private $rendering         = true;
+	public $use_style_manager = false;
+	private $rendering        = true;
 
 	private function current_post() {
 		return Live_Form::instance()->post;
@@ -329,7 +329,6 @@ class Hidden_Field extends Base {
 		}
 
 		return get_the_author_meta( $key, $this->current_post()->post_author );
-
 	}
 
 	private function get_default_field_value() {

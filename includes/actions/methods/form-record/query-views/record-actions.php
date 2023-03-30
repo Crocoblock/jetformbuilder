@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views;
 
-
 use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Action_Result_Model;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;

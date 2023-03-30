@@ -15,6 +15,6 @@ class City_Column extends Column_Advanced_Base {
 	protected $column = 'admin_area_2';
 
 	public function get_label(): string {
-		return __( 'City','jet-form-builder' );
+		return __( 'City', 'jet-form-builder' );
 	}
 }

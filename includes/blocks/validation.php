@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks;
 
-
 use Jet_Form_Builder\Blocks\Advanced_Rules\Match_Not_Regexp_Rule;
 use Jet_Form_Builder\Blocks\Advanced_Rules\Match_Regexp_Rule;
 use Jet_Form_Builder\Blocks\Advanced_Rules\Must_Contain_Characters_Rule;
@@ -55,7 +54,7 @@ class Validation implements Arrayable {
 	 * @var Base_Message[]
 	 */
 	private $messages;
-	public  $callbacks;
+	public $callbacks;
 	private $settings        = array();
 	private $inline_messages = array();
 
@@ -246,7 +245,7 @@ class Validation implements Arrayable {
 			array(
 				'value' => self::FORMAT_ADVANCED,
 				'label' => __( 'Advanced', 'jet-form-builder' ),
-				'title' => __( 'More flexible JetFormBuilder\'s validation', 'jet-form-builder' )
+				'title' => __( 'More flexible JetFormBuilder\'s validation', 'jet-form-builder' ),
 			),
 		);
 	}

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Integrations\Abstract_Captcha;
 
-
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 
 // If this file is called directly, abort.

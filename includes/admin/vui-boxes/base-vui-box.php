@@ -13,7 +13,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 abstract class Base_Vui_Box implements Repository_Item_Instance_Trait, Arrayable {
 
-	const TYPE_PANEL = 'panel';
+	const TYPE_PANEL  = 'panel';
 	const TYPE_BANNER = 'banner';
 
 	abstract public function get_slug(): string;

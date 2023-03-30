@@ -50,7 +50,7 @@ abstract class Base_Render_State implements
 
 	public function exclude_states(): array {
 		return array(
-			Default_State::class
+			Default_State::class,
 		);
 	}
 

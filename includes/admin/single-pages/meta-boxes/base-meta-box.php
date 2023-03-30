@@ -26,7 +26,7 @@ abstract class Base_Meta_Box
 	Arrayable,
 	Repository_Static_Item_It {
 
-	const TYPE_LIST = 'list';
+	const TYPE_LIST  = 'list';
 	const TYPE_TABLE = 'table';
 
 	use Repository_Item_With_Class;

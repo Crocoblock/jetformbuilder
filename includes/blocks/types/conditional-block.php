@@ -154,9 +154,12 @@ class Conditional_Block extends Base {
 			return;
 		}
 
-		usort( $conditions, function ( $current ) {
-			return 'show' === ( $current['type'] ?? '' ) ? - 1 : 1;
-		} );
+		usort(
+			$conditions,
+			function ( $current ) {
+				return 'show' === ( $current['type'] ?? '' ) ? - 1 : 1;
+			}
+		);
 
 		foreach ( $conditions as $condition ) {
 			$condition['type'] = $condition['type'] ?? '';
@@ -197,9 +200,9 @@ class Conditional_Block extends Base {
 
 		try {
 			return Condition_Manager::instance()
-			                        ->get_functions()
-			                        ->get_function( $func_type )
-			                        ->to_string( $settings );
+									->get_functions()
+									->get_function( $func_type )
+									->to_string( $settings );
 
 		} catch ( Repository_Exception $exception ) {
 			return '';

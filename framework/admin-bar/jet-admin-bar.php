@@ -110,7 +110,6 @@ if ( ! class_exists( 'Jet_Admin_Bar' ) ) {
 					$wp_admin_bar->add_menu( $child_args );
 				}
 			}
-
 		}
 
 		/**

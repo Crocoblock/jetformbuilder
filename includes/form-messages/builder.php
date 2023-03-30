@@ -91,7 +91,6 @@ class Builder {
 
 		// Reset status
 		$this->set_form_status( null );
-
 	}
 
 	public function get_rendered_messages() {

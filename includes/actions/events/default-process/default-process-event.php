@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Events\Default_Process;
 
-
 use Jet_Form_Builder\Actions\Events\Base_Event;
 
 // If this file is called directly, abort.
@@ -43,8 +42,8 @@ to perform before redirecting to checkout;',
 
 	public function to_array(): array {
 		return parent::to_array() + array(
-				'always' => true,
-			);
+			'always' => true,
+		);
 	}
 
 }

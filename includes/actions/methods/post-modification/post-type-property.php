@@ -27,7 +27,7 @@ class Post_Type_Property extends Base_Object_Property {
 	 */
 	public function can_attach( string $key, $value ): bool {
 		if ( ! $value || ! post_type_exists( $value ) ) {
-			throw new Action_Exception( 'failed','Empty post_type' );
+			throw new Action_Exception( 'failed', 'Empty post_type' );
 		}
 		return parent::can_attach( $key, $value );
 	}

@@ -26,7 +26,9 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Post_Type class
+ * Class Post_Type
+ *
+ * @package Jet_Form_Builder
  */
 class Post_Type {
 

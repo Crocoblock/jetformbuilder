@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Events\Default_Process;
 
-
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Exceptions\Action_Exception;

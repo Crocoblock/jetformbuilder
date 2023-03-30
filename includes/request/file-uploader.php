@@ -205,7 +205,7 @@ class File_Uploader {
 	public function count_files(): int {
 		$counter = 0;
 		if ( $this->file instanceof File ) {
-			++ $counter;
+			++$counter;
 		} elseif ( $this->file instanceof File_Collection ) {
 			$counter += count( $this->file );
 		}

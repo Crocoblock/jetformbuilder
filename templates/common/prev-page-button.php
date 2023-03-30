@@ -12,7 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @var \Jet_Form_Builder\Blocks\Render\Base $this
  */
-$break = $this->block_type->get_current_form_break();
+$break      = $this->block_type->get_current_form_break();
 $prev_label = ! empty( $args['prev_label'] ) ? $args['prev_label'] : __( 'Back', 'jet-form-builder' );
 
 if ( isset( $args['add_prev'] ) && $args['add_prev'] && 1 < $break->get_current() ) {

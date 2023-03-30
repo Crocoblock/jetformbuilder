@@ -45,7 +45,7 @@ abstract class Base_Function implements
 
 		return Tools::esc_attr(
 			array(
-				$slug => $current
+				$slug => $current,
 			)
 		);
 	}

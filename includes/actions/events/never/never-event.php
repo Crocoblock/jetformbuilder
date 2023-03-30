@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Events\Never;
 
-
 use Jet_Form_Builder\Actions\Events\Base_Event;
 use Jet_Form_Builder\Classes\Arrayable\Array_Continue_Exception;
 

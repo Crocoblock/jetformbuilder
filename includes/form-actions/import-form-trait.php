@@ -22,8 +22,8 @@ trait Import_Form_Trait {
 		$form_data = wp_parse_args(
 			$form_data,
 			array(
-				'post_title'  => 'New form',
-				'post_status' => 'publish',
+				'post_title'   => 'New form',
+				'post_status'  => 'publish',
 				'post_content' => '',
 			)
 		);
@@ -52,11 +52,11 @@ trait Import_Form_Trait {
 		);
 
 		if ( is_wp_error( $post_id ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			wp_die( $post_id->get_error_message(), 'Error' );
 		}
 
 		return $post_id;
-
 	}
 
 }

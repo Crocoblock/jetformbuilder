@@ -29,10 +29,15 @@ import SideBarBoxes from './components/SideBarBoxes';
 import FormBuilderPage from './components/FormBuilderPage';
 import PageActionsPlugin from './store/plugins/PageActions';
 import MessagesPlugin from './store/plugins/MessagesPlugin';
-import OnUpdateEditableCellPlugin from './store/plugins/OnUpdateEditableCellPlugin';
+import OnUpdateEditableCellPlugin
+	from './store/plugins/OnUpdateEditableCellPlugin';
 import EditCollectorPlugin from './store/plugins/EditCollectorPlugin';
+import PortalVue from 'portal-vue';
+import { PortalTarget, Portal } from 'portal-vue';
+import ActionsWithFilters from './components/ActionsWithFilters';
 
 Vue.use( Vuex );
+Vue.use( PortalVue );
 
 window.JetFBComponents = {
 	...window.JetFBComponents,
@@ -55,8 +60,10 @@ window.JetFBComponents = {
 	DashboardPanel,
 	SideBarBoxes,
 	FormBuilderPage,
+	ActionsWithFilters,
+	PortalTarget,
+	Portal,
 };
-
 
 window.JetFBMixins = {
 	...window.JetFBMixins,
@@ -64,7 +71,6 @@ window.JetFBMixins = {
 	GetColumnComponent,
 	ScopeStoreMixin,
 };
-
 
 window.JetFBStore = {
 	BaseStore,

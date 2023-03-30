@@ -21,7 +21,7 @@ abstract class Base_Action extends Base_Gateway_Action {
 	public function set_base( string $url ): self {
 		return $this->set_path(
 			array(
-				'base' => $url
+				'base' => $url,
 			)
 		);
 	}

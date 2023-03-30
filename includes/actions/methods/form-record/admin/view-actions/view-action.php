@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Form_Record\Admin\View_Actions;
 
-
 use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages\Single_Form_Record_Page;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Table_Views\Actions\Link_Single_Action;

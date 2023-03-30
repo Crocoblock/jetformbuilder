@@ -100,7 +100,6 @@ class Upload_Dir {
 			return false;
 		}
 
-
 		$path  = trailingslashit( $path ) . '.htaccess';
 		$index = wp_normalize_path( $path );
 

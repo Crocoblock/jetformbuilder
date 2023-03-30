@@ -120,15 +120,18 @@ class Block_Helper {
 			return array();
 		}
 
-		return array_map( function ( $block ) {
-			if ( 'core/block' !== $block['blockName'] ) {
-				return $block;
-			}
-			$reusable_id          = $block['attrs']['ref'] ?? 0;
-			$block['innerBlocks'] = self::get_blocks_by_post( $reusable_id );
+		return array_map(
+			function ( $block ) {
+				if ( 'core/block' !== $block['blockName'] ) {
+						return $block;
+				}
+				$reusable_id          = $block['attrs']['ref'] ?? 0;
+				$block['innerBlocks'] = self::get_blocks_by_post( $reusable_id );
 
-			return $block;
-		}, parse_blocks( $post->post_content ) );
+				return $block;
+			},
+			parse_blocks( $post->post_content )
+		);
 	}
 
 	public static function delete_namespace( $block ): string {

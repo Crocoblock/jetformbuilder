@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Classes\Security;
 
-
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
 

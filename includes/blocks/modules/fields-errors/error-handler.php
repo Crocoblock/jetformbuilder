@@ -34,7 +34,6 @@ class Error_Handler {
 		}
 
 		do_action( 'jet-form-builder/fields-errors/register', $this );
-
 	}
 
 	private function maybe_set_errors() {

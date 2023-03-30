@@ -19,7 +19,7 @@ abstract class Base_Meta_Container implements Arrayable {
 	use Repository_Pattern_Trait;
 
 	const TYPE_NORMAL = 'normal-sortables';
-	const TYPE_SIDE = 'side-sortables';
+	const TYPE_SIDE   = 'side-sortables';
 
 	protected $index;
 

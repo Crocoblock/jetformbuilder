@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Object_Dynamic_Property;
 use Jet_Form_Builder\Classes\Tools;
@@ -46,7 +45,7 @@ class Post_Meta_Property extends Base_Object_Property implements
 
 		$this->set_meta(
 			array(
-				$key => Tools::prepare_repeater_value( $value, $modifier->fields_map )
+				$key => Tools::prepare_repeater_value( $value, $modifier->fields_map ),
 			)
 		);
 	}

@@ -22,7 +22,7 @@ class Version_2_1_8 extends Base_Migration {
 
 	public function up( \wpdb $wpdb ) {
 		$actions = new Record_Actions();
-		$errors = new Record_Errors();
+		$errors  = new Record_Errors();
 
 		$tables = array( $actions, $errors );
 

@@ -56,7 +56,7 @@ class Num_Range extends Base {
 			$meta_value
 		);
 
-		for ( $i = $start; $i <= $meta_value; $i ++ ) {
+		for ( $i = $start; $i <= $meta_value; $i++ ) {
 			$result[] = array(
 				'value' => $i,
 				'label' => $i,

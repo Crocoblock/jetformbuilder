@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Events\On_Dynamic_State;
 
-
 use Jet_Form_Builder\Actions\Events\Base_Event;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Render_State_Replace_Exception;
@@ -49,7 +48,6 @@ class On_Dynamic_State_Event extends Base_Event implements Repository_Item_Dynam
 		} catch ( Render_State_Replace_Exception $exception ) {
 			return $exception->get_state()->get_id();
 		}
-
 
 		return $state->get_id();
 	}

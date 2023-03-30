@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Blocks\Conditional_Block\Condition_Types;
 
-
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Base_Operator;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;

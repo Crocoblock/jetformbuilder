@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 ?>
 <div
-        class="jet-form-builder-page <?php echo esc_attr( $hidden_class ); ?>"
-        data-page="<?php echo esc_attr( $this->get_current() ); ?>"
-        data-page-offset="<?php echo absint( $this->get_page_offset() ); ?>"
+		class="jet-form-builder-page <?php echo esc_attr( $hidden_class ); ?>"
+		data-page="<?php echo esc_attr( $this->get_current() ); ?>"
+		data-page-offset="<?php echo absint( $this->get_page_offset() ); ?>"
 >

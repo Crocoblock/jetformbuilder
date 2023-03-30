@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Classes\Macro_Constants;
 
-
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -32,7 +31,8 @@ class Constants_Manager {
 		add_filter(
 			'jet-form-builder/custom-macro',
 			array( $this, 'apply_constant_macro' ),
-			10, 2
+			10,
+			2
 		);
 	}
 

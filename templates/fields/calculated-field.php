@@ -50,12 +50,12 @@ $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field-
 		<div class="jet-form-builder__calculated-field-prefix"><?php echo wp_kses_post( $prefix ); ?></div>
 	<?php endif; ?>
 	<input type="hidden"
-           name="<?php echo esc_attr( $name ); ?>"
-           value="<?php echo esc_attr( $default_value ); ?>"
-		   class="jet-form-builder__calculated-field-input jet-form-builder__field"
-		   data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
-           data-jfb-sync
-    />
+			name="<?php echo esc_attr( $name ); ?>"
+			value="<?php echo esc_attr( $default_value ); ?>"
+			class="jet-form-builder__calculated-field-input jet-form-builder__field"
+			data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
+			data-jfb-sync
+	/>
 	<div class="jet-form-builder__calculated-field-val"><?php echo wp_kses_post( $this->render_editor_placeholder() ); ?></div>
 	<?php if ( false !== $suffix ) : ?>
 		<div class="jet-form-builder__calculated-field-suffix"><?php echo wp_kses_post( $suffix ); ?></div>

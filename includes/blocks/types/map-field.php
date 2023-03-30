@@ -12,6 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 /**
  * For JetEngine (3.0.3) compatibility
+ *
  * @since 2.1.4
  *
  * Class Map_Field

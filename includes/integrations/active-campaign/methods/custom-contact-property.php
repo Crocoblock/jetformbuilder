@@ -46,7 +46,7 @@ class Custom_Contact_Property extends Base_Object_Property implements Object_Dyn
 		if ( is_numeric( $key ) ) {
 			$this->value[] = array(
 				'field' => $key,
-				'value' => $value
+				'value' => $value,
 			);
 
 			return;
@@ -57,7 +57,7 @@ class Custom_Contact_Property extends Base_Object_Property implements Object_Dyn
 
 		$this->value[] = array(
 			'field' => $id,
-			'value' => $value
+			'value' => $value,
 		);
 	}
 

@@ -35,7 +35,7 @@ $default     = $args['default'] ?? false;
 $this->add_attribute( 'data-default-val', $default );
 ?>
 <div class="jet-form-builder__field-wrap">
-    <select <?php $this->render_attributes_string(); ?>>
+	<select <?php $this->render_attributes_string(); ?>>
 		<?php
 
 		if ( $placeholder ) {
@@ -77,7 +77,7 @@ $this->add_attribute( 'data-default-val', $default );
 		}
 
 		?>
-    </select>
+	</select>
 	<?php echo Tools::esc_template_string( $this->maybe_render_error( $args ) ); ?>
 </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

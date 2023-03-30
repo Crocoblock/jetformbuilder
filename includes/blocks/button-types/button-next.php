@@ -48,11 +48,13 @@ class Button_Next extends Button_Type_Base {
 
 		$block->add_attribute(
 			'data-jfb-conditional',
-			Tools::esc_attr( array(
+			Tools::esc_attr(
 				array(
-					'page_state' => 'active'
-				),
-			) )
+					array(
+						'page_state' => 'active',
+					),
+				)
+			)
 		);
 		$block->add_attribute( 'data-jfb-func', 'disable' );
 	}

@@ -23,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Request_Handler {
 
-	public  $_fields       = array();
+	public $_fields        = array();
 	private $request_types = array();
 	private $request_attrs = array();
 	private $raw_request   = array();
@@ -72,8 +72,8 @@ class Request_Handler {
 		$values = Tools::sanitize_recursive( wp_unslash( $_POST ) );
 
 		Live_Form::instance()
-		         ->set_form_id( jet_fb_handler()->get_form_id() )
-		         ->set_specific_data_for_render();
+				->set_form_id( jet_fb_handler()->get_form_id() )
+				->set_specific_data_for_render();
 
 		return apply_filters( 'jet-form-builder/request-handler/request', $values );
 	}
@@ -88,7 +88,7 @@ class Request_Handler {
 
 		return $this->set_request_attrs(
 			array(
-				$field_name => $attrs
+				$field_name => $attrs,
 			)
 		);
 	}

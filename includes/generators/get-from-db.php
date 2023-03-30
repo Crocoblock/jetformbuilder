@@ -58,7 +58,6 @@ class Get_From_DB extends Base {
 		}
 
 		return $result;
-
 	}
 
 }

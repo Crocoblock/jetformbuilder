@@ -19,7 +19,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	protected $value;
 	protected $is_required = false;
-	protected $name = 'field_name';
+	protected $name        = 'field_name';
 	protected $block;
 	protected $settings;
 	protected $inner;

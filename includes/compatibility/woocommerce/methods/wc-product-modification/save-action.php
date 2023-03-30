@@ -36,7 +36,6 @@ class Save_Action extends Base_Post_Action {
 		$id      = $this->modifier->get( 'ID' );
 		$product = $id->get_product();
 
-
 		/**
 		 * For Redirect to Page action
 		 */
@@ -46,7 +45,7 @@ class Save_Action extends Base_Post_Action {
 				Insert_Post::get_context_post_key( $this->inserted_id ) => array(
 					'__action'    => $this->get_id(),
 					'ID'          => $this->inserted_id,
-					'post_status' => $product->get_status()
+					'post_status' => $product->get_status(),
 				),
 			)
 		);

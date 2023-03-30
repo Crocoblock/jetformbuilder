@@ -58,8 +58,8 @@ class Preset_Source_User extends Base_Source {
 	 */
 	protected function can_get_preset() {
 		return ( parent::can_get_preset()
-		         && is_user_logged_in()
-		         && ( get_current_user_id() === $this->src()->ID || current_user_can( 'edit_users' ) )
+				&& is_user_logged_in()
+				&& ( get_current_user_id() === $this->src()->ID || current_user_can( 'edit_users' ) )
 		);
 	}
 

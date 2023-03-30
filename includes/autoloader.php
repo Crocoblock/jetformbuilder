@@ -70,6 +70,5 @@ class Autoloader {
 		if ( ! class_exists( $final_class_name ) ) {
 			self::load_class( $relative_class_name );
 		}
-
 	}
 }

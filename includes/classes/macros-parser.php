@@ -126,11 +126,10 @@ class Macros_Parser {
 			foreach ( $item as $key => $value ) {
 				$item_data[] = sprintf( '%1$s: %2$s', $key, $this->maybe_parse_if_array( $value ) );
 			}
-			$result .= $index ++ . ') ' . implode( ', ', $item_data ) . ';<br>';
+			$result .= $index++ . ') ' . implode( ', ', $item_data ) . ';<br>';
 		}
 
 		return $result;
-
 	}
 
 	private function maybe_parse_if_array( $value ) {

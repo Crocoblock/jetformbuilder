@@ -34,7 +34,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 */
 	protected $controls_manager;
 	protected $css_scheme;
-	public    $style_attributes = array();
+	public $style_attributes = array();
 
 	/**
 	 * Block attributes on render
@@ -56,7 +56,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 *
 	 * @var array
 	 */
-	public    $attrs            = array();
+	public $attrs               = array();
 	protected $provides_context = array();
 	protected $uses_context     = array();
 

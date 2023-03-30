@@ -39,7 +39,7 @@ class Array_Tools {
 	 * @return \Generator
 	 */
 	public static function reverse( $iterator ): \Generator {
-		for ( $current = count( $iterator ) - 1; $current >= 0; $current -- ) {
+		for ( $current = count( $iterator ) - 1; $current >= 0; $current-- ) {
 			yield $iterator[ $current ];
 		}
 	}

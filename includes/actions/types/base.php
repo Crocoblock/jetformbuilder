@@ -34,6 +34,7 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	 *
 	 * @var integer
 	 */
+	// phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 	public $_id;
 
 	/**
@@ -138,9 +139,9 @@ abstract class Base implements Repository_Item_Instance_Trait {
 
 		if ( ! $this->option_name ) {
 			_doing_it_wrong(
-				static::class . '::global_settings',
+				esc_attr( static::class . '::global_settings' ),
 				'Please define the `option_name`',
-				jet_form_builder()->get_version()
+				esc_attr( jet_form_builder()->get_version() )
 			);
 		}
 		$options = Tab_Handler_Manager::instance()->options( $this->option_name );

@@ -83,6 +83,7 @@ class Records_Table_View extends View_Advanced_Base {
 		$link = "<a href='https://youtu.be/FwfOTi5J1T4' target='_blank'>https://youtu.be/FwfOTi5J1T4</a>";
 
 		return sprintf(
+			/* translators: %s - link to the YouTube video */
 			__(
 				'No found items. To save a form record, add the 
 		Save Form Record action to the desired form. 

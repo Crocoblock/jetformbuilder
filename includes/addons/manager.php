@@ -1,4 +1,5 @@
 <?php
+
 namespace Jet_Form_Builder\Addons;
 
 use Jet_Form_Builder\Classes\Tools;
@@ -17,7 +18,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Manager {
 
-	const NOT_ACTIVE = 'license-not-activated';
+	const NOT_ACTIVE   = 'license-not-activated';
+	const NONCE_ACTION = 'jfb-addons-admin-page';
 
 	/**
 	 * [$api_url description]
@@ -98,8 +100,8 @@ class Manager {
 	/**
 	 * Remote request to updater API.
 	 *
-	 * @since  1.0.0
 	 * @return array|bool
+	 * @since  1.0.0
 	 */
 	public function get_jfb_remote_plugin_list() {
 
@@ -122,7 +124,7 @@ class Manager {
 			)
 		);
 
-		if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) != '200' ) {
+		if ( is_wp_error( $response ) || 200 !== ( (int) wp_remote_retrieve_response_code( $response ) ) ) {
 			return false;
 		}
 
@@ -220,6 +222,7 @@ class Manager {
 	 * Get latest version for passed plugin
 	 *
 	 * @param  [type] $remote_plugin_data [description]
+	 *
 	 * @return [type]                     [description]
 	 */
 	public function get_latest_version( $plugin_file ) {
@@ -240,17 +243,15 @@ class Manager {
 			}
 		}
 
-		$no_update = isset( $this->update_plugins->no_update ) ? $this->update_plugins->no_update : false;
-		$to_update = isset( $this->update_plugins->response ) ? $this->update_plugins->response : false;
+		$no_update = $this->update_plugins->no_update ?? false;
+		$to_update = $this->update_plugins->response ?? false;
 
-		if ( $to_update && ! empty( $to_update ) && array_key_exists( $plugin_file, $to_update ) ) {
+		if ( $to_update && array_key_exists( $plugin_file, $to_update ) ) {
 			return $to_update[ $plugin_file ]->new_version;
 		} elseif ( ! empty( $no_update ) && array_key_exists( $plugin_file, $no_update ) ) {
 			return $no_update[ $plugin_file ]->new_version;
 		} elseif ( array_key_exists( $plugin_file, $this->user_installed_plugins ) ) {
-			$current_version = $this->user_installed_plugins[ $plugin_file ]['Version'];
-
-			return $current_version;
+			return $this->user_installed_plugins[ $plugin_file ]['Version'];
 		} else {
 			return '1.0.0';
 		}
@@ -289,6 +290,16 @@ class Manager {
 	 */
 	public function addon_activate_action() {
 
+		if ( ! wp_verify_nonce( sanitize_key( $_POST['nonce'] ?? '' ), self::NONCE_ACTION ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'message' => __( 'The addon has been deactivated', 'jet-form-builder' ),
+				)
+			);
+		}
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 		$data = ( ! empty( $_POST['data'] ) ) ? Tools::sanitize_recursive( $_POST['data'] ) : false;
 
 		if ( ! $data ) {
@@ -319,6 +330,16 @@ class Manager {
 	 */
 	public function addon_deactivate_action() {
 
+		if ( ! wp_verify_nonce( sanitize_key( $_POST['nonce'] ?? '' ), self::NONCE_ACTION ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'message' => __( 'The addon has been deactivated', 'jet-form-builder' ),
+				)
+			);
+		}
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 		$data = ( ! empty( $_POST['data'] ) ) ? Tools::sanitize_recursive( $_POST['data'] ) : false;
 
 		if ( ! $data ) {
@@ -403,20 +424,8 @@ class Manager {
 			);
 		}
 
-		$deactivate_handler = null;
-
 		if ( is_plugin_active( $plugin_file ) ) {
-			$deactivate_handler = deactivate_plugins( $plugin_file );
-		}
-
-		if ( is_wp_error( $deactivate_handler ) ) {
-			wp_send_json(
-				array(
-					'success' => false,
-					'message' => $deactivate_handler->get_error_message(),
-					'data'    => array(),
-				)
-			);
+			deactivate_plugins( $plugin_file );
 		}
 
 		wp_send_json(
@@ -433,6 +442,16 @@ class Manager {
 	 */
 	public function service_action() {
 
+		if ( ! wp_verify_nonce( sanitize_key( $_POST['nonce'] ?? '' ), self::NONCE_ACTION ) ) {
+			wp_send_json(
+				array(
+					'success' => false,
+					'message' => __( 'The addon has been deactivated', 'jet-form-builder' ),
+				)
+			);
+		}
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 		$data = ( ! empty( $_POST['data'] ) ) ? Tools::sanitize_recursive( $_POST['data'] ) : false;
 
 		if ( ! $data || ! isset( $data['action'] ) ) {
@@ -505,7 +524,10 @@ class Manager {
 			$plugin_meta['view-details'] = sprintf(
 				'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
 				esc_url_raw( network_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin_slug . '&TB_iframe=true&width=600&height=550' ) ),
-				esc_attr( sprintf( __( 'More information about %s', 'jet-form-builder' ), $plugin_data['name'] ) ),
+				esc_attr(
+				/* translators: %s - plugin name */
+					sprintf( __( 'More information about %s', 'jet-form-builder' ), $plugin_data['name'] )
+				),
 				esc_attr( $plugin_data['name'] ),
 				__( 'View details', 'jet-form-builder' )
 			);
@@ -517,7 +539,7 @@ class Manager {
 	/**
 	 * @param $_data
 	 * @param string $_action
-	 * @param null   $_args
+	 * @param null $_args
 	 *
 	 * @return mixed
 	 */
@@ -604,13 +626,11 @@ class Manager {
 
 		$response = wp_remote_get( sprintf( $this->jet_changelog_url, $slug ) );
 
-		if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) != '200' ) {
+		if ( is_wp_error( $response ) || 200 !== ( (int) wp_remote_retrieve_response_code( $response ) ) ) {
 			return false;
 		}
 
-		$response = json_decode( $response['body'] );
-
-		return $response;
+		return json_decode( $response['body'] );
 	}
 
 	/**
@@ -637,11 +657,13 @@ class Manager {
 	 * [allow_unsafe_urls description]
 	 *
 	 * @param  [type] $args [description]
+	 *
 	 * @return [type]       [description]
 	 */
 	public function allow_unsafe_urls( $args ) {
 
-		if ( isset( $_REQUEST['action'] ) && 'jfb_addon_action' === $_REQUEST['action'] ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( 'jfb_addon_action' === sanitize_key( $_REQUEST['action'] ?? '' ) ) {
 			$args['reject_unsafe_urls'] = false;
 		}
 

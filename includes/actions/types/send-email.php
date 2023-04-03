@@ -216,7 +216,6 @@ To prevent this, enable this option.',
 		);
 		$this->set_from_address( $from_email );
 
-
 		$this->set_mail_to( $this->get_default_mail_to() );
 		$this->set_subject( $this->get_default_subject() );
 		$this->set_attachments( $this->get_default_attachments() );
@@ -305,6 +304,7 @@ To prevent this, enable this option.',
 	public function get_default_subject(): string {
 		return empty( $this->settings['subject'] )
 			? sprintf(
+				/* translators: %s - site url */
 				__( 'Form on %s Submitted', 'jet-form-builder' ),
 				home_url( '' )
 			)
@@ -360,7 +360,7 @@ To prevent this, enable this option.',
 		$headers = array(
 			"From: {$this->get_from_name()} <{$this->get_from_address()}>",
 			"Reply-To: {$this->get_reply_to()}",
-			"Content-Type: {$this->get_content_type()}; charset=utf-8"
+			"Content-Type: {$this->get_content_type()}; charset=utf-8",
 		);
 
 		return implode( "\r\n", $headers );

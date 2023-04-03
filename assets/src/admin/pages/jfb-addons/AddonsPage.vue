@@ -264,6 +264,7 @@ export default {
 				dataType: 'json',
 				data: {
 					action: 'jfb_license_action',
+					nonce: window.JetFBPageConfig.nonce,
 					data: {
 						license: self.licenseKey,
 						action: self.licenseActionType,
@@ -326,6 +327,7 @@ export default {
 				dataType: 'json',
 				data: {
 					action: 'jfb_license_service_action',
+					nonce: window.JetFBPageConfig.nonce,
 					data: {
 						action: 'check-plugin-update',
 					},

@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions;
 
-
 use Jet_Form_Builder\Actions\Types\Send_Email;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 

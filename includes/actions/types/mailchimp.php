@@ -107,14 +107,13 @@ class Mailchimp extends Integration_Base_Action {
 	}
 
 	/**
-	 * Run a hook notification
-	 *
 	 * @param array $request
 	 * @param Action_Handler $handler
 	 *
 	 * @return void
 	 * @throws Action_Exception
 	 */
+	// phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag.WrongNumber
 	public function do_action( array $request, Action_Handler $handler ) {
 		$this->request = $request;
 
@@ -205,9 +204,7 @@ class Mailchimp extends Integration_Base_Action {
 		return sprintf( $format, $this->settings['list_id'], md5( strtolower( $email ) ) );
 	}
 
-	/**
-	 * @throws Action_Exception
-	 */
+
 	private function get_request_args( $method ): array {
 		return array(
 			'method'  => $method,
@@ -297,6 +294,7 @@ class Mailchimp extends Integration_Base_Action {
 						$date_value = strtotime( $date_value );
 					}
 
+					// phpcs:ignore WordPress.DateTime.RestrictedFunctions
 					$body_args['merge_fields'][ $param ] = date( 'm/d', $date_value );
 					break;
 				default:

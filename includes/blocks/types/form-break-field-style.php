@@ -671,7 +671,6 @@ trait Form_Break_Field_Style {
 		);
 		$this->controls_manager->end_tab();
 
-
 		$this->controls_manager->start_tab(
 			'style_controls',
 			array(
@@ -792,7 +791,6 @@ trait Form_Break_Field_Style {
 				'id' => 'form_progress_figure_tabs',
 			)
 		);
-
 
 		$this->controls_manager->start_tab(
 			'style_controls',

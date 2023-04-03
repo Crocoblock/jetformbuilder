@@ -19,27 +19,6 @@ class Field_Value_Column extends Column_Advanced_Base {
 		return __( 'Value', 'jet-form-builder' );
 	}
 
-	public function is_editable( array $record = array() ): bool {
-		return false;
-
-		/*
-		$type        = $record['field_type'] ?? '';
-		$is_editable = true;
-
-		switch ( $type ) {
-			case 'computed':
-			case 'hidden-field':
-				$is_editable = false;
-				break;
-		}
-
-		return apply_filters(
-			'jet-form-builder/table-form-fields/column-value/is-editable',
-			$is_editable,
-			$record
-		);*/
-	}
-
 	public function get_control( array $record = array() ): string {
 		$type    = $record['field_type'] ?? '';
 		$control = 'input';

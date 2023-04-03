@@ -103,7 +103,7 @@ class Getresponse extends Integration_Base_Action {
 				continue;
 			}
 
-			if ( in_array( $param, array( 'email', 'name' ) ) ) {
+			if ( in_array( $param, array( 'email', 'name' ), true ) ) {
 				$body_args[ $param ] = $request[ $field ];
 			} else {
 				$custom_fields_values[] = array(

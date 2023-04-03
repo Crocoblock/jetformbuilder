@@ -18,7 +18,7 @@ class Fake_Wc_Add_To_Cart extends Base {
 	}
 
 	public function get_name() {
-		return __( 'Add to Cart & Redirect to Checkout', 'jet-form-builder-woo-action' );
+		return __( 'Add to Cart & Redirect to Checkout', 'jet-form-builder' );
 	}
 
 	public function is_disabled(): bool {

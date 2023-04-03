@@ -30,10 +30,6 @@ class Action_Handler {
 	private $form_conditions = array();
 	private $form_events     = array();
 
-	/**
-	 * Data for actions
-	 */
-	public $size_all;
 	public $response_data = array();
 
 	public $context = array();

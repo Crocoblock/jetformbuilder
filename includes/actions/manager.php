@@ -169,7 +169,9 @@ class Manager {
 		}
 	}
 
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 	public function register_assets( $editor, $handle ) {
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_enqueue_script(
 			self::ENGINE_HANDLE,
 			JET_FORM_BUILDER_URL . 'assets/js/action-localize-helper.js',

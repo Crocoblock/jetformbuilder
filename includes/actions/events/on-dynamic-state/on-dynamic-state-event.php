@@ -56,7 +56,7 @@ class On_Dynamic_State_Event extends Base_Event implements Repository_Item_Dynam
 		$custom = Render_State::get_states();
 
 		foreach ( $custom as $item ) {
-			if ( $name !== ( $item['value'] ?? '' ) ) {
+			if ( ( $item['value'] ?? '' ) !== $name ) {
 				continue;
 			}
 

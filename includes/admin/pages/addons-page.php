@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
+use Jet_Form_Builder\Addons\Manager;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
@@ -33,6 +34,7 @@ class Addons_Page extends Base_Page {
 		return apply_filters(
 			'jfb-addons-page/page-localize-data',
 			array(
+				'nonce'       => wp_create_nonce( Manager::NONCE_ACTION ),
 				'ajaxUrl'     => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
 				'allAddons'   => Plugin::instance()->addons_manager->get_plugin_data_list(),
 				'licenseMode' => false,

@@ -86,8 +86,16 @@ abstract class Base_Object_Property implements
 
 			if ( $property->get_id() === $this->get_id() ) {
 				wp_die(
-					"Logic error. 
-					Property [{$property->get_id()}] can not be related by itself."
+					esc_attr(
+						sprintf(
+						/* translators: %s - object property name */
+							__(
+								'Logic error. Property [%s] can not be related by itself.',
+								'jet-form-builder'
+							),
+							$property->get_id()
+						)
+					)
 				);
 			}
 			$value = $modifier->get_value( $field_name );

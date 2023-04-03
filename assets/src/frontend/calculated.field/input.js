@@ -96,6 +96,8 @@ function CalculatedData() {
 		this.sepThousands   = sepThousands ?? '';
 		this.visibleValNode = node.nextElementSibling;
 		this.valueTypeProp  = valueType;
+
+		this.inputType = 'calculated';
 	};
 	this.addListeners = function () {
 		// silence is golden

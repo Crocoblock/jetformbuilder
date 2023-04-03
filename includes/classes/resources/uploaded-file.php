@@ -89,6 +89,9 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 		);
 
 		$this->set_attachment_id( (string) $attachment );
+
+		// Update file url for performance plugins compatibility
+		$this->set_url( wp_get_attachment_url( $attachment ) );
 	}
 
 	public function set_from_array( array $upload ): Uploaded_File {
@@ -183,5 +186,12 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 		$file = get_attached_file( $this->get_attachment_id() );
 
 		return is_string( $file ) ? $file : '';
+	}
+
+	/**
+	 * @param string $url
+	 */
+	public function set_url( string $url ) {
+		$this->url = $url;
 	}
 }

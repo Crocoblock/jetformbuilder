@@ -5,6 +5,7 @@ import MultipleConditionChecker from './MultipleConditionChecker';
 import OrOperatorItem from './OrOperatorItem';
 import DateTimeConditionChecker from './DateTimeConditionChecker';
 import ConditionRenderStateItem from './ConditionRenderStateItem';
+import CalculatedFieldChecker from './CalculatedFieldChecker';
 
 const { applyFilters } = JetPlugins.hooks;
 
@@ -26,6 +27,7 @@ const getCheckers = () => applyFilters(
 	[
 		MultipleConditionChecker,
 		DateTimeConditionChecker,
+		CalculatedFieldChecker,
 		ConditionChecker,
 	],
 );

@@ -9,6 +9,7 @@ use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Default_State;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
+use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Classes\Post\Not_Found_Post_Exception;
 use Jet_Form_Builder\Classes\Post\Post_Tools;
 use Jet_Form_Builder\Classes\Tools;
@@ -26,6 +27,10 @@ if ( ! defined( 'WPINC' ) ) {
 class Form extends Base {
 
 	use Form_Break_Field_Style;
+
+	public function __construct() {
+		add_action( 'wp_enqueue_scripts', array( $this, 'handle_header_assets' ) );
+	}
 
 	/**
 	 * Render callback for the block
@@ -465,6 +470,21 @@ class Form extends Base {
 		Render_State::instance()->clear_current();
 
 		return ( $form . ob_get_clean() );
+	}
+
+	public function handle_header_assets() {
+		if ( ! is_singular() ) {
+			return;
+		}
+
+		$post = get_post();
+
+		if (
+			has_shortcode( $post->post_content, 'jet_fb_form' ) ||
+			( function_exists( 'has_block' ) && has_block( 'jet-forms/form-block' ) )
+		) {
+			Builder_Helper::enqueue_global_styles();
+		}
 	}
 
 

@@ -7,6 +7,7 @@ const {
 	      Repeater,
 	      RepeaterAddNew,
 	      SafeDeleteToggle,
+	      AdvancedModalControl,
 	      RepeaterState,
 	      BaseHelp,
       } = JetFBComponents;
@@ -124,23 +125,16 @@ function RepeaterItem( { formFields } ) {
 			style={ { marginTop: '0px', color: 'rgb(117, 117, 117)' } }
 			dangerouslySetInnerHTML={ { __html: transformerOption( 'help' ) } }
 		/> }
-		<FieldWithPreset
-			baseControlProps={ {
-				label: 'Value to Compare',
+		<AdvancedModalControl
+			value={ currentItem.default }
+			label={ __( 'Value to Compare', 'jet-form-builder' ) }
+			macroWithCurrent
+			onChangePreset={ newValue => {
+				changeCurrentItem( { default: newValue } );
 			} }
-			ModalEditor={ ( { actionClick, onRequestClose } ) => <DynamicPreset
-				value={ currentItem.default }
-				isSaveAction={ actionClick }
-				onSavePreset={ newValue => {
-					changeCurrentItem( { default: newValue } );
-				} }
-				excludeSources={ [ 'query_var' ] }
-				onUnMount={ onRequestClose }
-			/> }
-			triggerClasses={ [ 'trigger__textarea' ] }
 		>
-			<TextareaControl
-				className={ 'jet-control-clear jet-user-fields-map__list' }
+			{ ( { instanceId } ) => <TextareaControl
+				id={ instanceId }
 				value={ currentItem.default }
 				help={ operatorOption( 'need_explode' )
 				       ? conditionSettings.help_for_exploding_compare
@@ -148,8 +142,8 @@ function RepeaterItem( { formFields } ) {
 				onChange={ newValue => {
 					changeCurrentItem( { default: newValue } );
 				} }
-			/>
-		</FieldWithPreset>
+			/> }
+		</AdvancedModalControl>
 	</>;
 }
 

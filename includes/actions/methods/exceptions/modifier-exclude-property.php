@@ -12,8 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Modifier_Exclude_Property extends Handler_Exception {
 
-	public function save_exception(): bool {
-		return false;
+	public function log() {
 	}
 
 }

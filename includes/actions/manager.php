@@ -54,6 +54,9 @@ class Manager {
 	public function register_action_types() {
 		$this->rep_install();
 
+		// register basic hook for formatting settings
+		Send_Email_Hooks::register();
+
 		do_action( 'jet-form-builder/actions/register', $this );
 	}
 

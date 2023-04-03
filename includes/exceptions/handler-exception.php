@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Exceptions;
 
 use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Form_Messages\Manager;
+use \Jet_Form_Builder\Dev_Mode\Manager as DevManager;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -22,13 +23,7 @@ abstract class Handler_Exception extends \Exception {
 
 		$this->additional_data = $additional_data;
 
-		if ( $this->save_exception() ) {
-			Logger::instance()->log( $this );
-		}
-	}
-
-	public function save_exception(): bool {
-		return true;
+		$this->log();
 	}
 
 	public function set_code( $code ) {
@@ -51,15 +46,39 @@ abstract class Handler_Exception extends \Exception {
 
 
 	public function get_form_status() {
-		return $this->message ? $this->message : $this->default_type_message;
+		return $this->message ?: $this->default_type_message;
 	}
 
 	public function get_additional() {
 		return $this->additional_data;
 	}
 
-	public function unset_from_logger() {
-		Logger::instance()->unset_last( $this );
+	public function unset_log() {
+		Logger::instance()->unset_last( static::class );
+	}
+
+	public function log() {
+		if ( ! DevManager::instance()->active() ) {
+			return;
+		}
+		Logger::instance()->push_log(
+			static::class,
+			array(
+				'message'      => $this->getMessage(),
+				'file'         => $this->make_pretty_filename( $this->getFile() ),
+				'line'         => $this->getLine(),
+				'data'         => $this->get_additional(),
+				'trace_string' => $this->getTraceAsString(),
+				'version'      => jet_form_builder()->get_version(),
+				'action_id'    => jet_fb_action_handler()->get_position(),
+			)
+		);
+	}
+
+	private function make_pretty_filename( string $file ) {
+		$path = explode( 'wp-content\\', $file );
+
+		return $path[1] ?? ( explode( 'wp-content/', $file )[1] ?? $file );
 	}
 
 }

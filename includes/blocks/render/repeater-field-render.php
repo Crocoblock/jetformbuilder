@@ -27,7 +27,6 @@ class Repeater_Field_Render extends Base {
 		}
 
 		$this->add_attribute( 'class', 'jet-form-builder-repeater jet-form-builder__field' );
-		$this->add_attribute( 'class', $this->maybe_get_error_class( $this->block_type->block_attrs ) );
 		$this->add_attribute( 'class', $this->block_type->block_attrs['class_name'] );
 		$this->add_attribute( 'data-required', $this->block_type->get_required_val() );
 		$this->add_attribute( 'data-jfb-sync' );
@@ -64,7 +63,6 @@ class Repeater_Field_Render extends Base {
 		}
 
 		$html .= '</div>';
-		$html .= $this->maybe_render_error( $this->block_type->block_attrs );
 		$html .= '</div>';
 
 		return parent::render( null, $html );

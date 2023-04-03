@@ -26,10 +26,11 @@ class Options_Handler extends Base_Handler {
 		$options = array();
 
 		foreach ( self::OPTIONS as $name => $default ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			// phpcs:disable WordPress.Security.NonceVerification.Missing
 			$options[ $name ] = array_key_exists( $name, $_POST )
 				? 'true' === sanitize_key( $_POST[ $name ] )
 				: $default;
+			// phpcs:enable WordPress.Security.NonceVerification.Missing
 		}
 
 		$result = $this->update_options( $options );

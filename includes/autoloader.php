@@ -30,7 +30,7 @@ class Autoloader {
 	 *
 	 * For a given class name, require the class file.
 	 *
-	 * @param string $relative_class_name Class name.
+	 * @param $class_name
 	 *
 	 * @since 1.6.0
 	 * @access private
@@ -52,19 +52,19 @@ class Autoloader {
 	 *
 	 * For a given class, check if it exist and load it.
 	 *
-	 * @param string $class Class name.
+	 * @param $class_name
 	 *
 	 * @since 1.6.0
 	 * @access private
 	 * @static
 	 */
-	private static function autoload( $class ) {
+	private static function autoload( $class_name ) {
 
-		if ( 0 !== strpos( $class, __NAMESPACE__ . '\\' ) ) {
+		if ( 0 !== strpos( $class_name, __NAMESPACE__ . '\\' ) ) {
 			return;
 		}
 
-		$relative_class_name = preg_replace( '/^' . __NAMESPACE__ . '\\\/', '', $class );
+		$relative_class_name = preg_replace( '/^' . __NAMESPACE__ . '\\\/', '', $class_name );
 		$final_class_name    = __NAMESPACE__ . '\\' . $relative_class_name;
 
 		if ( ! class_exists( $final_class_name ) ) {

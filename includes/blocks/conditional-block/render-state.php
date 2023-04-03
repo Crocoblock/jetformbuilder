@@ -155,8 +155,9 @@ class Render_State implements Arrayable {
 	}
 
 	protected function set_states_from_url() {
-		$custom         = self::get_states();
-		$raw_url_states = sanitize_text_field( $_GET['jfb'][ jet_fb_live()->form_id ]['state'] ?? '' );
+		$custom = self::get_states();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$raw_url_states = $this->load_render_states();
 
 		if ( ! $raw_url_states || ! count( $custom ) ) {
 			return;
@@ -223,6 +224,26 @@ class Render_State implements Arrayable {
 		$request = jet_fb_request_handler()->get_request();
 
 		return $request[ self::FIELD_NAME ] ?? array();
+	}
+
+	protected function load_render_states(): string {
+		return $this->sanitize_render_state(
+			// phpcs:ignore WordPress.Security
+			wp_unslash( $_GET['jfb'][ jet_fb_live()->form_id ]['state'] ?? '' )
+		);
+	}
+
+	/**
+	 * Accepts: 'DEFAULT.STATE', 'DEFAULT.STATE,REGISTER.FORM.CUSTOM'
+	 *
+	 * @param string $content
+	 *
+	 * @return string
+	 */
+	protected function sanitize_render_state( string $content ): string {
+		$content = strtoupper( $content );
+
+		return preg_replace( '/[^A-Z0-9\.\,]/', '', $content );
 	}
 
 }

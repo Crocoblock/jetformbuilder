@@ -64,11 +64,9 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		try {
 			$this->value = $this->get_response();
 
-			if ( $this->has_error() ) {
-				$this->save_error();
-			}
+			$this->check_response();
 		} catch ( Sanitize_Value_Exception $exception ) {
-			$this->save_error( $exception->getMessage() );
+			// silence catch
 		}
 
 		return $this->value;
@@ -78,21 +76,29 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		return $value;
 	}
 
-	protected function has_error(): bool {
-		return ( ! $this->context->is_inside_conditional() && $this->is_required && empty( $this->value ) );
-	}
-
-	protected function save_error( string $message = '' ) {
-		$args = array(
-			'name'   => $this->name,
-			'params' => $this->settings,
-		);
-
-		if ( $message ) {
-			$args['message'] = jet_fb_msg_router_manager()->get_message( $message );
+	/**
+	 * @throws Sanitize_Value_Exception
+	 */
+	protected function check_response() {
+		if (
+			$this->context->is_inside_conditional() ||
+			( $this->is_required && empty( $this->value ) )
+		) {
+			return;
 		}
 
-		Error_Handler::instance()->add( $this->type(), $args );
+		throw new Sanitize_Value_Exception( 'empty_field', $this->name, $this->settings );
+	}
+
+	/**
+	 * @return bool
+	 *
+	 * @deprecated since 3.1.0
+	 * Use `check_response` instead
+	 * @see \Jet_Form_Builder\Request\Field_Data_Parser::check_response
+	 */
+	protected function has_error(): bool {
+		return false;
 	}
 
 	/**

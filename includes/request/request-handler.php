@@ -12,6 +12,7 @@ use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
 use Jet_Form_Builder\Classes\Resources\Sanitize_File_Exception;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
@@ -51,13 +52,13 @@ class Request_Handler {
 
 		jet_fb_action_handler()->add_request( $request );
 
+		if ( ! Logger::instance()->has_field_exception() ) {
+			return;
+		}
+
 		jet_fb_events()->execute( Bad_Request_Event::class );
 
-		/*throw new Request_Exception(
-			'validation_failed',
-			Error_Handler::instance()->errors(),
-			$request
-		);*/
+		throw new Request_Exception( 'validation_failed' );
 	}
 
 	private function get_raw_request(): array {

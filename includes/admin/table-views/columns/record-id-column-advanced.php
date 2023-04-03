@@ -16,6 +16,6 @@ class Record_Id_Column_Advanced extends Column_Advanced_Base {
 	protected $column = 'id';
 
 	public function get_label(): string {
-		return __( 'ID' );
+		return __( 'ID', 'jet-form-builder' );
 	}
 }

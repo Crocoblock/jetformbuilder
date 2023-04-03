@@ -28,7 +28,7 @@ abstract class Base_Handler implements Repository_Item_Instance_Trait {
 	public function on_raw_request() {
 		if (
 			empty( $_POST['_nonce'] ) ||
-			! wp_verify_nonce( $_POST['_nonce'], 'jfb-settings' ) ||
+			! wp_verify_nonce( sanitize_key( $_POST['_nonce'] ?? '' ), 'jfb-settings' ) ||
 			! current_user_can( 'manage_options' )
 		) {
 			$this->send_response( false );
@@ -56,14 +56,14 @@ abstract class Base_Handler implements Repository_Item_Instance_Trait {
 		return true;
 	}
 
-	public function get_options( $default = array() ) {
+	public function get_options( $if_empty = array() ) {
 		$response = get_option( $this->option_name(), false );
 
 		$response = $response
 			? json_decode( $response, true )
 			: array();
 
-		return array_merge( $default, $response );
+		return array_merge( $if_empty, $response );
 	}
 
 	public function update_options( $options ) {
@@ -75,10 +75,10 @@ abstract class Base_Handler implements Repository_Item_Instance_Trait {
 	public function before_assets() {
 	}
 
-	public function save_global_options( $default = array() ) {
+	public function save_global_options( $if_empty = array() ) {
 		Tab_Handler_Manager::instance()->save_options_tab(
 			$this->slug(),
-			$this->get_options( $default )
+			$this->get_options( $if_empty )
 		);
 	}
 

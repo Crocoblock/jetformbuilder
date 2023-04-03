@@ -64,13 +64,12 @@ abstract class Handler_Exception extends \Exception {
 		Logger::instance()->push_log(
 			static::class,
 			array(
-				'message'      => $this->getMessage(),
-				'file'         => $this->make_pretty_filename( $this->getFile() ),
-				'line'         => $this->getLine(),
-				'data'         => $this->get_additional(),
-				'trace_string' => $this->getTraceAsString(),
-				'version'      => jet_form_builder()->get_version(),
-				'action_id'    => jet_fb_action_handler()->get_position(),
+				'message'   => $this->getMessage(),
+				'file'      => $this->make_pretty_filename( $this->getFile() ),
+				'line'      => $this->getLine(),
+				'data'      => $this->get_additional(),
+				'version'   => jet_form_builder()->get_version(),
+				'action_id' => jet_fb_action_handler()->get_position(),
 			)
 		);
 	}

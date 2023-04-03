@@ -8,6 +8,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.Found
+
 abstract class Column_Base {
 
 	const CHOOSE         = 'choose';

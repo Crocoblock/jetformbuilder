@@ -175,13 +175,12 @@ class Controller {
 		foreach ( Logger::instance()->get_logs() as $instance => $logs ) {
 			foreach ( $logs as $log ) {
 				$errors[] = array(
-					'record_id'    => $this->record_id,
-					'name'         => $instance,
-					'message'      => $log['message'],
-					'file'         => $log['file'],
-					'line'         => $log['line'],
-					'data'         => Tools::encode_json( $log['data'] ),
-					'trace_string' => $log['trace_string'],
+					'record_id' => $this->record_id,
+					'name'      => $instance,
+					'message'   => $log['message'],
+					'file'      => $log['file'],
+					'line'      => $log['line'],
+					'data'      => Tools::encode_json( $log['data'] ),
 				);
 			}
 		}

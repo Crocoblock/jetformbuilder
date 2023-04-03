@@ -6,7 +6,6 @@ namespace Jet_Form_Builder\Admin\Single_Pages;
 use Jet_Form_Builder\Admin\Exceptions\Failed_Box_Update;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Meta_Box_Update_Callback;
-use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
@@ -41,16 +40,16 @@ abstract class Base_Page_Updater extends Rest_Api_Endpoint_Base {
 	}
 
 	public function run_callback( \WP_REST_Request $request ) {
-		$resource = $this->get_resource( $request );
+		$box_resource = $this->get_resource( $request );
 
-		if ( $resource instanceof \WP_REST_Request ) {
-			return $resource;
+		if ( $box_resource instanceof \WP_REST_Request ) {
+			return $box_resource;
 		}
 
 		Execution_Builder::instance()->transaction_start();
 
 		try {
-			$this->update_boxes( $request, $resource );
+			$this->update_boxes( $request, $box_resource );
 		} catch ( Failed_Box_Update $exception ) {
 			Execution_Builder::instance()->transaction_rollback();
 
@@ -73,12 +72,11 @@ abstract class Base_Page_Updater extends Rest_Api_Endpoint_Base {
 
 	/**
 	 * @param \WP_REST_Request $request
-	 * @param $resource
+	 * @param $box_resource
 	 *
 	 * @throws Failed_Box_Update
 	 */
-	protected function update_boxes( \WP_REST_Request $request, $resource ) {
-		/** @var Base_Meta_Container[] $containers */
+	protected function update_boxes( \WP_REST_Request $request, $box_resource ) {
 		$containers = $this->get_page()->get_prepared_containers();
 		$body       = $request->get_json_params();
 		$boxes      = $body['boxes'] ?? array();
@@ -93,7 +91,7 @@ abstract class Base_Page_Updater extends Rest_Api_Endpoint_Base {
 				if ( ! ( $box instanceof Meta_Box_Update_Callback ) ) {
 					continue;
 				}
-				$box->on_update( $state, $request, $resource );
+				$box->on_update( $state, $request, $box_resource );
 			}
 		}
 	}

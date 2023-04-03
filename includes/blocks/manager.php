@@ -7,9 +7,6 @@ use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
-use Jet_Form_Builder\Compatibility\Deprecated;
-use Jet_Form_Builder\Compatibility\Jet_Plugins_Ajax\Jet_Plugins_Ajax;
-use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
 use JET_SM\Gutenberg\Block_Manager;
@@ -32,10 +29,12 @@ class Manager {
 	/**
 	 * @var bool
 	 */
+	// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 	private $_registered_scripts = false;
 
 	private $_builder_blocks_repository;
 	private $_default_blocks_repository;
+	// phpcs:enable PSR2.Classes.PropertyDeclaration.Underscore
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'init_jet_sm_block_manager' ) );
@@ -120,8 +119,9 @@ class Manager {
 	}
 
 
-	public function add_categories( $categories, $post ) {
-		$categories = array_merge(
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	public function add_categories( $categories, $post ): array {
+		return array_merge(
 			array(
 				array(
 					'slug'  => 'jet-form-builder-fields',
@@ -136,8 +136,6 @@ class Manager {
 			),
 			$categories
 		);
-
-		return $categories;
 	}
 
 	public function add_default_fields_to_form( $arguments ) {

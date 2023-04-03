@@ -23,12 +23,15 @@ class Captcha_Handler extends Base_Handler {
 			if ( ! ( $captcha instanceof Captcha_Settings_From_Options ) ) {
 				continue;
 			}
+			// phpcs:disable WordPress.Security.NonceVerification.Missing
 			if ( ! array_key_exists( $slug, $_POST ) ) {
 				$options[ $slug ] = $captcha->on_load_options();
 				continue;
 			}
 
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$options[ $slug ] = $captcha->on_save_options( wp_unslash( $_POST[ $slug ] ) );
+			// phpcs:enable WordPress.Security.NonceVerification.Missing
 		}
 
 		$result = $this->update_options( $options );

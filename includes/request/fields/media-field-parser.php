@@ -35,7 +35,7 @@ class Media_Field_Parser extends Field_Data_Parser {
 			/** @var Media_Block_Value $uploads */
 			$uploads = $uploader->upload();
 		} catch ( Upload_Exception $exception ) {
-			throw new Sanitize_Value_Exception( $exception->getMessage() );
+			throw new Sanitize_Value_Exception( $exception->getMessage(), $this->name );
 		}
 
 		jet_fb_request_handler()->update_file( $this->name, $uploads );

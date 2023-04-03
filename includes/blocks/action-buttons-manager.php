@@ -20,7 +20,7 @@ if ( ! defined( 'WPINC' ) ) {
 trait Action_Buttons_Manager {
 
 	/**
-	 * @return Button_Type_Base[]
+	 * @var Button_Type_Base[]
 	 */
 	private $button_types = array();
 

@@ -6,7 +6,6 @@ namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -24,11 +23,12 @@ class Tab_Handler_Manager {
 	use Instance_Trait;
 	use Repository_Pattern_Trait;
 
+	// phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 	private $_tabs_options = array();
 
-	public static function get_options( string $slug, array $default = array() ): array {
+	public static function get_options( string $slug, array $if_empty = array() ): array {
 		$tab = static::instance()->tab( $slug );
-		$tab->save_global_options( $default );
+		$tab->save_global_options( $if_empty );
 
 		return $tab->get_global_options();
 	}
@@ -96,8 +96,8 @@ class Tab_Handler_Manager {
 		return $this->rep_get_item_or_die( $slug );
 	}
 
-	public function options( $slug, $default = array() ) {
-		return $this->tab( $slug )->get_options( $default );
+	public function options( $slug, $is_empty = array() ) {
+		return $this->tab( $slug )->get_options( $is_empty );
 	}
 
 	public function all( $default_tabs = array() ): array {

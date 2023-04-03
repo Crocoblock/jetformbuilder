@@ -37,8 +37,10 @@ class Preset_Manager {
 		'fields_map' => array(),
 	);
 
+	// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 	private $_preset_types = array();
 	private $_source_types;
+	// phpcs:enable PSR2.Classes.PropertyDeclaration.Underscore
 
 
 	protected function __construct() {

@@ -53,20 +53,20 @@ class Block_Helper {
 		);
 	}
 
-	public static function find_block( $callable, $blocks ): array {
-		if ( ! is_callable( $callable ) ) {
+	public static function find_block( $callback, $blocks ): array {
+		if ( ! is_callable( $callback ) ) {
 			return array();
 		}
 		foreach ( $blocks as $block ) {
 			if ( ! isset( $block['blockName'] ) || ! isset( $block['attrs'] ) ) {
 				continue;
 			}
-			if ( call_user_func( $callable, $block ) ) {
+			if ( call_user_func( $callback, $block ) ) {
 				return $block;
 			}
 
 			if ( 0 < count( $block['innerBlocks'] ) ) {
-				$find = self::find_block( $callable, $block['innerBlocks'] );
+				$find = self::find_block( $callback, $block['innerBlocks'] );
 
 				if ( $find ) {
 					return $find;
@@ -84,12 +84,12 @@ class Block_Helper {
 	 *
 	 * @return array
 	 */
-	public static function filter_blocks_by_namespace( $blocks, $namespace = Form_Manager::NAMESPACE_FIELDS ): array {
+	public static function filter_blocks_by_namespace( $blocks, $scope = Form_Manager::NAMESPACE_FIELDS ): array {
 		$fields = array();
 
 		self::filter_blocks(
-			function ( $block ) use ( $namespace ) {
-				return ( false !== stripos( $block['blockName'], $namespace ) );
+			function ( $block ) use ( $scope ) {
+				return ( false !== stripos( $block['blockName'], $scope ) );
 			},
 			$fields,
 			$blocks
@@ -98,17 +98,17 @@ class Block_Helper {
 		return $fields;
 	}
 
-	public static function filter_blocks( $callable, array &$storage, array $source ) {
+	public static function filter_blocks( $callback, array &$storage, array $source ) {
 		foreach ( $source as $index => $block ) {
 			if ( ! isset( $block['blockName'] ) ) {
 				continue;
 			}
-			if ( call_user_func( $callable, $block ) ) {
+			if ( call_user_func( $callback, $block ) ) {
 				$storage[] = $block;
 			}
 
 			if ( ! empty( $block['innerBlocks'] ) ) {
-				self::filter_blocks( $callable, $storage, $block['innerBlocks'] );
+				self::filter_blocks( $callback, $storage, $block['innerBlocks'] );
 			}
 		}
 	}

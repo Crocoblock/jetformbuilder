@@ -8,28 +8,26 @@
     <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>assets/*</exclude-pattern>
+    <exclude-pattern>framework/*</exclude-pattern>
     <exclude-pattern>\.idea/*</exclude-pattern>
 
     <rule ref="PHPCompatibility"/>
 
     <!-- Rules -->
     <rule ref="WordPress">
-        <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
-        <exclude name="Squiz.Commenting.VariableComment.Missing"/>
-        <exclude name="Squiz.Commenting.FunctionComment.Missing"/>
+        <exclude name="Universal.Operators.DisallowShortTernary.Found"/>
         <exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
         <exclude name="Generic.Commenting.DocComment.MissingShort"/>
+        <exclude name="Generic.Commenting.DocComment.ShortNotCapital"/>
         <exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedCatch"/>
-        <exclude name="PEAR.Commenting.FileComment.Missing"/>
-        <exclude name="PEAR.Commenting.ClassComment.Missing"/>
-        <exclude name="PEAR.Commenting.FunctionComment.Missing"/>
-        <exclude name="PEAR.Commenting.InlineComment.Missing"/>
+        <exclude name="Squiz.Commenting.VariableComment.Missing"/>
+        <exclude name="Squiz.Commenting.FunctionComment.Missing"/>
+        <exclude name="Squiz.Commenting.FileComment.WrongStyle"/>
         <exclude name="Squiz.Commenting.FileComment.MissingPackageTag"/>
         <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
-        <exclude name="Generic.Commenting.DocComment.ShortNotCapital"/>
+        <exclude name="Squiz.Commenting.ClassComment.Missing"/>
         <exclude name="Squiz.Commenting.FileComment.Missing"/>
         <exclude name="Squiz.Commenting.FunctionComment"/>
-
     </rule>
 
     <rule ref="WordPress-Extra">

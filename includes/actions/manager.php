@@ -92,7 +92,6 @@ class Manager {
 
 		try {
 			return $this->get_action( $type );
-
 		} catch ( Repository_Exception $exception ) {
 			return array();
 		}
@@ -131,7 +130,6 @@ class Manager {
 		$prepared_types = array();
 
 		foreach ( $source as $type ) {
-
 			$type_script_name = $type->self_script_name();
 
 			$prepared_types[] = array(
@@ -185,6 +183,4 @@ class Manager {
 
 		$this->register_action_types_assets( self::ENGINE_HANDLE );
 	}
-
-
 }

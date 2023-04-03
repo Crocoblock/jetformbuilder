@@ -407,7 +407,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 *
 	 * @return mixed|string
 	 */
-	public function get_field_id( $name = '', $for = 'input' ) {
+	public function get_field_id( $name = '', $for_element = 'input' ) {
 		if ( $name && is_array( $name ) ) {
 			$name = $name['name'];
 		}
@@ -424,7 +424,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			);
 		}
 
-		return Builder_Helper::get_unique_id( $name, $for );
+		return Builder_Helper::get_unique_id( $name, $for_element );
 	}
 
 	/**
@@ -657,7 +657,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		return false;
 	}
 
-	public function after_set_pages( Form_Break $break ) {
+	public function after_set_pages( Form_Break $form_break ) {
 	}
 
 	/**

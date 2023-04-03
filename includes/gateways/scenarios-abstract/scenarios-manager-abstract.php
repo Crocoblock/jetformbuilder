@@ -22,8 +22,10 @@ abstract class Scenarios_Manager_Abstract {
 	const QUERY_VAR = 'jet_gateway_scenario';
 
 	private $queried_scenario;
+	// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 	private $_logic_manager;
 	private $_view_manager;
+	// phpcs:enable PSR2.Classes.PropertyDeclaration.Underscore
 
 	protected function __construct() {
 		$this->logic()->rep_install();

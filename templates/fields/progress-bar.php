@@ -27,4 +27,3 @@ if ( ! defined( 'WPINC' ) ) {
 	<?php
 endforeach;
 // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-

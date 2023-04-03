@@ -19,11 +19,11 @@ interface With_Resource_It {
 	public function create_resource();
 
 	/**
-	 * @param $resource
+	 * @param $gateway_resource
 	 *
 	 * @return array
 	 * @throws Gateway_Exception
 	 */
-	public function save_resource( $resource );
+	public function save_resource( $gateway_resource );
 
 }

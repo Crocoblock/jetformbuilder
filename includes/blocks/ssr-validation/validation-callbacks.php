@@ -84,7 +84,7 @@ class Validation_Callbacks {
 				foreach ( $block['attrs']['validation']['rules'] as $rule ) {
 					if (
 						'ssr' !== ( $rule['type'] ?? '' ) ||
-						$name !== ( $rule['value'] ?? '' )
+						( $rule['value'] ?? '' ) !== $name
 					) {
 						continue;
 					}

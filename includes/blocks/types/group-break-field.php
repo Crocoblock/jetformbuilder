@@ -35,7 +35,7 @@ class Group_Break_Field extends Base {
 	}
 
 
-	protected function _jsm_register_controls() {
+	protected function jsm_controls() {
 
 		$this->controls_manager->start_section(
 			'style_controls',

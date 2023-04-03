@@ -16,13 +16,14 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+
 printf( "<div %s>\r\n", $label_wrapper->get_attributes_string() );
-	printf( '<%s %s>', $label_text_tag, $label_text->get_attributes_string() );
+printf( '<%s %s>', $label_text_tag, $label_text->get_attributes_string() );
 
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo wp_kses_post( $args['label'] );
+echo wp_kses_post( $args['label'] );
 
-		$mark = jet_fb_live_args()->required_mark;
+$mark = jet_fb_live_args()->required_mark;
 
 if ( $this->block_type->get_required_val() && ! empty( $mark ) ) {
 	printf(
@@ -30,9 +31,7 @@ if ( $this->block_type->get_required_val() && ! empty( $mark ) ) {
 		wp_kses_post( $mark )
 	);
 }
-		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "</{$label_text_tag}>";
 
-	require $this->get_global_template( 'common/prev-page-button.php' );
-?>
-</div>
+echo "</{$label_text_tag}>";
+require $this->get_global_template( 'common/prev-page-button.php' );
+echo '</div>';

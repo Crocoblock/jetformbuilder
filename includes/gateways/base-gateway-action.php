@@ -84,7 +84,7 @@ abstract class Base_Gateway_Action {
 		$patterns = array();
 
 		foreach ( $this->path_parts as $key => $value ) {
-			$patterns[ "#\{($key)\}#" ] = function ( $matches ) use ( $value ) {
+			$patterns[ "#\{($key)\}#" ] = function () use ( $value ) {
 				return $value;
 			};
 		}
@@ -165,10 +165,12 @@ abstract class Base_Gateway_Action {
 			return $this->body;
 		}
 
+		// phpcs:disable WordPress.PHP.IniSet.Risky
 		if ( version_compare( phpversion(), '7.1', '>=' ) ) {
 			ini_set( 'precision', 17 );
 			ini_set( 'serialize_precision', - 1 );
 		}
+		// phpcs:enable WordPress.PHP.IniSet.Risky
 
 		$this->body = $this->to_json( $this->body );
 

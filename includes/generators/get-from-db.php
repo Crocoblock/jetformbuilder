@@ -24,7 +24,7 @@ class Get_From_DB extends Base {
 	 * @return string
 	 */
 	public function get_name() {
-		return __( 'Get values list from database', 'jet-engine' );
+		return __( 'Get values list from database', 'jet-form-builder' );
 	}
 
 	/**
@@ -41,10 +41,13 @@ class Get_From_DB extends Base {
 		$result = array();
 		$field  = $args['generator_field'];
 		$table  = $wpdb->postmeta;
-		$rows   = $wpdb->get_results(
+
+		// phpcs:disable WordPress.DB
+		$rows = $wpdb->get_results(
 			$wpdb->prepare( "SELECT `meta_value` FROM `$table` WHERE `meta_key` = '%s'", $field ),
 			ARRAY_A
 		);
+		// phpcs:enable WordPress.DB
 
 		if ( empty( $rows ) ) {
 			return $result;

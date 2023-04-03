@@ -14,6 +14,8 @@ abstract class Base_Form_Action {
 
 	use Get_Template_Trait;
 
+	const NONCE_ACTION = 'jfb_admin_inline';
+
 	public function __construct() {
 		add_action( 'admin_action_' . $this->action_id(), array( $this, 'do_admin_action' ) );
 	}
@@ -37,6 +39,7 @@ abstract class Base_Form_Action {
 
 		$args = array(
 			'action' => $this->action_id(),
+			'nonce'  => wp_create_nonce( self::NONCE_ACTION ),
 		);
 
 		if ( $post instanceof \WP_Post ) {
@@ -78,17 +81,9 @@ abstract class Base_Form_Action {
 	}
 
 	protected function check_user_access( $post_id = null ) {
-		$res = true;
-
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			$res = false;
-		}
-
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
-			$res = false;
-		}
-
-		return $res;
+		return (
+			current_user_can( 'edit_posts' ) && current_user_can( 'edit_post', $post_id )
+		);
 	}
 
 

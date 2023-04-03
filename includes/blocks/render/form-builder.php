@@ -83,8 +83,6 @@ class Form_Builder {
 		$form .= jet_fb_live()->maybe_end_page( true );
 		$form .= $this->end_form();
 
-		// Preset_Manager::clear();
-
 		return $form;
 	}
 

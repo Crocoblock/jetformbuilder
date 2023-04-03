@@ -47,7 +47,7 @@ class Query_Cache_Builder extends Query_Builder {
 	public function query_all(): array {
 		$cached = $this->get_cached( 'query_all_' );
 
-		if ( $cached !== false ) {
+		if ( false !== $cached ) {
 			return $cached;
 		}
 
@@ -61,7 +61,7 @@ class Query_Cache_Builder extends Query_Builder {
 	public function query_one(): array {
 		$cached = $this->get_cached( 'query_one_' );
 
-		if ( $cached !== false ) {
+		if ( false !== $cached ) {
 			return $cached;
 		}
 
@@ -75,7 +75,7 @@ class Query_Cache_Builder extends Query_Builder {
 	public function query_var( $column_offset = 0, $row_offset = 0 ) {
 		$cached = $this->get_cached( "query_var_{$column_offset}_{$row_offset}_" );
 
-		if ( $cached !== false ) {
+		if ( false !== $cached ) {
 			return $cached;
 		}
 
@@ -89,7 +89,7 @@ class Query_Cache_Builder extends Query_Builder {
 	public function query_col( $index = 0 ) {
 		$cached = $this->get_cached( "query_col_{$index}_" );
 
-		if ( $cached !== false ) {
+		if ( false !== $cached ) {
 			return $cached;
 		}
 

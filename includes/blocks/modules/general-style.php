@@ -129,6 +129,7 @@ trait General_Style {
 		);
 	}
 
+	// phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
 	public function _get_default_control( $selector ) {
 		return array(
 			'padding' => array(
@@ -154,7 +155,7 @@ trait General_Style {
 		foreach ( $control_options as $type => $options ) {
 			$options = $this->merge_controls_or_add_id( $this->_get_default_control( $selector )[ $type ], $options );
 
-			if ( in_array( $type, $responsive ) ) {
+			if ( in_array( $type, $responsive, true ) ) {
 				$this->controls_manager->add_responsive_control( $options );
 			} else {
 				$this->controls_manager->add_control( $options );
@@ -172,6 +173,8 @@ trait General_Style {
 
 			return $control;
 		}
+
+		return $control;
 	}
 
 
@@ -355,10 +358,6 @@ trait General_Style {
 			array(
 				'id'    => 'description_style',
 				'title' => __( 'Description', 'jet-form-builder' ),
-				/*
-				'condition' => array(
-					'desc' => true
-				),*/
 			)
 		);
 

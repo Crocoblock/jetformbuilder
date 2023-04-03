@@ -35,4 +35,4 @@ $this->add_attribute( 'data-jfb-sync' );
 		<?php endif; ?>
 	</div>
 </div>
-<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

@@ -13,6 +13,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Manager {
 
+	// phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 	public $_types = array();
 
 	const DYNAMIC_SUCCESS_PREF = 'dsuccess|';

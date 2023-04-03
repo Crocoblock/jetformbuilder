@@ -10,6 +10,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
+
 trait Repository_Aborts_Trait {
 
 	/**

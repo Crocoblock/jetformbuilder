@@ -35,8 +35,7 @@ class Product_Catalog_Visibility_Property extends Base_Product_Property {
 	 * @param Abstract_Modifier $modifier
 	 *
 	 * @return void|null
-	 * @throws Action_Exception
-	 * @throws Silence_Exception
+	 * @throws Silence_Exception|Action_Exception
 	 */
 	public function get_value( Abstract_Modifier $modifier ) {
 		parent::get_value( $modifier );

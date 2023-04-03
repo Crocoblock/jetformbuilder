@@ -61,12 +61,12 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 		return false;
 	}
 
-	protected function in_array_by_dynamic( Repository_Item_Dynamic_Id $object ): bool {
+	protected function in_array_by_dynamic( Repository_Item_Dynamic_Id $current ): bool {
 		foreach ( $this as $state ) {
 			if ( ! is_a( $state, Repository_Item_Dynamic_Id::class ) ) {
 				continue;
 			}
-			if ( $state->get_dynamic_id() === $object->get_dynamic_id() ) {
+			if ( $state->get_dynamic_id() === $current->get_dynamic_id() ) {
 				return true;
 			}
 		}

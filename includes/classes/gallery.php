@@ -16,13 +16,15 @@ class Gallery {
 	 * @param array $images [description]
 	 * @param array $args [description]
 	 *
-	 * @return [type]         [description]
+	 * @return string
 	 */
 	public static function slider( $images = array(), $args = array() ) {
 
 		if ( empty( $images ) ) {
 			return '';
 		}
+
+		ob_start();
 
 		wp_enqueue_script( 'jquery-slick' );
 		wp_enqueue_script( 'imagesloaded' );
@@ -85,7 +87,8 @@ class Gallery {
 		foreach ( $images as $img_id ) {
 
 			if ( 'full' === $args['size'] ) {
-				$img_url = $img_full = wp_get_attachment_image_url( $img_id, $args['size'] );
+				$img_url  = wp_get_attachment_image_url( $img_id, $args['size'] );
+				$img_full = $img_url;
 			} else {
 				$img_url  = wp_get_attachment_image_url( $img_id, $args['size'] );
 				$img_full = wp_get_attachment_image_url( $img_id, 'full' );
@@ -114,6 +117,8 @@ class Gallery {
 		}
 
 		echo '</div>';
+
+		return ob_get_clean();
 	}
 
 	/**
@@ -158,7 +163,8 @@ class Gallery {
 		foreach ( $images as $img_id ) {
 
 			if ( 'full' === $args['size'] ) {
-				$img_url = $img_full = wp_get_attachment_image_url( $img_id, $args['size'] );
+				$img_url  = wp_get_attachment_image_url( $img_id, $args['size'] );
+				$img_full = $img_url;
 			} else {
 				$img_url  = wp_get_attachment_image_url( $img_id, $args['size'] );
 				$img_full = wp_get_attachment_image_url( $img_id, 'full' );

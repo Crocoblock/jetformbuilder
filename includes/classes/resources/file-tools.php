@@ -67,6 +67,7 @@ class File_Tools {
 			return self::create_uploaded_file( $file_data['id'] );
 		}
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions
 		if ( ! is_string( $file_data ) || false === parse_url( $file_data ) ) {
 			return false;
 		}

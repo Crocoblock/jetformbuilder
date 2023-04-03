@@ -104,13 +104,13 @@ abstract class Base_Scenario_Gateway extends Base_Gateway {
 	/**
 	 * Apply macros in string
 	 *
-	 * @param null $string
+	 * @param null $content
 	 *
 	 * @return string [description]
 	 * @throws Gateway_Exception
 	 */
-	public function apply_macros( $string = null ) {
-		return $this->query_scenario()->apply_macros( $string );
+	public function apply_macros( $content = null ) {
+		return $this->query_scenario()->apply_macros( $content );
 	}
 
 }

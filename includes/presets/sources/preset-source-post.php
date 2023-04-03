@@ -38,7 +38,8 @@ class Preset_Source_Post extends Base_Source {
 		if ( 'current_post' === $post_from ) {
 			$post_id = get_the_ID();
 		} else {
-			$var     = ! empty( $this->preset_data['query_var'] ) ? $this->preset_data['query_var'] : '';
+			$var = ! empty( $this->preset_data['query_var'] ) ? $this->preset_data['query_var'] : '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? absint( $_REQUEST[ $var ] ) : false;
 		}
 
@@ -173,7 +174,8 @@ class Preset_Source_Post extends Base_Source {
 
 			if ( 'post_meta' === $this->prop
 				&& ! empty( $this->preset_data['key'] )
-				&& $repeater_key == $this->preset_data['key'] ) {
+				&& $repeater_key === $this->preset_data['key']
+			) {
 				return $field;
 			}
 		}

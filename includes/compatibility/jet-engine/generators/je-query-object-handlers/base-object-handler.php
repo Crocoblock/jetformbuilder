@@ -15,7 +15,8 @@ class Base_Object_Handler {
 	protected $calc_field;
 	protected $additional;
 
-	public function is_supported( $object ): bool {
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public function is_supported( $current ): bool {
 		return true;
 	}
 
@@ -26,17 +27,17 @@ class Base_Object_Handler {
 		$this->additional  = $args[4] ?? false;
 	}
 
-	final public function to_array( $object ): array {
+	final public function to_array( $current ): array {
 		// convert to array because in 8.2 dynamic properties will be deprecated
-		$converted = $this->get_converted( $object );
+		$converted = $this->get_converted( $current );
 
-		$value      = $this->get_value( $converted, $object );
-		$label      = $this->get_label( $converted, $object );
-		$calculated = $this->get_calc( $converted, $object );
+		$value      = $this->get_value( $converted, $current );
+		$label      = $this->get_label( $converted, $current );
+		$calculated = $this->get_calc( $converted, $current );
 
-		$value      = apply_filters( 'jet-forms-generate-from-query/value', $value, $object, $this->additional );
-		$label      = apply_filters( 'jet-forms-generate-from-query/label', $label, $object, $this->additional );
-		$calculated = apply_filters( 'jet-forms-generate-from-query/calculated', $calculated, $object, $this->additional );
+		$value      = apply_filters( 'jet-forms-generate-from-query/value', $value, $current, $this->additional );
+		$label      = apply_filters( 'jet-forms-generate-from-query/label', $label, $current, $this->additional );
+		$calculated = apply_filters( 'jet-forms-generate-from-query/calculated', $calculated, $current, $this->additional );
 
 		$item = array();
 
@@ -52,20 +53,22 @@ class Base_Object_Handler {
 		return $item;
 	}
 
-	protected function get_converted( $object ) {
+	protected function get_converted( $current ) {
 		// convert to array because in 8.2 dynamic properties will be deprecated
-		return get_object_vars( $object );
+		return get_object_vars( $current );
 	}
 
-	protected function get_value( $converted, $object ) {
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	protected function get_value( $converted, $current ) {
 		return $converted[ $this->value_field ] ?? false;
 	}
 
-	protected function get_label( $converted, $object ) {
-		return $converted[ $this->label_field ] ?? $this->get_value( $converted, $object );
+	protected function get_label( $converted, $current ) {
+		return $converted[ $this->label_field ] ?? $this->get_value( $converted, $current );
 	}
 
-	protected function get_calc( $converted, $object ) {
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	protected function get_calc( $converted, $current ) {
 		return $converted[ $this->calc_field ] ?? false;
 	}
 

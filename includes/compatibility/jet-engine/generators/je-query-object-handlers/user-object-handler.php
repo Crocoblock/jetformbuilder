@@ -10,22 +10,22 @@ if ( ! defined( 'WPINC' ) ) {
 
 class User_Object_Handler extends Base_Object_Handler {
 
-	public function is_supported( $object ): bool {
-		return ( $object instanceof \WP_User );
+	public function is_supported( $current ): bool {
+		return ( $current instanceof \WP_User );
 	}
 
-	protected function get_converted( $object ) {
-		return parent::get_converted( $object->data );
+	protected function get_converted( $current ) {
+		return parent::get_converted( $current->data );
 	}
 
-	protected function get_label( $converted, $object ) {
+	protected function get_label( $converted, $current ) {
 		$label = $object->{$this->label_field} ?? '';
 
-		return $label ? $label : $this->get_value( $converted, $object );
+		return $label ? $label : $this->get_value( $converted, $current );
 	}
 
-	protected function get_calc( $converted, $object ) {
-		return $object->{$this->calc_field};
+	protected function get_calc( $converted, $current ) {
+		return $current->{$this->calc_field};
 	}
 
 }

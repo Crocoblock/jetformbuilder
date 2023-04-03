@@ -22,7 +22,7 @@ class Color_Picker_Field extends Base {
 		return 'color-picker-field';
 	}
 
-	protected function _jsm_register_controls() {
+	protected function jsm_controls() {
 		$this->controls_manager->start_section(
 			'style_controls',
 			array(

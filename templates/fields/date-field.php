@@ -39,3 +39,4 @@ if ( Regexp_Tools::has_macro( $this->args['max'] ) ) {
 }
 ?>
 <input <?php $this->render_attributes_string(); ?>>
+<?php

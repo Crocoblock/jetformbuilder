@@ -22,7 +22,7 @@ abstract class Rest_Api_Controller_Base {
 	public function register_routes() {
 		foreach ( $this->routes() as $route ) {
 			$endpoint_args = $route->get_overridden_args()
-				?: array(
+				?: array( // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 					'methods'             => $route::get_methods(),
 					'callback'            => array( $route, 'run_callback' ),
 					'permission_callback' => array( $route, 'check_permission' ),
@@ -39,6 +39,7 @@ abstract class Rest_Api_Controller_Base {
 			if ( ! $result ) {
 				_doing_it_wrong(
 					__METHOD__,
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					"Error on register REST API route: {$route::get_namespace()}/{$route::get_rest_base()}",
 					'1.4.0'
 				);

@@ -42,7 +42,7 @@ class Macros_Parser {
 		$this->set_content( $content )->set_replacements( $replacements );
 
 		if ( ! $this->content || ! $this->replacements ) {
-			return $this->content ?: '';
+			return $this->content ?: ''; // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 		}
 
 		return $this->macros_replace();
@@ -58,8 +58,8 @@ class Macros_Parser {
 
 		$content = preg_replace_callback(
 			'/%(.+?)%/',
-			function ( $match ) {
-				$filters = explode( '|', $match[1] );
+			function ( $replace_match ) {
+				$filters = explode( '|', $replace_match[1] );
 				$name    = $filters[0];
 				array_shift( $filters );
 
@@ -72,14 +72,14 @@ class Macros_Parser {
 					);
 
 					if ( is_null( $value ) ) {
-						return $match[0];
+						return $replace_match[0];
 					}
 
 					return Filters_Manager::instance()->apply( $value, $filters );
 				}
 
 				if ( ! isset( $this->replacements[ $name ] ) ) {
-					return $match[0];
+					return $replace_match[0];
 				}
 
 				$value = $this->replacements[ $name ];
@@ -126,7 +126,7 @@ class Macros_Parser {
 			foreach ( $item as $key => $value ) {
 				$item_data[] = sprintf( '%1$s: %2$s', $key, $this->maybe_parse_if_array( $value ) );
 			}
-			$result .= $index++ . ') ' . implode( ', ', $item_data ) . ';<br>';
+			$result .= ( $index++ ) . ') ' . implode( ', ', $item_data ) . ';<br>';
 		}
 
 		return $result;

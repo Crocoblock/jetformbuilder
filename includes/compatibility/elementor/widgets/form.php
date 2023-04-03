@@ -119,11 +119,6 @@ class Form extends Widget_Base implements Widget_Base_It {
 		return array( 'jet-form-builder' );
 	}
 
-	/*
-	public function get_script_depends() {
-		return array( 'jet-form-builder-frontend-forms' );
-	}*/
-
 	private function jet_form_builder_slug() {
 		return jet_form_builder()->post_type->slug();
 	}
@@ -148,6 +143,8 @@ class Form extends Widget_Base implements Widget_Base_It {
 			case 'field_messages_alignment':
 				return $this->selector( '-file-upload__errors' );
 		}
+
+		return '';
 	}
 
 
@@ -282,7 +279,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 		$booking_form->add_control(
 			'builder__checkbox_show_decorator',
 			array(
-				'label'     => __( 'Show Checkbox' ),
+				'label'     => __( 'Show Checkbox', 'jet-form-builder' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => array(
 					'inline-block' => array(
@@ -388,7 +385,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 		$booking_form->add_control(
 			'builder__radio_show_decorator',
 			array(
-				'label'     => __( 'Show Radio' ),
+				'label'     => __( 'Show Radio', 'jet-form-builder' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'default'   => 'inline-block',
 				'options'   => array(
@@ -671,9 +668,6 @@ class Form extends Widget_Base implements Widget_Base_It {
 		);
 		$instance->start_controls_tabs( 'jet_fb_progress_pages_tabs' );
 
-		/**
-		 *
-		 */
 		$wrapper = '-progress-pages__item--wrapper';
 		$item    = '-progress-pages__item';
 
@@ -694,9 +688,6 @@ class Form extends Widget_Base implements Widget_Base_It {
 			'prev-circle'      => "$wrapper.passed-page .%s$item--circle",
 		);
 
-		/**
-		 *
-		 */
 		$instance->start_controls_tab(
 			'jet_fb_progress_pages_tab--current',
 			array(

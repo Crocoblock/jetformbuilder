@@ -37,6 +37,7 @@ class Duplicate_Action extends Base_Form_Action {
 
 		$this->import_form( $form_data[1] );
 
+		// phpcs:ignore WordPress.Security.SafeRedirect
 		wp_redirect( add_query_arg( array( 'post_type' => $this->post_type() ), admin_url( 'edit.php' ) ) );
 		die();
 	}

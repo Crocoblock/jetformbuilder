@@ -29,7 +29,7 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 
 	const GATEWAY_META_KEY     = '_jet_gateway_data';
 	const PAYMENT_TYPE_INITIAL = 'initial';
-	const PAYMENT_TYPE_RENEWAl = 'renewal';
+	const PAYMENT_TYPE_RENEWAL = 'renewal';
 
 	const SUCCESS_TYPE = 'success';
 	const FAILED_TYPE  = 'cancel';
@@ -168,14 +168,13 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	 * @deprecated since 2.0.0
 	 */
 	public function get_result_message( $status ) {
-		if ( ! $status || in_array( $status, $this->failed_statuses() ) ) {
+		if ( ! $status || in_array( $status, $this->failed_statuses(), true ) ) {
 			$message = Manager::dynamic_error( $this->get_meta_message( 'failed' ) );
 		} else {
 			$message = Manager::dynamic_success( $this->get_meta_message( 'success' ) );
 		}
-		$message = stripcslashes( $message );
 
-		return $message;
+		return stripcslashes( $message );
 	}
 
 	/**
@@ -198,9 +197,9 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 		}
 
 		foreach ( $this->options_list() as $name => $option ) {
-			$is_required = isset( $option['required'] )
-				? filter_var( $option['required'], FILTER_VALIDATE_BOOLEAN )
-				: true;
+			$is_required = (
+				! isset( $option['required'] ) || filter_var( $option['required'], FILTER_VALIDATE_BOOLEAN )
+			);
 
 			$default_val = $option['default'] ?? false;
 
@@ -336,7 +335,7 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	 */
 	protected function try_do_actions() {
 		try {
-			if ( in_array( $this->data['status'], $this->failed_statuses() ) ) {
+			if ( in_array( $this->data['status'], $this->failed_statuses(), true ) ) {
 				$this->process_status( 'failed' );
 			} else {
 				$this->process_status( 'success' );

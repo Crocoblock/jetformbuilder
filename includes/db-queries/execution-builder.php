@@ -300,18 +300,21 @@ class Execution_Builder {
 	public function transaction_start() {
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		return $wpdb->query( 'START TRANSACTION' );
 	}
 
 	public function transaction_commit() {
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		return $wpdb->query( 'COMMIT' );
 	}
 
 	public function transaction_rollback() {
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		return $wpdb->query( 'ROLLBACK' );
 	}
 

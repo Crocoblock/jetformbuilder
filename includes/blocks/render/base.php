@@ -63,33 +63,6 @@ abstract class Base {
 		$this->block_type = $block_type;
 	}
 
-	public function maybe_add_error_class( $args ) {
-		if ( $this->has_error( $args ) ) {
-			$this->add_attribute( 'class', self::FIELD_ERROR_CLASS );
-		}
-	}
-
-	public function maybe_render_error( $args ) {
-		if ( $this->has_error( $args ) ) {
-			return '<div class="error-message">' . Error_Handler::instance()->error_by_name( $args['name'] ) . '</div>';
-		}
-
-		return '';
-	}
-
-	public function maybe_get_error_class( $args ) {
-		if ( $this->has_error( $args ) ) {
-			return self::FIELD_ERROR_CLASS;
-		}
-
-		return '';
-	}
-
-	private function has_error( $args ) {
-		return Error_Handler::instance()->has_error_by_name( $args['name'] );
-	}
-
-
 	/**
 	 * Returns field label
 	 *
@@ -212,8 +185,6 @@ abstract class Base {
 	public function render( $wp_block = null, $template = null ) {
 		$args     = $this->get_default_args_with_filter();
 		$template = $this->render_without_layout( $template, $args );
-
-		$this->maybe_add_error_class( $args );
 
 		$label  = $this->get_field_label();
 		$desc   = $this->get_field_desc();

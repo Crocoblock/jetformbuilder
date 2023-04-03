@@ -51,3 +51,4 @@ $fullwidth = ' content-fullwidth';
 	//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 	?>
 </div>
+<?php

@@ -10,6 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 trait With_Theme_Info {
 
+	// phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 	private $_theme;
 
 	public function theme(): Theme_Info {

@@ -18,3 +18,4 @@ if ( ! defined( 'WPINC' ) ) {
 			style="display: none"></span>
 	<!-- footer -->
 </div>
+<?php

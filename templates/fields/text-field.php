@@ -23,7 +23,6 @@ $this->add_attribute( 'type', $args['field_type'] );
 $this->add_attribute( 'data-field-name', $args['name'] );
 $this->add_attribute( 'class', 'jet-form-builder__field text-field' );
 $this->add_attribute( 'class', $args['class_name'] );
-$this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
 $this->add_attribute( 'minlength', $this->args['minlength'] ?? '' );
 $this->add_attribute( 'maxlength', $this->args['maxlength'] ?? '' );
 $this->add_attribute( 'data-jfb-sync' );
@@ -75,6 +74,5 @@ if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {
 ?>
 <div class="jet-form-builder__field-wrap">
 	<input <?php $this->render_attributes_string(); ?>>
-	<?php echo Tools::esc_template_string( $this->maybe_render_error( $args ) ); ?>
 </div>
-<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

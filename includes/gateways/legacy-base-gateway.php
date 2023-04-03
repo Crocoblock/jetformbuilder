@@ -23,6 +23,8 @@ abstract class Legacy_Base_Gateway {
 	const GATEWAY_META_KEY = '_jet_gateway_data';
 
 	/**
+	 * @var string|int
+	 *
 	 * @deprecated 2.0.0
 	 */
 	protected $payment_id;
@@ -129,6 +131,7 @@ abstract class Legacy_Base_Gateway {
 	 * @return false
 	 * @deprecated 2.0.0
 	 */
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 	protected function query_order_token( $order_id, $form_id ) {
 		return false;
 	}
@@ -259,11 +262,11 @@ abstract class Legacy_Base_Gateway {
 	/**
 	 * Apply macros in string
 	 *
-	 * @param null $string
+	 * @param null $content
 	 *
 	 * @return string [description]
 	 */
-	public function apply_macros( $string = null ) {
+	public function apply_macros( $content = null ) {
 		return preg_replace_callback(
 			'/%(.*?)%/',
 			function ( $matches ) {
@@ -282,7 +285,7 @@ abstract class Legacy_Base_Gateway {
 						return $this->data['form_data'][ $matches[1] ] ?? '';
 				}
 			},
-			$string
+			$content
 		);
 	}
 
@@ -303,6 +306,7 @@ abstract class Legacy_Base_Gateway {
 		global $wpdb;
 		$sql = "SELECT * FROM $wpdb->postmeta WHERE meta_key = '" . self::GATEWAY_META_KEY . "' AND meta_value LIKE '%$payment%';";
 
+		// phpcs:ignore WordPress.DB
 		return $wpdb->get_row( $sql, ARRAY_A );
 	}
 

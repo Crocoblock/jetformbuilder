@@ -5,7 +5,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-?>
-<div class="<?php echo esc_attr( $class ); ?>">
-	<?php echo wp_kses_post( $message_content ); ?>
-</div>
+printf(
+	'<div class="%1$s">%2$s</div>',
+	esc_attr( $class ),
+	wp_kses_post( $message_content )
+);

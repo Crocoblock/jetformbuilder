@@ -61,7 +61,7 @@ class Tools {
 		}
 
 		foreach ( $post_types as $post_type ) {
-			if ( $post_type->name !== Plugin::instance()->post_type->slug() ) {
+			if ( Plugin::instance()->post_type->slug() !== $post_type->name ) {
 				$post_types_list[] = array(
 					'value' => $post_type->name,
 					'label' => $post_type->label,
@@ -77,7 +77,7 @@ class Tools {
 	 *
 	 * @return array
 	 */
-	public static function get_post_types_for_options() {
+	public static function get_post_types_for_options(): array {
 		return self::get_post_types_for_js( false, array( 'public' => true ) );
 	}
 
@@ -96,11 +96,9 @@ class Tools {
 	 *
 	 * @return string
 	 */
-	public static function sanitize_wysiwyg( $input ) {
+	public static function sanitize_wysiwyg( $input ): string {
 		$input = wp_kses_post( $input );
-		$input = wp_specialchars_decode( stripslashes( $input ), ENT_COMPAT );
-
-		return $input;
+		return wp_specialchars_decode( stripslashes( $input ), ENT_COMPAT );
 	}
 
 	/**
@@ -110,7 +108,7 @@ class Tools {
 	 *
 	 * @return array
 	 */
-	public static function get_taxonomies_for_js( $args = array() ) {
+	public static function get_taxonomies_for_js( $args = array() ): array {
 		$taxonomies = get_taxonomies( $args, 'objects' );
 
 		return self::with_placeholder( self::prepare_list_for_js( $taxonomies, 'name', 'label' ) );
@@ -131,13 +129,13 @@ class Tools {
 		return self::with_placeholder( $response );
 	}
 
-	public static function get_generators_list_for_js() {
+	public static function get_generators_list_for_js(): array {
 		$generators = Plugin::instance()->form->get_generators_list();
 
 		return self::prepare_list_for_js( $generators );
 	}
 
-	public static function get_allowed_mimes_list_for_js() {
+	public static function get_allowed_mimes_list_for_js(): array {
 		return array_values( get_allowed_mime_types() );
 	}
 
@@ -220,7 +218,7 @@ class Tools {
 			$result = array();
 
 			foreach ( $roles as $role => $data ) {
-				if ( ! in_array( $role, $exclude ) ) {
+				if ( ! in_array( $role, $exclude, true ) ) {
 					$result[ $role ] = $data['name'];
 				}
 			}
@@ -243,7 +241,7 @@ class Tools {
 	 * @return array [type] [description]
 	 */
 	public static function prepare_list_for_js(
-		$array = array(),
+		$collection = array(),
 		$value_key = null,
 		$label_key = null,
 		$for_elementor = false,
@@ -252,11 +250,11 @@ class Tools {
 
 		$result = array();
 
-		if ( ! is_array( $array ) || empty( $array ) ) {
+		if ( ! is_array( $collection ) || empty( $collection ) ) {
 			return $result;
 		}
 
-		foreach ( $array as $key => $item ) {
+		foreach ( $collection as $key => $item ) {
 
 			$value = null;
 			$label = null;
@@ -287,12 +285,18 @@ class Tools {
 		return $result;
 	}
 
-	public static function with_placeholder( $array, $label = '--' ) {
+	/**
+	 * @param array $collection
+	 * @param string $label
+	 *
+	 * @return array
+	 */
+	public static function with_placeholder( array $collection, string $label = '--' ): array {
 		return array_merge(
 			array(
 				array( 'label' => $label, 'value' => '' ),
 			),
-			$array
+			$collection
 		);
 	}
 
@@ -311,7 +315,7 @@ class Tools {
 
 	public static function array_merge_intersect_key( $source, $arrays ) {
 		foreach ( $source as $index => $path ) {
-			$name = isset( $path['path'] ) ? $path['path'] : $index;
+			$name = $path['path'] ?? $index;
 
 			$deep_value = self::getDeepValue( $name, $arrays );
 
@@ -325,6 +329,7 @@ class Tools {
 		return $source;
 	}
 
+	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 	public static function getDeepValue( $key, $source ) {
 		$keys = explode( '/', $key );
 		$last = end( $keys );
@@ -333,11 +338,11 @@ class Tools {
 		return self::deep( $keys, current( $keys ), $last, $source );
 	}
 
-	private static function deep( $array, $key, $last, $source ) {
+	private static function deep( $collection, $key, $last, $source ) {
 
 		if ( isset( $source[ $key ] ) ) {
 			if ( $last !== $key ) {
-				return self::deep( $array, next( $array ), $last, $source[ $key ] );
+				return self::deep( $collection, next( $collection ), $last, $source[ $key ] );
 			}
 
 			return $source[ $key ];
@@ -357,6 +362,7 @@ class Tools {
 	public static function decode_unserializable( $value ) {
 		$data = self::decode_json( $value );
 
+		// phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 		return $data ?: maybe_unserialize( $value );
 	}
 
@@ -369,6 +375,7 @@ class Tools {
 			return $json;
 		}
 		if ( defined( 'JSON_INVALID_UTF8_IGNORE' ) ) {
+			// phpcs:ignore PHPCompatibility.Constants.NewConstants
 			return json_decode( $json, true, 512, JSON_INVALID_UTF8_IGNORE );
 		}
 
@@ -479,6 +486,7 @@ class Tools {
 
 	/**
 	 * @param $source
+	 * @param bool $replace_enqueue
 	 *
 	 * @return string
 	 */
@@ -533,6 +541,7 @@ class Tools {
 	public static function set_current_post( $post_id ) {
 		global $post;
 
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$post = get_post( absint( $post_id ) );
 	}
 

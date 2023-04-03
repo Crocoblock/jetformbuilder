@@ -104,8 +104,8 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 		return \Jet_Form_Builder\Live_Form::instance();
 	}
 
-	function jet_fb_live_arg( string $arg_name, $default = false ) {
-		return jet_fb_live_args()->argument( $arg_name, $default );
+	function jet_fb_live_arg( string $arg_name, $if_empty = false ) {
+		return jet_fb_live_args()->argument( $arg_name, $if_empty );
 	}
 
 	function jet_fb_live_args(): \Jet_Form_Builder\Classes\Arguments\Form_Arguments {

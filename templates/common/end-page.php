@@ -7,5 +7,4 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-?>
-</div>
+echo '</div>';

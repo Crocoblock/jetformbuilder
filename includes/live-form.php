@@ -33,11 +33,15 @@ class Live_Form {
 	/** @var Form_Arguments */
 	public $spec_data;
 	public $post;
+	// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 	public $_conditional_blocks = array();
 	public $_repeaters          = array();
 	public $blocks              = array();
+	// phpcs:enable PSR2.Classes.PropertyDeclaration.Underscore
 
-	// for progress
+	/**
+	 * @var Form_Break
+	 */
 	public $form_break;
 
 	/**

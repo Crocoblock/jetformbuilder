@@ -14,3 +14,4 @@ $this->add_attribute( 'class', $args['class_name'] );
 <div class="jet-form-builder__field-wrap">
 	<div <?php $this->render_attributes_string(); ?>></div>
 </div>
+<?php

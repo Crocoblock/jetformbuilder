@@ -39,8 +39,8 @@ class Update_List_Status extends Base_Action {
 		return $this;
 	}
 
-	public function set_list( int $list ): self {
-		$this->list = $list;
+	public function set_list( int $list_items ): self {
+		$this->list = $list_items;
 
 		return $this;
 	}

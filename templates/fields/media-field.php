@@ -17,7 +17,6 @@ if ( ! defined( 'WPINC' ) ) {
 $max_files = absint( $args['max_files'] ?? 1 );
 
 $this->add_attribute( 'class', 'jet-form-builder__field file-field jet-form-builder-file-upload__input' );
-$this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'name', $this->block_type->get_field_name() );
 $this->add_attribute( 'data-field-name', $args['name'] );
@@ -41,8 +40,6 @@ $max_size = $this->block_type->get_max_size();
 $this->add_attribute( 'data-max_size', $max_size );
 $max_size_message = $this->block_type->get_max_size_message();
 
-// $value = File_Upload::instance()->get_result_value( $args );
-// $value = is_array( $value ) || ( 'url' === $format ) ? wp_json_encode( $value ) : $value;
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
 <div class="jet-form-builder__field-wrap jet-form-builder-file-upload">
@@ -56,9 +53,8 @@ $max_size_message = $this->block_type->get_max_size_message();
 	</div>
 	<div class="jet-form-builder-file-upload__fields">
 		<input <?php $this->render_attributes_string(); ?>>
-		<?php echo Tools::esc_template_string( $this->maybe_render_error( $args ) ); ?>
 	</div>
 	<div class="jet-form-builder-file-upload__message"><small><?php echo wp_kses_post( $max_size_message ); ?></small></div>
 	<div class="jet-form-builder-file-upload__errors is-hidden"></div>
 </div>
-<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

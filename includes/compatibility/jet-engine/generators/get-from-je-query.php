@@ -53,7 +53,7 @@ class Get_From_Je_Query extends Base {
 	 */
 	public function generate( $args ) {
 
-		$field = isset( $args['generator_field'] ) ? $args['generator_field'] : $args;
+		$field = $args['generator_field'] ?? $args;
 
 		$args   = explode( '|', $field );
 		$query  = Query_Manager::instance()->get_query_by_id( $args[0] );
@@ -80,18 +80,19 @@ class Get_From_Je_Query extends Base {
 		return $result;
 	}
 
-	private function get_handler( $object ): Base_Object_Handler {
+	private function get_handler( $current ): Base_Object_Handler {
 		/** @var Base_Object_Handler $handler */
 		foreach ( $this->object_handlers as $handler ) {
-			if ( $handler->is_supported( $object ) ) {
+			if ( $handler->is_supported( $current ) ) {
 				return $handler;
 			}
 		}
 
 		wp_die(
 			sprintf(
-				__( '%s::is_supported must return TRUE', 'jet-form-builder' ),
-				Base_Object_Handler::class
+				/* translators: %s - class name  */
+				esc_html__( '%s::is_supported must return TRUE', 'jet-form-builder' ),
+				esc_attr( Base_Object_Handler::class )
 			)
 		);
 	}

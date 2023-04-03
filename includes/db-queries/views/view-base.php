@@ -65,19 +65,19 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	}
 
 	/**
-	 * @param $callable
+	 * @param $callback
 	 *
 	 * @return $this
 	 * @throws Query_Builder_Exception
 	 */
-	public function with( $callable ): View_Base {
-		if ( is_string( $callable ) ) {
-			$callable = array( $this, $callable );
+	public function with( $callback ): View_Base {
+		if ( is_string( $callback ) ) {
+			$callback = array( $this, $callback );
 		}
-		if ( ! is_callable( $callable ) ) {
+		if ( ! is_callable( $callback ) ) {
 			throw new Query_Builder_Exception( 'Relation is not callable.' );
 		}
-		$this->relations[] = call_user_func( $callable );
+		$this->relations[] = call_user_func( $callback );
 
 		return $this;
 	}

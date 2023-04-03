@@ -18,3 +18,4 @@ if ( ! defined( 'WPINC' ) ) {
 		name="<?php echo esc_attr( $this->block_type->get_field_name() ); ?>"
 		value="<?php echo esc_attr( Tools::encode_json( $file ) ); ?>"
 />
+<?php

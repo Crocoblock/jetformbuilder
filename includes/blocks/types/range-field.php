@@ -170,7 +170,7 @@ class Range_Field extends Base {
 						),
 					),
 				),
-				'css_selector' => array( // margin-top: calc( ({{VALUE}}{{UNIT}} - 3px)/-2 );
+				'css_selector' => array(
 					'{{WRAPPER}}' => self::CSS_VAR_SLIDER_SIZE . ': {{VALUE}}{{UNIT}}',
 				),
 				'attributes'   => array(

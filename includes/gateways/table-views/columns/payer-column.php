@@ -31,6 +31,7 @@ class Payer_Column extends Column_Advanced_Base {
 			);
 		}
 
+		// phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 		return $name ?: __( 'Not attached', 'jet-form-builder' );
 	}
 }

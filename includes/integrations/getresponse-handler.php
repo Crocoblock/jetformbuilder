@@ -24,8 +24,10 @@ class Getresponse_Handler extends Integration_Base {
 	 * @param $api_key
 	 */
 	public function __construct( $api_key ) {
+		parent::__construct( $api_key );
 
 		if ( empty( $api_key ) ) {
+			// phpcs:ignore Universal.CodeAnalysis.ConstructorDestructorReturn.ReturnValueFound
 			return new \WP_Error( 'invalid_api_key' );
 		}
 

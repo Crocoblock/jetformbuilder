@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Classes\Repository;
 
+use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 // If this file is called directly, abort.
@@ -14,8 +15,10 @@ trait Repository_Pattern_Trait {
 
 	use Repository_Aborts_Trait;
 
+	// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 	private $__repository      = array();
 	private $__failed_installs = array();
+	// phpcs:enable PSR2.Classes.PropertyDeclaration.Underscore
 
 	abstract public function rep_instances(): array;
 
@@ -39,7 +42,7 @@ trait Repository_Pattern_Trait {
 				case $this->_rep_abort_and_die_code():
 					_doing_it_wrong(
 						__METHOD__,
-						$exception->getMessage(),
+						esc_html( $exception->getMessage() ),
 						'2.0.0'
 					);
 			}
@@ -135,6 +138,7 @@ trait Repository_Pattern_Trait {
 		return array_keys( $this->__repository );
 	}
 
+	// phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
 	private function _rep_get_item( $slug ) {
 		return $this->__repository[ $slug ];
 	}
@@ -185,9 +189,7 @@ trait Repository_Pattern_Trait {
 	}
 
 	public function rep_get_item_or_die( $slug ) {
-		if ( ! $this->rep_isset_item( $slug ) ) {
-			_doing_it_wrong( __METHOD__, "Undefined item: {$slug}", '2.0.0' );
-		}
+		$this->rep_die_if_undefined( $slug );
 
 		return $this->_rep_get_item( $slug );
 	}
@@ -203,9 +205,7 @@ trait Repository_Pattern_Trait {
 	}
 
 	public function rep_clone_item_or_die( $slug ) {
-		if ( ! $this->rep_isset_item( $slug ) ) {
-			_doing_it_wrong( __METHOD__, "Undefined item: {$slug}", '2.0.0' );
-		}
+		$this->rep_die_if_undefined( $slug );
 
 		return clone $this->_rep_get_item( $slug );
 	}
@@ -217,6 +217,7 @@ trait Repository_Pattern_Trait {
 	 *
 	 * @throws Repository_Exception
 	 */
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 	public function rep_item_check( $item, $slug = '' ) {
 		if ( ! method_exists( $item, 'rep_item_id' ) ) {
 			$class_name = get_class( $item );
@@ -240,6 +241,19 @@ trait Repository_Pattern_Trait {
 		}
 	}
 
+	public function rep_die_if_undefined( $slug ) {
+		if ( $this->rep_isset_item( $slug ) ) {
+			return;
+		}
+
+		$name = static::class;
+
+		wp_die(
+			esc_html( "Undefined item: {$slug} in {$name}" ),
+			'Undefined repository item'
+		);
+	}
+
 	/**
 	 * @param $item_trait
 	 *
@@ -253,6 +267,7 @@ trait Repository_Pattern_Trait {
 		}
 	}
 
+	// phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
 	public function _rep_save_fail( Repository_Exception $exception ) {
 		if ( $this->rep_save_fails() ) {
 			$this->__failed_installs[] = $exception->getMessage();
@@ -262,6 +277,7 @@ trait Repository_Pattern_Trait {
 	/**
 	 * @return array
 	 */
+	// phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
 	public function _rep_get_fails(): array {
 		return $this->__failed_installs;
 	}

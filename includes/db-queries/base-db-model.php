@@ -18,8 +18,10 @@ if ( ! defined( 'WPINC' ) ) {
 abstract class Base_Db_Model {
 
 	const DB_TABLE_PREFIX = 'jet_fb_';
-	const InnoDB          = 'InnoDB';
-	const MyISAM          = 'MyISAM';
+	// phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
+	const InnoDB = 'InnoDB';
+	const MyISAM = 'MyISAM';
+	// phpcs:enable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
 
 	const PRIMARY_ID = 'id';
 	const CREATED_AT = 'created_at';
@@ -149,6 +151,7 @@ abstract class Base_Db_Model {
 	 * @return int[]
 	 * @throws Sql_Exception
 	 */
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 	public function insert_many( $multi_columns, $format = null ) {
 		$inserted_ids = array();
 		foreach ( $multi_columns as $columns ) {

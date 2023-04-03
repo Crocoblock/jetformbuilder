@@ -130,7 +130,7 @@ trait Base_Select_Radio_Check {
 				);
 
 				if ( ! empty( $value_from ) ) {
-					if ( in_array( $value_from, $post_props ) ) {
+					if ( in_array( $value_from, $post_props, true ) ) {
 						$item['value'] = $post->$value_from;
 					} else {
 						$item['value'] = get_post_meta( $post->ID, $value_from, true );
@@ -138,7 +138,7 @@ trait Base_Select_Radio_Check {
 				}
 
 				if ( ! empty( $calc_from ) ) {
-					if ( in_array( $calc_from, $post_props ) ) {
+					if ( in_array( $calc_from, $post_props, true ) ) {
 						$item['calculate'] = $post->$calc_from;
 					} else {
 						$item['calculate'] = get_post_meta( $post->ID, $calc_from, true );
@@ -208,7 +208,7 @@ trait Base_Select_Radio_Check {
 			$generators = Plugin::instance()->form->get_options_generators();
 
 			/** @var \Jet_Form_Builder\Generators\Base $generator_instance */
-			$generator_instance = isset( $generators[ $generator ] ) ? $generators[ $generator ] : false;
+			$generator_instance = $generators[ $generator ] ?? false;
 
 			if ( ! $generator_instance ) {
 				return $options;
@@ -288,7 +288,7 @@ trait Base_Select_Radio_Check {
 			$options = array( $options );
 		}
 
-		if ( in_array( 'true', $options ) || in_array( 'false', $options ) ) {
+		if ( in_array( 'true', $options, true ) || in_array( 'false', $options, true ) ) {
 			return $this->get_checked_options( $options );
 		}
 
@@ -316,7 +316,7 @@ trait Base_Select_Radio_Check {
 
 			$result[] = array(
 				'value' => $values[0],
-				'label' => isset( $values[1] ) ? $values[1] : $values[0],
+				'label' => $values[1] ?? $values[0],
 			);
 
 		}

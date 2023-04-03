@@ -12,9 +12,9 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-?>
-<div
-		class="jet-form-builder-page <?php echo esc_attr( $hidden_class ); ?>"
-		data-page="<?php echo esc_attr( $this->get_current() ); ?>"
-		data-page-offset="<?php echo absint( $this->get_page_offset() ); ?>"
->
+printf(
+	'<div class="jet-form-builder-page %1$s" data-page="%2$s" data-page-offset="%3$s">',
+	esc_attr( $hidden_class ),
+	esc_attr( $this->get_current() ),
+	absint( $this->get_page_offset() )
+);

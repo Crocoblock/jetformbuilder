@@ -4,8 +4,6 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Blocks\Render\Calculated_Field_Render;
-use Jet_Form_Builder\Compatibility\Deprecated;
-use Jet_Form_Builder\Compatibility\Jet_Plugins_Ajax\Jet_Plugins_Ajax;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
@@ -127,9 +125,9 @@ class Calculated_Field extends Base {
 						'
             Set math formula to calculate field value.<br/>
             For example:<br/><br/>
-            %1$FIELD::quantity%*%META::price%<br/><br/>
+            %quantity% * %META::price%<br/><br/>
             Where:<br/>
-            - %2$FIELD::quantity% - macro for form field value. "quantity" - is a field name to get value from<br/>
+            - %quantity% - macro for form field value. "quantity" - is a field name to get value from<br/>
             - %META::price% - macro for current post meta value. "price" - is a meta key to get value from<br/><br/>
         ',
 						'jet-form-builder'

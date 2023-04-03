@@ -24,3 +24,4 @@ $this->add_attribute( 'data-jfb-sync' );
 <div class="jet-form-builder__field-wrap">
 	<input type="number" <?php $this->render_attributes_string(); ?>>
 </div>
+<?php

@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Gateways\Db_Models;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Gateways\Db_Models\Constraints\Payment_Model_Constraint;
 
+// phpcs:disable WordPress.DB.SlowDBQuery
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;

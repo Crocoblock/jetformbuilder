@@ -31,7 +31,7 @@ class Textarea_Field extends Base {
 		);
 	}
 
-	public function _jsm_register_controls() {
+	public function jsm_controls() {
 
 		$this->controls_manager->start_section(
 			'style_controls',

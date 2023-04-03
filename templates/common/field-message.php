@@ -5,7 +5,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-?>
-<div class="jet-form-builder__field-error">
-	<?php echo wp_kses_post( $message_content ); ?>
-</div>
+printf(
+	'<div class="jet-form-builder__field-error">%1$s</div>',
+	wp_kses_post( $message_content )
+);

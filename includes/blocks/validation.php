@@ -240,7 +240,7 @@ class Validation implements Arrayable {
 			array(
 				'value' => self::FORMAT_BROWSER,
 				'label' => __( 'Default', 'jet-form-builder' ),
-				'title' => __( 'Browser native validation' ),
+				'title' => __( 'Browser native validation', 'jet-form-builder' ),
 			),
 			array(
 				'value' => self::FORMAT_ADVANCED,

@@ -49,6 +49,7 @@ class Jet_Appointment {
 		);
 	}
 
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 	public function add_compatibility_script( string $markup, array $parsed, $block ): string {
 		wp_enqueue_script( self::HANDLE );
 

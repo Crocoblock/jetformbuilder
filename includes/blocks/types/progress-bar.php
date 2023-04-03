@@ -37,11 +37,11 @@ class Progress_Bar extends Base {
 		return false;
 	}
 
-	public function after_set_pages( Form_Break $break ) {
+	public function after_set_pages( Form_Break $form_break ) {
 		$context_last_name = 'jet-forms/conditional-block--last_page_name';
 		$last_name         = $this->block_context[ $context_last_name ] ?? '';
 
-		$break->add_progress(
+		$form_break->add_progress(
 			array(
 				'label' => $last_name ?: 'Last Page',
 			)

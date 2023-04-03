@@ -31,6 +31,7 @@ class Get_Token extends Base_Action {
 	}
 
 	public function set_credentials( $client_id, $secret ) {
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
 		$key = base64_encode( $client_id . ':' . $secret );
 
 		return $this->set_basic_auth( $key );

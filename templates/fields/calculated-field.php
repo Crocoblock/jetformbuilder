@@ -61,4 +61,4 @@ $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field-
 		<div class="jet-form-builder__calculated-field-suffix"><?php echo wp_kses_post( $suffix ); ?></div>
 	<?php endif; ?>
 </div>
-<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WhiteSpace.PrecisionAlignment.Found
+<?php

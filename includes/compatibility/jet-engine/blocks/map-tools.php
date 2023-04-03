@@ -44,6 +44,7 @@ class Map_Tools {
 
 	public static function get_help_message(): string {
 		return sprintf(
+			/* translators: %1$s - link to the JetEngine page, %2$s - link to the Map Listing tutorial */
 			__(
 				'The Map Field type requires both the <a href="%1$s">JetEngine</a> (3.0.3) plugin and its <a href="%2$s">Map Listing</a> feature to be activated.',
 				'jet-form-builder'

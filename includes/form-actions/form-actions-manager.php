@@ -14,6 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Form_Actions_Manager {
 
+	// phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 	private $_types = array();
 
 	public function __construct() {

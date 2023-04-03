@@ -200,13 +200,13 @@ class Form_Handler {
 		$fields = $this->core_fields();
 
 		foreach ( $fields as $field_name => $options ) {
+			// phpcs:disable WordPress.Security
 			if ( ! isset( $_POST[ $field_name ] ) ) {
 				continue;
 			}
 
-			// phpcs:disable WordPress
 			Tools::call( $options['callback'] ?? false, $_POST[ $field_name ] );
-			// phpcs:enable WordPress
+			// phpcs:enable WordPress.Security
 		}
 	}
 

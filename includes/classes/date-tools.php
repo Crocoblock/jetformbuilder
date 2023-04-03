@@ -36,6 +36,7 @@ class Date_Tools {
 				break;
 		}
 
+		// phpcs:ignore WordPress.DateTime.RestrictedFunctions
 		return Tools::is_valid_timestamp( $value ) ? date( $format, $value ) : $value;
 	}
 

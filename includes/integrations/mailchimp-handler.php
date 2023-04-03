@@ -29,12 +29,14 @@ class MailChimp_Handler extends Integration_Base {
 		$api_key_data = explode( '-', $api_key );
 
 		if ( empty( $api_key_data[1] ) || 0 !== strpos( $api_key_data[1], 'us' ) ) {
+			// phpcs:ignore Universal.CodeAnalysis.ConstructorDestructorReturn.ReturnValueFound
 			return new \WP_Error( 'invalid_api_key' );
 		}
 
 		$this->api_base_url     = sprintf( 'https://%s.api.mailchimp.com/3.0/', $api_key_data[1] );
 		$this->api_request_args = array(
 			'headers' => array(
+				// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
 				'Authorization' => 'Basic ' . base64_encode( 'user:' . $this->api_key ),
 			),
 		);

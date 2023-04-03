@@ -41,7 +41,6 @@ $editor    = apply_filters(
 );
 $this->add_attribute( 'class', 'jet-form-builder__field wysiwyg-field' );
 $this->add_attribute( 'class', $args['class_name'] );
-$this->add_attribute( 'class', $this->maybe_get_error_class( $args ) );
 $this->add_attribute( 'data-editor', htmlspecialchars( wp_json_encode( $editor ) ) );
 $this->add_attribute( 'data-required', $this->block_type->get_required_val() );
 $this->add_attribute( 'data-report-type', 'html_message' );
@@ -66,8 +65,5 @@ if ( is_rtl() ) {
 		wp_editor( $args['default'], $editor_id, $editor );
 		?>
 	</div>
-	<?php
-	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	echo Tools::esc_template_string( $this->maybe_render_error( $args ) );
-	?>
 </div>
+<?php

@@ -80,4 +80,4 @@ $this->add_attribute( 'data-default-val', $default );
 	</select>
 	<?php echo Tools::esc_template_string( $this->maybe_render_error( $args ) ); ?>
 </div>
-<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

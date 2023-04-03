@@ -210,13 +210,13 @@ class Form_Arguments implements Arrayable {
 	 *
 	 * @return mixed
 	 */
-	public function argument( $property, $default = '' ) {
+	public function argument( $property, $if_empty = '' ) {
 		if ( ! array_key_exists( $property, $this->props ) ) {
-			return $default;
+			return $if_empty;
 		}
 		$value = $this->props[ $property ];
 
-		return ( is_null( $value ) || '' === $value ) ? $default : $value;
+		return ( is_null( $value ) || '' === $value ) ? $if_empty : $value;
 	}
 
 	public function is_use_nonce(): bool {
@@ -274,6 +274,7 @@ class Form_Arguments implements Arrayable {
 	 * @return string
 	 */
 	public function get_submit_type(): string {
+		// phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 		return $this->submit_type ?: 'reload';
 	}
 

@@ -10,6 +10,9 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Wp_Cli_Manager {
 
+	/**
+	 * @throws \Exception
+	 */
 	public static function register() {
 		if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
 			return;

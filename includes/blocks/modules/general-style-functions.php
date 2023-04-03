@@ -13,7 +13,7 @@ trait General_Style_Functions {
 	private $namespace = 'jet-form-builder';
 
 	public function maybe_add_controls_type( $type ) {
-		if ( ! in_array( $type, $this->general_style_unregister() ) ) {
+		if ( ! in_array( $type, $this->general_style_unregister(), true ) ) {
 
 			if ( is_callable( $this->general_controls_callbacks()[ $type ] ) ) {
 				$this->general_controls_callbacks()[ $type ]();
@@ -112,6 +112,8 @@ trait General_Style_Functions {
 
 			return $control;
 		}
+
+		return $control;
 	}
 
 }

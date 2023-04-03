@@ -23,6 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Request_Handler {
 
+	// phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 	public $_fields        = array();
 	private $request_types = array();
 	private $request_attrs = array();
@@ -50,17 +51,13 @@ class Request_Handler {
 
 		jet_fb_action_handler()->add_request( $request );
 
-		if ( Error_Handler::instance()->empty_errors() ) {
-			return;
-		}
-
 		jet_fb_events()->execute( Bad_Request_Event::class );
 
-		throw new Request_Exception(
+		/*throw new Request_Exception(
 			'validation_failed',
 			Error_Handler::instance()->errors(),
 			$request
-		);
+		);*/
 	}
 
 	private function get_raw_request(): array {

@@ -29,6 +29,7 @@ class Image_Alt_By_Id_Filter extends Base_Multiple_Filter {
 			return $item;
 		}
 
+		// phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 		return $attachment->post_excerpt ?: $attachment->post_title;
 	}
 

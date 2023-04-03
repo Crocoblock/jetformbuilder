@@ -1,6 +1,8 @@
 <?php
 /**
  * Start from template
+ *
+ * @var \Jet_Form_Builder\Blocks\Render\Base $this
  */
 
 // If this file is called directly, abort.
@@ -8,5 +10,5 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-?>
-<form <?php $this->render_attributes_string(); ?>>
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+printf( '<form %1$s>', $this->get_attributes_string() );

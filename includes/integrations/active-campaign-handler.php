@@ -17,8 +17,10 @@ class Active_Campaign_Handler extends Integration_Base {
 	 * @param $settings
 	 */
 	public function __construct( $settings ) {
+		parent::__construct( $settings );
 
 		if ( empty( $settings['api_key'] ) ) {
+			// phpcs:ignore Universal.CodeAnalysis.ConstructorDestructorReturn.ReturnValueFound
 			return new \WP_Error( 'invalid_api_key' );
 		}
 

@@ -41,4 +41,4 @@ if ( ! empty( $args['maxlength'] ) ) {
 <div class="jet-form-builder__field-wrap">
 	<textarea <?php $this->render_attributes_string(); ?>><?php echo $this->has_attribute( 'data-value' ) ? '' : esc_textarea( $args['default'] ); ?></textarea>
 </div>
-<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

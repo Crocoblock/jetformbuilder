@@ -16,6 +16,7 @@ class Export_Action extends Base_Form_Action {
 
 	use Get_Form_Data;
 
+	// phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 	private $_file;
 
 	/**

@@ -28,8 +28,8 @@ class Email_Contact_Property extends Base_Object_Property {
 	/**
 	 * @param Abstract_Modifier $modifier
 	 *
-	 * @return void|null
-	 * @throws Action_Exception|Silence_Exception
+	 * @return null
+	 * @throws Silence_Exception|Action_Exception
 	 */
 	public function get_value( Abstract_Modifier $modifier ) {
 		if ( ! empty( $this->value ) ) {

@@ -64,6 +64,7 @@ class Msg_Router {
 			return true;
 		}
 
+		// phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 		return $this->set_form_id( jet_form_builder()->form_handler->form_id ?: false );
 	}
 

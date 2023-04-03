@@ -40,4 +40,4 @@ if ( ! Regexp_Tools::has_macro( $this->args['field_value'] ) ) {
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
 <input type="hidden" <?php $this->render_attributes_string(); ?>>
-<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

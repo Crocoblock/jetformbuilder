@@ -40,7 +40,8 @@ class Preset_Source_User extends Base_Source {
 			return $this->get_queried_user();
 		}
 
-		$var     = ! empty( $this->preset_data['query_var'] ) ? $this->preset_data['query_var'] : 'user_id';
+		$var = ! empty( $this->preset_data['query_var'] ) ? $this->preset_data['query_var'] : 'user_id';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$user_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? absint( $_REQUEST[ $var ] ) : false;
 
 		return get_user_by( 'ID', $user_id );

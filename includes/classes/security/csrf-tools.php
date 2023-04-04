@@ -65,7 +65,7 @@ class Csrf_Tools {
 		Csrf_Token_Model::clear();
 
 		if ( ! static::verify( $this->token, $this->client ) ) {
-			throw ( new Request_Exception( 'Invalid token' ) )->dynamic_error();
+			throw new Request_Exception( 'csrf_failed' );
 		}
 
 		// delete verified token only on success

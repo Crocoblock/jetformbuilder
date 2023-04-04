@@ -19,6 +19,23 @@ class Save_Record extends Base {
 
 	const ID = 'save_record';
 
+	const SPAM_STATUSES = array(
+		'captcha_failed',
+		'nonce_failed',
+		'csrf_failed',
+	);
+
+	private $spam_statuses;
+
+	public function __construct() {
+		parent::__construct();
+
+		$this->spam_statuses = apply_filters(
+			'jet-form-builder/action/save-record/spam-statuses',
+			self::SPAM_STATUSES
+		);
+	}
+
 	/**
 	 * @return string
 	 */
@@ -100,6 +117,13 @@ class Save_Record extends Base {
 	 * @throws Sql_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
+		$status    = jet_fb_handler()->response_args['status'] ?? '';
+		$save_spam = $this->settings['save_spam'] ?? false;
+
+		if ( ! $save_spam && in_array( $status, $this->spam_statuses, true ) ) {
+			return;
+		}
+
 		$record_id = ( new Form_Record\Controller() )
 			->set_settings(
 				array(
@@ -118,6 +142,10 @@ class Save_Record extends Base {
 	public function editor_labels() {
 		return array(
 			'save_user_data' => __( 'Store the IP address and other request headers', 'jet-form-builder' ),
+			'save_spam'      => __(
+				'Keep form records that have not passed spam or captcha protection.',
+				'jet-form-builder'
+			),
 		);
 	}
 

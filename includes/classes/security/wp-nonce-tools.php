@@ -44,7 +44,7 @@ class Wp_Nonce_Tools {
 		$nonce = $request[ self::KEY ] ?? '';
 
 		if ( ! self::verify( $nonce ) ) {
-			throw ( new Request_Exception( 'Invalid nonce.' ) )->dynamic_error();
+			throw new Request_Exception( 'nonce_failed' );
 		}
 
 		return $request;

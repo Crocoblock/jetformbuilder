@@ -8,6 +8,7 @@ import limitAddon from './limit-addon';
 import scheduleAddon from './schedule-addon';
 import validation from './validation';
 import './captcha-providers';
+import './rating-popover';
 
 const {
 	      applyFilters,

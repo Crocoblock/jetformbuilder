@@ -6,6 +6,7 @@
 			<FormFilter/>
 		</Portal>
 		<Portal to="scope-default/buttons">
+			<ExportEntriesButton/>
 			<ClearFiltersButton/>
 		</Portal>
 		<ActionsWithFilters/>
@@ -25,6 +26,7 @@ const {
 	      ActionsWithFilters,
 	      ClearFiltersButton,
 	      Portal,
+	      ExportEntriesButton,
       } = JetFBComponents;
 
 const {
@@ -57,6 +59,7 @@ export default {
 		Portal,
 		FormFilter,
 		ClearFiltersButton,
+		ExportEntriesButton,
 	},
 	mixins: [
 		i18n,

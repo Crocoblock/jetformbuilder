@@ -2,13 +2,9 @@
 	<div :class="wrapperClass" v-if="items.length">
 		<ChooseAction/>
 		<template v-if="hasFilters">
-			<PortalTarget :name="scopedName( 'filters' )">
-				Hello filters
-			</PortalTarget>
+			<PortalTarget :name="scopedName( 'filters' )"/>
 			<div class="wrapper-buttons">
-				<PortalTarget :name="scopedName( 'buttons' )">
-					Hello buttons
-				</PortalTarget>
+				<PortalTarget :name="scopedName( 'buttons' )"/>
 			</div>
 		</template>
 	</div>

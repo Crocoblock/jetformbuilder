@@ -27,6 +27,11 @@ const getters = {
 	hasFilters: state => {
 		return 0 < Object.keys( state.filters ).length;
 	},
+	hasSelectedFilters: state => {
+		return Object.values( state.filters ).some(
+			( { selected } ) => !!selected,
+		);
+	},
 	apiOptions: state => {
 		return state.apiOptions;
 	},

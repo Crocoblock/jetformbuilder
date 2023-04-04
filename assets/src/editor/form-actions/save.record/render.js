@@ -2,21 +2,11 @@ const {
 	      ToggleControl,
       } = wp.components;
 
-const {
-	      useEffect,
-      } = wp.element;
-
 function SaveRecordRender( {
 	settings,
 	label,
 	onChangeSettingObj,
 } ) {
-
-	useEffect( () => {
-		if ( 'undefined' === typeof settings.save_spam ) {
-			onChangeSettingObj( { save_spam: false } );
-		}
-	}, [] );
 
 	return <>
 		<ToggleControl

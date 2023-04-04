@@ -14,6 +14,10 @@ class Wp_Nonce_Tools {
 			'jet-form-builder/request-handler/request',
 			array( static::class, 'handle_request' )
 		);
+		add_filter(
+			'jet-form-builder/message-types',
+			array( static::class, 'handle_messages' )
+		);
 	}
 
 	public static function get_nonce_id(): string {
@@ -48,6 +52,15 @@ class Wp_Nonce_Tools {
 		}
 
 		return $request;
+	}
+
+	public static function handle_messages( array $messages ): array {
+		$messages['nonce_failed'] = array(
+			'label' => __( 'WP nonce validation failed', 'jet-form-builder' ),
+			'value' => __( 'Invalid nonce', 'jet-form-builder' ),
+		);
+
+		return $messages;
 	}
 
 }

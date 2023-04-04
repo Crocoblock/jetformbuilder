@@ -1,11 +1,16 @@
+
+function getCalculatedWrapper( node ) {
+	return node.closest( '.jet-form-builder__calculated-field' );
+}
+
 /**
  * @param node {HTMLElement}
  * @returns {boolean}
  */
 function isCalculated( node ) {
 	return !!(
-		node?.parentElement?.dataset?.formula?.length ?? ''
+		getCalculatedWrapper( node )?.dataset?.formula?.length ?? ''
 	);
 }
 
-export { isCalculated };
+export { isCalculated, getCalculatedWrapper };

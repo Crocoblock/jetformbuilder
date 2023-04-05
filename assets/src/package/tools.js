@@ -176,4 +176,8 @@ export function convertObjectToOptionsList( entries = [], {
 	return usePlaceholder ? [ placeholder, ...options ] : options;
 }
 
+export function assetUrl( url = '' ) {
+	return JetFormEditorData.assetsUrl + url;
+}
+
 export default Tools;

@@ -12,7 +12,9 @@ import Tools, {
 	listen,
 	maybeCyrToLatin,
 	versionCompare,
-	convertObjectToOptionsList, column,
+	convertObjectToOptionsList,
+	column,
+	assetUrl,
 } from './tools';
 
 import getAvailableFields from './blocks/helpers/getAvailableFields';
@@ -297,6 +299,7 @@ window.JetFBActions = {
 	getCurrentInnerBlocks,
 	humanReadableCondition,
 	convertFlow,
+	assetUrl,
 };
 
 // JFBHooks

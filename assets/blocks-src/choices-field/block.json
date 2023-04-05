@@ -48,6 +48,10 @@
 			"type": "object",
 			"default": {}
 		},
+		"allow_multiple": {
+			"type": "boolean",
+			"default": false
+		},
 		"label": {
 			"type": "string",
 			"default": "",

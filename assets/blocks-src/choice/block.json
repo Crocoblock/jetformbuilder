@@ -23,6 +23,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"calc_value": {
+			"type": "string",
+			"default": ""
+		},
 		"class_name": {
 			"type": "string",
 			"default": ""

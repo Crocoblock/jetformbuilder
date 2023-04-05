@@ -1,12 +1,15 @@
 import { name } from './index';
+import Placeholder from './placeholder';
 
 const { __ } = wp.i18n;
 
-const {
-	      InspectorControls,
-	      useBlockProps,
-	      useInnerBlocksProps,
-      } = wp.blockEditor;
+let {
+	    InspectorControls,
+	    useBlockProps,
+	    useInnerBlocksProps,
+	    BlockControls,
+    } = wp.blockEditor;
+
 
 const {
 	      ToolBarFields,
@@ -38,12 +41,6 @@ const {
 
 const ALLOWED_BLOCKS = [ 'jet-forms/choice' ];
 
-const SelectedPlaceholder = (
-	<li className="jet-form-builder-choice--item">
-		{ __( 'Click plus to add new choice', 'jet-form-builder' ) }
-	</li>
-);
-
 const DefaultPlaceHolder = (
 	<>
 		<li className="jet-form-builder-choice--item">
@@ -65,7 +62,7 @@ export default function EditAdvancedChoicesField( props ) {
 	const blockProps       = useBlockProps();
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		allowedBlocks: ALLOWED_BLOCKS,
-		placeholder: isSelected ? SelectedPlaceholder : DefaultPlaceHolder,
+		placeholder: isSelected ? Placeholder : DefaultPlaceHolder,
 	} );
 
 	return <>

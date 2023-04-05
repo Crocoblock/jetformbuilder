@@ -409,6 +409,7 @@ class Editor {
 						'scheduleForm'   => $utm->set_campaign( 'schedule-pricing' )->add_query( $pricing ),
 					),
 					'isActivePro'             => jet_form_builder()->addons_manager->is_active(),
+					'assetsUrl'               => jet_form_builder()->plugin_url( 'assets/' ),
 				)
 			)
 		);

@@ -38,6 +38,8 @@ class Form_Builder_Blocks_Repository extends Blocks_Repository_Base {
 				new Types\Progress_Bar(),
 				new Types\Form_Break_Start(),
 				new Types\Captcha_Container(),
+				new Types\Choices_Field(),
+				new Types\Choice(),
 			)
 		);
 	}

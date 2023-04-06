@@ -20,10 +20,12 @@ const {
 export default function EditAdvancedChoice( props ) {
 	const { attributes, setAttributes } = props;
 
-	const blockProps       = useBlockProps();
+	const blockProps       = useBlockProps( {
+		className: 'jet-form-builder-choice--item',
+	} );
 	const innerBlocksProps = useInnerBlocksProps( blockProps );
 
 	return <>
-		<div { ...innerBlocksProps }/>
+		<li { ...innerBlocksProps }/>
 	</>;
 }

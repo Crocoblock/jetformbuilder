@@ -30,6 +30,7 @@ use Jet_Form_Builder\Addons\Manager as AddonsManager;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Wp_Cli\Wp_Cli_Manager;
 use Jet_Form_Builder\Migrations;
+use Jet_Form_Builder\Compatibility\Wp_Experiments\Wp_Experiments;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -64,6 +65,7 @@ class Plugin {
 	public $admin_bar;
 	public $msg_router;
 	public $honeypot;
+	public $wp_experiments;
 
 	public static $instance;
 
@@ -127,6 +129,7 @@ class Plugin {
 		$this->captcha        = new Forms_Captcha();
 		$this->addons_manager = new AddonsManager();
 		$this->honeypot       = new Honeypot();
+		$this->wp_experiments = new Wp_Experiments();
 
 		/**
 		 * Modules & components

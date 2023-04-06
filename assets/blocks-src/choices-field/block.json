@@ -19,10 +19,17 @@
 				"type": "flex"
 			}
 		},
-		"color": {
-			"background": true,
-			"gradients": true,
-			"text": true
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true,
+			"__experimentalDefaultControls": {
+				"color": true,
+				"radius": true,
+				"style": true,
+				"width": true
+			}
 		},
 		"spacing": {
 			"blockGap": [
@@ -38,6 +45,11 @@
 				"vh",
 				"vw"
 			]
+		},
+		"color": {
+			"background": true,
+			"gradients": true,
+			"text": true
 		}
 	},
 	"title": "Advanced Choices Field",

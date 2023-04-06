@@ -6,6 +6,16 @@ const {
 	      assetUrl,
       } = JetFBActions;
 
+const imageBlock = ( alt ) => [
+	'core/image',
+	{
+		alt,
+		url: assetUrl( 'img/image-placeholder.jpg' ),
+		width: 188,
+		height: 188,
+	},
+];
+
 const variations = [
 	{
 		name: 'simple-buttons',
@@ -19,39 +29,39 @@ const variations = [
 			[
 				'jet-forms/choice',
 				{
-					value: 'The Timeless Depths of Yesterday\'s Memories',
+					value: 'Book Name #1',
 					calc_value: '100',
 				},
 				[
 					[
 						'core/paragraph',
-						{ content: 'The Timeless Depths of Yesterday\'s Memories' },
+						{ content: 'Book Name #1' },
 					],
 				],
 			],
 			[
 				'jet-forms/choice',
 				{
-					value: 'Echoes of the Forgotten Woods',
+					value: 'Book Name #2',
 					calc_value: '200',
 				},
 				[
 					[
 						'core/paragraph',
-						{ content: 'Echoes of the Forgotten Woods' },
+						{ content: 'Book Name #2' },
 					],
 				],
 			],
 			[
 				'jet-forms/choice',
 				{
-					value: 'Whispers in the Attic of Secrets',
+					value: 'Book Name #3',
 					calc_value: '200',
 				},
 				[
 					[
 						'core/paragraph',
-						{ content: 'Whispers in the Attic of Secrets' },
+						{ content: 'Book Name #3' },
 					],
 				],
 			],
@@ -70,49 +80,31 @@ const variations = [
 			[
 				'jet-forms/choice',
 				{
-					value: 'The Timeless Depths of Yesterday\'s Memories',
+					value: 'Book Name #1',
 					calc_value: '100',
 				},
 				[
-					[
-						'core/image',
-						{
-							url: assetUrl( 'img/image-placeholder.png' ),
-							alt: 'The Timeless Depths of Yesterday\'s Memories',
-						},
-					],
+					imageBlock( 'Book Name #1' ),
 				],
 			],
 			[
 				'jet-forms/choice',
 				{
-					value: 'Echoes of the Forgotten Woods',
+					value: 'Book Name #2',
 					calc_value: '200',
 				},
 				[
-					[
-						'core/image',
-						{
-							url: assetUrl( 'img/image-placeholder.png' ),
-							alt: 'Echoes of the Forgotten Woods',
-						},
-					],
+					imageBlock( 'Book Name #2' ),
 				],
 			],
 			[
 				'jet-forms/choice',
 				{
-					value: 'Whispers in the Attic of Secrets',
+					value: 'Book Name #3',
 					calc_value: '200',
 				},
 				[
-					[
-						'core/image',
-						{
-							url: assetUrl( 'img/image-placeholder.png' ),
-							alt: 'Whispers in the Attic of Secrets',
-						},
-					],
+					imageBlock( 'Book Name #3' ),
 				],
 			],
 		],
@@ -130,60 +122,42 @@ const variations = [
 			[
 				'jet-forms/choice',
 				{
-					value: 'The Timeless Depths of Yesterday\'s Memories',
+					value: 'Book Name #1',
 					calc_value: '100',
 				},
 				[
-					[
-						'core/image',
-						{
-							url: assetUrl( 'img/image-placeholder.png' ),
-							alt: 'The Timeless Depths of Yesterday\'s Memories',
-						},
-					],
+					imageBlock( 'Book Name #1' ),
 					[
 						'core/paragraph',
-						{ content: 'The Timeless Depths of Yesterday\'s Memories' },
+						{ content: 'Book Name #1' },
 					],
 				],
 			],
 			[
 				'jet-forms/choice',
 				{
-					value: 'Echoes of the Forgotten Woods',
+					value: 'Book Name #2',
 					calc_value: '200',
 				},
 				[
-					[
-						'core/image',
-						{
-							url: assetUrl( 'img/image-placeholder.png' ),
-							alt: 'Echoes of the Forgotten Woods',
-						},
-					],
+					imageBlock( 'Book Name #2' ),
 					[
 						'core/paragraph',
-						{ content: 'Echoes of the Forgotten Woods' },
+						{ content: 'Book Name #2' },
 					],
 				],
 			],
 			[
 				'jet-forms/choice',
 				{
-					value: 'Whispers in the Attic of Secrets',
+					value: 'Book Name #3',
 					calc_value: '200',
 				},
 				[
-					[
-						'core/image',
-						{
-							url: assetUrl( 'img/image-placeholder.png' ),
-							alt: 'Whispers in the Attic of Secrets',
-						},
-					],
+					imageBlock( 'Book Name #3' ),
 					[
 						'core/paragraph',
-						{ content: 'Whispers in the Attic of Secrets' },
+						{ content: 'Book Name #3' },
 					],
 				],
 			],

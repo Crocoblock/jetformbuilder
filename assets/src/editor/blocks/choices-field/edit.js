@@ -10,7 +10,6 @@ let {
 	    BlockControls,
     } = wp.blockEditor;
 
-
 const {
 	      ToolBarFields,
 	      BlockLabel,
@@ -59,10 +58,12 @@ export default function EditAdvancedChoicesField( props ) {
 		      isSelected,
 	      } = props;
 
-	const blockProps       = useBlockProps();
+	const blockProps       = useBlockProps( {
+		className: 'jet-form-builder-choice',
+	} );
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		allowedBlocks: ALLOWED_BLOCKS,
-		placeholder: isSelected ? Placeholder : DefaultPlaceHolder,
+		placeholder: isSelected ? <Placeholder/> : DefaultPlaceHolder,
 	} );
 
 	return <>

@@ -45,8 +45,6 @@ function Placeholder() {
 		[],
 	);
 
-	debugger;
-
 	return <BlockVariationPicker
 		allowSkip
 		label={ __( 'Select choices layout', 'jet-form-builder' ) }

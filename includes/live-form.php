@@ -41,6 +41,7 @@ class Live_Form {
 
 	// for progress
 	public $form_break;
+	public $field_names = array();
 
 	/**
 	 * Create form instance
@@ -79,6 +80,10 @@ class Live_Form {
 	public function setup_fields(): array {
 		$this->blocks = $this->get_form_break()->set_pages(
 			Block_Helper::get_blocks_by_post( $this->form_id )
+		);
+
+		jet_form_builder()->regexp->set_field_names(
+			Block_Helper::get_form_field_names( $this->blocks )
 		);
 
 		return $this->blocks;

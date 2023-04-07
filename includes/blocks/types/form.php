@@ -484,6 +484,7 @@ class Form extends Base {
 			has_shortcode( $post->post_content, 'jet_fb_form' ) ||
 			( function_exists( 'has_block' ) && has_block( 'jet-forms/form-block' ) )
 		) {
+			jet_form_builder()->blocks->enqueue_frontend_styles();
 			Builder_Helper::enqueue_global_styles();
 		}
 	}

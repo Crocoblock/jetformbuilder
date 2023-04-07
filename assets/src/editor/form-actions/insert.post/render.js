@@ -2,8 +2,6 @@ import JetDefaultMetaControl from '../../blocks/controls/default-meta';
 import PostPropertySelect from '../../components/post.property.select';
 
 const {
-	      addAction,
-	      getFormFieldsBlocks,
 	      convertListToFieldsMap,
       } = JetFBActions;
 const {
@@ -39,7 +37,15 @@ const modifiers = applyFilters(
 	[
 		{
 			id: 'product',
-			isSupported: settings => 'product' === settings.post_type,
+			/**
+			 * @since 3.0.4 Make sure WooCommerce is installed
+			 *
+			 * @param settings
+			 * @returns {*|boolean}
+			 */
+			isSupported: settings => (
+				JetFormEditorData.wooExist && 'product' === settings.post_type
+			),
 		},
 		{
 			id: 'all',

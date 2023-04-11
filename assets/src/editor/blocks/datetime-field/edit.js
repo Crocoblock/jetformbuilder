@@ -27,7 +27,6 @@ const {
 
 const {
 	      TextControl,
-	      TextareaControl,
 	      ToggleControl,
 	      PanelBody,
       } = wp.components;
@@ -78,8 +77,7 @@ export default function DateTimeEdit( props ) {
 							onChangePreset={ min => setAttributes( { min } ) }
 							onChangeMacros={ updateMin }
 						>
-							{ ( { instanceId } ) => <TextareaControl
-								rows={ 1 }
+							{ ( { instanceId } ) => <TextControl
 								id={ instanceId }
 								ref={ minInput }
 								value={ attributes.min }
@@ -96,8 +94,7 @@ export default function DateTimeEdit( props ) {
 							onChangePreset={ max => setAttributes( { max } ) }
 							onChangeMacros={ updateMax }
 						>
-							{ ( { instanceId } ) => <TextareaControl
-								rows={ 1 }
+							{ ( { instanceId } ) => <TextControl
 								id={ instanceId }
 								ref={ maxInput }
 								value={ attributes.max }

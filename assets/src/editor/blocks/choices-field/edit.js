@@ -8,21 +8,26 @@ let {
 	    useBlockProps,
 	    useInnerBlocksProps,
 	    BlockControls,
+	    __experimentalColorGradientSettingsDropdown,
+	    ColorGradientSettingsDropdown,
+	    __experimentalUseMultipleOriginColorsAndGradients,
+	    useMultipleOriginColorsAndGradients,
     } = wp.blockEditor;
+
+ColorGradientSettingsDropdown = (
+	ColorGradientSettingsDropdown || __experimentalColorGradientSettingsDropdown
+);
+
+useMultipleOriginColorsAndGradients = (
+	useMultipleOriginColorsAndGradients ||
+	__experimentalUseMultipleOriginColorsAndGradients
+);
 
 const {
 	      ToolBarFields,
 	      BlockLabel,
 	      BlockName,
 	      BlockDescription,
-	      BlockAdvancedValue,
-	      AdvancedFields,
-	      FieldWrapper,
-	      FieldSettingsWrapper,
-	      AdvancedInspectorControl,
-	      ClientSideMacros,
-	      ValidationToggleGroup,
-	      ValidationBlockMessage,
       } = JetFBComponents;
 
 const {
@@ -37,6 +42,10 @@ const {
 const {
 	      PanelBody,
       } = wp.components;
+
+const {
+	      useStyle,
+      } = JetFBHooks;
 
 const ALLOWED_BLOCKS = [ 'jet-forms/choice' ];
 
@@ -66,6 +75,21 @@ export default function EditAdvancedChoicesField( props ) {
 		placeholder: isSelected ? <Placeholder/> : DefaultPlaceHolder,
 	} );
 
+	const [ itemBackGround, setItemBackGround ] = useStyle( [
+		'.jet-form-builder-choice--item',
+		'color',
+		'background',
+	] );
+
+	const [ checkedBackGround, setCheckedBackGround ] = useStyle( [
+		'.jet-form-builder-choice--item',
+		'.is-checked',
+		'color',
+		'background',
+	] );
+
+	const colorGradientSettings = useMultipleOriginColorsAndGradients();
+
 	return <>
 		<ToolBarFields/>
 		<InspectorControls>
@@ -74,6 +98,30 @@ export default function EditAdvancedChoicesField( props ) {
 				<BlockName/>
 				<BlockDescription/>
 			</PanelBody>
+		</InspectorControls>
+		<InspectorControls group={ 'color' }>
+			<ColorGradientSettingsDropdown
+				__experimentalIsRenderedInSidebar
+				settings={ [
+					{
+						colorValue: itemBackGround,
+						label: __( 'Choice Background', 'jet-form-builder' ),
+						onColorChange: setItemBackGround,
+						resetAllFilter: () => setItemBackGround(),
+					},
+					{
+						colorValue: checkedBackGround,
+						label: __( 'Checked Item Background' ),
+						onColorChange: setCheckedBackGround,
+						resetAllFilter: () => setCheckedBackGround(),
+					},
+
+				] }
+				panelId={ blockProps[ 'data-block' ] }
+				{ ...colorGradientSettings }
+				gradients={ [] }
+				disableCustomGradients={ true }
+			/>
 		</InspectorControls>
 		<ul { ...innerBlocksProps } />
 	</>;

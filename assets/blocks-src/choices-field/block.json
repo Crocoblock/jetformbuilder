@@ -9,8 +9,13 @@
 	],
 	"textdomain": "jet-form-builder",
 	"supports": {
-		"customClassName": false,
 		"html": false,
+		"__experimentalStyle": {
+			"spacing": {
+				"padding": "0px",
+				"margin": "0px"
+			}
+		},
 		"__experimentalLayout": {
 			"allowSwitching": false,
 			"allowInheriting": false,
@@ -93,15 +98,10 @@
 		"visibility": {
 			"type": "string",
 			"default": ""
-		},
-		"class_name": {
-			"type": "string",
-			"default": ""
-		},
-		"className": {
-			"type": "string",
-			"default": ""
 		}
+	},
+	"providesContext": {
+		"jet-forms/advanced-choice-style": "style"
 	},
 	"usesContext": [
 		"jet-forms/repeater-field--name"

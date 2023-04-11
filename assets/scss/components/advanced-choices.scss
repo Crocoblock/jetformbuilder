@@ -1,9 +1,9 @@
 .jet-form-builder-choice {
-	padding: 0;
-	margin: 0;
-
 	&--item {
 		display: block;
-		padding: 1em;
+
+		&.is-checked {
+			background-color: var(--checked-color-background, var(--wp--preset--color--cyan-bluish-gray)) !important;
+		}
 	}
 }

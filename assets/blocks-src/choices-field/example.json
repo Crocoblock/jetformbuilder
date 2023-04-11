@@ -1,0 +1,39 @@
+{
+	"attributes": {
+		"style": {
+			"color": {
+				"background": "#somecolor",
+				"text": "#somecolor"
+			},
+			"border": {
+				"width": "1px",
+				"style": "solid",
+				"color": "#somecolor"
+			},
+			".jet-form-builder-choice--item": {
+				"color": {
+					"background": "#default-color",
+					"text": "#default-color"
+				},
+				"&.is-checked": {
+					"color": {
+						"background": "#checked-color",
+						"text": "#checked-color"
+					},
+					":hover": {
+						"color": {
+							"background": "#checked-with-hover-color",
+							"text": "#checked-with-hover-color"
+						}
+					}
+				},
+				":hover": {
+					"color": {
+						"background": "#checked-color",
+						"text": "#checked-color"
+					}
+				}
+			}
+		}
+	}
+}

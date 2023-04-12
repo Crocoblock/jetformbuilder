@@ -44,4 +44,29 @@ class Regexp_Tools {
 		return $matches[0];
 	}
 
+	/**
+	 * @param string $content
+	 *
+	 * @return array
+	 */
+	public function get_form_ids_from_shortcode( string $content ): array {
+		$matches = array();
+
+		preg_match_all( '/\[jet_fb_form.*?form_id="(\d+)"/', $content, $matches );
+
+		return $matches[1] ?? array();
+	}
+
+	public function get_form_ids_from_block( string $content ): array {
+		$matches = array();
+
+		preg_match_all(
+			'/<!-- wp:jet\-forms\/form\-block.*?"form_id":(\d+)/',
+			$content,
+			$matches
+		);
+
+		return $matches[1] ?? array();
+	}
+
 }

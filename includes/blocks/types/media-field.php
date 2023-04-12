@@ -70,7 +70,10 @@ class Media_Field extends Base {
 			return explode( ',', str_replace( ', ', ',', $preset ) );
 		}
 
-		return isset( $preset['id'] ) ? array( $preset ) : $preset;
+		// is it multiple media
+		$response = isset( $preset['id'] ) ? array( $preset ) : $preset;
+
+		return is_array( $response ) ? $response : array( $response );
 	}
 
 	public function expected_preset_type(): array {

@@ -24,6 +24,8 @@ class Media_Field_Parser extends Field_Data_Parser {
 		if ( empty( $this->context->get_file() ) ) {
 			return false;
 		}
+		do_action( 'jet-form-builder/media-field/before-upload', $this );
+
 		$uploader = ( new File_Uploader() )->set_context( $this->context );
 
 		try {
@@ -46,11 +48,11 @@ class Media_Field_Parser extends Field_Data_Parser {
 	}
 
 	protected function get_value_format(): string {
-		if ( empty( $this->settings['insert_attachment'] ) ) {
+		if ( empty( $this->get_context()->get_settings()['insert_attachment'] ) ) {
 			return 'url';
 		}
 
-		return $this->settings['value_format'] ?? 'url';
+		return $this->get_context()->get_settings()['value_format'] ?? 'url';
 	}
 
 }

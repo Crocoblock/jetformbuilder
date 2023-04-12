@@ -12,9 +12,21 @@
 		"html": false,
 		"__experimentalStyle": {
 			"spacing": {
-				"padding": "0px",
-				"margin": "0px"
+				"padding": "0px"
 			}
+		},
+		"jetStyle": {
+			"--choice-bg": [
+				".jet-form-builder-choice--item",
+				"color",
+				"background"
+			],
+			"--choice-checked-bg": [
+				".jet-form-builder-choice--item",
+				".is-checked",
+				"color",
+				"background"
+			]
 		},
 		"__experimentalLayout": {
 			"allowSwitching": false,

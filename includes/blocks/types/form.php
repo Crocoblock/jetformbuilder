@@ -502,8 +502,6 @@ class Form extends Base {
 				$form_ids,
 				jet_form_builder()->regexp->get_form_ids_from_shortcode( $post->post_content )
 			);
-
-			$form_ids = array_unique( $form_ids );
 		}
 
 		foreach ( $form_ids as $form_id ) {

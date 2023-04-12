@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Actions\Conditions;
 
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Condition_Silence_Exception;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
 
@@ -259,7 +260,10 @@ class Condition_Instance {
 			case 'one_of':
 				return $this->check_one_of();
 			case 'contain':
-				return ( strpos( $this->get_field_value(), $this->get_compare() ) !== false );
+				$field   = Tools::to_string( $this->get_field_value() );
+				$compare = Tools::to_string( $this->get_compare() );
+
+				return ( strpos( $field, $compare ) !== false );
 			default:
 				return apply_filters( 'jet-form-builder/actions/process-condition', false, $this );
 		}

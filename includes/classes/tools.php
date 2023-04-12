@@ -592,4 +592,22 @@ class Tools {
 		return wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
 	}
 
+	/**
+	 * @param mixed $value
+	 */
+	public static function to_string( $value ): string {
+		if ( is_array( $value ) ) {
+			return implode(
+				',',
+				array_map( array( self::class, 'to_string' ), $value )
+			);
+		}
+
+		if ( is_object( $value ) && ! method_exists( $value, '__toString' ) ) {
+			return '';
+		}
+
+		return (string) $value;
+	}
+
 }

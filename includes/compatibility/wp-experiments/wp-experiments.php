@@ -88,6 +88,7 @@ class Wp_Experiments {
 					$css_var,
 					_wp_array_get( $root_styles, $path_items, '' )
 				);
+				break;
 			}
 		}
 

@@ -392,7 +392,7 @@ class Editor {
 			self::EDITOR_PACKAGE_HANDLE,
 			'JetFormEditorData',
 			apply_filters(
-				'jet-form-builder/form-builder/config',
+				'jet-form-builder/editor/config',
 				array(
 					'presetConfig'            => $this->get_preset_config(),
 					'messagesDefault'         => $messages_meta->messages(),

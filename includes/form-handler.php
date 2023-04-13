@@ -72,6 +72,9 @@ class Form_Handler {
 		$this->request_handler = new Request_Handler();
 		$this->csrf            = new Csrf_Tools();
 		$this->parser          = new Macros_Parser();
+
+		Wp_Nonce_Tools::register();
+		$this->csrf->register();
 	}
 
 	public function call_form() {
@@ -80,9 +83,6 @@ class Form_Handler {
 		} catch ( Not_Router_Request $exception ) {
 			return;
 		}
-
-		Wp_Nonce_Tools::register();
-		$this->csrf->register();
 
 		add_filter( 'jet-form-builder/form-handler/form-data', array( $this, 'merge_request' ), 0 );
 

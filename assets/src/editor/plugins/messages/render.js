@@ -1,12 +1,6 @@
-
 const {
 	      Children,
 	      cloneElement,
-      } = wp.element;
-
-const {
-	      useState,
-	      useEffect,
       } = wp.element;
 
 const {

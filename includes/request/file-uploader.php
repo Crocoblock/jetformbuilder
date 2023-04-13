@@ -229,7 +229,7 @@ class File_Uploader {
 	public function is_insert_attachment(): bool {
 		// Prevent non logged-in users insert attachment
 		if ( ! is_user_logged_in() ) {
-			return false;
+			return $this->context->is_allowed_for_guest();
 		}
 
 		return ! empty( $this->settings['insert_attachment'] );

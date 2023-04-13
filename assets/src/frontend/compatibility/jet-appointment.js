@@ -54,7 +54,7 @@ function AppointmentProvider() {
 	this.setNode = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
 
-		this.name = node.dataset.field;
+		this.name = node.dataset?.field || node.name;
 	};
 
 	this.checkIsRequired = function () {

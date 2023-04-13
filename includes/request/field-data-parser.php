@@ -129,7 +129,8 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	 * @throws Exclude_Field_Exception
 	 */
 	protected function set_block(): Field_Data_Parser {
-		$block          = $this->context->get_block();
+		$block = $this->context->get_block();
+		// todo: remove property settings
 		$this->settings = $block['attrs'];
 		$this->inner    = $block['innerBlocks'];
 
@@ -167,6 +168,14 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		$this->file = $file;
 
 		return $this;
+	}
+
+	/**
+	 * @return Parser_Context|false
+	 * @since 3.0.4
+	 */
+	public function get_context() {
+		return $this->context instanceof Parser_Context ? $this->context : false;
 	}
 
 

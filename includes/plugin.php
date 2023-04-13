@@ -12,6 +12,7 @@ use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Blocks\Switch_Page_On_Change;
 use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Security\Honeypot;
+use Jet_Form_Builder\Classes\Regexp_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Compatibility\Deprecated;
 use Jet_Form_Builder\Compatibility\Elementor\Elementor;
@@ -47,6 +48,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @property AddonsManager $addons_manager
  * @property \Jet_Admin_Bar $admin_bar
  * @property Form_Messages\Msg_Router $msg_router
+ * @property Regexp_Tools $regexp
  * Class Plugin
  * @package Jet_Form_Builder
  */
@@ -66,6 +68,7 @@ class Plugin {
 	public $msg_router;
 	public $honeypot;
 	public $wp_experiments;
+	public $regexp;
 
 	public static $instance;
 
@@ -130,6 +133,7 @@ class Plugin {
 		$this->addons_manager = new AddonsManager();
 		$this->honeypot       = new Honeypot();
 		$this->wp_experiments = new Wp_Experiments();
+		$this->regexp         = new Regexp_Tools();
 
 		/**
 		 * Modules & components

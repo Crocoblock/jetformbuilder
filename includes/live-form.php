@@ -43,6 +43,7 @@ class Live_Form {
 	 * @var Form_Break
 	 */
 	public $form_break;
+	public $field_names = array();
 
 	/**
 	 * Create form instance
@@ -110,6 +111,10 @@ class Live_Form {
 		$this->blocks = apply_filters(
 			'jet-form-builder/setup-blocks',
 			Block_Helper::get_blocks_by_post( $this->form_id )
+		);
+
+		jet_form_builder()->regexp->set_field_names(
+			Block_Helper::get_form_field_names( $this->blocks )
 		);
 
 		return $this->blocks;

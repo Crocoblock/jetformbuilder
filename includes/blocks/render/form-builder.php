@@ -173,11 +173,7 @@ class Form_Builder {
 		}
 
 		Builder_Helper::enqueue_global_styles();
-
-		wp_add_inline_style(
-			'jet-form-builder-frontend',
-			Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id )
-		);
+		Builder_Helper::enqueue_style_form( $this->form_id );
 
 		return '';
 	}

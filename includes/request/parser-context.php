@@ -28,6 +28,13 @@ class Parser_Context {
 	protected $context = array();
 
 	/**
+	 * @var bool
+	 *
+	 * @since 3.0.4
+	 */
+	protected $guest_allow = false;
+
+	/**
 	 * @return mixed
 	 */
 	public function get_file() {
@@ -71,6 +78,9 @@ class Parser_Context {
 		$this->settings   = $field['attrs'];
 		$this->name       = $field['attrs']['name'] ?? 'field_name';
 		$this->field_type = Block_Helper::delete_namespace( $field['blockName'] );
+
+		// reset
+		$this->guest_allow = false;
 
 		return $this;
 	}
@@ -162,6 +172,34 @@ class Parser_Context {
 		$this->inside_conditional = $inside_conditional;
 
 		return $this;
+	}
+
+	/**
+	 * @since 3.0.4
+	 */
+	public function get_class_name(): string {
+		return $this->settings['class_name'] ?? '';
+	}
+
+	/**
+	 * @since 3.0.4
+	 */
+	public function update_setting( string $name, $value ) {
+		$this->settings[ $name ] = $value;
+	}
+
+	/**
+	 * @since 3.0.4
+	 */
+	public function allow_for_guest() {
+		$this->guest_allow = true;
+	}
+
+	/**
+	 * @since 3.0.4
+	 */
+	public function is_allowed_for_guest(): bool {
+		return $this->guest_allow;
 	}
 
 

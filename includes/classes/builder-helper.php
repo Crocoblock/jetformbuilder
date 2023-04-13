@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Classes;
 
 use Jet_Form_Builder\Blocks\Manager;
+use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -12,6 +13,8 @@ if ( ! defined( 'WPINC' ) ) {
 class Builder_Helper {
 
 	private static $html_ids = array();
+
+	private static $styled_form_ids = array();
 
 	/**
 	 * @param $object_id
@@ -108,4 +111,36 @@ class Builder_Helper {
 		wp_enqueue_style( 'jet-form-builder-frontend' );
 	}
 
+	/**
+	 * @since 3.0.4
+	 *
+	 * @param string|int $form_id
+	 */
+	public static function enqueue_style_form( $form_id ) {
+		if ( self::is_enqueued_form_style( $form_id ) ) {
+			return;
+		}
+
+		$form_id = absint( $form_id );
+
+		$result = wp_add_inline_style(
+			'jet-form-builder-frontend',
+			Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $form_id )
+		);
+
+		if ( $result ) {
+			self::$styled_form_ids[ $form_id ] = 1;
+		}
+	}
+
+	/**
+	 * @since 3.0.4
+	 *
+	 * @param string|int $form_id
+	 */
+	public static function is_enqueued_form_style( $form_id ): bool {
+		$form_id = absint( $form_id );
+
+		return isset( self::$styled_form_ids[ $form_id ] );
+	}
 }

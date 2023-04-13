@@ -70,8 +70,8 @@ class Block_Helper {
 		return $names;
 	}
 
-	public static function find_block( $callable, $blocks ): array {
-		if ( ! is_callable( $callable ) ) {
+	public static function find_block( $callback, $blocks ): array {
+		if ( ! is_callable( $callback ) ) {
 			return array();
 		}
 		foreach ( $blocks as $block ) {
@@ -97,11 +97,11 @@ class Block_Helper {
 
 	/**
 	 * @param $blocks
-	 * @param string $namespace
+	 * @param string $scope
 	 *
 	 * @return array
 	 */
-	public static function filter_blocks_by_namespace( $blocks, $scope = Form_Manager::NAMESPACE_FIELDS ): array {
+	public static function filter_blocks_by_namespace( $blocks, string $scope = Form_Manager::NAMESPACE_FIELDS ): array {
 		$fields = array();
 
 		self::filter_blocks(

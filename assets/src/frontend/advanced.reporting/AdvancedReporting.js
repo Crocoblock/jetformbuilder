@@ -108,7 +108,8 @@ AdvancedReporting.prototype.setInput         = function ( input ) {
 		const attr = input.attrs[ watchAttr ];
 
 		attr.value.watch( () => {
-			this.validateOnChange( true );
+			this.valuePrev = null;
+			this.validateOnBlur();
 		} );
 	}
 };

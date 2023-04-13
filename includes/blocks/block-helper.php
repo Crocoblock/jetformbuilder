@@ -39,6 +39,23 @@ class Block_Helper {
 		);
 	}
 
+	public static function get_form_field_names( $blocks ): array {
+		$names = array();
+
+		self::find_block(
+			function ( $block ) use ( &$names ) {
+				if ( ! empty( $block['attrs']['name'] ) ) {
+					$names[ $block['attrs']['name'] ] = 1;
+				}
+
+				return false;
+			},
+			$blocks
+		);
+
+		return $names;
+	}
+
 	public static function find_block( $callable, $blocks ): array {
 		if ( ! is_callable( $callable ) ) {
 			return array();

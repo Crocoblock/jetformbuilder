@@ -11,6 +11,7 @@ use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Blocks\Switch_Page_On_Change;
 use Jet_Form_Builder\Blocks\Validation;
+use Jet_Form_Builder\Classes\Regexp_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Compatibility\Deprecated;
 use Jet_Form_Builder\Compatibility\Elementor\Elementor;
@@ -45,6 +46,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @property AddonsManager $addons_manager
  * @property \Jet_Admin_Bar $admin_bar
  * @property Form_Messages\Msg_Router $msg_router
+ * @property Regexp_Tools $regexp
  * Class Plugin
  * @package Jet_Form_Builder
  */
@@ -62,6 +64,7 @@ class Plugin {
 	public $addons_manager;
 	public $admin_bar;
 	public $msg_router;
+	public $regexp;
 
 	private $suffix;
 
@@ -126,6 +129,7 @@ class Plugin {
 		$this->form_handler   = new Form_Handler();
 		$this->captcha        = new Forms_Captcha();
 		$this->addons_manager = new AddonsManager();
+		$this->regexp         = new Regexp_Tools();
 
 		/**
 		 * Modules & components

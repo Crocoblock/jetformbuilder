@@ -473,6 +473,10 @@ class Form extends Base {
 		return ( $form . ob_get_clean() );
 	}
 
+	/**
+	 * @since 3.0.4 Enqueue specific styles
+	 * @since 3.0.3 Introduced
+	 */
 	public function handle_header_assets() {
 		if ( ! is_singular() ) {
 			return;
@@ -480,12 +484,28 @@ class Form extends Base {
 
 		$post = get_post();
 
-		if (
-			has_shortcode( $post->post_content, 'jet_fb_form' ) ||
-			( function_exists( 'has_block' ) && has_block( 'jet-forms/form-block' ) )
-		) {
+		$has_shortcode = has_shortcode( $post->post_content, 'jet_fb_form' );
+		$has_block     = function_exists( 'has_block' ) && has_block( 'jet-forms/form-block' );
+
+		if ( $has_block || $has_shortcode ) {
 			jet_form_builder()->blocks->enqueue_frontend_styles();
 			Builder_Helper::enqueue_global_styles();
+		}
+
+		$form_ids = array();
+
+		if ( $has_block ) {
+			$form_ids = jet_form_builder()->regexp->get_form_ids_from_block( $post->post_content );
+		}
+		if ( $has_shortcode ) {
+			$form_ids = array_merge(
+				$form_ids,
+				jet_form_builder()->regexp->get_form_ids_from_shortcode( $post->post_content )
+			);
+		}
+
+		foreach ( $form_ids as $form_id ) {
+			Builder_Helper::enqueue_style_form( $form_id );
 		}
 	}
 

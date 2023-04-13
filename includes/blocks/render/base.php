@@ -285,7 +285,7 @@ abstract class Base {
 	}
 
 	protected function set_value() {
-		if ( ! Regexp_Tools::has_macro( $this->args['default'] ) ) {
+		if ( ! jet_form_builder()->regexp->has_macro( $this->args['default'] ) ) {
 			$this->add_attribute( 'value', $this->args['default'] );
 
 			return;

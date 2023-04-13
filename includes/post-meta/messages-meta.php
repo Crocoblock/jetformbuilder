@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Post_Meta;
 
-
 use Jet_Form_Builder\Classes\Tools;
 
 class Messages_Meta extends Base_Meta_Type {
@@ -86,7 +85,7 @@ class Messages_Meta extends Base_Meta_Type {
 			return $this->messages;
 		}
 
-		return $messages;
+		return array_merge( $this->messages, $messages );
 	}
 
 

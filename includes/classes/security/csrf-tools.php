@@ -18,6 +18,7 @@ class Csrf_Tools {
 
 	public function register() {
 		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'handle_request' ) );
+		add_filter( 'jet-form-builder/message-types', array( $this, 'handle_messages' ) );
 	}
 
 	public static function get_field(): string {
@@ -65,7 +66,7 @@ class Csrf_Tools {
 		Csrf_Token_Model::clear();
 
 		if ( ! static::verify( $this->token, $this->client ) ) {
-			throw ( new Request_Exception( 'Invalid token' ) )->dynamic_error();
+			throw new Request_Exception( 'csrf_failed' );
 		}
 
 		// delete verified token only on success
@@ -82,11 +83,21 @@ class Csrf_Tools {
 		static::delete( $this->token, $this->client );
 	}
 
+	public function handle_messages( array $messages ): array {
+		$messages['csrf_failed'] = array(
+			'label' => __( 'CSRF token validation failed', 'jet-form-builder' ),
+			'value' => __( 'Invalid token', 'jet-form-builder' ),
+		);
+
+		return $messages;
+	}
+
 	/**
 	 * @param string $token
 	 * @param string $client_id
 	 *
 	 * New token or existed
+	 *
 	 * @return string
 	 * @throws Sql_Exception
 	 */

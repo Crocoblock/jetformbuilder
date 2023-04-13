@@ -44,7 +44,7 @@ class Forms_Captcha {
 		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'on_request' ) );
 		add_filter( 'jet-form-builder/before-render/submit-field', array( $this, 'on_render_submit' ), 10, 2 );
 		add_filter( 'jet-form-builder/page-config/jfb-settings', array( $this, 'on_localize_config' ) );
-		add_filter( 'jet-form-builder/form-builder/config', array( $this, 'on_localize_config' ) );
+		add_filter( 'jet-form-builder/editor/config', array( $this, 'on_localize_config' ) );
 		add_filter( 'jet-form-builder/setup-blocks', array( $this, 'check_is_container_exist' ) );
 		add_filter( 'jet-form-builder/before-end-form', array( $this, 'on_end_render_form' ) );
 	}

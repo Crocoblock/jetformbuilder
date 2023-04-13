@@ -117,5 +117,6 @@
 	},
 	"usesContext": [
 		"jet-forms/repeater-field--name"
-	]
+	],
+	"viewScript": ""
 }

@@ -1,9 +1,15 @@
 .jet-form-builder-choice {
 	&--item {
+		border: 2px solid var(--wp--preset--color--tertiary, #bfbfbf);
+		font-size: 1.5rem;
+		font-family: var(--wp--preset--font-family--system-fonts);
+		line-height: 1.5;
+		padding: 20px;
 		display: block;
+		background-color: var(--choice-bg, transparent) !important;
 
 		&.is-checked {
-			background-color: var(--checked-color-background, var(--wp--preset--color--cyan-bluish-gray)) !important;
+			background-color: var(--choice-checked-bg, var(--wp--preset--color--cyan-bluish-gray)) !important;
 		}
 	}
 }

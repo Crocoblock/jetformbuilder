@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
 
+use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 
 class Post_Thumbnail_Property extends Base_Object_Property {
@@ -18,5 +19,13 @@ class Post_Thumbnail_Property extends Base_Object_Property {
 
 	public function get_help(): string {
 		return __( 'Accepts attachment ID', 'jet-form-builder' );
+	}
+
+	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+		parent::do_before( $key, $value, $modifier );
+
+		if ( empty( $this->value ) ) {
+			$this->value = - 1;
+		}
 	}
 }

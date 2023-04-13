@@ -1,4 +1,4 @@
-import { isCalculated } from './functions';
+import { getCalculatedWrapper, isCalculated } from './functions';
 
 const {
 	      InputData,
@@ -88,7 +88,7 @@ function CalculatedData() {
 			      sepDecimal,
 			      valueType,
 			      sepThousands,
-		      } = node.parentElement.dataset;
+		      } = getCalculatedWrapper( node ).dataset;
 
 		this.formula        = formula;
 		this.precision      = +precision;

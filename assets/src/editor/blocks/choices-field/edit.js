@@ -45,6 +45,7 @@ const {
 
 const {
 	      useStyle,
+	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
 
 const ALLOWED_BLOCKS = [ 'jet-forms/choice' ];
@@ -66,6 +67,8 @@ export default function EditAdvancedChoicesField( props ) {
 		      setAttributes,
 		      isSelected,
 	      } = props;
+
+	useUniqueNameOnDuplicate();
 
 	const blockProps       = useBlockProps( {
 		className: 'jet-form-builder-choice',

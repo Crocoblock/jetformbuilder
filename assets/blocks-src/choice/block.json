@@ -35,25 +35,6 @@
 	},
 	"supports": {
 		"html": false,
-		"__experimentalStyle": {
-			"color": {
-				"background": "var(--wp--preset--color--white)",
-				"text": "var(--wp--preset--color--black)"
-			},
-			"border": {
-				"color": "var(--wp--preset--color--tertiary)",
-				"width": "2px",
-				"style": "solid"
-			},
-			"typography": {
-				"fontSize": "1.5rem",
-				"fontFamily": "var(--wp--preset--font-family--system-fonts)",
-				"lineHeight": "1.5"
-			},
-			"spacing": {
-				"padding": "20px"
-			}
-		},
 		"__experimentalLayout": {
 			"allowSwitching": false,
 			"allowInheriting": false,
@@ -93,8 +74,12 @@
 		"color": {
 			"background": true,
 			"gradients": true,
-			"text": true,
-			"link": true
+			"text": true
 		}
-	}
+	},
+	"usesContext": [
+		"jet-forms/choices-field--multiple",
+		"jet-forms/choices-field--required",
+		"jet-forms/choices-field--name"
+	]
 }

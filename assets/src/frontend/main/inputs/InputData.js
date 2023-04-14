@@ -319,7 +319,7 @@ InputData.prototype.getWrapperNode = function () {
 
 InputData.prototype.handleEnterKey = function ( event ) {
 	// not enter
-	if ( +event.keyCode !== 13 ) {
+	if ( event.key !== 'Enter' ) {
 		return;
 	}
 

@@ -7,11 +7,15 @@ function ReactiveSet( value ) {
 ReactiveSet.prototype = Object.create( ReactiveVar.prototype );
 
 ReactiveSet.prototype.add = function ( stateName ) {
-	if ( !this.current.hasOwnProperty( 'length' ) ) {
-		this.current = [];
-	}
 	// add unique value
-	this.current = [ ...new Set( [ ...this.current, stateName ] ) ];
+	this.current = [
+		...new Set( [
+			...(
+				this.current ?? []
+			),
+			stateName,
+		] ),
+	];
 };
 
 ReactiveSet.prototype.remove = function ( stateName ) {

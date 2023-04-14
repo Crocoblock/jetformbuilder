@@ -2,6 +2,7 @@ import initElementor from './init/initElementor';
 import BaseSignal from './signals/BaseSignal';
 import ReactiveVar from './reactive/ReactiveVar';
 import ReactiveHook from './reactive/ReactiveHook';
+import ReactiveSet from './reactive/ReactiveSet';
 import LoadingReactiveVar from './reactive/LoadingReactiveVar';
 import InputData from './inputs/InputData';
 import Observable from './Observable';
@@ -13,7 +14,7 @@ import {
 	getLanguage,
 	toHTML,
 	isEmpty,
-	getOffsetTop, 
+	getOffsetTop,
 	focusOnInvalidInput,
 	isVisible,
 } from './functions';
@@ -50,6 +51,7 @@ window.JetFormBuilderAbstract = {
 	Restriction,
 	RestrictionError,
 	BaseHtmlAttr,
+	ReactiveSet,
 };
 
 window.JetFormBuilderFunctions = {

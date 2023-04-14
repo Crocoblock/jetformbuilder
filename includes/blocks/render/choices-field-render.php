@@ -18,7 +18,8 @@ class Choices_Field_Render extends Base {
 	public function render( $wp_block = null, $template = null ) {
 		$attrs = get_block_wrapper_attributes(
 			array(
-				'class' => 'jet-form-builder-choice',
+				'class'         => 'jet-form-builder-choice',
+				'data-jfb-sync' => true,
 			)
 		);
 

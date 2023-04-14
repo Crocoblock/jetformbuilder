@@ -39,6 +39,7 @@ module.exports = {
 			'frontend/repeater.field': './frontend/repeater.field/main.js',
 			'frontend/calculated.field': './frontend/calculated.field/main.js',
 			'frontend/conditional.block': './frontend/conditional.block/main.js',
+			'frontend/choices.field': './frontend/choices.field/main.js',
 			'frontend/advanced.reporting': './frontend/advanced.reporting/main.js',
 			'frontend/dynamic.value': './frontend/dynamic.value/main.js',
 			'frontend/deprecated': './frontend/deprecated/main.js',

@@ -113,10 +113,12 @@
 		}
 	},
 	"providesContext": {
-		"jet-forms/advanced-choice-style": "style"
+		"jet-forms/choices-field--multiple": "allow_multiple",
+		"jet-forms/choices-field--required": "required",
+		"jet-forms/choices-field--name": "name"
 	},
 	"usesContext": [
 		"jet-forms/repeater-field--name"
 	],
-	"viewScript": ""
+	"viewScript": "jet-fb-choices-field"
 }

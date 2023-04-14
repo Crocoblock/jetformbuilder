@@ -15,6 +15,7 @@ import Tools, {
 	convertObjectToOptionsList,
 	column,
 	assetUrl,
+	set,
 } from './tools';
 
 import getAvailableFields from './blocks/helpers/getAvailableFields';
@@ -176,9 +177,12 @@ import useCaptchaProvider from './captcha/hooks/useCaptchaProvider';
 import SelectVariations from './blocks/components/SelectVariations';
 import ToggleGroupVariations from './blocks/components/ToggleGroupVariations';
 import useStyle from './blocks/hooks/useStyle';
+import StyleManagerEditControls
+	from './jet.style/components/StyleManagerEditControls';
 
 // JFBComponents
 window.JetFBComponents = {
+	StyleManagerEditControls,
 	ActionFieldsMap,
 	ActionModal,
 	ActionModalContext,
@@ -301,6 +305,7 @@ window.JetFBActions = {
 	humanReadableCondition,
 	convertFlow,
 	assetUrl,
+	set,
 };
 
 // JFBHooks

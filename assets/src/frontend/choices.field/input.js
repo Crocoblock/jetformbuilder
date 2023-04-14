@@ -79,14 +79,6 @@ function ChoicesData() {
 			this.toggleChoice( node );
 		} );
 
-		wrapperChoice.addEventListener( 'mousedown', event => {
-			wrapperChoice.ariaPressed = true;
-		} );
-
-		wrapperChoice.addEventListener( 'mouseup', event => {
-			wrapperChoice.ariaPressed = false;
-		} );
-
 		wrapperChoice.addEventListener(
 			'click',
 			() => this.toggleChoice( node ),

@@ -21,6 +21,7 @@ function SignalChoices() {
 			const wrapper = getWrapper( node );
 
 			wrapper.classList.toggle( 'is-checked', node.checked );
+			wrapper.ariaPressed = node.checked;
 
 			if ( !node.checked ) {
 				continue;

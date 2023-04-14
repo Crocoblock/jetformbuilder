@@ -56,7 +56,14 @@ export default function EditAdvancedChoicesField( props ) {
 
 	return <>
 		<ToolBarFields/>
-		<StyleManagerEditControls/>
+		<StyleManagerEditControls optionVars={ {
+			'--choice-bg': {
+				label: __( 'Choice background', 'jet-form-builder' )
+			},
+			'--choice-checked-bg': {
+				label: __( 'Choice checked background', 'jet-form-builder' )
+			}
+		} } />
 		<InspectorControls>
 			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
 				<BlockLabel/>

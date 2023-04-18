@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Types\Choice;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -22,6 +23,28 @@ class Choice_Render extends Base {
 		return 'choice';
 	}
 
+	public function get_input_control( array $wp_block ): string {
+		if ( empty( $wp_block['innerBlocks'] ) ) {
+			return $this->get_hidden_input_control();
+		}
+
+		$control = Block_Helper::find_by_block_name(
+			$wp_block['innerBlocks'],
+			'jet-forms/choice-check'
+		);
+
+		return $control ? '' : $this->get_hidden_input_control();
+	}
+
+	public function get_hidden_input_control(): string {
+		return Choice_Check_Render::get_input_control(
+			$this->block_type,
+			array(
+				array( 'style', 'display:none;' ),
+			)
+		);
+	}
+
 	public function render( $wp_block = null, $template = null ) {
 		$attrs = get_block_wrapper_attributes(
 			array(
@@ -33,34 +56,10 @@ class Choice_Render extends Base {
 			)
 		);
 
-		$attributes = array(
-			array( 'type', $this->block_type->is_allowed_multiple() ? 'checkbox' : 'radio' ),
-			array( 'name', $this->block_type->get_field_name() ),
-			array( 'value', esc_attr( $this->block_type->get_field_value() ) ),
-			array( 'data-calculate', esc_attr( $this->block_type->get_calculated_value() ) ),
-			array( 'required', $this->block_type->get_required_val() ),
-			array( 'class', 'jet-form-builder__field' ),
-			array( 'style', 'display:none;' ),
-		);
-
-		$attributes_stack = array();
-
-		foreach ( $attributes as list( $name, $value ) ) {
-			if ( ! $value ) {
-				continue;
-			}
-			$attributes_stack[] = sprintf( '%1$s="%2$s"', $name, $value );
-		}
-
-		$input = sprintf(
-			'<input %s/>',
-			implode( ' ', $attributes_stack )
-		);
-
 		$html = sprintf(
 			'<li %1$s>%2$s</li>',
 			$attrs,
-			( $this->block_type->block_content . $input )
+			( $this->block_type->block_content . $this->get_input_control( $wp_block ) )
 		);
 
 		return parent::render( null, $html );

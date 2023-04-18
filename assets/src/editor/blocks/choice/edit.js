@@ -1,4 +1,6 @@
 import { name } from './index';
+import useCheckedChoiceState from './useCheckedChoiceState';
+import ChoiceItemContext from './context';
 
 const { __ } = wp.i18n;
 
@@ -13,15 +15,22 @@ const {
 	      TextControl,
       } = wp.components;
 
-export default function EditAdvancedChoice( props ) {
-	const { attributes, setAttributes } = props;
+const { classnames } = JetFBActions;
 
-	const blockProps       = useBlockProps( {
-		className: 'jet-form-builder-choice--item',
+export default function EditAdvancedChoice( props ) {
+	const { attributes, setAttributes, clientId } = props;
+
+	const [ isChecked ] = useCheckedChoiceState();
+
+	const className = classnames( {
+		'jet-form-builder-choice--item': true,
+		'is-checked': isChecked,
 	} );
+
+	const blockProps       = useBlockProps( { className } );
 	const innerBlocksProps = useInnerBlocksProps( blockProps );
 
-	return <>
+	return <ChoiceItemContext.Provider value={ { clientId } }>
 		<li { ...innerBlocksProps }/>
 		<InspectorControls>
 			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
@@ -45,5 +54,5 @@ in the Calculated Field.`,
 				/>
 			</PanelBody>
 		</InspectorControls>
-	</>;
+	</ChoiceItemContext.Provider>;
 }

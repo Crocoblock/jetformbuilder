@@ -40,6 +40,7 @@ class Form_Builder_Blocks_Repository extends Blocks_Repository_Base {
 				new Types\Captcha_Container(),
 				new Types\Choices_Field(),
 				new Types\Choice(),
+				new Types\Choice_Check(),
 			)
 		);
 	}

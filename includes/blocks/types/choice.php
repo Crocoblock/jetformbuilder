@@ -14,7 +14,9 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 
-class Choice extends Base {
+class Choice extends Base implements Base_Choice_Item_It {
+
+	use Base_Choice_Item_Trait;
 
 	public function get_name() {
 		return 'choice';
@@ -37,29 +39,11 @@ class Choice extends Base {
 		return ( new Choice_Render( $this ) )->render( $wp_block );
 	}
 
-	public function is_allowed_multiple(): bool {
-		return $this->block_context['jet-forms/choices-field--multiple'] ?? false;
-	}
-
-	public function get_required_val(): bool {
-		return $this->block_context['jet-forms/choices-field--required'] ?? false;
-	}
-
-	public function get_field_name( $name = '' ) {
-		if ( $name ) {
-			return parent::get_field_name( $name );
-		}
-
-		return parent::get_field_name(
-			$this->block_context['jet-forms/choices-field--name'] ?? ''
-		);
-	}
-
 	public function get_field_value( $attributes = array() ) {
 		return $this->block_attrs['value'] ?? '';
 	}
 
-	public function get_calculated_value() {
+	public function get_calculated_value(): string {
 		return $this->block_attrs['calc_value'] ?? '';
 	}
 }

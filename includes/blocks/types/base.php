@@ -409,7 +409,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 */
 	public function get_field_id( $name = '', $for_element = 'input' ) {
 		if ( $name && is_array( $name ) ) {
-			$name = $name['name'];
+			$name = $name['name'] ?? '';
 		}
 		if ( ! $name ) {
 			$name = $this->block_attrs['name'] ?? '';

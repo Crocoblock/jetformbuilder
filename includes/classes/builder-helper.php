@@ -112,9 +112,9 @@ class Builder_Helper {
 	}
 
 	/**
-	 * @since 3.0.4
-	 *
 	 * @param string|int $form_id
+	 *
+	 * @since 3.0.4
 	 */
 	public static function enqueue_style_form( $form_id ) {
 		if ( self::is_enqueued_form_style( $form_id ) ) {
@@ -134,13 +134,33 @@ class Builder_Helper {
 	}
 
 	/**
-	 * @since 3.0.4
-	 *
 	 * @param string|int $form_id
+	 *
+	 * @since 3.0.4
 	 */
 	public static function is_enqueued_form_style( $form_id ): bool {
 		$form_id = absint( $form_id );
 
 		return isset( self::$styled_form_ids[ $form_id ] );
+	}
+
+	/**
+	 * @since 3.1.0
+	 *
+	 * @param array<array<string, string>> $attributes
+	 *
+	 * @return string
+	 */
+	public static function attrs( array $attributes ): string {
+		$attributes_stack = array();
+
+		foreach ( $attributes as list( $name, $value ) ) {
+			if ( ! $value ) {
+				continue;
+			}
+			$attributes_stack[] = sprintf( '%1$s="%2$s"', $name, $value );
+		}
+
+		return implode( ' ', $attributes_stack );
 	}
 }

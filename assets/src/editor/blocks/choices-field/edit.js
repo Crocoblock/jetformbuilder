@@ -1,5 +1,6 @@
 import { name } from './index';
 import Placeholder from './placeholder';
+import ChoicesFieldContext from './context';
 
 const { __ } = wp.i18n;
 
@@ -19,12 +20,17 @@ const {
 
 const {
 	      PanelBody,
+	      ToggleControl,
       } = wp.components;
 
 const {
 	      useJetStyle,
 	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
+
+const {
+	      useState,
+      } = wp.element;
 
 const ALLOWED_BLOCKS = [ 'jet-forms/choice' ];
 
@@ -39,9 +45,41 @@ const DefaultPlaceHolder = (
 	</>
 );
 
+function useCreateCurrentChoice( { allow_multiple } ) {
+	const [ current, setCurrent ] = useState(
+		() => allow_multiple ? [] : '',
+	);
+
+	const updateCurrent = value => {
+		if ( !allow_multiple ) {
+			if ( current !== value ) {
+				setCurrent( value );
+			}
+
+			return;
+		}
+
+		const tempCurrent = Array.isArray( current ) ? current : [ current ];
+
+		if ( !tempCurrent.includes( value ) ) {
+			setCurrent( [ ...tempCurrent, value ] );
+
+			return;
+		}
+
+		setCurrent( tempCurrent.filter(
+			item => item !== value,
+		) );
+	};
+
+	return { current, updateCurrent };
+}
+
 export default function EditAdvancedChoicesField( props ) {
 	const {
 		      isSelected,
+		      attributes,
+		      setAttributes,
 	      } = props;
 
 	useUniqueNameOnDuplicate();
@@ -57,7 +95,9 @@ export default function EditAdvancedChoicesField( props ) {
 		placeholder: isSelected ? <Placeholder/> : DefaultPlaceHolder,
 	} );
 
-	return <>
+	const state = useCreateCurrentChoice( attributes );
+
+	return <ChoicesFieldContext.Provider value={ state }>
 		<ToolBarFields/>
 		<StyleManagerEditControls optionVars={ {
 			'--choice-bg': {
@@ -73,7 +113,16 @@ export default function EditAdvancedChoicesField( props ) {
 				<BlockName/>
 				<BlockDescription/>
 			</PanelBody>
+			<PanelBody title={ __( 'Value', 'jet-form-builder' ) }>
+				<ToggleControl
+					label={ __( 'Allow multiple choices', 'jet-form-builder' ) }
+					checked={ attributes.allow_multiple }
+					onChange={
+						allow_multiple => setAttributes( { allow_multiple } )
+					}
+				/>
+			</PanelBody>
 		</InspectorControls>
 		<ul { ...innerBlocksProps } />
-	</>;
+	</ChoicesFieldContext.Provider>;
 }

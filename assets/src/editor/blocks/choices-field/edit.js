@@ -22,7 +22,7 @@ const {
       } = wp.components;
 
 const {
-	      useStyle,
+	      useJetStyle,
 	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
 
@@ -46,8 +46,11 @@ export default function EditAdvancedChoicesField( props ) {
 
 	useUniqueNameOnDuplicate();
 
+	const jetStyle = useJetStyle();
+
 	const blockProps       = useBlockProps( {
 		className: 'jet-form-builder-choice',
+		style: jetStyle,
 	} );
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		allowedBlocks: ALLOWED_BLOCKS,
@@ -58,12 +61,12 @@ export default function EditAdvancedChoicesField( props ) {
 		<ToolBarFields/>
 		<StyleManagerEditControls optionVars={ {
 			'--choice-bg': {
-				label: __( 'Choice background', 'jet-form-builder' )
+				label: __( 'Choice background', 'jet-form-builder' ),
 			},
 			'--choice-checked-bg': {
-				label: __( 'Choice checked background', 'jet-form-builder' )
-			}
-		} } />
+				label: __( 'Choice checked background', 'jet-form-builder' ),
+			},
+		} }/>
 		<InspectorControls>
 			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
 				<BlockLabel/>

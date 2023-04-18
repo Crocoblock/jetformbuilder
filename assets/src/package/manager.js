@@ -176,9 +176,10 @@ import CaptchaBlockEdit from './captcha/components/CaptchaBlockEdit';
 import useCaptchaProvider from './captcha/hooks/useCaptchaProvider';
 import SelectVariations from './blocks/components/SelectVariations';
 import ToggleGroupVariations from './blocks/components/ToggleGroupVariations';
-import useStyle from './blocks/hooks/useStyle';
 import StyleManagerEditControls
 	from './jet.style/components/StyleManagerEditControls';
+import useJetStyle from './jet.style/hooks/useJetStyle';
+import useJetStyleSupports from './jet.style/hooks/useJetStyleSupports';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -342,6 +343,7 @@ window.JetFBHooks = {
 	useUniqueNameOnDuplicate,
 	useFields: useFields,
 	useCaptchaProvider,
-	useStyle,
+	useJetStyle,
+	useJetStyleSupports,
 };
 

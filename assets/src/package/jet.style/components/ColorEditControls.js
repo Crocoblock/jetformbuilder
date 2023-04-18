@@ -17,10 +17,6 @@ const {
 	      __,
       } = wp.i18n;
 
-const {
-	      useMemo,
-      } = wp.element;
-
 ColorGradientSettingsDropdown = (
 	ColorGradientSettingsDropdown || __experimentalColorGradientSettingsDropdown
 );

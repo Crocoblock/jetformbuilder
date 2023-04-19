@@ -4,6 +4,19 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.0.4
+* ADD: Save Record will not execute if captcha, wp nonce or csrf token validation failed. To return the saving of errors of this kind, it is necessary to manually enable the corresponding option in the action
+* UPD: Guests are allowed to add attachments 
+  using the [`jet-form-builder/media-field/before-upload`](https://github.com/Crocoblock/jetformbuilder/wiki/PHP-Hooks#jet-form-buildermedia-fieldbefore-upload) hook
+* FIX: JetAppointment compatibility
+* FIX: Cannot delete thumbnail through form
+* FIX: Calculated field doesn't work if prefix suffix with html
+* FIX: UI error in Insert/Update Post with custom post-type 
+  `product` (which was created by JetEngine or another similar plugin)
+* FIX: JetStyleManager compatibility
+* FIX: Fatal error when setting the conditions for executing actions incorrectly
+* FIX: Back compatibility with Reusable Block
+
 ## 3.0.3
 * UPD: Loading css as early as possible on a single page
 * FIX: WP 6.2 compatibility (Editor error while editing action)

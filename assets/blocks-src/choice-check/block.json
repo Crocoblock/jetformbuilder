@@ -20,6 +20,14 @@
 		"label": {
 			"type": "string",
 			"default": ""
+		},
+		"default_image_control": {
+			"type": "object",
+			"default": {}
+		},
+		"checked_image_control": {
+			"type": "object",
+			"default": ""
 		}
 	},
 	"supports": {

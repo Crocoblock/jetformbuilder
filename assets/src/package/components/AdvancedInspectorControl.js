@@ -1,5 +1,6 @@
 import PresetButton from '../preset/components/PresetButton';
 import MacrosFields from '../macros.button/components/MacrosFields';
+import BaseLabel from './BaseLabel';
 
 const {
 	      Flex,
@@ -17,20 +18,14 @@ function AdvancedInspectorControl( {
 	onChangeMacros = false,
 } ) {
 
-	const instanceId = useInstanceId( FlexItem, 'jfb-AdvancedInspectorControl' );
+	const instanceId = useInstanceId( FlexItem,
+		'jfb-AdvancedInspectorControl' );
 
 	return <>
-		<Flex
-			align={ 'center' }
-			justify={ 'flex-start' }
-			style={ {
-				marginBottom: '8px',
-			} }
+		<BaseLabel
+			label={ label }
+			htmlFor={ instanceId }
 		>
-			<label
-				htmlFor={ instanceId }
-				className={ 'jet-fb label' }
-			>{ label }</label>
 			{ false !== onChangePreset && <PresetButton
 				value={ value }
 				onChange={ onChangePreset }
@@ -38,7 +33,7 @@ function AdvancedInspectorControl( {
 			{ false !== onChangeMacros && <MacrosFields
 				onClick={ onChangeMacros }
 			/> }
-		</Flex>
+		</BaseLabel>
 		{ 'function' === typeof children
 		  ? children( { instanceId } )
 		  : children

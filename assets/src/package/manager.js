@@ -180,9 +180,11 @@ import StyleManagerEditControls
 	from './jet.style/components/StyleManagerEditControls';
 import useJetStyle from './jet.style/hooks/useJetStyle';
 import useJetStyleSupports from './jet.style/hooks/useJetStyleSupports';
+import BaseLabel from './components/BaseLabel';
 
 // JFBComponents
 window.JetFBComponents = {
+	BaseLabel,
 	StyleManagerEditControls,
 	ActionFieldsMap,
 	ActionModal,

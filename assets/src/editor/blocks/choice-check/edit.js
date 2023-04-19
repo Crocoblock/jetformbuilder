@@ -148,7 +148,7 @@ export default function EditChoiceCheck( props ) {
 								/>
 							}
 						/>
-						{ !!attributes.checked_image_control?.url && < Button
+						{ !!attributes.checked_image_control?.url && <Button
 							isDestructive
 							isSmall
 							icon="no-alt"

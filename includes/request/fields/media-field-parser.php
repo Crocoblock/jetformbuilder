@@ -17,6 +17,8 @@ class Media_Field_Parser extends Field_Data_Parser {
 	}
 
 	/**
+	 * @since 3.0.4 Added `jet-form-builder/media-field/before-upload` hook
+	 *
 	 * @return array|false|int|string|null
 	 * @throws Sanitize_Value_Exception
 	 */

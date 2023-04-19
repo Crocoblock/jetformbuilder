@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 5.6
 Tested up to: 6.2
 Requires PHP: 7.0
-Stable tag: 3.0.3
+Stable tag: 3.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,19 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.0.4**
+ - ADD: Save Record will not execute if captcha, wp nonce or csrf token validation failed. To return the saving of errors of this kind, it is necessary to manually enable the corresponding option in the action
+ - UPD: Guests are allowed to add attachments
+  using the [`jet-form-builder/media-field/before-upload`](https://github.com/Crocoblock/jetformbuilder/wiki/PHP-Hooks#jet-form-buildermedia-fieldbefore-upload) hook
+ - FIX: JetAppointment compatibility
+ - FIX: Cannot delete thumbnail through form
+ - FIX: Calculated field doesn't work if prefix suffix with html
+ - FIX: UI error in Insert/Update Post with custom post-type
+  `product` (which was created by JetEngine or another similar plugin)
+ - FIX: JetStyleManager compatibility
+ - FIX: Fatal error when setting the conditions for executing actions incorrectly
+ - FIX: Back compatibility with Reusable Block
 
 **3.0.3**
  - UPD: Loading css as early as possible on a single page

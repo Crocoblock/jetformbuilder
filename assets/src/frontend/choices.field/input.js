@@ -67,7 +67,23 @@ function ChoicesData() {
 	};
 
 	this.addListenerForChoice = function ( node ) {
+
 		const wrapperChoice = getWrapper( node );
+
+		wrapperChoice.addEventListener(
+			'click',
+			event => this.toggleChoice( node, event ),
+		);
+
+		/**
+		 * if it visible input,
+		 * we don't need accessibility for the wrapper element.
+		 */
+		if ( node.classList.contains(
+			'jet-form-builder-choice--item-control-input',
+		) ) {
+			return;
+		}
 
 		wrapperChoice.addEventListener( 'keydown', event => {
 			// not enter or space
@@ -79,13 +95,13 @@ function ChoicesData() {
 			this.toggleChoice( node );
 		} );
 
-		wrapperChoice.addEventListener(
-			'click',
-			() => this.toggleChoice( node ),
-		);
+
 	};
 
-	this.toggleChoice = function ( node ) {
+	this.toggleChoice = function ( node, event ) {
+		if ( 'LABEL' === event?.target?.nodeName ) {
+			return;
+		}
 		if ( this.isArray() ) {
 			this.value.toggle( node.value );
 

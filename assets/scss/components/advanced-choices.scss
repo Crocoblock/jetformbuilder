@@ -7,10 +7,6 @@
 		cursor: pointer;
 		transition: all 0.2s ease-out;
 
-		&:focus {
-			background-color: var(--choice-focus-bg, rgba(179, 222, 246, 0.25)) !important;
-		}
-
 		&.is-checked {
 			background-color: var(--choice-checked-bg, var(--wp--preset--color--cyan-bluish-gray)) !important;
 		}

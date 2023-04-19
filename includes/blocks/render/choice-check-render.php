@@ -38,7 +38,12 @@ class Choice_Check_Render extends Base {
 			)
 		);
 
-		$input = self::get_input_control( $this->block_type );
+		$input = self::get_input_control(
+			$this->block_type,
+			array(
+				array( 'class', 'jet-form-builder-choice--item-control-input' ),
+			)
+		);
 
 		$html = sprintf(
 			'<span %1$s>%2$s</span>',
@@ -55,7 +60,13 @@ class Choice_Check_Render extends Base {
 		}
 
 		$attributes = array(
-			array( 'for', $this->block_type->get_field_id( '', 'label' ) ),
+			array(
+				'for',
+				$this->block_type->get_field_id(
+					$this->block_type->get_raw_field_name(),
+					'label'
+				),
+			),
 			array( 'class', 'jet-form-builder__label' ),
 		);
 
@@ -78,7 +89,6 @@ class Choice_Check_Render extends Base {
 				array( 'value', esc_attr( $block_type->get_field_value() ) ),
 				array( 'data-calculate', esc_attr( $block_type->get_calculated_value() ) ),
 				array( 'required', $block_type->get_required_val() ),
-				array( 'class', 'jet-form-builder__field' ),
 			),
 			$other
 		);

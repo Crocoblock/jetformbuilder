@@ -19,6 +19,7 @@ addAction(
 		observable.multistep = multistep;
 		multistep.onReady();
 	},
+	15
 );
 
 addAction(

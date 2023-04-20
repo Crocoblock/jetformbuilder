@@ -60,7 +60,8 @@ Observable.prototype = {
 		if ( this.isObserved ) {
 			return;
 		}
-		this.rootNode = root;
+		this.rootNode   = root;
+		this.isObserved = true;
 
 		doAction( 'jet.fb.observe.before', this );
 
@@ -82,16 +83,6 @@ Observable.prototype = {
 		this.initActionButtons();
 
 		doAction( 'jet.fb.observe.after', this );
-
-		/**
-		 * This is necessary, affects field validation
-		 * @since 3.0.4
-		 *
-		 * @see https://github.com/Crocoblock/issues-tracker/issues/2710#issuecomment-1502911797
-		 *
-		 * @type {boolean}
-		 */
-		this.isObserved = true;
 	},
 
 	initFields: function () {

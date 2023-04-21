@@ -34,13 +34,7 @@ $this->add_attribute( 'data-sep-decimal', $args['separate_decimals'] );
 $this->add_attribute( 'data-sep-thousands', $args['separate_thousands'] );
 $this->add_attribute( 'data-value-type', $this->args['value_type'] );
 
-$this->add_attribute(
-	'class',
-	empty( $this->block_type->get_current_repeater() )
-	? 'jet-form-builder__calculated-field'
-	: 'jet-form-builder__calculated-field--child'
-);
-
+$this->add_attribute( 'class', 'jet-form-builder__calculated-field' );
 $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field--hidden' : '' );
 
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WhiteSpace.PrecisionAlignment.Found

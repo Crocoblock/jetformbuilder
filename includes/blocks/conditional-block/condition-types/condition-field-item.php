@@ -8,6 +8,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+use Jet_Form_Builder\Classes\Tools;
+
 class Condition_Field_Item extends Base_Condition_Type {
 
 	protected $value;
@@ -48,7 +50,9 @@ class Condition_Field_Item extends Base_Condition_Type {
 			return $this->parsed_value;
 		}
 
-		$value = jet_fb_parse_dynamic( $this->value );
+		$value = Tools::to_string(
+			jet_fb_parse_dynamic( $this->value )
+		);
 
 		$this->use_preset   = $this->value !== $value;
 		$this->parsed_value = $this->parse_string( $value );

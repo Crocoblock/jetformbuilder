@@ -97,15 +97,19 @@ AdvancedReporting.prototype.setInput         = function ( input ) {
 	this.messages = getValidationMessages( input.nodes[ 0 ] );
 
 	ReportingInterface.prototype.setInput.call( this, input );
-
+};
+/**
+ * @since 3.0.5 Introduced
+ */
+AdvancedReporting.prototype.observeAttrs     = function () {
 	for ( const watchAttr of this.watchAttrs ) {
-		if ( !input.attrs.hasOwnProperty( watchAttr ) ) {
+		if ( !this.input.attrs.hasOwnProperty( watchAttr ) ) {
 			continue;
 		}
 		/**
 		 * @type {BaseHtmlAttr}
 		 */
-		const attr = input.attrs[ watchAttr ];
+		const attr = this.input.attrs[ watchAttr ];
 
 		attr.value.watch( () => {
 			this.valuePrev = null;

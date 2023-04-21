@@ -1,7 +1,7 @@
 {
 	"apiVersion": 2,
-	"name": "jet-forms/choice-check",
-	"title": "Choice Check",
+	"name": "jet-forms/choice-control",
+	"title": "Choice Control",
 	"ancestor": [
 		"jet-forms/choice"
 	],
@@ -32,6 +32,12 @@
 	},
 	"supports": {
 		"html": false,
+		"jetStyle": {
+			"--control-width": [
+				".jet-form-builder-choice--item-control-img",
+				"width"
+			]
+		},
 		"__experimentalBorder": {
 			"color": true,
 			"radius": true,

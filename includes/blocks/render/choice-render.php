@@ -84,7 +84,7 @@ class Choice_Render extends Base {
 
 		$control = Block_Helper::find_by_block_name(
 			$wp_block['innerBlocks'],
-			'jet-forms/choice-check'
+			'jet-forms/choice-control'
 		);
 
 		if ( $control ) {

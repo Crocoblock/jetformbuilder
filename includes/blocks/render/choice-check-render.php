@@ -22,7 +22,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Choice_Check_Render extends Base {
 
 	public function get_name() {
-		return 'choice-check';
+		return 'choice-control';
 	}
 
 	public function label_allowed() {

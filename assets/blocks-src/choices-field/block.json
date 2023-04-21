@@ -23,7 +23,7 @@
 			],
 			"--choice-checked-bg": [
 				".jet-form-builder-choice--item",
-				".is-checked",
+				"&.is-checked",
 				"color",
 				"background"
 			]

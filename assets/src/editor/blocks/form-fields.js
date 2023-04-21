@@ -26,7 +26,7 @@ import * as wrappers from './block-wrappers';
 import * as captchaContainer from './captcha-container';
 import * as choicesField from './choices-field';
 import * as choice from './choice';
-import * as choiceCheck from './choice-check';
+import * as choiceControl from './choice-control';
 
 const {
 	      registerBlockType,
@@ -64,7 +64,7 @@ const fields = applyFilters( 'jet.fb.register.fields', [
 	captchaContainer,
 	choicesField,
 	choice,
-	choiceCheck,
+	choiceControl,
 ] );
 
 const registerFormField = block => {

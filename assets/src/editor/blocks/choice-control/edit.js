@@ -79,8 +79,9 @@ export default function EditChoiceCheck( props ) {
 			/>
 		</span>
 		<InspectorControls>
-			<PanelBody title={ __( 'Control View', 'jet-form-builder' ) }>
-				<MediaUploadCheck>
+			<MediaUploadCheck>
+				<PanelBody
+					title={ __( 'Control Default', 'jet-form-builder' ) }>
 					<BaseLabel label={ __(
 						'Default icon',
 						'jet-form-builder',
@@ -95,7 +96,7 @@ export default function EditChoiceCheck( props ) {
 									id: media.id,
 								},
 							} ) }
-							allowedTypes={ [ 'image/svg+xml' ] }
+							allowedTypes={ [ 'image/*' ] }
 							value={ attributes.default_image_control?.id }
 							render={
 								( { open } ) => <SimpleChooseMediaButton
@@ -117,12 +118,26 @@ export default function EditChoiceCheck( props ) {
 							) }
 						/> }
 					</BaseLabel>
+					{ !!attributes.default_image_control?.url && <>
+						<img
+							src={ attributes.default_image_control?.url }
+							style={ {
+								maxWidth: '150px',
+								maxHeight: '150px',
+								margin: '1em 0',
+							} }
+						/>
+					</> }
 					<BaseHelp>
 						{ __(
 							'Choose icon for default state of choice',
 							'jet-form-builder',
 						) }
 					</BaseHelp>
+				</PanelBody>
+				<PanelBody
+					title={ __( 'Control Checked', 'jet-form-builder' ) }
+				>
 					<BaseLabel
 						label={ __(
 							'Checked Icon',
@@ -139,7 +154,7 @@ export default function EditChoiceCheck( props ) {
 									id: media.id,
 								},
 							} ) }
-							allowedTypes={ [ 'image/svg+xml' ] }
+							allowedTypes={ [ 'image/*' ] }
 							value={ attributes.checked_image_control?.id }
 							render={
 								( { open } ) => <SimpleChooseMediaButton
@@ -161,14 +176,24 @@ export default function EditChoiceCheck( props ) {
 							) }
 						/> }
 					</BaseLabel>
+					{ !!attributes.checked_image_control?.url && <>
+						<img
+							src={ attributes.checked_image_control?.url }
+							style={ {
+								maxWidth: '150px',
+								maxHeight: '150px',
+								margin: '1em 0',
+							} }
+						/>
+					</> }
 					<BaseHelp>
 						{ __(
 							'Choose icon for checked state of choice',
 							'jet-form-builder',
 						) }
 					</BaseHelp>
-				</MediaUploadCheck>
-			</PanelBody>
+				</PanelBody>
+			</MediaUploadCheck>
 		</InspectorControls>
 	</>;
 }

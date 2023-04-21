@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager;
 use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Blocks\Manager;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
@@ -134,11 +135,18 @@ class Conditional_Block extends Base {
 			$content = $break->maybe_start_page( true ) . $content . $break->maybe_end_page( true );
 		}
 
+		$attrs = get_block_wrapper_attributes(
+			array(
+				'class'                => 'jet-form-builder__conditional',
+				'data-jfb-conditional' => htmlspecialchars( wp_json_encode( $conditions ) ),
+				'data-jfb-func'        => esc_attr( $func_type ),
+			)
+		);
+
 		return sprintf(
-			'<div class="jet-form-builder__conditional" data-jfb-conditional="%2$s" data-jfb-func="%3$s">%1$s</div>',
+			'<div %2$s>%1$s</div>',
 			$content,
-			htmlspecialchars( wp_json_encode( $conditions ) ),
-			esc_attr( $func_type )
+			$attrs
 		);
 	}
 
@@ -154,9 +162,12 @@ class Conditional_Block extends Base {
 			return;
 		}
 
-		usort( $conditions, function ( $current ) {
-			return 'show' === ( $current['type'] ?? '' ) ? - 1 : 1;
-		} );
+		usort(
+			$conditions,
+			function ( $current ) {
+				return 'show' === ( $current['type'] ?? '' ) ? - 1 : 1;
+			}
+		);
 
 		foreach ( $conditions as $condition ) {
 			$condition['type'] = $condition['type'] ?? '';
@@ -197,9 +208,9 @@ class Conditional_Block extends Base {
 
 		try {
 			return Condition_Manager::instance()
-			                        ->get_functions()
-			                        ->get_function( $func_type )
-			                        ->to_string( $settings );
+									->get_functions()
+									->get_function( $func_type )
+									->to_string( $settings );
 
 		} catch ( Repository_Exception $exception ) {
 			return '';

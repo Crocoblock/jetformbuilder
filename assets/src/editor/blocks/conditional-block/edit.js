@@ -25,11 +25,13 @@ const {
 	      ToolbarGroup,
 	      TextControl,
 	      PanelBody,
+	      Tip,
       } = wp.components;
 
 const {
 	      useState,
 	      useEffect,
+	      RawHTML,
       } = wp.element;
 
 function hasFormBreakField( blocks ) {
@@ -81,8 +83,33 @@ export default function ConditionalBlockEdit( props ) {
 		) }
 	/> : <span className="dashicon dashicons dashicons-randomize"/>;
 
-	return [
-		<InspectorControls key={ uniqKey( 'InspectorControls' ) }>
+	// jet-form-builder--hidden
+
+	return <>
+		<div { ...blockProps }>
+			<div className="jet-form-builder__conditional">
+				<InnerBlocks
+					key={ uniqKey( 'conditional-fields' ) }
+				/>
+			</div>
+		</div>
+		{ showModal && <ConditionsModal
+			key={ uniqKey( 'ConditionsModal' ) }
+			setShowModal={ setShowModal }
+		/> }
+		<BlockControls>
+			<ToolbarGroup key={ uniqKey( 'ToolbarGroup' ) }>
+				<Button
+					className={ 'jet-fb-button' }
+					key={ uniqKey( 'randomize' ) }
+					isTertiary
+					isSmall
+					icon={ conditionsIcon }
+					onClick={ () => setShowModal( true ) }
+				/>
+			</ToolbarGroup>
+		</BlockControls>
+		<InspectorControls>
 			<PanelBody
 				title={ __( 'Conditions', 'jet-form-builder' ) }
 				initialOpen
@@ -117,29 +144,19 @@ export default function ConditionalBlockEdit( props ) {
 					) }
 				/>
 			</PanelBody> }
-		</InspectorControls>,
-		<BlockControls key={ uniqKey( 'BlockControls' ) }>
-			<ToolbarGroup key={ uniqKey( 'ToolbarGroup' ) }>
-				<Button
-					className={ 'jet-fb-button' }
-					key={ uniqKey( 'randomize' ) }
-					isTertiary
-					isSmall
-					icon={ conditionsIcon }
-					onClick={ () => setShowModal( true ) }
-				/>
-			</ToolbarGroup>
-		</BlockControls>,
-		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
-			<div className="jet-form-builder__conditional">
-				<InnerBlocks
-					key={ uniqKey( 'conditional-fields' ) }
-				/>
+		</InspectorControls>
+		<InspectorControls group={ 'advanced' }>
+			<div style={ { marginBottom: '1.5em' } }>
+				<Tip>
+					<RawHTML>
+						{ __(
+							`Add the CSS class <code>jet-form-builder--hidden</code> to make 
+this block hidden by default.`,
+							'jet-form-builder',
+						) }
+					</RawHTML>
+				</Tip>
 			</div>
-		</div>,
-		showModal && <ConditionsModal
-			key={ uniqKey( 'ConditionsModal' ) }
-			setShowModal={ setShowModal }
-		/>,
-	];
+		</InspectorControls>
+	</>;
 }

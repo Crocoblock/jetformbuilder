@@ -147,6 +147,8 @@ ConditionalBlock.prototype = {
 		} );
 	},
 	showBlock( result ) {
+		this.node.classList.remove( 'jet-form-builder--hidden' );
+
 		if ( this.settings?.dom ) {
 			this.showBlockDom( result );
 

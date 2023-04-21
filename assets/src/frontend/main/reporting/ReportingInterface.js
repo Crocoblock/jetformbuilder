@@ -70,15 +70,6 @@ ReportingInterface.prototype = {
 	 * @returns {Promise<boolean>}
 	 */
 	validate: async function () {
-		/**
-		 * We need to skip the validation in case with dynamic attrs
-		 * @since 3.0.4
-		 *
-		 * @see https://github.com/Crocoblock/issues-tracker/issues/2710#issuecomment-1502911797
-		 */
-		if ( !this.input.root.isObserved ) {
-			return true;
-		}
 		const errors = await this.getErrors();
 
 		this.validityState.current = !Boolean( errors.length );

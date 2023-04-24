@@ -9,6 +9,7 @@
 	],
 	"textdomain": "jet-form-builder",
 	"supports": {
+		"customClassName": false,
 		"html": false
 	},
 	"title": "Conditional Block",
@@ -35,6 +36,10 @@
 			"default": []
 		},
 		"className": {
+			"type": "string",
+			"default": ""
+		},
+		"class_name": {
 			"type": "string",
 			"default": ""
 		}

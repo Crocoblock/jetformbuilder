@@ -128,6 +128,7 @@ class Conditional_Block extends Base {
 		$func_type  = $this->get_function();
 		$content    = $this->block_content;
 		$name       = $this->block_attrs['name'] ?? '';
+		$class_name = $this->block_attrs['class_name'] ?? '';
 
 		if ( Live_Form::instance()->isset_form_break( $name ) ) {
 			$break = Live_Form::instance()->get_form_break( $name );
@@ -135,18 +136,12 @@ class Conditional_Block extends Base {
 			$content = $break->maybe_start_page( true ) . $content . $break->maybe_end_page( true );
 		}
 
-		$attrs = get_block_wrapper_attributes(
-			array(
-				'class'                => 'jet-form-builder__conditional',
-				'data-jfb-conditional' => htmlspecialchars( wp_json_encode( $conditions ) ),
-				'data-jfb-func'        => esc_attr( $func_type ),
-			)
-		);
-
 		return sprintf(
-			'<div %2$s>%1$s</div>',
+			'<div class="%2$s" data-jfb-conditional="%3$s" data-jfb-func="%4$s">%1$s</div>',
 			$content,
-			$attrs
+			'jet-form-builder__conditional ' . esc_attr( $class_name ),
+			htmlspecialchars( wp_json_encode( $conditions ) ),
+			esc_attr( $func_type )
 		);
 	}
 

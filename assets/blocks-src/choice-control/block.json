@@ -21,6 +21,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"control_type": {
+			"type": "string",
+			"default": ""
+		},
 		"default_image_control": {
 			"type": "object",
 			"default": {}
@@ -28,6 +32,14 @@
 		"checked_image_control": {
 			"type": "object",
 			"default": ""
+		},
+		"style": {
+			"type": "object",
+			"default": {
+				".jet-form-builder-choice--item-control-img": {
+					"width": "24px"
+				}
+			}
 		}
 	},
 	"supports": {

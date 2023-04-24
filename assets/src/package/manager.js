@@ -181,6 +181,7 @@ import StyleManagerEditControls
 import useJetStyle from './jet.style/hooks/useJetStyle';
 import useJetStyleSupports from './jet.style/hooks/useJetStyleSupports';
 import BaseLabel from './components/BaseLabel';
+import useStyle from './jet.style/hooks/useStyle';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -347,5 +348,6 @@ window.JetFBHooks = {
 	useCaptchaProvider,
 	useJetStyle,
 	useJetStyleSupports,
+	useStyle,
 };
 

@@ -1,5 +1,5 @@
-import { set } from '../../tools';
 import useBlockAttributes from '../../blocks/hooks/useBlockAttributes';
+import resolveStyle from '../helpers/resolveStyle';
 
 let {
 	    InspectorControls,
@@ -28,22 +28,15 @@ useMultipleOriginColorsAndGradients = (
 
 function ColorEditControls( { cssVars } ) {
 	const [ attributes, setAttributes ] = useBlockAttributes();
-
-	const colorGradientSettings = useMultipleOriginColorsAndGradients();
-
-	const { clientId } = useBlockEditContext();
-	const { get }      = window._;
+	const { clientId }                  = useBlockEditContext();
+	const colorGradientSettings         = useMultipleOriginColorsAndGradients();
 
 	const settings = Object.entries( cssVars ).map( ( [ cssVar, options ] ) => {
 
-		let currentRoot = attributes?.style ?? {};
+		const [ color, updateColor ] = resolveStyle( attributes, options.path );
 
-		const updateStyle = value => {
-			const newStyle = set(
-				JSON.parse( JSON.stringify( currentRoot ) ),
-				options.path,
-				value,
-			);
+		const onColorChange = value => {
+			const newStyle = updateColor( value );
 
 			setAttributes( {
 				style: newStyle,
@@ -53,10 +46,10 @@ function ColorEditControls( { cssVars } ) {
 		};
 
 		return {
-			colorValue: get( currentRoot, options.path ),
-			onColorChange: updateStyle,
+			colorValue: color,
+			onColorChange,
 			label: options?.label ?? __( 'Color', 'jet-form-builder' ),
-			resetAllFilter: () => updateStyle(),
+			resetAllFilter: () => onColorChange(),
 		};
 	} );
 

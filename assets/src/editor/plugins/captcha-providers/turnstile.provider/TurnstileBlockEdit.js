@@ -1,4 +1,5 @@
 import TurnstileOptions from './TurnstileOptions';
+import preview from './preview';
 
 const {
 	      __,
@@ -29,14 +30,26 @@ const currentTab = JetFBActions.globalTab( {
 	empty: {},
 } );
 
-function TurnstileBlockEdit( { isSelected } ) {
+function TurnstileBlockEdit( { isSelected, attributes } ) {
 	const blockProps = useBlockProps();
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return <>
 		<div { ...blockProps }>
 			{ isSelected
-			  ? <TurnstileOptions/>
-			  : 'Hello to turnstile!' }
+			  ? <div style={ { padding: '20px' } }>
+				  <TurnstileOptions/>
+			  </div>
+			  : preview }
 		</div>
 		<InspectorControls>
 			<div style={ { padding: '20px' } }>

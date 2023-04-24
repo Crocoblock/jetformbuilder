@@ -14,6 +14,11 @@ const { name, icon } = metadata;
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: EditCaptchaContainer,
+	example: {
+		attributes: {
+			isPreview: true,
+		},
+	},
 	variations,
 };
 

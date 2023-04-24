@@ -182,6 +182,8 @@ import useJetStyle from './jet.style/hooks/useJetStyle';
 import useJetStyleSupports from './jet.style/hooks/useJetStyleSupports';
 import BaseLabel from './components/BaseLabel';
 import useStyle from './jet.style/hooks/useStyle';
+import getCaptchaProviders from './captcha/helpers/getCaptchaProviders';
+import CaptchaBlockTip from './captcha/components/CaptchaBlockTip';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -272,6 +274,7 @@ window.JetFBComponents = {
 	CaptchaBlockEdit,
 	SelectVariations,
 	ToggleGroupVariations,
+	CaptchaBlockTip,
 };
 
 // JFBFunctions
@@ -310,6 +313,7 @@ window.JetFBActions = {
 	convertFlow,
 	assetUrl,
 	set,
+	getCaptchaProviders,
 };
 
 // JFBHooks

@@ -82,7 +82,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	protected function check_response() {
 		if (
 			$this->context->is_inside_conditional() ||
-			( $this->is_required && empty( $this->value ) )
+			( $this->is_required && ! empty( $this->value ) )
 		) {
 			return;
 		}

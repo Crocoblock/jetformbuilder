@@ -12,6 +12,7 @@ let {
 	    TextControl,
 	    NumberControl,
 	    __experimentalNumberControl,
+	    ExternalLink,
     }   = wp.components;
 
 NumberControl = NumberControl || __experimentalNumberControl;
@@ -49,12 +50,31 @@ function HCaptchaOptions() {
 			disabled={ providerArgs.use_global }
 			onChange={ key => setProviderArgs( { key } ) }
 		/>
+		<BaseHelp>
+			{ __(
+				'You can find it on this page in the first column of Sitekey.',
+				'jet-form-builder',
+			) + ' ' }
+			<ExternalLink href={ 'https://dashboard.hcaptcha.com/sites' }>
+				{ __( 'Go to the dashboard of sites', 'jet-form-builder' ) }
+			</ExternalLink>
+		</BaseHelp>
 		<TextControl
 			label={ __( 'Secret Key:', 'jet-form-builder' ) }
 			value={ currentArgs.secret }
 			disabled={ providerArgs.use_global }
 			onChange={ secret => setProviderArgs( { secret } ) }
 		/>
+		<BaseHelp>
+			{ __(
+				`You can find it on the hall settings page, 
+this will be the first field.`,
+				'jet-form-builder',
+			) + ' ' }
+			<ExternalLink href={ 'https://dashboard.hcaptcha.com/settings' }>
+				{ __( 'Go to the Settings page', 'jet-form-builder' ) }
+			</ExternalLink>
+		</BaseHelp>
 	</>;
 }
 

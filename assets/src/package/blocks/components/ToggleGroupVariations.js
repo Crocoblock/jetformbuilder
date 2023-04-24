@@ -52,7 +52,10 @@ function ToggleGroupVariationsBase( { value } ) {
 			return {
 				variations: items,
 				components: items.map(
-					current => toolbarState?.currentId
+					current => (
+						           toolbarState?.currentId ??
+						           toolbarState?.baseId
+					           )
 					           ? <ToolbarItem
 						           as={ ToggleGroupControlOptionIcon }
 						           value={ current.name }

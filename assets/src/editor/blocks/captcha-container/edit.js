@@ -1,4 +1,5 @@
 import { name } from './index';
+import preview from './preview';
 
 const {
 	      CaptchaBlockEdit,
@@ -39,6 +40,7 @@ BlockVariationPicker = (
 function Placeholder( props ) {
 	const {
 		      setAttributes,
+		      attributes,
 	      } = props;
 
 	const blockProps = useBlockProps();
@@ -58,6 +60,16 @@ function Placeholder( props ) {
 		[],
 	);
 
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
+
 	return <div { ...blockProps }>
 		<BlockVariationPicker
 			label={ blockType?.title }
@@ -74,7 +86,7 @@ export default function EditCaptchaContainer( props ) {
 	const { attributes, setAttributes } = props;
 
 	const [ args, setArgs ]         = useMetaState( '_jf_recaptcha' );
-	const [ provider, setProvider ] = useState( () => args.captcha );
+	const [ provider, setProvider ] = useState( () => attributes.provider );
 
 	useEffect( () => {
 		setProvider( attributes.provider );
@@ -85,6 +97,9 @@ export default function EditCaptchaContainer( props ) {
 	}, [ args.captcha ] );
 
 	useEffect( () => {
+		if ( attributes.isPreview ) {
+			return;
+		}
 		if ( provider !== attributes.provider ) {
 			setAttributes( { provider: provider } );
 		}

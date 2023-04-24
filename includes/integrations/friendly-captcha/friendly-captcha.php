@@ -47,7 +47,7 @@ class Friendly_Captcha extends Base_Captcha_From_Options {
 		wp_enqueue_script(
 			Base_Captcha::HANDLE_USER,
 			jet_form_builder()->plugin_url( 'assets/js/frontend/friendly.captcha.js' ),
-			array(),
+			array( 'jet-plugins' ),
 			jet_form_builder()->get_version(),
 			true
 		);

@@ -1,5 +1,3 @@
-import useCaptchaProvider from '../hooks/useCaptchaProvider';
-
 const {
 	      createSlotFill,
       } = wp.components;

@@ -119,6 +119,18 @@ const selectors = {
 
 		return !hasChanged;
 	},
+	/**
+	 * @since 3.1.0
+	 *
+	 * @param state
+	 * @param blockId {String} Block clientId or name
+	 * @returns {*}
+	 */
+	getBlock( state, blockId ) {
+		return state.blocks.find( ( { name, clientId } ) => (
+			[ name, clientId ].includes( blockId )
+		) );
+	},
 	getBlockByName( state, fieldName ) {
 		if ( !fieldName ) {
 			return false;

@@ -1,4 +1,5 @@
 import GoogleCaptchaOptions from './GoogleCaptchaOptions';
+import preview from './preview';
 
 const {
 	      __,
@@ -32,7 +33,7 @@ const currentTab = globalTab( {
 	empty: {},
 } );
 
-function GoogleCaptchaBlockEdit( { isSelected } ) {
+function GoogleCaptchaBlockEdit( { isSelected, attributes } ) {
 	const blockProps = useBlockProps();
 
 	const [ providerArgs, setProviderArgs ] = useCaptchaProvider();
@@ -40,10 +41,20 @@ function GoogleCaptchaBlockEdit( { isSelected } ) {
 	                                          ? currentTab
 	                                          : providerArgs;
 
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
+
 	return <>
 		<div { ...blockProps }>
 			{ isSelected
-			  ? <>
+			  ? <div style={ { padding: '20px' } }>
 				  <ToggleControl
 					  checked={ providerArgs.use_global }
 					  onChange={ use_global => setProviderArgs(
@@ -99,8 +110,8 @@ function GoogleCaptchaBlockEdit( { isSelected } ) {
 					  </a>
 				  </span>
 				  </BaseHelp>
-			  </>
-			  : 'Hello to Google!' }
+			  </div>
+			  : preview }
 		</div>
 		<InspectorControls>
 			<div style={ { padding: '20px' } }>

@@ -3,6 +3,7 @@ const {
       } = wp.i18n;
 const {
 	      ToggleControl,
+	      BaseHelp,
       } = JetFBComponents;
 const {
 	      useCaptchaProvider,
@@ -11,6 +12,7 @@ let {
 	    TextControl,
 	    NumberControl,
 	    __experimentalNumberControl,
+	    ExternalLink,
     }   = wp.components;
 
 NumberControl = NumberControl || __experimentalNumberControl;
@@ -48,9 +50,25 @@ function FriendlyCaptchaOptions() {
 			disabled={ providerArgs.use_global }
 			onChange={ key => setProviderArgs( { key } ) }
 		/>
+		<BaseHelp>
+			{ __(
+				`It can be found on the page listing your Applications. 
+Or follow this`,
+				'jet-form-builder',
+			) + ' ' }
+			<ExternalLink
+				href={ 'https://docs.friendlycaptcha.com/#/installation?id=_1-generating-a-sitekey' }
+			>
+				{ __( 'guide', 'jet-form-builder' ) }
+			</ExternalLink>
+		</BaseHelp>
 		<TextControl
 			label={ __( 'Secret Key:', 'jet-form-builder' ) }
 			value={ currentArgs.secret }
+			help={ __(
+				'It can be found on the page listing your API keys.',
+				'jet-form-builder',
+			) }
 			disabled={ providerArgs.use_global }
 			onChange={ secret => setProviderArgs( { secret } ) }
 		/>

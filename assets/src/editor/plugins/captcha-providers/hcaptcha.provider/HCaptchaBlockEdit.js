@@ -1,4 +1,5 @@
 import HCaptchaOptions from './HCaptchaOptions';
+import preview from './preview';
 
 const {
 	      __,
@@ -29,14 +30,26 @@ const currentTab = JetFBActions.globalTab( {
 	empty: {},
 } );
 
-function HCaptchaBlockEdit( { isSelected } ) {
+function HCaptchaBlockEdit( { isSelected, attributes } ) {
 	const blockProps = useBlockProps();
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return <>
 		<div { ...blockProps }>
 			{ isSelected
-			  ? <HCaptchaOptions/>
-			  : 'Hello to hCaptcha!' }
+			  ? <div style={ { padding: '20px' } }>
+				  <HCaptchaOptions/>
+			  </div>
+			  : preview }
 		</div>
 		<InspectorControls>
 			<div style={ { padding: '20px' } }>

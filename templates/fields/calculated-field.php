@@ -29,13 +29,7 @@ $this->add_attribute( 'data-sep-decimal', $args['separate_decimals'] );
 $this->add_attribute( 'data-sep-thousands', $args['separate_thousands'] );
 $this->add_attribute( 'data-value-type', $this->args['value_type'] );
 
-$this->add_attribute(
-	'class',
-	empty( $this->block_type->get_current_repeater() )
-	? 'jet-form-builder__calculated-field'
-	: 'jet-form-builder__calculated-field--child'
-);
-
+$this->add_attribute( 'class', 'jet-form-builder__calculated-field' );
 $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field--hidden' : '' );
 
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WhiteSpace.PrecisionAlignment.Found
@@ -45,12 +39,12 @@ $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field-
 		<div class="jet-form-builder__calculated-field-prefix"><?php echo wp_kses_post( $prefix ); ?></div>
 	<?php endif; ?>
 	<input type="hidden"
-           name="<?php echo esc_attr( $name ); ?>"
-           value="<?php echo esc_attr( $default_value ); ?>"
-		   class="jet-form-builder__calculated-field-input jet-form-builder__field"
-		   data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
-           data-jfb-sync
-    />
+			name="<?php echo esc_attr( $name ); ?>"
+			value="<?php echo esc_attr( $default_value ); ?>"
+			class="jet-form-builder__calculated-field-input jet-form-builder__field"
+			data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
+			data-jfb-sync
+	/>
 	<div class="jet-form-builder__calculated-field-val"><?php echo wp_kses_post( $this->render_editor_placeholder() ); ?></div>
 	<?php if ( false !== $suffix ) : ?>
 		<div class="jet-form-builder__calculated-field-suffix"><?php echo wp_kses_post( $suffix ); ?></div>

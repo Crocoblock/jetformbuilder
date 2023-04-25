@@ -38,6 +38,10 @@
 		"className": {
 			"type": "string",
 			"default": ""
+		},
+		"class_name": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"providesContext": {

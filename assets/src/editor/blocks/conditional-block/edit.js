@@ -157,6 +157,20 @@ this block hidden by default.`,
 					</RawHTML>
 				</Tip>
 			</div>
+			<TextControl
+				label={ __(
+					'Additional CSS class(es)',
+					'jet-form-builder',
+				) }
+				help={ __(
+					'Separate multiple classes with spaces.',
+					'jet-form-builder',
+				) }
+				value={ attributes.class_name }
+				onChange={ class_name => setAttributes(
+					{ class_name },
+				) }
+			/>
 		</InspectorControls>
 	</>;
 }

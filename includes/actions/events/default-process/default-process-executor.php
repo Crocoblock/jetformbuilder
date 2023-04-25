@@ -32,17 +32,6 @@ class Default_Process_Executor extends Base_Executor {
 	}
 
 	/**
-	 * @throws Action_Exception
-	 */
-	protected function execute_actions() {
-		$save = jet_fb_action_handler()->get_action( Save_Record::ID );
-
-		false === $save
-			? jet_fb_action_handler()->run_actions( $this )
-			: jet_fb_action_handler()->soft_run_actions( $this );
-	}
-
-	/**
 	 * @return bool
 	 */
 	public function is_supported(): bool {

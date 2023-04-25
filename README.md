@@ -4,6 +4,12 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.0.5
+* ADD: Ability to hide conditional blocks during form rendering to avoid layout shifts (see Advanced section in block settings)
+* FIX: Incorrect behavior of validation in step-by-step form
+* FIX: Compatibility of Calculated field with Repeater Field
+* FIX: Fatal error when using a preset with GET parameters that are missing
+
 ## 3.0.4
 * ADD: Save Record will not execute if captcha, wp nonce or csrf token validation failed. To return the saving of errors of this kind, it is necessary to manually enable the corresponding option in the action
 * UPD: Guests are allowed to add attachments 

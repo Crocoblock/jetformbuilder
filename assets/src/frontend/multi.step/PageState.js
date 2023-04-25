@@ -33,6 +33,12 @@ function PageState( node, state ) {
 	 * @since 3.0.1
 	 */
 	this.autoFocus = window.JetFormBuilderSettings?.auto_focus;
+
+	/**
+	 * @since 3.0.5
+	 * @type {boolean}
+	 */
+	this.initialObserveState = false;
 }
 
 PageState.prototype.observe = function () {
@@ -49,7 +55,25 @@ PageState.prototype.observe = function () {
 	} );
 
 	this.addButtonsListeners();
-	this.updateStateAsync().then( () => {} ).catch( () => {} );
+
+	/**
+	 * We check the fields only for the first page.
+	 * And for the following, we do it when switching pages
+	 * (in the `onShow` method)
+	 *
+	 * We do this because on other pages the fields are always
+	 * checked with a successful result due to the check on `isVisible`
+	 *
+	 * @since 3.0.5
+	 *
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/2781#issuecomment-1517928213
+	 * @see PageState.onShow
+	 * @see InputData.isVisible
+	 */
+	if ( this.isFirst() ) {
+		this.initialObserveState = true;
+		this.updateStateAsync().then( () => {} ).catch( () => {} );
+	}
 
 	addAction(
 		'jet.fb.observe.input.manual',
@@ -136,8 +160,20 @@ PageState.prototype.observeConditionalBlocks = function () {
 		}
 	}
 };
+
+/**
+ * @since 3.0.5 We check the fields if this is done for the first time
+ * @since 3.0.0 Introduced
+ */
 PageState.prototype.onShow      = function () {
 	this.node.classList.remove( 'jet-form-builder-page--hidden' );
+
+	if ( this.initialObserveState ) {
+		return;
+	}
+
+	this.initialObserveState = true;
+	this.updateStateAsync().then( () => {} ).catch( () => {} );
 };
 PageState.prototype.onHide      = function () {
 	this.node.classList.add( 'jet-form-builder-page--hidden' );
@@ -232,6 +268,15 @@ PageState.prototype.getLockState = function () {
 PageState.prototype.isLast = function () {
 	return this.state.isLastPage( this );
 };
+
+/**
+ * @since 3.0.5
+ *
+ * @returns {boolean}
+ */
+PageState.prototype.isFirst = function () {
+	return this.state.isFirstPage( this );
+}
 
 /**
  * @param input {InputData|RepeaterData}

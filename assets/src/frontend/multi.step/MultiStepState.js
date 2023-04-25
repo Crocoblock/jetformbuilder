@@ -123,6 +123,16 @@ function MultiStepState() {
 		return this.elements.at( -1 ) === page;
 	};
 
+	/**
+	 * @since 3.0.5
+	 *
+	 * @param page
+	 * @returns {boolean}
+	 */
+	this.isFirstPage = function ( page ) {
+		return this.elements[ 0 ] === page;
+	};
+
 	this.onReady = function () {
 		doAction( 'jet.fb.multistep.init', this );
 	};

@@ -1,7 +1,7 @@
 .components-toggle-group-control {
 	[aria-checked="true"] {
-		.jet-fb.fill-white-on-toggle-checked {
-			fill: #ffffff;
+		svg path {
+			fill: currentColor;
 		}
 	}
 }

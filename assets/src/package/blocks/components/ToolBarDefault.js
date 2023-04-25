@@ -14,6 +14,7 @@ const {
 	      TextControl,
 	      ToolbarGroup,
 	      ToolbarItem,
+	      ToolbarButton,
 	      Button,
       } = wp.components;
 
@@ -41,21 +42,18 @@ function ToolBarDefault( { children = null } ) {
 			key={ uniqKey( 'ToolBarFields-ToolbarGroup' ) }
 			className="jet-fb-block-toolbar"
 		>
-			<ToolbarItem as="div" style={ {
-				display: 'flex',
-			} }>
-				<Button
-					isSmall
-					icon="admin-page"
-					showTooltip
-					shortcut="Copy name"
-					ref={ copyRef }
-				/>
-				<TextControl
-					value={ attributes.name }
-					onChange={ name => setAttributes( { name } ) }
-				/>
-			</ToolbarItem>
+			<ToolbarButton
+				isSmall
+				icon="admin-page"
+				showTooltip
+				shortcut="Copy name"
+				ref={ copyRef }
+			/>
+			<ToolbarItem
+				as={ TextControl }
+				value={ attributes.name }
+				onChange={ name => setAttributes( { name } ) }
+			/>
 			{ children }
 		</ToolbarGroup>
 	</BlockControls>;

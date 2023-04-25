@@ -28,7 +28,9 @@ export default function EditAdvancedChoice( props ) {
 	} );
 
 	const blockProps       = useBlockProps( { className } );
-	const innerBlocksProps = useInnerBlocksProps( blockProps );
+	const innerBlocksProps = useInnerBlocksProps( blockProps, {
+		template: [ [ 'core/paragraph', {} ] ],
+	} );
 
 	return <ChoiceItemContext.Provider value={ { clientId } }>
 		<li { ...innerBlocksProps }/>

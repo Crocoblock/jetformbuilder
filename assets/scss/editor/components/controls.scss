@@ -150,7 +150,7 @@
 		}
 	}
 
-	&.toggle-toolbar-group.components-toolbar-group {
+	&.toggle-toolbar-group.components-toolbar-group, &.toggle-toolbar-group.components-toolbar {
 		.components-base-control__field {
 			margin-bottom: unset;
 		}

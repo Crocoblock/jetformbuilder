@@ -1,6 +1,7 @@
 import { name } from './index';
 import Placeholder from './placeholder';
 import ChoicesFieldContext from './context';
+import AddChoiceButton from './AddChoiceButton';
 
 const { __ } = wp.i18n;
 
@@ -16,6 +17,7 @@ const {
 	      BlockName,
 	      BlockDescription,
 	      StyleManagerEditControls,
+	      BlockAdvancedValue,
       } = JetFBComponents;
 
 const {
@@ -98,7 +100,9 @@ export default function EditAdvancedChoicesField( props ) {
 	const state = useCreateCurrentChoice( attributes );
 
 	return <ChoicesFieldContext.Provider value={ state }>
-		<ToolBarFields/>
+		<ToolBarFields>
+			<AddChoiceButton/>
+		</ToolBarFields>
 		<StyleManagerEditControls optionVars={ {
 			'--choice-bg': {
 				label: __( 'Choice background', 'jet-form-builder' ),
@@ -117,10 +121,16 @@ export default function EditAdvancedChoicesField( props ) {
 				<ToggleControl
 					label={ __( 'Allow multiple choices', 'jet-form-builder' ) }
 					checked={ attributes.allow_multiple }
+					help={ __(
+						`Enable this option if you need to be able 
+to select multiple options`,
+						'jet-form-builder',
+					) }
 					onChange={
 						allow_multiple => setAttributes( { allow_multiple } )
 					}
 				/>
+				<BlockAdvancedValue/>
 			</PanelBody>
 		</InspectorControls>
 		<ul { ...innerBlocksProps } />

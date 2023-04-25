@@ -86,7 +86,7 @@ function RegisterUserRender( props ) {
 				<div className="jet-user-fields-map__list">
 					<span
 						className={ 'description-controls' }>{ __(
-						'Set form fields names to to get user data from',
+						'Set form fields names to get user data from',
 						'jet-form-builder' ) }</span>
 					{ userFields.map( ( [ value, data ] ) => {
 

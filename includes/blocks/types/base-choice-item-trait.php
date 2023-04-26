@@ -18,6 +18,16 @@ trait Base_Choice_Item_Trait {
 		return $this->block_context['jet-forms/choices-field--multiple'] ?? false;
 	}
 
+	public function is_checked_current(): bool {
+		$context = $this->block_context['jet-forms/choices-field--default'] ?? array();
+
+		if ( ! is_array( $context ) ) {
+			return false;
+		}
+
+		return in_array( $this->get_field_value(), $context, true );
+	}
+
 	public function get_required_val(): bool {
 		return $this->block_context['jet-forms/choices-field--required'] ?? false;
 	}

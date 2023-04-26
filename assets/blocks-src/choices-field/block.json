@@ -100,7 +100,7 @@
 			}
 		},
 		"default": {
-			"type": "string",
+			"type": [ "string", "array", "number", "boolean", "object" ],
 			"default": ""
 		},
 		"required": {
@@ -115,7 +115,8 @@
 	"providesContext": {
 		"jet-forms/choices-field--multiple": "allow_multiple",
 		"jet-forms/choices-field--required": "required",
-		"jet-forms/choices-field--name": "name"
+		"jet-forms/choices-field--name": "name",
+		"jet-forms/choices-field--default": "default"
 	},
 	"usesContext": [
 		"jet-forms/repeater-field--name"

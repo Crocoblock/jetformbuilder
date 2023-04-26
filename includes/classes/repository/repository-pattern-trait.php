@@ -130,6 +130,17 @@ trait Repository_Pattern_Trait {
 		return $this->__repository;
 	}
 
+	/**
+	 * @since 3.1.0
+	 *
+	 * @return \Generator
+	 */
+	public function rep_generate_items(): \Generator {
+		foreach ( $this->__repository as $item ) {
+			yield $item;
+		}
+	}
+
 	public function rep_get_values(): array {
 		return array_values( $this->__repository );
 	}

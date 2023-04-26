@@ -27,11 +27,12 @@ class Choice_Render extends Base {
 
 	public function render( $wp_block = null, $template = null ) {
 		$this->set_choice_check( $wp_block );
+		$is_checked = $this->block_type->is_checked_current();
 
 		$accessibility_attrs = $this->has_choice_check()
 			? array()
 			: array(
-				'aria-pressed' => 'false',
+				'aria-pressed' => $is_checked ? 'true' : 'false',
 				'role'         => 'button',
 				'tabindex'     => '0',
 			);
@@ -39,7 +40,7 @@ class Choice_Render extends Base {
 		$attrs = get_block_wrapper_attributes(
 			array_merge(
 				array(
-					'class' => 'jet-form-builder-choice--item',
+					'class' => 'jet-form-builder-choice--item' . ( $is_checked ? ' is-checked' : '' ),
 				),
 				$accessibility_attrs
 			)

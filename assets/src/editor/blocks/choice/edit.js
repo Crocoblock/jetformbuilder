@@ -39,7 +39,9 @@ export default function EditAdvancedChoice( props ) {
 				<TextControl
 					label={ __( 'Value', 'jet-form-builder' ) }
 					value={ attributes.value }
-					onChange={ label => setAttributes( { label } ) }
+					onChange={ val => setAttributes( {
+						value: val.trim(),
+					} ) }
 				/>
 				<TextControl
 					label={ __(
@@ -52,7 +54,9 @@ in the Calculated Field.`,
 						'jet-form-builder',
 					) }
 					value={ attributes.calc_value }
-					onChange={ calc_value => setAttributes( { calc_value } ) }
+					onChange={ val => setAttributes( {
+						calc_value: val.trim(),
+					} ) }
 				/>
 			</PanelBody>
 		</InspectorControls>

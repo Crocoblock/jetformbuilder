@@ -9,6 +9,7 @@ use Jet_Form_Builder\Blocks\Modules\Base_Module;
 use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
@@ -28,6 +29,14 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	const PRESET_RAW     = 'raw';
 	const PRESET_ARRAY   = 'array';
 	const PRESET_EXACTLY = 'exactly';
+
+	/**
+	 * Accepts string `one, two, three`
+	 * or array `['one', 'two', 'three']`
+	 *
+	 * @since 3.1.0
+	 */
+	const PRESET_LIST = 'list';
 
 	/**
 	 * @var Controls_Manager
@@ -156,6 +165,8 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 				),
 				'2.1.0'
 			);
+
+			return;
 		}
 
 		$this->attrs            = $block->attributes;
@@ -314,7 +325,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @return mixed
 	 */
 	protected function apply_attribute( string $name ) {
-		$shortcode = $this->attrs['jfb']['shortcode'] ?? false;
+		$shortcode = $this->attrs[ $name ]['jfb']['shortcode'] ?? false;
 		$value     = $this->block_attrs[ $name ];
 
 		if ( $shortcode ) {
@@ -328,8 +339,10 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @param $value
 	 *
 	 * @return mixed
+	 * @since 3.1.0 Added case for PRESET_LIST & make public
+	 * @see Base::PRESET_LIST
 	 */
-	protected function get_prepared_default( $value ) {
+	public function get_prepared_default( $value ) {
 		$format = $this->expected_preset_type()[0] ?? false;
 
 		switch ( $format ) {
@@ -341,6 +354,19 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 				}
 
 				return array_map( 'strval', $value );
+
+			case self::PRESET_LIST:
+				if ( is_string( $value ) ) {
+					$value = explode( ',', $value );
+
+					$value = array_map( 'trim', $value );
+				}
+
+				if ( ! is_array( $value ) ) {
+					$value = array( $value );
+				}
+
+				return array_map( array( Tools::class, 'to_string' ), $value );
 			case self::PRESET_RAW:
 			default:
 				if ( is_array( $value ) ) {
@@ -353,7 +379,14 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		}
 	}
 
-	protected function get_default_from_preset( $attributes = array() ) {
+	/**
+	 * @since 3.1.0 Make public
+	 *
+	 * @param array $attributes
+	 *
+	 * @return mixed|string|void
+	 */
+	public function get_default_from_preset( $attributes = array() ) {
 		jet_fb_preset( jet_fb_live()->form_id );
 
 		if ( ! $this->parent_repeater_name() ) {

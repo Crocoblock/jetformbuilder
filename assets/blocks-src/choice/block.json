@@ -84,6 +84,7 @@
 	"usesContext": [
 		"jet-forms/choices-field--multiple",
 		"jet-forms/choices-field--required",
-		"jet-forms/choices-field--name"
+		"jet-forms/choices-field--name",
+		"jet-forms/choices-field--default"
 	]
 }

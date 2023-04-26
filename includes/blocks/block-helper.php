@@ -163,7 +163,7 @@ class Block_Helper {
 		return explode( '/', $block )[1] ?? '';
 	}
 
-	public static function is_field( $block_name ): bool {
+	public static function is_field( string $block_name ): bool {
 		return ( stripos( $block_name, Form_Manager::NAMESPACE_FIELDS ) !== false );
 	}
 
@@ -189,6 +189,11 @@ class Block_Helper {
 		return $attrs;
 	}
 
+	/**
+	 * @param $names
+	 *
+	 * @return array|string
+	 */
 	public static function get_block_names( $names ) {
 		if ( ! is_array( $names ) ) {
 			$block = jet_form_builder()->blocks->get_field_by_name( $names );

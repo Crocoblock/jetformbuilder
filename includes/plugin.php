@@ -49,6 +49,8 @@ if ( ! defined( 'WPINC' ) ) {
  * @property \Jet_Admin_Bar $admin_bar
  * @property Form_Messages\Msg_Router $msg_router
  * @property Regexp_Tools $regexp
+ * @property Blocks\Block_Sanitizer_Manager $blocks_sanitizer
+ *
  * Class Plugin
  * @package Jet_Form_Builder
  */
@@ -69,6 +71,7 @@ class Plugin {
 	public $honeypot;
 	public $wp_experiments;
 	public $regexp;
+	public $blocks_sanitizer;
 
 	public static $instance;
 
@@ -122,18 +125,19 @@ class Plugin {
 		Jet_Booking::register();
 		new Deprecated();
 
-		$this->admin_bar      = \Jet_Admin_Bar::get_instance();
-		$this->msg_router     = new Form_Messages\Msg_Router();
-		$this->post_type      = new Post_Type();
-		$this->blocks         = new Blocks\Manager();
-		$this->actions        = new Actions\Manager();
-		$this->form           = new Form_Manager();
-		$this->form_handler   = new Form_Handler();
-		$this->captcha        = new Forms_Captcha();
-		$this->addons_manager = new AddonsManager();
-		$this->honeypot       = new Honeypot();
-		$this->wp_experiments = new Wp_Experiments();
-		$this->regexp         = new Regexp_Tools();
+		$this->admin_bar        = \Jet_Admin_Bar::get_instance();
+		$this->msg_router       = new Form_Messages\Msg_Router();
+		$this->post_type        = new Post_Type();
+		$this->blocks           = new Blocks\Manager();
+		$this->actions          = new Actions\Manager();
+		$this->form             = new Form_Manager();
+		$this->form_handler     = new Form_Handler();
+		$this->captcha          = new Forms_Captcha();
+		$this->addons_manager   = new AddonsManager();
+		$this->honeypot         = new Honeypot();
+		$this->wp_experiments   = new Wp_Experiments();
+		$this->regexp           = new Regexp_Tools();
+		$this->blocks_sanitizer = new Blocks\Block_Sanitizer_Manager();
 
 		/**
 		 * Modules & components

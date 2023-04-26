@@ -3,12 +3,12 @@
 		border: 2px solid var(--wp--preset--color--tertiary, #bfbfbf);
 		padding: 20px;
 		display: block;
-		background-color: var(--choice-bg, transparent) !important;
+		background-color: var(--choice-bg, transparent);
 		cursor: pointer;
 		transition: all 0.2s ease-out;
 
 		&.is-checked {
-			background-color: var(--choice-checked-bg, var(--wp--preset--color--cyan-bluish-gray)) !important;
+			background-color: var(--choice-checked-bg, transparent);
 		}
 	}
 }

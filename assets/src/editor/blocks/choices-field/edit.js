@@ -130,7 +130,14 @@ to select multiple options`,
 						allow_multiple => setAttributes( { allow_multiple } )
 					}
 				/>
-				<BlockAdvancedValue/>
+				<BlockAdvancedValue
+					help={ attributes.allow_multiple && __(
+						`You should list the choice 
+values separated by commas that should be selected by default. But this 
+is not the case when you use a dynamic value using a preset, macros, etc.`,
+						'jet-form-builder',
+					) }
+				/>
 			</PanelBody>
 		</InspectorControls>
 		<ul { ...innerBlocksProps } />

@@ -89,6 +89,7 @@ class Choice_Check_Render extends Base {
 				array( 'value', esc_attr( $block_type->get_field_value() ) ),
 				array( 'data-calculate', esc_attr( $block_type->get_calculated_value() ) ),
 				array( 'required', $block_type->get_required_val() ),
+				array( 'checked', $block_type->is_checked_current() ? 'checked' : '' ),
 			),
 			$other
 		);

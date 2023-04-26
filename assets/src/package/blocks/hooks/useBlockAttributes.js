@@ -7,9 +7,13 @@ const {
 	      select,
       } = wp.data;
 
-function useBlockAttributes() {
+function useBlockAttributes( otherClientId = null ) {
 	const blockProps   = useBlockEditContext();
-	const { clientId } = blockProps;
+	let { clientId } = blockProps;
+
+	if ( otherClientId ) {
+		clientId = otherClientId;
+	}
 
 	const attributes      = useSelect( select => {
 		return select( 'core/block-editor' ).getBlockAttributes( clientId );

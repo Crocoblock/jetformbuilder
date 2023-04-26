@@ -79,7 +79,7 @@ class Media_Field extends Base {
 		return array( self::PRESET_EXACTLY );
 	}
 
-	protected function get_default_from_preset( $attributes = array() ) {
+	public function get_default_from_preset( $attributes = array() ): array {
 		$preset = parent::get_default_from_preset( $attributes );
 		$value  = $this->parse_preset( $preset );
 		$files  = array();

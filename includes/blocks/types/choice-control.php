@@ -12,7 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 
-class Choice_Check extends Base implements Base_Choice_Item_It {
+class Choice_Control extends Base implements Base_Choice_Item_It {
 
 	use Base_Choice_Item_Trait;
 

@@ -27,6 +27,10 @@ class Choices_Field extends Base {
 		return false;
 	}
 
+	public function use_preset() {
+		return false;
+	}
+
 	public function register_block_type() {
 		parent::register_block_type();
 
@@ -44,6 +48,10 @@ class Choices_Field extends Base {
 			Plugin::instance()->get_version(),
 			true
 		);
+	}
+
+	public function expected_preset_type(): array {
+		return array( self::PRESET_LIST );
 	}
 
 	/**

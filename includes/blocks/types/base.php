@@ -358,7 +358,6 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			case self::PRESET_LIST:
 				if ( is_string( $value ) ) {
 					$value = explode( ',', $value );
-
 					$value = array_map( 'trim', $value );
 				}
 

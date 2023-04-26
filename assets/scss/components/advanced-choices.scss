@@ -10,5 +10,15 @@
 		&.is-checked {
 			background-color: var(--choice-checked-bg, transparent);
 		}
+
+		&-control {
+			display: flex;
+			align-items: center;
+			gap: 0.5em;
+
+			&-img {
+				width: var(--control-width, 24px);
+			}
+		}
 	}
 }

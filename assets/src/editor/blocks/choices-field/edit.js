@@ -54,9 +54,7 @@ function useCreateCurrentChoice( { allow_multiple } ) {
 
 	const updateCurrent = value => {
 		if ( !allow_multiple ) {
-			if ( current !== value ) {
-				setCurrent( value );
-			}
+			setCurrent( current !== value ? value : '' );
 
 			return;
 		}

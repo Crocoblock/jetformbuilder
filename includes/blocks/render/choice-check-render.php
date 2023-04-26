@@ -7,6 +7,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Blocks\Types\Base_Choice_Item_It;
 use Jet_Form_Builder\Blocks\Types\Choice;
 use Jet_Form_Builder\Blocks\Types\Base as BaseType;
+use Jet_Form_Builder\Blocks\Types\Choice_Control;
 use Jet_Form_Builder\Classes\Builder_Helper;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -14,7 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * @property Choice $block_type
+ * @property Choice_Control $block_type
  *
  * Class Choice_Render
  * @package Jet_Form_Builder\Blocks\Render
@@ -38,17 +39,21 @@ class Choice_Check_Render extends Base {
 			)
 		);
 
+		$is_image = $this->block_type->is_image_control();
+		$image    = $this->get_image_control();
+
 		$input = self::get_input_control(
 			$this->block_type,
 			array(
-				array( 'class', 'jet-form-builder-choice--item-control-input' ),
+				array( 'class', $is_image ? '' : 'jet-form-builder-choice--item-control-input' ),
+				array( 'style', $is_image ? 'display:none;' : '' ),
 			)
 		);
 
 		$html = sprintf(
 			'<span %1$s>%2$s</span>',
 			$attrs,
-			( $input . $this->get_control_label() )
+			( $image . $input . $this->get_control_label() )
 		);
 
 		return parent::render( null, $html );
@@ -97,6 +102,38 @@ class Choice_Check_Render extends Base {
 		return sprintf(
 			'<input %s/>',
 			Builder_Helper::attrs( $attributes )
+		);
+	}
+
+	public function get_image_control(): string {
+		if ( ! $this->block_type->is_image_control() ) {
+			return '';
+		}
+
+		$is_checked    = $this->block_type->is_checked_current();
+		$default_image = esc_url( $this->block_type->get_control_image_default() );
+		$checked_image = esc_url( $this->block_type->get_control_image_checked() );
+
+		if ( ! $default_image || ! $checked_image ) {
+			return '';
+		}
+
+		$alt = $this->block_type->get_raw_field_name() . ' ' . __( 'control', 'jet-form-builder' );
+
+		$attrs = array(
+			array(
+				'src',
+				esc_url( $is_checked ? $checked_image : $default_image ),
+			),
+			array( 'class', 'jet-form-builder-choice--item-control-img' ),
+			array( 'data-src-default', $default_image ),
+			array( 'data-src-checked', $checked_image ),
+			array( 'alt', $alt ),
+		);
+
+		return sprintf(
+			'<img %s/>',
+			Builder_Helper::attrs( $attrs )
 		);
 	}
 }

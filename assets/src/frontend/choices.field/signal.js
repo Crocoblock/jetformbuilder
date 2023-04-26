@@ -23,6 +23,8 @@ function SignalChoices() {
 			wrapper.classList.toggle( 'is-checked', node.checked );
 			wrapper.ariaPressed = node.checked;
 
+			this.toggleImageControl( wrapper, node.checked );
+
 			if ( !node.checked ) {
 				continue;
 			}
@@ -35,5 +37,32 @@ function SignalChoices() {
 }
 
 SignalChoices.prototype = Object.create( BaseSignal.prototype );
+
+/**
+ * @param wrapper {HTMLElement}
+ * @param isChecked {Boolean}
+ */
+SignalChoices.prototype.toggleImageControl = function ( wrapper, isChecked ) {
+	/**
+	 * @type {Element|HTMLImageElement}
+	 */
+	const image = wrapper.querySelector(
+		'.jet-form-builder-choice--item-control-img',
+	);
+
+	if ( !image ) {
+		return;
+	}
+
+	const newSrc = isChecked
+	               ? image.dataset.srcChecked
+	               : image.dataset.srcDefault;
+
+	if ( image.src === newSrc ) {
+		return;
+	}
+
+	image.src = newSrc;
+};
 
 export default SignalChoices;

@@ -1,6 +1,6 @@
-import { name } from './index';
 import useCheckedChoiceState from './useCheckedChoiceState';
 import ChoiceItemContext from './context';
+import ToggleCheckStateButton from './ToggleCheckStateButton';
 
 const { __ } = wp.i18n;
 
@@ -8,6 +8,7 @@ const {
 	      InspectorControls,
 	      useBlockProps,
 	      useInnerBlocksProps,
+	      BlockControls,
       } = wp.blockEditor;
 
 const {
@@ -34,6 +35,9 @@ export default function EditAdvancedChoice( props ) {
 
 	return <ChoiceItemContext.Provider value={ { clientId } }>
 		<li { ...innerBlocksProps }/>
+		<BlockControls group={ 'block' }>
+			<ToggleCheckStateButton/>
+		</BlockControls>
 		<InspectorControls>
 			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
 				<TextControl

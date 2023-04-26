@@ -1,4 +1,5 @@
 import useCheckedChoiceState from '../choice/useCheckedChoiceState';
+import ToggleCheckStateButton from '../choice/ToggleCheckStateButton';
 
 const { __ } = wp.i18n;
 
@@ -8,6 +9,7 @@ const {
 	      InspectorControls,
 	      MediaUpload,
 	      MediaUploadCheck,
+	      BlockControls,
       } = wp.blockEditor;
 
 const {
@@ -95,6 +97,18 @@ export default function EditChoiceCheck( props ) {
 	const [ width, setWidth ]          = useStyle( '--control-width' );
 	const [ isChecked, toggleChecked ] = useCheckedChoiceState();
 
+	const controlImageUrl = (
+		() => {
+			if ( 'image' !== attributes.control_type ) {
+				return false;
+			}
+
+			return isChecked
+			       ? attributes?.checked_image_control?.url
+			       : attributes?.default_image_control?.url;
+		}
+	)();
+
 	const widthInt = parseInt( width );
 
 	const hasWidth = () => {
@@ -103,20 +117,29 @@ export default function EditChoiceCheck( props ) {
 
 	//
 	return <>
+		<BlockControls group={ 'block' }>
+			<ToggleCheckStateButton/>
+		</BlockControls>
 		<span { ...blockProps }>
-			<input
-				id={ instanceId }
-				type={ isMultiple ? 'checkbox' : 'radio' }
-				checked={ isChecked }
-				onChange={ () => toggleChecked() }
-			/>
+			{ !!controlImageUrl
+			  ? <img
+				  src={ controlImageUrl }
+				  className={ 'jet-form-builder-choice--item-control-img' }
+				  alt={ fieldName + ' ' + __( 'control', 'jet-form-builder' ) }
+			  />
+			  : <input
+				  id={ instanceId }
+				  type={ isMultiple ? 'checkbox' : 'radio' }
+				  checked={ isChecked }
+				  onChange={ () => toggleChecked() }
+				  className={ 'jet-form-builder-choice--item-control-input' }
+			  /> }
 			<RichText
 				tagName={ 'label' }
 				value={ attributes.label }
 				onChange={ label => setAttributes( { label } ) }
 				placeholder={ __( 'Label for input...', 'jet-form-builder' ) }
 				multiline={ false }
-				//htmlFor={ instanceId }
 			/>
 		</span>
 		<InspectorControls>

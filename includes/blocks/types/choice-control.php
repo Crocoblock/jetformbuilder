@@ -38,4 +38,24 @@ class Choice_Control extends Base implements Base_Choice_Item_It {
 	public function get_calculated_value(): string {
 		return $this->block_context['jet-forms/choice--calc_value'] ?? '';
 	}
+
+	public function is_image_control(): bool {
+		return 'image' === ( $this->block_attrs['control_type'] ?? '' );
+	}
+
+	public function get_control_image_default(): string {
+		if ( ! $this->is_image_control() ) {
+			return '';
+		}
+
+		return $this->block_attrs['default_image_control']['url'] ?? '';
+	}
+
+	public function get_control_image_checked(): string {
+		if ( ! $this->is_image_control() ) {
+			return '';
+		}
+
+		return $this->block_attrs['checked_image_control']['url'] ?? '';
+	}
 }

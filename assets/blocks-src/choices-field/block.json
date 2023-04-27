@@ -81,18 +81,7 @@
 				"type": "flex"
 			}
 		},
-		"__experimentalBorder": {
-			"color": true,
-			"radius": true,
-			"style": true,
-			"width": true,
-			"__experimentalDefaultControls": {
-				"color": true,
-				"radius": true,
-				"style": true,
-				"width": true
-			}
-		},
+		"__experimentalBorder": true,
 		"spacing": {
 			"blockGap": [
 				"horizontal",

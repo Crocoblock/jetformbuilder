@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Compatibility\Wp_Experiments;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Block_Helper;
-use Jet_Form_Builder\Blocks\Types\Choices_Field;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;

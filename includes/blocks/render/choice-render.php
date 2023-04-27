@@ -19,7 +19,24 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Choice_Render extends Base {
 
-	protected $choice_check_exist = false;
+	/**
+	 * Contains the jet-forms/choice-control block or not.
+	 *
+	 * Affects whether or not to add a hidden field
+	 *
+	 * @var bool
+	 */
+	protected $choice_control_exist = false;
+
+	/**
+	 * Contains a jet-forms/choice-control block with a default type control.
+	 * That is, a normal input instead of a picture
+	 *
+	 * Affects whether to make this block accessible
+	 *
+	 * @var bool
+	 */
+	protected $choice_input_exist = false;
 
 	public function get_name() {
 		return 'choice';
@@ -29,7 +46,7 @@ class Choice_Render extends Base {
 		$this->set_choice_check( $wp_block );
 		$is_checked = $this->block_type->is_checked_current();
 
-		$accessibility_attrs = $this->has_choice_check()
+		$accessibility_attrs = $this->has_choice_input()
 			? array()
 			: array(
 				'aria-pressed' => $is_checked ? 'true' : 'false',
@@ -50,7 +67,7 @@ class Choice_Render extends Base {
 			'<li %1$s>%2$s</li>',
 			$attrs,
 			( $this->block_type->block_content .
-				( $this->has_choice_check() ? '' : $this->get_hidden_input_control() )
+				( $this->has_choice_control() ? '' : $this->get_hidden_input_control() )
 			)
 		);
 	}
@@ -71,9 +88,12 @@ class Choice_Render extends Base {
 		);
 	}
 
+	public function has_choice_control(): bool {
+		return $this->choice_control_exist;
+	}
 
-	public function has_choice_check(): bool {
-		return $this->choice_check_exist;
+	public function has_choice_input(): bool {
+		return $this->choice_input_exist;
 	}
 
 	protected function set_choice_check( array $wp_block ) {
@@ -87,7 +107,8 @@ class Choice_Render extends Base {
 		);
 
 		if ( $control ) {
-			$this->choice_check_exist = true;
+			$this->choice_control_exist = true;
+			$this->choice_input_exist   = empty( $control['attrs']['control_type'] );
 		}
 	}
 }

@@ -7,10 +7,14 @@
 		display: block;
 		background-color: var(--choice-bg, transparent);
 		cursor: pointer;
-		transition: all 0.2s ease-out;
+		transition: all 0.2s ease-out, outline 0s;
 
 		&.is-checked {
 			background-color: var(--choice-checked-bg, transparent);
+		}
+
+		&:focus {
+			outline: 1.5px solid currentColor;
 		}
 
 		&-control {

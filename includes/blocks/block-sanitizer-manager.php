@@ -34,10 +34,6 @@ final class Block_Sanitizer_Manager {
 	use Repository_Pattern_Trait;
 
 	public function __construct() {
-		// available since 5.8.0 WordPress
-		if ( ! function_exists( 'block_has_support' ) ) {
-			return;
-		}
 		$this->rep_install();
 		$this->init_hooks();
 	}

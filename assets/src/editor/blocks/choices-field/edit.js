@@ -9,6 +9,7 @@ let {
 	    InspectorControls,
 	    useBlockProps,
 	    useInnerBlocksProps,
+	    useBlockEditContext,
     } = wp.blockEditor;
 
 const {
@@ -38,16 +39,39 @@ const {
 
 const ALLOWED_BLOCKS = [ 'jet-forms/choice' ];
 
-const DefaultPlaceHolder = (
-	<>
+const DefaultPlaceHolder = () => {
+	const { clientId } = useBlockEditContext();
+
+	const id1 = clientId + 'sample-control-1';
+	const id2 = clientId + 'sample-control-2';
+
+	return <>
 		<li className="jet-form-builder-choice--item">
-			{ __( 'Yes', 'jet-form-builder' ) }
+			<span className={ 'jet-form-builder-choice--item-control' }>
+				<input
+					id={ id1 }
+					type="checkbox"
+					className={ 'jet-form-builder-choice--item-control-input' }
+				/>
+				<label htmlFor={ id1 }>
+					{ __( 'Item #1', 'jet-form-builder' ) }
+				</label>
+			</span>
 		</li>
 		<li className="jet-form-builder-choice--item">
-			{ __( 'No', 'jet-form-builder' ) }
+			<span className={ 'jet-form-builder-choice--item-control' }>
+				<input
+					id={ id2 }
+					type="checkbox"
+					className={ 'jet-form-builder-choice--item-control-input' }
+				/>
+				<label htmlFor={ id2 }>
+					{ __( 'Item #2', 'jet-form-builder' ) }
+				</label>
+			</span>
 		</li>
-	</>
-);
+	</>;
+};
 
 function useCreateCurrentChoice( { allow_multiple } ) {
 	const [ current, setCurrent ] = useState(
@@ -96,7 +120,7 @@ export default function EditAdvancedChoicesField( props ) {
 		className: 'jet-form-builder-choice',
 	}, {
 		allowedBlocks: ALLOWED_BLOCKS,
-		placeholder: isSelected ? <Placeholder/> : DefaultPlaceHolder,
+		placeholder: isSelected ? <Placeholder/> : <DefaultPlaceHolder/>,
 	} );
 
 	const state = useCreateCurrentChoice( attributes );

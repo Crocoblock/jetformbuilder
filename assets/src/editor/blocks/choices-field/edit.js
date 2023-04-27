@@ -18,6 +18,7 @@ const {
 	      BlockDescription,
 	      StyleManagerEditControls,
 	      BlockAdvancedValue,
+	      FieldWrapper,
       } = JetFBComponents;
 
 const {
@@ -28,6 +29,7 @@ const {
 const {
 	      useJetStyle,
 	      useUniqueNameOnDuplicate,
+	      useUniqKey,
       } = JetFBHooks;
 
 const {
@@ -85,12 +87,14 @@ export default function EditAdvancedChoicesField( props ) {
 	useUniqueNameOnDuplicate();
 
 	const jetStyle = useJetStyle();
+	const uniqKey  = useUniqKey();
 
-	const blockProps       = useBlockProps( {
+	const blockProps = useBlockProps( { style: jetStyle } );
+
+	const innerBlocksProps = useInnerBlocksProps( {
+		ref: blockProps.ref,
 		className: 'jet-form-builder-choice',
-		style: jetStyle,
-	} );
-	const innerBlocksProps = useInnerBlocksProps( blockProps, {
+	}, {
 		allowedBlocks: ALLOWED_BLOCKS,
 		placeholder: isSelected ? <Placeholder/> : DefaultPlaceHolder,
 	} );
@@ -138,6 +142,12 @@ is not the case when you use a dynamic value using a preset, macros, etc.`,
 				/>
 			</PanelBody>
 		</InspectorControls>
-		<ul { ...innerBlocksProps } />
+		<div key={ uniqKey( 'viewBlock' ) } { ...blockProps }>
+			<FieldWrapper { ...props }>
+				<ul
+					{ ...innerBlocksProps }
+				/>
+			</FieldWrapper>
+		</div>
 	</ChoicesFieldContext.Provider>;
 }

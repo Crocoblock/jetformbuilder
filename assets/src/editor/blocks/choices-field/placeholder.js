@@ -32,13 +32,15 @@ function Placeholder() {
 	const [ , setAttributes ]    = useBlockAttributes();
 	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
 
-	const { variations } = useSelect(
+	const { variations, defaultVariation } = useSelect(
 		( select ) => {
 			const {
 				      getBlockVariations,
+				      getDefaultBlockVariation,
 			      } = select( 'core/blocks' );
 
 			return {
+				defaultVariation: getDefaultBlockVariation( name ),
 				variations: getBlockVariations( name, 'block' ),
 			};
 		},
@@ -53,7 +55,7 @@ function Placeholder() {
 			'jet-form-builder',
 		) }
 		variations={ variations }
-		onSelect={ ( nextVariation ) => {
+		onSelect={ ( nextVariation = defaultVariation ) => {
 			if ( nextVariation.attributes ) {
 				setAttributes( nextVariation.attributes );
 			}

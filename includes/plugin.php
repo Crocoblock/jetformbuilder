@@ -49,6 +49,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @property \Jet_Admin_Bar $admin_bar
  * @property Form_Messages\Msg_Router $msg_router
  * @property Regexp_Tools $regexp
+ * @property Wp_Experiments $wp_experiments
  * @property Blocks\Block_Sanitizer_Manager $blocks_sanitizer
  *
  * Class Plugin

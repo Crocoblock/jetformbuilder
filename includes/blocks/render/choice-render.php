@@ -46,15 +46,13 @@ class Choice_Render extends Base {
 			)
 		);
 
-		$html = sprintf(
+		return sprintf(
 			'<li %1$s>%2$s</li>',
 			$attrs,
 			( $this->block_type->block_content .
 				( $this->has_choice_check() ? '' : $this->get_hidden_input_control() )
 			)
 		);
-
-		return parent::render( null, $html );
 	}
 
 	public function get_hidden_input_control(): string {
@@ -65,7 +63,7 @@ class Choice_Render extends Base {
 		 */
 		$this->block_type->get_field_id( $this->block_type->get_raw_field_name(), 'label' );
 
-		return Choice_Check_Render::get_input_control(
+		return Choice_Control_Render::get_input_control(
 			$this->block_type,
 			array(
 				array( 'style', 'display:none;' ),

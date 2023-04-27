@@ -140,7 +140,7 @@ class Block_Helper {
 		return array_map(
 			function ( $block ) {
 				if ( 'core/block' !== $block['blockName'] ) {
-						return $block;
+					return $block;
 				}
 				$reusable_id          = $block['attrs']['ref'] ?? 0;
 				$block['innerBlocks'] = self::get_blocks_by_post( $reusable_id );
@@ -205,6 +205,22 @@ class Block_Helper {
 			array( static::class, 'get_block_names' ),
 			$names
 		);
+	}
+
+	public static function current_block(): array {
+		return is_array( \WP_Block_Supports::$block_to_render )
+			? \WP_Block_Supports::$block_to_render
+			: array();
+	}
+
+
+	/**
+	 * @return \WP_Block_Type|null
+	 */
+	public static function current_block_type() {
+		$name = self::current_block()['blockName'] ?? '';
+
+		return \WP_Block_Type_Registry::get_instance()->get_registered( $name );
 	}
 
 }

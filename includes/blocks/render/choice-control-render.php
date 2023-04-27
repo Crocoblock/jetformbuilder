@@ -20,7 +20,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Class Choice_Render
  * @package Jet_Form_Builder\Blocks\Render
  */
-class Choice_Check_Render extends Base {
+class Choice_Control_Render extends Base {
 
 	public function get_name() {
 		return 'choice-control';
@@ -50,13 +50,11 @@ class Choice_Check_Render extends Base {
 			)
 		);
 
-		$html = sprintf(
+		return sprintf(
 			'<span %1$s>%2$s</span>',
 			$attrs,
 			( $image . $input . $this->get_control_label() )
 		);
-
-		return parent::render( null, $html );
 	}
 
 	public function get_control_label(): string {

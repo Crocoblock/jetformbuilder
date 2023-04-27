@@ -23,10 +23,6 @@ class Choices_Field extends Base {
 		return 'choices-field';
 	}
 
-	public function render_row_layout() {
-		return false;
-	}
-
 	public function use_preset() {
 		return false;
 	}

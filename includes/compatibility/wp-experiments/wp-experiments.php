@@ -4,22 +4,28 @@
 namespace Jet_Form_Builder\Compatibility\Wp_Experiments;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Types\Choices_Field;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+/**
+ * @since 3.1.0
+ *
+ * Class Wp_Experiments
+ * @package Jet_Form_Builder\Compatibility\Wp_Experiments
+ */
 class Wp_Experiments {
 
-	const STYLE_SUPPORT = 'jetStyle';
+	const SUPPORT_STYLE         = 'jetStyle';
+	const SUPPORT_CUSTOM_LAYOUT = 'jetCustomWrapperLayout';
 
 	public function __construct() {
 		add_filter(
-			'render_block_jet-forms/choices-field',
-			array( $this, 'render_choice_with_layout' ),
-			10,
-			2
+			'block_type_metadata',
+			array( $this, 'disable_layout_support' )
 		);
 
 		\WP_Block_Supports::get_instance()->register(
@@ -31,24 +37,6 @@ class Wp_Experiments {
 		);
 	}
 
-	/**
-	 * @param string $block_content The block content.
-	 * @param array $block The full block, including name and attributes.
-	 */
-	public function render_choice_with_layout( string $block_content, array $block ): string {
-		/** @var Choices_Field $choice */
-		$choice = jet_form_builder()->blocks->get_field_by_name( 'choices-field' );
-
-		$choice->set_block_data( $block['attrs'] ?? array() );
-
-		$template = array(
-			$choice->start_form_row( true ),
-			$block_content,
-			$choice->end_form_row( true ),
-		);
-
-		return implode( "\r\n", $template );
-	}
 
 	public function register_jet_style_support( \WP_Block_Type $block_type ) {
 		// Setup attributes and styles within that if needed.
@@ -56,7 +44,7 @@ class Wp_Experiments {
 			$block_type->attributes = array();
 		}
 
-		if ( block_has_support( $block_type, array( self::STYLE_SUPPORT ) ) &&
+		if ( block_has_support( $block_type, array( self::SUPPORT_STYLE ) ) &&
 			! array_key_exists( 'style', $block_type->attributes )
 		) {
 			$block_type->attributes['style'] = array(
@@ -66,7 +54,7 @@ class Wp_Experiments {
 	}
 
 	public function apply_jet_style_support( \WP_Block_Type $block_type, array $block_attributes ): array {
-		$support_config = _wp_array_get( $block_type->supports, array( self::STYLE_SUPPORT ), false );
+		$support_config = _wp_array_get( $block_type->supports, array( self::SUPPORT_STYLE ), false );
 		$root_styles    = $block_attributes['style'] ?? array();
 
 		if (
@@ -95,6 +83,42 @@ class Wp_Experiments {
 		return array(
 			'style' => $declarations->get_declarations_string(),
 		);
+	}
+
+	public function disable_layout_support( array $metadata ): array {
+		if (
+			! Block_Helper::is_field( $metadata['name'] ) ||
+			! is_array( $metadata['supports'] ) ||
+			! _wp_array_get( $metadata['supports'], array( self::SUPPORT_CUSTOM_LAYOUT ), false )
+		) {
+			return $metadata;
+		}
+
+		$metadata['supports'][ self::SUPPORT_CUSTOM_LAYOUT ] = $metadata['supports']['__experimentalLayout'];
+		unset( $metadata['supports']['__experimentalLayout'] );
+
+		return $metadata;
+	}
+
+	public function enable_native_layout() {
+		$block_type = Block_Helper::current_block_type();
+
+		if ( ! $block_type ) {
+			return;
+		}
+
+		$block_type->supports['__experimentalLayout'] = $block_type->supports[ self::SUPPORT_CUSTOM_LAYOUT ];
+		unset( $block_type->supports[ self::SUPPORT_CUSTOM_LAYOUT ] );
+	}
+
+	public function remove_native_layout() {
+		$block_type = Block_Helper::current_block_type();
+
+		if ( ! $block_type ) {
+			return;
+		}
+
+		unset( $block_type->supports['__experimentalLayout'] );
 	}
 
 }

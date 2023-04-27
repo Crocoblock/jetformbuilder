@@ -18,6 +18,16 @@ const imageBlock = ( alt ) => [
 
 const variations = [
 	{
+		name: 'simple-empty',
+		title: __( 'Simple Empty', 'jet-form-builder' ),
+		innerBlocks: [
+			[ 'jet-forms/choice' ],
+			[ 'jet-forms/choice' ],
+		],
+		isDefault: true,
+		scope: [ 'hidden' ],
+	},
+	{
 		name: 'simple-buttons',
 		title: __( 'Buttons', 'jet-form-builder' ),
 		description: __(

@@ -3,7 +3,7 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
-use Jet_Form_Builder\Blocks\Render\Choice_Check_Render;
+use Jet_Form_Builder\Blocks\Render\Choice_Control_Render;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
 // If this file is called directly, abort.
@@ -28,7 +28,7 @@ class Choice_Control extends Base implements Base_Choice_Item_It {
 	 * @param null|array $wp_block
 	 */
 	public function get_block_renderer( $wp_block = null ) {
-		return ( new Choice_Check_Render( $this ) )->render( $wp_block );
+		return ( new Choice_Control_Render( $this ) )->render( $wp_block );
 	}
 
 	public function get_field_value( $attributes = array() ) {

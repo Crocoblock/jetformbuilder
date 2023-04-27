@@ -3,6 +3,7 @@ import {
 } from '../../tools';
 import useSelectPostMeta from '../../hooks/useSelectPostMeta';
 import ChangeNameByLabel from '../helpers/ChangeNameByLabel';
+import useUniqKey from '../hooks/useUniqKey';
 
 const {
 	      BaseControl,
@@ -31,16 +32,16 @@ function RichDescription( content ) {
 }
 
 function FieldWrapper( props ) {
-
 	const {
 		      attributes,
-		      editProps: { uniqKey },
 		      children,
 		      wrapClasses       = [],
 		      valueIfEmptyLabel = '',
 		      setAttributes,
 		      childrenPosition  = 'between',
 	      } = props;
+
+	const uniqKey = useUniqKey();
 
 	const _jf_args = useSelectPostMeta( '_jf_args' );
 

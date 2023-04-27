@@ -18,6 +18,7 @@ import ListComponents from './components/ListComponents';
 import CxVuiTabsPanel from './components/CxVuiTabsPanel';
 import CxVuiTabs from './components/CxVuiTabs';
 import LocalStorage from './functions/LocalStorage';
+import ExternalLink from './components/ExternalLink';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -39,6 +40,7 @@ window.JetFBComponents = {
 	ListComponents,
 	CxVuiTabsPanel,
 	CxVuiTabs,
+	ExternalLink,
 };
 
 window.JetFBMixins = {

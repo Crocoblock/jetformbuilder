@@ -12,7 +12,7 @@
 			<div class="cx-vui-collapse-mini__header-label">
 				<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<path d="M14 13.9999L14 -0.00012207L0 -0.000121458L6.11959e-07 13.9999L14 13.9999Z"
-						  fill="white"></path>
+					      fill="white"></path>
 					<path d="M5.32911 1L11 7L5.32911 13L4 11.5938L8.34177 7L4 2.40625L5.32911 1Z" fill="#007CBA"></path>
 				</svg>
 				{{ label }}
@@ -83,7 +83,7 @@ export default {
 		icon: {
 			type: [ Object, String ],
 			default: '',
-		}
+		},
 	},
 	data() {
 		return {
@@ -98,7 +98,7 @@ export default {
 			if ( this.disabled ) {
 				return;
 			}
-			this.isActive = ! this.isActive;
+			this.isActive = !this.isActive;
 			this.$emit( 'change', this.isActive );
 		},
 	},
@@ -120,7 +120,7 @@ export default {
 			margin-bottom: unset;
 		}
 
-		&--active svg {
+		&--active .cx-vui-collapse-mini__header-label > svg {
 			transform: rotate(90deg);
 		}
 

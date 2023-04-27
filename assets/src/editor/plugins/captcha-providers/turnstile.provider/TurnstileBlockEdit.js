@@ -24,12 +24,6 @@ const {
 
 NumberControl = NumberControl || __experimentalNumberControl;
 
-const currentTab = JetFBActions.globalTab( {
-	slug: 'captcha-tab',
-	element: 'turnstile',
-	empty: {},
-} );
-
 function TurnstileBlockEdit( { isSelected, attributes } ) {
 	const blockProps = useBlockProps();
 

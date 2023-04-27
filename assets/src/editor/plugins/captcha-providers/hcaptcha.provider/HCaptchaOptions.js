@@ -67,7 +67,7 @@ function HCaptchaOptions() {
 		/>
 		<BaseHelp>
 			{ __(
-				`You can find it on the hall settings page, 
+				`You can find it on the settings page,
 this will be the first field.`,
 				'jet-form-builder',
 			) + ' ' }

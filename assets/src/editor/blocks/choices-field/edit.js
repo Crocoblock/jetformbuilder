@@ -116,8 +116,7 @@ export default function EditAdvancedChoicesField( props ) {
 	const blockProps = useBlockProps( { style: jetStyle } );
 
 	const innerBlocksProps = useInnerBlocksProps( {
-		ref: blockProps.ref,
-		className: 'jet-form-builder-choice',
+		className: 'jet-form-builder-choice'
 	}, {
 		allowedBlocks: ALLOWED_BLOCKS,
 		placeholder: isSelected ? <Placeholder/> : <DefaultPlaceHolder/>,

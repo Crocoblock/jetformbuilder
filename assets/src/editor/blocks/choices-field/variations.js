@@ -11,8 +11,8 @@ const imageBlock = ( alt ) => [
 	{
 		alt,
 		url: assetUrl( 'img/image-placeholder.jpg' ),
-		width: 188,
-		height: 188,
+		width: 100,
+		height: 100,
 	},
 ];
 

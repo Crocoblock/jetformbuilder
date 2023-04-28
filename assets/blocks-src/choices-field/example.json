@@ -1,4 +1,22 @@
 {
+	"supports": {
+		"jetStyle": {
+			"--choice-color": {
+				"selector": ".jet-form-builder-choice--item",
+				"attrs":[
+					"color",
+					"text"
+				]
+			},
+			"--choice-checked-color": {
+				"selector": ".jet-form-builder-choice--item.is-checked",
+				"attrs":[
+					"color",
+					"text"
+				]
+			}
+		}
+	},
 	"attributes": {
 		"style": {
 			"color": {

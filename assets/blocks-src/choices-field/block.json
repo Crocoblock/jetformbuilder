@@ -96,9 +96,6 @@
 				"vh",
 				"vw"
 			]
-		},
-		"color": {
-			"gradients": true
 		}
 	},
 	"providesContext": {

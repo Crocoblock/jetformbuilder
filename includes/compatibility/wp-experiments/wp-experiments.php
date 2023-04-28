@@ -117,6 +117,7 @@ class Wp_Experiments {
 			return;
 		}
 
+		$block_type->supports[ self::SUPPORT_CUSTOM_LAYOUT ] = $block_type->supports['__experimentalLayout'];
 		unset( $block_type->supports['__experimentalLayout'] );
 	}
 

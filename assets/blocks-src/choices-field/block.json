@@ -98,9 +98,7 @@
 			]
 		},
 		"color": {
-			"background": true,
-			"gradients": true,
-			"text": true
+			"gradients": true
 		}
 	},
 	"providesContext": {

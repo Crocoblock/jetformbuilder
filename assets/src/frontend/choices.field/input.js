@@ -159,4 +159,25 @@ ChoicesData.prototype.isNativeControl = function ( node ) {
 	);
 };
 
+/**
+ * @param event {Event}
+ * @param node {HTMLElement}
+ */
+ChoicesData.prototype.handleNextKey = function ( event, node ) {
+
+};
+
+/**
+ * @param event {}
+ * @param node {HTMLElement}
+ */
+ChoicesData.prototype.handleSpaceKey = function ( event, node ) {
+	if ( ![ 'Spacebar', ' ' ].includes( event.key ) ) {
+		return;
+	}
+	event.preventDefault();
+
+	this.toggleChoice( node );
+};
+
 export default ChoicesData;

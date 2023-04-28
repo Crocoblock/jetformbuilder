@@ -166,8 +166,8 @@ is not the case when you use a dynamic value using a preset, macros, etc.`,
 				/>
 			</PanelBody>
 		</InspectorControls>
-		<div key={ uniqKey( 'viewBlock' ) } { ...blockProps }>
-			<FieldWrapper { ...props }>
+		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
+			<FieldWrapper { ...props } key={ uniqKey( 'viewBlockWrapper' ) }>
 				<ul
 					{ ...innerBlocksProps }
 				/>

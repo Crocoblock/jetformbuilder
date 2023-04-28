@@ -1,5 +1,6 @@
 .jet-form-builder-choice {
 	padding: 0;
+	margin: 0;
 
 	&--item {
 		border: 2px solid var(--wp--preset--color--tertiary, #bfbfbf);
@@ -11,10 +12,6 @@
 
 		&.is-checked {
 			background-color: var(--choice-checked-bg, transparent);
-		}
-
-		&:focus {
-			outline: 1.5px solid currentColor;
 		}
 
 		&-control {

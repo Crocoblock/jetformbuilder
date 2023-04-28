@@ -152,6 +152,18 @@ class Builder_Helper {
 	 * @return string
 	 */
 	public static function attrs( array $attributes ): string {
+		return implode(
+			' ',
+			self::filter_attrs( $attributes )
+		);
+	}
+
+	/**
+	 * @param  array<array<string, string>> $attributes
+	 *
+	 * @return array
+	 */
+	public static function filter_attrs( array $attributes ): array {
 		$attributes_stack = array();
 
 		foreach ( $attributes as list( $name, $value ) ) {
@@ -161,6 +173,6 @@ class Builder_Helper {
 			$attributes_stack[] = sprintf( '%1$s="%2$s"', $name, $value );
 		}
 
-		return implode( ' ', $attributes_stack );
+		return $attributes_stack;
 	}
 }

@@ -3,6 +3,7 @@ import { getWrapper, isChoicesField } from './functions';
 const {
 	      InputData,
 	      ReactiveSet,
+	      ReactiveHook,
       } = JetFormBuilderAbstract;
 
 const {
@@ -75,26 +76,33 @@ function ChoicesData() {
 			event => this.toggleChoice( node, event ),
 		);
 
+		this.enterKey = new ReactiveHook();
+
 		/**
 		 * if it visible input,
 		 * we don't need accessibility for the wrapper element.
 		 */
-		if ( node.classList.contains(
-			'jet-form-builder-choice--item-control-input',
-		) ) {
+		if ( this.isNativeControl( node ) ) {
+			node.addEventListener(
+				'keydown',
+				this.handleEnterKey.bind( this ),
+			);
+
 			return;
 		}
 
 		wrapperChoice.addEventListener( 'keydown', event => {
-			// not enter or space
-			if ( ![ 'Enter', 'Spacebar', ' ' ].includes( event.key ) ) {
+			// handle enter for submit form of switch page
+			this.handleEnterKey( event );
+
+			// not space
+			if ( ![ 'Spacebar', ' ' ].includes( event.key ) ) {
 				return;
 			}
 			event.preventDefault();
 
 			this.toggleChoice( node );
 		} );
-
 
 	};
 
@@ -115,12 +123,40 @@ function ChoicesData() {
 		}
 		this.value.current = node.value;
 	};
+
+	this.hasAutoScroll = function () {
+		return this.isNativeControl( this.nodes[ 0 ] );
+	};
+
+	this.focusRaw = function () {
+		const [ node ] = this.nodes;
+
+		if ( this.isNativeControl( node ) ) {
+			InputData.prototype.focusRaw.call( this );
+
+			return;
+		}
+
+		const wrapper = getWrapper( node );
+
+		wrapper.focus( { preventScroll: true } );
+	};
 }
 
 ChoicesData.prototype = Object.create( InputData.prototype );
 
 ChoicesData.prototype.getReactive = function () {
 	return new ReactiveSet();
+};
+
+/**
+ * @param node {HTMLElement}
+ * @returns {boolean}
+ */
+ChoicesData.prototype.isNativeControl = function ( node ) {
+	return node.classList.contains(
+		'jet-form-builder-choice--item-control-input',
+	);
 };
 
 export default ChoicesData;

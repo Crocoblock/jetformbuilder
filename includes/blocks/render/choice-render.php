@@ -49,8 +49,8 @@ class Choice_Render extends Base {
 		$accessibility_attrs = $this->has_choice_input()
 			? array()
 			: array(
-				'aria-pressed' => $is_checked ? 'true' : 'false',
-				'role'         => 'button',
+				'aria-checked' => $is_checked ? 'true' : 'false',
+				'role'         => $this->block_type->is_allowed_multiple() ? 'checkbox' : 'radio',
 				'tabindex'     => '0',
 			);
 

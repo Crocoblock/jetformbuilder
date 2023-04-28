@@ -62,4 +62,8 @@ class Choices_Field extends Base {
 
 		return ( new Choices_Field_Render( $this ) )->render( $wp_block );
 	}
+
+	public function is_allowed_multiple(): bool {
+		return ! ! ( $this->block_attrs['allow_multiple'] ?? false );
+	}
 }

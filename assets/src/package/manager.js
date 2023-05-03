@@ -187,6 +187,9 @@ import getCaptchaProviders from './captcha/helpers/getCaptchaProviders';
 import CaptchaBlockTip from './captcha/components/CaptchaBlockTip';
 import StylePanel from './jet.style/components/StylePanel';
 import StylePanelItem from './jet.style/components/StylePanelItem';
+import StyleColorItem from './jet.style/components/StyleColorItem';
+import StyleColorItemsWrapper
+	from './jet.style/components/StyleColorItemsWrapper';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -280,6 +283,8 @@ window.JetFBComponents = {
 	CaptchaBlockTip,
 	StylePanel,
 	StylePanelItem,
+	StyleColorItem,
+	StyleColorItemsWrapper,
 };
 
 // JFBFunctions

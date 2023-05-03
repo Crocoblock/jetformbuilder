@@ -17,9 +17,11 @@ const {
 	      BlockLabel,
 	      BlockName,
 	      BlockDescription,
-	      StyleManagerEditControls,
 	      BlockAdvancedValue,
 	      FieldWrapper,
+	      StylePanel,
+	      StyleColorItem,
+	      StyleColorItemsWrapper,
       } = JetFBComponents;
 
 const {
@@ -128,14 +130,6 @@ export default function EditAdvancedChoicesField( props ) {
 		<ToolBarFields>
 			<AddChoiceButton/>
 		</ToolBarFields>
-		<StyleManagerEditControls optionVars={ {
-			'--choice-bg': {
-				label: __( 'Choice background', 'jet-form-builder' ),
-			},
-			'--choice-checked-bg': {
-				label: __( 'Choice checked background', 'jet-form-builder' ),
-			},
-		} }/>
 		<InspectorControls>
 			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
 				<BlockLabel/>
@@ -164,6 +158,56 @@ is not the case when you use a dynamic value using a preset, macros, etc.`,
 					) }
 				/>
 			</PanelBody>
+		</InspectorControls>
+		<InspectorControls group="styles">
+			<StylePanel
+				label={ __( 'Single choice color', 'jet-form-builder' ) }
+			>
+				<StyleColorItemsWrapper>
+					<StyleColorItem
+						cssVar="--choice-text"
+						label={ __( 'Text Choice', 'jet-form-builder' ) }
+					/>
+					<StyleColorItem
+						cssVar="--choice-bg"
+						label={ __( 'Background Choice', 'jet-form-builder' ) }
+					/>
+				</StyleColorItemsWrapper>
+			</StylePanel>
+			<StylePanel
+				label={ __( 'Hover single choice color', 'jet-form-builder' ) }
+			>
+				<StyleColorItemsWrapper>
+					<StyleColorItem
+						cssVar="--choice-hover-text"
+						label={ __( 'Text Choice', 'jet-form-builder' ) }
+					/>
+					<StyleColorItem
+						cssVar="--choice-hover-bg"
+						label={ __( 'Background Choice', 'jet-form-builder' ) }
+					/>
+				</StyleColorItemsWrapper>
+			</StylePanel>
+			<StylePanel
+				label={ __( 'Checked single choice color',
+					'jet-form-builder' ) }
+			>
+				<StyleColorItemsWrapper>
+					<StyleColorItem
+						cssVar="--choice-checked-text"
+						label={ __( 'Text Choice', 'jet-form-builder' ) }
+					/>
+					<StyleColorItem
+						cssVar="--choice-checked-bg"
+						label={ __( 'Background Choice', 'jet-form-builder' ) }
+					/>
+				</StyleColorItemsWrapper>
+			</StylePanel>
+			<StylePanel
+				label={ __( 'Border single choice', 'jet-form-builder' ) }
+			>
+
+			</StylePanel>
 		</InspectorControls>
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<FieldWrapper { ...props } key={ uniqKey( 'viewBlockWrapper' ) }>

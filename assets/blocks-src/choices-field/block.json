@@ -70,6 +70,16 @@
 				"color",
 				"background"
 			],
+			"--choice-hover-text": [
+				".jet-form-builder-choice--item:hover",
+				"color",
+				"text"
+			],
+			"--choice-hover-bg": [
+				".jet-form-builder-choice--item:hover",
+				"color",
+				"background"
+			],
 			"--choice-checked-text": [
 				".jet-form-builder-choice--item.is-checked",
 				"color",

@@ -6,12 +6,19 @@
 		border: 2px solid var(--wp--preset--color--tertiary, #bfbfbf);
 		padding: 20px;
 		display: block;
+		color: var(--choice-text, inherit);
 		background-color: var(--choice-bg, transparent);
 		cursor: pointer;
 		transition: all 0.2s ease-out, outline 0s;
 
 		&.is-checked {
-			background-color: var(--choice-checked-bg, transparent);
+			color: var(--choice-checked-text, var(--choice-text, inherit));
+			background-color: var(--choice-checked-bg, var(--choice-bg, transparent));
+		}
+
+		&:hover {
+			color: var(--choice-hover-text, var(--choice-text, inherit));
+			background-color: var(--choice-hover-bg, var(--choice-bg, transparent));
 		}
 
 		&-control {

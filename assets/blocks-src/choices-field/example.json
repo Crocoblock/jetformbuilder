@@ -13,6 +13,39 @@
 			]
 		}
 	},
+	"value": {},
+	"label": "choices",
+	"name": "choices",
+	"style": {
+		"border": {
+			"radius": {
+				"topLeft": "2em",
+				"topRight": "4em",
+				"bottomLeft": "4em",
+				"bottomRight": "2em"
+			},
+			"top": {
+				"color": "var:preset|color|secondary",
+				"width": "8px"
+			},
+			"right": {
+				"color": "var:preset|color|vivid-green-cyan",
+				"width": "4px"
+			},
+			"bottom": {
+				"color": "var:preset|color|secondary",
+				"width": "8px"
+			},
+			"left": {
+				"color": "var:preset|color|vivid-green-cyan",
+				"width": "4px"
+			}
+		}
+	},
+	"layout": {
+		"type": "flex",
+		"justifyContent": "space-between"
+	}
 	"attributes": {
 		"style": {
 			"color": {

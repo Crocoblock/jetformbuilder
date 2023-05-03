@@ -60,14 +60,23 @@
 	"supports": {
 		"html": false,
 		"jetStyle": {
+			"--choice-text": [
+				".jet-form-builder-choice--item",
+				"color",
+				"text"
+			],
 			"--choice-bg": [
 				".jet-form-builder-choice--item",
 				"color",
 				"background"
 			],
+			"--choice-checked-text": [
+				".jet-form-builder-choice--item.is-checked",
+				"color",
+				"text"
+			],
 			"--choice-checked-bg": [
-				".jet-form-builder-choice--item",
-				"&.is-checked",
+				".jet-form-builder-choice--item.is-checked",
 				"color",
 				"background"
 			]
@@ -77,6 +86,7 @@
 			"allowSwitching": false,
 			"allowInheriting": false,
 			"allowVerticalAlignment": false,
+			"allowSizingOnChildren": true,
 			"default": {
 				"type": "flex"
 			}

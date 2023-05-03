@@ -1,20 +1,16 @@
 {
 	"supports": {
 		"jetStyle": {
-			"--choice-color": {
-				"selector": ".jet-form-builder-choice--item",
-				"attrs":[
-					"color",
-					"text"
-				]
-			},
-			"--choice-checked-color": {
-				"selector": ".jet-form-builder-choice--item.is-checked",
-				"attrs":[
-					"color",
-					"text"
-				]
-			}
+			"--choice-color": [
+				".jet-form-builder-choice--item",
+				"color",
+				"text"
+			],
+			"--choice-checked-color": [
+				".jet-form-builder-choice--item.is-checked",
+				"color",
+				"text"
+			]
 		}
 	},
 	"attributes": {
@@ -32,24 +28,18 @@
 				"color": {
 					"background": "#default-color",
 					"text": "#default-color"
-				},
-				"&.is-checked": {
-					"color": {
-						"background": "#checked-color",
-						"text": "#checked-color"
-					},
-					":hover": {
-						"color": {
-							"background": "#checked-with-hover-color",
-							"text": "#checked-with-hover-color"
-						}
-					}
-				},
-				":hover": {
-					"color": {
-						"background": "#checked-color",
-						"text": "#checked-color"
-					}
+				}
+			},
+			".jet-form-builder-choice--item.is-checked": {
+				"color": {
+					"background": "#checked-color",
+					"text": "#checked-color"
+				}
+			},
+			".jet-form-builder-choice--item:hover": {
+				"color": {
+					"background": "#checked-color",
+					"text": "#checked-color"
 				}
 			}
 		}

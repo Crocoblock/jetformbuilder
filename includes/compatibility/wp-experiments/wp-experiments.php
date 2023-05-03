@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Compatibility\Wp_Experiments;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Block_Helper;
+use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -53,7 +54,7 @@ class Wp_Experiments {
 	}
 
 	public function apply_jet_style_support( \WP_Block_Type $block_type, array $block_attributes ): array {
-		$support_config = _wp_array_get( $block_type->supports, array( self::SUPPORT_STYLE ), false );
+		$support_config = Array_Tools::get( $block_type->supports, array( self::SUPPORT_STYLE ), false );
 		$root_styles    = $block_attributes['style'] ?? array();
 
 		if (
@@ -73,7 +74,7 @@ class Wp_Experiments {
 
 				$declarations->add_declaration(
 					$css_var,
-					_wp_array_get( $root_styles, $path_items, '' )
+					Array_Tools::get( $root_styles, $path_items, '' )
 				);
 				break;
 			}
@@ -88,7 +89,7 @@ class Wp_Experiments {
 		if (
 			! Block_Helper::is_field( $metadata['name'] ) ||
 			! is_array( $metadata['supports'] ) ||
-			! _wp_array_get( $metadata['supports'], array( self::SUPPORT_CUSTOM_LAYOUT ), false )
+			! Array_Tools::get( $metadata['supports'], array( self::SUPPORT_CUSTOM_LAYOUT ), false )
 		) {
 			return $metadata;
 		}

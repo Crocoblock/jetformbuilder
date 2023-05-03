@@ -66,4 +66,72 @@ class Array_Tools {
 		return array_values( $payload );
 	}
 
+	/**
+	 * Copy-paste from WP-core function
+	 *
+	 * @see \_wp_array_get()
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param array $input_array
+	 * @param array $path
+	 * @param mixed $default_value
+	 *
+	 * @return array|mixed
+	 */
+	public static function get( array $input_array, array $path, $default_value = false ) {
+		foreach ( $path as $path_element ) {
+			if (
+				( ! is_string( $path_element ) && ! is_integer( $path_element ) && ! is_null( $path_element ) ) ||
+				! array_key_exists( $path_element, $input_array )
+			) {
+				return $default_value;
+			}
+			$input_array = $input_array[ $path_element ];
+		}
+
+		return $input_array;
+	}
+
+	/**
+	 * Copy-paste from WP-core function
+	 *
+	 * @see \_wp_array_set()
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param array $input_array
+	 * @param array $path
+	 * @param null $value
+	 */
+	public static function set( array &$input_array, array $path, $value = null ) {
+		$path_length = count( $path );
+
+		if ( 0 === $path_length ) {
+			return;
+		}
+
+		foreach ( $path as $path_element ) {
+			if (
+				! is_string( $path_element ) && ! is_integer( $path_element ) &&
+				! is_null( $path_element )
+			) {
+				return;
+			}
+		}
+
+		for ( $i = 0; $i < $path_length - 1; ++$i ) {
+			$path_element = $path[ $i ];
+			if (
+				! array_key_exists( $path_element, $input_array ) ||
+				! is_array( $input_array[ $path_element ] )
+			) {
+				$input_array[ $path_element ] = array();
+			}
+			$input_array = &$input_array[ $path_element ]; // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.VariableRedeclaration
+		}
+
+		$input_array[ $path[ $i ] ] = $value;
+	}
+
 }

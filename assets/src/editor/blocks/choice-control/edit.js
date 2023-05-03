@@ -19,24 +19,12 @@ const {
 let {
 	    Button,
 	    PanelBody,
-	    __experimentalToolsPanel,
-	    ToolsPanel,
-	    __experimentalToolsPanelItem,
-	    ToolsPanelItem,
 	    RangeControl,
 	    __experimentalToggleGroupControl,
 	    ToggleGroupControl,
 	    __experimentalToggleGroupControlOption,
 	    ToggleGroupControlOption,
     } = wp.components;
-
-ToolsPanel = (
-	ToolsPanel || __experimentalToolsPanel
-);
-
-ToolsPanelItem = (
-	ToolsPanelItem || __experimentalToolsPanelItem
-);
 
 ToggleGroupControl = (
 	ToggleGroupControl || __experimentalToggleGroupControl
@@ -49,6 +37,8 @@ ToggleGroupControlOption = (
 const {
 	      BaseHelp,
 	      BaseLabel,
+	      StylePanel,
+	      StylePanelItem,
       } = JetFBComponents;
 
 const {
@@ -77,7 +67,6 @@ export default function EditChoiceCheck( props ) {
 		      context,
 		      setAttributes,
 		      attributes,
-		      clientId,
 	      } = props;
 
 	const {
@@ -94,7 +83,6 @@ export default function EditChoiceCheck( props ) {
 
 	const instanceId = useInstanceId( EditChoiceCheck, fieldName );
 
-	const [ width, setWidth ]          = useStyle( '--control-width' );
 	const [ isChecked, toggleChecked ] = useCheckedChoiceState();
 
 	const controlImageUrl = (
@@ -109,13 +97,9 @@ export default function EditChoiceCheck( props ) {
 		}
 	)();
 
-	const widthInt = parseInt( width );
+	const [ width, setWidth ] = useStyle( '--control-width' );
+	const widthInt            = parseInt( width );
 
-	const hasWidth = () => {
-		return !!width;
-	};
-
-	//
 	return <>
 		<BlockControls group={ 'block' }>
 			<ToggleCheckStateButton/>
@@ -286,18 +270,11 @@ export default function EditChoiceCheck( props ) {
 				</MediaUploadCheck>
 			</InspectorControls>
 			<InspectorControls group={ 'styles' }>
-				<ToolsPanel
-					hasValue={ hasWidth }
-					label={ __( 'Image control', 'jet-form-builder' ) }
-					resetAll={ () => setWidth() }
-					panelId={ clientId }
-				>
-					<ToolsPanelItem
-						hasValue={ hasWidth }
+				<StylePanel label={ __( 'Image control', 'jet-form-builder' ) }>
+					<StylePanelItem
 						label={ __( 'Width', 'jet-form-builder' ) }
-						onDeselect={ () => setWidth() }
-						panelId={ clientId }
-						isShownByDefault
+						cssVar="--control-width"
+						defaultValue="24px"
 					>
 						<RangeControl
 							help={ __(
@@ -313,8 +290,8 @@ export default function EditChoiceCheck( props ) {
 								value => setWidth( value ? `${ value }px` : 0 )
 							}
 						/>
-					</ToolsPanelItem>
-				</ToolsPanel>
+					</StylePanelItem>
+				</StylePanel>
 			</InspectorControls>
 		</> }
 	</>;

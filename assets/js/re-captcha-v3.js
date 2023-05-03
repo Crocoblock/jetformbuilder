@@ -45,7 +45,7 @@
 		};
 
 		const setUpCaptcha = function ( formID, resolve, reject ) {
-			const current = window.JetFormBuilderReCaptchaConfig[ formID ] ||
+			const current = window.JetFormBuilderCaptchaConfig[ formID ] ||
 				{};
 
 			if ( !Object.values( current )?.length ) {

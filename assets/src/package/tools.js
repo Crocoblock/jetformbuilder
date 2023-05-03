@@ -15,8 +15,18 @@ class Tools {
 		];
 	}
 
+	/**
+	 * @deprecated 3.1.0
+	 *
+	 * @param object
+	 * @returns {boolean}
+	 */
 	static isEmptyObject( object ) {
-		return 'object' === typeof object && Object.keys( object ).length === 0;
+		console.warn(
+			'Use JetFBActions.isEmpty insteadof JetFBActions.Tools.isEmptyObject',
+		);
+
+		return isEmpty( object );
 	}
 
 	static getRandomID() {
@@ -180,26 +190,65 @@ export function assetUrl( url = '' ) {
 	return JetFormEditorData.assetsUrl + url;
 }
 
-export function set ( obj, path, value ) {
-	if ( Object( obj ) !== obj ) {
-		return obj;
-	} // When obj is not an object
-	// If not yet an array, get the keys from the string-path
-	if ( !Array.isArray( path ) ) {
-		path = path.toString().match( /[^.[\]]+/g ) ||
-			[];
+/**
+ * @since 3.1.0
+ *
+ * @param obj
+ * @param path
+ * @param value
+ * @returns {*}
+ */
+export function set( obj, path, value ) {
+	// Create a shallow copy of the object
+	const newObj = JSON.parse( JSON.stringify( obj ) );
+
+	let currentObj = newObj;
+	let currentKey;
+
+	// Traverse the object according to the path
+	for ( let i = 0; i < path.length; i++ ) {
+		currentKey = path[ i ];
+
+		// If the current key doesn't exist, create a new object at that key
+		if ( !currentObj[ currentKey ] ) {
+			currentObj[ currentKey ] = {};
+		}
+
+		// Update the current object and key
+		if ( i === path.length - 1 ) {
+			// If this is the last key in the path, set the value
+			currentObj[ currentKey ] = value;
+		}
+		else {
+			// Otherwise, continue traversing the object
+			currentObj[ currentKey ] = { ...currentObj[ currentKey ] };
+			currentObj               = currentObj[ currentKey ];
+		}
 	}
-	path.slice( 0, -1 ).reduce( ( a, c, i ) => // Iterate all of them except the last one
-			Object( a[ c ] ) === a[ c ] // Does the key exist and is its value an object?
-				// Yes: then follow that path
-			? a[ c ]
-				// No: create the key. Is the next key a potential array-index?
-			: a[ c ] = Math.abs( path[ i + 1 ] ) >> 0 === +path[ i + 1 ]
-			           ? [] // Yes: assign a new array object
-			           : {}, // No: assign a new plain object
-		obj )[ path[ path.length - 1 ] ] = value; // Finally assign the value
-                                                  // to the last key
-	return obj; // Return the top-level object to allow chaining
+
+	return newObj;
+}
+
+/**
+ * @since 3.1.0
+ *
+ * @param value
+ * @returns {boolean}
+ */
+export function isEmpty( value ) {
+	if ( null === value || undefined === value ) {
+		return true;
+	}
+
+	if ( 'object' === typeof value && !Array.isArray( value ) ) {
+		return !Object.keys( value )?.length;
+	}
+
+	if ( 'number' === typeof value ) {
+		return 0 === value;
+	}
+
+	return !value?.length;
 }
 
 export default Tools;

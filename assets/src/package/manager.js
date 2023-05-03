@@ -16,6 +16,7 @@ import Tools, {
 	column,
 	assetUrl,
 	set,
+	isEmpty,
 } from './tools';
 
 import getAvailableFields from './blocks/helpers/getAvailableFields';
@@ -184,6 +185,8 @@ import BaseLabel from './components/BaseLabel';
 import useStyle from './jet.style/hooks/useStyle';
 import getCaptchaProviders from './captcha/helpers/getCaptchaProviders';
 import CaptchaBlockTip from './captcha/components/CaptchaBlockTip';
+import StylePanel from './jet.style/components/StylePanel';
+import StylePanelItem from './jet.style/components/StylePanelItem';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -275,6 +278,8 @@ window.JetFBComponents = {
 	SelectVariations,
 	ToggleGroupVariations,
 	CaptchaBlockTip,
+	StylePanel,
+	StylePanelItem,
 };
 
 // JFBFunctions
@@ -314,6 +319,7 @@ window.JetFBActions = {
 	assetUrl,
 	set,
 	getCaptchaProviders,
+	isEmpty,
 };
 
 // JFBHooks

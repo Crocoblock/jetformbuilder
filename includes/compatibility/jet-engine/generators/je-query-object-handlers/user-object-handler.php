@@ -19,7 +19,7 @@ class User_Object_Handler extends Base_Object_Handler {
 	}
 
 	protected function get_label( $converted, $current ) {
-		$label = $object->{$this->label_field} ?? '';
+		$label = $current->{$this->label_field} ?? '';
 
 		return $label ? $label : $this->get_value( $converted, $current );
 	}

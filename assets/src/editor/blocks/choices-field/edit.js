@@ -22,6 +22,8 @@ const {
 	      StylePanel,
 	      StyleColorItem,
 	      StyleColorItemsWrapper,
+	      StyleBorderItem,
+	      StyleBorderRadiusItem,
       } = JetFBComponents;
 
 const {
@@ -112,13 +114,14 @@ export default function EditAdvancedChoicesField( props ) {
 
 	useUniqueNameOnDuplicate();
 
-	const jetStyle = useJetStyle();
-	const uniqKey  = useUniqKey();
+	const uniqKey    = useUniqKey();
+	const blockProps = useBlockProps();
 
-	const blockProps = useBlockProps( { style: jetStyle } );
+	const jetStyle = useJetStyle();
 
 	const innerBlocksProps = useInnerBlocksProps( {
 		className: 'jet-form-builder-choice',
+		style: jetStyle,
 	}, {
 		allowedBlocks: ALLOWED_BLOCKS,
 		placeholder: isSelected ? <Placeholder/> : <DefaultPlaceHolder/>,
@@ -206,7 +209,39 @@ is not the case when you use a dynamic value using a preset, macros, etc.`,
 			<StylePanel
 				label={ __( 'Border single choice', 'jet-form-builder' ) }
 			>
-
+				<StyleBorderItem
+					cssVar="--choice-border"
+					label={ __( 'Border', 'jet-form-builder' ) }
+				/>
+				<StyleBorderRadiusItem
+					cssVar="--choice-border-radius"
+					label={ __( 'Radius', 'jet-form-builder' ) }
+				/>
+			</StylePanel>
+			<StylePanel
+				label={ __( 'Hover Border single choice', 'jet-form-builder' ) }
+			>
+				<StyleBorderItem
+					cssVar="--choice-hover-border"
+					label={ __( 'Border', 'jet-form-builder' ) }
+				/>
+				<StyleBorderRadiusItem
+					cssVar="--choice-hover-border-radius"
+					label={ __( 'Radius', 'jet-form-builder' ) }
+				/>
+			</StylePanel>
+			<StylePanel
+				label={ __( 'Checked Border single choice',
+					'jet-form-builder' ) }
+			>
+				<StyleBorderItem
+					cssVar="--choice-checked-border"
+					label={ __( 'Border', 'jet-form-builder' ) }
+				/>
+				<StyleBorderRadiusItem
+					cssVar="--choice-checked-border-radius"
+					label={ __( 'Radius', 'jet-form-builder' ) }
+				/>
 			</StylePanel>
 		</InspectorControls>
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>

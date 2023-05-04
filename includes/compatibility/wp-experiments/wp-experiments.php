@@ -22,7 +22,14 @@ class Wp_Experiments {
 	const SUPPORT_STYLE         = 'jetStyle';
 	const SUPPORT_CUSTOM_LAYOUT = 'jetCustomWrapperLayout';
 
+	/**
+	 * @var Css_Compiler_Manager
+	 */
+	private $compiler;
+
 	public function __construct() {
+		$this->compiler = new Css_Compiler_Manager();
+
 		add_filter(
 			'block_type_metadata',
 			array( $this, 'disable_layout_support' )
@@ -64,24 +71,11 @@ class Wp_Experiments {
 			return array();
 		}
 
-		$declarations = new \WP_Style_Engine_CSS_Declarations();
-
-		foreach ( $support_config as $css_var => $path_items ) {
-			foreach ( $path_items as $path_item ) {
-				if ( ! isset( \WP_Style_Engine::BLOCK_STYLE_DEFINITIONS_METADATA[ $path_item ] ) ) {
-					continue;
-				}
-
-				$declarations->add_declaration(
-					$css_var,
-					Array_Tools::get( $root_styles, $path_items, '' )
-				);
-				break;
-			}
-		}
-
 		return array(
-			'style' => $declarations->get_declarations_string(),
+			'style' => $this->get_compiler()->compile_declarations(
+				$root_styles,
+				$support_config
+			),
 		);
 	}
 
@@ -120,6 +114,13 @@ class Wp_Experiments {
 
 		$block_type->supports[ self::SUPPORT_CUSTOM_LAYOUT ] = $block_type->supports['__experimentalLayout'];
 		unset( $block_type->supports['__experimentalLayout'] );
+	}
+
+	/**
+	 * @return Css_Compiler_Manager
+	 */
+	public function get_compiler(): Css_Compiler_Manager {
+		return $this->compiler;
 	}
 
 }

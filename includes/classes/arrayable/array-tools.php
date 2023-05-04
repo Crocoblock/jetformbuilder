@@ -39,7 +39,7 @@ class Array_Tools {
 	 * @return \Generator
 	 */
 	public static function reverse( $iterator ): \Generator {
-		for ( $current = count( $iterator ) - 1; $current >= 0; $current-- ) {
+		for ( $current = count( $iterator ) - 1; $current >= 0; $current -- ) {
 			yield $iterator[ $current ];
 		}
 	}
@@ -69,15 +69,15 @@ class Array_Tools {
 	/**
 	 * Copy-paste from WP-core function
 	 *
-	 * @see \_wp_array_get()
-	 *
-	 * @since 3.1.0
-	 *
 	 * @param array $input_array
 	 * @param array $path
 	 * @param mixed $default_value
 	 *
 	 * @return array|mixed
+	 * @see \_wp_array_get()
+	 *
+	 * @since 3.1.0
+	 *
 	 */
 	public static function get( array $input_array, array $path, $default_value = false ) {
 		foreach ( $path as $path_element ) {
@@ -96,13 +96,14 @@ class Array_Tools {
 	/**
 	 * Copy-paste from WP-core function
 	 *
-	 * @see \_wp_array_set()
-	 *
-	 * @since 3.1.0
-	 *
 	 * @param array $input_array
 	 * @param array $path
 	 * @param null $value
+	 *
+	 * @since 3.1.0
+	 *
+	 * @see \_wp_array_set()
+	 *
 	 */
 	public static function set( array &$input_array, array $path, $value = null ) {
 		$path_length = count( $path );
@@ -120,7 +121,7 @@ class Array_Tools {
 			}
 		}
 
-		for ( $i = 0; $i < $path_length - 1; ++$i ) {
+		for ( $i = 0; $i < $path_length - 1; ++ $i ) {
 			$path_element = $path[ $i ];
 			if (
 				! array_key_exists( $path_element, $input_array ) ||
@@ -132,6 +133,19 @@ class Array_Tools {
 		}
 
 		$input_array[ $path[ $i ] ] = $value;
+	}
+
+	/**
+	 * @param $source
+	 *
+	 * @return mixed|false
+	 */
+	public static function last( $source ) {
+		if ( ! is_array( $source ) || empty( $source ) ) {
+			return false;
+		}
+
+		return $source[ count( $source ) - 1 ];
 	}
 
 }

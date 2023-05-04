@@ -1,18 +1,12 @@
 .block-editor-block-inspector__tabs {
 
 	.components-grid.components-tools-panel {
-		& > div:not(:first-of-type) {
-			display: grid;
-			grid-template-columns: repeat(2, minmax(0px, 1fr));
-			gap: calc(16px) calc(8px);
-			grid-column: 1 / -1;
-		}
 
 		&.components-tools-panel .color-block-support-panel__inner-wrapper {
-			row-gap: 0;
+			grid-column: 1 / -1;
 
 			& > *:first-child {
-				border-top: 1px solid rgba(0,0,0,.1);
+				border-top: 1px solid rgba(0, 0, 0, .1);
 				border-top-left-radius: 2px;
 				border-top-right-radius: 2px;
 			}

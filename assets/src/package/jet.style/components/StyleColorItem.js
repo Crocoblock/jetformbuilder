@@ -8,7 +8,6 @@ let {
 	    useMultipleOriginColorsAndGradients,
     } = wp.blockEditor;
 
-
 const {
 	      useContext,
       } = wp.element;

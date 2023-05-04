@@ -1,7 +1,10 @@
 import useJetStyleSupports from './useJetStyleSupports';
 import useBlockAttributes from '../../blocks/hooks/useBlockAttributes';
+import compileDeclarations from '../helpers/compileDeclarations';
 
-const { get } = window._;
+const {
+	      useMemo,
+      } = wp.element;
 
 /**
  * @since 3.1.0
@@ -12,19 +15,22 @@ function useJetStyle() {
 	const jetStyle       = useJetStyleSupports();
 	const [ attributes ] = useBlockAttributes();
 
-	const currentRoot = attributes?.style ?? {};
-	const response    = {};
+	return useMemo(
+		() => {
+			let response = {};
 
-	for ( const [ cssVar, path ] of Object.entries( jetStyle ) ) {
-		const value = get( currentRoot, path );
+			for ( const entire of Object.entries( jetStyle ) ) {
+				compileDeclarations(
+					attributes?.style,
+					response,
+					...entire,
+				);
+			}
 
-		if ( !value ) {
-			continue;
-		}
-		response[ cssVar ] = value;
-	}
-
-	return response;
+			return response;
+		},
+		[ attributes?.style, jetStyle ],
+	);
 
 }
 

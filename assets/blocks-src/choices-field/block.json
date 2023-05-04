@@ -70,6 +70,15 @@
 				"color",
 				"background"
 			],
+			"--choice-border": [
+				".jet-form-builder-choice--item",
+				"border"
+			],
+			"--choice-border-radius": [
+				".jet-form-builder-choice--item",
+				"border",
+				"radius"
+			],
 			"--choice-hover-text": [
 				".jet-form-builder-choice--item:hover",
 				"color",
@@ -80,6 +89,15 @@
 				"color",
 				"background"
 			],
+			"--choice-hover-border": [
+				".jet-form-builder-choice--item:hover",
+				"border"
+			],
+			"--choice-hover-border-radius": [
+				".jet-form-builder-choice--item:hover",
+				"border",
+				"radius"
+			],
 			"--choice-checked-text": [
 				".jet-form-builder-choice--item.is-checked",
 				"color",
@@ -89,6 +107,15 @@
 				".jet-form-builder-choice--item.is-checked",
 				"color",
 				"background"
+			],
+			"--choice-checked-border": [
+				".jet-form-builder-choice--item.is-checked",
+				"border"
+			],
+			"--choice-checked-border-radius": [
+				".jet-form-builder-choice--item.is-checked",
+				"border",
+				"radius"
 			]
 		},
 		"jetCustomWrapperLayout": true,

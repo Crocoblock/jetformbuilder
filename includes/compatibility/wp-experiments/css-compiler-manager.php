@@ -33,16 +33,23 @@ class Css_Compiler_Manager {
 		);
 	}
 
-	public function compile_declarations( array $root_styles, array $support_config ): string {
+	public function compile( array $root_styles, array $support_config ): array {
 		$declarations = new \WP_Style_Engine_CSS_Declarations();
+		$class_names  = array();
 
 		foreach ( $support_config as $css_var => $path ) {
-			$this->get_supported_compiler( $path )
-				->set_css_var( $css_var )
-				->compile( $declarations, $root_styles, $path );
+			$compiler = $this->get_supported_compiler( $path )
+							->set_css_var( $css_var )
+							->set_path( $path );
+
+			$compiler->compile_declarations( $declarations, $root_styles, $class_names );
+			$compiler->compile_class_names( $class_names, $root_styles );
 		}
 
-		return $declarations->get_declarations_string();
+		return array(
+			'style' => $declarations->get_declarations_string(),
+			'class' => implode( ' ', $class_names ),
+		);
 	}
 
 	protected function get_supported_compiler( array $path ): Base_Css_Compiler {

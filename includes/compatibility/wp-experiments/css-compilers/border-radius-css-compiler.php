@@ -26,12 +26,12 @@ class Border_Radius_Css_Compiler extends Base_Css_Compiler {
 		);
 	}
 
-	public function compile(
+	public function compile_declarations(
 		\WP_Style_Engine_CSS_Declarations $declarations,
 		array $root_styles,
-		array $path
+		array &$class_names
 	) {
-		$base_radius = Array_Tools::get( $root_styles, $path, array() );
+		$base_radius = Array_Tools::get( $root_styles, $this->path, array() );
 
 		if ( empty( $base_radius ) ) {
 			return;

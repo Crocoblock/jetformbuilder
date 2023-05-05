@@ -39,7 +39,7 @@ class Array_Tools {
 	 * @return \Generator
 	 */
 	public static function reverse( $iterator ): \Generator {
-		for ( $current = count( $iterator ) - 1; $current >= 0; $current -- ) {
+		for ( $current = count( $iterator ) - 1; $current >= 0; $current-- ) {
 			yield $iterator[ $current ];
 		}
 	}
@@ -77,7 +77,6 @@ class Array_Tools {
 	 * @see \_wp_array_get()
 	 *
 	 * @since 3.1.0
-	 *
 	 */
 	public static function get( array $input_array, array $path, $default_value = false ) {
 		foreach ( $path as $path_element ) {
@@ -103,7 +102,6 @@ class Array_Tools {
 	 * @since 3.1.0
 	 *
 	 * @see \_wp_array_set()
-	 *
 	 */
 	public static function set( array &$input_array, array $path, $value = null ) {
 		$path_length = count( $path );
@@ -121,7 +119,7 @@ class Array_Tools {
 			}
 		}
 
-		for ( $i = 0; $i < $path_length - 1; ++ $i ) {
+		for ( $i = 0; $i < $path_length - 1; ++$i ) {
 			$path_element = $path[ $i ];
 			if (
 				! array_key_exists( $path_element, $input_array ) ||

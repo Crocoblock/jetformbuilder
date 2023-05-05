@@ -13,8 +13,8 @@ function BorderRadiusCSSCompiler() {
 		);
 	};
 
-	this.modifyDeclarations = function ( styleRoot, response, path ) {
-		const baseRadius = get( styleRoot, path );
+	this.compileDeclarations = function ( styleRoot, declarations, classNames ) {
+		const baseRadius = get( styleRoot, this.path );
 
 		if ( isEmpty( baseRadius ) ) {
 			return;
@@ -23,25 +23,25 @@ function BorderRadiusCSSCompiler() {
 		const topLeft = this.getTopLeft( baseRadius );
 
 		if ( topLeft ) {
-			response[ `${ this.cssVar }-top-left` ] = topLeft;
+			declarations[ `${ this.cssVar }-top-left` ] = topLeft;
 		}
 
 		const topRight = this.getTopRight( baseRadius );
 
 		if ( topRight ) {
-			response[ `${ this.cssVar }-top-right` ] = topRight;
+			declarations[ `${ this.cssVar }-top-right` ] = topRight;
 		}
 
 		const bottomRight = this.getBottomRight( baseRadius );
 
 		if ( bottomRight ) {
-			response[ `${ this.cssVar }-bottom-right` ] = bottomRight;
+			declarations[ `${ this.cssVar }-bottom-right` ] = bottomRight;
 		}
 
 		const bottomLeft = this.getBottomLeft( baseRadius );
 
 		if ( bottomLeft ) {
-			response[ `${ this.cssVar }-bottom-left` ] = bottomLeft;
+			declarations[ `${ this.cssVar }-bottom-left` ] = bottomLeft;
 		}
 	};
 }

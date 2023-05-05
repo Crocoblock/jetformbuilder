@@ -11,26 +11,25 @@ const {
  *
  * @returns {{}}
  */
-function useJetStyle() {
+function useJetStyle( { style, className, ...props } ) {
 	const jetStyle       = useJetStyleSupports();
 	const [ attributes ] = useBlockAttributes();
 
-	return useMemo(
-		() => {
-			let response = {};
-
-			for ( const entire of Object.entries( jetStyle ) ) {
-				compileDeclarations(
-					attributes?.style,
-					response,
-					...entire,
-				);
-			}
-
-			return response;
-		},
+	const compiled = useMemo(
+		() => compileDeclarations( attributes?.style, jetStyle ),
 		[ attributes?.style, jetStyle ],
 	);
+
+	return {
+		style: {
+			...compiled.style,
+			...style,
+		},
+		className: [ className, compiled.className ].
+			filter( Boolean ).
+			join( ' ' ),
+		...props,
+	};
 
 }
 

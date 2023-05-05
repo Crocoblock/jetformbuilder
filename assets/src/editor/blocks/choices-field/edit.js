@@ -105,6 +105,10 @@ function useCreateCurrentChoice( { allow_multiple } ) {
 	return { current, updateCurrent };
 }
 
+const baseProps = {
+	className: 'jet-form-builder-choice',
+};
+
 export default function EditAdvancedChoicesField( props ) {
 	const {
 		      isSelected,
@@ -116,13 +120,9 @@ export default function EditAdvancedChoicesField( props ) {
 
 	const uniqKey    = useUniqKey();
 	const blockProps = useBlockProps();
+	const jetStyle   = useJetStyle( baseProps );
 
-	const jetStyle = useJetStyle();
-
-	const innerBlocksProps = useInnerBlocksProps( {
-		className: 'jet-form-builder-choice',
-		style: jetStyle,
-	}, {
+	const innerBlocksProps = useInnerBlocksProps( jetStyle, {
 		allowedBlocks: ALLOWED_BLOCKS,
 		placeholder: isSelected ? <Placeholder/> : <DefaultPlaceHolder/>,
 	} );
@@ -164,7 +164,7 @@ is not the case when you use a dynamic value using a preset, macros, etc.`,
 		</InspectorControls>
 		<InspectorControls group="styles">
 			<StylePanel
-				label={ __( 'Single choice color', 'jet-form-builder' ) }
+				label={ __( 'Default choice', 'jet-form-builder' ) }
 			>
 				<StyleColorItemsWrapper>
 					<StyleColorItem
@@ -176,9 +176,19 @@ is not the case when you use a dynamic value using a preset, macros, etc.`,
 						label={ __( 'Background Choice', 'jet-form-builder' ) }
 					/>
 				</StyleColorItemsWrapper>
+				<StyleBorderItem
+					cssVar="--choice-border"
+					label={ __( 'Border', 'jet-form-builder' ) }
+					enableAlpha
+					labelForControl
+				/>
+				<StyleBorderRadiusItem
+					cssVar="--choice-border-radius"
+					label={ __( 'Radius', 'jet-form-builder' ) }
+				/>
 			</StylePanel>
 			<StylePanel
-				label={ __( 'Hover single choice color', 'jet-form-builder' ) }
+				label={ __( 'Hover choice', 'jet-form-builder' ) }
 			>
 				<StyleColorItemsWrapper>
 					<StyleColorItem
@@ -190,10 +200,19 @@ is not the case when you use a dynamic value using a preset, macros, etc.`,
 						label={ __( 'Background Choice', 'jet-form-builder' ) }
 					/>
 				</StyleColorItemsWrapper>
+				<StyleBorderItem
+					cssVar="--choice-hover-border"
+					label={ __( 'Border', 'jet-form-builder' ) }
+					enableAlpha
+					labelForControl
+				/>
+				<StyleBorderRadiusItem
+					cssVar="--choice-hover-border-radius"
+					label={ __( 'Radius', 'jet-form-builder' ) }
+				/>
 			</StylePanel>
 			<StylePanel
-				label={ __( 'Checked single choice color',
-					'jet-form-builder' ) }
+				label={ __( 'Checked choice', 'jet-form-builder' ) }
 			>
 				<StyleColorItemsWrapper>
 					<StyleColorItem
@@ -205,38 +224,11 @@ is not the case when you use a dynamic value using a preset, macros, etc.`,
 						label={ __( 'Background Choice', 'jet-form-builder' ) }
 					/>
 				</StyleColorItemsWrapper>
-			</StylePanel>
-			<StylePanel
-				label={ __( 'Border single choice', 'jet-form-builder' ) }
-			>
-				<StyleBorderItem
-					cssVar="--choice-border"
-					label={ __( 'Border', 'jet-form-builder' ) }
-				/>
-				<StyleBorderRadiusItem
-					cssVar="--choice-border-radius"
-					label={ __( 'Radius', 'jet-form-builder' ) }
-				/>
-			</StylePanel>
-			<StylePanel
-				label={ __( 'Hover Border single choice', 'jet-form-builder' ) }
-			>
-				<StyleBorderItem
-					cssVar="--choice-hover-border"
-					label={ __( 'Border', 'jet-form-builder' ) }
-				/>
-				<StyleBorderRadiusItem
-					cssVar="--choice-hover-border-radius"
-					label={ __( 'Radius', 'jet-form-builder' ) }
-				/>
-			</StylePanel>
-			<StylePanel
-				label={ __( 'Checked Border single choice',
-					'jet-form-builder' ) }
-			>
 				<StyleBorderItem
 					cssVar="--choice-checked-border"
 					label={ __( 'Border', 'jet-form-builder' ) }
+					enableAlpha
+					labelForControl
 				/>
 				<StyleBorderRadiusItem
 					cssVar="--choice-checked-border-radius"

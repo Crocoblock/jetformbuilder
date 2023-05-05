@@ -3,6 +3,8 @@ import { isEmpty } from '../../tools';
 
 const { get } = window._;
 
+const SIDES = [ 'top', 'right', 'bottom', 'left' ];
+
 function BorderCSSCompiler() {
 	BaseCSSCompiler.call( this );
 
@@ -10,39 +12,63 @@ function BorderCSSCompiler() {
 		return 'border' === path.at( -1 );
 	};
 
-	this.modifyDeclarations = function ( styleRoot, response, path ) {
-		const baseBorder = get( styleRoot, path );
+	this.compileDeclarations = function (
+		styleRoot,
+		declarations,
+		classNames
+	) {
+		const baseBorder = get( styleRoot, this.path );
 
 		if ( isEmpty( baseBorder ) ) {
 			return;
 		}
 
-		for ( const type of [ 'style', 'width', 'color' ] ) {
-			const topValue = this.getTopValue( baseBorder, type );
+		const isHover = this.hasHoverPath();
+
+		[ 'style', 'width', 'color' ].forEach( type => {
+			const topValue = this.getSideValue( baseBorder, 'top', type );
 
 			if ( topValue ) {
-				response[ this.getTopVar( type ) ] = topValue;
+				declarations[ this.getTopVar( type ) ] = topValue;
 			}
 
-			const rightValue = this.getRightValue( baseBorder, type );
+			const rightValue = this.getSideValue( baseBorder, 'right', type );
 
-			if ( topValue ) {
-				response[ this.getRightVar( type ) ] = rightValue;
+			if ( rightValue ) {
+				declarations[ this.getRightVar( type ) ] = rightValue;
 			}
 
-			const bottomValue = this.getBottomValue( baseBorder, type );
+			const bottomValue = this.getSideValue( baseBorder, 'bottom', type );
 
-			if ( topValue ) {
-				response[ this.getBottomVar( type ) ] = bottomValue;
+			if ( bottomValue ) {
+				declarations[ this.getBottomVar( type ) ] = bottomValue;
 			}
 
-			const leftValue = this.getLeftValue( baseBorder, type );
+			const leftValue = this.getSideValue( baseBorder, 'left', type );
 
-			if ( topValue ) {
-				response[ this.getLeftVar( type ) ] = leftValue;
+			if ( leftValue ) {
+				declarations[ this.getLeftVar( type ) ] = leftValue;
 			}
-		}
+
+			if ( !isHover ) {
+				return;
+			}
+
+			// Get non-empty values
+			const values = [
+				topValue,
+				rightValue,
+				bottomValue,
+				leftValue,
+			].filter( Boolean );
+
+			if ( values.length ) {
+				classNames.push( `has-hover-border-${ type }` );
+			}
+		} );
 	};
+
+	this.compileClassNames = () => {};
 }
 
 BorderCSSCompiler.prototype = Object.create(
@@ -65,31 +91,24 @@ BorderCSSCompiler.prototype.getLeftVar   = function ( type ) {
 BorderCSSCompiler.prototype.isLinked = function ( value ) {
 	const [ firstKey ] = Object.keys( value );
 
-	return [ 'top', 'left', 'right', 'bottom' ].includes( firstKey );
+	return SIDES.includes( firstKey );
 };
 
-BorderCSSCompiler.prototype.getTopValue = function ( value, property ) {
-	return this.isLinked( value )
-	       ? value.top?.[ property ]
-	       : value?.[ property ];
-};
+BorderCSSCompiler.prototype.getSideValue = function ( value, side, property ) {
+	if ( !SIDES.includes( side ) ) {
+		return '';
+	}
 
-BorderCSSCompiler.prototype.getRightValue = function ( value, property ) {
-	return this.isLinked( value )
-	       ? value.right?.[ property ]
-	       : value?.[ property ];
-};
+	let response = '';
 
-BorderCSSCompiler.prototype.getBottomValue = function ( value, property ) {
-	return this.isLinked( value )
-	       ? value.bottom?.[ property ]
-	       : value?.[ property ];
-};
+	if ( this.isLinked( value ) ) {
+		response = value[ side ][ property ] ?? '';
+	}
+	else {
+		response = value[ property ] ?? '';
+	}
 
-BorderCSSCompiler.prototype.getLeftValue = function ( value, property ) {
-	return this.isLinked( value )
-	       ? value.left?.[ property ]
-	       : value?.[ property ];
+	return response.trim();
 };
 
 export default BorderCSSCompiler;

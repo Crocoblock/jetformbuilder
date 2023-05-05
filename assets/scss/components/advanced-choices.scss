@@ -8,37 +8,34 @@ $border-radius: 4px;
 	margin: 0;
 	border-width: 0;
 
+	/* border width */
+	$border-top-width: var(--choice-border-top-width, $border-width);
+	$border-right-width: var(--choice-border-right-width, $border-width);
+	$border-bottom-width: var(--choice-border-bottom-width, $border-width);
+	$border-left-width: var(--choice-border-left-width, $border-width);
+
+	/* border style */
+	$border-top-style: var(--choice-border-top-style, $border-style);
+	$border-right-style: var(--choice-border-right-style, $border-style);
+	$border-bottom-style: var(--choice-border-bottom-style, $border-style);
+	$border-left-style: var(--choice-border-left-style, $border-style);
+
+	/* border color */
+	$border-top-color: var(--choice-border-top-color, $border-color);
+	$border-right-color: var(--choice-border-right-color, $border-color);
+	$border-bottom-color: var(--choice-border-bottom-color, $border-color);
+	$border-left-color: var(--choice-border-left-color, $border-color);
+
+	/* border radius */
+	$radius-top-left: var(--choice-border-radius-top-left, $border-radius);
+	$radius-top-right: var(--choice-border-radius-top-right, $border-radius);
+	$radius-bottom-right: var(--choice-border-radius-bottom-right, $border-radius);
+	$radius-bottom-left: var(--choice-border-radius-bottom-left, $border-radius);
+
 	&--item {
-		/* border width */
-		$border-top-width: var(--choice-border-top-width, $border-width);
-		$border-right-width: var(--choice-border-right-width, $border-width);
-		$border-bottom-width: var(--choice-border-bottom-width, $border-width);
-		$border-left-width: var(--choice-border-left-width, $border-width);
-
 		border-width: $border-top-width $border-right-width $border-bottom-width $border-left-width;
-
-		/* border style */
-		$border-top-style: var(--choice-border-top-style, $border-style);
-		$border-right-style: var(--choice-border-right-style, $border-style);
-		$border-bottom-style: var(--choice-border-bottom-style, $border-style);
-		$border-left-style: var(--choice-border-left-style, $border-style);
-
 		border-style: $border-top-style $border-right-style $border-bottom-style $border-left-style;
-
-		/* border color */
-		$border-top-color: var(--choice-border-top-color, $border-color);
-		$border-right-color: var(--choice-border-right-color, $border-color);
-		$border-bottom-color: var(--choice-border-bottom-color, $border-color);
-		$border-left-color: var(--choice-border-left-color, $border-color);
-
 		border-color: $border-top-color $border-right-color $border-bottom-color $border-left-color;
-
-		/* border radius */
-		$radius-top-left: var(--choice-border-radius-top-left, $border-radius);
-		$radius-top-right: var(--choice-border-radius-top-right, $border-radius);
-		$radius-bottom-right: var(--choice-border-radius-bottom-right, $border-radius);
-		$radius-bottom-left: var(--choice-border-radius-bottom-left, $border-radius);
-
 		border-radius: $radius-top-left $radius-top-right $radius-bottom-right $radius-bottom-left;
 
 		padding: 20px;
@@ -85,43 +82,6 @@ $border-radius: 4px;
 			background-color: var(--choice-checked-bg, var(--choice-bg, transparent));
 		}
 
-		&:hover {
-			/* border width */
-			$hover-border-top-width: var(--choice-hover-border-top-width, $border-top-width);
-			$hover-border-right-width: var(--choice-hover-border-right-width, $border-right-width);
-			$hover-border-bottom-width: var(--choice-hover-border-bottom-width, $border-bottom-width);
-			$hover-border-left-width: var(--choice-hover-border-left-width, $border-left-width);
-
-			border-width: $hover-border-top-width $hover-border-right-width $hover-border-bottom-width $hover-border-left-width;
-
-			/* border style */
-			$hover-border-top-style: var(--choice-hover-border-top-style, $border-top-style);
-			$hover-border-right-style: var(--choice-hover-border-right-style, $border-right-style);
-			$hover-border-bottom-style: var(--choice-hover-border-bottom-style, $border-bottom-style);
-			$hover-border-left-style: var(--choice-hover-border-left-style, $border-left-style);
-
-			border-style: $hover-border-top-style $hover-border-right-style $hover-border-bottom-style $hover-border-left-style;
-
-			/* border color */
-			$hover-border-top-color: var(--choice-hover-border-top-color, $border-top-color);
-			$hover-border-right-color: var(--choice-hover-border-right-color, $border-right-color);
-			$hover-border-bottom-color: var(--choice-hover-border-bottom-color, $border-bottom-color);
-			$hover-border-left-color: var(--choice-hover-border-left-color, $border-left-color);
-
-			border-color: $hover-border-top-color $hover-border-right-color $hover-border-bottom-color $hover-border-left-color;
-
-			/* border radius */
-			$current-radius-top-left: var(--choice-hover-border-radius-top-left, $radius-top-left);
-			$current-radius-top-right: var(--choice-hover-border-radius-top-right, $radius-top-right);
-			$current-radius-bottom-right: var(--choice-hover-border-radius-bottom-right, $radius-bottom-right);
-			$current-radius-bottom-left: var(--choice-hover-border-radius-bottom-left, $radius-bottom-left);
-
-			border-radius: $current-radius-top-left $current-radius-top-right $current-radius-bottom-right $current-radius-bottom-left;
-
-			color: var(--choice-hover-text, var(--choice-text, inherit));
-			background-color: var(--choice-hover-bg, var(--choice-bg, transparent));
-		}
-
 		&-control {
 			display: flex;
 			align-items: center;
@@ -130,6 +90,66 @@ $border-radius: 4px;
 			&-img {
 				width: var(--control-width, 24px);
 			}
+		}
+	}
+
+	&.has-hover-color-text {
+		.jet-form-builder-choice--item:hover {
+			color: var(--choice-hover-text, var(--choice-text, inherit));
+		}
+	}
+
+	&.has-hover-color-background {
+		.jet-form-builder-choice--item:hover {
+			background-color: var(--choice-hover-bg, var(--choice-bg, transparent));
+		}
+	}
+
+	&.has-hover-border-width {
+		.jet-form-builder-choice--item:hover {
+			/* border width */
+			$hover-border-top-width: var(--choice-hover-border-top-width, $border-top-width);
+			$hover-border-right-width: var(--choice-hover-border-right-width, $border-right-width);
+			$hover-border-bottom-width: var(--choice-hover-border-bottom-width, $border-bottom-width);
+			$hover-border-left-width: var(--choice-hover-border-left-width, $border-left-width);
+
+			border-width: $hover-border-top-width $hover-border-right-width $hover-border-bottom-width $hover-border-left-width;
+		}
+	}
+
+	&.has-hover-border-style {
+		.jet-form-builder-choice--item:hover {
+			/* border style */
+			$hover-border-top-style: var(--choice-hover-border-top-style, $border-top-style);
+			$hover-border-right-style: var(--choice-hover-border-right-style, $border-right-style);
+			$hover-border-bottom-style: var(--choice-hover-border-bottom-style, $border-bottom-style);
+			$hover-border-left-style: var(--choice-hover-border-left-style, $border-left-style);
+
+			border-style: $hover-border-top-style $hover-border-right-style $hover-border-bottom-style $hover-border-left-style;
+		}
+	}
+
+	&.has-hover-border-color {
+		.jet-form-builder-choice--item:hover {
+			/* border color */
+			$hover-border-top-color: var(--choice-hover-border-top-color, $border-top-color);
+			$hover-border-right-color: var(--choice-hover-border-right-color, $border-right-color);
+			$hover-border-bottom-color: var(--choice-hover-border-bottom-color, $border-bottom-color);
+			$hover-border-left-color: var(--choice-hover-border-left-color, $border-left-color);
+
+			border-color: $hover-border-top-color $hover-border-right-color $hover-border-bottom-color $hover-border-left-color;
+		}
+	}
+
+	&.has-hover-border-radius {
+		.jet-form-builder-choice--item:hover {
+			/* border radius */
+			$current-radius-top-left: var(--choice-hover-border-radius-top-left, $radius-top-left);
+			$current-radius-top-right: var(--choice-hover-border-radius-top-right, $radius-top-right);
+			$current-radius-bottom-right: var(--choice-hover-border-radius-bottom-right, $radius-bottom-right);
+			$current-radius-bottom-left: var(--choice-hover-border-radius-bottom-left, $radius-bottom-left);
+
+			border-radius: $current-radius-top-left $current-radius-top-right $current-radius-bottom-right $current-radius-bottom-left;
 		}
 	}
 }

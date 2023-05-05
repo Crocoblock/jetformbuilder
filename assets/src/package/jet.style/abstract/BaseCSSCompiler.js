@@ -2,6 +2,10 @@ const { get } = window._;
 
 function BaseCSSCompiler() {
 	this.cssVar = '';
+	/**
+	 * @type {String[]}
+	 */
+	this.path = [];
 }
 
 BaseCSSCompiler.prototype = {
@@ -12,8 +16,8 @@ BaseCSSCompiler.prototype = {
 	isSupported( path ) {
 		return true;
 	},
-	modifyDeclarations( styleRoot, response, path ) {
-		const value = get( styleRoot, path );
+	compileDeclarations( styleRoot, response, classNames ) {
+		const value = get( styleRoot, this.path );
 
 		if ( !value ) {
 			return;
@@ -21,12 +25,42 @@ BaseCSSCompiler.prototype = {
 
 		response[ this.cssVar ] = value;
 	},
+	compileClassNames( classNames, styleRoot ) {
+		if (
+			!this.hasHoverPath() ||
+			!get( styleRoot, this.path )
+		) {
+			return;
+		}
+
+		// Remove selector from path
+		const withoutFirst = this.path.slice( 1 );
+
+		classNames.push( 'has-hover-' + withoutFirst.join( '-' ) );
+	},
+	hasHoverPath() {
+		const parts = this.path[ 0 ].split( ':' );
+
+		return (
+			parts?.[ 1 ] && 'hover' === parts[ 1 ]
+		);
+	},
 	/**
 	 * @param cssVar {String}
 	 * @returns {BaseCSSCompiler}
 	 */
 	setCssVar( cssVar ) {
 		this.cssVar = cssVar;
+
+		return this;
+	},
+
+	/**
+	 * @param path {String[]}
+	 * @returns {BaseCSSCompiler}
+	 */
+	setPath( path ) {
+		this.path = path;
 
 		return this;
 	},

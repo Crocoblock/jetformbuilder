@@ -27,6 +27,7 @@ useMultipleOriginColorsAndGradients = (
 function UnCompleteStyleBorderItem( {
 	enableAlpha = false,
 	enableStyle = true,
+	label = '',
 } ) {
 	const {
 		      cssValue,
@@ -36,6 +37,7 @@ function UnCompleteStyleBorderItem( {
 	const { colors } = useMultipleOriginColorsAndGradients();
 
 	return <BorderBoxControl
+		label={ label }
 		colors={ colors }
 		onChange={ updateCss }
 		enableAlpha={ enableAlpha }
@@ -51,15 +53,19 @@ function StyleBorderItem( {
 	cssVar,
 	enableAlpha = false,
 	enableStyle = true,
+	label = 'Border',
+	labelForControl = false,
 	...props
 } ) {
 	return <StylePanelItem
 		cssVar={ cssVar }
+		label={ label }
 		{ ...props }
 	>
 		<UnCompleteStyleBorderItem
 			enableAlpha={ enableAlpha }
 			enableStyle={ enableStyle }
+			label={ labelForControl ? label : '' }
 		/>
 	</StylePanelItem>;
 }

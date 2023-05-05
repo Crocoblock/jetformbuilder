@@ -71,12 +71,7 @@ class Wp_Experiments {
 			return array();
 		}
 
-		return array(
-			'style' => $this->get_compiler()->compile_declarations(
-				$root_styles,
-				$support_config
-			),
-		);
+		return $this->get_compiler()->compile( $root_styles, $support_config );
 	}
 
 	public function disable_layout_support( array $metadata ): array {

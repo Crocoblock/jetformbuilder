@@ -45,7 +45,7 @@
 	"supports": {
 		"html": false,
 		"jetStyle": {
-			"--control-width": [
+			"--jfb-choice-control-width": [
 				".jet-form-builder-choice--item-control-img",
 				"width"
 			]

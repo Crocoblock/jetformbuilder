@@ -60,59 +60,59 @@
 	"supports": {
 		"html": false,
 		"jetStyle": {
-			"--choice-text": [
+			"--jfb-choice-text": [
 				".jet-form-builder-choice--item",
 				"color",
 				"text"
 			],
-			"--choice-bg": [
+			"--jfb-choice-bg": [
 				".jet-form-builder-choice--item",
 				"color",
 				"background"
 			],
-			"--choice-border": [
+			"--jfb-choice-border": [
 				".jet-form-builder-choice--item",
 				"border"
 			],
-			"--choice-border-radius": [
+			"--jfb-choice-border-radius": [
 				".jet-form-builder-choice--item",
 				"border",
 				"radius"
 			],
-			"--choice-hover-text": [
+			"--jfb-choice-hover-text": [
 				".jet-form-builder-choice--item:hover",
 				"color",
 				"text"
 			],
-			"--choice-hover-bg": [
+			"--jfb-choice-hover-bg": [
 				".jet-form-builder-choice--item:hover",
 				"color",
 				"background"
 			],
-			"--choice-hover-border": [
+			"--jfb-choice-hover-border": [
 				".jet-form-builder-choice--item:hover",
 				"border"
 			],
-			"--choice-hover-border-radius": [
+			"--jfb-choice-hover-border-radius": [
 				".jet-form-builder-choice--item:hover",
 				"border",
 				"radius"
 			],
-			"--choice-checked-text": [
+			"--jfb-choice-checked-text": [
 				".jet-form-builder-choice--item.is-checked",
 				"color",
 				"text"
 			],
-			"--choice-checked-bg": [
+			"--jfb-choice-checked-bg": [
 				".jet-form-builder-choice--item.is-checked",
 				"color",
 				"background"
 			],
-			"--choice-checked-border": [
+			"--jfb-choice-checked-border": [
 				".jet-form-builder-choice--item.is-checked",
 				"border"
 			],
-			"--choice-checked-border-radius": [
+			"--jfb-choice-checked-border-radius": [
 				".jet-form-builder-choice--item.is-checked",
 				"border",
 				"radius"

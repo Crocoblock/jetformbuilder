@@ -102,7 +102,7 @@ BorderCSSCompiler.prototype.getSideValue = function ( value, side, property ) {
 	let response = '';
 
 	if ( this.isLinked( value ) ) {
-		response = value[ side ][ property ] ?? '';
+		response = value[ side ]?.[ property ] ?? '';
 	}
 	else {
 		response = value[ property ] ?? '';

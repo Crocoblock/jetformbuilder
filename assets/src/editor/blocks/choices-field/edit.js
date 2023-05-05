@@ -168,22 +168,22 @@ is not the case when you use a dynamic value using a preset, macros, etc.`,
 			>
 				<StyleColorItemsWrapper>
 					<StyleColorItem
-						cssVar="--choice-text"
+						cssVar="--jfb-choice-text"
 						label={ __( 'Text Choice', 'jet-form-builder' ) }
 					/>
 					<StyleColorItem
-						cssVar="--choice-bg"
+						cssVar="--jfb-choice-bg"
 						label={ __( 'Background Choice', 'jet-form-builder' ) }
 					/>
 				</StyleColorItemsWrapper>
 				<StyleBorderItem
-					cssVar="--choice-border"
+					cssVar="--jfb-choice-border"
 					label={ __( 'Border', 'jet-form-builder' ) }
 					enableAlpha
 					labelForControl
 				/>
 				<StyleBorderRadiusItem
-					cssVar="--choice-border-radius"
+					cssVar="--jfb-choice-border-radius"
 					label={ __( 'Radius', 'jet-form-builder' ) }
 				/>
 			</StylePanel>
@@ -192,22 +192,22 @@ is not the case when you use a dynamic value using a preset, macros, etc.`,
 			>
 				<StyleColorItemsWrapper>
 					<StyleColorItem
-						cssVar="--choice-hover-text"
+						cssVar="--jfb-choice-hover-text"
 						label={ __( 'Text Choice', 'jet-form-builder' ) }
 					/>
 					<StyleColorItem
-						cssVar="--choice-hover-bg"
+						cssVar="--jfb-choice-hover-bg"
 						label={ __( 'Background Choice', 'jet-form-builder' ) }
 					/>
 				</StyleColorItemsWrapper>
 				<StyleBorderItem
-					cssVar="--choice-hover-border"
+					cssVar="--jfb-choice-hover-border"
 					label={ __( 'Border', 'jet-form-builder' ) }
 					enableAlpha
 					labelForControl
 				/>
 				<StyleBorderRadiusItem
-					cssVar="--choice-hover-border-radius"
+					cssVar="--jfb-choice-hover-border-radius"
 					label={ __( 'Radius', 'jet-form-builder' ) }
 				/>
 			</StylePanel>
@@ -216,22 +216,22 @@ is not the case when you use a dynamic value using a preset, macros, etc.`,
 			>
 				<StyleColorItemsWrapper>
 					<StyleColorItem
-						cssVar="--choice-checked-text"
+						cssVar="--jfb-choice-checked-text"
 						label={ __( 'Text Choice', 'jet-form-builder' ) }
 					/>
 					<StyleColorItem
-						cssVar="--choice-checked-bg"
+						cssVar="--jfb-choice-checked-bg"
 						label={ __( 'Background Choice', 'jet-form-builder' ) }
 					/>
 				</StyleColorItemsWrapper>
 				<StyleBorderItem
-					cssVar="--choice-checked-border"
+					cssVar="--jfb-choice-checked-border"
 					label={ __( 'Border', 'jet-form-builder' ) }
 					enableAlpha
 					labelForControl
 				/>
 				<StyleBorderRadiusItem
-					cssVar="--choice-checked-border-radius"
+					cssVar="--jfb-choice-checked-border-radius"
 					label={ __( 'Radius', 'jet-form-builder' ) }
 				/>
 			</StylePanel>

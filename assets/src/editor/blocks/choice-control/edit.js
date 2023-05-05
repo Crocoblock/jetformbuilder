@@ -97,7 +97,7 @@ export default function EditChoiceCheck( props ) {
 		}
 	)();
 
-	const [ width, setWidth ] = useStyle( '--control-width' );
+	const [ width, setWidth ] = useStyle( '--jfb-choice-control-width' );
 	const widthInt            = parseInt( width );
 
 	return <>
@@ -273,7 +273,7 @@ export default function EditChoiceCheck( props ) {
 				<StylePanel label={ __( 'Image control', 'jet-form-builder' ) }>
 					<StylePanelItem
 						label={ __( 'Width', 'jet-form-builder' ) }
-						cssVar="--control-width"
+						cssVar="--jfb-choice-control-width"
 						defaultValue="24px"
 					>
 						<RangeControl

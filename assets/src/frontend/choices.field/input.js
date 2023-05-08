@@ -21,8 +21,8 @@ function ChoicesData() {
 	this.isSupported = isChoicesField;
 
 	this.setNode = function ( node ) {
-		this.nodes     = node.querySelectorAll(
-			'.jet-form-builder-choice--item input',
+		this.nodes     = Array.from(
+			node.querySelectorAll( '.jet-form-builder-choice--item input' ),
 		);
 		this.rawName   = this.nodes[ 0 ].name;
 		this.name      = getParsedName( this.rawName );
@@ -95,13 +95,14 @@ function ChoicesData() {
 			// handle enter for submit form of switch page
 			this.handleEnterKey( event );
 
-			// not space
-			if ( ![ 'Spacebar', ' ' ].includes( event.key ) ) {
-				return;
-			}
-			event.preventDefault();
+			// for space
+			this.handleSpaceKey( event, node );
 
-			this.toggleChoice( node );
+			// for next or up keys
+			this.handleNextKey( event, node );
+
+			// for prev or down keys
+			this.handlePrevKey( event, node );
 		} );
 
 	};
@@ -164,11 +165,33 @@ ChoicesData.prototype.isNativeControl = function ( node ) {
  * @param node {HTMLElement}
  */
 ChoicesData.prototype.handleNextKey = function ( event, node ) {
+	if ( ![ 'ArrowRight', 'ArrowDown' ].includes( event.key ) ) {
+		return;
+	}
+	event.preventDefault();
 
+	const nextNode = this.nextNode( node );
+
+	this.switchChoice( nextNode );
 };
 
 /**
- * @param event {}
+ * @param event {Event}
+ * @param node {HTMLElement}
+ */
+ChoicesData.prototype.handlePrevKey = function ( event, node ) {
+	if ( ![ 'ArrowUp', 'ArrowLeft' ].includes( event.key ) ) {
+		return;
+	}
+	event.preventDefault();
+
+	const prevNode = this.prevNode( node );
+
+	this.switchChoice( prevNode );
+};
+
+/**
+ * @param event {Event}
  * @param node {HTMLElement}
  */
 ChoicesData.prototype.handleSpaceKey = function ( event, node ) {
@@ -178,6 +201,35 @@ ChoicesData.prototype.handleSpaceKey = function ( event, node ) {
 	event.preventDefault();
 
 	this.toggleChoice( node );
+};
+
+ChoicesData.prototype.switchChoice = function ( node ) {
+	const wrapper = getWrapper( node );
+
+	this.toggleChoice( node );
+	wrapper.focus( { preventScroll: true } );
+};
+
+ChoicesData.prototype.nextNode = function ( baseNode ) {
+	for ( const [ index, node ] of this.nodes.entries() ) {
+		if ( node !== baseNode ) {
+			continue;
+		}
+
+		return this.nodes.hasOwnProperty( +index + 1 )
+		       ? this.nodes[ +index + 1 ]
+		       : this.nodes[ 0 ];
+	}
+};
+
+ChoicesData.prototype.prevNode = function ( baseNode ) {
+	for ( const [ index, node ] of this.nodes.entries() ) {
+		if ( node !== baseNode ) {
+			continue;
+		}
+
+		return this.nodes.at( index - 1 );
+	}
 };
 
 export default ChoicesData;

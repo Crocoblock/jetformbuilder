@@ -9,9 +9,12 @@ const {
 /**
  * @since 3.1.0
  *
- * @returns {{}}
+ * @param style
+ * @param className
+ * @param props
+ * @returns {{style: (*), className: string}}
  */
-function useJetStyle( { style, className, ...props } ) {
+function useJetStyle( { style, className, ...props } = {} ) {
 	const jetStyle       = useJetStyleSupports();
 	const [ attributes ] = useBlockAttributes();
 
@@ -23,7 +26,9 @@ function useJetStyle( { style, className, ...props } ) {
 	return {
 		style: {
 			...compiled.style,
-			...style,
+			...(
+				style ?? {}
+			),
 		},
 		className: [ className, compiled.className ].
 			filter( Boolean ).

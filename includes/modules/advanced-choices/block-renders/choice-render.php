@@ -1,11 +1,13 @@
 <?php
 
 
-namespace Jet_Form_Builder\Blocks\Render;
+namespace Jet_Form_Builder\Modules\Advanced_Choices\Block_Renders;
+
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Block_Helper;
-use Jet_Form_Builder\Blocks\Types\Choice;
+use Jet_Form_Builder\Blocks\Render\Base;
+use Jet_Form_Builder\Modules\Advanced_Choices\Block_Types\Choice;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;

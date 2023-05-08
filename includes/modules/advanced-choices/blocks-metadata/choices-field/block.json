@@ -154,5 +154,6 @@
 	"usesContext": [
 		"jet-forms/repeater-field--name"
 	],
-	"viewScript": "jet-fb-choices-field"
+	"viewScript": "jet-fb-advanced-choices",
+	"style": "jet-fb-advanced-choices"
 }

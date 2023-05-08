@@ -1,13 +1,12 @@
 <?php
 
 
-namespace Jet_Form_Builder\Blocks\Types;
+namespace Jet_Form_Builder\Modules\Advanced_Choices\Block_Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
-use Jet_Form_Builder\Blocks\Render\Choice_Render;
-use Jet_Form_Builder\Blocks\Render\Choices_Field_Render;
-use function cli\render;
+use Jet_Form_Builder\Blocks\Types\Base;
+use Jet_Form_Builder\Modules\Advanced_Choices\Block_Renders\Choice_Render;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -17,6 +16,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Choice extends Base implements Base_Choice_Item_It {
 
 	use Base_Choice_Item_Trait;
+	use Block_Metadata_Trait;
 
 	public function get_name() {
 		return 'choice';

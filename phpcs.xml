@@ -10,6 +10,7 @@
     <exclude-pattern>assets/*</exclude-pattern>
     <exclude-pattern>framework/*</exclude-pattern>
     <exclude-pattern>\.idea/*</exclude-pattern>
+    <exclude-pattern>*\.(js|scss|json)$</exclude-pattern>
 
     <rule ref="PHPCompatibility"/>
 

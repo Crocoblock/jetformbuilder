@@ -1,4 +1,3 @@
-import { name } from './index';
 import Placeholder from './placeholder';
 import ChoicesFieldContext from './context';
 import AddChoiceButton from './AddChoiceButton';

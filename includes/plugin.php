@@ -28,6 +28,8 @@ use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Integrations\Active_Campaign\Active_Campaign;
 use Jet_Form_Builder\Integrations\Forms_Captcha;
 use Jet_Form_Builder\Addons\Manager as AddonsManager;
+use Jet_Form_Builder\Modules\Base_Module\Base_Module_It;
+use Jet_Form_Builder\Modules\Modules_Controller;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Wp_Cli\Wp_Cli_Manager;
 use Jet_Form_Builder\Migrations;
@@ -73,6 +75,8 @@ class Plugin {
 	public $wp_experiments;
 	public $regexp;
 	public $blocks_sanitizer;
+
+	private $modules_controller;
 
 	public static $instance;
 
@@ -247,6 +251,7 @@ class Plugin {
 
 		$this->register_autoloader();
 		$this->init_lang();
+		$this->get_modules()->init_hooks();
 
 		add_action(
 			'after_setup_theme',
@@ -262,6 +267,24 @@ class Plugin {
 
 		$this->init_framework();
 		Wp_Cli_Manager::register();
+	}
+
+	public function get_modules(): Modules_Controller {
+		if ( is_null( $this->modules_controller ) ) {
+			$this->modules_controller = new Modules_Controller();
+		}
+
+		return $this->modules_controller;
+	}
+
+	/**
+	 * @param string $name_or_class
+	 *
+	 * @return Base_Module_It
+	 * @throws Exceptions\Repository_Exception
+	 */
+	public function module( string $name_or_class ): Base_Module_It {
+		return $this->get_modules()->module( $name_or_class );
 	}
 
 }

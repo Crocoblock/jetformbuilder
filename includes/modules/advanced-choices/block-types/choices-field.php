@@ -1,0 +1,48 @@
+<?php
+
+
+namespace Jet_Form_Builder\Modules\Advanced_Choices\Block_Types;
+
+use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
+use Jet_Form_Builder\Blocks\Types\Base;
+use Jet_Form_Builder\Modules\Advanced_Choices\Block_Renders\Choices_Field_Render;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+
+class Choices_Field extends Base {
+
+	use Block_Metadata_Trait;
+
+	public function get_name() {
+		return 'choices-field';
+	}
+
+	public function use_preset() {
+		return false;
+	}
+
+	public function expected_preset_type(): array {
+		return array( self::PRESET_LIST );
+	}
+
+	/**
+	 * @param null|array $wp_block
+	 *
+	 * @throws Render_Empty_Field
+	 */
+	public function get_block_renderer( $wp_block = null ) {
+		if ( empty( $wp_block['innerBlocks'] ) ) {
+			throw new Render_Empty_Field();
+		}
+
+		return ( new Choices_Field_Render( $this ) )->render( $wp_block );
+	}
+
+	public function is_allowed_multiple(): bool {
+		return ! ! ( $this->block_attrs['allow_multiple'] ?? false );
+	}
+}

@@ -17,6 +17,7 @@ module.exports = {
 		path: path.resolve( __dirname, 'js' ),
 		filename: dev ? '[name].js' : '[name].min.js',
 		chunkFilename: 'chunks/[name].[contenthash:8].js',
+		devtoolNamespace: 'jfb',
 		clean: {
 			keep( asset ) {
 				const regexp = dev

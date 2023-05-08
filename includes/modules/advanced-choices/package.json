@@ -1,0 +1,24 @@
+{
+	"name": "jet-form-builder-advanced-choices",
+	"description": "Advanced Choice module for JetFormBuilder Plugin",
+	"version": "2.0.0",
+	"author": "hug.reed <sanko200065@gmail.com>",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"dev": "webpack --mode development --progress -w",
+		"build": "webpack --mode production --progress -w",
+		"css": "sass assets-src\\scss\\main.scss:assets-build\\css\\main.css -s compressed --no-source-map"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.14.3",
+		"@babel/plugin-proposal-class-properties": "^7.13.0",
+		"@babel/plugin-transform-react-jsx": "^7.14.3",
+		"@babel/preset-env": "^7.14.2",
+		"@babel/preset-react": "^7.13.13",
+		"babel-loader": "^8.2.2",
+		"webpack": "^5.37.1",
+		"webpack-cli": "^4.7.0",
+		"sass": "^1.60.0"
+	}
+}

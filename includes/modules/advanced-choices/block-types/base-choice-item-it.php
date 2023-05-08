@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Blocks\Types;
+namespace Jet_Form_Builder\Modules\Advanced_Choices\Block_Types;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -10,7 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Interface Base_Choice_Item_It
  *
- * @package Jet_Form_Builder\Blocks\Types
+ * @package Jet_Form_Builder\Modules\Advanced_Choices\Block_Types
  */
 interface Base_Choice_Item_It {
 

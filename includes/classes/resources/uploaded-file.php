@@ -178,7 +178,14 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 			return $file;
 		}
 
-		$file = get_attached_file( $this->get_attachment_id() );
+		$id  = $this->get_attachment_id();
+		$url = $this->get_attachment_url();
+
+		if ( ( empty( $id ) || ! is_numeric( $id ) ) && ! empty( $url ) ) {
+			$id = attachment_url_to_postid( $url );
+		}
+
+		$file = get_attached_file( $id );
 
 		return is_string( $file ) ? $file : '';
 	}

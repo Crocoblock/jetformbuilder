@@ -1,6 +1,5 @@
 import BlockJetStyleContext from '../context/BlockJetStyleContext';
 import useCssVarPath from '../hooks/useCssVarPath';
-import useBlockAttributes from '../../blocks/hooks/useBlockAttributes';
 import resolveStyle from '../helpers/resolveStyle';
 import BlockJetStyleItemContext from '../context/BlockJetStyleItemContext';
 
@@ -9,6 +8,10 @@ const {
 	      useMemo,
 	      useCallback,
       } = wp.element;
+
+const {
+	      useBlockAttributes,
+      } = JetFBHooks;
 
 /**
  * @since 3.1.0

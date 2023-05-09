@@ -177,20 +177,9 @@ import CaptchaBlockEdit from './captcha/components/CaptchaBlockEdit';
 import useCaptchaProvider from './captcha/hooks/useCaptchaProvider';
 import SelectVariations from './blocks/components/SelectVariations';
 import ToggleGroupVariations from './blocks/components/ToggleGroupVariations';
-import useJetStyle from './jet.style/hooks/useJetStyle';
-import useJetStyleSupports from './jet.style/hooks/useJetStyleSupports';
 import BaseLabel from './components/BaseLabel';
-import useStyle from './jet.style/hooks/useStyle';
 import getCaptchaProviders from './captcha/helpers/getCaptchaProviders';
 import CaptchaBlockTip from './captcha/components/CaptchaBlockTip';
-import StylePanel from './jet.style/components/StylePanel';
-import StylePanelItem from './jet.style/components/StylePanelItem';
-import StyleColorItem from './jet.style/components/StyleColorItem';
-import StyleColorItemsWrapper
-	from './jet.style/components/StyleColorItemsWrapper';
-import StyleBorderItem from './jet.style/components/StyleBorderItem';
-import StyleBorderRadiusItem
-	from './jet.style/components/StyleBorderRadiusItem';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -281,12 +270,6 @@ window.JetFBComponents = {
 	SelectVariations,
 	ToggleGroupVariations,
 	CaptchaBlockTip,
-	StylePanel,
-	StylePanelItem,
-	StyleColorItem,
-	StyleColorItemsWrapper,
-	StyleBorderItem,
-	StyleBorderRadiusItem,
 };
 
 // JFBFunctions
@@ -363,8 +346,5 @@ window.JetFBHooks = {
 	useUniqueNameOnDuplicate,
 	useFields: useFields,
 	useCaptchaProvider,
-	useJetStyle,
-	useJetStyleSupports,
-	useStyle,
 };
 

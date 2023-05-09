@@ -1,7 +1,10 @@
 import BaseCSSCompiler from './BaseCSSCompiler';
-import { isEmpty } from '../../tools';
 
 const { get } = window._;
+
+const {
+	      isEmpty,
+      } = JetFBActions;
 
 const SIDES = [ 'top', 'right', 'bottom', 'left' ];
 
@@ -15,7 +18,7 @@ function BorderCSSCompiler() {
 	this.compileDeclarations = function (
 		styleRoot,
 		declarations,
-		classNames
+		classNames,
 	) {
 		const baseBorder = get( styleRoot, this.path );
 

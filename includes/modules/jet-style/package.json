@@ -1,0 +1,22 @@
+{
+	"name": "jet-form-builder-jet-style",
+	"description": "Jet Style module for JetFormBuilder Plugin",
+	"version": "2.0.0",
+	"author": "hug.reed <sanko200065@gmail.com>",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"dev": "webpack --mode development --progress -w",
+		"build": "webpack --mode production --progress -w"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.14.3",
+		"@babel/plugin-proposal-class-properties": "^7.13.0",
+		"@babel/plugin-transform-react-jsx": "^7.14.3",
+		"@babel/preset-env": "^7.14.2",
+		"@babel/preset-react": "^7.13.13",
+		"babel-loader": "^8.2.2",
+		"webpack": "^5.37.1",
+		"webpack-cli": "^4.7.0"
+	}
+}

@@ -1,10 +1,13 @@
 import useJetStyleSupports from './useJetStyleSupports';
-import useBlockAttributes from '../../blocks/hooks/useBlockAttributes';
 import compileDeclarations from '../helpers/compileDeclarations';
 
 const {
 	      useMemo,
       } = wp.element;
+
+const {
+	      useBlockAttributes,
+      } = JetFBHooks;
 
 /**
  * @since 3.1.0

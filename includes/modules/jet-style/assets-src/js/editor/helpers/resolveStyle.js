@@ -1,4 +1,6 @@
-import { set } from '../../tools';
+const {
+	      set,
+      } = JetFBActions;
 
 function resolveStyle( attributes, path ) {
 	const currentRoot = attributes?.style ?? {};

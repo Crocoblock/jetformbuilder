@@ -1,7 +1,10 @@
 import BaseCSSCompiler from './BaseCSSCompiler';
-import { isEmpty } from '../../tools';
 
 const { get } = window._;
+
+const {
+	      isEmpty,
+      } = JetFBActions;
 
 function BorderRadiusCSSCompiler() {
 	BaseCSSCompiler.call( this );
@@ -13,7 +16,8 @@ function BorderRadiusCSSCompiler() {
 		);
 	};
 
-	this.compileDeclarations = function ( styleRoot, declarations, classNames ) {
+	this.compileDeclarations = function (
+		styleRoot, declarations, classNames ) {
 		const baseRadius = get( styleRoot, this.path );
 
 		if ( isEmpty( baseRadius ) ) {

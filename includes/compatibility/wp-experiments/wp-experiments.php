@@ -19,59 +19,13 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Wp_Experiments {
 
-	const SUPPORT_STYLE         = 'jetStyle';
 	const SUPPORT_CUSTOM_LAYOUT = 'jetCustomWrapperLayout';
 
-	/**
-	 * @var Css_Compiler_Manager
-	 */
-	private $compiler;
-
 	public function __construct() {
-		$this->compiler = new Css_Compiler_Manager();
-
 		add_filter(
 			'block_type_metadata',
 			array( $this, 'disable_layout_support' )
 		);
-
-		\WP_Block_Supports::get_instance()->register(
-			'jetStyle',
-			array(
-				'register_attribute' => array( $this, 'register_jet_style_support' ),
-				'apply'              => array( $this, 'apply_jet_style_support' ),
-			)
-		);
-	}
-
-
-	public function register_jet_style_support( \WP_Block_Type $block_type ) {
-		// Setup attributes and styles within that if needed.
-		if ( ! $block_type->attributes ) {
-			$block_type->attributes = array();
-		}
-
-		if ( block_has_support( $block_type, array( self::SUPPORT_STYLE ) ) &&
-			! array_key_exists( 'style', $block_type->attributes )
-		) {
-			$block_type->attributes['style'] = array(
-				'type' => 'object',
-			);
-		}
-	}
-
-	public function apply_jet_style_support( \WP_Block_Type $block_type, array $block_attributes ): array {
-		$support_config = Array_Tools::get( $block_type->supports, array( self::SUPPORT_STYLE ), false );
-		$root_styles    = $block_attributes['style'] ?? array();
-
-		if (
-			! is_array( $support_config ) ||
-			empty( $root_styles )
-		) {
-			return array();
-		}
-
-		return $this->get_compiler()->compile( $root_styles, $support_config );
 	}
 
 	public function disable_layout_support( array $metadata ): array {
@@ -109,13 +63,6 @@ class Wp_Experiments {
 
 		$block_type->supports[ self::SUPPORT_CUSTOM_LAYOUT ] = $block_type->supports['__experimentalLayout'];
 		unset( $block_type->supports['__experimentalLayout'] );
-	}
-
-	/**
-	 * @return Css_Compiler_Manager
-	 */
-	public function get_compiler(): Css_Compiler_Manager {
-		return $this->compiler;
 	}
 
 }

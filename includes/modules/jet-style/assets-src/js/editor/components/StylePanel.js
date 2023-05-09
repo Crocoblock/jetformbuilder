@@ -1,4 +1,3 @@
-import useBlockAttributes from '../../blocks/hooks/useBlockAttributes';
 import BlockJetStyleContext from '../context/BlockJetStyleContext';
 
 const {
@@ -25,6 +24,10 @@ const {
 ToolsPanel = (
 	ToolsPanel || __experimentalToolsPanel
 );
+
+const {
+	      useBlockAttributes,
+      } = JetFBHooks;
 
 /**
  * Wrapper Component for style controls

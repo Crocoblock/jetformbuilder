@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Jet_Form_Builder\Compatibility\Wp_Experiments;
+namespace Jet_Form_Builder\Modules\Jet_Style;
 
-use Jet_Form_Builder\Compatibility\Wp_Experiments\Css_Compilers\Base_Css_Compiler;
-use Jet_Form_Builder\Compatibility\Wp_Experiments\Css_Compilers\Border_Css_Compiler;
-use Jet_Form_Builder\Compatibility\Wp_Experiments\Css_Compilers\Border_Radius_Css_Compiler;
+use Jet_Form_Builder\Modules\Jet_Style\Css_Compilers\Base_Css_Compiler;
+use Jet_Form_Builder\Modules\Jet_Style\Css_Compilers\Border_Radius_Css_Compiler;
+use Jet_Form_Builder\Modules\Jet_Style\Css_Compilers\Border_Css_Compiler;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

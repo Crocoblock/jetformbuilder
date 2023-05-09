@@ -251,7 +251,6 @@ class Plugin {
 
 		$this->register_autoloader();
 		$this->init_lang();
-		$this->get_modules()->init_hooks();
 
 		add_action(
 			'after_setup_theme',
@@ -287,6 +286,10 @@ class Plugin {
 		return $this->get_modules()->module( $name_or_class );
 	}
 
+	public function has_module( string $name_or_class ): bool {
+		return $this->get_modules()->has_module( $name_or_class );
+	}
+
 }
 
-Plugin::instance();
+Plugin::instance()->get_modules()->init_hooks();

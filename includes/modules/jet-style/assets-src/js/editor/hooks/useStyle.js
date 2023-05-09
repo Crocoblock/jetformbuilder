@@ -1,6 +1,9 @@
 import useJetStyleSupports from './useJetStyleSupports';
 import resolveStyle from '../helpers/resolveStyle';
-import useBlockAttributes from '../../blocks/hooks/useBlockAttributes';
+
+const {
+	      useBlockAttributes,
+      } = JetFBHooks;
 
 function useStyle( cssVar ) {
 	const [ attributes, setAttributes ] = useBlockAttributes();

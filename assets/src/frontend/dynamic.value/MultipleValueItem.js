@@ -28,7 +28,7 @@ MultipleValueItem.prototype.observeSetValue = function ( conditions, input ) {
 		formula.setResult = () => {
 			this.to_set[ index ] = '' + formula.calculate();
 
-			this.to_set = Object.values( this.to_set );
+			this.to_set = Object.values( this.to_set ).filter( Boolean );
 		};
 
 		formula.setResult();

@@ -101,12 +101,16 @@ class Builder_Helper {
 	}
 
 	/**
+	 * @since 3.1.0 Add support for WP 5.6
 	 * @since 3.0.3
 	 *
 	 * @see https://github.com/Crocoblock/issues-tracker/issues/2636
 	 */
 	public static function enqueue_global_styles() {
-		wp_enqueue_global_styles();
+		// support for WP 5.6
+		if ( function_exists( 'wp_enqueue_global_styles' ) ) {
+			wp_enqueue_global_styles();
+		}
 		wp_enqueue_style( 'wp-block-library' );
 		wp_enqueue_style( 'jet-form-builder-frontend' );
 	}

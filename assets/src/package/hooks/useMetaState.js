@@ -9,18 +9,18 @@ function useMetaState(
 	dependencies = undefined,
 ) {
 	const meta = useSelect( ( select ) => {
-		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+		const rawMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+
+		return JSON.parse( rawMeta[ key ] || ifEmpty );
 	}, dependencies );
 
-	const { editPost } = useDispatch( 'core/editor', [ meta ] );
-
-	const metaStateValue = JSON.parse( meta[ key ] || ifEmpty );
+	const { editPost } = useDispatch( 'core/editor' );
 
 	const setMetaStateValue = callable => {
 		let value;
 
 		if ( 'function' === typeof callable ) {
-			value = callable( metaStateValue );
+			value = callable( meta );
 		}
 		else {
 			value = callable;
@@ -36,7 +36,7 @@ function useMetaState(
 		} );
 	};
 
-	return [ metaStateValue, setMetaStateValue ];
+	return [ meta, setMetaStateValue ];
 }
 
 export default useMetaState;

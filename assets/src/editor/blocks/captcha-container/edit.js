@@ -89,24 +89,43 @@ export default function EditCaptchaContainer( props ) {
 	const [ provider, setProvider ] = useState( () => attributes.provider );
 
 	useEffect( () => {
-		setProvider( attributes.provider );
+		if ( attributes.isPreview ) {
+			return;
+		}
+		setProvider(
+			prev => attributes.provider !== prev ? attributes.provider : prev,
+		);
 	}, [ attributes.provider ] );
 
 	useEffect( () => {
-		setProvider( args.captcha );
+		if ( attributes.isPreview ) {
+			return;
+		}
+		setProvider(
+			prev => args.captcha !== prev ? args.captcha : prev,
+		);
 	}, [ args.captcha ] );
 
 	useEffect( () => {
 		if ( attributes.isPreview ) {
 			return;
 		}
-		if ( provider !== attributes.provider ) {
-			setAttributes( { provider: provider } );
+		setArgs( prev => {
+			if ( provider !== prev.captcha ) {
+				args.captcha = provider;
+				return { ...prev, captcha: provider };
+			}
+
+			return prev;
+		} );
+	}, [ provider ] );
+
+	useEffect( () => {
+		if ( attributes.isPreview ) {
+			return;
 		}
-		if ( provider !== args.captcha ) {
-			setArgs( prev => (
-				{ ...prev, captcha: provider }
-			) );
+		if ( provider !== attributes.provider ) {
+			setAttributes( { provider } );
 		}
 	}, [ provider ] );
 

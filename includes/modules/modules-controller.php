@@ -25,6 +25,7 @@ class Modules_Controller {
 	public function rep_instances(): array {
 		return array(
 			new Jet_Style\Module(),
+			new Switch_Page_On_Change\Module(),
 			new Advanced_Choices\Module(),
 		);
 	}

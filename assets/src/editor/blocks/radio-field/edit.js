@@ -12,6 +12,7 @@ const {
 	      BlockName,
 	      AdvancedFields,
 	      FieldControl,
+	      SwitchPageOnChangeControls,
       } = JetFBComponents;
 const {
 	      __,
@@ -33,20 +34,19 @@ export default function RadioEdit( props ) {
 
 	const {
 		      isSelected,
-		      editProps: { uniqKey, attrHelp },
-		      attributes,
-		      setAttributes,
+		      editProps: { uniqKey },
 	      } = props;
 
 	const blockProps = useBlockProps();
 	useUniqueNameOnDuplicate();
 
-	return [
+	return <>
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
 			{ ...props }
-		/>,
-		isSelected && <InspectorControls
+		/>
+		<SwitchPageOnChangeControls/>
+		{ isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }
 		>
 			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
@@ -61,7 +61,7 @@ export default function RadioEdit( props ) {
 				key={ uniqKey( 'AdvancedFields' ) }
 				{ ...props }
 			/>
-		</InspectorControls>,
+		</InspectorControls> }
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<SelectRadioCheckPlaceholder
 				key={ uniqKey( 'SelectRadioCheckPlaceholder' ) }
@@ -73,22 +73,12 @@ export default function RadioEdit( props ) {
 					listingTypes={ window.JetFormRadioFieldData.listings_list }
 					{ ...props }
 				/>
-				<ToggleControl
-					key="switch_on_change"
-					label={ __( 'Switch page on change' ) }
-					checked={ attributes.switch_on_change }
-					help={ attrHelp( 'switch_on_change' ) }
-					onChange={ ( newValue ) => {
-						setAttributes(
-							{ switch_on_change: Boolean( newValue ) } );
-					} }
-				/>
 				<FieldControl
 					type="custom_settings"
 					key={ uniqKey( 'customSettingsFields' ) }
 					{ ...props }
 				/>
 			</SelectRadioCheck>
-		</div>,
-	];
+		</div>
+	</>;
 }

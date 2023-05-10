@@ -12,13 +12,12 @@ module.exports = {
 	output: {
 		path: path.resolve( __dirname, 'assets-build/js' ),
 		filename: isDev ? '[name].js' : '[name].min.js',
-		devtoolNamespace: 'jfb',
+		devtoolNamespace: 'jfb-advanced-choices',
 	},
 	devtool: 'eval-source-map',
 	resolve: {
 		modules: [
 			path.resolve( __dirname, 'src' ),
-			path.resolve( __dirname, 'blocks-src' ),
 			'node_modules',
 		],
 		extensions: [ '.js' ],

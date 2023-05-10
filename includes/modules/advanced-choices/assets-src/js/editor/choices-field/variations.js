@@ -29,7 +29,7 @@ const variations = [
 	},
 	{
 		name: 'simple-buttons',
-		title: __( 'Buttons', 'jet-form-builder' ),
+		title: __( 'Text', 'jet-form-builder' ),
 		description: __(
 			'Simple buttons list with labels',
 			'jet-form-builder',
@@ -168,6 +168,60 @@ const variations = [
 					[
 						'core/paragraph',
 						{ content: 'Book Name #3' },
+					],
+				],
+			],
+		],
+		scope: [ 'block' ],
+	},
+	{
+		name: 'images-with-controls',
+		title: __( 'Images with controls', 'jet-form-builder' ),
+		description: __(
+			'Image buttons with controls in footer',
+			'jet-form-builder',
+		),
+		icon: 'images-alt2',
+		innerBlocks: [
+			[
+				'jet-forms/choice',
+				{
+					value: 'Book Name #1',
+					calc_value: '100',
+				},
+				[
+					imageBlock( 'Book Name #1' ),
+					[
+						'jet-forms/choice-control',
+						{ label: 'Book Name #1' },
+					],
+				],
+			],
+			[
+				'jet-forms/choice',
+				{
+					value: 'Book Name #2',
+					calc_value: '200',
+				},
+				[
+					imageBlock( 'Book Name #2' ),
+					[
+						'jet-forms/choice-control',
+						{ label: 'Book Name #1' },
+					],
+				],
+			],
+			[
+				'jet-forms/choice',
+				{
+					value: 'Book Name #3',
+					calc_value: '200',
+				},
+				[
+					imageBlock( 'Book Name #3' ),
+					[
+						'jet-forms/choice-control',
+						{ label: 'Book Name #1' },
 					],
 				],
 			],

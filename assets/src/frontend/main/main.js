@@ -27,7 +27,6 @@ import {
 } from './reporting/functions';
 
 import './calc.module/main';
-import './switch-page-on-change/main';
 import {
 	getParsedName,
 	populateInputs,

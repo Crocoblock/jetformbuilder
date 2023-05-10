@@ -59,6 +59,7 @@
 	"textdomain": "jet-form-builder",
 	"supports": {
 		"html": false,
+		"jetFBSwitchPageOnChange": true,
 		"jetStyle": {
 			"--jfb-choice-text": [
 				".jet-form-builder-choice--item",

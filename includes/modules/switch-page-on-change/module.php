@@ -16,7 +16,11 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_It, Base_Module_After_Install_It {
+class Module implements
+	Base_Module_It,
+	Base_Module_Url_It,
+	Base_Module_Handle_It,
+	Base_Module_After_Install_It {
 
 	use Base_Module_Url_Trait;
 	use Base_Module_Handle_Trait;
@@ -43,9 +47,45 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	}
 
 	public function init_hooks() {
+		add_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'register_editor_scripts' ),
+			0
+		);
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
+		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
 	}
 
 	public function remove_hooks() {
+		remove_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'register_editor_scripts' ),
+			0
+		);
+
+		remove_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
+		remove_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
+	}
+
+	public function register_editor_scripts() {
+		wp_enqueue_script(
+			$this->get_handle(),
+			$this->get_url( 'assets-build/js/editor/main{min}.js' ),
+			array(),
+			jet_form_builder()->get_version(),
+			true
+		);
+	}
+
+	public function register_frontend_scripts() {
+		wp_register_script(
+			$this->get_handle(),
+			$this->get_url( 'assets-build/js/frontend/main{min}.js' ),
+			array( 'jet-plugins' ),
+			jet_form_builder()->get_version(),
+			true
+		);
 	}
 
 	public function register_support( \WP_Block_Type $block_type ) {
@@ -68,14 +108,14 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		$support_config = Array_Tools::get( $block_type->supports, array( self::SUPPORT_NAME ), false );
 		$value          = $block_attributes[ self::ATTRIBUTE_NAME ] ?? array();
 
-		if (
-			! is_array( $support_config ) ||
-			empty( $value )
-		) {
+		if ( empty( $support_config ) || empty( $value ) ) {
 			return array();
 		}
-		// todo
 
-		return array();
+		wp_enqueue_script( $this->get_handle() );
+
+		return array(
+			'class' => $this->get_handle(),
+		);
 	}
 }

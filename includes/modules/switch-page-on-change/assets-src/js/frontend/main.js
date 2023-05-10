@@ -8,20 +8,21 @@ addAction(
 	 */
 	function ( page ) {
 		const wrappers = page.node.querySelectorAll(
-			'.jet-form-builder-row[data-switch-page]',
+			'.jet-fb-switch-page-on-change',
 		);
-
 		if ( !wrappers ) {
 			return;
 		}
-
 		for ( const wrapper of wrappers ) {
-			const node = wrapper.querySelector( '[data-jfb-sync]' );
+			let node = wrapper;
 
-			if ( !node?.jfbSync || ! page.isNodeBelongThis( node ) ) {
-				continue;
+			if ( !wrapper.hasOwnProperty( 'jfbSync' ) ) {
+				node = wrapper.querySelector( 'input' );
 			}
 
+			if ( !node?.jfbSync || !page.isNodeBelongThis( node ) ) {
+				continue;
+			}
 			node.jfbSync.watch( () => {
 				page.changePage( false ).then( () => {} ).catch( () => {} );
 			} );

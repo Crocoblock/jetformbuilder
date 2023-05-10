@@ -180,6 +180,7 @@ import ToggleGroupVariations from './blocks/components/ToggleGroupVariations';
 import BaseLabel from './components/BaseLabel';
 import getCaptchaProviders from './captcha/helpers/getCaptchaProviders';
 import CaptchaBlockTip from './captcha/components/CaptchaBlockTip';
+import useSupport from './blocks/hooks/useSupport';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -346,5 +347,6 @@ window.JetFBHooks = {
 	useUniqueNameOnDuplicate,
 	useFields: useFields,
 	useCaptchaProvider,
+	useSupport,
 };
 

@@ -17,6 +17,7 @@ const {
 	      BlockVisibility,
 	      BlockClassName,
 	      FieldControl,
+	      SwitchPageOnChangeControls,
       } = JetFBComponents;
 
 const {
@@ -54,12 +55,13 @@ export default function SelectEdit( props ) {
 
 	useUniqueNameOnDuplicate();
 
-	return [
+	return <>
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
 			{ ...props }
-		/>,
-		isSelected && <InspectorControls
+		/>
+		{ !attributes.multiple && <SwitchPageOnChangeControls/> }
+		{ isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }
 		>
 			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
@@ -88,23 +90,13 @@ export default function SelectEdit( props ) {
 				<BlockVisibility/>
 				<BlockClassName/>
 			</PanelBody>
-		</InspectorControls>,
+		</InspectorControls> }
 		<div key={ uniqKey( 'viewBlock' ) } { ...blockProps }>
 			<SelectRadioCheckPlaceholder
 				scriptData={ window.JetFormSelectFieldData }
 				{ ...props }
 			/>
 			<SelectRadioCheck { ...props }>
-				<ToggleControl
-					key="switch_on_change"
-					label={ __( 'Switch page on change' ) }
-					checked={ attributes.switch_on_change }
-					help={ attrHelp( 'switch_on_change' ) }
-					onChange={ ( newValue ) => {
-						setAttributes(
-							{ switch_on_change: Boolean( newValue ) } );
-					} }
-				/>
 				<ToggleControl
 					key="multiple"
 					label={ __( 'Is multiple', 'jet-form-builder' ) }
@@ -128,6 +120,6 @@ export default function SelectEdit( props ) {
 					{ ...props }
 				/>
 			</SelectRadioCheck>
-		</div>,
-	];
+		</div>
+	</>;
 }

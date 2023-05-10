@@ -9,7 +9,6 @@ use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
-use Jet_Form_Builder\Blocks\Switch_Page_On_Change;
 use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Security\Honeypot;
 use Jet_Form_Builder\Classes\Regexp_Tools;
@@ -152,7 +151,6 @@ class Plugin {
 		Validation::instance();
 		Render_State::instance();
 		new Dynamic_Value();
-		new Switch_Page_On_Change();
 
 		/**
 		 * REST API

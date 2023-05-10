@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
+use Jet_Form_Builder\Blocks\Native_Block_Wrapper_Attributes;
 use Jet_Form_Builder\Blocks\Render\Radio_Field_Render;
 
 // If this file is called directly, abort.
@@ -12,7 +13,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Text field block class
  */
-class Radio_Field extends Base {
+class Radio_Field extends Base implements Native_Block_Wrapper_Attributes {
 
 	use Base_Select_Radio_Check;
 
@@ -70,7 +71,7 @@ class Radio_Field extends Base {
 					),
 				),
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['item'] => 'display: {{VALUE}};',
+					'{{WRAPPER}} ' . $this->css_scheme['item']       => 'display: {{VALUE}};',
 					'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] => 'display: {{VALUE}};',
 				),
 				'attributes'   => array(
@@ -155,7 +156,7 @@ class Radio_Field extends Base {
 					),
 				),
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['item'] => 'margin-right: {{VALUE}}{{UNIT}}',
+					'{{WRAPPER}} ' . $this->css_scheme['item']       => 'margin-right: {{VALUE}}{{UNIT}}',
 					'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] => 'margin-right: {{VALUE}}{{UNIT}}',
 				),
 				'attributes'   => array(
@@ -203,9 +204,9 @@ class Radio_Field extends Base {
 
 		$this->controls_manager->add_control(
 			array(
-				'id'           => 'item_normal_background_color',
-				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'id'    => 'item_normal_background_color',
+				'type'  => 'color-picker',
+				'label' => __( 'Background Color', 'jet-form-builder' ),
 
 				'css_selector' => array(
 					// editor

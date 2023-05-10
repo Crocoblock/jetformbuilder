@@ -624,9 +624,6 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 		do_action( 'jet-form-builder/before-start-form-row', $this );
 
-		$this->add_attribute( 'class', 'jet-form-builder-row' );
-		$this->add_attribute( 'class', 'field-type-' . $this->get_name() );
-
 		include $this->get_global_template( 'common/start-form-row.php' );
 
 		do_action( 'jet-form-builder/after-start-form-row', $this );

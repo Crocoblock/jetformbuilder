@@ -23,6 +23,7 @@ const {
 	      StyleColorItemsWrapper,
 	      StyleBorderItem,
 	      StyleBorderRadiusItem,
+	      SwitchPageOnChangeControls,
       } = JetFBComponents;
 
 const {
@@ -132,6 +133,9 @@ export default function EditAdvancedChoicesField( props ) {
 		<ToolBarFields>
 			<AddChoiceButton/>
 		</ToolBarFields>
+		{ (
+			!attributes.allow_multiple
+		) && <SwitchPageOnChangeControls/> }
 		<InspectorControls>
 			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
 				<BlockLabel/>

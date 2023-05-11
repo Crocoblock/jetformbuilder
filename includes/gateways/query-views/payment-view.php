@@ -3,7 +3,7 @@
 
 namespace Jet_Form_Builder\Gateways\Query_Views;
 
-use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Model;
+use Jet_Form_Builder\Modules\Form_Record\Models\Record_Model;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;

@@ -26,6 +26,7 @@ class Modules_Controller {
 		return array(
 			new Jet_Style\Module(),
 			new Switch_Page_On_Change\Module(),
+			new Form_Record\Module(),
 			new Advanced_Choices\Module(),
 		);
 	}

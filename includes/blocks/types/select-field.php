@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Render\Select_Field_Render;
+use Jet_Form_Builder\Modules\Switch_Page_On_Change;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -135,6 +136,14 @@ class Select_Field extends Base {
 		);
 
 		$this->controls_manager->end_section();
+	}
+
+	public function set_block_data( $attributes, $content = null, $wp_block = null ) {
+		parent::set_block_data( $attributes, $content, $wp_block );
+
+		if ( $this->is_multiple() ) {
+			$this->set_attribute( Switch_Page_On_Change\Module::ATTRIBUTE_NAME, false );
+		}
 	}
 
 	public function get_field_name( $name = '' ) {

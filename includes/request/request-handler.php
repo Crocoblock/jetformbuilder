@@ -80,7 +80,7 @@ class Request_Handler {
 		$attrs = $this->get_attrs_by_name( $field_name );
 
 		/**
-		 * @see \Jet_Form_Builder\Actions\Methods\Form_Record\Controller::generate_request
+		 * @see \Jet_Form_Builder\Modules\Form_Record\Controller::generate_request
 		 */
 		$attrs['field_type'] = 'password';
 

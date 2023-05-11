@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Modules\Advanced_Choices\Block_Types;
 use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Modules\Advanced_Choices\Block_Renders\Choices_Field_Render;
+use Jet_Form_Builder\Modules\Switch_Page_On_Change;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -27,6 +28,14 @@ class Choices_Field extends Base {
 
 	public function expected_preset_type(): array {
 		return array( self::PRESET_LIST );
+	}
+
+	public function set_block_data( $attributes, $content = null, $wp_block = null ) {
+		parent::set_block_data( $attributes, $content, $wp_block );
+
+		if ( $this->is_allowed_multiple() ) {
+			$this->set_attribute( Switch_Page_On_Change\Module::ATTRIBUTE_NAME, false );
+		}
 	}
 
 	/**

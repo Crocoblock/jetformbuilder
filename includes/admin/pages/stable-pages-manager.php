@@ -3,12 +3,10 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
-use Jet_Form_Builder\Actions\Methods\Form_Record\Admin\Pages\Form_Records;
 use Jet_Form_Builder\Admin\Pages\Settings\Settings_Page;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Gateways\Pages\Payments_Page;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -34,7 +32,6 @@ class Stable_Pages_Manager {
 			array(
 				new Settings_Page(),
 				new Addons_Page(),
-				new Form_Records(),
 			)
 		);
 	}

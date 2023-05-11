@@ -14,7 +14,6 @@ use Jet_Form_Builder\Modules\Base_Module\Base_Module_Url_It;
 use Jet_Form_Builder\Modules\Base_Module\Base_Module_Url_Trait;
 use Jet_Form_Builder\Plugin;
 
-// use Jet_Form_Builder\Modules\Jet_Style\Module as JetStyleModule;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

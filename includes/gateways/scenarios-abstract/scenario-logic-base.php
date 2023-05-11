@@ -5,8 +5,8 @@ namespace Jet_Form_Builder\Gateways\Scenarios_Abstract;
 
 use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
 use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
-use Jet_Form_Builder\Actions\Methods\Form_Record\Query_Views\Record_Fields_View;
-use Jet_Form_Builder\Actions\Methods\Form_Record\Tools;
+use Jet_Form_Builder\Modules\Form_Record\Query_Views\Record_Fields_View;
+use Jet_Form_Builder\Modules\Form_Record\Tools;
 use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
 use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;

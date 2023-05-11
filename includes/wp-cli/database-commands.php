@@ -5,8 +5,8 @@ namespace Jet_Form_Builder\Wp_Cli;
 
 use ElementorPro\Modules\Forms\Submissions\Database\Query;
 use JET_APB\Plugin;
-use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Action_Result_Model;
-use Jet_Form_Builder\Actions\Methods\Form_Record\Models\Record_Model;
+use Jet_Form_Builder\Modules\Form_Record\Models\Record_Action_Result_Model;
+use Jet_Form_Builder\Modules\Form_Record\Models\Record_Model;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Migrations\Migration_Exception;
 use Jet_Form_Builder\Migrations\Migrator;

@@ -1,6 +1,7 @@
 import useCheckedChoiceState from './useCheckedChoiceState';
 import ChoiceItemContext from './context';
 import ToggleCheckStateButton from './ToggleCheckStateButton';
+import useAllowedBlocks from './useAllowedBlocks';
 
 const { __ } = wp.i18n;
 
@@ -28,9 +29,12 @@ export default function EditAdvancedChoice( props ) {
 		'is-checked': isChecked,
 	} );
 
+	const allowedBlocks = useAllowedBlocks();
+
 	const blockProps       = useBlockProps( { className } );
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		template: [ [ 'core/paragraph', {} ] ],
+		allowedBlocks,
 	} );
 
 	return <ChoiceItemContext.Provider value={ { clientId } }>

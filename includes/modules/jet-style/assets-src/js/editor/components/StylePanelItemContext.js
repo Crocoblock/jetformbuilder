@@ -34,26 +34,28 @@ function StylePanelItemContext( { cssVar, defaultValue, children } ) {
 	);
 
 	const updateCss = useCallback( ( value ) => {
+		const newValue = getUpdatedCss( value );
+
 		setAttributes(
 			{
 				...attributes,
-				style: getUpdatedCss( value ),
+				style: newValue,
 			},
 		);
 	}, [ attributes ] );
 
-	const resetAllFilter = attributes => {
+	const resetAllFilter = ( attributes, forceResetValue ) => {
 		const [ , getUpdatedStyle ] = resolveStyle( attributes, path );
 
 		return {
 			...attributes,
-			style: getUpdatedStyle( defaultValue ),
+			style: getUpdatedStyle( forceResetValue ?? defaultValue ),
 		};
 	};
 
-	const onDeselect = function () {
+	const onDeselect = function ( forceValue ) {
 		setAttributes(
-			resetAllFilter( attributes ),
+			resetAllFilter( attributes, forceValue ),
 		);
 	};
 

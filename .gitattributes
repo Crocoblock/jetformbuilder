@@ -15,8 +15,3 @@ assets/.gitignore       export-ignore
 assets/*.js             export-ignore
 assets/*.json           export-ignore
 
-modules/*/assets-src    export-ignore
-modules/*/.babelrc      export-ignore
-modules/*/*.js          export-ignore
-modules/*/*.json        export-ignore
-

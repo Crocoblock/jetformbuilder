@@ -45,12 +45,16 @@ class Turnstile extends Base_Captcha_From_Options {
 			)
 		);
 
-		$captcha_url = apply_filters(
-			'jet-form-builder/turnstile/url',
-			esc_url_raw(
+		$captcha_url = esc_url_raw(
+			apply_filters(
+				'jet-form-builder/turnstile/url',
 				'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=jfbTurnstileOnLoad&render=explicit'
 			)
 		);
+
+		if ( empty( $captcha_args['sitekey'] ) || ! $captcha_url ) {
+			return '';
+		}
 
 		wp_register_script(
 			Base_Captcha::HANDLE_USER,

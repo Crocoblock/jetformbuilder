@@ -40,6 +40,15 @@ abstract class Base_Handler implements Repository_Item_Instance_Trait {
 	}
 
 	/**
+	 * @since 3.1.0
+	 *
+	 * @return array
+	 */
+	public function on_editor_load(): array {
+		return $this->get_options();
+	}
+
+	/**
 	 * Define this, if you want to save options
 	 * in Tab_Handler_Manager::$_tabs_options.
 	 *

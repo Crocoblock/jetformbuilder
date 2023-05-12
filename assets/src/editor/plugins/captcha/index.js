@@ -19,7 +19,7 @@ const settings = {
 		/* Backward compatibility */
 
 		useEffect( () => {
-			if ( !args.enabled ) {
+			if ( !args.enabled || args.hasOwnProperty( 'captcha' ) ) {
 				return;
 			}
 			setArgs( prev => {
@@ -28,7 +28,10 @@ const settings = {
 				return {
 					captcha: 'google',
 					google: {
-						...prev,
+						use_global: prev.use_global,
+						key: prev.key,
+						secret: prev.secret,
+						threshold: prev.threshold
 					},
 				};
 			} );

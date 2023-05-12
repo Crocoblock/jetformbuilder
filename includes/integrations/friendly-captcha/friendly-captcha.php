@@ -44,6 +44,10 @@ class Friendly_Captcha extends Base_Captcha_From_Options {
 			)
 		);
 
+		if ( empty( $captcha_args['sitekey'] ) ) {
+			return '';
+		}
+
 		wp_enqueue_script(
 			Base_Captcha::HANDLE_USER,
 			jet_form_builder()->plugin_url( 'assets/js/frontend/friendly.captcha.js' ),

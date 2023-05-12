@@ -44,10 +44,16 @@ class Hcaptcha extends Base_Captcha_From_Options {
 			)
 		);
 
-		$captcha_url = apply_filters(
-			'jet-form-builder/h-captcha/url',
-			esc_url_raw( 'https://js.hcaptcha.com/1/api.js?onload=jfbHCaptchaOnLoad&render=explicit' )
+		$captcha_url = esc_url_raw(
+			apply_filters(
+				'jet-form-builder/h-captcha/url',
+				'https://js.hcaptcha.com/1/api.js?onload=jfbHCaptchaOnLoad&render=explicit'
+			)
 		);
+
+		if ( empty( $captcha_args['sitekey'] ) || ! $captcha_url ) {
+			return '';
+		}
 
 		wp_register_script(
 			Base_Captcha::HANDLE_USER,

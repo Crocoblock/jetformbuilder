@@ -52,6 +52,10 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 		$key = esc_attr( $this->options['key'] ?? '' );
 		$url = esc_url_raw( sprintf( 'https://www.google.com/recaptcha/api.js?render=%s', $key ) );
 
+		if ( ! $key || ! $url ) {
+			return '';
+		}
+
 		wp_enqueue_script(
 			Base_Captcha::HANDLE_API,
 			$url,
@@ -133,6 +137,8 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 		 */
 		$options = Tab_Handler_Manager::get_options( 'captcha-tab', self::OPTIONS );
 
-		return wp_array_slice_assoc( $options, array_keys( self::OPTIONS ) );
+		$response = wp_array_slice_assoc( $options, array_keys( self::OPTIONS ) );
+
+		return $response;
 	}
 }

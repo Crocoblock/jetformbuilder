@@ -40,6 +40,14 @@ class Captcha_Handler extends Base_Handler {
 	}
 
 	public function on_load() {
+		return $this->get_captcha_options();
+	}
+
+	public function on_editor_load(): array {
+		return $this->get_captcha_options();
+	}
+
+	protected function get_captcha_options(): array {
 		$options = array();
 
 		foreach ( jet_form_builder()->captcha->rep_get_items() as $slug => $captcha ) {

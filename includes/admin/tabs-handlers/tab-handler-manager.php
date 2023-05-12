@@ -100,17 +100,19 @@ class Tab_Handler_Manager {
 		return $this->tab( $slug )->get_options( $is_empty );
 	}
 
-	public function all( $default_tabs = array() ): array {
+	/**
+	 * @since 3.1.0 Remove $default_tabs argument
+	 *
+	 * @return array
+	 */
+	public function all(): array {
 		$response = array();
-		$tabs     = $this->rep_get_items();
+
+		/** @var Base_Handler[] $tabs */
+		$tabs = $this->rep_get_items();
 
 		foreach ( $tabs as $slug => $tab ) {
-			$default = array();
-			if ( isset( $default_tabs[ $slug ] ) ) {
-				$default = $default_tabs[ $slug ];
-			}
-
-			$response[ $slug ] = $tab->get_options( $default );
+			$response[ $slug ] = $tab->on_editor_load();
 		}
 
 		return $response;

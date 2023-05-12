@@ -150,7 +150,7 @@ class Forms_Captcha {
 			return $this->current;
 		}
 
-		$settings = Plugin::instance()->post_type->get_recaptcha( jet_fb_live()->form_id );
+		$settings = Plugin::instance()->post_type->get_captcha( jet_fb_live()->form_id );
 
 		if ( ! $settings || ! is_array( $settings ) ) {
 			throw new Repository_Exception( 'Empty captcha settings' );

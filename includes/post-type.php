@@ -283,7 +283,7 @@ class Post_Type {
 	 *
 	 * @return array
 	 */
-	public function get_recaptcha( $form_id = false ) {
+	public function get_captcha( $form_id = false ) {
 		return $this->get_meta( Recaptcha_Meta::class )->query( $form_id );
 	}
 
@@ -325,6 +325,21 @@ class Post_Type {
 
 	public function maybe_get_jet_sm_ready_styles( $form_id ) {
 		return Compatibility::has_jet_sm() ? get_post_meta( $form_id, '_jet_sm_ready_style', true ) : '';
+	}
+
+	/**
+	 * Returns captcha settings
+	 *
+	 * @deprecated 3.1.0 Use ::get_captcha() instead
+	 *
+	 * @param int|false $form_id
+	 *
+	 * @return array
+	 */
+	public function get_recaptcha( $form_id = false ) {
+		_deprecated_function( __METHOD__, '3.1.0', __CLASS__ . '::get_captcha()' );
+
+		return $this->get_captcha( $form_id );
 	}
 
 

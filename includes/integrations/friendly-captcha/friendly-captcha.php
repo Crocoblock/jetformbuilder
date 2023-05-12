@@ -3,11 +3,10 @@
 
 namespace Jet_Form_Builder\Integrations\Friendly_Captcha;
 
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha_From_Options;
+use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
 
 class Friendly_Captcha extends Base_Captcha_From_Options {
 
@@ -28,7 +27,7 @@ class Friendly_Captcha extends Base_Captcha_From_Options {
 		try {
 			$action->send_request();
 		} catch ( Gateway_Exception $exception ) {
-			throw new Request_Exception(
+			throw new Spam_Exception(
 				'captcha_failed',
 				$exception->getMessage(),
 				...$exception->get_additional()

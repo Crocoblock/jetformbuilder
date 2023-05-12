@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Modules\Form_Record\Action_Types;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Actions\Types\Base;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Modules\Form_Record;
 use Jet_Form_Builder\Modules\Form_Record\Controller;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
@@ -14,6 +15,7 @@ use Jet_Form_Builder\Dev_Mode\Manager;
 use Jet_Form_Builder\Modules\Form_Record\Admin\Meta_Boxes\Record_To_Payment_Box;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
+use Jet_Form_Builder\Modules\Security\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -23,23 +25,6 @@ if ( ! defined( 'WPINC' ) ) {
 class Save_Record extends Base {
 
 	const ID = 'save_record';
-
-	const SPAM_STATUSES = array(
-		'captcha_failed',
-		'nonce_failed',
-		'csrf_failed',
-	);
-
-	private $spam_statuses;
-
-	public function __construct() {
-		parent::__construct();
-
-		$this->spam_statuses = apply_filters(
-			'jet-form-builder/action/save-record/spam-statuses',
-			self::SPAM_STATUSES
-		);
-	}
 
 	/**
 	 * @return string
@@ -120,12 +105,15 @@ class Save_Record extends Base {
 	 *
 	 * @return void
 	 * @throws Sql_Exception
+	 * @throws Repository_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		$status    = jet_fb_handler()->response_args['status'] ?? '';
 		$save_spam = $this->settings['save_spam'] ?? false;
 
-		if ( ! $save_spam && in_array( $status, $this->spam_statuses, true ) ) {
+		/** @var Module $security */
+		$security = jet_form_builder()->module( Module::class );
+
+		if ( ! $save_spam && $security->has_spam() ) {
 			return;
 		}
 

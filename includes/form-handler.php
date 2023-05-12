@@ -16,6 +16,7 @@ use Jet_Form_Builder\Exceptions\Not_Router_Request;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Form_Response;
+use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
 use Jet_Form_Builder\Request\Form_Request_Router;
 use Jet_Form_Builder\Request\Request_Handler;
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
@@ -298,11 +299,17 @@ class Form_Handler {
 					'status' => $exception->get_form_status(),
 				)
 			);
+		} catch ( Spam_Exception $exception ) {
+			$this->send_response(
+				array(
+					'status' => $exception->get_form_status(),
+				)
+			);
 		}
 	}
 
 	/**
-	 * @throws Request_Exception|Action_Exception
+	 * @throws Request_Exception|Action_Exception|Modules\Security\Exceptions\Spam_Exception
 	 */
 	public function send_form() {
 		$this->action_handler->set_form_id( $this->form_id );

@@ -45,9 +45,16 @@ class Logger {
 		array_pop( $this->logged[ $key ] );
 	}
 
-	public function has_field_exception(): bool {
+	/**
+	 * @since 3.1.0
+	 *
+	 * @param string $slug
+	 *
+	 * @return bool
+	 */
+	public function has_log( string $slug ): bool {
 		foreach ( $this->logged as $exception_name => $args ) {
-			if ( Sanitize_Value_Exception::class === $exception_name ) {
+			if ( $slug === $exception_name ) {
 				return true;
 			}
 		}

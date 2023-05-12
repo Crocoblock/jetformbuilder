@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Classes\Security;
 
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
+use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -57,7 +58,7 @@ class Honeypot {
 	 * @param array $request
 	 *
 	 * @return array
-	 * @throws Request_Exception
+	 * @throws Spam_Exception
 	 */
 	public function handle_request( array $request ): array {
 		$args = jet_form_builder()->post_type->get_args();
@@ -67,7 +68,7 @@ class Honeypot {
 		}
 
 		if ( ! empty( $request[ self::FIELD ] ) ) {
-			throw new Request_Exception( 'honeypot' );
+			throw new Spam_Exception( 'honeypot' );
 		}
 
 		unset( $request[ self::FIELD ] );

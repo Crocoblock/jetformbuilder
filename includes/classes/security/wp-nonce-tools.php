@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Classes\Security;
 
 use Jet_Form_Builder\Exceptions\Request_Exception;
+use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -47,13 +48,13 @@ class Wp_Nonce_Tools {
 	 * @param array $request
 	 *
 	 * @return array
-	 * @throws Request_Exception
+	 * @throws Spam_Exception
 	 */
 	public static function handle_request( array $request ): array {
 		$nonce = $request[ self::KEY ] ?? '';
 
 		if ( ! self::verify( $nonce ) ) {
-			throw new Request_Exception( 'nonce_failed' );
+			throw new Spam_Exception( 'nonce_failed' );
 		}
 
 		return $request;

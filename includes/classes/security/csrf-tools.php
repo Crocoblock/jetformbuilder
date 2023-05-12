@@ -8,6 +8,7 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
+use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -60,7 +61,7 @@ class Csrf_Tools {
 	 * @param array $request
 	 *
 	 * @return array
-	 * @throws Request_Exception
+	 * @throws Spam_Exception
 	 */
 	public function handle_request( array $request ): array {
 		if ( ! jet_fb_live_args()->is_use_csrf() ) {
@@ -74,7 +75,7 @@ class Csrf_Tools {
 		Csrf_Token_Model::clear();
 
 		if ( ! static::verify( $this->token, $this->client ) ) {
-			throw new Request_Exception( 'csrf_failed' );
+			throw new Spam_Exception( 'csrf_failed' );
 		}
 
 		// delete verified token only on success

@@ -4,12 +4,10 @@
 namespace Jet_Form_Builder\Integrations\Re_Captcha_V3;
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha;
 use Jet_Form_Builder\Integrations\Abstract_Captcha\Base_Captcha_From_Options;
-use Jet_Form_Builder\Integrations\Forms_Captcha;
+use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -40,7 +38,7 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 		try {
 			$action->send_request();
 		} catch ( Gateway_Exception $exception ) {
-			throw new Request_Exception(
+			throw new Spam_Exception(
 				'captcha_failed',
 				$exception->getMessage(),
 				...$exception->get_additional()
@@ -137,8 +135,6 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options {
 		 */
 		$options = Tab_Handler_Manager::get_options( 'captcha-tab', self::OPTIONS );
 
-		$response = wp_array_slice_assoc( $options, array_keys( self::OPTIONS ) );
-
-		return $response;
+		return wp_array_slice_assoc( $options, array_keys( self::OPTIONS ) );
 	}
 }

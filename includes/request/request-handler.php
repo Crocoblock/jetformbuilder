@@ -16,6 +16,8 @@ use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
+use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
+use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -34,7 +36,7 @@ class Request_Handler {
 	/**
 	 * Get submitted form data
 	 *
-	 * @throws Action_Exception|Request_Exception
+	 * @throws Action_Exception|Spam_Exception|Request_Exception
 	 */
 	public function set_form_data() {
 		$this->set_raw_request( $this->get_raw_request() );
@@ -52,7 +54,7 @@ class Request_Handler {
 
 		jet_fb_action_handler()->add_request( $request );
 
-		if ( ! Logger::instance()->has_field_exception() ) {
+		if ( ! Logger::instance()->has_log( Sanitize_Value_Exception::class ) ) {
 			return;
 		}
 
@@ -61,6 +63,11 @@ class Request_Handler {
 		throw new Request_Exception( 'validation_failed' );
 	}
 
+	/**
+	 * @throws Request_Exception|Spam_Exception
+	 *
+	 * @return array
+	 */
 	private function get_raw_request(): array {
 		$this->_fields = Block_Helper::get_blocks_by_post(
 			jet_fb_handler()->get_form_id()

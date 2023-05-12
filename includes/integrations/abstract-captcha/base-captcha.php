@@ -8,6 +8,7 @@ use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Exceptions\Request_Exception;
+use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -33,7 +34,7 @@ abstract class Base_Captcha implements
 	/**
 	 * @param array $request
 	 *
-	 * @throws Request_Exception
+	 * @throws Spam_Exception
 	 */
 	abstract public function verify( array $request );
 

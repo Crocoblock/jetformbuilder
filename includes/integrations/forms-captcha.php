@@ -13,6 +13,7 @@ use Jet_Form_Builder\Integrations\Friendly_Captcha\Friendly_Captcha;
 use Jet_Form_Builder\Integrations\Hcaptcha\Hcaptcha;
 use Jet_Form_Builder\Integrations\Re_Captcha_V3\Re_Captcha_V3;
 use Jet_Form_Builder\Integrations\Turnstile\Turnstile;
+use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
@@ -65,7 +66,7 @@ class Forms_Captcha {
 	 * @param $request
 	 *
 	 * @return mixed
-	 * @throws Request_Exception
+	 * @throws Spam_Exception
 	 */
 	public function on_request( $request ) {
 		$this->verify( $request );
@@ -121,7 +122,7 @@ class Forms_Captcha {
 	/**
 	 * @param $request
 	 *
-	 * @throws Request_Exception
+	 * @throws Spam_Exception
 	 */
 	protected function verify( $request ) {
 		try {

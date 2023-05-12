@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Integrations\Turnstile;
 
+use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
@@ -59,7 +60,7 @@ class Turnstile extends Base_Captcha_From_Options {
 		wp_register_script(
 			Base_Captcha::HANDLE_USER,
 			jet_form_builder()->plugin_url( 'assets/js/frontend/turnstile.js' ),
-			array( 'jet-plugins' ),
+			array( Manager::MAIN_SCRIPT_HANDLE ),
 			jet_form_builder()->get_version(),
 			true
 		);

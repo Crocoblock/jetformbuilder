@@ -45,7 +45,7 @@ function observableHandle( observable ) {
 
 	const widget = new WidgetInstance( container, options );
 
-	observable.getSubmit().submitter?.watchFail( () => {
+	observable.getSubmit().submitter?.status?.watch?.( () => {
 		widget.reset();
 	} );
 }

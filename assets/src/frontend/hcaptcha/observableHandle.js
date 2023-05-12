@@ -38,7 +38,7 @@ function observableHandle( observable ) {
 
 	const widgetID = hcaptcha.render( container, options );
 
-	observable.getSubmit().submitter?.watchFail?.( () => {
+	observable.getSubmit().submitter?.status?.watch?.( () => {
 		hcaptcha.reset( widgetID );
 	} );
 }

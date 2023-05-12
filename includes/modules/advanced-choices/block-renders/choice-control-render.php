@@ -118,20 +118,24 @@ class Choice_Control_Render extends Base {
 
 		$alt = $this->block_type->get_raw_field_name() . ' ' . __( 'control', 'jet-form-builder' );
 
-		$attrs = array(
-			array(
-				'src',
-				esc_url( $is_checked ? $checked_image : $default_image ),
-			),
+		$default_attrs = array(
+			array( 'src', $default_image ),
 			array( 'class', 'jet-form-builder-choice--item-control-img' ),
-			array( 'data-src-default', $default_image ),
-			array( 'data-src-checked', $checked_image ),
-			array( 'alt', $alt ),
+			array( 'alt', __( 'Default', 'jet-form-builder' ) . ' ' . $alt ),
+			array( 'style', $is_checked ? 'display:none;' : '' ),
+		);
+
+		$checked_attrs = array(
+			array( 'src', $checked_image ),
+			array( 'class', 'jet-form-builder-choice--item-control-img checked' ),
+			array( 'alt', __( 'Checked', 'jet-form-builder' ) . ' ' . $alt ),
+			array( 'style', $is_checked ? '' : 'display:none;' ),
 		);
 
 		return sprintf(
-			'<img %s/>',
-			Builder_Helper::attrs( $attrs )
+			'<img %1$s/><img %2$s/>',
+			Builder_Helper::attrs( $default_attrs ),
+			Builder_Helper::attrs( $checked_attrs )
 		);
 	}
 }

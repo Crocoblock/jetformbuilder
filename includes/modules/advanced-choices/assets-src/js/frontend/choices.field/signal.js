@@ -66,25 +66,24 @@ SignalChoices.prototype = Object.create( BaseSignal.prototype );
  */
 SignalChoices.prototype.toggleImageControl = function ( wrapper, isChecked ) {
 	/**
-	 * @type {Element|HTMLImageElement}
+	 * @type {NodeListOf<HTMLImageElement>}
 	 */
-	const image = wrapper.querySelector(
+	const images = wrapper.querySelectorAll(
 		'.jet-form-builder-choice--item-control-img',
 	);
 
-	if ( !image ) {
-		return;
+	for ( const image of images ) {
+		if ( isChecked ) {
+			image.style.display = image.classList.contains( 'checked' )
+			                      ? ''
+			                      : 'none';
+		}
+		else {
+			image.style.display = image.classList.contains( 'checked' )
+			                      ? 'none'
+			                      : '';
+		}
 	}
-
-	const newSrc = isChecked
-	               ? image.dataset.srcChecked
-	               : image.dataset.srcDefault;
-
-	if ( image.src === newSrc ) {
-		return;
-	}
-
-	image.src = newSrc;
 };
 
 /**

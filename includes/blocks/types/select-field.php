@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
+use Jet_Form_Builder\Blocks\Native_Block_Wrapper_Attributes;
 use Jet_Form_Builder\Blocks\Render\Select_Field_Render;
 use Jet_Form_Builder\Modules\Switch_Page_On_Change;
 
@@ -13,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Text field block class
  */
-class Select_Field extends Base {
+class Select_Field extends Base implements Native_Block_Wrapper_Attributes {
 
 	use Base_Select_Radio_Check;
 

@@ -17,7 +17,7 @@ addAction(
 			let node = wrapper;
 
 			if ( !wrapper.hasOwnProperty( 'jfbSync' ) ) {
-				node = wrapper.querySelector( 'input' );
+				node = wrapper.querySelector( 'input, select' );
 			}
 
 			if ( !node?.jfbSync || !page.isNodeBelongThis( node ) ) {

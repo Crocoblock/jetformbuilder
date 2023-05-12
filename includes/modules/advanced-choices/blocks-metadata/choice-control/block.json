@@ -50,23 +50,7 @@
 				"width"
 			]
 		},
-		"__experimentalBorder": {
-			"color": true,
-			"radius": true,
-			"style": true,
-			"width": true,
-			"__experimentalDefaultControls": {
-				"color": true,
-				"radius": true,
-				"style": true,
-				"width": true
-			}
-		},
 		"spacing": {
-			"blockGap": [
-				"horizontal",
-				"vertical"
-			],
 			"margin": true,
 			"padding": true,
 			"units": [
@@ -78,9 +62,8 @@
 			]
 		},
 		"color": {
-			"background": true,
-			"gradients": true,
-			"text": true
+			"text": true,
+			"background": false
 		}
 	},
 	"usesContext": [

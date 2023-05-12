@@ -44,6 +44,7 @@
 				"orientation": "vertical"
 			}
 		},
+		"color": {},
 		"spacing": {
 			"blockGap": [
 				"horizontal",

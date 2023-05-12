@@ -129,7 +129,6 @@
 				"type": "flex"
 			}
 		},
-		"__experimentalBorder": true,
 		"spacing": {
 			"blockGap": [
 				"horizontal",

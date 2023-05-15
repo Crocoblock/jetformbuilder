@@ -3,12 +3,16 @@
 
 namespace Jet_Form_Builder\Form_Actions\Types;
 
+use Jet_Form_Builder\Classes\Resources\File;
+use Jet_Form_Builder\Classes\Resources\Sanitize_File_Exception;
 use Jet_Form_Builder\Form_Actions\Base_Form_Action;
 use Jet_Form_Builder\Form_Actions\Import_Form_Trait;
 
 class Import_Action extends Base_Form_Action {
 
 	use Import_Form_Trait;
+
+	const NONCE_ACTION = 'jfb_admin_import_form';
 
 	public function __construct() {
 		parent::__construct();
@@ -29,31 +33,31 @@ class Import_Action extends Base_Form_Action {
 	}
 
 	public function do_admin_action() {
-		if ( ! current_user_can( 'publish_posts' ) ) {
-			wp_die( 'Acess denied', 'Error' );
+		if ( ! wp_verify_nonce( sanitize_key( $_POST['_wpnonce'] ?? '' ), self::NONCE_ACTION ) ||
+			! current_user_can( 'publish_posts' )
+		) {
+			wp_die( 'Access denied', 'Error' );
 		}
 
-		$file = ! empty( $_FILES['form_file'] ) ? $_FILES['form_file'] : false;
-
-		if ( ! $file ) {
+		try {
+			// phpcs:ignore WordPress.Security
+			$file = new File( $_FILES['form_file'] ?? array() );
+		} catch ( Sanitize_File_Exception $exception ) {
 			wp_die( 'File not found in request', 'Error' );
 		}
 
-		$type = $file['type'];
-
-		if ( 'application/json' !== $type ) {
+		if ( 'application/json' !== $file->get_type() ) {
 			wp_die( 'Incorrect file type', 'Error' );
 		}
 
-		if ( MB_IN_BYTES < $file['size'] ) {
+		if ( MB_IN_BYTES < $file->get_size() ) {
 			wp_die( 'File to large', 'Error' );
 		}
 
-		ob_start();
-		include $file['tmp_name'];
-		$content = ob_get_clean();
+		// phpcs:ignore WordPress.WP.AlternativeFunctions
+		$content = file_get_contents( $file->get_tmp_name() );
 
-		unlink( $file['tmp_name'] );
+		wp_delete_file( $file->get_tmp_name() );
 
 		$content = json_decode( $content, true );
 
@@ -63,7 +67,7 @@ class Import_Action extends Base_Form_Action {
 
 		$form_id = $this->import_form( $content );
 
-		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+		// phpcs:ignore WordPress.Security.SafeRedirect
 		wp_redirect( get_edit_post_link( $form_id, 'url' ) );
 		die();
 	}

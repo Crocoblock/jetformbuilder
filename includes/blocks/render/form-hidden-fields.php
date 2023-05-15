@@ -6,7 +6,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Classes\Security\Csrf_Tools;
-use Jet_Form_Builder\Classes\Security\Wp_Nonce_Tools;
+use Jet_Form_Builder\Modules\Security\Wp_Nonce;
 use Jet_Form_Builder\Live_Form;
 
 // If this file is called directly, abort.
@@ -18,7 +18,7 @@ class Form_Hidden_Fields {
 
 	public static function render() {
 		// render wp nonce
-		$fields = Wp_Nonce_Tools::get_nonce_field();
+		$fields = Wp_Nonce\Module::get_nonce_field();
 
 		$fields .= Csrf_Tools::get_field();
 

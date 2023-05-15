@@ -5,8 +5,6 @@ namespace Jet_Form_Builder;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Classes\Macros_Parser;
-use Jet_Form_Builder\Classes\Security\Csrf_Tools;
-use Jet_Form_Builder\Classes\Security\Wp_Nonce_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;

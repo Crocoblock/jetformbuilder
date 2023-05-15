@@ -59,6 +59,16 @@ class Modules_Controller {
 		}
 	}
 
+	public function install( Base_Module_It $item ): bool {
+		try {
+			$this->rep_install_item( $item );
+
+			return true;
+		} catch ( Repository_Exception $exception ) {
+			return false;
+		}
+	}
+
 	/**
 	 * @param $item Base_Module_It
 	 *

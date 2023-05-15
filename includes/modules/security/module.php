@@ -13,13 +13,21 @@ use Jet_Form_Builder\Modules\Base_Module\Base_Module_It;
 use Jet_Form_Builder\Modules\Base_Module\Base_Module_Url_It;
 use Jet_Form_Builder\Modules\Base_Module\Base_Module_Url_Trait;
 use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
+use Jet_Form_Builder\Modules\Security\Csrf;
+use Jet_Form_Builder\Modules\Security\Honeypot;
+use Jet_Form_Builder\Modules\Security\Wp_Nonce;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, Base_Module_After_Install_It, Base_Module_Handle_It {
+class Module implements
+	Base_Module_It,
+	Base_Module_Url_It,
+	Base_Module_Dir_It,
+	Base_Module_After_Install_It,
+	Base_Module_Handle_It {
 
 	use Base_Module_Handle_Trait;
 	use Base_Module_Url_Trait;
@@ -36,6 +44,10 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 			'jet-form-builder/security/spam-statuses',
 			array()
 		);
+
+		/*jet_form_builder()->get_modules()->install( new Csrf\Module() );
+		jet_form_builder()->get_modules()->install( new Honeypot\Module() );
+		jet_form_builder()->get_modules()->install( new Wp_Nonce\Module() );*/
 	}
 
 	public function condition(): bool {

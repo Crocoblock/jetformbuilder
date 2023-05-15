@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Jet_Form_Builder\Classes\Security;
+namespace Jet_Form_Builder\Modules\Security\Wp_Nonce;
 
-use Jet_Form_Builder\Exceptions\Request_Exception;
+use Jet_Form_Builder\Modules\Base_Module\Base_Module_It;
 use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
 
 // If this file is called directly, abort.
@@ -11,16 +11,35 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Wp_Nonce_Tools {
+class Module implements Base_Module_It {
 
 	const KEY = '_wpnonce';
 
-	public static function register() {
+	public function rep_item_id() {
+		return 'wp-nonce';
+	}
+
+	public function condition(): bool {
+		return true;
+	}
+
+	public function init_hooks() {
 		add_filter(
 			'jet-form-builder/request-handler/request',
 			array( static::class, 'handle_request' )
 		);
 		add_filter(
+			'jet-form-builder/message-types',
+			array( static::class, 'handle_messages' )
+		);
+	}
+
+	public function remove_hooks() {
+		remove_filter(
+			'jet-form-builder/request-handler/request',
+			array( static::class, 'handle_request' )
+		);
+		remove_filter(
 			'jet-form-builder/message-types',
 			array( static::class, 'handle_messages' )
 		);

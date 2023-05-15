@@ -1,6 +1,7 @@
 import Placeholder from './placeholder';
 import ChoicesFieldContext from './context';
 import AddChoiceButton from './AddChoiceButton';
+import preview from './preview';
 
 const { __ } = wp.i18n;
 
@@ -128,6 +129,16 @@ export default function EditAdvancedChoicesField( props ) {
 	} );
 
 	const state = useCreateCurrentChoice( attributes );
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return <ChoicesFieldContext.Provider value={ state }>
 		<ToolBarFields>

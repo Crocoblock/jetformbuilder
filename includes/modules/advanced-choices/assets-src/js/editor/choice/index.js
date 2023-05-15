@@ -15,6 +15,11 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: EditAdvancedChoice,
 	save: SaveAdvancedChoice,
+	example: {
+		attributes: {
+			isPreview: true,
+		},
+	},
 };
 
 export {

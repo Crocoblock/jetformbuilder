@@ -1,10 +1,11 @@
 <?php
 
 
-namespace Jet_Form_Builder\Classes\Security;
+namespace Jet_Form_Builder\Modules\Security\Honeypot;
 
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
+use Jet_Form_Builder\Modules\Base_Module\Base_Module_It;
 use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
 
 // If this file is called directly, abort.
@@ -12,11 +13,19 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Honeypot {
+class Module implements Base_Module_It {
 
 	const FIELD = '_jfb_email_hp_';
 
-	public function __construct() {
+	public function rep_item_id() {
+		return 'honeypot';
+	}
+
+	public function condition(): bool {
+		return true;
+	}
+
+	public function init_hooks() {
 		add_filter(
 			'jet-form-builder/after-start-form',
 			array( $this, 'on_render_form' )
@@ -26,6 +35,21 @@ class Honeypot {
 			array( $this, 'handle_request' )
 		);
 		add_filter(
+			'jet-form-builder/message-types',
+			array( $this, 'handle_global_messages' )
+		);
+	}
+
+	public function remove_hooks() {
+		remove_filter(
+			'jet-form-builder/after-start-form',
+			array( $this, 'on_render_form' )
+		);
+		remove_filter(
+			'jet-form-builder/request-handler/request',
+			array( $this, 'handle_request' )
+		);
+		remove_filter(
 			'jet-form-builder/message-types',
 			array( $this, 'handle_global_messages' )
 		);

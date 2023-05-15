@@ -25,7 +25,7 @@ function useCheckedChoiceState() {
 
 	if ( 'jet-forms/choice' === name ) {
 		return [
-			current?.includes( clientId ),
+			current.includes?.( clientId ),
 			() => {
 				updateCurrent( clientId );
 			},
@@ -33,7 +33,7 @@ function useCheckedChoiceState() {
 	}
 
 	return [
-		current?.includes( parentId ),
+		current.includes?.( parentId ),
 		() => {
 			updateCurrent( parentId );
 		},

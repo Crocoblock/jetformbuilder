@@ -75,6 +75,9 @@ class Autoloader {
 		'Actions\\Methods\\Form_Record\\Rest_Endpoints\\Mark_View_Record_Base_Endpoint' => 'Modules\\Form_Record\\Rest_Endpoints\\Mark_View_Record_Base_Endpoint',
 		'Actions\\Methods\\Form_Record\\Tools'      => 'Modules\\Form_Record\\Tools',
 		'Actions\\Types\\Save_Record'               => 'Modules\\Form_Record\\Action_Types\\Save_Record',
+		'Classes\\Security\\Csrf_Token_Model'       => 'Modules\\Security\\Csrf\\Csrf_Token_Model',
+		'Classes\\Security\\Csrf_Token_View'        => 'Modules\\Security\\Csrf\\Csrf_Token_View',
+		'Classes\\Security\\Csrf_Tools'             => 'Modules\\Security\\Csrf\\Csrf_Tools',
 	);
 
 	/**

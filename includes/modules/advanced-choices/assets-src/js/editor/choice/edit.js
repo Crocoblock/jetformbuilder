@@ -2,6 +2,7 @@ import useCheckedChoiceState from './useCheckedChoiceState';
 import ChoiceItemContext from './context';
 import ToggleCheckStateButton from './ToggleCheckStateButton';
 import useAllowedBlocks from './useAllowedBlocks';
+import preview from './preview';
 
 const { __ } = wp.i18n;
 
@@ -36,6 +37,16 @@ export default function EditAdvancedChoice( props ) {
 		template: [ [ 'core/paragraph', {} ] ],
 		allowedBlocks,
 	} );
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return <ChoiceItemContext.Provider value={ { clientId } }>
 		<li { ...innerBlocksProps }/>

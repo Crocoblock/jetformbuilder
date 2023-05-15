@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Classes\Security;
+namespace Jet_Form_Builder\Modules\Security\Csrf;
 
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;

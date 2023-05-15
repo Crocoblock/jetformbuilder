@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Classes\Security;
+namespace Jet_Form_Builder\Modules\Security\Csrf;
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 

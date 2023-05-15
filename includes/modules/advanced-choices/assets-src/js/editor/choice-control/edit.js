@@ -1,5 +1,6 @@
 import useCheckedChoiceState from '../choice/useCheckedChoiceState';
 import ToggleCheckStateButton from '../choice/ToggleCheckStateButton';
+import preview from './preview';
 
 const { __ } = wp.i18n;
 
@@ -99,6 +100,16 @@ export default function EditChoiceCheck( props ) {
 
 	const [ width, setWidth ] = useStyle( '--jfb-choice-control-width' );
 	const widthInt            = parseInt( width );
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return <>
 		<BlockControls group={ 'block' }>

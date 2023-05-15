@@ -10,7 +10,6 @@ use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Blocks\Validation;
-use Jet_Form_Builder\Classes\Security\Honeypot;
 use Jet_Form_Builder\Classes\Regexp_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Compatibility\Deprecated;
@@ -138,7 +137,6 @@ class Plugin {
 		$this->form_handler     = new Form_Handler();
 		$this->captcha          = new Forms_Captcha();
 		$this->addons_manager   = new AddonsManager();
-		$this->honeypot         = new Honeypot();
 		$this->wp_experiments   = new Wp_Experiments();
 		$this->regexp           = new Regexp_Tools();
 		$this->blocks_sanitizer = new Blocks\Block_Sanitizer_Manager();

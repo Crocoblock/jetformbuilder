@@ -18,10 +18,6 @@ class Modules_Controller {
 
 	use Repository_Pattern_Trait;
 
-	public function __construct() {
-		$this->rep_install();
-	}
-
 	public function rep_instances(): array {
 		return array(
 			new Jet_Style\Module(),

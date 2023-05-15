@@ -288,4 +288,5 @@ class Plugin {
 
 }
 
+Plugin::instance()->get_modules()->rep_install();
 Plugin::instance()->get_modules()->init_hooks();

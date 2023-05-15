@@ -45,9 +45,9 @@ class Module implements
 			array()
 		);
 
-		/*jet_form_builder()->get_modules()->install( new Csrf\Module() );
+		jet_form_builder()->get_modules()->install( new Csrf\Module() );
 		jet_form_builder()->get_modules()->install( new Honeypot\Module() );
-		jet_form_builder()->get_modules()->install( new Wp_Nonce\Module() );*/
+		jet_form_builder()->get_modules()->install( new Wp_Nonce\Module() );
 	}
 
 	public function condition(): bool {

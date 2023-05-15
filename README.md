@@ -4,6 +4,12 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.0.6
+* ADD: Ability to import multiple forms at the same time
+* UPD: The post title is used for the form export file instead of the post name
+* FIX: Shows an error if you just save without patching on Settings page
+* FIX: "Must not contain chars" in advanced validation
+
 ## 3.0.5
 * ADD: Ability to hide conditional blocks during form rendering to avoid layout shifts (see Advanced section in block settings)
 * FIX: Incorrect behavior of validation in step-by-step form

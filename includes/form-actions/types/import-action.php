@@ -4,9 +4,11 @@
 namespace Jet_Form_Builder\Form_Actions\Types;
 
 use Jet_Form_Builder\Classes\Resources\File;
+use Jet_Form_Builder\Classes\Resources\File_Collection;
 use Jet_Form_Builder\Classes\Resources\Sanitize_File_Exception;
 use Jet_Form_Builder\Form_Actions\Base_Form_Action;
 use Jet_Form_Builder\Form_Actions\Import_Form_Trait;
+use Jet_Form_Builder\Request\Request_Tools;
 
 class Import_Action extends Base_Form_Action {
 
@@ -39,36 +41,70 @@ class Import_Action extends Base_Form_Action {
 			wp_die( 'Access denied', 'Error' );
 		}
 
-		try {
-			// phpcs:ignore WordPress.Security
-			$file = new File( $_FILES['form_file'] ?? array() );
-		} catch ( Sanitize_File_Exception $exception ) {
+		/** @var File_Collection[] $files */
+		// phpcs:ignore WordPress.Security
+		$files = Request_Tools::get_files( $_FILES );
+
+		if ( ! is_array( $files ) ) {
 			wp_die( 'File not found in request', 'Error' );
 		}
 
-		if ( 'application/json' !== $file->get_type() ) {
-			wp_die( 'Incorrect file type', 'Error' );
+		$collection = $files['form_file'] ?? false;
+
+		if ( ! $collection ||
+			! is_a( $collection, File_Collection::class ) ||
+			! $collection->count()
+		) {
+			wp_die( 'File not found in request', 'Error' );
 		}
 
-		if ( MB_IN_BYTES < $file->get_size() ) {
-			wp_die( 'File to large', 'Error' );
+		$wp_error = new \WP_Error();
+		$form_ids = array();
+
+		/** @var File $file */
+		foreach ( $collection as $file ) {
+			if ( 'application/json' !== $file->get_type() ) {
+				$wp_error->add( 'not_json', 'Incorrect file type', $file->to_array() );
+				continue;
+			}
+
+			if ( MB_IN_BYTES < $file->get_size() ) {
+				$wp_error->add( 'too_large', 'File to large', $file->to_array() );
+				continue;
+			}
+
+			// phpcs:ignore WordPress.WP.AlternativeFunctions
+			$content = file_get_contents( $file->get_tmp_name() );
+
+			wp_delete_file( $file->get_tmp_name() );
+
+			$content = json_decode( $content, true );
+
+			if ( ! $content ) {
+				$wp_error->add( 'no_content', 'Incorrect file format', $file->to_array() );
+				continue;
+			}
+
+			$form_ids[] = $this->import_form( $content );
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions
-		$content = file_get_contents( $file->get_tmp_name() );
-
-		wp_delete_file( $file->get_tmp_name() );
-
-		$content = json_decode( $content, true );
-
-		if ( ! $content ) {
-			wp_die( 'Incorrect file format', 'Error' );
+		if ( $wp_error->has_errors() ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			wp_die( $wp_error );
 		}
 
-		$form_id = $this->import_form( $content );
+		$url = esc_url(
+			add_query_arg(
+				array( 'post_type' => jet_form_builder()->post_type->slug() ),
+				admin_url( 'edit.php' )
+			)
+		);
 
-		// phpcs:ignore WordPress.Security.SafeRedirect
-		wp_redirect( get_edit_post_link( $form_id, 'url' ) );
+		if ( 1 === count( $form_ids ) ) {
+			$url = get_edit_post_link( $form_ids[0], 'url' );
+		}
+
+		wp_safe_redirect( $url );
 		die();
 	}
 

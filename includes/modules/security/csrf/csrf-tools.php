@@ -6,9 +6,7 @@ namespace Jet_Form_Builder\Modules\Security\Csrf;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
-use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
-use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -18,14 +16,6 @@ if ( ! defined( 'WPINC' ) ) {
 class Csrf_Tools {
 
 	const FIELD = '_jfb_csrf_token';
-
-	private $token;
-	private $client;
-
-	public function register() {
-		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'handle_request' ) );
-		add_filter( 'jet-form-builder/message-types', array( $this, 'handle_messages' ) );
-	}
 
 	public static function get_field(): string {
 		if ( ! jet_fb_live_args()->is_use_csrf() ) {
@@ -55,50 +45,6 @@ class Csrf_Tools {
 				'name'        => self::FIELD,
 			)
 		);
-	}
-
-	/**
-	 * @param array $request
-	 *
-	 * @return array
-	 * @throws Spam_Exception
-	 */
-	public function handle_request( array $request ): array {
-		if ( ! jet_fb_live_args()->is_use_csrf() ) {
-			return $request;
-		}
-
-		$this->token  = $request[ self::FIELD ] ?? false;
-		$this->client = static::client_id( jet_fb_live()->form_id );
-
-		// delete all old tokens
-		Csrf_Token_Model::clear();
-
-		if ( ! static::verify( $this->token, $this->client ) ) {
-			throw new Spam_Exception( 'csrf_failed' );
-		}
-
-		// delete verified token only on success
-		add_action( 'jet-form-builder/form-handler/after-send', array( $this, 'handle_after_send' ) );
-
-		return $request;
-	}
-
-	public function handle_after_send() {
-		if ( ! jet_fb_handler()->is_success ) {
-			return;
-		}
-
-		static::delete( $this->token, $this->client );
-	}
-
-	public function handle_messages( array $messages ): array {
-		$messages['csrf_failed'] = array(
-			'label' => __( 'CSRF token validation failed', 'jet-form-builder' ),
-			'value' => __( 'Invalid token', 'jet-form-builder' ),
-		);
-
-		return $messages;
 	}
 
 	/**

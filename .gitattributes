@@ -14,4 +14,6 @@ assets/.babelrc         export-ignore
 assets/.gitignore       export-ignore
 assets/*.js             export-ignore
 assets/*.json           export-ignore
+assets/.config          export-ignore
+assets/.helpers         export-ignore
 

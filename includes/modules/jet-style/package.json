@@ -6,8 +6,8 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"dev": "webpack --mode development --progress -w",
-		"build": "webpack --mode production --progress -w"
+		"hidden:dev:js": "webpack --config .config/dev.webpack.config.js --progress -w",
+		"hidden:build:js": "webpack --config .config/prod.webpack.config.js --progress"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.14.3",

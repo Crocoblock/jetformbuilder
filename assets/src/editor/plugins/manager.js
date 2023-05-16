@@ -1,13 +1,11 @@
 import actions from './actions';
 import args from './arguments';
-import captcha from './captcha';
 import gateways from './gateways';
 import preset from './preset';
 import messages from './messages';
 import limitAddon from './limit-addon';
 import scheduleAddon from './schedule-addon';
 import validation from './validation';
-import './captcha-providers';
 import './rating-popover';
 
 const {
@@ -61,7 +59,6 @@ export default function RegisterPlugins() {
 	const jfbPlugins    = applyFilters( 'jet.fb.register.plugins', [
 		args,
 		validation,
-		captcha,
 		gateways,
 		actions,
 		preset,

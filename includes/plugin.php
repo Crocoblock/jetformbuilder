@@ -24,9 +24,12 @@ use Jet_Form_Builder\Form_Patterns\Manager as PatternsManager;
 use Jet_Form_Builder\Framework\CX_Loader;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Integrations\Active_Campaign\Active_Campaign;
-use Jet_Form_Builder\Integrations\Forms_Captcha;
 use Jet_Form_Builder\Addons\Manager as AddonsManager;
+use Jet_Form_Builder\Modules\Base_Module\Base_Module_After_Install_It;
+use Jet_Form_Builder\Modules\Base_Module\Base_Module_Dir_It;
+use Jet_Form_Builder\Modules\Base_Module\Base_Module_Handle_It;
 use Jet_Form_Builder\Modules\Base_Module\Base_Module_It;
+use Jet_Form_Builder\Modules\Base_Module\Base_Module_Url_It;
 use Jet_Form_Builder\Modules\Modules_Controller;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Wp_Cli\Wp_Cli_Manager;
@@ -43,7 +46,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @property ActionsManager $actions
  * @property Form_Manager $form
  * @property Form_Handler $form_handler
- * @property Forms_Captcha $captcha
  * @property Admin\Editor $editor
  * @property AddonsManager $addons_manager
  * @property \Jet_Admin_Bar $admin_bar
@@ -63,13 +65,11 @@ class Plugin {
 	public $form;
 	public $form_handler;
 	public $editor;
-	public $captcha;
 	public $allow_gateways;
 	public $framework;
 	public $addons_manager;
 	public $admin_bar;
 	public $msg_router;
-	public $honeypot;
 	public $wp_experiments;
 	public $regexp;
 	public $blocks_sanitizer;
@@ -135,7 +135,6 @@ class Plugin {
 		$this->actions          = new Actions\Manager();
 		$this->form             = new Form_Manager();
 		$this->form_handler     = new Form_Handler();
-		$this->captcha          = new Forms_Captcha();
 		$this->addons_manager   = new AddonsManager();
 		$this->wp_experiments   = new Wp_Experiments();
 		$this->regexp           = new Regexp_Tools();
@@ -275,7 +274,7 @@ class Plugin {
 	/**
 	 * @param string $name_or_class
 	 *
-	 * @return Base_Module_It
+	 * @return Base_Module_It|Base_Module_Handle_It|Base_Module_Url_It|Base_Module_Dir_It|Base_Module_After_Install_It
 	 * @throws Exceptions\Repository_Exception
 	 */
 	public function module( string $name_or_class ): Base_Module_It {

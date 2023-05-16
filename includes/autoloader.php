@@ -78,6 +78,7 @@ class Autoloader {
 		'Classes\\Security\\Csrf_Token_Model'       => 'Modules\\Security\\Csrf\\Csrf_Token_Model',
 		'Classes\\Security\\Csrf_Token_View'        => 'Modules\\Security\\Csrf\\Csrf_Token_View',
 		'Classes\\Security\\Csrf_Tools'             => 'Modules\\Security\\Csrf\\Csrf_Tools',
+		'Integrations\\Forms_Captcha'               => 'Modules\\Captcha\\Module',
 	);
 
 	/**

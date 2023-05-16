@@ -172,14 +172,9 @@ import useActionCallback from './actions/hooks/useActionCallback';
 import useActionDetail from './actions/hooks/useActionDetail';
 import useUniqueNameOnDuplicate from './blocks/hooks/useUniqueNameOnDuplicate';
 import useFields from './blocks/hooks/useFields';
-import CaptchaOptions from './captcha/components/CaptchaOptions';
-import CaptchaBlockEdit from './captcha/components/CaptchaBlockEdit';
-import useCaptchaProvider from './captcha/hooks/useCaptchaProvider';
 import SelectVariations from './blocks/components/SelectVariations';
 import ToggleGroupVariations from './blocks/components/ToggleGroupVariations';
 import BaseLabel from './components/BaseLabel';
-import getCaptchaProviders from './captcha/helpers/getCaptchaProviders';
-import CaptchaBlockTip from './captcha/components/CaptchaBlockTip';
 import useSupport from './blocks/hooks/useSupport';
 
 // JFBComponents
@@ -266,11 +261,8 @@ window.JetFBComponents = {
 	ConditionsRepeaterContextProvider,
 	ServerSideMacros,
 	ActionsFlow,
-	CaptchaOptions,
-	CaptchaBlockEdit,
 	SelectVariations,
 	ToggleGroupVariations,
-	CaptchaBlockTip,
 };
 
 // JFBFunctions
@@ -309,7 +301,6 @@ window.JetFBActions = {
 	convertFlow,
 	assetUrl,
 	set,
-	getCaptchaProviders,
 	isEmpty,
 };
 
@@ -346,7 +337,6 @@ window.JetFBHooks = {
 	useActionDetail,
 	useUniqueNameOnDuplicate,
 	useFields: useFields,
-	useCaptchaProvider,
 	useSupport,
 };
 

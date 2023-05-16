@@ -46,7 +46,6 @@ class Tab_Handler_Manager {
 		return apply_filters(
 			'jet-form-builder/register-tabs-handlers',
 			array(
-				new Captcha_Handler(),
 				new Mailchimp_Handler(),
 				new Active_Campaign_Handler(),
 				new Get_Response_Handler(),

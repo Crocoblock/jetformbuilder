@@ -157,7 +157,8 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 		if ( ! $block ) {
 			_doing_it_wrong(
-				__METHOD__,
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				static::class . '::' . __FUNCTION__,
 				esc_html__(
 					'Unsuccessful field (block) registration. 
 				Perhaps the path to the block scheme (block.json) is incorrectly specified',

@@ -12,7 +12,10 @@ use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Modules\Advanced_Choices;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Modules\Base_Module\Base_Module_After_Install_It;
+use Jet_Form_Builder\Modules\Base_Module\Base_Module_Dir_It;
+use Jet_Form_Builder\Modules\Base_Module\Base_Module_Handle_It;
 use Jet_Form_Builder\Modules\Base_Module\Base_Module_It;
+use Jet_Form_Builder\Modules\Base_Module\Base_Module_Url_It;
 
 class Modules_Controller {
 
@@ -25,6 +28,7 @@ class Modules_Controller {
 			new Switch_Page_On_Change\Module(),
 			new Form_Record\Module(),
 			new Advanced_Choices\Module(),
+			new Captcha\Module(),
 		);
 	}
 
@@ -38,7 +42,7 @@ class Modules_Controller {
 	/**
 	 * @param string $name_or_class
 	 *
-	 * @return Base_Module_It
+	 * @return Base_Module_It|Base_Module_Handle_It|Base_Module_Url_It|Base_Module_Dir_It|Base_Module_After_Install_It
 	 * @throws Repository_Exception
 	 */
 	public function module( string $name_or_class ): Base_Module_It {

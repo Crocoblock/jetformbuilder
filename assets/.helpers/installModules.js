@@ -8,6 +8,6 @@ executeCommandForPackages(
 );
 
 executeCommandForPackages(
-	path.resolve( __dirname, '../../includes/modules' ),
+	path.resolve( __dirname, '../../modules' ),
 	{ command: 'npm install' }
 );

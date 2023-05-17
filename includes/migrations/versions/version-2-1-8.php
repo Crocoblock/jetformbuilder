@@ -3,9 +3,9 @@
 
 namespace Jet_Form_Builder\Migrations\Versions;
 
-use Jet_Form_Builder\Modules\Form_Record\Query_Views\Record_Actions;
-use Jet_Form_Builder\Modules\Form_Record\Query_Views\Record_Errors;
-use Jet_Form_Builder\Modules\Form_Record\Query_Views\Record_Fields_View;
+use JFB_Modules\Form_Record\Query_Views\Record_Actions;
+use JFB_Modules\Form_Record\Query_Views\Record_Errors;
+use JFB_Modules\Form_Record\Query_Views\Record_Fields_View;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

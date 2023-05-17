@@ -7,6 +7,6 @@ executeCommandForPackages(
 );
 
 executeCommandForPackages(
-	path.resolve( __dirname, '../../includes/modules' ),
+	path.resolve( __dirname, '../../modules' ),
 	{ script: 'hidden:build:js' }
 );

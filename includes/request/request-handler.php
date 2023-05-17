@@ -13,7 +13,7 @@ use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
-use Jet_Form_Builder\Modules\Security\Exceptions\Spam_Exception;
+use JFB_Modules\Security\Exceptions\Spam_Exception;
 use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
 
 // If this file is called directly, abort.
@@ -84,7 +84,7 @@ class Request_Handler {
 		$attrs = $this->get_attrs_by_name( $field_name );
 
 		/**
-		 * @see \Jet_Form_Builder\Modules\Form_Record\Controller::generate_request
+		 * @see \JFB_Modules\Form_Record\Controller::generate_request
 		 */
 		$attrs['field_type'] = 'password';
 

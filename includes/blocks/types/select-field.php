@@ -4,7 +4,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Native_Block_Wrapper_Attributes;
 use Jet_Form_Builder\Blocks\Render\Select_Field_Render;
-use Jet_Form_Builder\Modules\Switch_Page_On_Change;
+use JFB_Modules\Switch_Page_On_Change;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

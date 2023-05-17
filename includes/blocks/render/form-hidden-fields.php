@@ -6,7 +6,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Classes\Security\Csrf_Tools;
-use Jet_Form_Builder\Modules\Security\Wp_Nonce;
+use JFB_Modules\Security\Wp_Nonce;
 use Jet_Form_Builder\Live_Form;
 
 // If this file is called directly, abort.

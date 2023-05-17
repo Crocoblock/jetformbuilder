@@ -12,73 +12,76 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Autoloader {
 
-	const PREFIX = __NAMESPACE__ . '\\';
+	const NAMESPACES = array(
+		__NAMESPACE__ . '\\' => 'includes/',
+		'JFB_Modules\\'      => 'modules/',
+	);
 
 	const DEPRECATED_CLASSMAP = array(
-		'Actions\\Methods\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Actions_Box' => 'Modules\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Actions_Box',
-		'Actions\\Methods\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Errors_Box' => 'Modules\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Errors_Box',
-		'Actions\\Methods\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Fields_Box' => 'Modules\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Fields_Box',
-		'Actions\\Methods\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Values_Box' => 'Modules\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Values_Box',
-		'Actions\\Methods\\Form_Record\\Admin\\Meta_Boxes\\Record_To_Payment_Box' => 'Modules\\Form_Record\\Admin\\Meta_Boxes\\Record_To_Payment_Box',
-		'Actions\\Methods\\Form_Record\\Admin\\Notices\\Update_Db_Notice' => 'Modules\\Form_Record\\Admin\\Notices\\Update_Db_Notice',
-		'Actions\\Methods\\Form_Record\\Admin\\Pages\\Form_Records' => 'Modules\\Form_Record\\Admin\\Pages\\Form_Records',
-		'Actions\\Methods\\Form_Record\\Admin\\Pages\\Single_Form_Record_Page' => 'Modules\\Form_Record\\Admin\\Pages\\Single_Form_Record_Page',
-		'Actions\\Methods\\Form_Record\\Admin\\Table_Views\\Records_Table_View' => 'Modules\\Form_Record\\Admin\\Table_Views\\Records_Table_View',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Actions\\Delete_Record_Action' => 'Modules\\Form_Record\\Admin\\View_Actions\\Delete_Record_Action',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Actions\\Mark_Not_Viewed_Action' => 'Modules\\Form_Record\\Admin\\View_Actions\\Mark_Not_Viewed_Action',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Actions\\Mark_Viewed_Action' => 'Modules\\Form_Record\\Admin\\View_Actions\\Mark_Viewed_Action',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Actions\\View_Action' => 'Modules\\Form_Record\\Admin\\View_Actions\\View_Action',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Actions\\View_Related_Form' => 'Modules\\Form_Record\\Admin\\View_Actions\\View_Related_Form',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Action_Event_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Action_Event_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Actions_List_For_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Actions_List_For_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Classes_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Classes_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Error_Data_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Error_Data_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Error_Message_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Error_Message_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Error_Place_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Error_Place_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Exception_Name_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Exception_Name_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Field_Name_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Field_Name_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Field_Type_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Field_Type_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Field_Value_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Field_Value_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Form_Action_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Form_Action_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Form_Action_Status_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Form_Action_Status_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Form_Link_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Form_Link_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Header_Actions_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Header_Actions_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Ip_Address_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Ip_Address_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Primary_Form_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Primary_Form_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Referrer_Link_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Referrer_Link_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Row_Actions_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Row_Actions_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Status_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\Status_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\User_Agent_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\User_Agent_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\User_Login_Column' => 'Modules\\Form_Record\\Admin\\View_Columns\\User_Login_Column',
-		'Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Utils' => 'Modules\\Form_Record\\Admin\\View_Columns\\Utils',
-		'Actions\\Methods\\Form_Record\\Constraints\\Record_Model_Constraint' => 'Modules\\Form_Record\\Constraints\\Record_Model_Constraint',
-		'Actions\\Methods\\Form_Record\\Controller' => 'Modules\\Form_Record\\Controller',
-		'Actions\\Methods\\Form_Record\\Models\\Record_Action_Result_Model' => 'Modules\\Form_Record\\Models\\Record_Action_Result_Model',
-		'Actions\\Methods\\Form_Record\\Models\\Record_Error_Model' => 'Modules\\Form_Record\\Models\\Record_Error_Model',
-		'Actions\\Methods\\Form_Record\\Models\\Record_Field_Model' => 'Modules\\Form_Record\\Models\\Record_Field_Model',
-		'Actions\\Methods\\Form_Record\\Models\\Record_Model' => 'Modules\\Form_Record\\Models\\Record_Model',
-		'Actions\\Methods\\Form_Record\\Query_Views\\Record_Actions' => 'Modules\\Form_Record\\Query_Views\\Record_Actions',
-		'Actions\\Methods\\Form_Record\\Query_Views\\Record_By_Payment' => 'Modules\\Form_Record\\Query_Views\\Record_By_Payment',
-		'Actions\\Methods\\Form_Record\\Query_Views\\Record_Errors' => 'Modules\\Form_Record\\Query_Views\\Record_Errors',
-		'Actions\\Methods\\Form_Record\\Query_Views\\Record_Fields_View_Count' => 'Modules\\Form_Record\\Query_Views\\Record_Fields_View_Count',
-		'Actions\\Methods\\Form_Record\\Query_Views\\Record_Fields_View' => 'Modules\\Form_Record\\Query_Views\\Record_Fields_View',
-		'Actions\\Methods\\Form_Record\\Query_Views\\Record_View_Count' => 'Modules\\Form_Record\\Query_Views\\Record_View_Count',
-		'Actions\\Methods\\Form_Record\\Query_Views\\Record_View_Forms' => 'Modules\\Form_Record\\Query_Views\\Record_View_Forms',
-		'Actions\\Methods\\Form_Record\\Query_Views\\Record_View' => 'Modules\\Form_Record\\Query_Views\\Record_View',
-		'Actions\\Methods\\Form_Record\\Records_Rest_Controller' => 'Modules\\Form_Record\\Records_Rest_Controller',
-		'Actions\\Methods\\Form_Record\\Rest_Endpoints\\Delete_Form_Record_Endpoint' => 'Modules\\Form_Record\\Rest_Endpoints\\Delete_Form_Record_Endpoint',
-		'Actions\\Methods\\Form_Record\\Rest_Endpoints\\Fetch_Filters_Endpoint' => 'Modules\\Form_Record\\Rest_Endpoints\\Fetch_Filters_Endpoint',
-		'Actions\\Methods\\Form_Record\\Rest_Endpoints\\Fetch_Records_Fields_Box_Endpoint' => 'Modules\\Form_Record\\Rest_Endpoints\\Fetch_Records_Fields_Box_Endpoint',
-		'Actions\\Methods\\Form_Record\\Rest_Endpoints\\Fetch_Records_Page_Endpoint' => 'Modules\\Form_Record\\Rest_Endpoints\\Fetch_Records_Page_Endpoint',
-		'Actions\\Methods\\Form_Record\\Rest_Endpoints\\Mark_As_Not_Viewed_Record_Endpoint' => 'Modules\\Form_Record\\Rest_Endpoints\\Mark_As_Not_Viewed_Record_Endpoint',
-		'Actions\\Methods\\Form_Record\\Rest_Endpoints\\Mark_As_Viewed_Record_Endpoint' => 'Modules\\Form_Record\\Rest_Endpoints\\Mark_As_Viewed_Record_Endpoint',
-		'Actions\\Methods\\Form_Record\\Rest_Endpoints\\Mark_View_Record_Base_Endpoint' => 'Modules\\Form_Record\\Rest_Endpoints\\Mark_View_Record_Base_Endpoint',
-		'Actions\\Methods\\Form_Record\\Tools'      => 'Modules\\Form_Record\\Tools',
-		'Actions\\Types\\Save_Record'               => 'Modules\\Form_Record\\Action_Types\\Save_Record',
-		'Classes\\Security\\Csrf_Token_Model'       => 'Modules\\Security\\Csrf\\Csrf_Token_Model',
-		'Classes\\Security\\Csrf_Token_View'        => 'Modules\\Security\\Csrf\\Csrf_Token_View',
-		'Classes\\Security\\Csrf_Tools'             => 'Modules\\Security\\Csrf\\Csrf_Tools',
-		'Integrations\\Forms_Captcha'               => 'Modules\\Captcha\\Module',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Actions_Box' => 'JFB_Modules\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Actions_Box',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Errors_Box' => 'JFB_Modules\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Errors_Box',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Fields_Box' => 'JFB_Modules\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Fields_Box',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Values_Box' => 'JFB_Modules\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Values_Box',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Meta_Boxes\\Record_To_Payment_Box' => 'JFB_Modules\\Form_Record\\Admin\\Meta_Boxes\\Record_To_Payment_Box',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Notices\\Update_Db_Notice' => 'JFB_Modules\\Form_Record\\Admin\\Notices\\Update_Db_Notice',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Pages\\Form_Records' => 'JFB_Modules\\Form_Record\\Admin\\Pages\\Form_Records',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Pages\\Single_Form_Record_Page' => 'JFB_Modules\\Form_Record\\Admin\\Pages\\Single_Form_Record_Page',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Table_Views\\Records_Table_View' => 'JFB_Modules\\Form_Record\\Admin\\Table_Views\\Records_Table_View',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Actions\\Delete_Record_Action' => 'JFB_Modules\\Form_Record\\Admin\\View_Actions\\Delete_Record_Action',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Actions\\Mark_Not_Viewed_Action' => 'JFB_Modules\\Form_Record\\Admin\\View_Actions\\Mark_Not_Viewed_Action',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Actions\\Mark_Viewed_Action' => 'JFB_Modules\\Form_Record\\Admin\\View_Actions\\Mark_Viewed_Action',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Actions\\View_Action' => 'JFB_Modules\\Form_Record\\Admin\\View_Actions\\View_Action',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Actions\\View_Related_Form' => 'JFB_Modules\\Form_Record\\Admin\\View_Actions\\View_Related_Form',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Action_Event_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Action_Event_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Actions_List_For_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Actions_List_For_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Classes_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Classes_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Error_Data_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Error_Data_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Error_Message_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Error_Message_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Error_Place_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Error_Place_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Exception_Name_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Exception_Name_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Field_Name_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Field_Name_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Field_Type_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Field_Type_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Field_Value_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Field_Value_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Form_Action_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Form_Action_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Form_Action_Status_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Form_Action_Status_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Form_Link_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Form_Link_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Header_Actions_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Header_Actions_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Ip_Address_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Ip_Address_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Primary_Form_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Primary_Form_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Referrer_Link_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Referrer_Link_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Row_Actions_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Row_Actions_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Status_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Status_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\User_Agent_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\User_Agent_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\User_Login_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\User_Login_Column',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Utils' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Utils',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Constraints\\Record_Model_Constraint' => 'JFB_Modules\\Form_Record\\Constraints\\Record_Model_Constraint',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Controller' => 'JFB_Modules\\Form_Record\\Controller',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Models\\Record_Action_Result_Model' => 'JFB_Modules\\Form_Record\\Models\\Record_Action_Result_Model',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Models\\Record_Error_Model' => 'JFB_Modules\\Form_Record\\Models\\Record_Error_Model',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Models\\Record_Field_Model' => 'JFB_Modules\\Form_Record\\Models\\Record_Field_Model',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Models\\Record_Model' => 'JFB_Modules\\Form_Record\\Models\\Record_Model',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Query_Views\\Record_Actions' => 'JFB_Modules\\Form_Record\\Query_Views\\Record_Actions',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Query_Views\\Record_By_Payment' => 'JFB_Modules\\Form_Record\\Query_Views\\Record_By_Payment',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Query_Views\\Record_Errors' => 'JFB_Modules\\Form_Record\\Query_Views\\Record_Errors',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Query_Views\\Record_Fields_View_Count' => 'JFB_Modules\\Form_Record\\Query_Views\\Record_Fields_View_Count',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Query_Views\\Record_Fields_View' => 'JFB_Modules\\Form_Record\\Query_Views\\Record_Fields_View',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Query_Views\\Record_View_Count' => 'JFB_Modules\\Form_Record\\Query_Views\\Record_View_Count',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Query_Views\\Record_View_Forms' => 'JFB_Modules\\Form_Record\\Query_Views\\Record_View_Forms',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Query_Views\\Record_View' => 'JFB_Modules\\Form_Record\\Query_Views\\Record_View',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Records_Rest_Controller' => 'JFB_Modules\\Form_Record\\Records_Rest_Controller',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Rest_Endpoints\\Delete_Form_Record_Endpoint' => 'JFB_Modules\\Form_Record\\Rest_Endpoints\\Delete_Form_Record_Endpoint',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Rest_Endpoints\\Fetch_Filters_Endpoint' => 'JFB_Modules\\Form_Record\\Rest_Endpoints\\Fetch_Filters_Endpoint',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Rest_Endpoints\\Fetch_Records_Fields_Box_Endpoint' => 'JFB_Modules\\Form_Record\\Rest_Endpoints\\Fetch_Records_Fields_Box_Endpoint',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Rest_Endpoints\\Fetch_Records_Page_Endpoint' => 'JFB_Modules\\Form_Record\\Rest_Endpoints\\Fetch_Records_Page_Endpoint',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Rest_Endpoints\\Mark_As_Not_Viewed_Record_Endpoint' => 'JFB_Modules\\Form_Record\\Rest_Endpoints\\Mark_As_Not_Viewed_Record_Endpoint',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Rest_Endpoints\\Mark_As_Viewed_Record_Endpoint' => 'JFB_Modules\\Form_Record\\Rest_Endpoints\\Mark_As_Viewed_Record_Endpoint',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Rest_Endpoints\\Mark_View_Record_Base_Endpoint' => 'JFB_Modules\\Form_Record\\Rest_Endpoints\\Mark_View_Record_Base_Endpoint',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Tools' => 'JFB_Modules\\Form_Record\\Tools',
+		'Jet_Form_Builder\\Actions\\Types\\Save_Record'   => 'JFB_Modules\\Form_Record\\Action_Types\\Save_Record',
+		'Jet_Form_Builder\\Classes\\Security\\Csrf_Token_Model' => 'JFB_Modules\\Security\\Csrf\\Csrf_Token_Model',
+		'Jet_Form_Builder\\Classes\\Security\\Csrf_Token_View' => 'JFB_Modules\\Security\\Csrf\\Csrf_Token_View',
+		'Jet_Form_Builder\\Classes\\Security\\Csrf_Tools' => 'JFB_Modules\\Security\\Csrf\\Csrf_Tools',
+		'Jet_Form_Builder\\Integrations\\Forms_Captcha'   => 'JFB_Modules\\Captcha\\Module',
 	);
 
 	/**
@@ -99,17 +102,18 @@ class Autoloader {
 	 *
 	 * For a given class name, require the class file.
 	 *
-	 * @param $class_name
+	 * @param string $space
+	 * @param array $class_parts
 	 *
 	 * @since 1.6.0
 	 * @access private
 	 * @static
 	 */
-	private static function load_class( $class_name ) {
+	private static function load_class( string $space, array $class_parts ) {
 
-		$file     = str_replace( '\\', DIRECTORY_SEPARATOR, $class_name );
+		$file     = implode( DIRECTORY_SEPARATOR, $class_parts );
 		$file     = strtolower( str_replace( '_', '-', $file ) );
-		$filepath = JET_FORM_BUILDER_PATH . 'includes/' . $file . '.php';
+		$filepath = JET_FORM_BUILDER_PATH . self::NAMESPACES[ $space ] . $file . '.php';
 
 		if ( is_readable( $filepath ) ) {
 			require_once $filepath;
@@ -129,25 +133,46 @@ class Autoloader {
 	 */
 	private static function autoload( $class_name ) {
 
-		if ( 0 !== strpos( $class_name, self::PREFIX ) ) {
+		$parts = explode( '\\', $class_name );
+
+		if ( ! array_key_exists( $parts[0] . '\\', self::NAMESPACES ) ) {
 			return;
 		}
 
-		$relative_class_name = substr( $class_name, strlen( self::PREFIX ) );
-		$has_alias           = isset( self::DEPRECATED_CLASSMAP[ $relative_class_name ] );
+		list( $prefix, $parts, $relative ) = self::get_class_parts( $parts );
+
+		$has_alias = isset( self::DEPRECATED_CLASSMAP[ $prefix . $relative ] );
 
 		if ( $has_alias ) {
-			$relative_class_name = self::DEPRECATED_CLASSMAP[ $relative_class_name ];
+			list( $prefix, $parts, $relative ) = self::get_class_parts(
+				self::DEPRECATED_CLASSMAP[ $prefix . $relative ]
+			);
 		}
 
-		$final_class_name = __NAMESPACE__ . '\\' . $relative_class_name;
-
-		if ( ! class_exists( $final_class_name ) ) {
-			self::load_class( $relative_class_name );
+		if ( ! class_exists( $prefix . $relative ) ) {
+			self::load_class( $prefix, $parts );
 		}
 
 		if ( $has_alias ) {
-			class_alias( $final_class_name, $class_name );
+			class_alias( $prefix . $relative, $class_name );
 		}
+	}
+
+	/**
+	 * @param array|string $class_name
+	 *
+	 * @return array
+	 */
+	private static function get_class_parts( $class_name ): array {
+		$parts = is_array( $class_name ) ? $class_name : explode( '\\', $class_name );
+
+		// global namespace
+		$prefix = $parts[0] . '\\';
+		// remove first element
+		array_shift( $parts );
+
+		$relative = implode( '\\', $parts );
+
+		return array( $prefix, $parts, $relative );
 	}
 }

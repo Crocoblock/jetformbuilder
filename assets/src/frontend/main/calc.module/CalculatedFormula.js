@@ -179,6 +179,10 @@ CalculatedFormula.prototype = {
 				return false;
 			}
 
+			if ( 'function' === typeof customValue ) {
+				return () => applyFilters( customValue(), filtersList );
+			}
+
 			return applyFilters( customValue, filtersList );
 		}
 

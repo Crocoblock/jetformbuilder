@@ -38,9 +38,7 @@ class Post_Type {
 	 *
 	 * @var boolean
 	 */
-	public $is_form_editor;
-
-	public $screen;
+	public $is_form_editor = false;
 
 	/**
 	 * Constructor for the class
@@ -111,25 +109,28 @@ class Post_Type {
 
 
 	public function set_current_screen() {
-		$this->screen = get_current_screen();
+		$screen = get_current_screen();
 
-		if ( ! $this->screen->action ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$this->screen->action = ! empty( $_GET['action'] ) ? sanitize_key( $_GET['action'] ) : '';
+		if ( ! $screen || ! $screen->is_block_editor ) {
+			return;
 		}
 
-		$is_editor_page = in_array( $this->screen->action, array( 'add', 'edit' ), true );
-
-		if ( $this->slug() === $this->screen->id && $is_editor_page ) {
+		if ( $this->slug() === $screen->id ) {
 			$this->is_form_editor = true;
 
-		} elseif ( $this->slug() !== $this->screen->id && $is_editor_page ) {
+		} elseif ( $this->slug() !== $screen->id ) {
 			$this->is_form_editor = false;
 		}
 	}
 
 	public function is_form_list_page() {
-		return ( "edit-{$this->slug()}" === $this->screen->id );
+		if ( ! did_action( 'current_screen' ) ) {
+			return false;
+		}
+
+		$screen = get_current_screen();
+
+		return ( "edit-{$this->slug()}" === $screen->id );
 	}
 
 	/**

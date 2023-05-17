@@ -139,7 +139,7 @@
 
 <script>
 import AddonItem from './components/AddonItem.vue';
-import Banner from './components/Banner';
+import Banner from '../../components/Banner';
 
 const { applyFilters, doAction } = wp.hooks;
 

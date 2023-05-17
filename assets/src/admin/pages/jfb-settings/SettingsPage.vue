@@ -2,6 +2,7 @@
 	<FormBuilderPage
 		:title="__( 'JetFormBuilder Settings', 'jet-form-builder' )"
 	>
+		<Banner />
 		<div class="jfb-content">
 			<AlertsList/>
 			<div class="jfb-content-main">
@@ -57,6 +58,7 @@ import * as activecampaign from './tabs/activecampaign';
 import * as paymentGateways from './tabs/payments-gateways';
 import * as options from './tabs/options';
 import SettingsSideBar from './sidebar/SettingsSideBar';
+import Banner from '../../components/Banner';
 
 const { applyFilters, doAction } = wp.hooks;
 
@@ -117,6 +119,7 @@ export default {
 		CxVuiTabs,
 		SettingsSideBar,
 		FormBuilderPage,
+		Banner,
 	},
 	data() {
 		const [ tabSlug, others ] = getActiveTab();

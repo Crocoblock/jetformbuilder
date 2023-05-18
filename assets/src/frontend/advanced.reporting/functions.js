@@ -16,7 +16,14 @@ import MustEqual from './restrictions/MustEqual';
 import TooEarlyTimestamp from './restrictions/TooEarlyTimestamp';
 import TooLateTimestamp from './restrictions/TooLateTimestamp';
 
-const { applyFilters, addFilter } = JetPlugins.hooks;
+const {
+	      applyFilters,
+	      addFilter,
+      } = JetPlugins.hooks;
+
+const {
+	      isEmpty,
+      } = JetFormBuilderFunctions;
 
 const getAdvancedRules = () => applyFilters(
 	'jet.fb.advanced.rules',
@@ -176,6 +183,10 @@ function observeFieldRestriction() {
 		this.reporting.valuePrev = null;
 		this.reporting.validateOnChange();
 	} );
+
+	if ( !isEmpty( input.value.current ) ) {
+		this.attrs.value = input.value.current;
+	}
 }
 
 /**

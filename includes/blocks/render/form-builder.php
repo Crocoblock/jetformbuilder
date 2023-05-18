@@ -158,7 +158,9 @@ class Form_Builder {
 		if ( Compatibility::has_jet_sm() ) {
 			$block = \WP_Block_Type_Registry::get_instance()->get_registered( 'jet-forms/form-block' );
 
-			$block->supports['customClassName'] = false;
+			if ( $block instanceof \WP_Block_Type ) {
+				$block->supports['customClassName'] = false;
+			}
 		}
 
 		if ( jet_fb_live_args()->clear ) {

@@ -18,6 +18,8 @@ class Choices_Field extends Base {
 
 	use Block_Metadata_Trait;
 
+	public $use_style_manager = false;
+
 	public function get_name() {
 		return 'choices-field';
 	}

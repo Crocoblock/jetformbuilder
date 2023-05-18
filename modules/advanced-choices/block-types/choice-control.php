@@ -17,6 +17,8 @@ class Choice_Control extends Base implements Base_Choice_Item_It {
 	use Base_Choice_Item_Trait;
 	use Block_Metadata_Trait;
 
+	public $use_style_manager = false;
+
 	public function get_name() {
 		return 'choice-control';
 	}

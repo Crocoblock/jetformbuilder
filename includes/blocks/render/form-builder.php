@@ -2,6 +2,9 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
+use Jet_Form_Builder\Blocks\Dynamic_Value;
+use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Builder_Helper;
@@ -120,12 +123,14 @@ class Form_Builder {
 		$start_form .= $this->maybe_render_fonts_block();
 		$start_form .= $this->render_styles();
 
+		$base_classes = sprintf(
+			'jet-form-builder layout-%1$s submit-type-%2$s',
+			jet_fb_live_args()->fields_layout,
+			jet_fb_live_args()->submit_type
+		);
+
 		$attrs_list = array(
-			'class'                => sprintf(
-				'jet-form-builder layout-%1$s submit-type-%2$s',
-				jet_fb_live_args()->fields_layout,
-				jet_fb_live_args()->submit_type
-			),
+			'class'                => $base_classes,
 			'action'               => Http_Tools::get_form_action_url(),
 			'method'               => \WP_REST_Server::CREATABLE,
 			'data-form-id'         => $this->form_id,
@@ -134,6 +139,21 @@ class Form_Builder {
 			'data-validation-type' => jet_fb_live_args()->validation_type,
 			'novalidate'           => '',
 		);
+
+		/**
+		 * TODO: refactor in 3.1
+		 *
+		 * Backward compatibility.
+		 * We leave only the basic ones in the classes, because the value
+		 * from className is added "from above"
+		 *
+		 * Without it, custom classes will be on the <form> tag and the outer <div>
+		 */
+		if ( Compatibility::has_jet_sm() ) {
+			$block = \WP_Block_Type_Registry::get_instance()->get_registered( 'jet-forms/form-block' );
+
+			$block->supports['customClassName'] = false;
+		}
 
 		if ( jet_fb_live_args()->clear ) {
 			$attrs_list['data-clear'] = true;

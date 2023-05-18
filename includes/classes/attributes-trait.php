@@ -17,6 +17,7 @@ trait Attributes_Trait {
 		/**
 		 * Don't use wp_is_numeric_array function
 		 * for backward compatibility
+		 *
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/2392
 		 */
 		if ( is_array( $value ) ) {
@@ -46,6 +47,17 @@ trait Attributes_Trait {
 
 	public function has_attribute( string $name ): bool {
 		return array_key_exists( $name, $this->attrs );
+	}
+
+	public function merge_attributes( array &$extra_attrs ) {
+		if ( $this->has_attribute( 'class' ) ) {
+			$extra_attrs['class']  = $extra_attrs['class'] ?? '';
+			$extra_attrs['class'] .= ' ' . $this->attrs['class'] ?? '';
+		}
+
+		if ( $this->has_attribute( 'id' ) ) {
+			$extra_attrs['id'] = $this->attrs['id'] ?? '';
+		}
 	}
 
 }

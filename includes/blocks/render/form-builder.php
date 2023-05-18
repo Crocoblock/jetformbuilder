@@ -90,7 +90,7 @@ class Form_Builder {
 
 		Live_Form::clear();
 
-		//Preset_Manager::clear();
+		// Preset_Manager::clear();
 
 		return $form;
 	}
@@ -128,21 +128,39 @@ class Form_Builder {
 		$start_form .= $this->maybe_render_fonts_block();
 		$start_form .= $this->render_styles();
 
-		$this->add_attribute( 'class', 'jet-form-builder' );
-		$this->add_attribute( 'class', 'layout-' . jet_fb_live_args()->fields_layout );
-		$this->add_attribute( 'class', 'submit-type-' . jet_fb_live_args()->submit_type );
-		$this->add_attribute( 'action', Http_Tools::get_form_action_url() );
-		$this->add_attribute( 'method', 'POST' );
-		$this->add_attribute( 'data-form-id', $this->form_id );
-		$this->add_attribute( 'data-layout', jet_fb_live_args()->fields_layout );
-		$this->add_attribute( 'enctype', 'multipart/form-data' );
-		$this->add_attribute( 'data-validation-type', jet_fb_live_args()->validation_type );
-		$this->add_attribute( 'data-clear', jet_fb_live_args()->clear );
-		$this->add_attribute( 'novalidate' );
+		$attrs_list = array(
+			'class'                => sprintf(
+				'jet-form-builder layout-%1$s submit-type-%2$s',
+				jet_fb_live_args()->fields_layout,
+				jet_fb_live_args()->submit_type
+			),
+			'action'               => Http_Tools::get_form_action_url(),
+			'method'               => \WP_REST_Server::CREATABLE,
+			'data-form-id'         => $this->form_id,
+			'data-layout'          => jet_fb_live_args()->fields_layout,
+			'enctype'              => 'multipart/form-data',
+			'data-validation-type' => jet_fb_live_args()->validation_type,
+			'novalidate'           => '',
+		);
 
-		ob_start();
-		include $this->get_global_template( 'common/start-form.php' );
-		$start_form .= ob_get_clean();
+		if ( jet_fb_live_args()->clear ) {
+			$attrs_list['data-clear'] = true;
+		}
+
+		if ( jet_fb_live_args()->anchor ) {
+			$attrs_list['id'] = esc_attr( jet_fb_live_args()->anchor );
+		}
+
+		// backward compatibility
+		$this->merge_attributes( $attrs_list );
+
+		$attrs = get_block_wrapper_attributes( $attrs_list );
+
+		$start_form .= sprintf(
+			'<form %1$s %2$s>',
+			$this->get_attributes_string(),
+			$attrs
+		);
 
 		$start_form .= apply_filters( 'jet-form-builder/after-start-form', '', $this );
 

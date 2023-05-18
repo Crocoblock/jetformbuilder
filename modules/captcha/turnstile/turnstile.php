@@ -73,7 +73,7 @@ class Turnstile extends Base_Captcha_From_Options implements
 		$this->module()->add_inline_config( $captcha_args, $handle );
 
 		return sprintf(
-			'<div class="jet-form-builder-row captcha-token-container" data-validation-type="advanced">
+			'<div class="jet-form-builder-row captcha-token-container" data-validation-type="inherit">
 	<input type="hidden" class="%1$s" name="%2$s" value="" data-jfb-sync required="required">
 </div>',
 			self::FIELD_CLASS,

@@ -59,7 +59,6 @@ class Hcaptcha extends Base_Captcha_From_Options implements
 
 		$handle = $this->get_handle( '-api' );
 		wp_enqueue_script( $handle );
-		wp_enqueue_script( Validation::HANDLE );
 
 		/**
 		 * In some themes, the "the_content" filter may be executed before the "wp_enqueue_scripts" action.
@@ -69,7 +68,7 @@ class Hcaptcha extends Base_Captcha_From_Options implements
 		$this->module()->add_inline_config( $captcha_args, $handle );
 
 		return sprintf(
-			'<div class="jet-form-builder-row captcha-token-container" data-validation-type="advanced">
+			'<div class="jet-form-builder-row captcha-token-container" data-validation-type="inherit">
 	<input type="hidden" class="%1$s" name="%2$s" value="" data-jfb-sync required="required">
 </div>',
 			self::FIELD_CLASS,

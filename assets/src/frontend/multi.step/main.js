@@ -1,4 +1,4 @@
-import { createMultiStep } from './functions';
+import { createMultiStep, getScrollParent } from './functions';
 import ConditionPageStateItem from './ConditionPageStateItem';
 
 const {
@@ -19,7 +19,7 @@ addAction(
 		observable.multistep = multistep;
 		multistep.onReady();
 	},
-	15
+	15,
 );
 
 addAction(
@@ -63,7 +63,7 @@ addAction(
 			 */
 			const page = multistep.getCurrentPage();
 
-			window.scrollTo( {
+			getScrollParent( page.node ).scrollTo( {
 				top: page.getOffsetTop(),
 				behavior: 'smooth',
 			} );

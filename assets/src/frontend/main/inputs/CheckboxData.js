@@ -30,9 +30,15 @@ function CheckboxData() {
 			return;
 		}
 
-		this.sanitize(
-			value => Array.isArray( value ) ? value : [ value ],
-		);
+		this.sanitize( value => {
+			if ( Array.isArray( value ) ) {
+				return value;
+			}
+
+			return [ value ].filter(
+				Boolean,
+			);
+		} );
 	};
 	this.setValue     = function () {
 		this.value.current = this.getActiveValue();

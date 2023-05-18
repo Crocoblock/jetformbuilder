@@ -12,7 +12,7 @@
 	"textdomain": "jet-form-builder",
 	"supports": {
 		"html": false,
-		"className": true
+		"anchor": true
 	},
 	"editorScript": "jet-form-builder/form",
 	"editorStyle": "jet-form-builder-others",
@@ -40,6 +40,10 @@
 			"default": false
 		},
 		"fields_label_tag": {
+			"type": "string",
+			"default": ""
+		},
+		"anchor": {
 			"type": "string",
 			"default": ""
 		}

@@ -4,6 +4,24 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.0.7
+* ADD: Support for custom css classes and anchors for the JetForm block
+* FIX: Form doesn't scroll to the top on next page in popup
+* FIX: Must not contain chars in advanced validation
+* FIX: Advanced validation fails when field value comes from URL parameter
+* FIX: Macros in call webhook action does not work
+* FIX: Attachments are empty in an email with a media field that has been filled with a preset, and files with a value format of array
+* FIX: Dynamic value does not uncheck all checkbox options. Removed `.trigger( 'change' )` support for checkboxes when changing state via Dynamic Value
+* FIX: An error occurred when synchronizing with GetResponse when editing an action
+* FIX: Minor bug causing WooCommerce pages to look a little different
+* FIX: The value in the text field with the input mask was stored in the wrong sequence in the RTL direction
+
+## 3.0.6
+* ADD: Ability to import multiple forms at the same time
+* UPD: The post title is used for the form export file instead of the post name
+* FIX: Shows an error if you just save without patching on Settings page
+* FIX: "Must not contain chars" in advanced validation
+
 ## 3.0.5
 * ADD: Ability to hide conditional blocks during form rendering to avoid layout shifts (see Advanced section in block settings)
 * FIX: Incorrect behavior of validation in step-by-step form

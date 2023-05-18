@@ -33,6 +33,13 @@ import {
 } from './inputs/functions';
 import initForm from './init/initForm';
 import BaseHtmlAttr from './attrs/BaseHtmlAttr';
+import {
+	queryByAttrValue,
+	iterateComments,
+	observeMacroAttr,
+	observeComment,
+	iterateJfbComments,
+} from './html.macro/functions';
 
 window.JetFormBuilderAbstract = {
 	...(
@@ -69,6 +76,11 @@ window.JetFormBuilderFunctions = {
 	focusOnInvalidInput,
 	populateInputs,
 	isVisible,
+	queryByAttrValue,
+	iterateComments,
+	observeMacroAttr,
+	observeComment,
+	iterateJfbComments,
 };
 
 jQuery( () => JetPlugins.init() );

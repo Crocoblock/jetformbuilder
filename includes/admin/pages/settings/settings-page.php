@@ -46,6 +46,15 @@ class Settings_Page extends Base_Page {
 			'is_active' => jet_form_builder()->addons_manager->is_active(),
 			'notices'   => Array_Tools::to_array( $this->notices()->get_notices() ),
 			'boxes'     => Array_Tools::to_array( $this->boxes()->get_boxes() ),
+			'addons'    => apply_filters(
+				'jfb-addons-page/page-localize-data',
+				array(
+					'licenseMode' => false,
+					'licenseKey'  => '',
+					'licenseList' => array(),
+					'themeInfo'   => jet_form_builder()->addons_manager->get_theme_info(),
+				)
+			),
 		);
 	}
 

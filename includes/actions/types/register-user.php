@@ -345,7 +345,7 @@ class Register_User extends Base {
 			),
 			'already_logged_in' => array(
 				'label' => __( 'Logged in (appears only if register user is only notification)', 'jet-form-builder' ),
-				'value' => 'You already logged in.',
+				'value' => 'You are already logged in.',
 			),
 			'not_logged_in'     => array(
 				'label' => sprintf(

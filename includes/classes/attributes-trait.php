@@ -54,4 +54,15 @@ trait Attributes_Trait {
 		return array_key_exists( $name, $this->attrs );
 	}
 
+	public function merge_attributes( array &$extra_attrs ) {
+		if ( $this->has_attribute( 'class' ) ) {
+			$extra_attrs['class']  = $extra_attrs['class'] ?? '';
+			$extra_attrs['class'] .= ' ' . $this->attrs['class'] ?? '';
+		}
+
+		if ( $this->has_attribute( 'id' ) ) {
+			$extra_attrs['id'] = $this->attrs['id'] ?? '';
+		}
+	}
+
 }

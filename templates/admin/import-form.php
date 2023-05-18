@@ -15,7 +15,7 @@ use Jet_Form_Builder\Form_Actions\Types\Import_Action;
 		method="POST"
 		action="<?php echo esc_url_raw( $this->action_url() ); ?>"
 		enctype="multipart/form-data">
-	<input type="file" name="form_file" accept="application/json" multiple="false">
+	<input type="file" name="form_file[]" accept="application/json" multiple="multiple">
 	<?php wp_nonce_field( Import_Action::NONCE_ACTION ); ?>
 	<button class="button button-primary" type="submit" style="margin: 0 0 0 5px;">
 		<?php echo esc_html( $import_button ); ?>

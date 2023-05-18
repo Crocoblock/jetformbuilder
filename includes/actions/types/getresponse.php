@@ -139,7 +139,7 @@ class Getresponse extends Integration_Base_Action {
 
 		// Error response
 		if ( isset( $response['httpStatus'] ) && isset( $response['code'] ) ) {
-			throw new Action_Exception( "derror|{$response['message']}" );
+			throw new Action_Exception( "derror|{$response['message']}", $response );
 		}
 	}
 

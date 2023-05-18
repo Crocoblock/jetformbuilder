@@ -47,18 +47,20 @@ export default class IntegrationComponent extends BaseActionComponent {
 			},
 			success: function ( response ) {
 				if ( response.success ) {
-					self.onChangeSetting( true, 'isValidAPI' );
-					self.onChangeSetting( response.data, 'data' );
+					self.onChangeSettingObj( {
+						isValidAPI: true,
+						data: response.data
+					} );
 
 					self.setState( { className: [ 'is-valid' ] } );
 				}
 				else {
-					self.onChangeSetting( false, 'isValidAPI' );
+					self.onChangeSettingObj( { isValidAPI: false } );
 					self.setState( { className: [ 'is-invalid' ] } );
 				}
 			},
 			error: function () {
-				self.onChangeSetting( false, 'isValidAPI' );
+				self.onChangeSettingObj( { isValidAPI: false } );
 				self.setState( { className: [ 'is-invalid' ] } );
 			}
 		} );

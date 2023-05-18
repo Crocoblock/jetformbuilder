@@ -76,7 +76,12 @@ abstract class Base_Handler implements Repository_Item_Instance_Trait {
 	}
 
 	public function update_options( $options ) {
-		$options = wp_json_encode( $options );
+		$options    = wp_json_encode( $options );
+		$prev_value = get_option( $this->option_name(), false );
+
+		if ( $prev_value === $options ) {
+			return true;
+		}
 
 		return update_option( $this->option_name(), $options );
 	}

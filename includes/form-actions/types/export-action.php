@@ -34,12 +34,15 @@ class Export_Action extends Base_Form_Action {
 	}
 
 	public function do_admin_action() {
-		$form_id   = $this->get_post_id_from_request();
-		$form_data = $this->get_from_data( $form_id );
+		$form_id = $this->get_post_id_from_request();
 
+		/** @var \WP_Post[] $form_data */
+		$form_data   = $this->get_from_data( $form_id );
 		$this->_file = Tools::encode_json( $form_data[1] );
 
-		$this->file_download( $form_data[0]->post_name . '.json' );
+		$name = sanitize_title( $form_data[0]->post_title );
+
+		$this->file_download( $name . '.json' );
 	}
 
 

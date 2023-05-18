@@ -99,6 +99,9 @@ class Form_Builder {
 	public function set_form_args( $arguments ): Form_Builder {
 		$this->args = array_intersect_key( $arguments, Form_Arguments::arguments() );
 
+		$this->args['className'] = $arguments['className'] ?? '';
+		$this->args['anchor']    = $arguments['anchor'] ?? '';
+
 		return $this;
 	}
 
@@ -129,51 +132,36 @@ class Form_Builder {
 			jet_fb_live_args()->submit_type
 		);
 
-		$attrs_list = array(
-			'class'                => $base_classes,
-			'action'               => Http_Tools::get_form_action_url(),
-			'method'               => \WP_REST_Server::CREATABLE,
-			'data-form-id'         => $this->form_id,
-			'data-layout'          => jet_fb_live_args()->fields_layout,
-			'enctype'              => 'multipart/form-data',
-			'data-validation-type' => jet_fb_live_args()->validation_type,
-			'novalidate'           => '',
-		);
+		/**
+		 * We use form builder methods to add attributes, as the form can be displayed
+		 * not only with the Gutenberg block, but also with a third-party builder widget
+		 */
+		$this->add_attribute( 'id', $this->args['anchor'] );
+		$this->add_attribute( 'class', $base_classes );
+		$this->add_attribute( 'action', Http_Tools::get_form_action_url() );
+		$this->add_attribute( 'method', \WP_REST_Server::CREATABLE );
+		$this->add_attribute( 'data-form-id', $this->form_id );
+		$this->add_attribute( 'data-layout', jet_fb_live_args()->fields_layout );
+		$this->add_attribute( 'enctype', 'multipart/form-data' );
+		$this->add_attribute( 'data-validation-type', jet_fb_live_args()->validation_type );
+		$this->add_attribute( 'data-clear', jet_fb_live_args()->clear );
+		$this->add_attribute( 'novalidate' );
 
 		/**
-		 * TODO: refactor in 3.1
-		 *
 		 * Backward compatibility.
 		 * We leave only the basic ones in the classes, because the value
 		 * from className is added "from above"
 		 *
 		 * Without it, custom classes will be on the <form> tag and the outer <div>
 		 */
-		if ( Compatibility::has_jet_sm() ) {
-			$block = \WP_Block_Type_Registry::get_instance()->get_registered( 'jet-forms/form-block' );
-
-			if ( $block instanceof \WP_Block_Type ) {
-				$block->supports['customClassName'] = false;
-			}
-		}
-
-		if ( jet_fb_live_args()->clear ) {
-			$attrs_list['data-clear'] = true;
-		}
-
-		if ( jet_fb_live_args()->anchor ) {
-			$attrs_list['id'] = esc_attr( jet_fb_live_args()->anchor );
-		}
-
-		// backward compatibility
-		$this->merge_attributes( $attrs_list );
-
-		$attrs = get_block_wrapper_attributes( $attrs_list );
+		$this->add_attribute(
+			'class',
+			Compatibility::has_jet_sm() ? '' : $this->args['className']
+		);
 
 		$start_form .= sprintf(
-			'<form %1$s %2$s>',
-			$this->get_attributes_string(),
-			$attrs
+			'<form %1$s>',
+			$this->get_attributes_string()
 		);
 
 		$start_form .= apply_filters( 'jet-form-builder/after-start-form', '', $this );

@@ -30,10 +30,10 @@ trait Attributes_Trait {
 
 		$value = Tools::esc_attr( $value );
 
-		if ( ! isset( $this->attrs[ $attr ] ) ) {
-			$this->attrs[ $attr ] = $value;
-		} else {
+		if ( isset( $this->attrs[ $attr ] ) && in_array( $attr, array( 'class', 'style' ), true ) ) {
 			$this->attrs[ $attr ] .= ' ' . $value;
+		} else {
+			$this->attrs[ $attr ] = $value;
 		}
 	}
 
@@ -47,17 +47,6 @@ trait Attributes_Trait {
 
 	public function has_attribute( string $name ): bool {
 		return array_key_exists( $name, $this->attrs );
-	}
-
-	public function merge_attributes( array &$extra_attrs ) {
-		if ( $this->has_attribute( 'class' ) ) {
-			$extra_attrs['class']  = $extra_attrs['class'] ?? '';
-			$extra_attrs['class'] .= ' ' . $this->attrs['class'] ?? '';
-		}
-
-		if ( $this->has_attribute( 'id' ) ) {
-			$extra_attrs['id'] = $this->attrs['id'] ?? '';
-		}
 	}
 
 }

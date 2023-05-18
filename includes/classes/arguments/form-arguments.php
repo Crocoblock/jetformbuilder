@@ -18,7 +18,6 @@ use Jet_Form_Builder\Plugin;
  * @property bool use_csrf
  * @property string validation_type
  * @property string clear
- * @property string anchor
  *
  * Class Form_Arguments
  * @package Jet_Form_Builder\Classes\Arguments
@@ -38,7 +37,6 @@ class Form_Arguments implements Arrayable {
 		'use_csrf'         => '',
 		'validation_type'  => '',
 		'clear'            => '',
-		'anchor'           => '',
 	);
 
 	public function __construct( $form_id = 0 ) {
@@ -181,7 +179,6 @@ class Form_Arguments implements Arrayable {
 			'fields_label_tag' => $this->fields_label_tag,
 			'load_nonce'       => $this->load_nonce,
 			'use_csrf'         => $this->use_csrf,
-			'anchor'           => $this->anchor,
 		);
 	}
 

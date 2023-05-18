@@ -40,6 +40,7 @@ function observableHandle( observable ) {
 
 	observable.getSubmit().submitter?.status?.watch?.( () => {
 		turnstile.reset( widgetID );
+		token.onClear();
 	} );
 }
 

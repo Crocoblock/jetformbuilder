@@ -40,6 +40,7 @@ function observableHandle( observable ) {
 
 	observable.getSubmit().submitter?.status?.watch?.( () => {
 		hcaptcha.reset( widgetID );
+		token.onClear();
 	} );
 }
 

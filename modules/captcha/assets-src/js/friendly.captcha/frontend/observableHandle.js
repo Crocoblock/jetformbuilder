@@ -47,6 +47,7 @@ function observableHandle( observable ) {
 
 	observable.getSubmit().submitter?.status?.watch?.( () => {
 		widget.reset();
+		token.onClear();
 	} );
 }
 

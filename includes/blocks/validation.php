@@ -170,7 +170,6 @@ class Validation implements Arrayable {
 			return;
 		}
 		wp_enqueue_script( self::HANDLE );
-		do_action( 'jet_plugins/frontend/register_script', self::HANDLE );
 
 		$this->add_validation_messages_global( '', true );
 

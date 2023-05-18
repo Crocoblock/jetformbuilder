@@ -63,7 +63,6 @@ class Turnstile extends Base_Captcha_From_Options implements
 
 		$handle = $this->get_handle( '-api' );
 		wp_enqueue_script( $handle );
-		wp_enqueue_script( Validation::HANDLE );
 
 		/**
 		 * In some themes, the "the_content" filter may be executed before the "wp_enqueue_scripts" action.

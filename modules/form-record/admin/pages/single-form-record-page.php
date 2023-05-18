@@ -3,13 +3,13 @@
 
 namespace JFB_Modules\Form_Record\Admin\Pages;
 
+use JFB_Modules\Base_Module\Module_Tools;
 use JFB_Modules\Form_Record\Admin\Meta_Boxes;
 use JFB_Modules\Form_Record\Admin\Notices\Update_Db_Notice;
 use Jet_Form_Builder\Admin\Notices\With_Notices_Trait;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
-use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -66,5 +66,12 @@ class Single_Form_Record_Page extends Base_Single_Page {
 		wp_enqueue_style( Pages_Manager::STYLE_DASHICONS );
 
 		parent::assets();
+	}
+
+	public function base_script_url(): string {
+		return Module_Tools::get_url(
+			'form-record',
+			"assets-build/js/admin/pages/{$this->slug()}{min}.js"
+		);
 	}
 }

@@ -4,7 +4,11 @@
 		'jet-form-builder-page': true,
 	}">
 		<slot name="heading-before"></slot>
-		<h1>{{ title }}</h1>
+		<h1 :class="{
+			'inline': inlineHeader,
+		}">
+			{{ title }}
+		</h1>
 		<template v-if="$slots['heading-after']">
 			<slot name="heading-after"></slot>
 		</template>
@@ -25,6 +29,10 @@ export default {
 			type: String,
 			default: window?.JetFBPageConfig?.title ?? '',
 		},
+		inlineHeader: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	computed: {
 		hasGlobalActions() {
@@ -39,15 +47,8 @@ export default {
 
 <style lang="scss">
 .jet-form-builder-page {
-	.jfb-heading {
-		display: flex;
-		align-items: flex-end;
-		gap: 2em;
-		padding: 9px 0 4px;
-
-		h1 {
-			padding: unset;
-		}
+	& > h1.inline {
+		display: inline-block;
 	}
 }
 

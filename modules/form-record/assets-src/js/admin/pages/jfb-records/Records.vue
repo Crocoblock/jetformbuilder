@@ -1,12 +1,15 @@
 <template>
 	<FormBuilderPage
 		:title="__( 'JetFormBuilder Form Records', 'jet-form-builder' )"
+		:inline-header="true"
 	>
+		<template #heading-after>
+			<ExportEntriesButton/>
+		</template>
 		<Portal to="scope-default/filters">
 			<FormFilter/>
 		</Portal>
 		<Portal to="scope-default/buttons">
-			<ExportEntriesButton/>
 			<ClearFiltersButton/>
 		</Portal>
 		<ActionsWithFilters/>

@@ -1,12 +1,10 @@
 <template>
-	<div class="wrapper">
-		<cx-vui-button
-			@click="showPopup = true"
-			button-style="accent-border"
-			size="mini"
-		>
-			<template #label>{{ getLabel }}</template>
-		</cx-vui-button>
+	<cx-vui-button
+		@click="showPopup = true"
+		button-style="accent-border"
+		size="mini"
+	>
+		<template #label>{{ getLabel }}</template>
 		<cx-vui-popup
 			v-model="showPopup"
 			body-width="650px"
@@ -20,7 +18,7 @@
 
 			</template>
 		</cx-vui-popup>
-	</div>
+	</cx-vui-button>
 </template>
 
 <script>

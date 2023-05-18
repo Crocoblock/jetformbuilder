@@ -2,7 +2,10 @@ import useCheckedChoiceState from '../choice/useCheckedChoiceState';
 import ToggleCheckStateButton from '../choice/ToggleCheckStateButton';
 import preview from './preview';
 
-const { __ } = wp.i18n;
+const {
+	      __,
+	      sprintf,
+      } = wp.i18n;
 
 const {
 	      useBlockProps,
@@ -78,8 +81,11 @@ export default function EditChoiceCheck( props ) {
 	const jetStyle = useJetStyle();
 
 	const blockProps = useBlockProps( {
-		className: 'jet-form-builder-choice--item-control',
-		style: jetStyle,
+		className: sprintf(
+			'jet-form-builder-choice--item-control %s',
+			jetStyle.className
+		),
+		style: jetStyle.style,
 	} );
 
 	const instanceId = useInstanceId( EditChoiceCheck, fieldName );

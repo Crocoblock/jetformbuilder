@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Actions\Types;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Exceptions\Action_Exception;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -33,7 +34,7 @@ class Call_Webhook extends Base {
 	}
 
 	public function do_action( array $request, Action_Handler $handler ) {
-		$webhook_url = ! empty( $this->settings['webhook_url'] ) ? esc_url_raw( $this->settings['webhook_url'] ) : false;
+		$webhook_url = ! empty( $this->settings['webhook_url'] ) ? trim( $this->settings['webhook_url'] ) : false;
 
 		if ( ! $webhook_url ) {
 			throw new Action_Exception( 'failed', $this->settings );
@@ -60,6 +61,12 @@ class Call_Webhook extends Base {
 			$webhook_url,
 			$this
 		);
+
+		$webhook_url = esc_url_raw( $webhook_url );
+
+		if ( ! $webhook_url ) {
+			throw new Action_Exception( 'failed', 'empty_webhook_url' );
+		}
 
 		$response = wp_remote_post( $webhook_url, $args );
 

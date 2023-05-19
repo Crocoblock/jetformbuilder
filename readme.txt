@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 5.6
-Tested up to: 6.2
+Tested up to: 6.2.1
 Requires PHP: 7.0
-Stable tag: 3.0.6
+Stable tag: 3.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,18 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.0.7**
+ - ADD: Support for custom css classes and anchors for the JetForm block
+ - FIX: Form doesn't scroll to the top on next page in popup
+ - FIX: Must not contain chars in advanced validation
+ - FIX: Advanced validation fails when field value comes from URL parameter
+ - FIX: Macros in call webhook action does not work
+ - FIX: Attachments are empty in an email with a media field that has been filled with a preset, and files with a value format of array
+ - FIX: Dynamic value does not uncheck all checkbox options. Removed `.trigger( 'change' )` support for checkboxes when changing state via Dynamic Value
+ - FIX: An error occurred when synchronizing with GetResponse when editing an action
+ - FIX: Minor bug causing WooCommerce pages to look a little different
+ - FIX: The value in the text field with the input mask was stored in the wrong sequence in the RTL direction
 
 **3.0.6**
  - ADD: Ability to import multiple forms at the same time

@@ -17,6 +17,7 @@ trait Attributes_Trait {
 		/**
 		 * Don't use wp_is_numeric_array function
 		 * for backward compatibility
+		 *
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/2392
 		 */
 		if ( is_array( $value ) ) {
@@ -29,10 +30,10 @@ trait Attributes_Trait {
 
 		$value = Tools::esc_attr( $value );
 
-		if ( ! isset( $this->attrs[ $attr ] ) ) {
-			$this->attrs[ $attr ] = $value;
-		} else {
+		if ( isset( $this->attrs[ $attr ] ) && in_array( $attr, array( 'class', 'style' ), true ) ) {
 			$this->attrs[ $attr ] .= ' ' . $value;
+		} else {
+			$this->attrs[ $attr ] = $value;
 		}
 	}
 

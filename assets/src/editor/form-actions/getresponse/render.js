@@ -94,36 +94,33 @@ class GetResponseAction extends IntegrationComponent {
 					} }
 				/>
 				<BaseControl
-					key={ 'getresponse_input_key' }
-					className="input-with-button"
+					label={ label( 'api_key' ) }
 				>
-					<TextControl
-						key="api_key"
-						label={ label( 'api_key' ) }
-						disabled={ settings.use_global }
-						value={ settings.use_global
-						        ? currentTab.api_key
-						        : settings.api_key
-						}
-						onChange={ newVal => this.onChangeSetting( newVal,
-							'api_key' ) }
-					/>
-					<Button
-						key={ 'validate_api_key' }
-						isPrimary
-						onClick={ () => {
-							settings.use_global
-							? this.validateAPIKey( currentTab.api_key )
-							: this.validateAPIKey();
-						} }
-						className={ this.state.className.join( ' ' ) +
-						' jet-form-validate-button' }
-					>
-						<i className="dashicons"/>
-						{ label( 'validate_api_key' ) }
-					</Button>
+					<div className="jet-control-clear-full jet-d-flex-between">
+						<TextControl
+							disabled={ settings.use_global }
+							value={ settings.use_global
+							        ? currentTab.api_key
+							        : settings.api_key
+							}
+							onChange={ newVal => this.onChangeSetting( newVal,
+								'api_key' ) }
+						/>
+						<Button
+							isPrimary
+							onClick={ () => {
+								settings.use_global
+								? this.validateAPIKey( currentTab.api_key )
+								: this.validateAPIKey();
+							} }
+							className={ this.state.className.join( ' ' ) +
+							' jet-form-validate-button' }
+						>
+							<i className="dashicons"/>
+							{ label( 'validate_api_key' ) }
+						</Button>
+					</div>
 				</BaseControl>
-				<div/>
 				<div className="jfb-margin-bottom--small">{ help(
 					'api_key_link_prefix' ) } <a
 					href={ help( 'api_key_link' ) }>{ help(
@@ -131,38 +128,37 @@ class GetResponseAction extends IntegrationComponent {
 				</div>
 				{ settings.isValidAPI && <React.Fragment>
 					<BaseControl
-						key="getresponse_select_lists"
-						className="input-with-button"
+						label={ label( 'list_id' ) }
 					>
-						<SelectControl
-							key="list_id"
-							className="full-width"
-							label={ label( 'list_id' ) }
-							labelPosition="side"
-							value={ settings.list_id }
-							onChange={ newVal => this.onChangeSetting( newVal,
-								'list_id' ) }
-							options={ this.getLists() }
-						/>
-						<Button
-							key={ 'update_list_ids' }
-							isPrimary
-							onClick={ () => {
-								settings.use_global
-								? this.getApiData( settings.api_key )
-								: this.getApiData( currentTab.api_key );
-							} }
-						>
-							{ label( 'update_list_ids' ) }
-						</Button>
+						<div
+							className="jet-control-clear-full jet-d-flex-between">
+							<SelectControl
+								key="list_id"
+								className="full-width"
+								value={ settings.list_id }
+								onChange={ newVal => this.onChangeSetting(
+									newVal,
+									'list_id' ) }
+								options={ this.getLists() }
+							/>
+							<Button
+								key={ 'update_list_ids' }
+								isPrimary
+								onClick={ () => {
+									settings.use_global
+									? this.getApiData( settings.api_key )
+									: this.getApiData( currentTab.api_key );
+								} }
+							>
+								{ label( 'update_list_ids' ) }
+							</Button>
+						</div>
 					</BaseControl>
 					<BaseControl
-						key={ 'getresponse_day_of_cycle' }
+						label={ label( 'day_of_cycle' ) }
 					>
 						<NumberControl
-							key="day_of_cycle"
-							label={ label( 'day_of_cycle' ) }
-							labelPosition="side"
+							className="full-width jet-control-clear-full"
 							value={ settings.day_of_cycle }
 							onChange={ newVal => this.onChangeSetting(
 								Number( newVal ), 'day_of_cycle' ) }
@@ -197,6 +193,7 @@ class GetResponseAction extends IntegrationComponent {
 		);
 		/* eslint-enable jsx-a11y/no-onchange */
 	}
+
 }
 
 export default withSelect( withRequestFields )( GetResponseAction );

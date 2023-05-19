@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
@@ -70,9 +71,9 @@ class Form_Builder {
 		}
 
 		$blocks = Live_Form::instance()
-		                   ->set_form_id( $this->form_id )
-		                   ->set_specific_data_for_render( $this->args )
-		                   ->setup_fields();
+							->set_form_id( $this->form_id )
+							->set_specific_data_for_render( $this->args )
+							->setup_fields();
 
 		$form = $this->start_form();
 
@@ -90,8 +91,6 @@ class Form_Builder {
 
 		Live_Form::clear();
 
-		//Preset_Manager::clear();
-
 		return $form;
 	}
 
@@ -103,6 +102,9 @@ class Form_Builder {
 	 */
 	public function set_form_args( $arguments ): Form_Builder {
 		$this->args = array_intersect_key( $arguments, Form_Arguments::arguments() );
+
+		$this->args['className'] = $arguments['className'] ?? '';
+		$this->args['anchor']    = $arguments['anchor'] ?? '';
 
 		return $this;
 	}
@@ -128,11 +130,20 @@ class Form_Builder {
 		$start_form .= $this->maybe_render_fonts_block();
 		$start_form .= $this->render_styles();
 
-		$this->add_attribute( 'class', 'jet-form-builder' );
-		$this->add_attribute( 'class', 'layout-' . jet_fb_live_args()->fields_layout );
-		$this->add_attribute( 'class', 'submit-type-' . jet_fb_live_args()->submit_type );
+		$base_classes = sprintf(
+			'jet-form-builder layout-%1$s submit-type-%2$s',
+			jet_fb_live_args()->fields_layout,
+			jet_fb_live_args()->submit_type
+		);
+
+		/**
+		 * We use form builder methods to add attributes, as the form can be displayed
+		 * not only with the Gutenberg block, but also with a third-party builder widget
+		 */
+		$this->add_attribute( 'id', $this->args['anchor'] );
+		$this->add_attribute( 'class', $base_classes );
 		$this->add_attribute( 'action', Http_Tools::get_form_action_url() );
-		$this->add_attribute( 'method', 'POST' );
+		$this->add_attribute( 'method', \WP_REST_Server::CREATABLE );
 		$this->add_attribute( 'data-form-id', $this->form_id );
 		$this->add_attribute( 'data-layout', jet_fb_live_args()->fields_layout );
 		$this->add_attribute( 'enctype', 'multipart/form-data' );
@@ -140,9 +151,22 @@ class Form_Builder {
 		$this->add_attribute( 'data-clear', jet_fb_live_args()->clear );
 		$this->add_attribute( 'novalidate' );
 
-		ob_start();
-		include $this->get_global_template( 'common/start-form.php' );
-		$start_form .= ob_get_clean();
+		/**
+		 * Backward compatibility.
+		 * We leave only the basic ones in the classes, because the value
+		 * from className is added "from above"
+		 *
+		 * Without it, custom classes will be on the <form> tag and the outer <div>
+		 */
+		$this->add_attribute(
+			'class',
+			Compatibility::has_jet_sm() ? '' : $this->args['className']
+		);
+
+		$start_form .= sprintf(
+			'<form %1$s>',
+			$this->get_attributes_string()
+		);
 
 		$start_form .= apply_filters( 'jet-form-builder/after-start-form', '', $this );
 

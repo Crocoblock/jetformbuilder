@@ -38,6 +38,7 @@ class Form_Actions_Manager {
 	}
 
 	public function base_add_action_links( $actions, $post ) {
+		/** @var Base_Form_Action $type */
 		foreach ( $this->_types as $type ) {
 			if ( $type->display_action_link() ) {
 				$actions = $type->register_action( $actions, $post );

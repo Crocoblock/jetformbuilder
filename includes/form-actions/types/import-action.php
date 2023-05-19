@@ -14,7 +14,6 @@ class Import_Action extends Base_Form_Action {
 
 	use Import_Form_Trait;
 
-	const NONCE_ACTION = 'jfb_admin_import_form';
 
 	public function __construct() {
 		parent::__construct();
@@ -35,9 +34,7 @@ class Import_Action extends Base_Form_Action {
 	}
 
 	public function do_admin_action() {
-		if ( ! wp_verify_nonce( sanitize_key( $_POST['_wpnonce'] ?? '' ), self::NONCE_ACTION ) ||
-			! current_user_can( 'publish_posts' )
-		) {
+		if ( ! current_user_can( 'publish_posts' ) ) {
 			wp_die( 'Access denied', 'Error' );
 		}
 

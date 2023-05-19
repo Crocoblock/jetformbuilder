@@ -10,7 +10,7 @@ abstract class Base_Form_Action {
 	use Get_Template_Trait;
 
 	public function __construct() {
-		add_action( 'admin_action_' . $this->action_id(), array( $this, 'do_admin_action' ) );
+		add_action( 'admin_action_' . $this->action_id(), array( $this, 'do_action' ) );
 	}
 
 	abstract public function get_id();
@@ -18,6 +18,14 @@ abstract class Base_Form_Action {
 	abstract public function get_title();
 
 	abstract public function do_admin_action();
+
+	public function do_action() {
+		if ( ! wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ?? '' ), $this->get_id() ) ) {
+			wp_die( 'Your link is expired, please return to the previous page and try again', 'Error' );
+		}
+
+		$this->do_admin_action();
+	}
 
 	public function action_id() {
 		return $this->get_id();
@@ -31,7 +39,8 @@ abstract class Base_Form_Action {
 		$admin_url = esc_url_raw( admin_url( 'admin.php' ) );
 
 		$args = array(
-			'action' => $this->action_id(),
+			'action'   => $this->action_id(),
+			'_wpnonce' => wp_create_nonce( $this->get_id() ),
 		);
 
 		if ( $post instanceof \WP_Post ) {

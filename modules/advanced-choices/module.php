@@ -4,6 +4,7 @@
 namespace JFB_Modules\Advanced_Choices;
 
 use Jet_Form_Builder\Blocks\Manager;
+use JFB_Modules\Advanced_Choices\Block_Parsers\Choices_Field_Parser;
 use JFB_Modules\Base_Module\Base_Module_Handle_It;
 use JFB_Modules\Base_Module\Base_Module_Handle_Trait;
 use JFB_Modules\Base_Module\Base_Module_It;
@@ -54,6 +55,8 @@ class Module implements
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
+
+		add_filter( 'jet-form-builder/parsers-request/register', array( $this, 'add_block_parsers' ) );
 	}
 
 	public function remove_hooks() {
@@ -66,6 +69,8 @@ class Module implements
 
 		remove_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		remove_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
+
+		remove_filter( 'jet-form-builder/parsers-request/register', array( $this, 'add_block_parsers' ) );
 	}
 
 	public function add_blocks_types( array $block_types ): array {
@@ -79,6 +84,12 @@ class Module implements
 			);
 
 		return array_merge( $block_types, $types );
+	}
+
+	public function add_block_parsers( array $types ): array {
+		$types[] = new Choices_Field_Parser();
+
+		return $types;
 	}
 
 	public function register_frontend_scripts() {

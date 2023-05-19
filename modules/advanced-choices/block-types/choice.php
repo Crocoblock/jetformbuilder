@@ -3,11 +3,11 @@
 
 namespace JFB_Modules\Advanced_Choices\Block_Types;
 
-// If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Blocks\Types\Base;
 use JFB_Modules\Advanced_Choices\Block_Renders\Choice_Render;
 
+// If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }

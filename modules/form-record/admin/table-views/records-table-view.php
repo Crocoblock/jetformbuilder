@@ -21,6 +21,7 @@ use Jet_Form_Builder\Admin\Table_Views\Columns\Record_Id_Column_Advanced;
 use Jet_Form_Builder\Admin\Table_Views\View_Advanced_Base;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use JFB_Modules\Rest_Api\Endpoints\Get_Form_Fields;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -83,7 +84,7 @@ class Records_Table_View extends View_Advanced_Base {
 		$link = "<a href='https://youtu.be/FwfOTi5J1T4' target='_blank'>https://youtu.be/FwfOTi5J1T4</a>";
 
 		return sprintf(
-			/* translators: %s - link to the YouTube video */
+		/* translators: %s - link to the YouTube video */
 			__(
 				'No found items. To save a form record, add the 
 		Save Form Record action to the desired form. 
@@ -96,11 +97,12 @@ class Records_Table_View extends View_Advanced_Base {
 
 	public function load_data(): array {
 		return array(
-			'filters_endpoint' => array(
+			'filters_endpoint'     => array(
 				'methods' => Fetch_Filters_Endpoint::get_methods(),
 				'url'     => Fetch_Filters_Endpoint::rest_url(),
 			),
-			'messages'         => array(
+			'load_fields_endpoint' => Get_Form_Fields::get_endpoint(),
+			'messages'             => array(
 				'filter_form'       => __( 'Select Form', 'jet-form-builder' ),
 				'filter_form_title' => __( 'All Forms', 'jet-form-builder' ),
 				'filter_date'       => __( 'All time', 'jet-form-builder' ),

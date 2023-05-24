@@ -4,9 +4,7 @@
 		'jet-form-builder-page': true,
 	}">
 		<slot name="heading-before"></slot>
-		<h1 :class="{
-			'inline': inlineHeader,
-		}">
+		<h1 class="wp-heading-inline">
 			{{ title }}
 		</h1>
 		<template v-if="$slots['heading-after']">
@@ -15,6 +13,7 @@
 		<template v-else-if="hasGlobalActions">
 			<PageActions/>
 		</template>
+		<hr class="wp-header-end">
 		<slot></slot>
 	</div>
 </template>

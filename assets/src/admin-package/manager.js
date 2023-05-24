@@ -5,7 +5,7 @@ import SaveTabByAjax from './mixins/SaveTabByAjax';
 import ParseIncomingValueMixin from './mixins/ParseIncomingValueMixin';
 import PromiseWrapper from './mixins/PromiseWrapper';
 import DetailsTable from './components/DetailsTable';
-import SimpleWrapperComponent from './components/SimpleWrapperComponent';
+import SimpleWrapperComponent from './components/RowWrapper';
 import i18n from './mixins/i18n';
 import { renderCurrentPage } from './functions/RenderCurrentPage';
 import {
@@ -19,6 +19,8 @@ import CxVuiTabsPanel from './components/CxVuiTabsPanel';
 import CxVuiTabs from './components/CxVuiTabs';
 import LocalStorage from './functions/LocalStorage';
 import ExternalLink from './components/ExternalLink';
+import resolveRestUrl from './functions/resolveRestUrl';
+import ColumnWrapper from './components/ColumnWrapper';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -27,6 +29,7 @@ window.JetFBActions = {
 	createPath,
 	addQueryArgs,
 	LocalStorage,
+	resolveRestUrl,
 };
 
 window.JetFBErrors = {
@@ -41,6 +44,8 @@ window.JetFBComponents = {
 	CxVuiTabsPanel,
 	CxVuiTabs,
 	ExternalLink,
+	RowWrapper: SimpleWrapperComponent,
+	ColumnWrapper,
 };
 
 window.JetFBMixins = {
@@ -48,5 +53,5 @@ window.JetFBMixins = {
 	SaveTabByAjax,
 	i18n,
 	ParseIncomingValueMixin,
-	PromiseWrapper
+	PromiseWrapper,
 };

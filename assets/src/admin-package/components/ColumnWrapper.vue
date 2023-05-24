@@ -1,0 +1,53 @@
+<template>
+	<div :class="className">
+		<label
+			class="cx-vui-component__label"
+			v-if="$slots.label"
+			:for="elementId"
+		>
+			<slot name="label"></slot>
+		</label>
+		<slot></slot>
+		<div
+			class="cx-vui-component__desc"
+			v-if="$slots.description"
+		>
+			<slot name="description"></slot>
+		</div>
+	</div>
+</template>
+
+<script>
+
+export default {
+	name: 'ColumnWrapper',
+	props: {
+		elementId: {
+			type: String,
+		},
+		classNames: {
+			type: Object,
+			default: () => (
+				{}
+			),
+		},
+	},
+	computed: {
+		className() {
+			return {
+				'cx-vui-component': true,
+				...this.classNames,
+			};
+		},
+	},
+};
+</script>
+
+<style lang="scss" scoped>
+.cx-vui-component {
+	flex-direction: column;
+	width: 100%;
+	border-top: unset;
+	gap: 0.7em;
+}
+</style>

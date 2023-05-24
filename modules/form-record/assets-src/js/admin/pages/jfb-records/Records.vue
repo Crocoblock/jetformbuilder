@@ -21,6 +21,7 @@
 
 <script>
 import FormFilter from './filters/FormFilter';
+import ExportEntriesButton from './components/ExportEntriesButton';
 
 const {
 	      TablePagination,
@@ -29,7 +30,6 @@ const {
 	      ActionsWithFilters,
 	      ClearFiltersButton,
 	      Portal,
-	      ExportEntriesButton,
       } = JetFBComponents;
 
 const {

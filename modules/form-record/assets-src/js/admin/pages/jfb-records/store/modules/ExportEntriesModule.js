@@ -1,0 +1,198 @@
+const {
+	      __,
+      } = wp.i18n;
+
+const {
+	      load_fields_endpoint,
+      } = window.JetFBPageConfig;
+
+const {
+	      resolveRestUrl,
+      } = JetFBActions;
+
+const getters = {
+	extra: state => state.extra,
+	extraValues: state => getters.extra( state ).map(
+		( { value } ) => value,
+	),
+	selectedExtra: state => state.selectedExtra,
+	selectedForm: state => state.form,
+	currentFields: state => state.fields?.[ state.form ] ?? [],
+	currentFieldsValues: state => getters.currentFields( state ).map(
+		( { value } ) => value,
+	),
+	selectedFields: state => state.selectedFields || [],
+	isLoading: state => type => state.loading?.[ type ] ?? false,
+	status: state => state.status,
+	statusesList: state => state.statusesList,
+};
+
+const extra = [
+	{
+		'value': 'id',
+		'label': __( 'ID (primary)', 'jet-form-builder' ),
+	},
+	{
+		'value': 'form_id',
+		'label': __( 'Form ID', 'jet-form-builder' ),
+	},
+	{
+		'value': 'user_id',
+		'label': __( 'User ID', 'jet-form-builder' ),
+	},
+	{
+		'value': 'from_content_id',
+		'label': __( 'From content ID', 'jet-form-builder' ),
+	},
+	{
+		'value': 'from_content_type',
+		'label': __( 'From content type', 'jet-form-builder' ),
+	},
+	{
+		'value': 'status',
+		'label': __( 'Status', 'jet-form-builder' ),
+	},
+	{
+		'value': 'ip_address',
+		'label': __( 'IP address', 'jet-form-builder' ),
+	},
+	{
+		'value': 'user_agent',
+		'label': __( 'User agent', 'jet-form-builder' ),
+	},
+	{
+		'value': 'referrer',
+		'label': __( 'Referrer', 'jet-form-builder' ),
+	},
+	{
+		'value': 'submit_type',
+		'label': __( 'Submit type', 'jet-form-builder' ),
+	},
+	{
+		'value': 'is_viewed',
+		'label': __( 'Is viewed', 'jet-form-builder' ),
+	},
+	{
+		'value': 'created_at',
+		'label': __( 'Created', 'jet-form-builder' ),
+	},
+	{
+		'value': 'updated_at',
+		'label': __( 'Updated', 'jet-form-builder' ),
+	},
+];
+
+const ExportEntriesModule = {
+	namespaced: true,
+	state: () => (
+		{
+			form: '',
+			selectedFields: [],
+			selectedExtra: extra.map( ( { value } ) => value ),
+			fields: {},
+			extra,
+			statusesList: [
+				{
+					value: 'success',
+					label: __( 'Only successful ones', 'jet-form-builder' ),
+				},
+				{
+					value: 'failed',
+					label: __( 'Only failed ones', 'jet-form-builder' ),
+				},
+				{
+					value: 'all',
+					label: __( 'All', 'jet-form-builder' ),
+				},
+			],
+			status: 'success',
+			loading: {},
+		}
+	),
+	mutations: {
+		setForm( state, formId ) {
+			state.form = formId;
+		},
+		setFields( state, fields ) {
+			state.fields = {
+				...state.fields,
+				[ state.form ]: fields,
+			};
+		},
+		setStatus( state, status ) {
+			state.status = status;
+		},
+		updateSelectedFields( state, fields ) {
+			state.selectedFields = fields;
+		},
+		updateSelectedExtra( state, extra ) {
+			state.selectedExtra = extra;
+		},
+		toggleLoading( state, type ) {
+			state.loading = {
+				...state.loading,
+				[ type ]: !(
+					state.loading?.[ type ] ?? false
+				),
+			};
+		},
+	},
+	getters,
+	actions: {
+		handleFilters( { commit, state, rootGetters } ) {
+			const getter     = rootGetters[ 'scope-default/getFilter' ];
+			const formFilter = getter( 'form' );
+
+			if ( formFilter.selected !== state.form ) {
+				commit( 'setForm', formFilter.selected );
+			}
+		},
+		async resolveFields( { state, commit, dispatch } ) {
+			if (
+				state.fields.hasOwnProperty( state.form ) ||
+				Number.isNaN( Number( state.form ) ) ||
+				!state.form
+			) {
+				return true;
+			}
+
+			let response;
+			commit( 'toggleLoading', 'fields' );
+
+			try {
+				response = await dispatch( 'fetchFormFields' );
+			}
+			finally {
+				commit( 'toggleLoading', 'fields' );
+			}
+
+			commit( 'setFields', response.fields );
+		},
+		fetchFormFields( { commit, state } ) {
+			if ( Number.isNaN( Number( state.form ) ) ) {
+				throw new Error( 'empty_form' );
+			}
+
+			const url = resolveRestUrl(
+				load_fields_endpoint.url,
+				{ id: state.form },
+			);
+
+			return wp.apiFetch( { ...load_fields_endpoint, url } );
+		},
+		selectAllFields( { commit, getters } ) {
+			commit( 'updateSelectedFields', getters.currentFieldsValues );
+		},
+		clearAllFields( { commit } ) {
+			commit( 'updateSelectedFields', [] );
+		},
+		selectAllExtra( { commit, getters } ) {
+			commit( 'updateSelectedExtra', getters.extraValues );
+		},
+		clearAllExtra( { commit } ) {
+			commit( 'updateSelectedExtra', [] );
+		},
+	},
+};
+
+export default ExportEntriesModule;

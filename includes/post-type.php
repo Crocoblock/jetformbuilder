@@ -26,6 +26,8 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
+ * @method Base_Meta_Type rep_get_item( $class_or_slug )
+ *
  * Class Post_Type
  *
  * @package Jet_Form_Builder
@@ -295,8 +297,12 @@ class Post_Type {
 	 *
 	 * @return array
 	 */
-	public function get_gateways( $form_id = false ) {
-		return $this->get_meta( Gateways_Meta::class )->query( $form_id );
+	public function get_gateways( $form_id = false ): array {
+		try {
+			return $this->rep_get_item( Gateways_Meta::class )->query( $form_id );
+		} catch ( Repository_Exception $exception ) {
+			return array();
+		}
 	}
 
 	public function get_validation( $form_id = false ) {

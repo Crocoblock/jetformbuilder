@@ -115,7 +115,7 @@ class Block_Helper {
 		return $fields;
 	}
 
-	public static function filter_blocks( $callback, array &$storage, array $source ) {
+	public static function filter_blocks( $callback, array &$storage, array $source, $after_callback = null ) {
 		foreach ( $source as $index => $block ) {
 			if ( ! isset( $block['blockName'] ) ) {
 				continue;
@@ -126,6 +126,10 @@ class Block_Helper {
 
 			if ( ! empty( $block['innerBlocks'] ) ) {
 				self::filter_blocks( $callback, $storage, $block['innerBlocks'] );
+			}
+
+			if ( is_callable( $after_callback ) ) {
+				call_user_func( $after_callback, $block );
 			}
 		}
 	}

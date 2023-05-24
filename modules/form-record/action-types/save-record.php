@@ -8,13 +8,8 @@ use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Form_Record;
-use JFB_Modules\Form_Record\Controller;
-use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Manager;
-use JFB_Modules\Form_Record\Admin\Meta_Boxes\Record_To_Payment_Box;
-use Jet_Form_Builder\Exceptions\Handler_Exception;
-use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 use JFB_Modules\Security\Module;
 
 // If this file is called directly, abort.
@@ -50,53 +45,6 @@ class Save_Record extends Base {
 		return array(
 			Default_Required_Event::class,
 		);
-	}
-
-	public function dependence() {
-		( new Form_Record\Records_Rest_Controller() )->rest_api_init();
-		add_filter(
-			'jet-form-builder/page-containers/jfb-payments-single',
-			array(
-				$this,
-				'add_box_to_single_payment',
-			)
-		);
-
-		add_action(
-			'jet-form-builder/gateways/before-send',
-			array( $this, 'before_send_gateway' ),
-			10,
-			3
-		);
-
-		return parent::dependence();
-	}
-
-	/**
-	 * @param Base_Meta_Container[] $containers
-	 *
-	 * @return array
-	 */
-	public function add_box_to_single_payment( array $containers ): array {
-		$containers[1]->add_meta_box( new Record_To_Payment_Box() );
-
-		return $containers;
-	}
-
-	public function before_send_gateway( $status, $action_error, Scenario_Logic_Base $scenario ) {
-		// prepare record controller, for saving errors & actions
-		$record     = $scenario->get_scenario_row( 'record' );
-		$controller = ( new Controller() )->set_record_id( $record['id'] );
-		$controller->set_setting( 'save_errors', Manager::instance()->active() );
-
-		try {
-			$controller->save_fields();
-			$controller->save_actions();
-			$controller->save_errors();
-
-		} catch ( Handler_Exception $exception ) {
-			// do nothing
-		}
 	}
 
 	/**

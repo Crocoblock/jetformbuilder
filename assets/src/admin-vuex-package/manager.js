@@ -35,7 +35,6 @@ import EditCollectorPlugin from './store/plugins/EditCollectorPlugin';
 import PortalVue from 'portal-vue';
 import { PortalTarget, Portal } from 'portal-vue';
 import ActionsWithFilters from './components/ActionsWithFilters';
-import ExportEntriesButton from './components/ExportEntriesButton';
 
 Vue.use( Vuex );
 Vue.use( PortalVue );
@@ -64,7 +63,6 @@ window.JetFBComponents = {
 	ActionsWithFilters,
 	PortalTarget,
 	Portal,
-	ExportEntriesButton,
 };
 
 window.JetFBMixins = {

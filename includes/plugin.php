@@ -8,7 +8,6 @@ use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
-use Jet_Form_Builder\Blocks\Manager as BlocksManager;
 use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Regexp_Tools;
 use Jet_Form_Builder\Classes\Tools;
@@ -18,6 +17,7 @@ use Jet_Form_Builder\Compatibility\Jet_Appointment\Jet_Appointment;
 use Jet_Form_Builder\Compatibility\Jet_Booking\Jet_Booking;
 use Jet_Form_Builder\Compatibility\Jet_Engine\Jet_Engine;
 use Jet_Form_Builder\Compatibility\Woocommerce\Woocommerce;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
 use Jet_Form_Builder\Form_Messages;
 use Jet_Form_Builder\Form_Patterns\Manager as PatternsManager;
@@ -42,7 +42,6 @@ if ( ! defined( 'WPINC' ) ) {
 
 /**
  * @property Post_Type $post_type
- * @property BlocksManager $blocks
  * @property ActionsManager $actions
  * @property Form_Manager $form
  * @property Form_Handler $form_handler
@@ -52,7 +51,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @property Form_Messages\Msg_Router $msg_router
  * @property Regexp_Tools $regexp
  * @property Wp_Experiments $wp_experiments
- * @property Blocks\Block_Sanitizer_Manager $blocks_sanitizer
  *
  * Class Plugin
  * @package Jet_Form_Builder
@@ -60,7 +58,6 @@ if ( ! defined( 'WPINC' ) ) {
 class Plugin {
 
 	public $post_type;
-	public $blocks;
 	public $actions;
 	public $form;
 	public $form_handler;
@@ -72,40 +69,33 @@ class Plugin {
 	public $msg_router;
 	public $wp_experiments;
 	public $regexp;
-	public $blocks_sanitizer;
 
 	private $modules_controller;
 
 	public static $instance;
 
 	/**
-	 * Instance.
-	 *
-	 * Ensures only one instance of the plugin class is loaded or can be loaded.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @static
+	 * Plugin constructor.
 	 */
-	public static function instance() {
+	private function __construct() {
 
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
-		}
+		$this->register_autoloader();
+		$this->init_lang();
 
-		return self::$instance;
-	}
+		add_action(
+			'after_setup_theme',
+			function () {
+				do_action( 'jet-form-builder/before-init' );
 
-	public static function clear() {
-		self::$instance = null;
-	}
+				$this->init_components();
 
-	/**
-	 * Register autoloader.
-	 */
-	private function register_autoloader() {
-		require JET_FORM_BUILDER_PATH . 'includes' . DIRECTORY_SEPARATOR . 'autoloader.php';
-		Autoloader::run();
+				do_action( 'jet-form-builder/after-init' );
+			},
+			0
+		);
+
+		$this->init_framework();
+		Wp_Cli_Manager::register();
 	}
 
 	/**
@@ -128,17 +118,15 @@ class Plugin {
 		Jet_Booking::register();
 		new Deprecated();
 
-		$this->admin_bar        = \Jet_Admin_Bar::get_instance();
-		$this->msg_router       = new Form_Messages\Msg_Router();
-		$this->post_type        = new Post_Type();
-		$this->blocks           = new Blocks\Manager();
-		$this->actions          = new Actions\Manager();
-		$this->form             = new Form_Manager();
-		$this->form_handler     = new Form_Handler();
-		$this->addons_manager   = new AddonsManager();
-		$this->wp_experiments   = new Wp_Experiments();
-		$this->regexp           = new Regexp_Tools();
-		$this->blocks_sanitizer = new Blocks\Block_Sanitizer_Manager();
+		$this->admin_bar      = \Jet_Admin_Bar::get_instance();
+		$this->msg_router     = new Form_Messages\Msg_Router();
+		$this->post_type      = new Post_Type();
+		$this->actions        = new Actions\Manager();
+		$this->form           = new Form_Manager();
+		$this->form_handler   = new Form_Handler();
+		$this->addons_manager = new AddonsManager();
+		$this->wp_experiments = new Wp_Experiments();
+		$this->regexp         = new Regexp_Tools();
 
 		/**
 		 * Modules & components
@@ -239,30 +227,6 @@ class Plugin {
 		return JET_FORM_BUILDER_VERSION;
 	}
 
-	/**
-	 * Plugin constructor.
-	 */
-	private function __construct() {
-
-		$this->register_autoloader();
-		$this->init_lang();
-
-		add_action(
-			'after_setup_theme',
-			function () {
-				do_action( 'jet-form-builder/before-init' );
-
-				$this->init_components();
-
-				do_action( 'jet-form-builder/after-init' );
-			},
-			0
-		);
-
-		$this->init_framework();
-		Wp_Cli_Manager::register();
-	}
-
 	public function get_modules(): Modules_Controller {
 		if ( is_null( $this->modules_controller ) ) {
 			$this->modules_controller = new Modules_Controller();
@@ -283,6 +247,56 @@ class Plugin {
 
 	public function has_module( string $name_or_class ): bool {
 		return $this->get_modules()->has_module( $name_or_class );
+	}
+
+	/**
+	 * Instance.
+	 *
+	 * Ensures only one instance of the plugin class is loaded or can be loaded.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @static
+	 */
+	public static function instance() {
+
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
+
+	public static function clear() {
+		self::$instance = null;
+	}
+
+	/**
+	 * Register autoloader.
+	 */
+	private function register_autoloader() {
+		require JET_FORM_BUILDER_PATH . 'includes' . DIRECTORY_SEPARATOR . 'autoloader.php';
+		Autoloader::run();
+	}
+
+	/**
+	 * Backward compatibility to deprecated properties
+	 *
+	 * @param $name
+	 *
+	 * @return mixed
+	 */
+	public function __get( $name ) {
+		switch ( $name ) {
+			case 'blocks':
+				try {
+					return jet_form_builder()->module( 'blocks' );
+				} catch ( Repository_Exception $exception ) {
+					return null;
+				}
+		}
+
+		return null;
 	}
 
 }

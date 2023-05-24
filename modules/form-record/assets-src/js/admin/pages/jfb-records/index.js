@@ -1,19 +1,25 @@
 import Records from './Records';
+import ExportEntriesPlugin from './store/plugins/ExportEntriesPlugin';
 
 const {
-	BaseStore,
-	TableModulePlugin,
-	TableSeedPlugin,
-	MessagesPlugin,
-} = JetFBStore;
+	      BaseStore,
+	      TableModulePlugin,
+	      TableSeedPlugin,
+	      MessagesPlugin,
+      } = JetFBStore;
 
 const {
-	renderCurrentPage,
-} = window.JetFBActions;
+	      renderCurrentPage,
+      } = window.JetFBActions;
 
 const store = new Vuex.Store( {
 	...BaseStore,
-	plugins: [ TableModulePlugin(), TableSeedPlugin(), MessagesPlugin ],
+	plugins: [
+		TableModulePlugin(),
+		TableSeedPlugin(),
+		MessagesPlugin,
+		ExportEntriesPlugin,
+	],
 } );
 
 renderCurrentPage( Records, { store } );

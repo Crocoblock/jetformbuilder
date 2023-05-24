@@ -4,7 +4,10 @@
 namespace JFB_Modules\Advanced_Choices;
 
 use Jet_Form_Builder\Blocks\Manager;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Advanced_Choices\Block_Parsers\Choices_Field_Parser;
+use JFB_Modules\Advanced_Choices\Block_Sanitizers\Choices_Default_Value_Sanitizer;
+use JFB_Modules\Base_Module\Base_Module_After_Install_It;
 use JFB_Modules\Base_Module\Base_Module_Handle_It;
 use JFB_Modules\Base_Module\Base_Module_Handle_Trait;
 use JFB_Modules\Base_Module\Base_Module_It;
@@ -14,6 +17,7 @@ use JFB_Modules\Advanced_Choices\Block_Types;
 use JFB_Modules\Base_Module\Base_Module_Url_It;
 use JFB_Modules\Base_Module\Base_Module_Url_Trait;
 use Jet_Form_Builder\Plugin;
+use JFB_Modules\Block_Sanitizer;
 
 
 // If this file is called directly, abort.
@@ -31,7 +35,8 @@ class Module implements
 	Base_Module_It,
 	Base_Module_Dir_It,
 	Base_Module_Handle_It,
-	Base_Module_Url_It {
+	Base_Module_Url_It,
+Base_Module_After_Install_It {
 
 	use Base_Module_Dir_Trait;
 	use Base_Module_Handle_Trait;
@@ -43,6 +48,16 @@ class Module implements
 
 	public function condition(): bool {
 		return true;
+	}
+
+	/**
+	 * @throws Repository_Exception
+	 */
+	public function on_install() {
+		/** @var Block_Sanitizer\Module $sanitizer */
+		$sanitizer = jet_form_builder()->module( 'block-sanitizer' );
+
+		$sanitizer->register( new Choices_Default_Value_Sanitizer() );
 	}
 
 	public function init_hooks() {

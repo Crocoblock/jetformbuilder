@@ -9,13 +9,13 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use JFB_Modules\Advanced_Choices;
 use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
 use JFB_Modules\Base_Module\Base_Module_After_Install_It;
 use JFB_Modules\Base_Module\Base_Module_Dir_It;
 use JFB_Modules\Base_Module\Base_Module_Handle_It;
 use JFB_Modules\Base_Module\Base_Module_It;
 use JFB_Modules\Base_Module\Base_Module_Url_It;
+use Jet_Form_Builder\Blocks;
 
 class Modules_Controller {
 
@@ -23,6 +23,9 @@ class Modules_Controller {
 
 	public function rep_instances(): array {
 		return array(
+			new Rest_Api\Module(),
+			new Blocks\Module(),
+			new Block_Sanitizer\Module(),
 			new Jet_Style\Module(),
 			new Security\Module(),
 			new Switch_Page_On_Change\Module(),

@@ -32,8 +32,9 @@ const apiOptions = getters => {
 export default {
 	fetchPage( { commit, getters, dispatch } ) {
 		commit( 'toggleLoading', 'page' );
+		const url = getters.receiveEndpoint;
 
-		dispatch( 'fetch', getters.getPageOptionsFetch ).then( response => {
+		dispatch( 'fetch', getters.fetchListOptions( url ) ).then( response => {
 			dispatch( 'updateList', response );
 			dispatch( 'updateQueryState' );
 
@@ -46,8 +47,9 @@ export default {
 	},
 	fetchPageWithFilters( { commit, getters, dispatch, state } ) {
 		commit( 'toggleLoading', 'page' );
+		const url = getters.receiveEndpoint;
 
-		dispatch( 'fetch', getters.getPageOptionsFetch ).then( response => {
+		dispatch( 'fetch', getters.fetchListOptions( url ) ).then( response => {
 			dispatch( 'updateList', response );
 			jfbEventBus.reactiveCounter ++;
 		} ).finally( () => {

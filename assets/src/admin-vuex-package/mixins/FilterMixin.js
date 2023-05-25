@@ -20,7 +20,6 @@ export default {
 			this.setCurrentFilter( {
 				selected: value,
 			} );
-			this.dispatch( 'fetchPageWithFilters' );
 		},
 	},
 };

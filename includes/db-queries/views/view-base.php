@@ -85,8 +85,25 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	public function get_prepared_join( Query_Builder $builder ) {
 	}
 
+	/**
+	 * @see \Jet_Form_Builder\Db_Queries\Query_Conditions_Builder::get_types
+	 *
+	 * @param array $conditions
+	 *
+	 * @return $this
+	 */
 	public function set_conditions( array $conditions ): View_Base {
 		$this->conditions = array_merge( $this->always_conditions(), $conditions );
+
+		return $this;
+	}
+
+	public function add_conditions( array $conditions ): View_Base {
+		if ( empty( $this->conditions ) ) {
+			return $this->set_conditions( $conditions );
+		}
+
+		$this->conditions = array_merge( $this->conditions, $conditions );
 
 		return $this;
 	}
@@ -130,15 +147,18 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	}
 
 	/**
+	 * @since 3.1.0 Added $raw argument
+	 *
 	 * Get the column name with table prefix
 	 *
 	 * @param $column
+	 * @param bool $raw
 	 *
 	 * @return string
 	 */
-	public function column( $column ): string {
+	public function column( $column, bool $raw = false ): string {
 		if ( is_string( $column ) ) {
-			return "`{$this->table()}`.`{$column}`";
+			return $raw ? "{$this->table()}.{$column}" : "`{$this->table()}`.`{$column}`";
 		}
 
 		if ( isset( $column['as'] ) ) {
@@ -152,7 +172,7 @@ abstract class View_Base implements Model_Dependencies_Interface {
 			wp_die( 'Please set the column name.', 'View Base Error' );
 		}
 
-		return "`{$table}`.`{$name}`";
+		return $raw ? "{$table}.{$name}" : "`{$table}`.`{$name}`";
 	}
 
 	protected function prepare_row( $row ) {

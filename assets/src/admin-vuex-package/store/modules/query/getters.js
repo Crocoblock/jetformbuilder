@@ -58,9 +58,4 @@ const getters = {
 
 export default {
 	...getters,
-	getPageOptionsFetch: state => {
-		const receive_url = getters.receiveEndpoint( state );
-
-		return getters.fetchListOptions( state )( receive_url );
-	},
 };

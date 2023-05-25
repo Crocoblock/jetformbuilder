@@ -25,6 +25,11 @@ export default {
 		elementId: {
 			type: String,
 		},
+		/**
+		 * Possible values:
+		 * 'padding-top-bottom-unset': true
+		 * 'padding-unset': true
+		 */
 		classNames: {
 			type: Object,
 			default: () => (
@@ -49,5 +54,14 @@ export default {
 	width: 100%;
 	border-top: unset;
 	gap: 0.7em;
+}
+
+.padding-top-bottom-unset {
+	padding-top: unset;
+	padding-bottom: unset;
+}
+
+.padding-unset {
+	padding: unset;
 }
 </style>

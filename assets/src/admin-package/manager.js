@@ -21,6 +21,7 @@ import LocalStorage from './functions/LocalStorage';
 import ExternalLink from './components/ExternalLink';
 import resolveRestUrl from './functions/resolveRestUrl';
 import ColumnWrapper from './components/ColumnWrapper';
+import CxVuiSelect from './components/CxVuiSelect';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -46,6 +47,7 @@ window.JetFBComponents = {
 	ExternalLink,
 	RowWrapper: SimpleWrapperComponent,
 	ColumnWrapper,
+	CxVuiSelect,
 };
 
 window.JetFBMixins = {

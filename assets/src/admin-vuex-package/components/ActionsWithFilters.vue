@@ -2,7 +2,7 @@
 	<div :class="wrapperClass" v-if="items.length">
 		<ChooseAction/>
 		<template v-if="hasFilters">
-			<PortalTarget :name="scopedName( 'filters' )"/>
+			<PortalTarget :name="scopedName( 'filters' )" class="filters"/>
 			<div class="wrapper-buttons">
 				<PortalTarget :name="scopedName( 'buttons' )"/>
 			</div>
@@ -80,6 +80,12 @@ export default {
 	&--loading {
 		opacity: 0.5;
 	}
+}
+
+.filters {
+	display: flex;
+	gap: 1em;
+	align-items: flex-end;
 }
 
 .wrapper-buttons {

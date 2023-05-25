@@ -9,7 +9,8 @@
 		</cx-vui-button>
 		<cx-vui-popup
 			v-model="showPopup"
-			body-width="650px"
+			class="export-popup"
+			body-width="70vw"
 			:ok-label="__( 'Export', 'jet-form-builder' )"
 			:cancel-label="__( 'Cancel', 'jet-form-builder' )"
 			@on-ok="handlePopupExport"
@@ -331,5 +332,26 @@ hr.jfb {
 
 .jfb-dates-wrapper {
 	display: flex;
+}
+
+.cx-vui-popup.export-popup {
+	.cx-vui-popup {
+		&__body {
+			height: 80vh;
+			overflow-y: auto;
+			padding-bottom: 0;
+		}
+
+		&__content {
+			padding-bottom: 40px;
+		}
+
+		&__footer {
+			position: sticky;
+			bottom: 0;
+			background-color: white;
+			padding-bottom: 20px;
+		}
+	}
 }
 </style>

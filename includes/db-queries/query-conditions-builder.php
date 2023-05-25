@@ -174,7 +174,13 @@ class Query_Conditions_Builder {
 	}
 
 	public function build_equal_static( $first, $second ): string {
-		return "{$first} = {$second}";
+		global $wpdb;
+
+		return $wpdb->prepare(
+			'%s = %s',
+			$first,
+			$second
+		);
 	}
 
 	/**
@@ -235,7 +241,16 @@ class Query_Conditions_Builder {
 	 * @throws Query_Builder_Exception
 	 */
 	public function build_more_static( $column_name, $second ): string {
-		return "{$this->view()->column( $column_name )} > {$second}";
+		global $wpdb;
+
+		$format = is_numeric( $second ) ? '%d' : '%s';
+
+		// phpcs:disable WordPress.DB
+		return $wpdb->prepare(
+			$this->view()->column( $column_name ) . ' > ' . $format,
+			$second
+		);
+		// phpcs:enable WordPress.DB
 	}
 
 	/**
@@ -246,7 +261,16 @@ class Query_Conditions_Builder {
 	 * @throws Query_Builder_Exception
 	 */
 	public function build_less_static( $column_name, $second ): string {
-		return "{$this->view()->column( $column_name )} < {$second}";
+		global $wpdb;
+
+		$format = is_numeric( $second ) ? '%d' : '%s';
+
+		// phpcs:disable WordPress.DB
+		return $wpdb->prepare(
+			$this->view()->column( $column_name ) . ' < ' . $format,
+			$second
+		);
+		// phpcs:enable WordPress.DB
 	}
 
 	/**

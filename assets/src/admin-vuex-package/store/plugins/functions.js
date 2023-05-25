@@ -17,7 +17,7 @@ export function getScopeName( box ) {
 
 export function registerNamespacedModule( store, box ) {
 	const { render_type } = box;
-	let module = ( modules = {} ) => (
+	let module            = ( modules = {} ) => (
 		{
 			...singleView,
 			modules: {
@@ -58,18 +58,18 @@ export function withScope( box ) {
 
 export function setTableSeed( store, source ) {
 	const {
-		list = [],
-		columns = {},
-		total = 0,
-		receive_url = {},
-		actions,
-		render_type = '',
-		empty_message = '',
-		is_editable_table = false,
-		is_editable_table_control = false,
-		stable_limit = null,
-		...options
-	} = source;
+		      list                      = [],
+		      columns                   = {},
+		      total                     = 0,
+		      receive_url               = {},
+		      actions,
+		      render_type               = '',
+		      empty_message             = '',
+		      is_editable_table         = false,
+		      is_editable_table_control = false,
+		      stable_limit              = null,
+		      ...options
+	      } = source;
 
 	let getName = withScope( source );
 
@@ -86,20 +86,30 @@ export function setTableSeed( store, source ) {
 	store.commit( getName( 'options/insert' ), options );
 
 	store.dispatch( getName( 'setQueriedPage' ), 1 );
+
+	store.subscribe( ( mutation, state ) => {
+		const typeParts = mutation.type.split( '/' );
+
+		switch ( typeParts.at( -1 ) ) {
+			case 'setFilter':
+				store.dispatch( getName( 'fetchPageWithFilters' ) );
+				return;
+		}
+	} );
 }
 
 export function setListSeed( store, source ) {
 	const {
-		list = {},
-		columns = {},
-		render_type = '',
-		single_endpoint = {},
-		receive_url = {},
-		is_editable_table = false,
-		is_editable_table_control = false,
-		box_actions = [],
-		...options
-	} = source;
+		      list                      = {},
+		      columns                   = {},
+		      render_type               = '',
+		      single_endpoint           = {},
+		      receive_url               = {},
+		      is_editable_table         = false,
+		      is_editable_table_control = false,
+		      box_actions               = [],
+		      ...options
+	      } = source;
 
 	let getName = withScope( source );
 

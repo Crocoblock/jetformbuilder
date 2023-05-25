@@ -1,12 +1,13 @@
 <template>
-	<cx-vui-select
-		:options-list="filter.options || []"
-		:wrapper-css="[ 'equalwidth' ]"
+	<CxVuiSelect
 		:value="filter.selected"
-		:placeholder="label( 'filter_form_title' )"
-		class="jet-fb-filter-form-select"
 		@input="onChangeFilter"
-	></cx-vui-select>
+	>
+		<option value="">{{ __( 'All forms', 'jet-form-builder' ) }}</option>
+		<option v-for="option in filter.options || []" v-bind:value="option.value">
+			{{ option.label }}
+		</option>
+	</CxVuiSelect>
 </template>
 
 <script>
@@ -19,31 +20,29 @@ const {
 
 const {
 	      FilterMixin,
+	      i18n,
       } = JetFBMixins;
+
+const {
+	      ColumnWrapper,
+	      CxVuiSelect,
+      } = JetFBComponents;
 
 export default {
 	name: 'FormFilter',
+	components: {
+		ColumnWrapper,
+		CxVuiSelect
+	},
 	data() {
 		return {
 			filter_id: 'form',
 		};
 	},
-	mixins: [ FilterMixin ],
-	computed: {
-		...mapGetters( 'messages', [
-			'label',
-		] ),
-	},
+	mixins: [ FilterMixin, i18n ],
 };
 </script>
 
 <style lang="scss">
-.jet-fb-filter-form-select.cx-vui-component {
-	display: block;
-	padding: unset;
 
-	.cx-vui-select {
-		min-width: 150px;
-	}
-}
 </style>

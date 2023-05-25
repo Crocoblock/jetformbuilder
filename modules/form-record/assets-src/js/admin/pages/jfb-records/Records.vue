@@ -8,6 +8,7 @@
 		</template>
 		<Portal to="scope-default/filters">
 			<FormFilter/>
+			<DatesFilter/>
 		</Portal>
 		<Portal to="scope-default/buttons">
 			<ClearFiltersButton/>
@@ -22,6 +23,9 @@
 <script>
 import FormFilter from './filters/FormFilter';
 import ExportEntriesButton from './components/ExportEntriesButton';
+import DateFromFilter from './filters/DateFromFilter';
+import DateToFilter from './filters/DateToFilter';
+import DatesFilter from './filters/DatesFilter';
 
 const {
 	      TablePagination,
@@ -55,6 +59,7 @@ const {
 export default {
 	name: 'jfb-records',
 	components: {
+		DatesFilter,
 		TablePagination,
 		EntriesTable,
 		ActionsWithFilters,

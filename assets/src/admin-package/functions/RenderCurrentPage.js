@@ -1,3 +1,5 @@
+const { __, sprintf } = wp.i18n;
+
 export function renderCurrentPage( component, options = {} ) {
 	const pref = 'jet-form-builder_page_';
 

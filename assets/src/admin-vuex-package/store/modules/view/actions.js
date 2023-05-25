@@ -7,11 +7,11 @@ const getActionFromRecord = ( record, slug ) => {
 
 const apiOptions = getters => {
 	const { action, payload } = getters.currentProcess;
-	const [ checked ] = payload;
+	const [ checked ]         = payload;
 
 	let actionEndpoint = getters.getAction( action );
 
-	if ( ! actionEndpoint ) {
+	if ( !actionEndpoint ) {
 		const record = payload[ 3 ] ?? {};
 
 		actionEndpoint = getActionFromRecord( record, action );
@@ -47,25 +47,37 @@ export default {
 	},
 	fetchPageWithFilters( { commit, getters, dispatch, state } ) {
 		commit( 'toggleLoading', 'page' );
+		dispatch( 'updateQueryState', 1 );
 		const url = getters.receiveEndpoint;
 
 		dispatch( 'fetch', getters.fetchListOptions( url ) ).then( response => {
 			dispatch( 'updateList', response );
-			jfbEventBus.reactiveCounter ++;
-		} ).finally( () => {
+			jfbEventBus.reactiveCounter++;
+		} ).catch( response => {
+			if ( !response?.hasOwnProperty?.( 'code' ) ) {
+				return;
+			}
+			switch ( response.code ) {
+				case 'not_found':
+					dispatch( 'updateList', { list: [], total: 0 } );
+					break;
+			}
+		} ).finally( response => {
 			commit( 'toggleLoading', 'page' );
 		} );
 	},
 	updateList( { commit, getters, dispatch, state }, response ) {
 		commit( 'setList', response.list );
 
-		if ( state.queryState ) {
-			commit( 'setTotal', response?.total ?? state.queryState.total );
+		if ( getters.queryState ) {
+			commit( 'setTotal', response?.total ?? getters.queryState.total );
 		}
 
 		if ( response.list.length > getters.getLimit ) {
 			commit( 'setLimit', response.list.length );
 		}
+
+		commit( 'setOffset', 0 );
 	},
 	fetch( { commit, getters }, options ) {
 		return new Promise( ( resolve, reject ) => {
@@ -96,7 +108,7 @@ export default {
 
 		apiFetch( endpoint ).then( response => {
 			commit( 'setFilters', response.filters );
-			jfbEventBus.reactiveCounter ++;
+			jfbEventBus.reactiveCounter++;
 		} ).finally( () => {
 			commit( 'toggleDoingAction', null, { root: true } );
 		} );

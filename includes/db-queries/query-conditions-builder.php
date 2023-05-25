@@ -27,15 +27,24 @@ class Query_Conditions_Builder {
 	const TYPE_MORE_STATIC   = 'more_static';
 	const TYPE_LESS_STATIC   = 'less_static';
 	const TYPE_IN            = 'in';
+	/**
+	 * @since 3.1.0
+	 */
+	const TYPE_NOT_EQUAL    = 'not_equal_column';
+	const TYPE_LIKE_END     = 'like_end';
+	const TYPE_NOT_LIKE_END = 'not_like_end';
+
+
+	/**
+	 * @since 3.1.0
+	 */
+	const RELATIONS_TYPES = array( 'AND', 'OR' );
 
 	use With_View;
 
-	private $conditions = array(
-		array(
-			'type'   => self::TYPE_EQUAL_STATIC,
-			'values' => array( 1, 1 ),
-		),
-	);
+	private $conditions = array();
+
+	private $relation_type = 'AND';
 
 	/**
 	 * @var array
@@ -68,10 +77,30 @@ class Query_Conditions_Builder {
 			self::TYPE_IN            => array(
 				'callback' => array( $this, 'build_in' ),
 			),
+			/**
+			 * @since 3.1.0
+			 */
+			self::TYPE_NOT_EQUAL     => array(
+				'callback' => array( $this, 'build_not_equal_column' ),
+			),
+			self::TYPE_LIKE_END      => array(
+				'callback' => array( $this, 'build_like_end' ),
+			),
+			self::TYPE_NOT_LIKE_END  => array(
+				'callback' => array( $this, 'build_not_like_end' ),
+			),
 		);
 	}
 
-	public function set_condition( array $condition ): Query_Conditions_Builder {
+	/**
+	 * @param array|Query_Conditions_Builder $condition
+	 *
+	 * @return $this
+	 */
+	public function set_condition( $condition ): Query_Conditions_Builder {
+		if ( ! is_array( $condition ) && ! ( $condition instanceof Query_Conditions_Builder ) ) {
+			return $this;
+		}
 		$this->conditions[] = $condition;
 
 		return $this;
@@ -128,13 +157,20 @@ class Query_Conditions_Builder {
 	public function prepare_conditions(): string {
 		$prepared = $this->build_conditions_raw( $this->conditions );
 
-		return implode( "\r\n\tAND ", $prepared );
+		return implode(
+			sprintf( "\r\n\t%s ", $this->relation_type ),
+			$prepared
+		);
 	}
 
 	/**
 	 * @return mixed
 	 */
 	public function prepare() {
+		if ( $this->current_condition instanceof Query_Conditions_Builder ) {
+			return sprintf( "(\r\n%s\r\n)", $this->current_condition->prepare_conditions() );
+		}
+
 		$type = $this->get_condition_type();
 
 		list ( $first, $second ) = $this->get_condition_values();
@@ -191,9 +227,34 @@ class Query_Conditions_Builder {
 	 * @throws Query_Builder_Exception
 	 */
 	public function build_equal_column( $column_name, $second ): string {
-		$second = esc_sql( $second );
+		global $wpdb;
+		$format = is_numeric( $second ) ? '%d' : '%s';
 
-		return "{$this->view()->column( $column_name )} = '{$second}'";
+		return $wpdb->prepare(
+		// phpcs:ignore WordPress.DB
+			"{$this->view()->column( $column_name )} = {$format}",
+			$second
+		);
+	}
+
+	/**
+	 * @since 3.1.0
+	 *
+	 * @param $column_name
+	 * @param $second
+	 *
+	 * @return string
+	 * @throws Query_Builder_Exception
+	 */
+	public function build_not_equal_column( $column_name, $second ): string {
+		global $wpdb;
+		$format = is_numeric( $second ) ? '%d' : '%s';
+
+		return $wpdb->prepare(
+		// phpcs:ignore WordPress.DB
+			"{$this->view()->column( $column_name )} != {$format}",
+			$second
+		);
 	}
 
 	/**
@@ -230,7 +291,33 @@ class Query_Conditions_Builder {
 	public function build_not_like( $column_name, $second ): string {
 		$second = esc_sql( $second );
 
-		return "{$this->view()->column( $column_name )} LIKE '%{$second}%'";
+		return "{$this->view()->column( $column_name )} NOT LIKE '%{$second}%'";
+	}
+
+	/**
+	 * @param $column_name
+	 * @param $second
+	 *
+	 * @return string
+	 * @throws Query_Builder_Exception
+	 */
+	public function build_like_end( $column_name, $second ): string {
+		$second = esc_sql( $second );
+
+		return "{$this->view()->column( $column_name )} LIKE '{$second}%'";
+	}
+
+	/**
+	 * @param $column_name
+	 * @param $second
+	 *
+	 * @return string
+	 * @throws Query_Builder_Exception
+	 */
+	public function build_not_like_end( $column_name, $second ): string {
+		$second = esc_sql( $second );
+
+		return "{$this->view()->column( $column_name )} NOT LIKE '{$second}%'";
 	}
 
 	/**
@@ -293,6 +380,33 @@ class Query_Conditions_Builder {
 		$condition = $this->current_condition();
 
 		return $condition['values'] ?? array();
+	}
+
+	/**
+	 * @since 3.1.0
+	 *
+	 * @return $this
+	 */
+	public function set_relation_and(): Query_Conditions_Builder {
+		return $this->set_relation_type( 'AND' );
+	}
+
+	/**
+	 * @since 3.1.0
+	 *
+	 * @return $this
+	 */
+	public function set_relation_or(): Query_Conditions_Builder {
+		return $this->set_relation_type( 'OR' );
+	}
+
+	protected function set_relation_type( string $type ): Query_Conditions_Builder {
+		if ( ! in_array( $type, self::RELATIONS_TYPES, true ) ) {
+			return $this;
+		}
+		$this->relation_type = $type;
+
+		return $this;
 	}
 
 }

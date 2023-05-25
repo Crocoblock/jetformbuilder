@@ -28,10 +28,6 @@ export default {
 			type: String,
 			default: window?.JetFBPageConfig?.title ?? '',
 		},
-		inlineHeader: {
-			type: Boolean,
-			default: false,
-		},
 	},
 	computed: {
 		hasGlobalActions() {

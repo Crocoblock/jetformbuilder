@@ -35,6 +35,7 @@
 	"dependencies": {
 		"portal-vue": "2.1.7",
 		"semver": "^7.3.5",
-		"svg-url-loader": "^7.1.1"
+		"svg-url-loader": "^7.1.1",
+		"v-click-outside-x": "^4.1.3"
 	}
 }

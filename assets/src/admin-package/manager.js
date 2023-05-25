@@ -22,6 +22,9 @@ import ExternalLink from './components/ExternalLink';
 import resolveRestUrl from './functions/resolveRestUrl';
 import ColumnWrapper from './components/ColumnWrapper';
 import CxVuiSelect from './components/CxVuiSelect';
+import CxVuiPopup from './components/CxVuiPopup';
+import CxVuiFSelect from './components/CxVuiFSelect';
+import CxVuiDate from './components/CxVuiDate';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -48,6 +51,9 @@ window.JetFBComponents = {
 	RowWrapper: SimpleWrapperComponent,
 	ColumnWrapper,
 	CxVuiSelect,
+	CxVuiPopup,
+	CxVuiFSelect,
+	CxVuiDate,
 };
 
 window.JetFBMixins = {

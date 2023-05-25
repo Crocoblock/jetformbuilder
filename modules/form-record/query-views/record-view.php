@@ -15,6 +15,14 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Record_View extends View_Base {
 
+	/**
+	 * @since 3.1.0
+	 */
+	const AVAILABLE_STATUSES = array(
+		'success',
+		'failed',
+	);
+
 	protected $order_by = array(
 		array(
 			'column' => 'id',
@@ -36,26 +44,23 @@ class Record_View extends View_Base {
 		$this->set_form_filter();
 		$this->set_date_from_filter();
 		$this->set_date_to_filter();
+		$this->set_status_filter();
 
 		return $this;
 	}
 
 	protected function set_form_filter() {
-		$forms = $this->filters['form'] ?? array();
+		$form = absint( $this->filters['form'] ?? '' );
 
 		if ( empty( $form ) ) {
 			return;
-		}
-
-		if ( ! is_array( $forms ) ) {
-			$forms = array( $forms );
 		}
 
 		$this->add_conditions(
 			array(
 				array(
 					'type'   => 'in',
-					'values' => array( 'form_id', array_map( 'absint', $forms ) ),
+					'values' => array( 'form_id', array( $form ) ),
 				),
 			)
 		);
@@ -95,6 +100,49 @@ class Record_View extends View_Base {
 				),
 			)
 		);
+	}
+
+	protected function set_status_filter() {
+		$status = $this->filters['status'] ?? '';
+
+		if ( ! in_array( $status, self::AVAILABLE_STATUSES, true ) ) {
+			return;
+		}
+
+		if ( 'success' !== $status ) {
+			$this->add_conditions(
+				array(
+					array(
+						'type'   => Query_Conditions_Builder::TYPE_NOT_EQUAL,
+						'values' => array( 'status', 'success' ),
+					),
+					array(
+						'type'   => Query_Conditions_Builder::TYPE_NOT_LIKE_END,
+						'values' => array( 'status', 'dsuccess' ),
+					),
+				)
+			);
+
+			return;
+		}
+
+		$conditions = new Query_Conditions_Builder();
+		$conditions->set_view( $this );
+		$conditions->set_relation_or();
+		$conditions->set_condition(
+			array(
+				'type'   => Query_Conditions_Builder::TYPE_EQUAL,
+				'values' => array( 'status', 'success' ),
+			)
+		);
+		$conditions->set_condition(
+			array(
+				'type'   => Query_Conditions_Builder::TYPE_LIKE_END,
+				'values' => array( 'status', 'dsuccess' ),
+			)
+		);
+
+		$this->add_conditions( array( $conditions ) );
 	}
 
 	public function query(): Query_Builder {

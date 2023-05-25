@@ -97,6 +97,12 @@ class Query_Builder {
 		}
 
 		$this->where = ( new Query_Conditions_Builder() )
+			->set_condition(
+				array(
+					'type'   => Query_Conditions_Builder::TYPE_EQUAL_STATIC,
+					'values' => array( 1, 1 ),
+				)
+			)
 			->set_view( $this->view() )
 			->result();
 

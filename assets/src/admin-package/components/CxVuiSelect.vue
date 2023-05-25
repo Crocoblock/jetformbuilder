@@ -3,6 +3,8 @@
 		:class="className"
 		:value="value"
 		@input="handleInput"
+		:name="elementId"
+		:id="elementId"
 	>
 		<slot></slot>
 	</select>
@@ -15,6 +17,9 @@ export default {
 		value: {
 			type: [ String, Number ],
 			default: '',
+		},
+		elementId: {
+			type: String,
 		},
 		classNames: {
 			type: Object,
@@ -36,6 +41,7 @@ export default {
 			this.$emit( 'input', event.target.value );
 		},
 	},
+	inject: [ 'elementId' ]
 };
 </script>
 

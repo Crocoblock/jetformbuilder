@@ -1,5 +1,5 @@
 <template>
-	<div :class="wrapperClass" v-if="items.length">
+	<div :class="wrapperClass" v-if="show">
 		<ChooseAction/>
 		<template v-if="hasFilters">
 			<PortalTarget :name="scopedName( 'filters' )" class="filters"/>
@@ -48,6 +48,9 @@ export default {
 		},
 		items() {
 			return this.getter( 'list' );
+		},
+		show() {
+			return this.items.length || this.hasFilters;
 		},
 		wrapperClass() {
 			return {

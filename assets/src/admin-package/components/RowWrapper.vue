@@ -13,7 +13,7 @@
 			<label
 				class="cx-vui-component__label"
 				v-if="$slots.label"
-				:for="elementId"
+				:for="elementIdData"
 			>
 				<slot name="label"></slot>
 			</label>
@@ -24,7 +24,7 @@
 				<slot name="description"></slot>
 			</div>
 		</div>
-		<div class="cx-vui-component__control" :style="{ flex: 1 }">
+		<div class="cx-vui-component__control">
 			<slot></slot>
 		</div>
 	</div>
@@ -49,6 +49,11 @@ export default {
 			),
 		},
 	},
+	data() {
+		return {
+			elementIdData: `cx_${ this.elementId }`,
+		};
+	},
 	computed: {
 		className() {
 			return {
@@ -56,6 +61,11 @@ export default {
 				...this.classNames,
 			};
 		},
+	},
+	provide() {
+		return {
+			elementId: this.elementIdData,
+		};
 	},
 };
 </script>

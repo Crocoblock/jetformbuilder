@@ -10,7 +10,6 @@ use Jet_Form_Builder\Db_Queries\Query_Cache_Builder;
 use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies;
 use Jet_Form_Builder\Db_Queries\Traits\Model_Dependencies_Interface;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
-use spec\HubSpot\Discovery\Cms\Blogs\Tags\DiscoverySpec;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

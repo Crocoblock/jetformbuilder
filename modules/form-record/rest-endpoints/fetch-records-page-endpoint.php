@@ -40,6 +40,7 @@ class Fetch_Records_Page_Endpoint extends Rest_Api_Endpoint_Base {
 			return new \WP_REST_Response(
 				array(
 					'message' => __( 'Records not found', 'jet-form-builder' ),
+					'code'    => 'not_found',
 				),
 				404
 			);

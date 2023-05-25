@@ -8,6 +8,7 @@ function ExportEntriesPlugin( store ) {
 
 		switch ( typeParts.at( -1 ) ) {
 			case 'setFilter':
+			case 'clearSelectedFilters':
 				store.dispatch( 'export/handleFilters' );
 				return;
 			case 'setForm':

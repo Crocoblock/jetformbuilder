@@ -3,7 +3,7 @@
 		<label
 			class="cx-vui-component__label"
 			v-if="$slots.label"
-			:for="elementId"
+			:for="elementIdData"
 		>
 			<slot name="label"></slot>
 		</label>
@@ -24,6 +24,7 @@ export default {
 	props: {
 		elementId: {
 			type: String,
+			required: true,
 		},
 		/**
 		 * Possible values:
@@ -37,6 +38,11 @@ export default {
 			),
 		},
 	},
+	data() {
+		return {
+			elementIdData: `cx_${ this.elementId }`,
+		};
+	},
 	computed: {
 		className() {
 			return {
@@ -44,6 +50,11 @@ export default {
 				...this.classNames,
 			};
 		},
+	},
+	provide() {
+		return {
+			elementId: this.elementIdData,
+		};
 	},
 };
 </script>

@@ -22,9 +22,17 @@ const getters = {
 		( { value } ) => value,
 	),
 	selectedFields: state => state.selectedFields || [],
-	isLoading: state => type => state.loading?.[ type ] ?? false,
+	isLoading: state => type => {
+		if ( !type ) {
+			return Object.values( state.loading ).some( Boolean );
+		}
+
+		return state.loading?.[ type ] ?? false;
+	},
 	status: state => state.status,
 	statusesList: state => state.statusesList,
+	dateFrom: state => state.date_from,
+	dateTo: state => state.date_to,
 };
 
 const extra = [
@@ -89,23 +97,11 @@ const ExportEntriesModule = {
 			form: '',
 			selectedFields: [],
 			selectedExtra: extra.map( ( { value } ) => value ),
+			status: '',
+			date_from: '',
+			date_to: '',
 			fields: {},
 			extra,
-			statusesList: [
-				{
-					value: 'success',
-					label: __( 'Only successful ones', 'jet-form-builder' ),
-				},
-				{
-					value: 'failed',
-					label: __( 'Only failed ones', 'jet-form-builder' ),
-				},
-				{
-					value: 'all',
-					label: __( 'All', 'jet-form-builder' ),
-				},
-			],
-			status: 'success',
 			loading: {},
 		}
 	),
@@ -121,6 +117,12 @@ const ExportEntriesModule = {
 		},
 		setStatus( state, status ) {
 			state.status = status;
+		},
+		setDateFrom( state, from ) {
+			state.date_from = from;
+		},
+		setDateTo( state, to ) {
+			state.date_to = to;
 		},
 		updateSelectedFields( state, fields ) {
 			state.selectedFields = fields;
@@ -142,9 +144,21 @@ const ExportEntriesModule = {
 		handleFilters( { commit, state, rootGetters } ) {
 			const getter     = rootGetters[ 'scope-default/getFilter' ];
 			const formFilter = getter( 'form' );
+			const dateFrom   = getter( 'date_from' );
+			const dateTo     = getter( 'date_to' );
+			const status     = getter( 'status' );
 
 			if ( formFilter.selected !== state.form ) {
 				commit( 'setForm', formFilter.selected );
+			}
+			if ( dateFrom.selected !== state.date_from ) {
+				commit( 'setDateFrom', dateFrom.selected );
+			}
+			if ( dateTo.selected !== state.date_to ) {
+				commit( 'setDateTo', dateTo.selected );
+			}
+			if ( status.selected !== state.status ) {
+				commit( 'setStatus', status.selected );
 			}
 		},
 		async resolveFields( { state, commit, dispatch } ) {

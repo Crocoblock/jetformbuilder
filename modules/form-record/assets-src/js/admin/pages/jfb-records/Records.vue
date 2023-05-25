@@ -1,13 +1,13 @@
 <template>
 	<FormBuilderPage
 		:title="__( 'JetFormBuilder Form Records', 'jet-form-builder' )"
-		:inline-header="true"
 	>
 		<template #heading-after>
 			<ExportEntriesButton/>
 		</template>
 		<Portal to="scope-default/filters">
 			<FormFilter/>
+			<StatusFilter/>
 			<DatesFilter/>
 		</Portal>
 		<Portal to="scope-default/buttons">
@@ -26,6 +26,7 @@ import ExportEntriesButton from './components/ExportEntriesButton';
 import DateFromFilter from './filters/DateFromFilter';
 import DateToFilter from './filters/DateToFilter';
 import DatesFilter from './filters/DatesFilter';
+import StatusFilter from './filters/StatusFilter';
 
 const {
 	      TablePagination,
@@ -59,6 +60,7 @@ const {
 export default {
 	name: 'jfb-records',
 	components: {
+		StatusFilter,
 		DatesFilter,
 		TablePagination,
 		EntriesTable,

@@ -2,19 +2,21 @@
 	<div style="display:inline-block;">
 		<cx-vui-button
 			@click="onClick"
-			button-style="accent-border"
+			button-style="link-accent"
 			size="mini"
 		>
-			<template #label>{{ getLabel }}</template>
+			<template #label>
+				<span class="dashicons dashicons-database-export"></span>
+				{{ __( 'Export', 'jet-form-builder' ) }}
+			</template>
 		</cx-vui-button>
-		<cx-vui-popup
-			v-model="showPopup"
-			class="export-popup"
-			body-width="70vw"
-			:ok-label="__( 'Export', 'jet-form-builder' )"
-			:cancel-label="__( 'Cancel', 'jet-form-builder' )"
-			@on-ok="handlePopupExport"
-			@on-cancel="showPopup = false"
+		<CxVuiPopup
+			v-if="showPopup"
+			:class-names="{
+				'export-popup': true,
+				'sticky-footer': true,
+			}"
+			@close="showPopup = false"
 		>
 			<template #title>{{ __( 'Export settings', 'jet-form-builder' ) }}</template>
 			<template #content>
@@ -26,107 +28,146 @@
 					:label="__( 'Export record from', 'jet-form-builder' )"
 					:placeholder="__( 'You need to select form', 'jet-form-builder' )"
 					@input="setForm"
-				></cx-vui-select>
-				<cx-vui-f-select
-					:label="__( 'Export fields', 'jet-form-builder' )"
-					:wrapper-css="[ '1-x-2', 'jfb-loading-select', 'jfb-padding-b-unset' ]"
-					:options-list="currentFields"
-					size="fullwidth"
-					:multiple="true"
-					name="export_fields"
-					:value="selectedFields"
-					:placeholder="placeholder"
-					:disabled="isLoading( 'fields' ) || currentFields.length === 1"
-					@input="updateSelectedFields"
-				>
-					<LoadingIcon
-						v-if="isLoading( 'fields' )"
-						style="margin-bottom: 0.4em;"
+					name="select_form"
+				/>
+				<template v-if="selectedForm">
+					<RowWrapper
+						element-id="fields"
+						:class-names="{ 'size--1-x-2': true }"
+					>
+						<template #label>{{ __( 'Export fields', 'jet-form-builder' ) }}</template>
+						<template #default>
+							<CxVuiFSelect
+								:wrapper-css="[ 'jfb-loading-select', 'jfb-padding-b-unset' ]"
+								:options-list="currentFields"
+								size="fullwidth"
+								:multiple="true"
+								:value="selectedFields"
+								:placeholder="placeholder"
+								:disabled="isLoading( 'fields' ) || currentFields.length === 1"
+								@change="updateSelectedFields"
+							>
+								<LoadingIcon
+									v-if="isLoading( 'fields' )"
+									style="margin-bottom: 0.4em;"
+								/>
+							</CxVuiFSelect>
+						</template>
+					</RowWrapper>
+					<div class="jfb-inline-control-actions">
+						<cx-vui-button
+							button-style="link-accent"
+							size="link"
+							tagName="a"
+							:disabled="currentFieldsValues.length === selectedFields.length"
+							@click="selectAllFields"
+						>
+							<template #label>
+								{{ __( 'Choose all', 'jet-form-builder' ) }}
+							</template>
+						</cx-vui-button>
+						<cx-vui-button
+							button-style="link-error"
+							size="link"
+							tagName="a"
+							:disabled="!selectedFields.length"
+							@click="clearAllFields"
+						>
+							<template #label>
+								{{ __( 'Clear', 'jet-form-builder' ) }}
+							</template>
+						</cx-vui-button>
+					</div>
+					<hr class="jfb"/>
+					<RowWrapper
+						element-id="extra"
+						:class-names="{ 'size--1-x-2': true }"
+					>
+						<template #label>{{ __( 'Additional information', 'jet-form-builder' ) }}</template>
+						<template #default>
+							<CxVuiFSelect
+								:wrapper-css="[ 'jfb-padding-b-unset' ]"
+								:options-list="extra"
+								size="fullwidth"
+								:multiple="true"
+								:value="selectedExtra"
+								@change="updateSelectedExtra"
+							/>
+						</template>
+					</RowWrapper>
+					<div class="jfb-inline-control-actions">
+						<cx-vui-button
+							button-style="link-accent"
+							size="link"
+							tagName="a"
+							:disabled="extraValues.length === selectedExtra.length"
+							@click="selectAllExtra"
+						>
+							<template #label>
+								{{ __( 'Choose all', 'jet-form-builder' ) }}
+							</template>
+						</cx-vui-button>
+						<cx-vui-button
+							button-style="link-error"
+							size="link"
+							tagName="a"
+							:disabled="!selectedExtra.length"
+							@click="clearAllExtra"
+						>
+							<template #label>
+								{{ __( 'Clear', 'jet-form-builder' ) }}
+							</template>
+						</cx-vui-button>
+					</div>
+					<h3>{{ __( 'Filter records', 'jet-form-builder' ) }}</h3>
+					<hr class="jfb"/>
+					<cx-vui-select
+						:label="__( 'Status', 'jet-form-builder' )"
+						:wrapper-css="[ '1-x-2' ]"
+						:options-list="statusFilter.options"
+						size="fullwidth"
+						name="status"
+						:value="status"
+						@input="setStatus"
 					/>
-				</cx-vui-f-select>
-				<div class="jfb-inline-control-actions">
-					<cx-vui-button
-						button-style="link-accent"
-						size="link"
-						tagName="a"
-						:disabled="currentFieldsValues.length === selectedFields.length"
-						@click="selectAllFields"
-					>
-						<template #label>
-							{{ __( 'Choose all', 'jet-form-builder' ) }}
-						</template>
-					</cx-vui-button>
-					<cx-vui-button
-						button-style="link-error"
-						size="link"
-						tagName="a"
-						:disabled="!selectedFields.length"
-						@click="clearAllFields"
-					>
-						<template #label>
-							{{ __( 'Clear', 'jet-form-builder' ) }}
-						</template>
-					</cx-vui-button>
-				</div>
-				<hr class="jfb"/>
-				<cx-vui-f-select
-					:label="__( 'Additional information', 'jet-form-builder' )"
-					:wrapper-css="[ '1-x-2', 'jfb-padding-b-unset' ]"
-					:options-list="extra"
-					size="fullwidth"
-					:multiple="true"
-					name="additional"
-					:value="selectedExtra"
-					@input="updateSelectedExtra"
-				/>
-				<div class="jfb-inline-control-actions">
-					<cx-vui-button
-						button-style="link-accent"
-						size="link"
-						tagName="a"
-						:disabled="extraValues.length === selectedExtra.length"
-						@click="selectAllExtra"
-					>
-						<template #label>
-							{{ __( 'Choose all', 'jet-form-builder' ) }}
-						</template>
-					</cx-vui-button>
-					<cx-vui-button
-						button-style="link-error"
-						size="link"
-						tagName="a"
-						:disabled="!selectedExtra.length"
-						@click="clearAllExtra"
-					>
-						<template #label>
-							{{ __( 'Clear', 'jet-form-builder' ) }}
-						</template>
-					</cx-vui-button>
-				</div>
-				<h3>{{ __( 'Filter records', 'jet-form-builder' ) }}</h3>
-				<hr class="jfb"/>
-				<cx-vui-select
-					:label="__( 'Status', 'jet-form-builder' )"
-					:wrapper-css="[ '1-x-2' ]"
-					:options-list="statusesList"
-					size="fullwidth"
-					name="status"
-					:value="status"
-					@input="setStatus"
-				/>
-				<hr class="jfb"/>
-				<div class="jfb-dates-wrapper">
-					<ColumnWrapper>
-						<template #label>{{ __( 'Date from', 'jet-form-builder' ) }}</template>
-						<input type="date" class="cx-vui-input size-fullwidth">
-					</ColumnWrapper>
-					<ColumnWrapper>
-						<template #label>{{ __( 'Date to', 'jet-form-builder' ) }}</template>
-						<input type="date" class="cx-vui-input size-fullwidth">
-					</ColumnWrapper>
-				</div>
+					<hr class="jfb"/>
+					<div class="jfb-dates-wrapper">
+						<ColumnWrapper element-id="date_from">
+							<template #label>{{ __( 'Date from', 'jet-form-builder' ) }}</template>
+							<CxVuiDate
+								:value="dateFrom"
+								@input="setDateFrom"
+								max-date="now"
+							/>
+						</ColumnWrapper>
+						<ColumnWrapper element-id="date_to">
+							<template #label>{{ __( 'Date to', 'jet-form-builder' ) }}</template>
+							<CxVuiDate
+								:value="dateTo"
+								@input="setDateTo"
+								max-date="now"
+							/>
+						</ColumnWrapper>
+					</div>
+				</template>
 			</template>
-		</cx-vui-popup>
+			<template #footer>
+				<cx-vui-button
+					:button-style="'accent'"
+					:size="'mini'"
+					:disabled="!canBeExported"
+					@click="handlePopupExport"
+				>
+					<template #label>{{ __( 'Export', 'jet-form-builder' ) }}</template>
+				</cx-vui-button>
+				<cx-vui-button
+					:size="'mini'"
+					@click="showPopup = false"
+				>
+					<template #label>{{ __( 'Cancel', 'jet-form-builder' ) }}</template>
+				</cx-vui-button>
+			</template>
+		</CxVuiPopup>
 	</div>
 </template>
 
@@ -154,9 +195,10 @@ const {
 const {
 	      RowWrapper,
 	      ColumnWrapper,
+	      CxVuiPopup,
+	      CxVuiFSelect,
+	      CxVuiDate,
       } = JetFBComponents;
-
-const defaultLabel = __( 'Export All', 'jet-form-builder' );
 
 export default {
 	name: 'ExportEntriesButton',
@@ -164,11 +206,13 @@ export default {
 		LoadingIcon,
 		RowWrapper,
 		ColumnWrapper,
+		CxVuiPopup,
+		CxVuiFSelect,
+		CxVuiDate,
 	},
 	props: {
 		label: {
 			type: String,
-			default: defaultLabel,
 		},
 	},
 	data: () => (
@@ -192,20 +236,14 @@ export default {
 			'export/selectedExtra',
 			'export/statusesList',
 			'export/status',
+			'export/dateFrom',
+			'export/dateTo',
 		] ),
 		formFilter() {
 			return this.getter( 'getFilter', 'form' );
 		},
-		getLabel() {
-			const checkedLength = this.getter( 'getChecked' )?.length;
-
-			if ( checkedLength ) {
-				return __( 'Export checked', 'jet-form-builder' );
-			}
-
-			return this.getter( 'hasSelectedFilters' )
-			       ? __( 'Export filtered', 'jet-form-builder' )
-			       : this.label;
+		statusFilter() {
+			return this.getter( 'getFilter', 'status' );
 		},
 		currentFields() {
 			jfbEventBus.reactiveCounter;
@@ -259,6 +297,25 @@ export default {
 
 			return this[ 'export/statusesList' ];
 		},
+		dateFrom() {
+			jfbEventBus.reactiveCounter;
+
+			return this[ 'export/dateFrom' ];
+		},
+		dateTo() {
+			jfbEventBus.reactiveCounter;
+
+			return this[ 'export/dateTo' ];
+		},
+		canBeExported() {
+			return (
+				this.selectedForm &&
+				!this.isLoading() && (
+					this.selectedFields?.length ||
+					this.selectedExtra?.length
+				)
+			);
+		},
 	},
 	methods: {
 		...mapMutations( 'export', [
@@ -266,6 +323,8 @@ export default {
 			'updateSelectedFields',
 			'updateSelectedExtra',
 			'setStatus',
+			'setDateFrom',
+			'setDateTo',
 		] ),
 		...mapActions( 'export', [
 			'resolveFields',
@@ -337,20 +396,7 @@ hr.jfb {
 .cx-vui-popup.export-popup {
 	.cx-vui-popup {
 		&__body {
-			height: 80vh;
-			overflow-y: auto;
-			padding-bottom: 0;
-		}
-
-		&__content {
-			padding-bottom: 40px;
-		}
-
-		&__footer {
-			position: sticky;
-			bottom: 0;
-			background-color: white;
-			padding-bottom: 20px;
+			width: 65vw;
 		}
 	}
 }

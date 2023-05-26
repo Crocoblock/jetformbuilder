@@ -127,18 +127,17 @@ class Record_View extends View_Base {
 		}
 
 		$conditions = new Query_Conditions_Builder();
-		$conditions->set_view( $this );
 		$conditions->set_relation_or();
 		$conditions->set_condition(
 			array(
 				'type'   => Query_Conditions_Builder::TYPE_EQUAL,
-				'values' => array( 'status', 'success' ),
+				'values' => array( $this->column( 'status' ), 'success' ),
 			)
 		);
 		$conditions->set_condition(
 			array(
 				'type'   => Query_Conditions_Builder::TYPE_LIKE_END,
-				'values' => array( 'status', 'dsuccess' ),
+				'values' => array( $this->column( 'status' ), 'dsuccess' ),
 			)
 		);
 

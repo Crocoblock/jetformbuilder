@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Db_Queries;
 
 use Jet_Form_Builder\Db_Queries\Traits\With_View;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use JFB_Components\Db\Db_Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -114,11 +115,14 @@ class Query_Conditions_Builder {
 		return $this;
 	}
 
-	/**
-	 * @throws Query_Builder_Exception
-	 */
 	public function after_set_view() {
-		$this->set_conditions( $this->view()->conditions() );
+		try {
+			$view = $this->view();
+		} catch ( Query_Builder_Exception $exception ) {
+			return;
+		}
+
+		$this->set_conditions( $view->conditions() );
 	}
 
 	/**
@@ -132,11 +136,6 @@ class Query_Conditions_Builder {
 		return 'WHERE ' . $this->prepare_conditions();
 	}
 
-	/**
-	 * @param $conditions
-	 *
-	 * @return array
-	 */
 	public function build_conditions_raw( array $conditions ): array {
 		$prepared = array();
 
@@ -224,35 +223,46 @@ class Query_Conditions_Builder {
 	 * @param $second
 	 *
 	 * @return string
-	 * @throws Query_Builder_Exception
 	 */
 	public function build_equal_column( $column_name, $second ): string {
 		global $wpdb;
-		$format = is_numeric( $second ) ? '%d' : '%s';
+		$format      = is_numeric( $second ) ? '%d' : '%s';
+		$column_name = Db_Tools::sanitize_column( $column_name );
+
+		try {
+			$column_name = $this->view()->column( $column_name );
+		} catch ( Query_Builder_Exception $exception ) {
+			// silence
+		}
 
 		return $wpdb->prepare(
 		// phpcs:ignore WordPress.DB
-			"{$this->view()->column( $column_name )} = {$format}",
+			"{$column_name} = {$format}",
 			$second
 		);
 	}
 
 	/**
-	 * @since 3.1.0
-	 *
 	 * @param $column_name
 	 * @param $second
 	 *
 	 * @return string
-	 * @throws Query_Builder_Exception
+	 * @since 3.1.0
 	 */
 	public function build_not_equal_column( $column_name, $second ): string {
 		global $wpdb;
-		$format = is_numeric( $second ) ? '%d' : '%s';
+		$format      = is_numeric( $second ) ? '%d' : '%s';
+		$column_name = Db_Tools::sanitize_column( $column_name );
+
+		try {
+			$column_name = $this->view()->column( $column_name );
+		} catch ( Query_Builder_Exception $exception ) {
+			// silence
+		}
 
 		return $wpdb->prepare(
 		// phpcs:ignore WordPress.DB
-			"{$this->view()->column( $column_name )} != {$format}",
+			"{$column_name} != {$format}",
 			$second
 		);
 	}
@@ -262,10 +272,19 @@ class Query_Conditions_Builder {
 	 * @param $second
 	 *
 	 * @return string
-	 * @throws Query_Builder_Exception
 	 */
 	public function build_equal_two_columns( $column_name, $second ): string {
-		return "{$this->view()->column( $column_name )} = {$this->view()->column( $second )}";
+		$column_name = Db_Tools::sanitize_column( $column_name );
+		$second      = Db_Tools::sanitize_column( $second );
+
+		try {
+			$column_name = $this->view()->column( $column_name );
+			$second      = $this->view()->column( $second );
+		} catch ( Query_Builder_Exception $exception ) {
+			// silence
+		}
+
+		return "{$column_name} = {$second}";
 	}
 
 	/**
@@ -273,12 +292,18 @@ class Query_Conditions_Builder {
 	 * @param $second
 	 *
 	 * @return string
-	 * @throws Query_Builder_Exception
 	 */
 	public function build_like( $column_name, $second ): string {
-		$second = esc_sql( $second );
+		$second      = esc_sql( $second );
+		$column_name = Db_Tools::sanitize_column( $column_name );
 
-		return "{$this->view()->column( $column_name )} LIKE '%{$second}%'";
+		try {
+			$column_name = $this->view()->column( $column_name );
+		} catch ( Query_Builder_Exception $exception ) {
+			// silence
+		}
+
+		return "{$column_name} LIKE '%{$second}%'";
 	}
 
 	/**
@@ -286,12 +311,18 @@ class Query_Conditions_Builder {
 	 * @param $second
 	 *
 	 * @return string
-	 * @throws Query_Builder_Exception
 	 */
 	public function build_not_like( $column_name, $second ): string {
-		$second = esc_sql( $second );
+		$second      = esc_sql( $second );
+		$column_name = Db_Tools::sanitize_column( $column_name );
 
-		return "{$this->view()->column( $column_name )} NOT LIKE '%{$second}%'";
+		try {
+			$column_name = $this->view()->column( $column_name );
+		} catch ( Query_Builder_Exception $exception ) {
+			// silence
+		}
+
+		return "{$column_name} NOT LIKE '%{$second}%'";
 	}
 
 	/**
@@ -299,12 +330,18 @@ class Query_Conditions_Builder {
 	 * @param $second
 	 *
 	 * @return string
-	 * @throws Query_Builder_Exception
 	 */
 	public function build_like_end( $column_name, $second ): string {
-		$second = esc_sql( $second );
+		$second      = esc_sql( $second );
+		$column_name = Db_Tools::sanitize_column( $column_name );
 
-		return "{$this->view()->column( $column_name )} LIKE '{$second}%'";
+		try {
+			$column_name = $this->view()->column( $column_name );
+		} catch ( Query_Builder_Exception $exception ) {
+			// silence
+		}
+
+		return "{$column_name} LIKE '{$second}%'";
 	}
 
 	/**
@@ -315,9 +352,16 @@ class Query_Conditions_Builder {
 	 * @throws Query_Builder_Exception
 	 */
 	public function build_not_like_end( $column_name, $second ): string {
-		$second = esc_sql( $second );
+		$second      = esc_sql( $second );
+		$column_name = Db_Tools::sanitize_column( $column_name );
 
-		return "{$this->view()->column( $column_name )} NOT LIKE '{$second}%'";
+		try {
+			$column_name = $this->view()->column( $column_name );
+		} catch ( Query_Builder_Exception $exception ) {
+			// silence
+		}
+
+		return "{$column_name} NOT LIKE '{$second}%'";
 	}
 
 	/**
@@ -330,11 +374,18 @@ class Query_Conditions_Builder {
 	public function build_more_static( $column_name, $second ): string {
 		global $wpdb;
 
-		$format = is_numeric( $second ) ? '%d' : '%s';
+		$format      = is_numeric( $second ) ? '%d' : '%s';
+		$column_name = Db_Tools::sanitize_column( $column_name );
+
+		try {
+			$column_name = $this->view()->column( $column_name );
+		} catch ( Query_Builder_Exception $exception ) {
+			// silence
+		}
 
 		// phpcs:disable WordPress.DB
 		return $wpdb->prepare(
-			$this->view()->column( $column_name ) . ' > ' . $format,
+			$column_name . ' > ' . $format,
 			$second
 		);
 		// phpcs:enable WordPress.DB
@@ -350,11 +401,18 @@ class Query_Conditions_Builder {
 	public function build_less_static( $column_name, $second ): string {
 		global $wpdb;
 
-		$format = is_numeric( $second ) ? '%d' : '%s';
+		$format      = is_numeric( $second ) ? '%d' : '%s';
+		$column_name = Db_Tools::sanitize_column( $column_name );
+
+		try {
+			$column_name = $this->view()->column( $column_name );
+		} catch ( Query_Builder_Exception $exception ) {
+			// silence
+		}
 
 		// phpcs:disable WordPress.DB
 		return $wpdb->prepare(
-			$this->view()->column( $column_name ) . ' < ' . $format,
+			$column_name . ' < ' . $format,
 			$second
 		);
 		// phpcs:enable WordPress.DB
@@ -365,12 +423,18 @@ class Query_Conditions_Builder {
 	 * @param $second
 	 *
 	 * @return string
-	 * @throws Query_Builder_Exception
 	 */
 	public function build_in( $column_name, $second ): string {
-		$right_part = implode( ', ', $second );
+		$right_part  = implode( ', ', $second );
+		$column_name = Db_Tools::sanitize_column( $column_name );
 
-		return "{$this->view()->column( $column_name )} IN ({$right_part})";
+		try {
+			$column_name = $this->view()->column( $column_name );
+		} catch ( Query_Builder_Exception $exception ) {
+			// silence
+		}
+
+		return "{$column_name} IN ({$right_part})";
 	}
 
 	/**
@@ -383,18 +447,16 @@ class Query_Conditions_Builder {
 	}
 
 	/**
-	 * @since 3.1.0
-	 *
 	 * @return $this
+	 * @since 3.1.0
 	 */
 	public function set_relation_and(): Query_Conditions_Builder {
 		return $this->set_relation_type( 'AND' );
 	}
 
 	/**
-	 * @since 3.1.0
-	 *
 	 * @return $this
+	 * @since 3.1.0
 	 */
 	public function set_relation_or(): Query_Conditions_Builder {
 		return $this->set_relation_type( 'OR' );

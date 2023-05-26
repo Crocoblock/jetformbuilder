@@ -34,13 +34,14 @@
 					<RowWrapper
 						element-id="fields"
 						:class-names="{ 'size--1-x-2': true }"
+						:state="isEmptyProperties ? 'invalid' : ''"
+						:state-help="__( 'Please fill this field', 'jet-form-builder' )"
 					>
 						<template #label>{{ __( 'Export fields', 'jet-form-builder' ) }}</template>
 						<template #default>
 							<CxVuiFSelect
 								:wrapper-css="[ 'jfb-loading-select', 'jfb-padding-b-unset' ]"
 								:options-list="currentFields"
-								size="fullwidth"
 								:multiple="true"
 								:value="selectedFields"
 								:placeholder="placeholder"
@@ -82,13 +83,14 @@
 					<RowWrapper
 						element-id="extra"
 						:class-names="{ 'size--1-x-2': true }"
+						:state="isEmptyProperties ? 'invalid' : ''"
+						:state-help="__( 'Please fill this field', 'jet-form-builder' )"
 					>
 						<template #label>{{ __( 'Additional information', 'jet-form-builder' ) }}</template>
 						<template #default>
 							<CxVuiFSelect
 								:wrapper-css="[ 'jfb-padding-b-unset' ]"
 								:options-list="extra"
-								size="fullwidth"
 								:multiple="true"
 								:value="selectedExtra"
 								@change="updateSelectedExtra"
@@ -111,7 +113,7 @@
 							button-style="link-error"
 							size="link"
 							tagName="a"
-							:disabled="!selectedExtra.length"
+							:disabled="!removableSelectedExtra.length"
 							@click="clearAllExtra"
 						>
 							<template #label>
@@ -198,6 +200,7 @@ const {
 	      CxVuiPopup,
 	      CxVuiFSelect,
 	      CxVuiDate,
+	      Tooltip,
       } = JetFBComponents;
 
 export default {
@@ -209,6 +212,7 @@ export default {
 		CxVuiPopup,
 		CxVuiFSelect,
 		CxVuiDate,
+		Tooltip,
 	},
 	props: {
 		label: {
@@ -238,6 +242,7 @@ export default {
 			'export/status',
 			'export/dateFrom',
 			'export/dateTo',
+			'export/removableSelectedExtra',
 		] ),
 		formFilter() {
 			return this.getter( 'getFilter', 'form' );
@@ -307,13 +312,19 @@ export default {
 
 			return this[ 'export/dateTo' ];
 		},
+		removableSelectedExtra() {
+			jfbEventBus.reactiveCounter;
+
+			return this[ 'export/removableSelectedExtra' ];
+		},
+		isEmptyProperties() {
+			return !this.selectedFields?.length && !this.selectedExtra?.length;
+		},
 		canBeExported() {
 			return (
 				this.selectedForm &&
-				!this.isLoading() && (
-					this.selectedFields?.length ||
-					this.selectedExtra?.length
-				)
+				!this.isLoading() &&
+				!this.isEmptyProperties
 			);
 		},
 	},

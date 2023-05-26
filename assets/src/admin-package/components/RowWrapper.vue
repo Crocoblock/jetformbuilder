@@ -15,7 +15,18 @@
 				v-if="$slots.label"
 				:for="elementIdData"
 			>
-				<slot name="label"></slot>
+				<template v-if="state">
+					<Tooltip
+						:type="isInvalid ? 'warning' : ''"
+						:help="stateHelp"
+						:position="'top-right'"
+					>
+						<slot name="label"></slot>
+					</Tooltip>
+				</template>
+				<template v-else>
+					<slot name="label"></slot>
+				</template>
 			</label>
 			<div
 				class="cx-vui-component__desc"
@@ -32,10 +43,22 @@
 
 <script>
 
+import Tooltip from './Tooltip';
+
 export default {
 	name: 'RowWrapper',
+	components: { Tooltip },
 	props: {
 		elementId: {
+			type: String,
+		},
+		state: {
+			type: String,
+			validator( value ) {
+				return [ 'invalid', '' ].includes( value );
+			},
+		},
+		stateHelp: {
 			type: String,
 		},
 		/**
@@ -58,19 +81,28 @@ export default {
 		className() {
 			return {
 				'cx-vui-component': true,
+				[ 'cx-vui-component--is-' + this.state ]: this.state,
 				...this.classNames,
 			};
+		},
+		isInvalid() {
+			return 'invalid' === this.state;
 		},
 	},
 	provide() {
 		return {
 			elementId: this.elementIdData,
+			isInvalid: () => this.isInvalid,
 		};
 	},
 };
 </script>
 
 <style lang="scss" scoped>
+.cx-vui-component {
+	gap: 1em;
+}
+
 .size--1-x-2 {
 	.cx-vui-component__meta {
 		flex: 1;

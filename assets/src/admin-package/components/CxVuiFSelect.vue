@@ -9,11 +9,16 @@
 				class="cx-vui-f-select__selected-option"
 				@click="handleResultClick( option )"
 			>
-				<span class="cx-vui-f-select__selected-option-icon">
+				<template v-if="$slots[ 'option-' + option ]">
+					<slot :name="'option-' + option"></slot>
+				</template>
+				<template v-else>
+				<span v-if="!isNonRemovable( option )" class="cx-vui-f-select__selected-option-icon">
 					<svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path
 						d="M10 1.00671L6.00671 5L10 8.99329L8.99329 10L5 6.00671L1.00671 10L0 8.99329L3.99329 5L0 1.00671L1.00671 0L5 3.99329L8.99329 0L10 1.00671Z"/></svg>
-				</span>
-				{{ getOptionLabel( option ) }}
+					</span>
+					{{ getOptionLabel( option ) }}
+				</template>
 			</div>
 		</div>
 		<div
@@ -38,8 +43,9 @@
 				@focus="handleFocus"
 				:class="{
 					'cx-vui-f-select__input': true,
-					'cx-vui-input--in-focus': this.inFocus,
+					'cx-vui-input--in-focus': inFocus,
 					'cx-vui-input': true,
+					'cx-vui-input--invalid': isInvalid(),
 					'size-fullwidth': true,
 					'has-error': error,
 				}"
@@ -118,9 +124,6 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		elementId: {
-			type: String,
-		},
 		autocomplete: {
 			validator( value ) {
 				return [ 'on', 'off' ].includes( value );
@@ -156,16 +159,24 @@ export default {
 			type: String,
 			default: 'Loading...',
 		},
-		// Wrapper related props (should be passed into wrapper component)
 		preventWrap: {
 			type: Boolean,
 			default: false,
 		},
+		// Wrapper related props (should be passed into wrapper component)
 		wrapperCss: {
 			type: Array,
 			default: function () {
 				return [];
 			},
+		},
+		// basically used from injected
+		elementId: {
+			type: String,
+		},
+		// basically used from injected
+		isInvalid: {
+			type: Function,
 		},
 	},
 	data() {
@@ -263,6 +274,10 @@ export default {
 
 		},
 		handleResultClick( value ) {
+			if ( this.isNonRemovable( value ) ) {
+				return;
+			}
+
 			if ( this.value.includes( value ) ) {
 				this.removeValue( value );
 			}
@@ -294,8 +309,7 @@ export default {
 		},
 		getOptionLabel( option ) {
 			const optionValue = 'string' === typeof option ? option : option.value;
-
-			const find = this.optionsList.find( ( { value } ) => value === optionValue );
+			const find        = this.optionsList.find( ( { value } ) => value === optionValue );
 
 			return find?.label ?? '';
 		},
@@ -311,11 +325,21 @@ export default {
 
 			return this.value.includes( optionValue );
 		},
+		isNonRemovable( option ) {
+			const optionValue = 'string' === typeof option ? option : option.value;
+			const find        = this.optionsList.find( ( { value } ) => value === optionValue );
+
+			return find?.nonRemovable ?? false;
+		},
 	},
-	inject: [ 'elementId' ],
+	inject: [ 'elementId', 'isInvalid' ],
 };
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.cx-vui-input {
+	&--invalid {
+		border: 1px solid #d63638;
+	}
+}
 </style>

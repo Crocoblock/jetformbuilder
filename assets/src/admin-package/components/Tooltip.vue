@@ -1,64 +1,71 @@
 <template>
 	<div :class="wrapperClasses">
 		<span :class="dashIconClass"></span>
-		<span class="jfb-icon-status--text" v-if="value.text">{{ value.text }}</span>
+		<span class="jfb-icon-status--text" v-if="$slots.default">
+			<slot></slot>
+		</span>
 		<div
 			:class="tooltipClasses"
-			v-if="value.help"
-		>{{ value.help }}
+			v-if="help"
+		>{{ help }}
 		</div>
 	</div>
 </template>
 
 <script>
+const schema = {
+	success: 'dashicons-yes-alt',
+	warning: 'dashicons-warning',
+	info: 'dashicons-info',
+	pending: 'dashicons-hourglass',
+	error: 'dashicons-dismiss',
+};
+
 export default {
-	name: 'icon_status--item',
-	props: [ 'value', 'full-entry', 'entry-id' ],
-	computed: {
-		helpPosition() {
-			return this.value?.help_position ?? 'top-right';
+	name: 'Tooltip',
+	props: {
+		type: {
+			type: String,
+			validator( value ) {
+				return Object.keys( schema ).includes( value );
+			},
+			default: 'info',
 		},
+		help: {
+			type: String,
+		},
+		position: {
+			type: String,
+			validator( value ) {
+				return [ 'top-right', 'top-left' ].includes( value );
+			},
+			default: 'top-left',
+		},
+	},
+	computed: {
 		wrapperClasses() {
 			return {
-				'jfb-icon-status': true,
-				'jfb-icon-status-has-text': !! this.value.text,
-				'jfb-icon-status-has-help': !! this.value.help,
+				'jfb-tooltip': true,
+				'jfb-tooltip-has-text': !!this.$slots.default,
+				'jfb-tooltip-has-help': !!this.help,
+				[ 'jfb-tooltip-position--' + this.position ]: true,
 			};
 		},
 		dashIconClass() {
-			const classes = [ 'dashicons' ];
-			switch ( this.value.type ) {
-				case 'success':
-					classes.push( 'dashicons-yes-alt' );
-					break;
-				case 'warning':
-					classes.push( 'dashicons-warning' );
-					break;
-				case 'info':
-					classes.push( 'dashicons-info' );
-					break;
-				case 'pending':
-					classes.push( 'dashicons-hourglass' );
-					break;
-				default:
-					classes.push( 'dashicons-dismiss' );
-					break;
-			}
-
-			return classes;
+			return [ 'dashicons', schema[ this.type ] ?? '' ];
 		},
 		tooltipClasses() {
 			return {
 				'cx-vui-tooltip': true,
-				[ 'tooltip-position-' + this.helpPosition ]: true,
+				[ 'tooltip-position-' + this.position ]: true,
 			};
 		},
-	}
+	},
 };
 </script>
 
-<style lang="scss" scoped>
-.jfb-icon-status {
+<style scoped lang="scss">
+.jfb-tooltip {
 	position: relative;
 	display: inline-block;
 
@@ -137,11 +144,17 @@ export default {
 			&.tooltip-position-top-right {
 				bottom: 100%;
 			}
+
 			&.tooltip-position-top-left {
 				bottom: 100%;
 			}
 		}
 	}
-}
 
+	&-position {
+		&--top-right {
+			flex-direction: row-reverse;
+		}
+	}
+}
 </style>

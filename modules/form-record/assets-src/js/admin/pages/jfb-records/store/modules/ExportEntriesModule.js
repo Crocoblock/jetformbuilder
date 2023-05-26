@@ -33,6 +33,11 @@ const getters = {
 	statusesList: state => state.statusesList,
 	dateFrom: state => state.date_from,
 	dateTo: state => state.date_to,
+	removableSelectedExtra: state => state.extra.filter(
+		( { value, nonRemovable } ) => (
+			state.selectedExtra.includes( value ) && !nonRemovable
+		),
+	),
 };
 
 const extra = [
@@ -203,8 +208,15 @@ const ExportEntriesModule = {
 		selectAllExtra( { commit, getters } ) {
 			commit( 'updateSelectedExtra', getters.extraValues );
 		},
-		clearAllExtra( { commit } ) {
-			commit( 'updateSelectedExtra', [] );
+		clearAllExtra( { commit, getters } ) {
+			commit(
+				'updateSelectedExtra',
+				getters.extra.filter(
+					( { nonRemovable } ) => nonRemovable,
+				).map(
+					( { value } ) => value,
+				),
+			);
 		},
 	},
 };

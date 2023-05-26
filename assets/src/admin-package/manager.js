@@ -25,6 +25,7 @@ import CxVuiSelect from './components/CxVuiSelect';
 import CxVuiPopup from './components/CxVuiPopup';
 import CxVuiFSelect from './components/CxVuiFSelect';
 import CxVuiDate from './components/CxVuiDate';
+import Tooltip from './components/Tooltip';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -54,6 +55,7 @@ window.JetFBComponents = {
 	CxVuiPopup,
 	CxVuiFSelect,
 	CxVuiDate,
+	Tooltip,
 };
 
 window.JetFBMixins = {

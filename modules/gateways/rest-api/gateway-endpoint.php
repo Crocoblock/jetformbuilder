@@ -3,8 +3,8 @@
 
 namespace JFB_Modules\Gateways\Rest_Api;
 
-use Jet_Form_Builder\Rest_Api\Dynamic_Rest_Url_Trait;
-use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
+use JFB_Components\Rest_Api\Dynamic_Rest_Url_Trait;
+use JFB_Components\Rest_Api\Rest_Api_Endpoint_Base;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

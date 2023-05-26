@@ -53,6 +53,7 @@ class Autoloader {
 		'Jet_Form_Builder\\Gateways\\Gateway_Manager'     => 'JFB_Modules\\Gateways\\Gateway_Manager',
 		'Jet_Form_Builder\\Gateways\\Pages\\Single_Payment_Page' => 'JFB_Modules\\Gateways\\Pages\\Single_Payment_Page',
 		'Jet_Form_Builder\\Gateways\\Paypal\\Scenarios_Logic\\With_Resource_It' => 'JFB_Modules\\Gateways\\Paypal\\Scenarios_Logic\\With_Resource_It',
+		'Jet_Form_Builder\\Gateways\\Rest_Api\\Gateway_Endpoint' => 'JFB_Modules\\Gateways\\Rest_Api\\Gateway_Endpoint',
 	);
 
 	/**

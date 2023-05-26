@@ -54,6 +54,7 @@ class Autoloader {
 		'Jet_Form_Builder\\Gateways\\Pages\\Single_Payment_Page' => 'JFB_Modules\\Gateways\\Pages\\Single_Payment_Page',
 		'Jet_Form_Builder\\Gateways\\Paypal\\Scenarios_Logic\\With_Resource_It' => 'JFB_Modules\\Gateways\\Paypal\\Scenarios_Logic\\With_Resource_It',
 		'Jet_Form_Builder\\Gateways\\Rest_Api\\Gateway_Endpoint' => 'JFB_Modules\\Gateways\\Rest_Api\\Gateway_Endpoint',
+		'Jet_Form_Builder\\Gateways\\Paypal\\Rest_Endpoints\\Fetch_Pay_Now_Editor' => 'JFB_Modules\\Gateways\\Paypal\\Rest_Endpoints\\Fetch_Pay_Now_Editor',
 	);
 
 	/**

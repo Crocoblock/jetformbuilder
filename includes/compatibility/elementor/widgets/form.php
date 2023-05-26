@@ -1063,9 +1063,9 @@ class Form extends Widget_Base implements Widget_Base_It {
 				'form_id',
 				array(
 					'label'       => __( 'Choose Form', 'jet-form-builder' ),
-					'type'        => Controls_Manager::SELECT2,
+					'type'        => Controls_Manager::SELECT,
 					'default'     => '',
-					'label_block' => true,
+					'label_block' => false,
 					'options'     => Tools::get_forms_list_for_js( true ),
 				)
 			);

@@ -15,6 +15,7 @@
 			:class-names="{
 				'export-popup': true,
 				'sticky-footer': true,
+				'sticky-header': true,
 			}"
 			@close="showPopup = false"
 		>

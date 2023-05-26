@@ -45,7 +45,7 @@
 					'cx-vui-f-select__input': true,
 					'cx-vui-input--in-focus': inFocus,
 					'cx-vui-input': true,
-					'cx-vui-input--invalid': isInvalid(),
+					['cx-vui-input--' + stateType() ]: stateType(),
 					'size-fullwidth': true,
 					'has-error': error,
 				}"
@@ -175,7 +175,7 @@ export default {
 			type: String,
 		},
 		// basically used from injected
-		isInvalid: {
+		stateType: {
 			type: Function,
 		},
 	},
@@ -332,13 +332,13 @@ export default {
 			return find?.nonRemovable ?? false;
 		},
 	},
-	inject: [ 'elementId', 'isInvalid' ],
+	inject: [ 'elementId', 'stateType' ],
 };
 </script>
 
 <style scoped lang="scss">
 .cx-vui-input {
-	&--invalid {
+	&--warning-danger {
 		border: 1px solid #d63638;
 	}
 }

@@ -5,9 +5,10 @@
 			<slot></slot>
 		</span>
 		<div
+			v-if="$slots.help"
 			:class="tooltipClasses"
-			v-if="help"
-		>{{ help }}
+		>
+			<slot name="help"></slot>
 		</div>
 	</div>
 </template>
@@ -16,23 +17,22 @@
 const schema = {
 	success: 'dashicons-yes-alt',
 	warning: 'dashicons-warning',
+	'warning-danger': [ 'dashicons-warning', 'danger' ],
 	info: 'dashicons-info',
 	pending: 'dashicons-hourglass',
 	error: 'dashicons-dismiss',
+	loading: [ 'dashicons-update', 'loading' ],
 };
 
 export default {
 	name: 'Tooltip',
 	props: {
-		type: {
+		icon: {
 			type: String,
 			validator( value ) {
 				return Object.keys( schema ).includes( value );
 			},
 			default: 'info',
-		},
-		help: {
-			type: String,
 		},
 		position: {
 			type: String,
@@ -47,12 +47,18 @@ export default {
 			return {
 				'jfb-tooltip': true,
 				'jfb-tooltip-has-text': !!this.$slots.default,
-				'jfb-tooltip-has-help': !!this.help,
+				'jfb-tooltip-has-help': !!this.$slots.help,
 				[ 'jfb-tooltip-position--' + this.position ]: true,
 			};
 		},
 		dashIconClass() {
-			return [ 'dashicons', schema[ this.type ] ?? '' ];
+			let classes = schema[ this.icon ] ?? '';
+
+			if ( !Array.isArray( classes ) ) {
+				classes = [ classes ];
+			}
+
+			return [ 'dashicons', ...classes ];
 		},
 		tooltipClasses() {
 			return {
@@ -87,11 +93,15 @@ export default {
 
 	.dashicons {
 		&-dismiss {
-			color: #ff4500;
+			color: #d63638;
 		}
 
 		&-warning {
 			color: #ffa500;
+		}
+
+		&-warning.danger {
+			color: #d63638;
 		}
 
 		&-yes-alt {
@@ -104,6 +114,10 @@ export default {
 
 		&-hourglass {
 			color: #b5b5b5;
+		}
+
+		&-update.loading {
+			animation: jfb-tooltip-loading-icon 1.5s infinite linear;
 		}
 	}
 
@@ -155,6 +169,16 @@ export default {
 		&--top-right {
 			flex-direction: row-reverse;
 		}
+	}
+}
+
+@keyframes jfb-tooltip-loading-icon {
+	0% {
+		transform: rotate(0deg)
+	}
+
+	to {
+		transform: rotate(359deg)
 	}
 }
 </style>

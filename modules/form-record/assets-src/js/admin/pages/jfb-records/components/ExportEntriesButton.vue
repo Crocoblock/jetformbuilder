@@ -34,8 +34,7 @@
 					<RowWrapper
 						element-id="fields"
 						:class-names="{ 'size--1-x-2': true }"
-						:state="isEmptyProperties ? 'invalid' : ''"
-						:state-help="__( 'Please fill this field', 'jet-form-builder' )"
+						:state="fieldState"
 					>
 						<template #label>{{ __( 'Export fields', 'jet-form-builder' ) }}</template>
 						<template #default>
@@ -47,12 +46,7 @@
 								:placeholder="placeholder"
 								:disabled="isLoading( 'fields' ) || currentFields.length === 1"
 								@change="updateSelectedFields"
-							>
-								<LoadingIcon
-									v-if="isLoading( 'fields' )"
-									style="margin-bottom: 0.4em;"
-								/>
-							</CxVuiFSelect>
+							/>
 						</template>
 					</RowWrapper>
 					<div class="jfb-inline-control-actions">
@@ -83,8 +77,7 @@
 					<RowWrapper
 						element-id="extra"
 						:class-names="{ 'size--1-x-2': true }"
-						:state="isEmptyProperties ? 'invalid' : ''"
-						:state-help="__( 'Please fill this field', 'jet-form-builder' )"
+						:state="extraState"
 					>
 						<template #label>{{ __( 'Additional information', 'jet-form-builder' ) }}</template>
 						<template #default>
@@ -175,8 +168,6 @@
 
 <script>
 
-import LoadingIcon from './LoadingIcon';
-
 const {
 	      __,
       } = wp.i18n;
@@ -206,7 +197,6 @@ const {
 export default {
 	name: 'ExportEntriesButton',
 	components: {
-		LoadingIcon,
 		RowWrapper,
 		ColumnWrapper,
 		CxVuiPopup,
@@ -326,6 +316,32 @@ export default {
 				!this.isLoading() &&
 				!this.isEmptyProperties
 			);
+		},
+		fieldState() {
+			if ( this.isLoading( 'fields' ) ) {
+				return {
+					type: 'loading',
+					message: __( 'Loading...', 'jet-form-builder' ),
+				};
+			}
+			if ( this.isEmptyProperties ) {
+				return {
+					type: 'warning-danger',
+					message: __( 'Please fill this field', 'jet-form-builder' ),
+				};
+			}
+
+			return '';
+		},
+		extraState() {
+			if ( !this.isEmptyProperties ) {
+				return '';
+			}
+
+			return {
+				type: 'warning-danger',
+				message: __( 'Please fill this field', 'jet-form-builder' ),
+			};
 		},
 	},
 	methods: {

@@ -15,13 +15,15 @@
 				v-if="$slots.label"
 				:for="elementIdData"
 			>
-				<template v-if="state">
+				<template v-if="stateType">
 					<Tooltip
-						:type="isInvalid ? 'warning' : ''"
-						:help="stateHelp"
+						:icon="stateType"
 						:position="'top-right'"
 					>
-						<slot name="label"></slot>
+						<template #help>{{ stateHelp }}</template>
+						<template #default>
+							<slot name="label"></slot>
+						</template>
 					</Tooltip>
 				</template>
 				<template v-else>
@@ -45,6 +47,8 @@
 
 import Tooltip from './Tooltip';
 
+const isCorrectType = value => [ 'warning-danger', 'warning', 'loading', '' ].includes( value );
+
 export default {
 	name: 'RowWrapper',
 	components: { Tooltip },
@@ -53,13 +57,14 @@ export default {
 			type: String,
 		},
 		state: {
-			type: String,
+			type: [ String, Object ],
 			validator( value ) {
-				return [ 'invalid', '' ].includes( value );
+				if ( 'string' === typeof value ) {
+					return isCorrectType( value );
+				}
+				return isCorrectType( value.type );
 			},
-		},
-		stateHelp: {
-			type: String,
+			default: '',
 		},
 		/**
 		 * Possible values:
@@ -81,27 +86,27 @@ export default {
 		className() {
 			return {
 				'cx-vui-component': true,
-				[ 'cx-vui-component--is-' + this.state ]: this.state,
+				[ 'cx-vui-component--is-' + this.stateType ]: this.stateType,
 				...this.classNames,
 			};
 		},
-		isInvalid() {
-			return 'invalid' === this.state;
+		stateType() {
+			return 'string' === typeof this.state ? this.state : this.state.type;
+		},
+		stateHelp() {
+			return 'string' === typeof this.state ? '' : this.state.message;
 		},
 	},
 	provide() {
 		return {
 			elementId: this.elementIdData,
-			isInvalid: () => this.isInvalid,
+			stateType: () => this.stateType,
 		};
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-.cx-vui-component {
-	gap: 1em;
-}
 
 .size--1-x-2 {
 	.cx-vui-component__meta {

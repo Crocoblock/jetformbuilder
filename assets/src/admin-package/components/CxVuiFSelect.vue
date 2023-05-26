@@ -56,7 +56,7 @@
 						:class="{
 							'cx-vui-f-select__result': true,
 							'in-focus': optionIndex === optionInFocus,
-							'is-selected': getOptionLabel( option )
+							'is-selected': isSelectedOption( option )
 						}"
 						@click="handleResultClick( option.value )"
 					>{{ getOptionLabel( option ) }}
@@ -266,6 +266,12 @@ export default {
 			if ( this.value.includes( value ) ) {
 				this.removeValue( value );
 			}
+			else if ( this.multiple ) {
+				this.storeValues( [
+					...new Set( this.value ),
+					value,
+				] );
+			}
 			else {
 				this.storeValues( value );
 			}
@@ -299,6 +305,11 @@ export default {
 			}
 
 			return Array.isArray( value ) ? value[ 0 ] : value;
+		},
+		isSelectedOption( option ) {
+			const optionValue = 'string' === typeof option ? option : option.value;
+
+			return this.value.includes( optionValue );
 		},
 	},
 	inject: [ 'elementId' ],

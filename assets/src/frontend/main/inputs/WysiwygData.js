@@ -25,16 +25,14 @@ function WysiwygData() {
 		this.name    = getParsedName( this.rawName );
 
 		const editor = () => window.tinymce.get( this.textArea.id );
+		editor()?.remove?.();
 
-		if ( !editor() ) {
-			//window.tinymce.get( textArea.id ).remove();
-			window.wp.editor.initialize( this.textArea.id, editorConfig );
-		}
+		window.wp.editor.initialize( this.textArea.id, editorConfig );
 
 		this.editor = editor();
 	};
 	this.onRemove     = function () {
-		this.editor.remove();
+		//this.editor.remove();
 	};
 	this.addListeners = function () {
 		const update = () => {

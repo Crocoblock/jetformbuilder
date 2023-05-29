@@ -4,18 +4,25 @@ class JetPlugins {
 
 	hooks;
 	globalNamespace  = 'jet-plugins';
-	blocksNamespace  = 'frontend.element-ready';
 	blocksConditions = {};
 
 	constructor( hooksHandler ) {
 		this.hooks = hooksHandler || createHooks();
 	}
 
-	hookNameFromBlock( block ) {
+	hookNameBlockReady( block ) {
 		const name = this.getBlockName( block );
 
 		return name
-		       ? `${ this.globalNamespace }.${ this.blocksNamespace }.${ name }`
+		       ? `${ this.globalNamespace }.frontend.element-ready.${ name }`
+		       : '';
+	}
+
+	hookNameBlockRemoved( block ) {
+		const name = this.getBlockName( block );
+
+		return name
+		       ? `${ this.globalNamespace }.frontend.element-removed.${ name }`
 		       : '';
 	}
 
@@ -35,17 +42,19 @@ class JetPlugins {
 			this.bulkBlocksInit( blocks );
 		}
 
-		// Init in some scope if needed. By default on body
-		$scope = $scope || jQuery( 'body' );
+		const $blocksList = this.getBlocks( $scope );
 
-		if ( $scope && $scope.length ) {
-			let $blocksList = $scope.find( '[data-is-block*="/"]' );
-			$blocksList && $blocksList.length &&
-			$blocksList.each( ( index, el ) => {
-				this.initBlock( el );
-			} );
-		}
+		$blocksList?.each?.( ( index, el ) => {
+			this.initBlock( el );
+		} );
+	}
 
+	remove( $scope ) {
+		const $blocksList = this.getBlocks( $scope );
+
+		$blocksList?.each?.( ( index, el ) => {
+			this.removeBlock( el );
+		} );
 	}
 
 	/**
@@ -74,7 +83,7 @@ class JetPlugins {
 	initBlock( el, forceInit ) {
 
 		forceInit       = forceInit || false;
-		const blockHook = this.hookNameFromBlock( el );
+		const blockHook = this.hookNameBlockReady( el );
 
 		if ( blockHook && this.hasHandlers( blockHook ) ) {
 
@@ -95,6 +104,13 @@ class JetPlugins {
 		}
 	}
 
+	removeBlock( el ) {
+		const blockHook = this.hookNameBlockRemoved( el );
+
+		this.hooks.doAction( blockHook, jQuery( el ) );
+		el.dataset.jetInited = false;
+	}
+
 	hasHandlers( hookName ) {
 
 		if ( !this.hooks.actions[ hookName ] ) {
@@ -113,7 +129,7 @@ class JetPlugins {
 		const blockName = this.getBlockName( block.block );
 
 		this.hooks.addAction(
-			this.hookNameFromBlock( blockName ),
+			this.hookNameBlockReady( blockName ),
 			`${ this.globalNamespace }/${ block.block }`,
 			block.callback,
 		);
@@ -130,6 +146,19 @@ class JetPlugins {
 			this.registerBlockHandlers( blocks[ i ] );
 		}
 
+	}
+
+	getBlocks( $scope ) {
+		// Init in some scope if needed. By default on body
+		$scope = $scope || jQuery( 'body' );
+
+		if ( !$scope || !$scope.length ) {
+			return;
+		}
+
+		const $blocksList = $scope.find( '[data-is-block*="/"]' );
+
+		return $blocksList?.length ? $blocksList : [];
 	}
 
 }

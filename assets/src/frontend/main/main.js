@@ -40,6 +40,7 @@ import {
 	observeComment,
 	iterateJfbComments,
 } from './html.macro/functions';
+import removeForm from './init/removeForm';
 
 window.JetFormBuilderAbstract = {
 	...(
@@ -88,6 +89,7 @@ JetPlugins.bulkBlocksInit( [
 	{
 		block: 'jet-forms.form-block',
 		callback: initForm,
+		removeCallback: removeForm,
 		condition: () => 'loading' !== document.readyState,
 	},
 ] );

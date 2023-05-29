@@ -134,6 +134,12 @@ class JetPlugins {
 			block.callback,
 		);
 
+		block?.removeCallback && this.hooks.addAction(
+			this.hookNameBlockRemoved( blockName ),
+			`${ this.globalNamespace }/${ block.block }`,
+			block.removeCallback,
+		);
+
 		if ( block.condition && 'function' === typeof block.condition ) {
 			this.blocksConditions[ blockName ] = block.condition;
 		}

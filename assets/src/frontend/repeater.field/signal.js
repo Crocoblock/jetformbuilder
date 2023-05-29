@@ -61,7 +61,7 @@ function SignalRepeater() {
 				'.jet-form-builder-repeater__remove',
 			).addEventListener(
 				'click',
-				() => observable.remove(),
+				() => observable.removeManually(),
 			);
 		}
 
@@ -73,7 +73,7 @@ function SignalRepeater() {
 
 		for ( const prevRow of prevRows ) {
 			if ( !current.includes( prevRow ) ) {
-				prevRow.remove();
+				prevRow.removeManually();
 			}
 		}
 	};

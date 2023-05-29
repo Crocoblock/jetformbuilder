@@ -4,6 +4,7 @@ class JetPlugins {
 
 	hooks;
 	globalNamespace  = 'jet-plugins';
+	blocksNamespace  = 'frontend.element-ready';
 	blocksConditions = {};
 
 	constructor( hooksHandler ) {
@@ -11,26 +12,10 @@ class JetPlugins {
 	}
 
 	hookNameFromBlock( block ) {
-		console.warn(
-			`JetPlugins.hookNameFromBlock is deprecated. Use JetPlugins.hookNameBlockReady instead`
-		);
-
-		return this.hookNameBlockReady( block );
-	}
-
-	hookNameBlockReady( block ) {
 		const name = this.getBlockName( block );
 
 		return name
-		       ? `${ this.globalNamespace }.frontend.element-ready.${ name }`
-		       : '';
-	}
-
-	hookNameBlockRemoved( block ) {
-		const name = this.getBlockName( block );
-
-		return name
-		       ? `${ this.globalNamespace }.frontend.element-removed.${ name }`
+		       ? `${ this.globalNamespace }.${ this.blocksNamespace }.${ name }`
 		       : '';
 	}
 
@@ -50,19 +35,17 @@ class JetPlugins {
 			this.bulkBlocksInit( blocks );
 		}
 
-		const $blocksList = this.getBlocks( $scope );
+		// Init in some scope if needed. By default on body
+		$scope = $scope || jQuery( 'body' );
 
-		$blocksList?.each?.( ( index, el ) => {
-			this.initBlock( el );
-		} );
-	}
+		if ( $scope && $scope.length ) {
+			let $blocksList = $scope.find( '[data-is-block*="/"]' );
+			$blocksList && $blocksList.length &&
+			$blocksList.each( ( index, el ) => {
+				this.initBlock( el );
+			} );
+		}
 
-	remove( $scope ) {
-		const $blocksList = this.getBlocks( $scope );
-
-		$blocksList?.each?.( ( index, el ) => {
-			this.removeBlock( el );
-		} );
 	}
 
 	/**
@@ -91,7 +74,7 @@ class JetPlugins {
 	initBlock( el, forceInit ) {
 
 		forceInit       = forceInit || false;
-		const blockHook = this.hookNameBlockReady( el );
+		const blockHook = this.hookNameFromBlock( el );
 
 		if ( blockHook && this.hasHandlers( blockHook ) ) {
 
@@ -112,13 +95,6 @@ class JetPlugins {
 		}
 	}
 
-	removeBlock( el ) {
-		const blockHook = this.hookNameBlockRemoved( el );
-
-		this.hooks.doAction( blockHook, jQuery( el ) );
-		el.dataset.jetInited = false;
-	}
-
 	hasHandlers( hookName ) {
 
 		if ( !this.hooks.actions[ hookName ] ) {
@@ -137,15 +113,9 @@ class JetPlugins {
 		const blockName = this.getBlockName( block.block );
 
 		this.hooks.addAction(
-			this.hookNameBlockReady( blockName ),
+			this.hookNameFromBlock( blockName ),
 			`${ this.globalNamespace }/${ block.block }`,
 			block.callback,
-		);
-
-		block?.removeCallback && this.hooks.addAction(
-			this.hookNameBlockRemoved( blockName ),
-			`${ this.globalNamespace }/${ block.block }`,
-			block.removeCallback,
 		);
 
 		if ( block.condition && 'function' === typeof block.condition ) {
@@ -160,19 +130,6 @@ class JetPlugins {
 			this.registerBlockHandlers( blocks[ i ] );
 		}
 
-	}
-
-	getBlocks( $scope ) {
-		// Init in some scope if needed. By default on body
-		$scope = $scope || jQuery( 'body' );
-
-		if ( !$scope || !$scope.length ) {
-			return [];
-		}
-
-		const $blocksList = $scope.find( '[data-is-block*="/"]' );
-
-		return $blocksList?.length ? $blocksList : [];
 	}
 
 }

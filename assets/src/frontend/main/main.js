@@ -89,7 +89,6 @@ JetPlugins.bulkBlocksInit( [
 	{
 		block: 'jet-forms.form-block',
 		callback: initForm,
-		removeCallback: removeForm,
 		condition: () => 'loading' !== document.readyState,
 	},
 ] );

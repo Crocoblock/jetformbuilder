@@ -10,6 +10,14 @@ class JetPlugins {
 		this.hooks = hooksHandler || createHooks();
 	}
 
+	hookNameFromBlock( block ) {
+		console.warn(
+			`JetPlugins.hookNameFromBlock is deprecated. Use JetPlugins.hookNameBlockReady instead`
+		);
+
+		return this.hookNameBlockReady( block );
+	}
+
 	hookNameBlockReady( block ) {
 		const name = this.getBlockName( block );
 
@@ -159,7 +167,7 @@ class JetPlugins {
 		$scope = $scope || jQuery( 'body' );
 
 		if ( !$scope || !$scope.length ) {
-			return;
+			return [];
 		}
 
 		const $blocksList = $scope.find( '[data-is-block*="/"]' );

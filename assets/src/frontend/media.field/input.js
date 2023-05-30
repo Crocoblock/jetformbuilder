@@ -32,16 +32,10 @@ function FileData() {
 		const [ node ] = this.nodes;
 
 		node.addEventListener( 'change', event => {
-			const { files } = event.target;
-
-			if ( !this.isMultiple ) {
-				this.value.current = files;
-
-				return;
-			}
-
 			this.value.current = createFileList(
-				[ ...this.prevFiles ?? [], ...event.target.files ],
+				this.isMultiple
+				? [ ...this.prevFiles ?? [], ...event.target.files ]
+				: [ ...event.target.files ],
 			);
 		} );
 	};

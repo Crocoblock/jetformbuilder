@@ -19,7 +19,7 @@ trait Paginated_Args {
 			'limit'   => (int) ( $body['limit'] ?? 5 ),
 			'sort'    => $body['sort'] ?? View_Base::FROM_HIGH_TO_LOW,
 			'page'    => (int) ( $body['page'] ?? 1 ),
-			'filters' => $body['filters'] ?? array(),
+			'filters' => (array) $body['filters'] ?? array(),
 		);
 	}
 

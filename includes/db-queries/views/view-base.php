@@ -26,7 +26,7 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	protected $limit      = array();
 	protected $conditions = array();
 	protected $order_by   = array();
-	protected $select     = array( '*' );
+	protected $select;
 
 	/** @var Relation[] */
 	protected $relations = array();
@@ -85,8 +85,6 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	}
 
 	/**
-	 * @see \Jet_Form_Builder\Db_Queries\Query_Conditions_Builder::get_types
-	 *
 	 * @param array $conditions
 	 *
 	 * @return $this
@@ -154,6 +152,9 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	 * @param bool $raw
 	 *
 	 * @return string
+	 * @since 3.1.0 Added $raw argument
+	 *
+	 * Get the column name with table prefix
 	 */
 	public function column( $column, bool $raw = false ): string {
 		if ( is_string( $column ) ) {
@@ -405,6 +406,10 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	public function query(): Query_Builder {
 		$this->prepare_dependencies();
 
+		if ( ! $this->select ) {
+			$this->set_select( array( '*' ) );
+		}
+
 		return ( new Query_Cache_Builder() )->set_view( $this );
 	}
 
@@ -419,6 +424,13 @@ abstract class View_Base implements Model_Dependencies_Interface {
 				throw new Query_Builder_Exception( get_class( $model ) . ' is not updated' );
 			}
 		}
+	}
+
+	/**
+	 * @param string[] $select
+	 */
+	public function set_select( array $select ) {
+		$this->select = $select;
 	}
 
 }

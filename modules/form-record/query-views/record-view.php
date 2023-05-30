@@ -34,10 +34,6 @@ class Record_View extends View_Base {
 		return Models\Record_Model::table();
 	}
 
-	public function select_columns(): array {
-		return Models\Record_Model::schema_columns();
-	}
-
 	public function set_filters( array $filters ) {
 		parent::set_filters( $filters );
 
@@ -147,6 +143,11 @@ class Record_View extends View_Base {
 	public function query(): Query_Builder {
 		$this->prepare_dependencies();
 
+		if ( ! $this->select ) {
+			$this->set_select( Models\Record_Model::schema_columns() );
+		}
+
 		return ( new Query_Builder() )->set_view( $this );
 	}
+
 }

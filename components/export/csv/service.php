@@ -3,14 +3,25 @@
 
 namespace JFB_Components\Export\Csv;
 
-class Service {
+use JFB_Components\Export\Multiple_Entries_Export_It;
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+class Service implements Multiple_Entries_Export_It {
 
 	private $file;
+	protected $file_name;
+	protected $headings;
+	protected $rows;
 
-	protected function headers( string $filename ) {
+	public function headers() {
 		if ( false === strpos( ini_get( 'disable_functions' ), 'set_time_limit' ) ) {
 			set_time_limit( 0 );
 		}
+		ignore_user_abort( true );
 
 		// phpcs:disable WordPress.PHP
 		@session_write_close();
@@ -26,7 +37,7 @@ class Service {
 		header( 'Robots: none' );
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Description: File Transfer' );
-		header( 'Content-Disposition: attachment; filename="' . $filename . '";' );
+		header( 'Content-Disposition: attachment; filename="' . $this->file_name . '";' );
 		header( 'Content-Transfer-Encoding: binary' );
 
 		// phpcs:enable WordPress.PHP
@@ -41,9 +52,9 @@ class Service {
 		/**
 		 * Add BOM to fix UTF-8 in Excel
 		 *
-		 * @see https://www.skoumal.com/en/making-utf-8-csv-excel/
+		 * @see https://www.php.net/manual/en/function.fputcsv.php#118252
 		 */
-		$bom = ( chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF ) );
+		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fputs
 		fputs( $this->file, $bom );
@@ -51,4 +62,16 @@ class Service {
 		return $this->file;
 	}
 
+	public function set_file_name( string $file_name, string $fallback = '' ) {
+		$this->file_name = sanitize_title( $file_name, $fallback ) . '.csv';
+	}
+
+	public function add_row( array $row ) {
+		fputcsv( $this->get_file(), $row );
+	}
+
+	public function close() {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+		fclose( $this->get_file() );
+	}
 }

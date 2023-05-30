@@ -83,10 +83,10 @@ class Form_Manager {
 
 	public function get_field_by_name( $form_id, $field_name, $blocks = array() ): array {
 		if ( ! $blocks ) {
-			$blocks = $this->get_only_form_fields( $form_id );
+			$blocks = Block_Helper::get_blocks_by_post( $form_id );
 		}
 
-		return Block_Helper::find_block_by_attr( $field_name, 'name', $blocks );
+		return Block_Helper::find_block_by_name( $field_name, $blocks );
 	}
 
 }

@@ -14,7 +14,6 @@ class Record_View_Forms extends Record_View {
 
 	/**
 	 * @return \string[][]
-	 * @throws Query_Builder_Exception
 	 */
 	public function select_columns(): array {
 		return array(

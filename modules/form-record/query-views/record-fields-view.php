@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Form_Record\Query_Views;
 
+use Jet_Form_Builder\Db_Queries\Query_Builder;
 use JFB_Modules\Form_Record\Models\Record_Field_Model;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Query_Conditions_Builder;
@@ -21,10 +22,6 @@ class Record_Fields_View extends View_Base {
 		return Record_Field_Model::table();
 	}
 
-	public function select_columns(): array {
-		return Record_Field_Model::schema_columns();
-	}
-
 	public static function get_request( $record_id ): array {
 		try {
 			return static::find(
@@ -41,13 +38,20 @@ class Record_Fields_View extends View_Base {
 	public function set_filters( array $filters ) {
 		parent::set_filters( $filters );
 
-		$record_id = $this->filters['record_id'] ?? 0;
+		$this->set_record_filter();
+		$this->set_names_filter();
+
+		return $this;
+	}
+
+	protected function set_record_filter(): Record_Fields_View {
+		$record_id = absint( $this->filters['record_id'] ?? 0 );
 
 		if ( empty( $record_id ) ) {
 			return $this;
 		}
 
-		$this->set_conditions(
+		return $this->add_conditions(
 			array(
 				array(
 					'type'   => Query_Conditions_Builder::TYPE_EQUAL,
@@ -55,8 +59,23 @@ class Record_Fields_View extends View_Base {
 				),
 			)
 		);
+	}
 
-		return $this;
+	protected function set_names_filter(): Record_Fields_View {
+		$names = (array) $this->filters['names'] ?? array();
+
+		if ( empty( $names ) ) {
+			return $this;
+		}
+
+		return $this->add_conditions(
+			array(
+				array(
+					'type'   => Query_Conditions_Builder::TYPE_IN,
+					'values' => array( 'field_name', $names ),
+				),
+			)
+		);
 	}
 
 	/**
@@ -75,6 +94,16 @@ class Record_Fields_View extends View_Base {
 		RecordTools::parse_values( $request );
 
 		return Tools::prepare_list_for_js( $request, $value_key, $label_key, true );
+	}
+
+	public function query(): Query_Builder {
+		$this->prepare_dependencies();
+
+		if ( ! $this->select ) {
+			$this->set_select( Record_Field_Model::schema_columns() );
+		}
+
+		return ( new Query_Builder() )->set_view( $this );
 	}
 
 

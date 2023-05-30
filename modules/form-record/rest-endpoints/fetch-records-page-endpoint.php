@@ -6,17 +6,16 @@ namespace JFB_Modules\Form_Record\Rest_Endpoints;
 use JFB_Modules\Form_Record\Query_Views\Record_View_Count;
 use JFB_Modules\Form_Record\Admin\Table_Views\Records_Table_View;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
-use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
-use Jet_Form_Builder\Rest_Api\Traits;
+use JFB_Components\Rest_Api;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Fetch_Records_Page_Endpoint extends Rest_Api_Endpoint_Base {
+class Fetch_Records_Page_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 
-	use Traits\Paginated_Args;
+	use Rest_Api\Traits\Paginated_Args;
 
 	public static function get_rest_base() {
 		return 'records/fetch-page';

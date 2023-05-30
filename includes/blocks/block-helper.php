@@ -38,6 +38,9 @@ class Block_Helper {
 	public static function find_block_by_attr( $value, $attr_name, $blocks ): array {
 		return self::find_block(
 			function ( $block ) use ( $value, $attr_name ) {
+				if ( empty( $block['blockName'] ) || ! self::is_field( $block['blockName'] ) ) {
+					return false;
+				}
 				return ( ( $block['attrs'][ $attr_name ] ?? false ) === $value );
 			},
 			$blocks
@@ -58,6 +61,9 @@ class Block_Helper {
 
 		self::find_block(
 			function ( $block ) use ( &$names ) {
+				if ( empty( $block['blockName'] ) || ! self::is_field( $block['blockName'] ) ) {
+					return false;
+				}
 				if ( ! empty( $block['attrs']['name'] ) ) {
 					$names[ $block['attrs']['name'] ] = 1;
 				}

@@ -396,7 +396,6 @@ class Query_Conditions_Builder {
 	 * @param $second
 	 *
 	 * @return string
-	 * @throws Query_Builder_Exception
 	 */
 	public function build_less_static( $column_name, $second ): string {
 		global $wpdb;
@@ -425,7 +424,23 @@ class Query_Conditions_Builder {
 	 * @return string
 	 */
 	public function build_in( $column_name, $second ): string {
-		$right_part  = implode( ', ', $second );
+		if ( ! is_array( $second ) ) {
+			$second = array( $second );
+		}
+
+		$in_list = array();
+
+		foreach ( $second as $in_item ) {
+			if ( ! is_scalar( $in_item ) ) {
+				continue;
+			}
+
+			$in_list[] = is_numeric( $in_item )
+				? $in_item
+				: sprintf( "'%s'", sanitize_key( $in_item ) );
+		}
+
+		$right_part  = implode( ', ', $in_list );
 		$column_name = Db_Tools::sanitize_column( $column_name );
 
 		try {

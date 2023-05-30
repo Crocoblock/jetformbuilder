@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Db_Queries;
 
 use Jet_Form_Builder\Db_Queries\Traits\With_View;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 
 // If this file is called directly, abort.
@@ -243,6 +244,23 @@ class Query_Builder {
 		}
 
 		return $response;
+	}
+
+	/**
+	 * @return \Generator
+	 * @throws Query_Builder_Exception
+	 */
+	public function generate_all(): \Generator {
+		// phpcs:ignore WordPress.DB
+		$rows = $this->db()->get_results( $this->sql(), ARRAY_A );
+
+		if ( empty( $rows ) ) {
+			throw new Query_Builder_Exception( "Empty {$this->view()->table()} rows" );
+		}
+
+		foreach ( $rows as $row ) {
+			yield $this->view()->get_prepared_row( $row );
+		}
 	}
 
 	/**

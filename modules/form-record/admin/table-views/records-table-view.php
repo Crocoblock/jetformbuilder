@@ -22,6 +22,7 @@ use Jet_Form_Builder\Admin\Table_Views\View_Advanced_Base;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use JFB_Modules\Rest_Api\Endpoints\Get_Form_Fields;
+use JFB_Modules\Form_Record\Export;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -96,12 +97,15 @@ class Records_Table_View extends View_Advanced_Base {
 	}
 
 	public function load_data(): array {
+		$export = new Export\Controller();
+
 		return array(
 			'filters_endpoint'     => array(
 				'methods' => Fetch_Filters_Endpoint::get_methods(),
 				'url'     => Fetch_Filters_Endpoint::rest_url(),
 			),
 			'load_fields_endpoint' => Get_Form_Fields::get_endpoint(),
+			'export_url'           => $export->get_url(),
 			'messages'             => array(
 				'filter_form'       => __( 'Select Form', 'jet-form-builder' ),
 				'filter_form_title' => __( 'All Forms', 'jet-form-builder' ),

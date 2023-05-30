@@ -3,13 +3,13 @@ const { VueLoaderPlugin }      = require( 'vue-loader' );
 
 module.exports = {
 	name: 'prod:jfb-form-record',
-	context: path.resolve( __dirname, '../assets-src/js' ),
+	context: path.resolve( __dirname, '../assets/src/js' ),
 	entry: {
 		'admin/pages/jfb-records': './admin/pages/jfb-records/index',
 		'admin/pages/jfb-records-single': './admin/pages/jfb-records-single/index',
 	},
 	output: {
-		path: path.resolve( __dirname, '../assets-build/js' ),
+		path: path.resolve( __dirname, '../assets/build/js' ),
 		filename: '[name].min.js',
 	},
 	resolve: {

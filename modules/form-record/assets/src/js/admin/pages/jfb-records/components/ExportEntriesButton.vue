@@ -152,7 +152,8 @@
 					:button-style="'accent'"
 					:size="'mini'"
 					:disabled="!canBeExported"
-					@click="handlePopupExport"
+					:loading="exportEntries"
+					@click="startExport"
 				>
 					<template #label>{{ __( 'Export', 'jet-form-builder' ) }}</template>
 				</cx-vui-button>
@@ -164,6 +165,14 @@
 				</cx-vui-button>
 			</template>
 		</CxVuiPopup>
+		<iframe
+			v-if="exportEntries"
+			ref="exportFrame"
+			:src="iframeSrc"
+			style="display:none;"
+			@load="onDoneExport"
+			@error="onDoneExport( true )"
+		></iframe>
 	</div>
 </template>
 
@@ -192,8 +201,15 @@ const {
 	      CxVuiPopup,
 	      CxVuiFSelect,
 	      CxVuiDate,
-	      Tooltip,
       } = JetFBComponents;
+
+const {
+	      export_url,
+      } = window.JetFBPageConfig;
+
+const {
+	      addQueryArgs,
+      } = JetFBActions;
 
 export default {
 	name: 'ExportEntriesButton',
@@ -203,7 +219,6 @@ export default {
 		CxVuiPopup,
 		CxVuiFSelect,
 		CxVuiDate,
-		Tooltip,
 	},
 	props: {
 		label: {
@@ -213,6 +228,7 @@ export default {
 	data: () => (
 		{
 			showPopup: false,
+			exportEntries: false,
 		}
 	),
 	mixins: [
@@ -240,6 +256,11 @@ export default {
 		},
 		statusFilter() {
 			return this.getter( 'getFilter', 'status' );
+		},
+		filtersObj() {
+			jfbEventBus.reactiveCounter;
+
+			return this.getter( 'filtersObj' );
 		},
 		currentFields() {
 			jfbEventBus.reactiveCounter;
@@ -344,6 +365,16 @@ export default {
 				message: __( 'Please fill this field', 'jet-form-builder' ),
 			};
 		},
+		iframeSrc() {
+			return addQueryArgs(
+				{
+					fields: this.selectedFields,
+					extra: this.selectedExtra,
+					filters: this.filtersObj
+				},
+				export_url,
+			);
+		},
 	},
 	methods: {
 		...mapMutations( 'export', [
@@ -365,8 +396,31 @@ export default {
 			this.showPopup = true;
 			this.resolveFields();
 		},
-		handlePopupExport() {
+		startExport() {
+			this.exportEntries = true;
+		},
+		onDoneExport( isError ) {
+			this.showPopup = false;
 
+			const notice = {
+				duration: 3000,
+				message: __( 'Form Records exported successfully', 'jet-form-builder' ),
+				type: 'success',
+			};
+
+			if ( isError ) {
+				const iframe       = this.$refs.exportFrame;
+				const messageNode  = iframe.contentWindow.document.body.querySelector( '.wp-die-message' );
+				const errorMessage = messageNode?.childNodes?.[ 0 ]?.textContent;
+
+				notice.type    = 'error';
+				notice.message = errorMessage || __( 'Undefined critical error', 'jet-form-builder' );
+			}
+
+			jfbEventBus.$CXNotice.add( notice );
+
+			// remove iframe
+			this.exportEntries = false;
 		},
 		isLoading( type ) {
 			return this[ 'export/isLoading' ]( type );

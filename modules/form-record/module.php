@@ -4,7 +4,6 @@
 namespace JFB_Modules\Form_Record;
 
 use Jet_Form_Builder\Actions\Manager;
-use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
@@ -20,6 +19,7 @@ use JFB_Modules\Form_Record\Action_Types\Save_Record;
 use JFB_Modules\Form_Record\Admin\Meta_Boxes\Record_To_Payment_Box;
 use JFB_Modules\Form_Record\Admin\Pages\Form_Records;
 use JFB_Modules\Form_Record\Admin\Pages\Single_Form_Record_Page;
+use JFB_Modules\Form_Record\Export;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -56,6 +56,10 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 			10,
 			3
 		);
+		add_action(
+			'admin_action_' . Export\Controller::ACTION,
+			array( $this, 'do_export_records' )
+		);
 
 		// filters
 		add_filter(
@@ -82,6 +86,10 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 			'jet-form-builder/gateways/before-send',
 			array( $this, 'before_send_gateway' ),
 			10
+		);
+		remove_action(
+			'admin_action_' . Export\Controller::ACTION,
+			array( $this, 'do_export_records' )
 		);
 
 		// filters
@@ -140,5 +148,9 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 		} catch ( Handler_Exception $exception ) {
 			// do nothing
 		}
+	}
+
+	public function do_export_records() {
+		( new Export\Controller() )->run();
 	}
 }

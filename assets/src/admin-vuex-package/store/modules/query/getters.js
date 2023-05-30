@@ -38,6 +38,9 @@ const getters = {
 	apiData: state => {
 		return state.apiData;
 	},
+	filtersObj: state => {
+		return prepareFiltersQuery( state.filters );
+	},
 	fetchListOptions: state => endpoint => {
 		const { limit, sort, currentPage: page } = state;
 

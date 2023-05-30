@@ -6,7 +6,7 @@ module.exports = {
 	name: 'dev:jfb-form-record',
 	mode: 'development',
 	output: {
-		path: path.resolve( __dirname, '../assets-build/js' ),
+		path: path.resolve( __dirname, '../assets/build/js' ),
 		filename: '[name].js',
 		devtoolNamespace: 'jfb-form-record',
 	},

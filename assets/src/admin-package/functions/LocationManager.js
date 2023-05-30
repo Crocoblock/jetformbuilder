@@ -35,18 +35,23 @@ function prepareQueryArgs( key, value ) {
 	return response;
 }
 
+/**
+ * @param args {Object}
+ * @param url {module:url.URL}
+ * @returns {string}
+ */
 export function addQueryArgs( args, url ) {
 	url = new URL( url );
 
 	const params = new URLSearchParams( url.search );
-	const pairs = [];
+	const pairs  = [];
 
 	for ( const [ key, value ] of Object.entries( args ) ) {
 		pairs.push( ...prepareQueryArgs( key, value ) );
 	}
 
 	for ( const [ key, value ] of pairs ) {
-		if ( ! value ) {
+		if ( !value ) {
 			continue;
 		}
 		params.append( key, value );
@@ -57,10 +62,10 @@ export function addQueryArgs( args, url ) {
 
 export function createPath( queryArgs = {}, hashes = {}, clearArgs = [] ) {
 	const params = [];
-	queryArgs = {
+	queryArgs    = {
 		...getSearch(),
 		...queryArgs,
-	}
+	};
 
 	for ( const [ key, value ] of Object.entries( queryArgs ) ) {
 		if ( clearArgs.includes( key ) ) {

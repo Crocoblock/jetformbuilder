@@ -4,18 +4,25 @@ class JetPlugins {
 
 	hooks;
 	globalNamespace  = 'jet-plugins';
-	blocksNamespace  = 'frontend.element-ready';
 	blocksConditions = {};
 
 	constructor( hooksHandler ) {
 		this.hooks = hooksHandler || createHooks();
 	}
 
-	hookNameFromBlock( block ) {
+	hookNameBlockReady( block ) {
 		const name = this.getBlockName( block );
 
 		return name
-		       ? `${ this.globalNamespace }.${ this.blocksNamespace }.${ name }`
+		       ? `${ this.globalNamespace }.frontend.element-ready.${ name }`
+		       : '';
+	}
+
+	hookNameBlockRemoved( block ) {
+		const name = this.getBlockName( block );
+
+		return name
+		       ? `${ this.globalNamespace }.frontend.element-removed.${ name }`
 		       : '';
 	}
 
@@ -113,7 +120,7 @@ class JetPlugins {
 		const blockName = this.getBlockName( block.block );
 
 		this.hooks.addAction(
-			this.hookNameFromBlock( blockName ),
+			this.hookNameBlockReady( blockName ),
 			`${ this.globalNamespace }/${ block.block }`,
 			block.callback,
 		);

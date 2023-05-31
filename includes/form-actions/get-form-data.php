@@ -17,10 +17,12 @@ trait Get_Form_Data {
 	 */
 	public function get_post_id_from_request() {
 
-		if ( ! wp_verify_nonce( sanitize_key( $_GET['nonce'] ?? '' ) ) ) {
-			wp_die( 'You haven`t access to this form', 'Error!' );
-		}
-
+		/**
+		 * Nonce verifies earlier
+		 *
+		 * @see \Jet_Form_Builder\Form_Actions\Base_Form_Action::do_action
+		 */
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$post_id = ! empty( $_GET['post'] ) ? absint( $_GET['post'] ) : false;
 
 		if ( ! $post_id ) {

@@ -5,12 +5,16 @@ namespace Jet_Form_Builder\Wp_Cli;
 
 use ElementorPro\Modules\Forms\Submissions\Database\Query;
 use JET_APB\Plugin;
+use Jet_Form_Builder\Blocks\Block_Helper;
+use Jet_Form_Builder\Classes\Tools;
 use JFB_Modules\Form_Record\Models\Record_Action_Result_Model;
+use JFB_Modules\Form_Record\Models\Record_Field_Model;
 use JFB_Modules\Form_Record\Models\Record_Model;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Migrations\Migration_Exception;
 use Jet_Form_Builder\Migrations\Migrator;
 use Jet_Form_Builder\Migrations\Profilers\Cli_Migration_Profiler;
+use JFB_Modules\Security\Csrf\Csrf_Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -59,6 +63,12 @@ class Database_Commands extends \WP_CLI_Command {
 			)
 		);
 
+		$field_names = array_keys(
+			Block_Helper::get_form_field_names(
+				Block_Helper::get_blocks_by_post( $form )
+			)
+		);
+
 		/** @var \WP_User $user */
 		list( $user ) = get_users(
 			array(
@@ -96,7 +106,19 @@ class Database_Commands extends \WP_CLI_Command {
 				);
 			}
 
-			if ( 0 === $current % 100000 ) {
+			foreach ( $field_names as $field_name ) {
+				( new Record_Field_Model() )->insert_soft(
+					array(
+						'record_id'   => $record_id,
+						'field_name'  => $field_name,
+						'field_value' => Csrf_Tools::generate(),
+						'field_type'  => 'text-field',
+						'field_attrs' => '{}',
+					)
+				);
+			}
+
+			if ( 0 === $current % 5000 ) {
 				\WP_CLI::line( 'Reached: ' . $current );
 			}
 		}

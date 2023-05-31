@@ -257,11 +257,6 @@ export default {
 		statusFilter() {
 			return this.getter( 'getFilter', 'status' );
 		},
-		filtersObj() {
-			jfbEventBus.reactiveCounter;
-
-			return this.getter( 'filtersObj' );
-		},
 		currentFields() {
 			jfbEventBus.reactiveCounter;
 
@@ -365,12 +360,20 @@ export default {
 				message: __( 'Please fill this field', 'jet-form-builder' ),
 			};
 		},
+		filtersObj() {
+			return {
+				form: this.selectedForm,
+				status: this.status,
+				date_from: this.dateFrom,
+				date_to: this.dateTo,
+			};
+		},
 		iframeSrc() {
 			return addQueryArgs(
 				{
 					fields: this.selectedFields,
 					extra: this.selectedExtra,
-					filters: this.filtersObj
+					filters: this.filtersObj,
 				},
 				export_url,
 			);

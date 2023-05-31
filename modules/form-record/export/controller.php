@@ -92,32 +92,35 @@ class Controller {
 
 		$fields_view     = $this->get_fields_view();
 		$fields_headings = array_keys( $this->fields_columns );
+		$fields_empty    = array();
+
+		foreach ( $fields_headings as $name ) {
+			$fields_empty[ $name ] = '';
+		}
 
 		foreach ( $records as $record ) {
-			foreach ( $record as &$record_value ) {
-				if ( ! is_null( $record_value ) ) {
-					continue;
-				}
-				$record_value = '';
+			foreach ( $record as $property => $record_value ) {
+				$record[ sprintf( 'extra|%s', $property ) ] = is_null( $record_value ) ? '' : $record_value;
 			}
 
+			$fields_view->set_conditions( array() );
 			$fields_view->set_filters(
 				array(
 					'record_id' => $record['id'] ?? 0,
-					'names'     => array_keys( $this->fields_columns ),
+					'names'     => $fields_headings,
 				)
 			);
 
 			try {
 				$fields_values = $this->get_fields_values( $fields_view, $fields_headings );
 			} catch ( Query_Builder_Exception $exception ) {
-				$fields_values = array_fill( 0, count( $fields_headings ), '' );
+				$fields_values = $fields_empty;
 			}
 
 			$export->add_row(
 				array_merge(
 					$fields_values,
-					array_values( $record )
+					$record
 				)
 			);
 		}
@@ -135,16 +138,16 @@ class Controller {
 		$fields        = $view->query()->generate_all();
 
 		foreach ( $fields as $field ) {
-			foreach ( $fields_headings as $index => $field_name ) {
-				if ( ! isset( $fields_values[ $index ] ) ) {
-					$fields_values[ $index ] = '';
+			foreach ( $fields_headings as $field_name ) {
+				if ( ! isset( $fields_values[ $field_name ] ) ) {
+					$fields_values[ $field_name ] = '';
 				}
 
 				if ( ( $field['field_name'] ?? '' ) !== $field_name ) {
 					continue;
 				}
 
-				$fields_values[ $index ] = $field['field_value'];
+				$fields_values[ $field_name ] = $field['field_value'];
 			}
 		}
 

@@ -62,7 +62,7 @@ class Record_Fields_View extends View_Base {
 	}
 
 	protected function set_names_filter(): Record_Fields_View {
-		$names = (array) $this->filters['names'] ?? array();
+		$names = (array) ( $this->filters['names'] ?? array() );
 
 		if ( empty( $names ) ) {
 			return $this;

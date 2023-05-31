@@ -54,14 +54,13 @@ class Database_Commands extends \WP_CLI_Command {
 		}
 	}
 
-	public function seed_records() {
-		/** @var \WP_Post $form */
-		list( $form ) = get_posts(
-			array(
-				'numberposts' => 1,
-				'post_type'   => jet_form_builder()->post_type->slug(),
-			)
-		);
+	public function seed_records( $args, $assoc_args ) {
+		$form  = $this->resolve_form( $assoc_args );
+		$limit = absint( $assoc_args['limit'] ?? 1000000 );
+
+		if ( 0 >= $limit ) {
+			$limit = 1;
+		}
 
 		$field_names = array_keys(
 			Block_Helper::get_form_field_names(
@@ -83,7 +82,9 @@ class Database_Commands extends \WP_CLI_Command {
 			)
 		);
 
-		foreach ( range( 0, 1000000 ) as $current ) {
+		$current = 0;
+
+		foreach ( range( 0, $limit ) as $current ) {
 			$record_id = ( new Record_Model() )->insert_soft(
 				array(
 					'user_id'           => $user->ID,
@@ -123,7 +124,25 @@ class Database_Commands extends \WP_CLI_Command {
 			}
 		}
 
-		\WP_CLI::success( 'Executed successfully' );
+		\WP_CLI::success( "Executed successfully ($current)" );
+	}
+
+	protected function resolve_form( $assoc_args ): \WP_Post {
+		$form_id = absint( $assoc_args['form'] ?? 0 );
+		$form    = get_post( $form_id );
+
+		if ( $form instanceof \WP_Post ) {
+			return $form;
+		}
+
+		list( $form ) = get_posts(
+			array(
+				'numberposts' => 1,
+				'post_type'   => jet_form_builder()->post_type->slug(),
+			)
+		);
+
+		return $form;
 	}
 
 	public function seed_jet_apb() {

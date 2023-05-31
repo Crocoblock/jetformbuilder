@@ -152,7 +152,6 @@
 					:button-style="'accent'"
 					:size="'mini'"
 					:disabled="!canBeExported"
-					:loading="exportEntries"
 					@click="startExport"
 				>
 					<template #label>{{ __( 'Export', 'jet-form-builder' ) }}</template>
@@ -165,14 +164,6 @@
 				</cx-vui-button>
 			</template>
 		</CxVuiPopup>
-		<iframe
-			v-if="exportEntries"
-			ref="exportFrame"
-			:src="iframeSrc"
-			style="display:none;"
-			@load="onDoneExport"
-			@error="onDoneExport( true )"
-		></iframe>
 	</div>
 </template>
 
@@ -228,7 +219,6 @@ export default {
 	data: () => (
 		{
 			showPopup: false,
-			exportEntries: false,
 		}
 	),
 	mixins: [
@@ -400,30 +390,7 @@ export default {
 			this.resolveFields();
 		},
 		startExport() {
-			this.exportEntries = true;
-		},
-		onDoneExport( isError ) {
-			this.showPopup = false;
-
-			const notice = {
-				duration: 3000,
-				message: __( 'Form Records exported successfully', 'jet-form-builder' ),
-				type: 'success',
-			};
-
-			if ( isError ) {
-				const iframe       = this.$refs.exportFrame;
-				const messageNode  = iframe.contentWindow.document.body.querySelector( '.wp-die-message' );
-				const errorMessage = messageNode?.childNodes?.[ 0 ]?.textContent;
-
-				notice.type    = 'error';
-				notice.message = errorMessage || __( 'Undefined critical error', 'jet-form-builder' );
-			}
-
-			jfbEventBus.$CXNotice.add( notice );
-
-			// remove iframe
-			this.exportEntries = false;
+			window.location = this.iframeSrc;
 		},
 		isLoading( type ) {
 			return this[ 'export/isLoading' ]( type );

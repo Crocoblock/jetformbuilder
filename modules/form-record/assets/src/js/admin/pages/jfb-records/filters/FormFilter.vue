@@ -32,7 +32,7 @@ export default {
 	name: 'FormFilter',
 	components: {
 		ColumnWrapper,
-		CxVuiSelect
+		CxVuiSelect,
 	},
 	data() {
 		return {

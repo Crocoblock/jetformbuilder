@@ -10,9 +10,13 @@ export default {
 			return 'scope-' + this.scope + '/' + name;
 		},
 		getter( name, payload ) {
+			if ( !this.$store ) {
+				debugger;
+			}
 			const result = this.$store.getters[ this.scopedName( name ) ];
 
-			if ( 'undefined' !== typeof payload && 'function' === typeof result ) {
+			if ( 'undefined' !== typeof payload && 'function' ===
+				typeof result ) {
 				if ( payload?.length && 'object' === typeof payload ) {
 					return result( ...payload );
 				}
@@ -28,4 +32,4 @@ export default {
 			return this.$store.dispatch( this.scopedName( name ), payload );
 		},
 	},
-}
+};

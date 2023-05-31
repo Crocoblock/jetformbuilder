@@ -67,12 +67,7 @@ class Controller {
 		$exporter->headers();
 
 		// headings
-		$exporter->add_row(
-			array_merge(
-				array_values( $this->fields_columns ),
-				array_values( $this->extra_columns )
-			)
-		);
+		$exporter->add_row( $this->prepare_row( $this->fields_columns, $this->extra_columns ) );
 
 		$this->add_rows( $exporter );
 		$exporter->close();
@@ -99,14 +94,10 @@ class Controller {
 		}
 
 		foreach ( $records as $record ) {
-			foreach ( $record as $property => $record_value ) {
-				$record[ sprintf( 'extra|%s', $property ) ] = is_null( $record_value ) ? '' : $record_value;
-			}
-
 			$fields_view->set_conditions( array() );
 			$fields_view->set_filters(
 				array(
-					'record_id' => $record['id'] ?? 0,
+					'record_id' => $record['id'],
 					'names'     => $fields_headings,
 				)
 			);
@@ -117,13 +108,21 @@ class Controller {
 				$fields_values = $fields_empty;
 			}
 
-			$export->add_row(
-				array_merge(
-					$fields_values,
-					$record
-				)
-			);
+			$export->add_row( $this->prepare_row( $fields_values, $record ) );
 		}
+	}
+
+
+	protected function prepare_row( array $fields_values, array $extra_values ): array {
+		foreach ( $extra_values as $property => $record_value ) {
+			$extra_values[ sprintf( 'extra|%s', $property ) ] = is_null( $record_value ) ? '' : $record_value;
+			unset( $extra_values[ $property ] );
+		}
+
+		return array_merge(
+			$fields_values,
+			$extra_values
+		);
 	}
 
 	/**
@@ -143,34 +142,20 @@ class Controller {
 					$fields_values[ $field_name ] = '';
 				}
 
-				if ( ( $field['field_name'] ?? '' ) !== $field_name ) {
+				if ( ( $field->field_name ?? '' ) !== $field_name ) {
 					continue;
 				}
 
-				$fields_values[ $field_name ] = $field['field_value'];
+				$fields_values[ $field_name ] = $field->field_value;
 			}
 		}
 
 		return $fields_values;
 	}
 
-	public function get_nonce(): Wp_Nonce {
-		return $this->nonce;
-	}
-
-	public function get_url(): string {
-		return add_query_arg(
-			array(
-				'action'                 => self::ACTION,
-				$this->nonce->get_name() => $this->nonce->create(),
-			),
-			admin_url( 'admin.php' )
-		);
-	}
-
 	protected function get_field_columns(): array {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$fields  = array_map( 'sanitize_key', (array) $_GET['fields'] ?? array() );
+		$fields  = array_map( 'sanitize_key', (array) ( $_GET['fields'] ?? array() ) );
 		$columns = array();
 
 		$blocks = Block_Helper::get_blocks_by_post( $this->form_id );
@@ -207,7 +192,7 @@ class Controller {
 		);
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$extra = array_map( 'sanitize_key', (array) $_GET['extra'] ?? array() );
+		$extra = array_map( 'sanitize_key', (array) ( $_GET['extra'] ?? array() ) );
 
 		foreach ( $columns as $column_name => $label ) {
 			if ( ! in_array( $column_name, $extra, true ) ) {
@@ -259,11 +244,11 @@ class Controller {
 	protected function get_records(): \Generator {
 		$view = ( new Record_View() )->set_filters(
 		// phpcs:ignore WordPress.Security
-			(array) $_GET['filters'] ?? array()
+			(array) ( $_GET['filters'] ?? array() )
 		);
 		$view->set_select( array_keys( $this->extra_columns ) );
 
-		return $view->query()->generate_all();
+		return $view->query()->generate_all( ARRAY_A );
 	}
 
 	protected function get_fields_view(): Record_Fields_View {
@@ -280,6 +265,20 @@ class Controller {
 
 	protected function get_file_name(): string {
 		return get_the_title( $this->form_id ) . ' ' . __( 'records', 'jet-form-builder' );
+	}
+
+	public function get_nonce(): Wp_Nonce {
+		return $this->nonce;
+	}
+
+	public function get_url(): string {
+		return add_query_arg(
+			array(
+				'action'                 => self::ACTION,
+				$this->nonce->get_name() => $this->nonce->create(),
+			),
+			admin_url( 'admin.php' )
+		);
 	}
 
 

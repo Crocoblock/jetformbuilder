@@ -247,19 +247,21 @@ class Query_Builder {
 	}
 
 	/**
+	 * @param string $format
+	 *
 	 * @return \Generator
 	 * @throws Query_Builder_Exception
 	 */
-	public function generate_all(): \Generator {
+	public function generate_all( string $format = OBJECT ): \Generator {
 		// phpcs:ignore WordPress.DB
-		$rows = $this->db()->get_results( $this->sql(), ARRAY_A );
+		$this->db()->query( $this->sql() );
 
-		if ( empty( $rows ) ) {
+		if ( empty( $this->db()->last_result ) ) {
 			throw new Query_Builder_Exception( "Empty {$this->view()->table()} rows" );
 		}
 
-		foreach ( $rows as $row ) {
-			yield $this->view()->get_prepared_row( $row );
+		foreach ( (array) $this->db()->last_result as $row ) {
+			yield ( OBJECT === $format ? $row : (array) $row );
 		}
 	}
 

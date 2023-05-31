@@ -5,6 +5,7 @@
 		<template #heading-after>
 			<ExportEntriesButton/>
 		</template>
+		<ActionsWithFilters/>
 		<Portal to="scope-default/filters">
 			<FormFilter/>
 			<StatusFilter/>
@@ -13,7 +14,6 @@
 		<Portal to="scope-default/buttons">
 			<ClearFiltersButton/>
 		</Portal>
-		<ActionsWithFilters/>
 		<TablePagination/>
 		<EntriesTable/>
 		<TablePagination/>

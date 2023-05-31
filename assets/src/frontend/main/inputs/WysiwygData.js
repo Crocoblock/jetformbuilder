@@ -39,7 +39,7 @@ function WysiwygData() {
 			this.value.current = this.editor.getContent();
 		};
 
-		this.editor.on( 'input', update ).on( 'change', update );
+		this.editor?.on?.( 'input', update )?.on?.( 'change', update );
 	};
 
 	this.setValue = function () {

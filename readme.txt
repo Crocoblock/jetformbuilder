@@ -274,6 +274,7 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 
 **3.0.7**
  - ADD: Support for custom css classes and anchors for the JetForm block
+ - FIX: Additional security checks on export and duplicate forms.
  - FIX: Form doesn't scroll to the top on next page in popup
  - FIX: Must not contain chars in advanced validation
  - FIX: Advanced validation fails when field value comes from URL parameter

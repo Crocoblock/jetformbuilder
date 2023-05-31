@@ -2,7 +2,7 @@
 	<FormBuilderPage
 		:title="__( 'JetFormBuilder Settings', 'jet-form-builder' )"
 	>
-		<Banner />
+		<Banner utm-source="dashboard/jet-form-builder-settings-page" />
 		<div class="jfb-content">
 			<AlertsList/>
 			<div class="jfb-content-main">

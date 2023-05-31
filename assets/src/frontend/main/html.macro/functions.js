@@ -27,6 +27,7 @@ function observeComment( comment, root ) {
 		prevSibling.innerHTML = formula.calculateString();
 	};
 	formula.setResult();
+	comment.jfbObserved = true;
 }
 
 /**

@@ -26,7 +26,6 @@ $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'minlength', $this->args['minlength'] ?? '' );
 $this->add_attribute( 'maxlength', $this->args['maxlength'] ?? '' );
 $this->add_attribute( 'data-jfb-sync' );
-$this->add_attribute( 'dir', is_rtl() ? 'rtl' : '' );
 
 
 if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {

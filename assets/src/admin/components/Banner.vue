@@ -28,13 +28,19 @@
 <script>
 export default {
 	name: 'Banner',
+	props: {
+		utmSource: {
+			type: String,
+			default: 'dashboard/jet-form-builder-addons-page'
+		}
+	},
 	computed: {
 		pricingUrl() {
 			//const pricingUrl = this.$parent.miscInfo.pricingPageUrl;
 			const pricingUrl = 'https://crocoblock.com/pricing/';
-			const license    = this.isLicenseActivated ? 'crocoblock-license' : 'license-not-activated';
+			const license    = this.isLicenseActivated ? 'jetformbuilder-license' : 'license-not-activated';
 			const params     = this.getUtmParamsString( {
-				utm_source: `dashboard/jet-form-builder-addons-page`,
+				utm_source: this.utmSource,
 				utm_medium: `${ license }/${ this.authorSlug }`,
 				utm_campaign: 'birthday_sale_2023',
 			} );

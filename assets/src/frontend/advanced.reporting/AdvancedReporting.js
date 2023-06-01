@@ -173,7 +173,7 @@ AdvancedReporting.prototype.createError      = function (
 };
 AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 	const callback = () => {
-		this.input.getContext().silence = false;
+		this.input.getContext().setSilence( false );
 
 		this.validate().
 			then( () => {} ).
@@ -220,7 +220,7 @@ AdvancedReporting.prototype.validateOnBlur = function () {
 	this.isProcess      = true;
 	this.skipServerSide = false;
 
-	this.input.getContext().silence = false;
+	this.input.getContext().setSilence( false );
 
 	this.validate().
 		then( () => {} ).

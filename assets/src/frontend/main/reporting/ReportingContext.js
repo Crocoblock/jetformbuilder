@@ -12,10 +12,13 @@ function ReportingContext( root ) {
 ReportingContext.prototype = {
 	reset( props = {} ) {
 		this.reportedFirst = false;
-		this.silence       = props?.silence ?? true;
+		this.setSilence( props?.silence ?? true );
 	},
 	reportFirst() {
 		this.reportedFirst = true;
+	},
+	setSilence( value ) {
+		this.silence = !!value;
 	},
 };
 

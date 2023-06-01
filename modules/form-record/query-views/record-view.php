@@ -45,6 +45,23 @@ class Record_View extends View_Base {
 		return $this;
 	}
 
+	protected function set_id_filter() {
+		$id = absint( $this->filters['id'] ?? 0 );
+
+		if ( empty( $form ) ) {
+			return;
+		}
+
+		$this->add_conditions(
+			array(
+				array(
+					'type'   => Query_Conditions_Builder::TYPE_EQUAL,
+					'values' => array( 'id', $id ),
+				),
+			)
+		);
+	}
+
 	protected function set_form_filter() {
 		$form = absint( $this->filters['form'] ?? '' );
 

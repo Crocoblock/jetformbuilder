@@ -5,15 +5,16 @@
 		<template #heading-after>
 			<ExportEntriesButton/>
 		</template>
-		<ActionsWithFilters/>
-		<Portal to="scope-default/filters">
-			<FormFilter/>
-			<StatusFilter/>
-			<DatesFilter/>
-		</Portal>
-		<Portal to="scope-default/buttons">
-			<ClearFiltersButton/>
-		</Portal>
+		<ActionsWithFilters>
+			<template #filters>
+				<FormFilter/>
+				<StatusFilter/>
+				<DatesFilter/>
+			</template>
+			<template #buttons>
+				<ClearFiltersButton/>
+			</template>
+		</ActionsWithFilters>
 		<TablePagination/>
 		<EntriesTable/>
 		<TablePagination/>
@@ -23,8 +24,6 @@
 <script>
 import FormFilter from './filters/FormFilter';
 import ExportEntriesButton from './components/ExportEntriesButton';
-import DateFromFilter from './filters/DateFromFilter';
-import DateToFilter from './filters/DateToFilter';
 import DatesFilter from './filters/DatesFilter';
 import StatusFilter from './filters/StatusFilter';
 
@@ -34,7 +33,6 @@ const {
 	      FormBuilderPage,
 	      ActionsWithFilters,
 	      ClearFiltersButton,
-	      Portal,
       } = JetFBComponents;
 
 const {
@@ -66,7 +64,6 @@ export default {
 		EntriesTable,
 		ActionsWithFilters,
 		FormBuilderPage,
-		Portal,
 		FormFilter,
 		ClearFiltersButton,
 		ExportEntriesButton,

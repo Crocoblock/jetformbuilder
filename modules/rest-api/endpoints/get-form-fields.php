@@ -50,41 +50,13 @@ class Get_Form_Fields extends Rest_Api_Endpoint_Base {
 			);
 		}
 
-		$blocks      = Block_Helper::get_blocks_by_post( $form );
-		$fields      = array();
-		$in_repeater = false;
+		$blocks    = Block_Helper::get_blocks_by_post( $form );
+		$generator = Block_Helper::generate_top_fields( $blocks );
+		$fields    = array();
 
-		Block_Helper::filter_blocks(
-			static function ( $block ) use ( &$in_repeater ) {
-				$is_field = (
-					! empty( $block['attrs']['name'] ) &&
-					! $in_repeater &&
-
-					// it's not a conditional block
-					Form_Manager::NAMESPACE_FIELDS . 'conditional-block' !== $block['blockName'] &&
-
-					// has 'jet-forms/' namespace
-					false !== stripos( $block['blockName'], Form_Manager::NAMESPACE_FIELDS )
-				);
-
-				if ( ! $is_field ) {
-					return false;
-				}
-
-				if ( 'jet-forms/repeater-field' === $block['blockName'] ) {
-					$in_repeater = true;
-				}
-
-				return true;
-			},
-			$fields,
-			$blocks,
-			static function ( $block ) use ( &$in_repeater ) {
-				if ( 'jet-forms/repeater-field' === $block['blockName'] ) {
-					$in_repeater = false;
-				}
-			}
-		);
+		foreach ( $generator as $block ) {
+			$fields[] = $this->get_field( $block );
+		}
 
 		if ( empty( $fields ) ) {
 			return new \WP_REST_Response(
@@ -97,10 +69,7 @@ class Get_Form_Fields extends Rest_Api_Endpoint_Base {
 
 		return new \WP_REST_Response(
 			array(
-				'fields' => array_map(
-					array( $this, 'get_field' ),
-					$fields
-				),
+				'fields' => $fields,
 			)
 		);
 	}

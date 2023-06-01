@@ -10,19 +10,11 @@ class JetPlugins {
 		this.hooks = hooksHandler || createHooks();
 	}
 
-	hookNameBlockReady( block ) {
+	hookNameFromBlock( block ) {
 		const name = this.getBlockName( block );
 
 		return name
 		       ? `${ this.globalNamespace }.frontend.element-ready.${ name }`
-		       : '';
-	}
-
-	hookNameBlockRemoved( block ) {
-		const name = this.getBlockName( block );
-
-		return name
-		       ? `${ this.globalNamespace }.frontend.element-removed.${ name }`
 		       : '';
 	}
 
@@ -120,7 +112,7 @@ class JetPlugins {
 		const blockName = this.getBlockName( block.block );
 
 		this.hooks.addAction(
-			this.hookNameBlockReady( blockName ),
+			this.hookNameFromBlock( blockName ),
 			`${ this.globalNamespace }/${ block.block }`,
 			block.callback,
 		);

@@ -6,7 +6,7 @@ namespace JFB_Modules\Form_Record;
 use Jet_Form_Builder\Actions\Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
-use Jet_Form_Builder\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
+use JFB_Modules\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 use JFB_Modules\Base_Module\Base_Module_After_Install_It;
 use JFB_Modules\Base_Module\Base_Module_Dir_It;
 use JFB_Modules\Base_Module\Base_Module_Dir_Trait;
@@ -26,11 +26,19 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, Base_Module_After_Install_It, Base_Module_Handle_It {
+final class Module implements
+	Base_Module_It,
+	Base_Module_Url_It,
+	Base_Module_Dir_It,
+	Base_Module_After_Install_It,
+	Base_Module_Handle_It {
 
 	use Base_Module_Handle_Trait;
 	use Base_Module_Url_Trait;
 	use Base_Module_Dir_Trait;
+
+	/** @var Export\Controller */
+	private $export;
 
 	public function rep_item_id() {
 		return 'form-record';
@@ -38,6 +46,8 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 
 	public function on_install() {
 		( new Records_Rest_Controller() )->rest_api_init();
+
+		$this->export = new Export\Controller();
 	}
 
 	public function condition(): bool {
@@ -151,6 +161,13 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 	}
 
 	public function do_export_records() {
-		( new Export\Controller() )->run();
+		$this->export->run();
+	}
+
+	/**
+	 * @return Export\Controller
+	 */
+	public function get_export(): Export\Controller {
+		return $this->export;
 	}
 }

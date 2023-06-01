@@ -102,6 +102,8 @@ function CalculatedData() {
 	this.addListeners = function () {
 		// silence is golden
 	};
+
+	this.report = () => {};
 }
 
 CalculatedData.prototype = Object.create( InputData.prototype );

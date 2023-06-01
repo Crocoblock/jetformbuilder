@@ -1,17 +1,16 @@
 <template>
 	<div :class="wrapperClass" v-if="show">
 		<ChooseAction/>
-		<template v-if="hasFilters">
-			<PortalTarget :name="scopedName( 'filters' )" class="filters"/>
-			<div class="wrapper-buttons">
-				<PortalTarget :name="scopedName( 'buttons' )"/>
-			</div>
-		</template>
+		<div class="filters">
+			<slot name="filters"></slot>
+		</div>
+		<div class="wrapper-buttons">
+			<slot name="buttons"></slot>
+		</div>
 	</div>
 </template>
 
 <script>
-import { PortalTarget } from 'portal-vue';
 import ChooseAction from './ChooseAction';
 import ScopeStoreMixin from '../mixins/ScopeStoreMixin';
 
@@ -31,7 +30,6 @@ export default {
 	name: 'ActionsWithFilters',
 	components: {
 		ChooseAction,
-		PortalTarget,
 	},
 	mixins: [ GetIncoming, i18n, ScopeStoreMixin ],
 	data() {

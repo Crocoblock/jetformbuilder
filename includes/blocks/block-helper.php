@@ -19,6 +19,48 @@ if ( ! defined( 'WPINC' ) ) {
 class Block_Helper {
 
 	/**
+	 * @since 3.1.0
+	 *
+	 * @param array $blocks
+	 *
+	 * @return \Generator
+	 */
+	public static function generate_top_fields( array $blocks ): \Generator {
+		$in_repeater = false;
+
+		return self::generate_blocks(
+			static function ( $block ) use ( &$in_repeater ) {
+				$is_field = (
+					! empty( $block['attrs']['name'] ) &&
+					! $in_repeater &&
+
+					// it's not a conditional block
+					Form_Manager::NAMESPACE_FIELDS . 'conditional-block' !== $block['blockName'] &&
+
+					// has 'jet-forms/' namespace
+					false !== stripos( $block['blockName'], Form_Manager::NAMESPACE_FIELDS )
+				);
+
+				if ( ! $is_field ) {
+					return false;
+				}
+
+				if ( 'jet-forms/repeater-field' === $block['blockName'] ) {
+					$in_repeater = true;
+				}
+
+				return true;
+			},
+			$blocks,
+			static function ( $block ) use ( &$in_repeater ) {
+				if ( 'jet-forms/repeater-field' === $block['blockName'] ) {
+					$in_repeater = false;
+				}
+			}
+		);
+	}
+
+	/**
 	 * @param $value
 	 * @param $blocks
 	 *
@@ -108,30 +150,55 @@ class Block_Helper {
 	 * @return array
 	 */
 	public static function filter_blocks_by_namespace( $blocks, string $scope = Form_Manager::NAMESPACE_FIELDS ): array {
-		$fields = array();
+		$fields    = array();
+		$generator = self::generate_blocks_in_space( $blocks, $scope );
 
-		self::filter_blocks(
-			function ( $block ) use ( $scope ) {
-				return ( false !== stripos( $block['blockName'], $scope ) );
-			},
-			$fields,
-			$blocks
-		);
+		foreach ( $generator as $block ) {
+			$fields[] = $block;
+		}
 
 		return $fields;
 	}
 
-	public static function filter_blocks( $callback, array &$storage, array $source, $after_callback = null ) {
+	/**
+	 * @since 3.1.0
+	 *
+	 * @param array $blocks
+	 * @param string $scope
+	 *
+	 * @return \Generator
+	 */
+	public static function generate_blocks_in_space(
+		array $blocks,
+		string $scope = Form_Manager::NAMESPACE_FIELDS
+	): \Generator {
+		return self::generate_blocks(
+			static function ( $block ) use ( $scope ) {
+				return ( false !== stripos( $block['blockName'], $scope ) );
+			},
+			$blocks
+		);
+	}
+
+	/**
+	 * @param $callback
+	 * @param array $source
+	 * @param null $after_callback
+	 *
+	 * @return \Generator
+	 * @since 3.1.0
+	 */
+	public static function generate_blocks( $callback, array $source, $after_callback = null ): \Generator {
 		foreach ( $source as $index => $block ) {
 			if ( ! isset( $block['blockName'] ) ) {
 				continue;
 			}
 			if ( call_user_func( $callback, $block ) ) {
-				$storage[] = $block;
+				yield $block;
 			}
 
 			if ( ! empty( $block['innerBlocks'] ) ) {
-				self::filter_blocks( $callback, $storage, $block['innerBlocks'] );
+				yield from self::generate_blocks( $callback, $block['innerBlocks'] );
 			}
 
 			if ( is_callable( $after_callback ) ) {

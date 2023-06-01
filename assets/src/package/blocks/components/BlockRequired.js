@@ -1,4 +1,5 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
+import useIsHasAttribute from '../../hooks/useIsHasAttribute';
 
 const {
 	      __,
@@ -12,6 +13,10 @@ function BlockRequired( { label, help } ) {
 		      attributes,
 		      setAttributes,
 	      ] = useBlockAttributes();
+
+	if ( !useIsHasAttribute( 'required' ) ) {
+		return null;
+	}
 
 	return <ToggleControl
 		label={ label ?? __( 'Is required', 'jet-form-builder' ) }

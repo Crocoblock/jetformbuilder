@@ -84,10 +84,6 @@
 			"type": "string",
 			"default": ""
 		},
-		"required": {
-			"type": "boolean",
-			"default": false
-		},
 		"add_prev": {
 			"type": "boolean",
 			"default": false

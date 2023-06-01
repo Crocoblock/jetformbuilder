@@ -4,6 +4,15 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.0.8
+* UPD: Removed support for required attribute in Calculated Field
+* FIX: Forms are displayed on the front when their status is trash
+* FIX: WYSIWYG toolbar in JetPopup (by ajax)
+* FIX: Removed rtl support for Text Field with input mask due to "flipping" value
+* FIX: ActiveCampaign action does not show all fields
+* FIX: Changed the form selection control in the JetForm widget in Elementor due to a compatibility bug with Safari
+* FIX: Media Field and Firefox ESR browser compatibility
+
 ## 3.0.7
 * ADD: Support for custom css classes and anchors for the JetForm block
 * FIX: Additional security checks on export and duplicate forms.

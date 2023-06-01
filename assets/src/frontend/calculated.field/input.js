@@ -102,6 +102,9 @@ function CalculatedData() {
 	this.addListeners = function () {
 		// silence is golden
 	};
+
+	// calculated field can't be validated
+	this.report = () => {};
 }
 
 CalculatedData.prototype = Object.create( InputData.prototype );

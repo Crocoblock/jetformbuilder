@@ -14,6 +14,12 @@ class Retrieve_Custom_Fields_Action extends Base_Action implements Arrayable {
 		return 'fields';
 	}
 
+	public function action_query_args(): array {
+		return array(
+			'limit' => -1,
+		);
+	}
+
 	public function to_array(): array {
 		$response = array();
 

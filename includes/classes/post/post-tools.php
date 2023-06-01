@@ -25,6 +25,10 @@ class Post_Tools {
 			throw new Not_Found_Post_Exception( 'Not found post row' );
 		}
 
+		if ( 'publish' !== $post->post_status ) {
+			throw new Not_Found_Post_Exception( "Post isn't published" );
+		}
+
 		return $post;
 	}
 

@@ -21,7 +21,7 @@ abstract class Base_Form_Action {
 
 	public function do_action() {
 		if ( ! wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ?? '' ), $this->get_id() ) ) {
-			wp_die( 'Your link is expired, please return to the previous page and try again', 'Error' );
+			wp_die( 'Your link has expired, please return to the previous page and try again', 'Error' );
 		}
 
 		$this->do_admin_action();

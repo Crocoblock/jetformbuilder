@@ -3,7 +3,7 @@
 
 namespace Jet_Form_Builder\Classes\Filters;
 
-use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use JFB_Components\Repository\Repository_Item_Instance_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Admin\Pages;
 
 use Jet_Form_Builder\Admin\Pages\Settings\Settings_Page;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
-use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 // If this file is called directly, abort.

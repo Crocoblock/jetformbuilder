@@ -3,8 +3,8 @@
 
 namespace Jet_Form_Builder\Migrations\Versions;
 
-use Jet_Form_Builder\Classes\Repository\Repository_Item_With_Class;
-use Jet_Form_Builder\Classes\Repository\Repository_Static_Item_It;
+use JFB_Components\Repository\Repository_Item_With_Class;
+use JFB_Components\Repository\Repository_Static_Item_It;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Migrations\Migration_Exception;
 use Jet_Form_Builder\Migrations\Migration_Model;

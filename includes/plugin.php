@@ -11,12 +11,6 @@ use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Regexp_Tools;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Compatibility\Deprecated;
-use Jet_Form_Builder\Compatibility\Elementor\Elementor;
-use Jet_Form_Builder\Compatibility\Jet_Appointment\Jet_Appointment;
-use Jet_Form_Builder\Compatibility\Jet_Booking\Jet_Booking;
-use Jet_Form_Builder\Compatibility\Jet_Engine\Jet_Engine;
-use Jet_Form_Builder\Compatibility\Woocommerce\Woocommerce;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
 use Jet_Form_Builder\Form_Messages;
@@ -25,16 +19,16 @@ use Jet_Form_Builder\Framework\CX_Loader;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Integrations\Active_Campaign\Active_Campaign;
 use Jet_Form_Builder\Addons\Manager as AddonsManager;
-use JFB_Modules\Base_Module\Base_Module_After_Install_It;
-use JFB_Modules\Base_Module\Base_Module_Dir_It;
-use JFB_Modules\Base_Module\Base_Module_Handle_It;
-use JFB_Modules\Base_Module\Base_Module_It;
-use JFB_Modules\Base_Module\Base_Module_Url_It;
+use JFB_Compatibility\Compatibility_Controller;
+use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Handle_It;
+use JFB_Components\Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Modules\Modules_Controller;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Wp_Cli\Wp_Cli_Manager;
 use Jet_Form_Builder\Migrations;
-use Jet_Form_Builder\Compatibility\Wp_Experiments\Wp_Experiments;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -50,7 +44,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @property \Jet_Admin_Bar $admin_bar
  * @property Form_Messages\Msg_Router $msg_router
  * @property Regexp_Tools $regexp
- * @property Wp_Experiments $wp_experiments
  *
  * Class Plugin
  * @package Jet_Form_Builder
@@ -67,10 +60,10 @@ class Plugin {
 	public $addons_manager;
 	public $admin_bar;
 	public $msg_router;
-	public $wp_experiments;
 	public $regexp;
 
 	private $modules_controller;
+	private $compat_controller;
 
 	public static $instance;
 
@@ -107,17 +100,6 @@ class Plugin {
 		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
 		$this->maybe_enable_gateways();
 
-		/**
-		 * Compatibility & Integrations
-		 */
-		Woocommerce::register();
-		Jet_Engine::register();
-		Active_Campaign::register();
-		Elementor::register();
-		Jet_Appointment::register();
-		Jet_Booking::register();
-		new Deprecated();
-
 		$this->admin_bar      = \Jet_Admin_Bar::get_instance();
 		$this->msg_router     = new Form_Messages\Msg_Router();
 		$this->post_type      = new Post_Type();
@@ -125,7 +107,6 @@ class Plugin {
 		$this->form           = new Form_Manager();
 		$this->form_handler   = new Form_Handler();
 		$this->addons_manager = new AddonsManager();
-		$this->wp_experiments = new Wp_Experiments();
 		$this->regexp         = new Regexp_Tools();
 
 		/**
@@ -227,6 +208,20 @@ class Plugin {
 		return JET_FORM_BUILDER_VERSION;
 	}
 
+	/**
+	 * @param string $name_or_class
+	 *
+	 * @return Base_Module_It|Base_Module_Handle_It|Base_Module_Url_It|Base_Module_Dir_It|Base_Module_After_Install_It
+	 * @throws Exceptions\Repository_Exception
+	 */
+	public function module( string $name_or_class ): Base_Module_It {
+		return $this->get_modules()->module( $name_or_class );
+	}
+
+	public function has_module( string $name_or_class ): bool {
+		return $this->get_modules()->has_module( $name_or_class );
+	}
+
 	public function get_modules(): Modules_Controller {
 		if ( is_null( $this->modules_controller ) ) {
 			$this->modules_controller = new Modules_Controller();
@@ -241,12 +236,20 @@ class Plugin {
 	 * @return Base_Module_It|Base_Module_Handle_It|Base_Module_Url_It|Base_Module_Dir_It|Base_Module_After_Install_It
 	 * @throws Exceptions\Repository_Exception
 	 */
-	public function module( string $name_or_class ): Base_Module_It {
-		return $this->get_modules()->module( $name_or_class );
+	public function compat( string $name_or_class ): Base_Module_It {
+		return $this->get_compat()->module( $name_or_class );
 	}
 
-	public function has_module( string $name_or_class ): bool {
-		return $this->get_modules()->has_module( $name_or_class );
+	public function has_compat( string $name_or_class ): bool {
+		return $this->get_compat()->has_module( $name_or_class );
+	}
+
+	public function get_compat(): Compatibility_Controller {
+		if ( is_null( $this->compat_controller ) ) {
+			$this->compat_controller = new Compatibility_Controller();
+		}
+
+		return $this->compat_controller;
 	}
 
 	/**
@@ -302,4 +305,7 @@ class Plugin {
 }
 
 Plugin::instance()->get_modules()->rep_install();
+Plugin::instance()->get_compat()->rep_install();
+
 Plugin::instance()->get_modules()->init_hooks();
+Plugin::instance()->get_compat()->init_hooks();

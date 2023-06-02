@@ -3,7 +3,7 @@
 
 namespace JFB_Modules\Block_Sanitizer;
 
-use JFB_Modules\Base_Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_It;
 use Jet_Form_Builder\Blocks\Block_Helper;
 
 // If this file is called directly, abort.

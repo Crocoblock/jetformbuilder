@@ -8,21 +8,18 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
-use JFB_Modules\Base_Module\Base_Module_After_Install_It;
-use JFB_Modules\Base_Module\Base_Module_Dir_It;
-use JFB_Modules\Base_Module\Base_Module_Handle_It;
-use JFB_Modules\Base_Module\Base_Module_It;
-use JFB_Modules\Base_Module\Base_Module_Url_It;
 use Jet_Form_Builder\Blocks;
+use JFB_Components\Module\Module_Controller_It;
+use JFB_Components\Module\Module_Controller_Trait;
 
-class Modules_Controller {
+class Modules_Controller implements Module_Controller_It {
 
-	use Repository_Pattern_Trait;
+	use Module_Controller_Trait;
 
 	public function rep_instances(): array {
 		return array(
+			new Wp_Experiments\Module(),
+			new Deprecated\Module(),
 			new Rest_Api\Module(),
 			new Blocks\Module(),
 			new Block_Sanitizer\Module(),
@@ -35,64 +32,4 @@ class Modules_Controller {
 		);
 	}
 
-	public function init_hooks() {
-		/** @var Base_Module_It $item */
-		foreach ( $this->rep_generate_items() as $item ) {
-			$item->init_hooks();
-		}
-	}
-
-	/**
-	 * @param string $name_or_class
-	 *
-	 * @return Base_Module_It|Base_Module_Handle_It|Base_Module_Url_It|Base_Module_Dir_It|Base_Module_After_Install_It
-	 * @throws Repository_Exception
-	 */
-	public function module( string $name_or_class ): Base_Module_It {
-		return $this->rep_get_item( $name_or_class );
-	}
-
-	public function has_module( string $name_or_class ): bool {
-		try {
-			$this->module( $name_or_class );
-
-			return true;
-		} catch ( Repository_Exception $exception ) {
-			return false;
-		}
-	}
-
-	public function install( Base_Module_It $item ): bool {
-		try {
-			$this->rep_install_item( $item );
-
-			return true;
-		} catch ( Repository_Exception $exception ) {
-			return false;
-		}
-	}
-
-	/**
-	 * @param $item Base_Module_It
-	 *
-	 * @throws Repository_Exception
-	 */
-	public function rep_before_install_item( $item ) {
-		if (
-			! is_object( $item ) ||
-			! ( $item instanceof Base_Module_It ) ||
-			! $item->condition()
-		) {
-			$this->_rep_abort_this();
-		}
-	}
-
-	/**
-	 * @param $item Base_Module_It
-	 */
-	public function rep_after_install_item( $item ) {
-		if ( $item instanceof Base_Module_After_Install_It ) {
-			$item->on_install();
-		}
-	}
 }

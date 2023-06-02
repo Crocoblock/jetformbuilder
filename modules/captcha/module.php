@@ -9,7 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 use Jet_Form_Builder\Blocks\Block_Helper;
-use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Captcha\Abstract_Captcha\Base_Captcha;
@@ -20,14 +20,14 @@ use JFB_Modules\Captcha\Friendly_Captcha\Friendly_Captcha;
 use JFB_Modules\Captcha\Hcaptcha\Hcaptcha;
 use JFB_Modules\Captcha\Re_Captcha_V3\Re_Captcha_V3;
 use JFB_Modules\Captcha\Turnstile\Turnstile;
-use JFB_Modules\Base_Module\Base_Module_After_Install_It;
-use JFB_Modules\Base_Module\Base_Module_Dir_It;
-use JFB_Modules\Base_Module\Base_Module_Dir_Trait;
-use JFB_Modules\Base_Module\Base_Module_Handle_It;
-use JFB_Modules\Base_Module\Base_Module_Handle_Trait;
-use JFB_Modules\Base_Module\Base_Module_It;
-use JFB_Modules\Base_Module\Base_Module_Url_It;
-use JFB_Modules\Base_Module\Base_Module_Url_Trait;
+use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
+use JFB_Components\Module\Base_Module_Handle_It;
+use JFB_Components\Module\Base_Module_Handle_Trait;
+use JFB_Components\Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_Url_It;
+use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Security\Exceptions\Spam_Exception;
 use Jet_Form_Builder\Plugin;
 

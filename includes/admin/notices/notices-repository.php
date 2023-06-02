@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Admin\Notices;
 
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
-use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use JFB_Components\Repository\Repository_Pattern_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

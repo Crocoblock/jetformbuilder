@@ -4,12 +4,12 @@
 namespace JFB_Modules\Switch_Page_On_Change;
 
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
-use JFB_Modules\Base_Module\Base_Module_After_Install_It;
-use JFB_Modules\Base_Module\Base_Module_Handle_It;
-use JFB_Modules\Base_Module\Base_Module_Handle_Trait;
-use JFB_Modules\Base_Module\Base_Module_It;
-use JFB_Modules\Base_Module\Base_Module_Url_It;
-use JFB_Modules\Base_Module\Base_Module_Url_Trait;
+use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Handle_It;
+use JFB_Components\Module\Base_Module_Handle_Trait;
+use JFB_Components\Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_Url_It;
+use JFB_Components\Module\Base_Module_Url_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

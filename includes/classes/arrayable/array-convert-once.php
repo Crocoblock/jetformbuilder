@@ -3,8 +3,8 @@
 
 namespace Jet_Form_Builder\Classes\Arrayable;
 
-use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
-use Jet_Form_Builder\Classes\Repository\Repository_Static_Item_It;
+use JFB_Components\Repository\Repository_Item_Instance_Trait;
+use JFB_Components\Repository\Repository_Static_Item_It;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

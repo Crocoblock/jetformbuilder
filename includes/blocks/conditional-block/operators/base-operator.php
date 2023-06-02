@@ -6,7 +6,7 @@ namespace Jet_Form_Builder\Blocks\Conditional_Block\Operators;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Response_Object;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Types\Base_Condition_Type;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
-use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use JFB_Components\Repository\Repository_Item_Instance_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

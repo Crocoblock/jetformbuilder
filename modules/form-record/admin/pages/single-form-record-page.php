@@ -3,7 +3,7 @@
 
 namespace JFB_Modules\Form_Record\Admin\Pages;
 
-use JFB_Modules\Base_Module\Module_Tools;
+use JFB_Components\Module\Module_Tools;
 use JFB_Modules\Form_Record\Admin\Meta_Boxes;
 use JFB_Modules\Form_Record\Admin\Notices\Update_Db_Notice;
 use Jet_Form_Builder\Admin\Notices\With_Notices_Trait;

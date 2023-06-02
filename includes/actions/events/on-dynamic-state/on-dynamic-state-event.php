@@ -6,7 +6,7 @@ namespace Jet_Form_Builder\Actions\Events\On_Dynamic_State;
 use Jet_Form_Builder\Actions\Events\Base_Event;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Render_State_Replace_Exception;
-use Jet_Form_Builder\Classes\Repository\Repository_Item_Dynamic_Id;
+use JFB_Components\Repository\Repository_Item_Dynamic_Id;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 class On_Dynamic_State_Event extends Base_Event implements Repository_Item_Dynamic_Id {

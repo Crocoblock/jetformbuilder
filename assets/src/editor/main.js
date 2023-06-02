@@ -3,7 +3,6 @@ import './form-actions/send.email/index';
 import './form-actions/insert.post/index';
 import './form-actions/register.user/index';
 import './form-actions/update.user/index';
-import './form-actions/update.options/index';
 import './form-actions/call.hook/index';
 import './form-actions/call.webhook/index';
 import './form-actions/redirect.to.page/index';

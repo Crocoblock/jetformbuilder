@@ -3,7 +3,7 @@
 
 namespace JFB_Modules\Security\Wp_Nonce;
 
-use JFB_Modules\Base_Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_It;
 use JFB_Modules\Security\Exceptions\Spam_Exception;
 
 // If this file is called directly, abort.

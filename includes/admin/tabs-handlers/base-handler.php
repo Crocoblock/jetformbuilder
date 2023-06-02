@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use JFB_Components\Repository\Repository_Item_Instance_Trait;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;

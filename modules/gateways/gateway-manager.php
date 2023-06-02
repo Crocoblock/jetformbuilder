@@ -6,7 +6,7 @@ use Jet_Form_Builder\Actions\Events\Default_Process\Default_With_Gateway_Executo
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Instance_Trait;
-use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Gateways\Meta_Boxes\Payment_Info_For_Record;
 use JFB_Modules\Gateways\Pages\Payments_Page;

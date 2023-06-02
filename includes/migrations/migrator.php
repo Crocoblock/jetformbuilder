@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Migrations;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
-use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Migrations\Profilers\Base_Migration_Profiler;

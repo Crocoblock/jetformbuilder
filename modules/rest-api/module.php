@@ -3,8 +3,8 @@
 
 namespace JFB_Modules\Rest_Api;
 
-use JFB_Modules\Base_Module\Base_Module_After_Install_It;
-use JFB_Modules\Base_Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_It;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

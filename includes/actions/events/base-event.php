@@ -6,7 +6,7 @@ namespace Jet_Form_Builder\Actions\Events;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Arrayable\Collection_Item_Interface;
-use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
 // If this file is called directly, abort.

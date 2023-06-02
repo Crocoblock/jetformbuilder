@@ -5,7 +5,7 @@ namespace JFB_Modules\Security\Honeypot;
 
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
-use JFB_Modules\Base_Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_It;
 use JFB_Modules\Security\Exceptions\Spam_Exception;
 
 // If this file is called directly, abort.

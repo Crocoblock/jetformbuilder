@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Request;
 
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
-use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
 use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;

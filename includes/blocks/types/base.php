@@ -8,7 +8,7 @@ use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Blocks\Modules\Base_Module;
 use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Classes\Compatibility;
-use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;

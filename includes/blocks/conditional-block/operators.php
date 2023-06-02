@@ -19,7 +19,7 @@ use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_In_The_List;
 use Jet_Form_Builder\Blocks\Conditional_Block\Operators\Operator_Less;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
-use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 // If this file is called directly, abort.

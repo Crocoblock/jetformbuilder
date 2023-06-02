@@ -3,7 +3,7 @@
 
 namespace JFB_Modules\Form_Record\Admin\Pages;
 
-use JFB_Modules\Base_Module\Module_Tools;
+use JFB_Components\Module\Module_Tools;
 use JFB_Modules\Form_Record\Admin\Table_Views\Records_Table_View;
 use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;

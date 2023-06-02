@@ -36,18 +36,6 @@ const modifiers = applyFilters(
 	'jet.fb.insert.post.modifiers',
 	[
 		{
-			id: 'product',
-			/**
-			 * @since 3.0.4 Make sure WooCommerce is installed
-			 *
-			 * @param settings
-			 * @returns {*|boolean}
-			 */
-			isSupported: settings => (
-				JetFormEditorData.wooExist && 'product' === settings.post_type
-			),
-		},
-		{
 			id: 'all',
 			isSupported: settings => true,
 		},

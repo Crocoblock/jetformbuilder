@@ -12,7 +12,7 @@ use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Classes\Arrayable\Array_Convert_Once;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
-use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Theme\With_Theme_Info;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 

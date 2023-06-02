@@ -11,7 +11,7 @@ use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
 use JET_SM\Gutenberg\Block_Manager;
-use JFB_Modules\Base_Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_It;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;

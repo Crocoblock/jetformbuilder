@@ -6,7 +6,7 @@ use Jet_Form_Builder\Classes\Arguments\Default_Form_Arguments;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Get_Icon_Trait;
-use Jet_Form_Builder\Classes\Repository\Repository_Pattern_Trait;
+use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Post_Meta\Actions_Meta;

@@ -4,14 +4,14 @@
 namespace JFB_Modules\Security;
 
 use Jet_Form_Builder\Dev_Mode\Logger;
-use JFB_Modules\Base_Module\Base_Module_After_Install_It;
-use JFB_Modules\Base_Module\Base_Module_Dir_It;
-use JFB_Modules\Base_Module\Base_Module_Dir_Trait;
-use JFB_Modules\Base_Module\Base_Module_Handle_It;
-use JFB_Modules\Base_Module\Base_Module_Handle_Trait;
-use JFB_Modules\Base_Module\Base_Module_It;
-use JFB_Modules\Base_Module\Base_Module_Url_It;
-use JFB_Modules\Base_Module\Base_Module_Url_Trait;
+use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
+use JFB_Components\Module\Base_Module_Handle_It;
+use JFB_Components\Module\Base_Module_Handle_Trait;
+use JFB_Components\Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_Url_It;
+use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Security\Exceptions\Spam_Exception;
 use JFB_Modules\Security\Csrf;
 use JFB_Modules\Security\Honeypot;

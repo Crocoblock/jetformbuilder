@@ -13,9 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Autoloader {
 
 	const NAMESPACES = array(
-		__NAMESPACE__ . '\\' => 'includes/',
-		'JFB_Modules\\'      => 'modules/',
-		'JFB_Components\\'   => 'components/',
+		__NAMESPACE__ . '\\'  => 'includes/',
+		'JFB_Modules\\'       => 'modules/',
+		'JFB_Components\\'    => 'components/',
+		'JFB_Compatibility\\' => 'compatibility/',
 	);
 
 	/**

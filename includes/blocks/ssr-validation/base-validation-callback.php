@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Blocks\Ssr_Validation;
 
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
-use Jet_Form_Builder\Classes\Repository\Repository_Item_Instance_Trait;
+use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Request\Parser_Context;
 
 // If this file is called directly, abort.

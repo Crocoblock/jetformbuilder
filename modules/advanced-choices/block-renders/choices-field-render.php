@@ -7,7 +7,9 @@ namespace JFB_Modules\Advanced_Choices\Block_Renders;
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Render\Base;
 use Jet_Form_Builder\Classes\Builder_Helper;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Advanced_Choices\Block_Types\Choices_Field;
+use JFB_Modules\Wp_Experiments\Module;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -25,6 +27,13 @@ class Choices_Field_Render extends Base {
 		return 'choices-field';
 	}
 
+	/**
+	 * @param null $wp_block
+	 * @param null $template
+	 *
+	 * @return false|string
+	 * @throws Repository_Exception
+	 */
 	public function render( $wp_block = null, $template = null ) {
 		/**
 		 * For radio options, you must specify these attributes on the wrapper
@@ -54,11 +63,13 @@ class Choices_Field_Render extends Base {
 			$accessibility
 		);
 
-		jet_form_builder()->wp_experiments->enable_native_layout();
+		/** @var Module $module */
+		$module = jet_form_builder()->module( 'wp-experiments' );
+		$module->enable_native_layout();
 
 		$html = wp_render_layout_support_flag( $html, Block_Helper::current_block() );
 
-		jet_form_builder()->wp_experiments->remove_native_layout();
+		$module->remove_native_layout();
 
 		return parent::render( null, $html );
 	}

@@ -252,6 +252,16 @@ Observable.prototype = {
 	getContext: function () {
 		return this.context ?? this.parent.root.context;
 	},
+	/**
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/2711
+	 *
+	 * @since 3.0.8
+	 */
+	remove: function () {
+		for ( const input of this.getInputs() ) {
+			input.onRemove();
+		}
+	},
 };
 
 export default Observable;

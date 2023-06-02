@@ -20,10 +20,8 @@ ObservableRow.prototype.observe = function ( root ) {
 	this.parent.lastObserved.current = this;
 };
 
-ObservableRow.prototype.remove = function () {
-	for ( const input of this.getInputs() ) {
-		input.onRemove();
-	}
+ObservableRow.prototype.removeManually = function () {
+	this.remove();
 
 	this.parent.remove( this );
 	this.rootNode.remove();

@@ -40,6 +40,7 @@ import {
 	observeComment,
 	iterateJfbComments,
 } from './html.macro/functions';
+import removeForm from './init/removeForm';
 
 window.JetFormBuilderAbstract = {
 	...(

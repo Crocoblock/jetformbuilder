@@ -1,6 +1,5 @@
 import actions from './actions';
 import args from './arguments';
-import gateways from './gateways';
 import preset from './preset';
 import messages from './messages';
 import limitAddon from './limit-addon';
@@ -59,7 +58,6 @@ export default function RegisterPlugins() {
 	const jfbPlugins    = applyFilters( 'jet.fb.register.plugins', [
 		args,
 		validation,
-		gateways,
 		actions,
 		preset,
 		messages,

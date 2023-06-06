@@ -11,7 +11,6 @@ use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Form_Response\Response;
 use Jet_Form_Builder\Form_Response\Types\Reload_Response;
-use JFB_Modules\Gateways\Module as GM;
 use JFB_Modules\Gateways\Scenarios_Abstract\Scenarios_Manager_Abstract;
 
 // If this file is called directly, abort.
@@ -42,7 +41,7 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	protected $token_query_name;
 
 	protected $removed_query_args_on_payment = array(
-		GM::PAYMENT_TYPE_PARAM,
+		Module::PAYMENT_TYPE_PARAM,
 		Scenarios_Manager_Abstract::QUERY_VAR,
 		'session_id',
 		'order_token',
@@ -184,7 +183,7 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 
 		return isset( $this->gateways_meta['messages'][ $type ] )
 			? $this->apply_macros( $this->gateways_meta['messages'][ $type ] )
-			: Gateway_Manager::instance()->default_messages()[ $type ];
+			: Module::instance()->default_messages()[ $type ];
 	}
 
 
@@ -219,7 +218,7 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	public function get_refer_url( $type, array $additional_args = array() ) {
 		return add_query_arg(
 			array_merge(
-				array( GM::PAYMENT_TYPE_PARAM => $this->get_id() ),
+				array( Module::PAYMENT_TYPE_PARAM => $this->get_id() ),
 				$additional_args
 			),
 			jet_fb_handler()->refer
@@ -242,7 +241,7 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 
 
 	public function with_global_settings() {
-		return Gateway_Manager::instance()->with_global_settings( $this->retrieve_gateway_meta(), $this->get_id() );
+		return Module::instance()->with_global_settings( $this->retrieve_gateway_meta(), $this->get_id() );
 	}
 
 

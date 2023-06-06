@@ -17,6 +17,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Single_Payment_Page extends Base_Single_Page {
 
+	use Gateways_Pages_Trait;
+
 	/**
 	 * Page title
 	 */

@@ -16,7 +16,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-abstract class Base_Scenario_Gateway extends Base_Gateway {
+abstract class Base_Scenario_Gateway extends \Jet_Form_Builder\Gateways\Base_Gateway {
 
 	/**
 	 * @return Scenario_Logic_Base

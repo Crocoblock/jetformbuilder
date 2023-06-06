@@ -1,5 +1,3 @@
-import * as paypal from './paypal';
-
 const {
 	gatewayAttr,
 	renderGateway,

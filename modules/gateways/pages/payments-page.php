@@ -14,6 +14,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Payments_Page extends Base_Page {
 
+	use Gateways_Pages_Trait;
+
 	const SLUG = 'jfb-payments';
 
 	public function slug(): string {

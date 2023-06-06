@@ -4,7 +4,6 @@ namespace JFB_Modules\Gateways\Paypal;
 
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use JFB_Modules\Gateways\Base_Scenario_Gateway;
 use JFB_Modules\Gateways\Module;
 use JFB_Modules\Gateways\Paypal\Api_Actions\Get_Token;
 
@@ -13,7 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Controller extends Base_Scenario_Gateway {
+class Controller extends \Jet_Form_Builder\Gateways\Base_Scenario_Gateway {
 
 	const ID = 'paypal';
 

@@ -1,4 +1,4 @@
-import GatewaysEditor from '../../gateways/gateways-editor';
+import GatewaysEditor from '../components/gateways-editor';
 
 const {
 	      RadioControl,

@@ -113,7 +113,7 @@ trait Gateways_Editor_Data {
 
 	public function editor_data() {
 		$result = array(
-			'allowed' => Plugin::instance()->allow_gateways,
+			'allowed' => true,
 		);
 
 		if ( $result['allowed'] ) {

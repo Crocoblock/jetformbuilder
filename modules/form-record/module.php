@@ -6,6 +6,7 @@ namespace JFB_Modules\Form_Record;
 use Jet_Form_Builder\Actions\Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
+use JFB_Components\Wp_Nonce\Wp_Nonce;
 use JFB_Modules\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
@@ -37,8 +38,13 @@ final class Module implements
 	use Base_Module_Url_Trait;
 	use Base_Module_Dir_Trait;
 
-	/** @var Export\Controller */
-	private $export;
+	const EXPORT_ACTION = 'jfb_records_export_admin';
+
+	/** @var Export\Multiple_Controller */
+	private $export_multiple;
+
+	/** @var Export\Single_Controller */
+	private $export_single;
 
 	public function rep_item_id() {
 		return 'form-record';
@@ -47,7 +53,13 @@ final class Module implements
 	public function on_install() {
 		( new Records_Rest_Controller() )->rest_api_init();
 
-		$this->export = new Export\Controller();
+		$nonce = new Wp_Nonce( self::EXPORT_ACTION );
+
+		$this->export_multiple = new Export\Multiple_Controller();
+		$this->export_single   = new Export\Single_Controller();
+
+		$this->export_multiple->set_wp_nonce( $nonce );
+		$this->export_single->set_wp_nonce( $nonce );
 	}
 
 	public function condition(): bool {
@@ -67,7 +79,7 @@ final class Module implements
 			3
 		);
 		add_action(
-			'admin_action_' . Export\Controller::ACTION,
+			'admin_action_' . self::EXPORT_ACTION,
 			array( $this, 'do_export_records' )
 		);
 
@@ -98,7 +110,7 @@ final class Module implements
 			10
 		);
 		remove_action(
-			'admin_action_' . Export\Controller::ACTION,
+			'admin_action_' . self::EXPORT_ACTION,
 			array( $this, 'do_export_records' )
 		);
 
@@ -161,13 +173,20 @@ final class Module implements
 	}
 
 	public function do_export_records() {
-		$this->export->run();
+		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( array_key_exists( 'id', $_GET ) ) {
+			$this->export_single->run();
+		} else {
+			$this->export_multiple->run();
+		}
 	}
 
-	/**
-	 * @return Export\Controller
-	 */
-	public function get_export(): Export\Controller {
-		return $this->export;
+	public function get_export_multiple(): Export\Multiple_Controller {
+		return $this->export_multiple;
 	}
+
+	public function get_export_single(): Export\Single_Controller {
+		return $this->export_single;
+	}
+
 }

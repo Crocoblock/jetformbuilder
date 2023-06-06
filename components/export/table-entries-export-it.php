@@ -8,7 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-interface Multiple_Entries_Export_It extends Base_Export_It {
+interface Table_Entries_Export_It extends Base_Export_It {
 
 	public function add_row( array $row );
 

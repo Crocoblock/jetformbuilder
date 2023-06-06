@@ -6,8 +6,11 @@ namespace JFB_Modules\Form_Record\Export;
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use JFB_Components\Export\Export_Tools;
-use JFB_Components\Export\Multiple_Entries_Export_It;
+use JFB_Components\Export\Table_Entries_Export_It;
 use JFB_Components\Wp_Nonce\Wp_Nonce;
+use JFB_Components\Wp_Nonce\Wp_Nonce_It;
+use JFB_Components\Wp_Nonce\Wp_Nonce_Trait;
+use JFB_Modules\Form_Record\Module;
 use JFB_Modules\Form_Record\Query_Views\Record_Fields_View;
 use JFB_Modules\Form_Record\Query_Views\Record_View;
 
@@ -16,37 +19,15 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Controller {
+class Multiple_Controller extends Base_Export_Controller {
 
-	const ACTION = 'jfb_records_export_admin';
-
-	protected $nonce;
-	protected $fields_columns;
-	protected $extra_columns;
 	protected $form_id;
-
-	public function __construct() {
-		$this->nonce = new Wp_Nonce( self::ACTION );
-	}
-
-	public function run() {
-		try {
-			$this->do_export();
-		} catch ( \Exception $exception ) {
-			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die(
-				$exception->getMessage(),
-				__( 'Error', 'jet-form-builder' )
-			);
-			// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-		}
-	}
 
 	/**
 	 * @throws \Exception
 	 */
 	protected function do_export() {
-		if ( ! $this->nonce->verify() || ! current_user_can( 'manage_options' ) ) {
+		if ( ! $this->get_wp_nonce()->verify() || ! current_user_can( 'manage_options' ) ) {
 			throw new \Exception(
 				__( 'You don`t have access to this URL', 'jet-form-builder' )
 			);
@@ -55,7 +36,7 @@ class Controller {
 		$exporter             = $this->get_exporter();
 		$this->form_id        = $this->get_form_id();
 		$this->fields_columns = $this->get_field_columns();
-		$this->extra_columns  = $this->get_extra_columns();
+		$this->modify_extra_columns();
 
 		if ( ! $this->fields_columns && ! $this->extra_columns ) {
 			throw new \Exception(
@@ -76,9 +57,9 @@ class Controller {
 
 
 	/**
-	 * @param Multiple_Entries_Export_It $export
+	 * @param Table_Entries_Export_It $export
 	 */
-	protected function add_rows( Multiple_Entries_Export_It $export ) {
+	protected function add_rows( Table_Entries_Export_It $export ) {
 		try {
 			$records = $this->get_records();
 		} catch ( Query_Builder_Exception $exception ) {
@@ -110,19 +91,6 @@ class Controller {
 
 			$export->add_row( $this->prepare_row( $fields_values, $record ) );
 		}
-	}
-
-
-	protected function prepare_row( array $fields_values, array $extra_values ): array {
-		foreach ( $extra_values as $property => $record_value ) {
-			$extra_values[ sprintf( 'extra|%s', $property ) ] = is_null( $record_value ) ? '' : $record_value;
-			unset( $extra_values[ $property ] );
-		}
-
-		return array_merge(
-			$fields_values,
-			$extra_values
-		);
 	}
 
 	/**
@@ -174,33 +142,15 @@ class Controller {
 		return $columns;
 	}
 
-	protected function get_extra_columns(): array {
-		$columns = array(
-			'id'                => __( 'ID (primary)', 'jet-form-builder' ),
-			'form_id'           => __( 'Form ID', 'jet-form-builder' ),
-			'user_id'           => __( 'User ID', 'jet-form-builder' ),
-			'from_content_id'   => __( 'From content ID', 'jet-form-builder' ),
-			'from_content_type' => __( 'From content type', 'jet-form-builder' ),
-			'status'            => __( 'Status', 'jet-form-builder' ),
-			'ip_address'        => __( 'IP address', 'jet-form-builder' ),
-			'user_agent'        => __( 'User agent', 'jet-form-builder' ),
-			'referrer'          => __( 'Referrer', 'jet-form-builder' ),
-			'submit_type'       => __( 'Submit type', 'jet-form-builder' ),
-			'is_viewed'         => __( 'Is viewed', 'jet-form-builder' ),
-			'created_at'        => __( 'Created', 'jet-form-builder' ),
-			'updated_at'        => __( 'Updated', 'jet-form-builder' ),
-		);
-
+	protected function modify_extra_columns() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$extra = array_map( 'sanitize_key', (array) ( $_GET['extra'] ?? array() ) );
 
-		foreach ( $columns as $column_name => $label ) {
+		foreach ( $this->extra_columns as $column_name => $label ) {
 			if ( ! in_array( $column_name, $extra, true ) ) {
-				unset( $columns[ $column_name ] );
+				unset( $this->extra_columns[ $column_name ] );
 			}
 		}
-
-		return $columns;
 	}
 
 	/**
@@ -218,23 +168,6 @@ class Controller {
 		}
 
 		return $form_id;
-	}
-
-	/**
-	 * @return Multiple_Entries_Export_It
-	 * @throws \Exception
-	 */
-	protected function get_exporter(): Multiple_Entries_Export_It {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$exporter = Export_Tools::get_exporter( sanitize_key( $_GET['format'] ?? 'csv' ) );
-
-		if ( ! ( $exporter instanceof Multiple_Entries_Export_It ) ) {
-			throw new \Exception(
-				__( 'Undefined export type', 'jet-form-builder' )
-			);
-		}
-
-		return $exporter;
 	}
 
 	/**
@@ -265,20 +198,6 @@ class Controller {
 
 	protected function get_file_name(): string {
 		return get_the_title( $this->form_id ) . ' ' . __( 'records', 'jet-form-builder' );
-	}
-
-	public function get_nonce(): Wp_Nonce {
-		return $this->nonce;
-	}
-
-	public function get_url(): string {
-		return add_query_arg(
-			array(
-				'action'                 => self::ACTION,
-				$this->nonce->get_name() => $this->nonce->create(),
-			),
-			admin_url( 'admin.php' )
-		);
 	}
 
 

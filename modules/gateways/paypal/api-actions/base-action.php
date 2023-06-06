@@ -4,7 +4,7 @@
 namespace JFB_Modules\Gateways\Paypal\Api_Actions;
 
 use JFB_Modules\Gateways\Base_Gateway_Action;
-use JFB_Modules\Gateways\Gateway_Manager;
+use JFB_Modules\Gateways\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 abstract class Base_Action extends Base_Gateway_Action {
 
 	public function base_url(): string {
-		return Gateway_Manager::instance()->is_sandbox
+		return Module::instance()->is_sandbox
 			? 'https://api-m.sandbox.paypal.com/'
 			: 'https://api-m.paypal.com/';
 	}

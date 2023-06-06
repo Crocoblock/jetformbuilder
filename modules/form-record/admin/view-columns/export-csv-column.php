@@ -4,7 +4,6 @@
 namespace JFB_Modules\Form_Record\Admin\View_Columns;
 
 use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
-use Jet_Form_Builder\Classes\Post\Post_Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Form_Record\Module;
 
@@ -38,11 +37,9 @@ class Export_Csv_Column extends Column_Advanced_Base {
 			'text' => __( 'Export in CSV', 'jet-form-builder' ),
 			'href' => add_query_arg(
 				array(
-					'filters' => array(
-						'id' => $record_id,
-					),
+					'id' => $record_id,
 				),
-				$module->get_export()->get_url()
+				$module->get_export_single()->get_url()
 			),
 			'type' => 'external',
 		);

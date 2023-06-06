@@ -7,7 +7,7 @@ use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use JFB_Modules\Gateways\Gateway_Manager as GM;
+use JFB_Modules\Gateways\Module as GM;
 use JFB_Modules\Gateways\Paypal\Scenarios_Manager;
 use JFB_Modules\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 

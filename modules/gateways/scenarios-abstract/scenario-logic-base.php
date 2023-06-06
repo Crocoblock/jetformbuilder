@@ -5,16 +5,13 @@ namespace JFB_Modules\Gateways\Scenarios_Abstract;
 
 use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
 use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
-use JFB_Modules\Form_Record\Query_Views\Record_Fields_View;
 use JFB_Modules\Form_Record\Tools;
-use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
 use Jet_Form_Builder\Actions\Types\Save_Record;
-use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Messages\Manager;
-use JFB_Modules\Gateways\Gateway_Manager;
+use JFB_Modules\Gateways\Module;
 use JFB_Modules\Gateways\Scenario_Item;
 use JFB_Modules\Gateways\Paypal\Scenarios_Manager;
 
@@ -87,8 +84,8 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 	public function get_referrer_url( string $type ) {
 		return add_query_arg(
 			array(
-				Gateway_Manager::PAYMENT_TYPE_PARAM => jet_fb_gateway_current()->get_id(),
-				Scenarios_Manager::QUERY_VAR        => static::scenario_id(),
+				Module::PAYMENT_TYPE_PARAM   => jet_fb_gateway_current()->get_id(),
+				Scenarios_Manager::QUERY_VAR => static::scenario_id(),
 			),
 			jet_fb_handler()->refer
 		);

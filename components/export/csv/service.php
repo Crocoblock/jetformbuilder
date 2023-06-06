@@ -3,14 +3,14 @@
 
 namespace JFB_Components\Export\Csv;
 
-use JFB_Components\Export\Multiple_Entries_Export_It;
+use JFB_Components\Export\Table_Entries_Export_It;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Service implements Multiple_Entries_Export_It {
+class Service implements Table_Entries_Export_It {
 
 	private $file;
 	protected $file_name;

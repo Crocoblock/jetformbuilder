@@ -11,7 +11,7 @@ use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Form_Response\Response;
 use Jet_Form_Builder\Form_Response\Types\Reload_Response;
-use JFB_Modules\Gateways\Gateway_Manager as GM;
+use JFB_Modules\Gateways\Module as GM;
 use JFB_Modules\Gateways\Scenarios_Abstract\Scenarios_Manager_Abstract;
 
 // If this file is called directly, abort.

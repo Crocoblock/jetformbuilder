@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Wp_Nonce {
 
 	const DEFAULT_OPTIONS = array(
-		'name' => '_wpnonce',
+		'name' => '_nonce',
 	);
 
 	protected $action;

@@ -55,7 +55,6 @@ class Plugin {
 	public $form;
 	public $form_handler;
 	public $editor;
-	public $allow_gateways;
 	public $framework;
 	public $addons_manager;
 	public $admin_bar;
@@ -97,8 +96,11 @@ class Plugin {
 	 * @return void
 	 */
 	public function init_components() {
-		$this->allow_gateways = apply_filters( 'jet-form-builder/allow-gateways', false );
-		$this->maybe_enable_gateways();
+		$this->get_modules()->rep_install();
+		$this->get_compat()->rep_install();
+
+		$this->get_modules()->init_hooks();
+		$this->get_compat()->init_hooks();
 
 		$this->admin_bar      = \Jet_Admin_Bar::get_instance();
 		$this->msg_router     = new Form_Messages\Msg_Router();
@@ -147,26 +149,6 @@ class Plugin {
 				$this->plugin_dir( 'framework/admin-bar/jet-admin-bar.php' ),
 			)
 		);
-	}
-
-	public function maybe_enable_gateways() {
-		Tab_Handler_Manager::instance()->tab( 'payments-gateways' )->save_global_options();
-		$gateways = Tab_Handler_Manager::instance()->tab( 'payments-gateways' )->get_global_options();
-
-		if ( isset( $gateways['enable_test_mode'] ) ) {
-			add_filter(
-				'jet-form-builder/gateways/paypal/sandbox-mode',
-				function () use ( $gateways ) {
-					return $gateways['enable_test_mode'];
-				}
-			);
-		}
-
-		if ( isset( $gateways['use_gateways'] ) ) {
-			$this->allow_gateways = $gateways['use_gateways'];
-		}
-
-		Gateway_Manager::instance()->set_up();
 	}
 
 	/**
@@ -297,6 +279,8 @@ class Plugin {
 				} catch ( Repository_Exception $exception ) {
 					return null;
 				}
+			case 'allow_gateways':
+				return jet_form_builder()->has_module( 'gateways' );
 		}
 
 		return null;
@@ -304,8 +288,4 @@ class Plugin {
 
 }
 
-Plugin::instance()->get_modules()->rep_install();
-Plugin::instance()->get_compat()->rep_install();
-
-Plugin::instance()->get_modules()->init_hooks();
-Plugin::instance()->get_compat()->init_hooks();
+Plugin::instance();

@@ -6,6 +6,16 @@ use Jet_Form_Builder\Actions\Events\Default_Process\Default_With_Gateway_Executo
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Instance_Trait;
+use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
+use JFB_Components\Module\Base_Module_Handle_It;
+use JFB_Components\Module\Base_Module_Handle_Trait;
+use JFB_Components\Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_Static_Instance_It;
+use JFB_Components\Module\Base_Module_Static_Instance_Trait;
+use JFB_Components\Module\Base_Module_Url_It;
+use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Gateways\Meta_Boxes\Payment_Info_For_Record;
@@ -21,16 +31,26 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * @method static Gateway_Manager instance()
+ * @method static Module instance()
  *
- * Class Gateway_Manager
  * @package JFB_Modules\Gateways
  */
-class Gateway_Manager {
+final class Module implements
+	Base_Module_Dir_It,
+	Base_Module_It,
+	Base_Module_Handle_It,
+	Base_Module_Url_It,
+	Base_Module_After_Install_It,
+	Base_Module_Static_Instance_It
+{
 
-	use Instance_Trait;
 	use Gateways_Editor_Data;
 	use Repository_Pattern_Trait;
+
+	use Base_Module_Handle_Trait;
+	use Base_Module_Dir_Trait;
+	use Base_Module_Url_Trait;
+	use Base_Module_Static_Instance_Trait;
 
 	const PAYMENT_TYPE_PARAM = 'jet_form_gateway';
 
@@ -42,15 +62,38 @@ class Gateway_Manager {
 	public $is_sandbox;
 	private $current_gateway_type;
 
-	/**
-	 * Register gateways components
-	 */
-	public function set_up() {
-		if ( ! Plugin::instance()->allow_gateways ) {
-			return;
+	public static function get_instance_id(): string {
+		return 'gateways';
+	}
+
+	public function condition(): bool {
+		$allow = apply_filters( 'jet-form-builder/allow-gateways', false );
+
+		Tab_Handler_Manager::instance()->tab( 'payments-gateways' )->save_global_options();
+		$gateways = Tab_Handler_Manager::instance()->tab( 'payments-gateways' )->get_global_options();
+
+		if ( isset( $gateways['use_gateways'] ) ) {
+			$allow = $gateways['use_gateways'];
 		}
+
+		if ( ! $allow ) {
+			return false;
+		}
+
+		if ( isset( $gateways['enable_test_mode'] ) ) {
+			add_filter(
+				'jet-form-builder/gateways/paypal/sandbox-mode',
+				function () use ( $gateways ) {
+					return $gateways['enable_test_mode'];
+				}
+			);
+		}
+
+		return true;
+	}
+
+	public function init_hooks() {
 		add_action( 'init', array( $this, 'register_gateways' ) );
-		( new Rest_Api_Controller() )->rest_api_init();
 
 		add_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ), 0 );
 		add_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
@@ -63,6 +106,26 @@ class Gateway_Manager {
 			'jet-form-builder/default-process-event/executors',
 			array( $this, 'add_executor_to_default_process' )
 		);
+	}
+
+	public function remove_hooks() {
+		remove_action( 'init', array( $this, 'register_gateways' ) );
+
+		remove_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ), 0 );
+		remove_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
+		remove_filter(
+			'jet-form-builder/page-containers/jfb-records-single',
+			array( $this, 'add_box_to_single_record' ),
+			0
+		);
+		remove_filter(
+			'jet-form-builder/default-process-event/executors',
+			array( $this, 'add_executor_to_default_process' )
+		);
+	}
+
+	public function on_install() {
+		( new Rest_Api_Controller() )->rest_api_init();
 
 		$this->catch_payment_result();
 	}
@@ -224,10 +287,6 @@ class Gateway_Manager {
 	}
 
 	public function has_gateway( $form_id ) {
-		if ( ! jet_form_builder()->allow_gateways ) {
-			return false;
-		}
-
 		$this->set_gateways_options_by_form_id( $form_id );
 
 		return $this->get_gateway_id( false );

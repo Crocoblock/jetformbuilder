@@ -5,7 +5,7 @@ namespace JFB_Modules\Gateways\Meta_Boxes\Columns;
 
 use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use JFB_Modules\Gateways\Gateway_Manager;
+use JFB_Modules\Gateways\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -24,7 +24,7 @@ class Gateway_Type_Column extends Column_Advanced_Base {
 		$gateway = parent::get_value( $record );
 
 		try {
-			return Gateway_Manager::instance()->get_gateway_controller( $gateway )->get_name();
+			return Module::instance()->get_gateway_controller( $gateway )->get_name();
 		} catch ( Repository_Exception $exception ) {
 			return 'none';
 		}

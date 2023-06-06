@@ -51,7 +51,7 @@ class Autoloader {
 		'Jet_Form_Builder\\Gateways\\Db_Models\\Payment_Model' => 'JFB_Modules\\Gateways\\Db_Models\\Payment_Model',
 		'Jet_Form_Builder\\Gateways\\Db_Models\\Payment_To_Payer_Shipping_Model' => 'JFB_Modules\\Gateways\\Db_Models\\Payment_To_Payer_Shipping_Model',
 		'Jet_Form_Builder\\Gateways\\Db_Models\\Payment_To_Record' => 'JFB_Modules\\Gateways\\Db_Models\\Payment_To_Record',
-		'Jet_Form_Builder\\Gateways\\Gateway_Manager'     => 'JFB_Modules\\Gateways\\Gateway_Manager',
+		'Jet_Form_Builder\\Gateways\\Gateway_Manager'     => 'JFB_Modules\\Gateways\\Module',
 		'Jet_Form_Builder\\Gateways\\Pages\\Single_Payment_Page' => 'JFB_Modules\\Gateways\\Pages\\Single_Payment_Page',
 		'Jet_Form_Builder\\Gateways\\Paypal\\Scenarios_Logic\\With_Resource_It' => 'JFB_Modules\\Gateways\\Paypal\\Scenarios_Logic\\With_Resource_It',
 		'Jet_Form_Builder\\Gateways\\Rest_Api\\Gateway_Endpoint' => 'JFB_Modules\\Gateways\\Rest_Api\\Gateway_Endpoint',

@@ -11,7 +11,7 @@ use Jet_Form_Builder\Actions\Events_List;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use JFB_Modules\Gateways\Gateway_Manager as GM;
+use JFB_Modules\Gateways\Module as GM;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

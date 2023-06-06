@@ -112,7 +112,7 @@ class Records_Table_View extends View_Advanced_Base {
 				'url'     => Fetch_Filters_Endpoint::rest_url(),
 			),
 			'load_fields_endpoint' => Get_Form_Fields::get_endpoint(),
-			'export_url'           => $module->get_export()->get_url(),
+			'export_url'           => $module->get_export_multiple()->get_url(),
 			'messages'             => array(
 				'filter_form'       => __( 'Select Form', 'jet-form-builder' ),
 				'filter_form_title' => __( 'All Forms', 'jet-form-builder' ),

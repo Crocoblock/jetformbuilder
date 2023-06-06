@@ -8,7 +8,12 @@
 				'row--' + column
 			]"
 		>
-			<th class="jfb-list-table-row--inner jfb-list-table-row--heading">{{ label }}</th>
+			<th
+				v-if="label"
+				class="jfb-list-table-row--inner jfb-list-table-row--heading"
+			>
+				{{ label }}
+			</th>
 			<td class="jfb-list-table-row--inner jfb-list-table-row--item">
 				<EntryColumnList
 					:scope="scope"

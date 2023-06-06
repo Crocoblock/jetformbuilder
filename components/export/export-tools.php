@@ -10,6 +10,11 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Export_Tools {
 
+	public static function get_exporter_by_format(): Base_Export_It {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return self::get_exporter( sanitize_key( $_GET['format'] ?? 'csv' ) );
+	}
+
 	/**
 	 * @param string $format
 	 *

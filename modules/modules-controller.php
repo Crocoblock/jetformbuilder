@@ -29,6 +29,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Form_Record\Module(),
 			new Advanced_Choices\Module(),
 			new Captcha\Module(),
+			new Gateways\Module(),
 		);
 	}
 

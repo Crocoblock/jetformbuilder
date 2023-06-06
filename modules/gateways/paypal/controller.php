@@ -5,7 +5,7 @@ namespace JFB_Modules\Gateways\Paypal;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use JFB_Modules\Gateways\Base_Scenario_Gateway;
-use JFB_Modules\Gateways\Gateway_Manager as GM;
+use JFB_Modules\Gateways\Module;
 use JFB_Modules\Gateways\Paypal\Api_Actions\Get_Token;
 
 // If this file is called directly, abort.
@@ -83,14 +83,14 @@ class Controller extends Base_Scenario_Gateway {
 	}
 
 	public static function get_credentials() {
-		return GM::instance()->get_global_settings( self::ID );
+		return Module::instance()->get_global_settings( self::ID );
 	}
 
 	public static function get_credentials_by_form( $form_id ) {
 		if ( ! $form_id ) {
 			return self::get_credentials();
 		}
-		$credits = GM::instance()->get_form_gateways_by_id( $form_id )[ self::ID ] ?? array();
+		$credits = Module::instance()->get_form_gateways_by_id( $form_id )[ self::ID ] ?? array();
 
 		if ( ! empty( $credits['client_id'] ) && ! empty( $credits['secret'] ) ) {
 			return $credits;

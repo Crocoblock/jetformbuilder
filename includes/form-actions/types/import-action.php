@@ -60,10 +60,12 @@ class Import_Action extends Base_Form_Action {
 
 		/** @var File $file */
 		foreach ( $collection as $file ) {
-			if ( 'application/json' !== $file->get_type() ) {
+			if ( 'json' !== strtolower(
+				pathinfo( $file->get_name(), PATHINFO_EXTENSION )
+			) ) {
 				$wp_error->add(
 					'not_json',
-					'Incorrect file type ' . $file->get_type(),
+					sprintf( 'Incorrect file type (%s)', $file->get_name() ),
 					$file->to_array()
 				);
 				continue;

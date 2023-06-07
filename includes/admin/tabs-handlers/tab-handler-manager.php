@@ -18,7 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Class Tab_Handler_Manager
  * @package Jet_Form_Builder\Admin\Tabs_Handlers
  */
-class Tab_Handler_Manager {
+final class Tab_Handler_Manager {
 
 	use Instance_Trait;
 	use Repository_Pattern_Trait;
@@ -26,11 +26,16 @@ class Tab_Handler_Manager {
 	// phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 	private $_tabs_options = array();
 
-	public static function get_options( string $slug, array $if_empty = array() ): array {
-		$tab = static::instance()->tab( $slug );
-		$tab->save_global_options( $if_empty );
+	/**
+	 * @param string $slug
+	 * @param array $if_empty
+	 *
+	 * @return array|false|void
+	 */
+	public static function get_options( string $slug, array $if_empty = array() ) {
+		$tab = self::instance()->tab( $slug );
 
-		return $tab->get_global_options();
+		return $tab->get_options( $if_empty );
 	}
 
 	public function __construct() {
@@ -115,17 +120,6 @@ class Tab_Handler_Manager {
 		}
 
 		return $response;
-	}
-
-	public function save_options_tab( $slug, $options ) {
-		if ( isset( $this->_tabs_options[ $slug ] ) && $this->_tabs_options[ $slug ] ) {
-			return;
-		}
-		$this->_tabs_options[ $slug ] = $options;
-	}
-
-	public function get_options_tab( $slug ) {
-		return $this->_tabs_options[ $slug ];
 	}
 
 

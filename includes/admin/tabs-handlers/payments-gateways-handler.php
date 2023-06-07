@@ -31,12 +31,11 @@ class Payments_Gateways_Handler extends Base_Handler {
 	}
 
 	public function on_load() {
-		return array_merge(
+		return $this->get_options(
 			array(
 				'use_gateways'     => false,
 				'enable_test_mode' => false,
-			),
-			$this->get_global_options()
+			)
 		);
 	}
 }

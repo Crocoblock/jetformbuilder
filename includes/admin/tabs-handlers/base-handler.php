@@ -89,17 +89,6 @@ abstract class Base_Handler implements Repository_Item_Instance_Trait {
 	public function before_assets() {
 	}
 
-	public function save_global_options( $if_empty = array() ) {
-		Tab_Handler_Manager::instance()->save_options_tab(
-			$this->slug(),
-			$this->get_options( $if_empty )
-		);
-	}
-
-	public function get_global_options() {
-		return Tab_Handler_Manager::instance()->get_options_tab( $this->slug() );
-	}
-
 	public function option_name() {
 		return $this->prefix . $this->slug();
 	}

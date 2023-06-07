@@ -5,7 +5,6 @@ namespace Jet_Form_Builder;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Manager as ActionsManager;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
-use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Validation;
@@ -17,7 +16,6 @@ use Jet_Form_Builder\Form_Messages;
 use Jet_Form_Builder\Form_Patterns\Manager as PatternsManager;
 use Jet_Form_Builder\Framework\CX_Loader;
 use Jet_Form_Builder\Gateways\Gateway_Manager;
-use Jet_Form_Builder\Integrations\Active_Campaign\Active_Campaign;
 use Jet_Form_Builder\Addons\Manager as AddonsManager;
 use JFB_Compatibility\Compatibility_Controller;
 use JFB_Components\Module\Base_Module_After_Install_It;
@@ -27,8 +25,8 @@ use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Modules\Modules_Controller;
 use Jet_Form_Builder\Presets\Preset_Manager;
-use Jet_Form_Builder\Wp_Cli\Wp_Cli_Manager;
 use Jet_Form_Builder\Migrations;
+use JFB_Modules\Wp_Cli;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -87,7 +85,6 @@ class Plugin {
 		);
 
 		$this->init_framework();
-		Wp_Cli_Manager::register();
 	}
 
 	/**
@@ -288,4 +285,4 @@ class Plugin {
 
 }
 
-Plugin::instance();
+Plugin::instance()->get_modules()->install( new Wp_Cli\Module() );

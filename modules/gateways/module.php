@@ -4,6 +4,7 @@ namespace JFB_Modules\Gateways;
 
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_With_Gateway_Executor;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Payments_Gateways_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use JFB_Components\Module\Base_Module_After_Install_It;
@@ -41,8 +42,7 @@ final class Module implements
 	Base_Module_Handle_It,
 	Base_Module_Url_It,
 	Base_Module_After_Install_It,
-	Base_Module_Static_Instance_It
-{
+	Base_Module_Static_Instance_It {
 
 	use Gateways_Editor_Data;
 	use Repository_Pattern_Trait;
@@ -53,6 +53,8 @@ final class Module implements
 	use Base_Module_Static_Instance_Trait;
 
 	const PAYMENT_TYPE_PARAM = 'jet_form_gateway';
+	const OPTION_NAME        = 'payments-gateways';
+	const EXPORT_ACTION      = 'jfb_payments_export_admin';
 
 	private $gateways_form_data = array();
 	private $form_id;
@@ -62,34 +64,23 @@ final class Module implements
 	public $is_sandbox;
 	private $current_gateway_type;
 
+	private $export_single;
+	private $export_multiple;
+
 	public static function get_instance_id(): string {
 		return 'gateways';
 	}
 
 	public function condition(): bool {
-		$allow = apply_filters( 'jet-form-builder/allow-gateways', false );
+		$allow    = apply_filters_deprecated(
+			'jet-form-builder/allow-gateways',
+			array( false ),
+			'3.1.0',
+			__( 'Settings -> Payments Gateways -> Enable Gateways', 'jet-form-builder' )
+		);
+		$gateways = Tab_Handler_Manager::get_options( self::OPTION_NAME );
 
-		Tab_Handler_Manager::instance()->tab( 'payments-gateways' )->save_global_options();
-		$gateways = Tab_Handler_Manager::instance()->tab( 'payments-gateways' )->get_global_options();
-
-		if ( isset( $gateways['use_gateways'] ) ) {
-			$allow = $gateways['use_gateways'];
-		}
-
-		if ( ! $allow ) {
-			return false;
-		}
-
-		if ( isset( $gateways['enable_test_mode'] ) ) {
-			add_filter(
-				'jet-form-builder/gateways/paypal/sandbox-mode',
-				function () use ( $gateways ) {
-					return $gateways['enable_test_mode'];
-				}
-			);
-		}
-
-		return true;
+		return isset( $gateways['use_gateways'] ) ? boolval( $gateways['use_gateways'] ) : $allow;
 	}
 
 	public function init_hooks() {
@@ -125,8 +116,28 @@ final class Module implements
 	}
 
 	public function on_install() {
+		$options          = Tab_Handler_Manager::get_options( self::OPTION_NAME );
+		$this->is_sandbox = apply_filters_deprecated(
+			'jet-form-builder/gateways/paypal/sandbox-mode',
+			array( false ),
+			'3.1.0',
+			__( 'Settings -> Payments Gateways -> Enable Test Mode', 'jet-form-builder' )
+		);
+
+		if ( isset( $options['enable_test_mode'] ) ) {
+			$this->is_sandbox = $options['enable_test_mode'];
+		}
+
+		$this->export_single   = new Export\Single_Controller();
+		$this->export_multiple = new Export\Multiple_Controller();
+
+		// install gateways
+		$this->rep_install();
+
+		// rest api
 		( new Rest_Api_Controller() )->rest_api_init();
 
+		// catch webhook by get param
 		$this->catch_payment_result();
 	}
 
@@ -174,9 +185,6 @@ final class Module implements
 	 * @return void [description]
 	 */
 	public function register_gateways() {
-		$this->is_sandbox = apply_filters( 'jet-form-builder/gateways/paypal/sandbox-mode', false );
-
-		$this->rep_install();
 
 		do_action( 'jet-form-builder/gateways/register', $this );
 	}

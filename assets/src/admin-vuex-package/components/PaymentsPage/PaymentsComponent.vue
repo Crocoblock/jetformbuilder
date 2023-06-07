@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ActionsWithFilters from './ActionsWithFilters';
+import ActionsWithFilters from '../ActionsWithFilters';
 import TablePagination from '../TablePagination';
 import EntriesTable from '../EntriesTable';
 import FormBuilderPage from '../FormBuilderPage';

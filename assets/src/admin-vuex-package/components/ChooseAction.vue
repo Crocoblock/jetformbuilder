@@ -113,6 +113,8 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 	gap: 0.7em;
+	max-width: 20vw;
+	min-width: 250px;
 
 	.cx-vui-component {
 		flex: 1;

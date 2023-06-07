@@ -36,7 +36,7 @@ class Single_Controller extends Base_Export_Controller {
 			);
 		}
 
-		$exporter        = $this->get_exporter();
+		$exporter        = Export_Tools::get_exporter_by_format();
 		$this->record_id = $this->get_record_id();
 		$this->record    = Record_View::findById( $this->record_id );
 		$fields          = Record_Fields_View::get_request( $this->record_id );

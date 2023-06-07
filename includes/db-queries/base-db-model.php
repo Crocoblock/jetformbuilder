@@ -3,12 +3,10 @@
 
 namespace Jet_Form_Builder\Db_Queries;
 
-use ElementorPro\Modules\Forms\Submissions\Database\Migration;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Migrations\Migration_Exception;
-use Jet_Form_Builder\Migrations\Migrator;
 use Jet_Form_Builder\Migrations\Versions\Base_Migration;
-use Jet_Form_Builder\Wp_Cli\Cli_Tools;
+use JFB_Modules\Wp_Cli\Cli_Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

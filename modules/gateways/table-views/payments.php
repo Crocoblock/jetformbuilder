@@ -9,6 +9,7 @@ use Jet_Form_Builder\Admin\Table_Views\View_Advanced_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use JFB_Modules\Gateways\Db_Models\Payment_To_Payer_Shipping_Model;
 use JFB_Modules\Gateways\Db_Models\Payment_To_Record;
+use JFB_Modules\Gateways\Module;
 use JFB_Modules\Gateways\Query_Views\Payment_Count_View;
 use JFB_Modules\Gateways\Query_Views\Payment_View;
 use JFB_Modules\Gateways\Paypal\Rest_Endpoints;
@@ -81,7 +82,14 @@ class Payments extends View_Advanced_Base {
 		);
 	}
 
+	/**
+	 * @return array[]
+	 * @throws \Jet_Form_Builder\Exceptions\Repository_Exception
+	 */
 	public function load_data(): array {
+		/** @var Module $module */
+		$module = jet_form_builder()->module( Module::class );
+
 		return array(
 			'messages' => array(
 				'empty_checked' => __( 'You have not selected any payment.', 'jet-form-builder' ),

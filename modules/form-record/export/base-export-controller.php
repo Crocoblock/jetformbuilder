@@ -74,20 +74,4 @@ abstract class Base_Export_Controller implements Wp_Nonce_It {
 		);
 	}
 
-	/**
-	 * @return Table_Entries_Export_It
-	 * @throws \Exception
-	 */
-	protected function get_exporter(): Table_Entries_Export_It {
-		$exporter = Export_Tools::get_exporter_by_format();
-
-		if ( ! ( $exporter instanceof Table_Entries_Export_It ) ) {
-			throw new \Exception(
-				__( 'Undefined export type', 'jet-form-builder' )
-			);
-		}
-
-		return $exporter;
-	}
-
 }

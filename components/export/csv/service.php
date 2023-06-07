@@ -13,9 +13,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Service implements Table_Entries_Export_It {
 
 	private $file;
-	protected $file_name;
-	protected $headings;
-	protected $rows;
+	private $file_name;
 
 	public function headers() {
 		if ( false === strpos( ini_get( 'disable_functions' ), 'set_time_limit' ) ) {

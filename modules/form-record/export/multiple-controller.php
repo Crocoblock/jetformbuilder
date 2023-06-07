@@ -33,7 +33,7 @@ class Multiple_Controller extends Base_Export_Controller {
 			);
 		}
 
-		$exporter             = $this->get_exporter();
+		$exporter             = Export_Tools::get_exporter_by_format();
 		$this->form_id        = $this->get_form_id();
 		$this->fields_columns = $this->get_field_columns();
 		$this->modify_extra_columns();

@@ -85,6 +85,7 @@ final class Module implements
 
 	public function init_hooks() {
 		add_action( 'init', array( $this, 'register_gateways' ) );
+		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
 
 		add_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ), 0 );
 		add_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
@@ -144,6 +145,16 @@ final class Module implements
 	public function rep_instances(): array {
 		return array(
 			new Paypal\Controller(),
+		);
+	}
+
+	public function enqueue_editor_assets() {
+		wp_enqueue_script(
+			$this->get_handle( 'editor' ),
+			$this->get_url( 'assets/build/js/editor{min}.js' ),
+			array(),
+			jet_form_builder()->get_version(),
+			true
 		);
 	}
 

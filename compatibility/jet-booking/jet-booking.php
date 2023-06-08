@@ -4,7 +4,7 @@
 namespace JFB_Compatibility\Jet_Booking;
 
 use Jet_Form_Builder\Blocks\Module;
-use JFB_Compatibility\Deprecated;
+use JFB_Modules\Deprecated;
 use Jet_Form_Builder\Plugin;
 use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
 use JFB_Components\Compatibility\Base_Compat_Url_Trait;
@@ -59,13 +59,18 @@ class Jet_Booking implements
 		);
 	}
 
+	/**
+	 * @throws \Jet_Form_Builder\Exceptions\Repository_Exception
+	 */
 	public function register_scripts() {
+		$deprecated = jet_form_builder()->module( Deprecated\Module::class );
+
 		wp_register_script(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/js/frontend{min}.js' ),
 			array(
 				Module::MAIN_SCRIPT_HANDLE,
-				Deprecated::HANDLE,
+				$deprecated->get_handle(),
 			),
 			Plugin::instance()->get_version(),
 			true

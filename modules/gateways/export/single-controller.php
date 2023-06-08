@@ -13,6 +13,8 @@ if ( ! defined( 'WPINC' ) ) {
 class Single_Controller extends Base_Export_Controller {
 
 	protected $payment_id;
+	protected $payment;
+	protected $payer;
 
 	/**
 	 * @throws \Exception

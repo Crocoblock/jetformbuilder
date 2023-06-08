@@ -52,9 +52,10 @@ abstract class Base_Db_Model {
 	abstract public static function schema_keys(): array;
 
 	public static function schema_columns( $prefix = '' ): array {
-		$columns = array();
+		$columns   = array();
+		$generator = self::generate_columns();
 
-		foreach ( array_keys( static::schema() ) as $column ) {
+		foreach ( $generator as $column ) {
 			$item = sprintf( '`%s`.`%s`', static::table(), $column );
 
 			if ( $prefix ) {
@@ -65,6 +66,29 @@ abstract class Base_Db_Model {
 		}
 
 		return $columns;
+	}
+
+	public static function generate_scoped_columns( string $prefix = '' ): \Generator {
+		$generator = self::generate_columns();
+
+		foreach ( $generator as $column ) {
+			$item = sprintf( '`%s`.`%s`', static::table(), $column );
+
+			if ( $prefix ) {
+				$item .= sprintf( " as '%s'", "{$prefix}.{$column}" );
+			}
+
+			yield $column;
+			yield array( 'as' => $item );
+		}
+	}
+
+	public static function generate_columns(): \Generator {
+		$schema = static::schema();
+
+		foreach ( $schema as $column_name => $details ) {
+			yield $column_name;
+		}
 	}
 
 
@@ -254,7 +278,7 @@ abstract class Base_Db_Model {
 		$schema_keys = array_keys( static::schema() );
 
 		if ( in_array( self::UPDATED_AT, $schema_keys, true ) &&
-			! array_key_exists( self::UPDATED_AT, $columns )
+		     ! array_key_exists( self::UPDATED_AT, $columns )
 		) {
 			$columns[ self::UPDATED_AT ] = current_time( 'mysql' );
 		}
@@ -266,7 +290,7 @@ abstract class Base_Db_Model {
 	 * @throws Sql_Exception
 	 */
 	public function before_delete() {
-		if ( Cli_Tools::is_cli() ) {
+		if ( jet_form_builder()->has_module( 'cli' ) ) {
 			return;
 		}
 		if ( ! current_user_can( 'manage_options' ) ) {

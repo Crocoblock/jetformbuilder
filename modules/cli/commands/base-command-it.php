@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JFB_Modules\Wp_Cli\Commands;
+namespace JFB_Modules\Cli\Commands;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

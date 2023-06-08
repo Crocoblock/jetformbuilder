@@ -1,12 +1,12 @@
 <?php
 
 
-namespace JFB_Modules\Wp_Cli;
+namespace JFB_Modules\Cli;
 
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Repository\Repository_Pattern_Trait;
-use JFB_Modules\Wp_Cli\Commands\Base_Command_It;
+use JFB_Modules\Cli\Commands\Base_Command_It;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -22,7 +22,7 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It {
 	}
 
 	public function condition(): bool {
-		return Cli_Tools::is_cli();
+		return defined( 'WP_CLI' ) && WP_CLI;
 	}
 
 	public function on_install() {
@@ -31,10 +31,11 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It {
 
 	public function rep_instances(): array {
 		return array(
-			new Commands\Migrate_Database(),
+			new Commands\Upgrade_Database(),
 			new Commands\Downgrade_Database(),
 			new Commands\Seed_Records(),
 			new Commands\Seed_Jet_Apb(),
+			new Commands\Seed_Payments(),
 		);
 	}
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JFB_Modules\Wp_Cli\Commands;
+namespace JFB_Modules\Cli\Commands;
 
 use JET_APB\Plugin;
 

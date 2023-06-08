@@ -6,6 +6,7 @@ namespace JFB_Modules\Gateways\Export;
 // If this file is called directly, abort.
 use JFB_Components\Wp_Nonce\Wp_Nonce_It;
 use JFB_Components\Wp_Nonce\Wp_Nonce_Trait;
+use JFB_Modules\Gateways\Db_Models\Payer_Model;
 use JFB_Modules\Gateways\Module;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -46,6 +47,14 @@ abstract class Base_Export_Controller implements Wp_Nonce_It {
 			'email'      => __( 'Email', 'jet-form-builder' ),
 		);
 
+		foreach ( $this->payers_columns as $payer_name => $payer_value ) {
+			$this->payers_columns[ $payer_name ] = sprintf(
+			/* translators: %s - column title */
+				__( '[Payer] %s', 'jet-form-builder' ),
+				$payer_value
+			);
+		}
+
 		$this->shipping_columns = array(
 			'full_name'      => __( 'Full Name', 'jet-form-builder' ),
 			'address_line_1' => __( 'Address Line 1', 'jet-form-builder' ),
@@ -55,6 +64,14 @@ abstract class Base_Export_Controller implements Wp_Nonce_It {
 			'postal_code'    => __( 'Postal Code', 'jet-form-builder' ),
 			'country_code'   => __( 'Country Code', 'jet-form-builder' ),
 		);
+
+		foreach ( $this->shipping_columns as $ship_name => $ship_value ) {
+			$this->shipping_columns[ $ship_name ] = sprintf(
+			/* translators: %s - column title */
+				__( '[Shipping] %s', 'jet-form-builder' ),
+				$ship_value
+			);
+		}
 
 		try {
 			$this->do_export();
@@ -76,6 +93,39 @@ abstract class Base_Export_Controller implements Wp_Nonce_It {
 			),
 			admin_url( 'admin.php' )
 		);
+	}
+
+	protected function prepare_row( $payment_values, array $payer_values, array $payer_shipping ): array {
+		foreach ( $payer_values as $property => $record_value ) {
+			$payer_values[ sprintf( 'payer|%s', $property ) ] = is_null( $record_value ) ? '' : $record_value;
+			unset( $payer_values[ $property ] );
+		}
+
+		foreach ( $payer_shipping as $property => $record_value ) {
+			$payer_shipping[ sprintf( 'shipping|%s', $property ) ] = is_null( $record_value ) ? '' : $record_value;
+			unset( $payer_shipping[ $property ] );
+		}
+
+		return array_merge(
+			is_array( $payment_values ) ? $payment_values : get_object_vars( $payment_values ),
+			$payer_values,
+			$payer_shipping
+		);
+	}
+
+	protected function get_select_row_columns(): array {
+		$columns   = array_keys( $this->shipping_columns );
+		$generator = Payer_Model::generate_scoped_columns( 'payer' );
+
+		foreach ( $generator as $column ) {
+			$generator->next();
+
+			if ( array_key_exists( $column, $this->payers_columns ) ) {
+				$columns[] = $generator->current();
+			}
+		}
+
+		return $columns;
 	}
 
 }

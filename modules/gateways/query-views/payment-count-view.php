@@ -19,4 +19,7 @@ class Payment_Count_View extends Payment_View {
 
 	use View_Base_Count_Trait;
 
+	public function get_prepared_join( Query_Builder $builder ) {
+	}
+
 }

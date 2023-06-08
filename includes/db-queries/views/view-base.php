@@ -248,8 +248,21 @@ abstract class View_Base implements Model_Dependencies_Interface {
 		return $base;
 	}
 
-	public static function get_offset( $args ): int {
-		return 1 === $args['page'] ? 0 : ( ( $args['page'] - 1 ) * $args['limit'] );
+	/**
+	 * @param int|array $args
+	 * @param int $limit
+	 *
+	 * @return int
+	 */
+	public static function get_offset( $args, int $limit = 0 ): int {
+		if ( is_array( $args ) ) {
+			$page  = (int) $args['page'];
+			$limit = (int) $args['limit'];
+		} else {
+			$page = (int) $args;
+		}
+
+		return 1 === $page ? 0 : ( ( $page - 1 ) * $limit );
 	}
 
 	/**
@@ -410,7 +423,7 @@ abstract class View_Base implements Model_Dependencies_Interface {
 			$this->set_select( array( '*' ) );
 		}
 
-		return ( new Query_Cache_Builder() )->set_view( $this );
+		return ( new Query_Builder() )->set_view( $this );
 	}
 
 	/**

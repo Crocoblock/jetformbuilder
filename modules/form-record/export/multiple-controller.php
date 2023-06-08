@@ -7,10 +7,6 @@ use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use JFB_Components\Export\Export_Tools;
 use JFB_Components\Export\Table_Entries_Export_It;
-use JFB_Components\Wp_Nonce\Wp_Nonce;
-use JFB_Components\Wp_Nonce\Wp_Nonce_It;
-use JFB_Components\Wp_Nonce\Wp_Nonce_Trait;
-use JFB_Modules\Form_Record\Module;
 use JFB_Modules\Form_Record\Query_Views\Record_Fields_View;
 use JFB_Modules\Form_Record\Query_Views\Record_View;
 

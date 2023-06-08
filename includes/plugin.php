@@ -26,7 +26,7 @@ use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Modules\Modules_Controller;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Migrations;
-use JFB_Modules\Wp_Cli;
+use JFB_Modules\Cli;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -285,4 +285,4 @@ class Plugin {
 
 }
 
-Plugin::instance()->get_modules()->install( new Wp_Cli\Module() );
+Plugin::instance()->get_modules()->install( new Cli\Module() );

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JFB_Modules\Wp_Cli;
+namespace JFB_Modules\Cli;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -9,10 +9,6 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 class Cli_Tools {
-
-	public static function is_cli(): bool {
-		return defined( 'WP_CLI' ) && WP_CLI;
-	}
 
 	public static function resolve_form( $assoc_args ): \WP_Post {
 		$form_id = absint( $assoc_args['form'] ?? 0 );

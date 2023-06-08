@@ -21,6 +21,16 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Payment_View extends View_Base {
 
+	public function __construct() {
+		$this->set_select(
+			array_merge(
+				Payment_Model::schema_columns(),
+				Payer_Shipping_Model::schema_columns( 'ship' ),
+				Payer_Model::schema_columns( 'payer' )
+			)
+		);
+	}
+
 	protected $order_by = array(
 		array(
 			'column' => 'id',
@@ -53,11 +63,4 @@ LEFT JOIN `{$payers}` ON 1=1
 		return Payment_Model::table();
 	}
 
-	public function select_columns(): array {
-		return array_merge(
-			Payment_Model::schema_columns(),
-			Payer_Shipping_Model::schema_columns( 'ship' ),
-			Payer_Model::schema_columns( 'payer' )
-		);
-	}
 }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JFB_Modules\Wp_Cli\Commands;
+namespace JFB_Modules\Cli\Commands;
 
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Migrations\Migration_Exception;
@@ -13,10 +13,10 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Downgrade_Database implements Base_Command_It {
+class Upgrade_Database implements Base_Command_It {
 
 	public function rep_item_id() {
-		return 'db-downgrade';
+		return 'db-upgrade';
 	}
 
 	public function condition(): bool {
@@ -26,15 +26,14 @@ class Downgrade_Database implements Base_Command_It {
 	public function do_command( $args, $assoc_args ) {
 		try {
 			Execution_Builder::instance()->transaction_start();
-			Migrator::instance()->uninstall( new Cli_Migration_Profiler() );
+			Migrator::instance()->install( new Cli_Migration_Profiler() );
 			Execution_Builder::instance()->transaction_commit();
 
 			\WP_CLI::line();
-			\WP_CLI::success( 'Downgraded successfully' );
+			\WP_CLI::success( 'Migrated successfully' );
 
 		} catch ( Migration_Exception $exception ) {
 			Execution_Builder::instance()->transaction_rollback();
-
 			\WP_CLI::error( $exception->getMessage() );
 		}
 	}

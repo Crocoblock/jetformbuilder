@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JFB_Modules\Wp_Cli\Commands;
+namespace JFB_Modules\Cli\Commands;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -13,7 +13,7 @@ use JFB_Modules\Form_Record\Models\Record_Action_Result_Model;
 use JFB_Modules\Form_Record\Models\Record_Field_Model;
 use JFB_Modules\Form_Record\Models\Record_Model;
 use JFB_Modules\Security\Csrf\Csrf_Tools;
-use JFB_Modules\Wp_Cli\Cli_Tools;
+use JFB_Modules\Cli\Cli_Tools;
 
 class Seed_Records implements Base_Command_It {
 

@@ -5,7 +5,6 @@ namespace JFB_Compatibility\Jet_Engine\Blocks;
 
 use Jet_Engine\Modules\Maps_Listings\Base_Provider;
 use Jet_Engine\Modules\Maps_Listings\Module;
-use Jet_Form_Builder\Blocks\Manager;
 use Jet_Form_Builder\Blocks\Render\Base as RenderBase;
 use Jet_Form_Builder\Blocks\Types\Base;
 use JFB_Compatibility\Jet_Engine\Preset_Sources\Preset_Source_Options_Page;

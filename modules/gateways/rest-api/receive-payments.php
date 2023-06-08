@@ -4,8 +4,7 @@
 namespace JFB_Modules\Gateways\Rest_Api;
 
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
-use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
-use Jet_Form_Builder\Rest_Api\Traits;
+use JFB_Components\Rest_Api;
 use JFB_Modules\Gateways\Table_Views;
 
 // If this file is called directly, abort.
@@ -13,9 +12,9 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Receive_Payments extends Rest_Api_Endpoint_Base {
+class Receive_Payments extends Rest_Api\Rest_Api_Endpoint_Base {
 
-	use Traits\Paginated_Args;
+	use Rest_Api\Traits\Paginated_Args;
 
 	public static function get_rest_base() {
 		return 'payments';

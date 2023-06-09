@@ -12,7 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 abstract class Base_Handler implements Repository_Item_Instance_Trait {
 
-	private $prefix = 'jet_form_builder_settings__';
+	const PREFIX = 'jet_form_builder_settings__';
 
 	abstract public function slug();
 
@@ -90,7 +90,7 @@ abstract class Base_Handler implements Repository_Item_Instance_Trait {
 	}
 
 	public function option_name() {
-		return $this->prefix . $this->slug();
+		return self::PREFIX . $this->slug();
 	}
 
 	public function get_success_response_data() {

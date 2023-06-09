@@ -4,6 +4,7 @@ namespace JFB_Modules\Gateways;
 
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_With_Gateway_Executor;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Base_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Payments_Gateways_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Instance_Trait;

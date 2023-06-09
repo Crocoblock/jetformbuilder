@@ -8,6 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Block_Helper;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
@@ -37,7 +38,7 @@ use Jet_Form_Builder\Plugin;
  * Class Module
  * @package JFB_Modules\Captcha
  */
-class Module implements
+final class Module implements
 	Base_Module_It,
 	Base_Module_Url_It,
 	Base_Module_Dir_It,
@@ -64,6 +65,8 @@ class Module implements
 
 	public function on_install() {
 		$this->rep_install();
+
+		Tab_Handler_Manager::instance()->install( new Admin_Tabs\Captcha_Handler() );
 	}
 
 	public function rep_instances(): array {
@@ -90,7 +93,6 @@ class Module implements
 		add_filter( 'jet-form-builder/setup-blocks', array( $this, 'check_is_container_exist' ) );
 		add_filter( 'jet-form-builder/before-end-form', array( $this, 'on_end_render_form' ) );
 		add_filter( 'jet-form-builder/blocks/items', array( $this, 'add_blocks_types' ) );
-		add_filter( 'jet-form-builder/register-tabs-handlers', array( $this, 'add_admin_tabs' ) );
 
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_package_assets' ), 0 );
@@ -106,7 +108,6 @@ class Module implements
 		remove_filter( 'jet-form-builder/setup-blocks', array( $this, 'check_is_container_exist' ) );
 		remove_filter( 'jet-form-builder/before-end-form', array( $this, 'on_end_render_form' ) );
 		remove_filter( 'jet-form-builder/blocks/items', array( $this, 'add_blocks_types' ) );
-		remove_filter( 'jet-form-builder/register-tabs-handlers', array( $this, 'add_admin_tabs' ) );
 
 		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
 		remove_action(
@@ -178,12 +179,6 @@ class Module implements
 		$block_types[] = new Block_Types\Captcha_Container();
 
 		return $block_types;
-	}
-
-	public function add_admin_tabs( array $tabs ): array {
-		$tabs[] = new Admin_Tabs\Captcha_Handler();
-
-		return $tabs;
 	}
 
 	public function register_frontend_scripts() {

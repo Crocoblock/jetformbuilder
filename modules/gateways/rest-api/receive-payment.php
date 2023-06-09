@@ -4,8 +4,9 @@
 namespace JFB_Modules\Gateways\Rest_Api;
 
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
-use JFB_Modules\Gateways\Meta_Boxes\Payment_Details_Box;
 use JFB_Components\Rest_Api;
+// do not change
+use Jet_Form_Builder\Gateways\Meta_Boxes\Payment_Details_Box;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

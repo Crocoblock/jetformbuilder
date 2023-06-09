@@ -103,6 +103,7 @@ function CalculatedData() {
 		// silence is golden
 	};
 
+	// calculated field can't be validated
 	this.report = () => {};
 }
 

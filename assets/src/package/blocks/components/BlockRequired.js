@@ -1,4 +1,5 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
+import useIsHasAttribute from '../../hooks/useIsHasAttribute';
 
 const {
 	      __,
@@ -17,6 +18,10 @@ function BlockRequired() {
 		      attributes,
 		      setAttributes,
 	      ] = useBlockAttributes();
+
+	if ( !useIsHasAttribute( 'required' ) ) {
+		return null;
+	}
 
 	return <BlockControls group="block">
 		<ToolbarButton

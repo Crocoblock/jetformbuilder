@@ -26,6 +26,10 @@ function useMetaState(
 			value = callable;
 		}
 
+		if ( 'object' !== typeof value || null === value ) {
+			value = JSON.parse( ifEmpty );
+		}
+
 		editPost( {
 			meta: (
 				{

@@ -5,10 +5,10 @@ import { getParsedName } from './functions';
 function WysiwygData() {
 	InputData.call( this );
 
-	this.isSupported  = function ( node ) {
+	this.isSupported = function ( node ) {
 		return isWysiwyg( node );
 	};
-	this.setNode      = function ( node ) {
+	this.setNode     = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
 
 		this.inputType = 'wysiwyg';
@@ -25,27 +25,24 @@ function WysiwygData() {
 		this.name    = getParsedName( this.rawName );
 
 		const editor = () => window.tinymce.get( this.textArea.id );
+		editor()?.remove?.();
 
-		if ( !editor() ) {
-			//window.tinymce.get( textArea.id ).remove();
-			window.wp.editor.initialize( this.textArea.id, editorConfig );
-		}
+		window.wp.editor.initialize( this.textArea.id, editorConfig );
 
 		this.editor = editor();
+		this.getEditor = editor;
 	};
-	this.onRemove     = function () {
-		this.editor.remove();
-	};
+
 	this.addListeners = function () {
 		const update = () => {
 			this.value.current = this.editor.getContent();
 		};
 
-		this.editor.on( 'input', update ).on( 'change', update );
+		this.getEditor()?.on?.( 'input', update )?.on?.( 'change', update );
 	};
 
 	this.setValue = function () {
-		this.editor.on( 'init', () => {
+		this.getEditor()?.on?.( 'init', () => {
 			this.callable.lock.current = false;
 			this.silenceSet( this.editor.getContent() );
 		} );
@@ -54,7 +51,7 @@ function WysiwygData() {
 	this.initNotifyValue = () => {};
 
 	this.focusRaw = function () {
-		window.tinymce.get( this.textArea.id )?.getBody()?.focus(
+		this.getEditor()?.getBody()?.focus(
 			{ preventScroll: true },
 		);
 	};

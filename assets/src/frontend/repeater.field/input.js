@@ -50,7 +50,7 @@ function RepeaterData() {
 				continue;
 			}
 
-			button.addEventListener( 'click', () => row.remove() );
+			button.addEventListener( 'click', () => row.removeManually() );
 		}
 
 		if ( this.isManualCount ) {
@@ -134,6 +134,17 @@ function RepeaterData() {
 		}
 
 		return inputs;
+	};
+
+	this.onRemove = function () {
+		/**
+		 * @type {ObservableRow[]}
+		 */
+		const rows = this.value.current;
+
+		for ( const row of rows ) {
+			row.remove();
+		}
 	};
 }
 

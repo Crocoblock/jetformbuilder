@@ -81,6 +81,7 @@ class Autoloader {
 		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Values_Box' => 'JFB_Modules\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Values_Box',
 		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Error_Message_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Error_Message_Column',
 		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Models\\Record_Model' => 'JFB_Modules\\Form_Record\\Models\\Record_Model',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Pages\\Single_Form_Record_Page' => 'JFB_Modules\\Form_Record\\Admin\\Pages\\Single_Form_Record_Page',
 	);
 
 	/**

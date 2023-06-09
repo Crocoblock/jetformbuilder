@@ -5,17 +5,16 @@ namespace JFB_Modules\Gateways\Rest_Api;
 
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use JFB_Modules\Gateways\Meta_Boxes\Payment_Details_Box;
-use Jet_Form_Builder\Rest_Api\Dynamic_Rest_Url_Trait;
-use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
+use JFB_Components\Rest_Api;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Receive_Payment extends Rest_Api_Endpoint_Base {
+class Receive_Payment extends Rest_Api\Rest_Api_Endpoint_Base {
 
-	use Dynamic_Rest_Url_Trait;
+	use Rest_Api\Dynamic_Rest_Url_Trait;
 
 	public static function get_rest_base() {
 		return 'payment/(?P<id>[\d]+)';

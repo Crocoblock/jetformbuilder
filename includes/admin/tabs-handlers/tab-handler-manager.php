@@ -125,6 +125,7 @@ final class Tab_Handler_Manager {
 	public function install( Base_Handler $item ): bool {
 		try {
 			$this->rep_install_item( $item );
+			$this->rep_after_install_item( $item );
 
 			return true;
 		} catch ( Repository_Exception $exception ) {

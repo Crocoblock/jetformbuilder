@@ -8,7 +8,7 @@ use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
 use JFB_Modules\Gateways\Meta_Boxes\Payer_Box;
 use JFB_Modules\Gateways\Meta_Boxes\Payer_Shipping_Box;
-use JFB_Modules\Gateways\Meta_Boxes\Payment_Details_Box;
+use Jet_Form_Builder\Gateways\Meta_Boxes\Payment_Details_Box;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

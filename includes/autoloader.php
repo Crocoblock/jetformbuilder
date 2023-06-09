@@ -68,8 +68,13 @@ class Autoloader {
 		'Jet_Form_Builder\\Gateways\\Pages\\Payments_Page' => 'JFB_Modules\\Gateways\\Pages\\Payments_Page',
 		'Jet_Form_Builder\\Gateways\\Meta_Boxes\\Payer_Box' => 'JFB_Modules\\Gateways\\Meta_Boxes\\Payer_Box',
 		'Jet_Form_Builder\\Gateways\\Meta_Boxes\\Payer_Shipping_Box' => 'JFB_Modules\\Gateways\\Meta_Boxes\\Payer_Shipping_Box',
+		'Jet_Form_Builder\\Gateways\\Meta_Boxes\\Columns\\Payment_Amount_Column' => 'JFB_Modules\\Gateways\\Meta_Boxes\\Columns\\Payment_Amount_Column',
+		'Jet_Form_Builder\\Gateways\\Meta_Boxes\\Columns\\Payment_Currency_Column' => 'JFB_Modules\\Gateways\\Meta_Boxes\\Columns\\Payment_Currency_Column',
+		'Jet_Form_Builder\\Gateways\\Meta_Boxes\\Columns\\Gateway_Type_Column' => 'JFB_Modules\\Gateways\\Meta_Boxes\\Columns\\Gateway_Type_Column',
 		'Jet_Form_Builder\\Gateways\\Table_Views\\Columns\\Payment_Type_Column' => 'JFB_Modules\\Gateways\\Table_Views\\Columns\\Payment_Type_Column',
 		'Jet_Form_Builder\\Gateways\\Table_Views\\Columns\\Payment_Status_Column' => 'JFB_Modules\\Gateways\\Table_Views\\Columns\\Payment_Status_Column',
+		'Jet_Form_Builder\\Gateways\\Table_Views\\Columns\\Payer_Column' => 'JFB_Modules\\Gateways\\Table_Views\\Columns\\Payer_Column',
+		'Jet_Form_Builder\\Gateways\\Table_Views\\Payments' => 'JFB_Modules\\Gateways\\Table_Views\\Payments',
 		'Jet_Form_Builder\\Gateways\\Query_Views\\Payment_View' => 'JFB_Modules\\Gateways\\Query_Views\\Payment_View',
 		// jet-engine compatibility
 		'Jet_Form_Builder\\Blocks\\Types\\Map_Field'       => 'JFB_Compatibility\\Jet_Engine\\Blocks\\Map_Field',

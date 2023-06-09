@@ -2,9 +2,6 @@
 	<FormBuilderPage
 		:title="__( 'JetFormBuilder Payments', 'jet-form-builder' )"
 	>
-		<template #heading-after>
-			<ExportPaymentsButton/>
-		</template>
 		<ActionsWithFilters/>
 		<TablePagination/>
 		<EntriesTable/>
@@ -20,7 +17,6 @@ import ActionsWithFilters from '../ActionsWithFilters';
 import TablePagination from '../TablePagination';
 import EntriesTable from '../EntriesTable';
 import FormBuilderPage from '../FormBuilderPage';
-import ExportPaymentsButton from './components/ExportPaymentsButton';
 
 const {
 	      GetIncoming,
@@ -44,7 +40,6 @@ export default {
 		FormBuilderPage,
 		EntriesTable,
 		TablePagination,
-		ExportPaymentsButton,
 	},
 	mixins: [ GetIncoming, i18n, PromiseWrapper ],
 	created() {

@@ -18,6 +18,8 @@ class Modules_Controller implements Module_Controller_It {
 
 	public function rep_instances(): array {
 		return array(
+			new Logger\Module(),
+			new Dev\Module(),
 			new Wp_Experiments\Module(),
 			new Deprecated\Module(),
 			new Rest_Api\Module(),

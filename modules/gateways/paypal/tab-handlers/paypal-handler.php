@@ -1,7 +1,9 @@
 <?php
 
 
-namespace Jet_Form_Builder\Admin\Tabs_Handlers;
+namespace JFB_Modules\Gateways\Paypal\Tab_Handlers;
+
+use Jet_Form_Builder\Admin\Tabs_Handlers\Base_Handler;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

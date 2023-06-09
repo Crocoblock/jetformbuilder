@@ -7,6 +7,7 @@ use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Base_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Payments_Gateways_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Admin\Tabs_Handlers\With_Tab_Handler_It;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
@@ -73,12 +74,16 @@ final class Module implements
 	}
 
 	public function condition(): bool {
-		$allow    = apply_filters_deprecated(
+		$allow = apply_filters_deprecated(
 			'jet-form-builder/allow-gateways',
 			array( false ),
 			'3.1.0',
 			__( 'Settings -> Payments Gateways -> Enable Gateways', 'jet-form-builder' )
 		);
+
+		// install tab handlers for Settings page
+		Tab_Handler_Manager::instance()->install( new Tab_Handlers\Payments_Gateways_Handler() );
+
 		$gateways = Tab_Handler_Manager::get_options( self::OPTION_NAME );
 
 		return isset( $gateways['use_gateways'] ) ? boolval( $gateways['use_gateways'] ) : $allow;
@@ -135,9 +140,6 @@ final class Module implements
 
 		$this->export_single   = new Export\Single_Controller();
 		$this->export_multiple = new Export\Multiple_Controller();
-
-		// install gateways
-		$this->rep_install();
 
 		// rest api
 		( new Rest_Api_Controller() )->rest_api_init();
@@ -200,6 +202,8 @@ final class Module implements
 	 * @return void [description]
 	 */
 	public function register_gateways() {
+		// install gateways
+		$this->rep_install();
 
 		do_action( 'jet-form-builder/gateways/register', $this );
 	}

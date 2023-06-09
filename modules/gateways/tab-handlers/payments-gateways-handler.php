@@ -1,9 +1,11 @@
 <?php
 
 
-namespace Jet_Form_Builder\Admin\Tabs_Handlers;
+namespace JFB_Modules\Gateways\Tab_Handlers;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Admin\Tabs_Handlers\Base_Handler;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }

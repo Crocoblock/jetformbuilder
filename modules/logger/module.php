@@ -1,10 +1,11 @@
 <?php
 
 
-namespace Jet_Form_Builder\Dev_Mode;
+namespace JFB_Modules\Logger;
 
-use Jet_Form_Builder\Classes\Instance_Trait;
-use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
+use JFB_Components\Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_Static_Instance_It;
+use JFB_Components\Module\Base_Module_Static_Instance_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -12,18 +13,32 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * @method static Logger instance()
+ * @method static Module instance()
  *
  * Class Logger
  * @package Jet_Form_Builder\Dev_Mode
  */
-class Logger {
+final class Module implements Base_Module_It, Base_Module_Static_Instance_It {
+
+	use Base_Module_Static_Instance_Trait;
 
 	private $logged = array();
 
-	use Instance_Trait;
+	public static function get_instance_id(): string {
+		return 'logger';
+	}
 
-	public function get_logs() {
+	public function condition(): bool {
+		return true;
+	}
+
+	public function init_hooks() {
+	}
+
+	public function remove_hooks() {
+	}
+
+	public function get_logs(): array {
 		return $this->logged;
 	}
 
@@ -45,6 +60,7 @@ class Logger {
 		array_pop( $this->logged[ $key ] );
 	}
 
+
 	/**
 	 * @since 3.1.0
 	 *
@@ -61,6 +77,4 @@ class Logger {
 
 		return false;
 	}
-
-
 }

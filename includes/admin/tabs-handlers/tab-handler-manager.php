@@ -54,8 +54,6 @@ final class Tab_Handler_Manager {
 				new Mailchimp_Handler(),
 				new Active_Campaign_Handler(),
 				new Get_Response_Handler(),
-				new Paypal_Handler(),
-				new Payments_Gateways_Handler(),
 				new Options_Handler(),
 			)
 		);

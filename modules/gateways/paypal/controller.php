@@ -2,6 +2,7 @@
 
 namespace JFB_Modules\Gateways\Paypal;
 
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use JFB_Modules\Gateways\Module;
@@ -13,6 +14,11 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 class Controller extends \Jet_Form_Builder\Gateways\Base_Scenario_Gateway {
+
+	public function __construct() {
+		// install tab handlers for Settings page
+		Tab_Handler_Manager::instance()->install( new Tab_Handlers\Paypal_Handler() );
+	}
 
 	const ID = 'paypal';
 

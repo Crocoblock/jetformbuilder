@@ -6,6 +6,7 @@ namespace JFB_Modules\Gateways\Rest_Api;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use JFB_Components\Rest_Api;
 use JFB_Modules\Gateways\Table_Views;
+use JFB_Modules\Gateways\Query_Views\Payment_Count_View;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -49,7 +50,8 @@ class Receive_Payments extends Rest_Api\Rest_Api_Endpoint_Base {
 
 		return new \WP_REST_Response(
 			array(
-				'list' => $view->prepare_list( $payments ),
+				'list'  => $view->prepare_list( $payments ),
+				'total' => Payment_Count_View::count( $args ),
 			)
 		);
 	}

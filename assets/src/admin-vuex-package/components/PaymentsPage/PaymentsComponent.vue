@@ -2,7 +2,14 @@
 	<FormBuilderPage
 		:title="__( 'JetFormBuilder Payments', 'jet-form-builder' )"
 	>
-		<ActionsWithFilters/>
+		<template #heading-after>
+			<ExportPaymentsButton/>
+		</template>
+		<ActionsWithFilters>
+			<template #filters>
+				<StatusFilter/>
+			</template>
+		</ActionsWithFilters>
 		<TablePagination/>
 		<EntriesTable/>
 		<template v-if="$slots.default">
@@ -17,6 +24,8 @@ import ActionsWithFilters from '../ActionsWithFilters';
 import TablePagination from '../TablePagination';
 import EntriesTable from '../EntriesTable';
 import FormBuilderPage from '../FormBuilderPage';
+import StatusFilter from './filters/StatusFilter';
+import ExportPaymentsButton from './components/ExportPaymentsButton';
 
 const {
 	      GetIncoming,
@@ -36,6 +45,8 @@ const {
 export default {
 	name: 'payments-table-core',
 	components: {
+		ExportPaymentsButton,
+		StatusFilter,
 		ActionsWithFilters,
 		FormBuilderPage,
 		EntriesTable,

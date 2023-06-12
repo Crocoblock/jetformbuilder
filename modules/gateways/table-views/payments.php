@@ -7,6 +7,7 @@ use Jet_Form_Builder\Admin\Table_Views\Column_Base;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Record_Id_Column_Advanced;
 use Jet_Form_Builder\Admin\Table_Views\View_Advanced_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Gateways\Db_Models\Payment_To_Payer_Shipping_Model;
 use JFB_Modules\Gateways\Db_Models\Payment_To_Record;
 use JFB_Modules\Gateways\Module;
@@ -84,14 +85,15 @@ class Payments extends View_Advanced_Base {
 
 	/**
 	 * @return array[]
-	 * @throws \Jet_Form_Builder\Exceptions\Repository_Exception
+	 * @throws Repository_Exception
 	 */
 	public function load_data(): array {
 		/** @var Module $module */
 		$module = jet_form_builder()->module( Module::class );
 
 		return array(
-			'messages' => array(
+			'export_url' => $module->get_export_multiple()->get_url(),
+			'messages'   => array(
 				'empty_checked' => __( 'You have not selected any payment.', 'jet-form-builder' ),
 				'empty_action'  => __( 'You have not selected an action.', 'jet-form-builder' ),
 			),

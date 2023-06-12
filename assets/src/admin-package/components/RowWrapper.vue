@@ -39,6 +39,12 @@
 		</div>
 		<div class="cx-vui-component__control">
 			<slot></slot>
+			<div
+				v-if="$slots.actions"
+				class="cx-vui-component__control-actions"
+			>
+				<slot name="actions"></slot>
+			</div>
 		</div>
 	</div>
 </template>
@@ -116,5 +122,12 @@ export default {
 	.cx-vui-component__control {
 		flex: 2;
 	}
+}
+
+.cx-vui-component__control-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1em;
+	margin-top: 0.5em;
 }
 </style>

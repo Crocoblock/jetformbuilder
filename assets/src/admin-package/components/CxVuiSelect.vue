@@ -41,7 +41,7 @@ export default {
 			this.$emit( 'input', event.target.value );
 		},
 	},
-	inject: [ 'elementId' ]
+	inject: [ 'elementId' ],
 };
 </script>
 
@@ -49,5 +49,9 @@ export default {
 .cx-vui-select {
 	line-height: 2em;
 	padding: 6px 24px 6px 8px;
+
+	&.fullwidth {
+		width: 100%;
+	}
 }
 </style>

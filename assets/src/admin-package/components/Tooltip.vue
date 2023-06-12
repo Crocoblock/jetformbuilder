@@ -131,6 +131,7 @@ export default {
 		padding-left: 1em;
 		padding-right: 1em;
 		position: absolute;
+		z-index: 2;
 
 		&.tooltip-position-top-right {
 			right: -1.2em;

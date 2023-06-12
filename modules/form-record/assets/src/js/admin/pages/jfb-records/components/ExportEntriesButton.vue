@@ -49,31 +49,31 @@
 								@change="updateSelectedFields"
 							/>
 						</template>
+						<template #actions>
+							<cx-vui-button
+								button-style="link-accent"
+								size="link"
+								tagName="a"
+								:disabled="currentFieldsValues.length === selectedFields.length"
+								@click="selectAllFields"
+							>
+								<template #label>
+									{{ __( 'Choose all', 'jet-form-builder' ) }}
+								</template>
+							</cx-vui-button>
+							<cx-vui-button
+								button-style="link-error"
+								size="link"
+								tagName="a"
+								:disabled="!selectedFields.length"
+								@click="clearAllFields"
+							>
+								<template #label>
+									{{ __( 'Clear', 'jet-form-builder' ) }}
+								</template>
+							</cx-vui-button>
+						</template>
 					</RowWrapper>
-					<div class="jfb-inline-control-actions">
-						<cx-vui-button
-							button-style="link-accent"
-							size="link"
-							tagName="a"
-							:disabled="currentFieldsValues.length === selectedFields.length"
-							@click="selectAllFields"
-						>
-							<template #label>
-								{{ __( 'Choose all', 'jet-form-builder' ) }}
-							</template>
-						</cx-vui-button>
-						<cx-vui-button
-							button-style="link-error"
-							size="link"
-							tagName="a"
-							:disabled="!selectedFields.length"
-							@click="clearAllFields"
-						>
-							<template #label>
-								{{ __( 'Clear', 'jet-form-builder' ) }}
-							</template>
-						</cx-vui-button>
-					</div>
 					<hr class="jfb"/>
 					<RowWrapper
 						element-id="extra"
@@ -90,31 +90,31 @@
 								@change="updateSelectedExtra"
 							/>
 						</template>
+						<template #actions>
+							<cx-vui-button
+								button-style="link-accent"
+								size="link"
+								tagName="a"
+								:disabled="extraValues.length === selectedExtra.length"
+								@click="selectAllExtra"
+							>
+								<template #label>
+									{{ __( 'Choose all', 'jet-form-builder' ) }}
+								</template>
+							</cx-vui-button>
+							<cx-vui-button
+								button-style="link-error"
+								size="link"
+								tagName="a"
+								:disabled="!removableSelectedExtra.length"
+								@click="clearAllExtra"
+							>
+								<template #label>
+									{{ __( 'Clear', 'jet-form-builder' ) }}
+								</template>
+							</cx-vui-button>
+						</template>
 					</RowWrapper>
-					<div class="jfb-inline-control-actions">
-						<cx-vui-button
-							button-style="link-accent"
-							size="link"
-							tagName="a"
-							:disabled="extraValues.length === selectedExtra.length"
-							@click="selectAllExtra"
-						>
-							<template #label>
-								{{ __( 'Choose all', 'jet-form-builder' ) }}
-							</template>
-						</cx-vui-button>
-						<cx-vui-button
-							button-style="link-error"
-							size="link"
-							tagName="a"
-							:disabled="!removableSelectedExtra.length"
-							@click="clearAllExtra"
-						>
-							<template #label>
-								{{ __( 'Clear', 'jet-form-builder' ) }}
-							</template>
-						</cx-vui-button>
-					</div>
 					<h3>{{ __( 'Filter records', 'jet-form-builder' ) }}</h3>
 					<hr class="jfb"/>
 					<cx-vui-select
@@ -426,13 +426,6 @@ export default {
 	&--jfb-padding-b-unset {
 		padding-bottom: 0.2em;
 	}
-}
-
-.jfb-inline-control-actions {
-	display: flex;
-	justify-content: flex-end;
-	gap: 1em;
-	padding: 0 20px 20px 0;
 }
 
 hr.jfb {

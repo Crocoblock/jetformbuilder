@@ -64,6 +64,10 @@ export default {
 		}
 		const { filters_endpoint } = this.getIncoming();
 
+		if ( !filters_endpoint ) {
+			return;
+		}
+
 		this.dispatch( 'maybeFetchFilters', filters_endpoint );
 	},
 };

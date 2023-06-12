@@ -9,6 +9,7 @@ use Jet_Form_Builder\Admin\Tabs_Handlers\Payments_Gateways_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\With_Tab_Handler_It;
 use Jet_Form_Builder\Classes\Instance_Trait;
+use JFB_Components\Export\Table_Entries_Export_It;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
@@ -21,6 +22,9 @@ use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use JFB_Components\Wp_Nonce\Wp_Nonce;
+use JFB_Modules\Gateways\Export\Multiple_Controller;
+use JFB_Modules\Gateways\Export\Single_Controller;
 use JFB_Modules\Gateways\Meta_Boxes\Payment_Info_For_Record;
 use JFB_Modules\Gateways\Pages\Payments_Page;
 use JFB_Modules\Gateways\Pages\Single_Payment_Page;
@@ -61,12 +65,15 @@ final class Module implements
 	private $gateways_form_data = array();
 	private $form_id;
 
-	public $message = null;
-	public $data    = null;
-	public $is_sandbox;
+	public  $message = null;
+	public  $data    = null;
+	public  $is_sandbox;
 	private $current_gateway_type;
 
+	/** @var Single_Controller */
 	private $export_single;
+
+	/** @var Multiple_Controller */
 	private $export_multiple;
 
 	public static function get_instance_id(): string {
@@ -138,8 +145,13 @@ final class Module implements
 			$this->is_sandbox = $options['enable_test_mode'];
 		}
 
+		$nonce = new Wp_Nonce( self::EXPORT_ACTION );
+
 		$this->export_single   = new Export\Single_Controller();
 		$this->export_multiple = new Export\Multiple_Controller();
+
+		$this->get_export_multiple()->set_wp_nonce( $nonce );
+		$this->get_export_single()->set_wp_nonce( $nonce );
 
 		// rest api
 		( new Rest_Api_Controller() )->rest_api_init();
@@ -401,6 +413,17 @@ final class Module implements
 		}
 
 		return apply_filters( 'jet-form-builder/gateways/currency-symbol', $symbol, $currency );
+	}
+
+	public function get_export_multiple(): Multiple_Controller {
+		return $this->export_multiple;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function get_export_single(): Single_Controller {
+		return $this->export_single;
 	}
 
 }

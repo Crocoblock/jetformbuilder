@@ -15,15 +15,17 @@
 			:class-names="{
 				'export-popup': true,
 				'sticky-footer': true,
-				'sticky-header': true,
 			}"
 			@close="showPopup = false"
 		>
-			<template #title>{{ __( 'Export settings', 'jet-form-builder' ) }}</template>
+			<template #title>{{ __( '1. Select data to export:', 'jet-form-builder' ) }}</template>
 			<template #content>
 				<RowWrapper
 					element-id="columns"
-					:class-names="{ 'size--1-x-2': true }"
+					:class-names="{
+					'size--1-x-2': true,
+					'padding-side-unset': true
+				}"
 					:state="columnsState"
 				>
 					<template #label>{{ __( 'General Columns', 'jet-form-builder' ) }}</template>
@@ -62,7 +64,10 @@
 				</RowWrapper>
 				<RowWrapper
 					element-id="payerColumns"
-					:class-names="{ 'size--1-x-2': true }"
+					:class-names="{
+					'size--1-x-2': true,
+					'padding-side-unset': true
+				}"
 					:state="columnsState"
 				>
 					<template #label>{{ __( 'Payer Columns', 'jet-form-builder' ) }}</template>
@@ -101,7 +106,10 @@
 				</RowWrapper>
 				<RowWrapper
 					element-id="shippingColumns"
-					:class-names="{ 'size--1-x-2': true }"
+					:class-names="{
+					'size--1-x-2': true,
+					'padding-side-unset': true
+				}"
 					:state="columnsState"
 				>
 					<template #label>{{ __( 'Shipping Columns', 'jet-form-builder' ) }}</template>
@@ -138,9 +146,14 @@
 						</cx-vui-button>
 					</template>
 				</RowWrapper>
+				<h3>{{ __( '2. Filter payments:', 'jet-form-builder' ) }}</h3>
+				<Delimiter/>
 				<RowWrapper
 					element-id="status"
-					:class-names="{ 'size--1-x-2': true }"
+					:class-names="{
+					'size--1-x-2': true,
+					'padding-side-unset': true
+				}"
 				>
 					<template #label>{{ __( 'Status', 'jet-form-builder' ) }}</template>
 					<template #default>
@@ -200,6 +213,7 @@ const {
 	      CxVuiPopup,
 	      CxVuiFSelect,
 	      CxVuiSelect,
+	      Delimiter,
       } = JetFBComponents;
 
 const {
@@ -217,6 +231,7 @@ export default {
 		RowWrapper,
 		CxVuiPopup,
 		CxVuiSelect,
+		Delimiter,
 	},
 	mixins: [
 		i18n,

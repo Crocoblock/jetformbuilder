@@ -74,7 +74,8 @@ export default {
 		},
 		/**
 		 * Possible values:
-		 * 'size--1-x-2': true
+		 * 'size--1-x-2': true,
+		 * 'padding-side-unset': true,
 		 */
 		classNames: {
 			type: Object,
@@ -122,6 +123,11 @@ export default {
 	.cx-vui-component__control {
 		flex: 2;
 	}
+}
+
+.padding-side-unset.cx-vui-component {
+	padding-left: unset;
+	padding-right: unset;
 }
 
 .cx-vui-component__control-actions {

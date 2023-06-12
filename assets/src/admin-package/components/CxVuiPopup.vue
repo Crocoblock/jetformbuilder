@@ -5,7 +5,7 @@
 			@click="$emit( 'close' )"
 		></div>
 		<div class="cx-vui-popup__body">
-			<div class="cx-vui-popup__header" v-if="$slots.title">
+			<h2 class="cx-vui-popup__header" v-if="$slots.title">
 				<slot name="title"></slot>
 				<template v-if="$slots.close">
 					<slot name="close"></slot>
@@ -20,7 +20,7 @@
 							d="M12 3.00671L8.00671 7L12 10.9933L10.9933 12L7 8.00671L3.00671 12L2 10.9933L5.99329 7L2 3.00671L3.00671 2L7 5.99329L10.9933 2L12 3.00671Z"/>
 					</svg>
 				</div>
-			</div>
+			</h2>
 			<div class="cx-vui-popup__content">
 				<slot name="content"></slot>
 			</div>
@@ -70,6 +70,9 @@ export default {
 	&__header {
 		display: flex;
 		justify-content: space-between;
+		padding-bottom: 10px;
+		margin: unset;
+		border-bottom: 1px solid #ECECEC;
 	}
 
 	&.sticky-header, &.sticky-footer {
@@ -86,7 +89,6 @@ export default {
 			background-color: white;
 			padding-top: 20px;
 			z-index: 1;
-			border-bottom: 1px solid #ECECEC;
 		}
 
 		.cx-vui-popup__body {

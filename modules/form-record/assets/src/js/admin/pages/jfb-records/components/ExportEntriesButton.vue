@@ -15,32 +15,48 @@
 			:class-names="{
 				'export-popup': true,
 				'sticky-footer': true,
-				'sticky-header': true,
 			}"
 			@close="showPopup = false"
 		>
-			<template #title>{{ __( 'Export settings', 'jet-form-builder' ) }}</template>
+			<template #title>{{ __( '1. Select Form:', 'jet-form-builder' ) }}</template>
 			<template #content>
-				<cx-vui-select
-					:options-list="formFilter.options || []"
-					:wrapper-css="[ '1-x-2' ]"
-					size="fullwidth"
-					:value="selectedForm"
-					:label="__( 'Export record from', 'jet-form-builder' )"
-					:placeholder="__( 'You need to select form', 'jet-form-builder' )"
-					@input="setForm"
-					name="select_form"
-				/>
+				<RowWrapper
+					element-id="form"
+					:class-names="{
+					'size--1-x-2': true,
+					'padding-side-unset': true,
+				}"
+				>
+					<template #label>{{ __( 'Choose form', 'jet-form-builder' ) }}</template>
+					<template #default>
+						<CxVuiSelect
+							:value="selectedForm"
+							@input="setForm"
+							:class-names="{ 'fullwidth': true }"
+						>
+							<option disabled value="">
+								{{ __( 'You need to select form', 'jet-form-builder' ) }}
+							</option>
+							<option v-for="option in formFilter.options || []" v-bind:value="option.value">
+								{{ option.label }}
+							</option>
+						</CxVuiSelect>
+					</template>
+				</RowWrapper>
 				<template v-if="selectedForm">
+					<h3>{{ __( '2. Select data to export:', 'jet-form-builder' ) }}</h3>
+					<Delimiter/>
 					<RowWrapper
 						element-id="fields"
-						:class-names="{ 'size--1-x-2': true }"
+						:class-names="{
+					'size--1-x-2': true,
+					'padding-side-unset': true,
+				}"
 						:state="fieldState"
 					>
-						<template #label>{{ __( 'Export fields', 'jet-form-builder' ) }}</template>
+						<template #label>{{ __( 'Choose fields', 'jet-form-builder' ) }}</template>
 						<template #default>
 							<CxVuiFSelect
-								:wrapper-css="[ 'jfb-loading-select', 'jfb-padding-b-unset' ]"
 								:options-list="currentFields"
 								:multiple="true"
 								:value="selectedFields"
@@ -74,10 +90,13 @@
 							</cx-vui-button>
 						</template>
 					</RowWrapper>
-					<hr class="jfb"/>
+					<Delimiter/>
 					<RowWrapper
 						element-id="extra"
-						:class-names="{ 'size--1-x-2': true }"
+						:class-names="{
+					'size--1-x-2': true,
+					'padding-side-unset': true,
+				}"
 						:state="extraState"
 					>
 						<template #label>{{ __( 'Additional information', 'jet-form-builder' ) }}</template>
@@ -115,20 +134,34 @@
 							</cx-vui-button>
 						</template>
 					</RowWrapper>
-					<h3>{{ __( 'Filter records', 'jet-form-builder' ) }}</h3>
-					<hr class="jfb"/>
-					<cx-vui-select
-						:label="__( 'Status', 'jet-form-builder' )"
-						:wrapper-css="[ '1-x-2' ]"
-						:options-list="statusFilter.options"
-						size="fullwidth"
-						name="status"
-						:value="status"
-						@input="setStatus"
-					/>
-					<hr class="jfb"/>
+					<h3>{{ __( '3. Filter records:', 'jet-form-builder' ) }}</h3>
+					<Delimiter/>
+					<RowWrapper
+						element-id="status"
+						:class-names="{
+					'size--1-x-2': true,
+					'padding-side-unset': true,
+				}"
+					>
+						<template #label>{{ __( 'Status', 'jet-form-builder' ) }}</template>
+						<template #default>
+							<CxVuiSelect
+								:value="status"
+								@input="setStatus"
+								:class-names="{ 'fullwidth': true }"
+							>
+								<option v-for="option in statusFilter.options" v-bind:value="option.value">
+									{{ option.label }}
+								</option>
+							</CxVuiSelect>
+						</template>
+					</RowWrapper>
+					<Delimiter/>
 					<div class="jfb-dates-wrapper">
-						<ColumnWrapper element-id="date_from">
+						<ColumnWrapper
+							element-id="date_from"
+							:class-names="{ 'padding-side-unset': true }"
+						>
 							<template #label>{{ __( 'Date from', 'jet-form-builder' ) }}</template>
 							<CxVuiDate
 								:value="dateFrom"
@@ -136,7 +169,10 @@
 								max-date="now"
 							/>
 						</ColumnWrapper>
-						<ColumnWrapper element-id="date_to">
+						<ColumnWrapper
+							element-id="date_to"
+							:class-names="{ 'padding-side-unset': true }"
+						>
 							<template #label>{{ __( 'Date to', 'jet-form-builder' ) }}</template>
 							<CxVuiDate
 								:value="dateTo"
@@ -192,6 +228,8 @@ const {
 	      CxVuiPopup,
 	      CxVuiFSelect,
 	      CxVuiDate,
+	      Delimiter,
+	      CxVuiSelect,
       } = JetFBComponents;
 
 const {
@@ -210,6 +248,8 @@ export default {
 		CxVuiPopup,
 		CxVuiFSelect,
 		CxVuiDate,
+		Delimiter,
+		CxVuiSelect,
 	},
 	props: {
 		label: {
@@ -400,42 +440,9 @@ export default {
 </script>
 
 <style lang="scss">
-.cx-vui-component {
-	&--1-x-2 {
-		.cx-vui-component__meta {
-			flex: 1;
-		}
-
-		.cx-vui-component__control {
-			flex: 2;
-		}
-	}
-
-	&--jfb-loading-select {
-		.cx-vui-component__control {
-			display: flex;
-			gap: 10px;
-			align-items: flex-end;
-
-			& > *:first-child {
-				flex: 1 1 auto;
-			}
-		}
-	}
-
-	&--jfb-padding-b-unset {
-		padding-bottom: 0.2em;
-	}
-}
-
-hr.jfb {
-	border: 0;
-	border-top: 1px solid #ECECEC;
-	margin: unset;
-}
-
 .jfb-dates-wrapper {
 	display: flex;
+	gap: 1em;
 }
 
 .cx-vui-popup.export-popup {

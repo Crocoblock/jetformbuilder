@@ -28,8 +28,9 @@ export default {
 		},
 		/**
 		 * Possible values:
-		 * 'padding-top-bottom-unset': true
-		 * 'padding-unset': true
+		 * 'padding-top-bottom-unset': true,
+		 * 'padding-unset': true,
+		 * 'padding-side-unset: true,
 		 */
 		classNames: {
 			type: Object,
@@ -65,6 +66,11 @@ export default {
 	width: 100%;
 	border-top: unset;
 	gap: 0.7em;
+
+	&.padding-side-unset {
+		padding-left: unset;
+		padding-right: unset;
+	}
 }
 
 .padding-top-bottom-unset {

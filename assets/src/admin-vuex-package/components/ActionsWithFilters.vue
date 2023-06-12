@@ -81,6 +81,7 @@ export default {
 	align-items: end;
 	padding: 1em;
 	margin-top: 2em;
+	flex-wrap: wrap;
 
 	&--loading {
 		opacity: 0.5;
@@ -91,6 +92,7 @@ export default {
 	display: flex;
 	gap: 1em;
 	align-items: flex-end;
+	flex-wrap: wrap;
 }
 
 .wrapper-buttons {

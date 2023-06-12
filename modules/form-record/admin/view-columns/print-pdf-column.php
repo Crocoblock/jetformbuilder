@@ -12,9 +12,9 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Export_Csv_Column extends Column_Advanced_Base {
+class Print_Pdf_Column extends Column_Advanced_Base {
 
-	protected $column = 'export_csv';
+	protected $column = 'print_pdf';
 	protected $type   = self::LINK;
 
 	public function get_label(): string {
@@ -34,14 +34,9 @@ class Export_Csv_Column extends Column_Advanced_Base {
 		$module = jet_form_builder()->module( 'form-record' );
 
 		return array(
-			'text' => __( 'Export in CSV', 'jet-form-builder' ),
-			'href' => add_query_arg(
-				array(
-					'id' => $record_id,
-				),
-				$module->get_export_single()->get_url()
-			),
-			'type' => 'media-spreadsheet',
+			'text' => __( 'Print in PDF', 'jet-form-builder' ),
+			'href' => '#',
+			'type' => 'media-document',
 		);
 	}
 }

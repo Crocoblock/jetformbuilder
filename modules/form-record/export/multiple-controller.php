@@ -29,7 +29,14 @@ class Multiple_Controller extends Base_Export_Controller {
 			);
 		}
 
-		$exporter             = Export_Tools::get_exporter_by_format();
+		$exporter = Export_Tools::get_exporter_by_format();
+
+		if ( ! is_a( $exporter, Table_Entries_Export_It::class ) ) {
+			throw new \Exception(
+				__( 'Invalid format for export', 'jet-form-builder' )
+			);
+		}
+
 		$this->form_id        = $this->get_form_id();
 		$this->fields_columns = $this->get_field_columns();
 		$this->modify_extra_columns();

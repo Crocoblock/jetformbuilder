@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Export_Csv_Column extends \JFB_Modules\Form_Record\Admin\View_Columns\Export_Csv_Column {
+class Print_Pdf_Column extends \JFB_Modules\Form_Record\Admin\View_Columns\Print_Pdf_Column {
 
 	/**
 	 * @param array $record
@@ -23,17 +23,12 @@ class Export_Csv_Column extends \JFB_Modules\Form_Record\Admin\View_Columns\Expo
 		$record_id = (int) $record['id'];
 
 		/** @var Module $module */
-		$module = jet_form_builder()->module( 'gateways' );
+		$module = jet_form_builder()->module( Module::class );
 
 		return array(
-			'text' => __( 'Export in CSV', 'jet-form-builder' ),
-			'href' => add_query_arg(
-				array(
-					'id' => $record_id,
-				),
-				$module->get_export_single()->get_url()
-			),
-			'type' => 'media-spreadsheet',
+			'text' => __( 'Print in PDF', 'jet-form-builder' ),
+			'href' => '#',
+			'type' => 'media-document',
 		);
 	}
 }

@@ -6,6 +6,7 @@ namespace JFB_Modules\Form_Record;
 use Jet_Form_Builder\Actions\Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
+use JFB_Components\Export\Export_Tools;
 use JFB_Components\Wp_Nonce\Wp_Nonce;
 use JFB_Modules\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 use JFB_Components\Module\Base_Module_After_Install_It;
@@ -21,6 +22,7 @@ use JFB_Modules\Form_Record\Admin\Meta_Boxes\Record_To_Payment_Box;
 use JFB_Modules\Form_Record\Admin\Pages\Form_Records;
 use JFB_Modules\Form_Record\Admin\Pages\Single_Form_Record_Page;
 use JFB_Modules\Form_Record\Export;
+use JFB_Modules\Dev;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -160,7 +162,10 @@ final class Module implements
 		// prepare record controller, for saving errors & actions
 		$record     = $scenario->get_scenario_row( 'record' );
 		$controller = ( new Controller() )->set_record_id( $record['id'] );
-		$controller->set_setting( 'save_errors', \Jet_Form_Builder\Dev_Mode\Manager::instance()->active() );
+		$controller->set_setting(
+			'save_errors',
+			jet_form_builder()->has_module( Dev\Module::class )
+		);
 
 		try {
 			$controller->save_fields();

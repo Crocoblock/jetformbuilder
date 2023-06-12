@@ -3,10 +3,12 @@
 
 namespace JFB_Modules\Form_Record\Admin\Meta_Boxes;
 
+use Jet_Form_Builder\Admin\Table_Views\Column_Base;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use JFB_Modules\Form_Record\Admin\View_Columns\Export_Csv_Column;
 use JFB_Modules\Form_Record\Admin\View_Columns\Form_Link_Column;
 use JFB_Modules\Form_Record\Admin\View_Columns\Ip_Address_Column;
+use JFB_Modules\Form_Record\Admin\View_Columns\Print_Pdf_Column;
 use JFB_Modules\Form_Record\Admin\View_Columns\Referrer_Link_Column;
 use JFB_Modules\Form_Record\Admin\View_Columns\Status_Column;
 use JFB_Modules\Form_Record\Admin\View_Columns\User_Agent_Column;
@@ -35,6 +37,7 @@ class Form_Record_Inline_Actions_Box extends Base_List_Box {
 	public function get_columns(): array {
 		return array(
 			'export_csv' => new Export_Csv_Column(),
+			'print_pdf'  => new Print_Pdf_Column(),
 		);
 	}
 

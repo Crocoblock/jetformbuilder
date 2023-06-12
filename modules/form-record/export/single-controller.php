@@ -38,8 +38,12 @@ class Single_Controller extends Base_Export_Controller {
 
 		$exporter        = Export_Tools::get_exporter_by_format();
 		$this->record_id = $this->get_record_id();
-		$this->record    = Record_View::findById( $this->record_id );
 		$fields          = Record_Fields_View::get_request( $this->record_id );
+
+		$record_view = Record_View::findOne( array( 'id' => $this->record_id ) );
+		$record_view->set_select( array_keys( $this->extra_columns ) );
+
+		$this->record = $record_view->query()->query_one();
 
 		RecordTools::parse_values( $fields );
 
@@ -94,7 +98,7 @@ class Single_Controller extends Base_Export_Controller {
 
 	protected function get_file_name(): string {
 		return sprintf(
-			/* translators: %1$s - form title, %2$d - record ID */
+		/* translators: %1$s - form title, %2$d - record ID */
 			__( '%1$s-record-%2$d', 'jet-form-builder' ),
 			get_the_title( $this->record['form_id'] ),
 			$this->record_id

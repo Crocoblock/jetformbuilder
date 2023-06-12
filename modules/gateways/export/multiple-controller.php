@@ -6,10 +6,7 @@ namespace JFB_Modules\Gateways\Export;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use JFB_Components\Export\Export_Tools;
 use JFB_Components\Export\Table_Entries_Export_It;
-use JFB_Modules\Gateways\Db_Models\Payer_Model;
-use JFB_Modules\Gateways\Db_Models\Payer_Shipping_Model;
 use JFB_Modules\Gateways\Query_Views\Payment_For_Export_View;
-use JFB_Modules\Gateways\Query_Views\Payment_View;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -27,6 +24,21 @@ class Multiple_Controller extends Base_Export_Controller {
 			);
 		}
 
+		$this->modify_columns();
+		$this->modify_record_columns();
+		$this->modify_payer_columns();
+		$this->modify_shipping_columns();
+
+		if ( ! $this->columns &&
+			! $this->payers_columns &&
+			! $this->shipping_columns &&
+			! $this->record_columns
+		) {
+			throw new \Exception(
+				__( 'General or additional columns must be specified', 'jet-form-builder' )
+			);
+		}
+
 		$exporter = Export_Tools::get_exporter_by_format();
 
 		$exporter->set_file_name( 'jfb-payments' );
@@ -36,6 +48,7 @@ class Multiple_Controller extends Base_Export_Controller {
 		$exporter->add_row(
 			$this->prepare_row(
 				$this->columns,
+				$this->record_columns,
 				$this->payers_columns,
 				$this->shipping_columns
 			)
@@ -48,50 +61,91 @@ class Multiple_Controller extends Base_Export_Controller {
 
 	protected function add_rows( Table_Entries_Export_It $export ) {
 		try {
-			$payments = ( new Payment_For_Export_View() )->query()->generate_all();
+			$payments = $this->generate_payments();
 		} catch ( Query_Builder_Exception $exception ) {
 			return;
 		}
 
-		$view = new Payment_View();
-		$view->set_select( $this->get_select_row_columns() );
-		$view->set_limit( array( 1 ) );
-
-		$empty_ship  = array_fill_keys(
-			array_keys( $this->shipping_columns ),
-			''
-		);
-		$empty_payer = array_fill_keys(
-			array_keys( $this->payers_columns ),
-			''
-		);
-
-		foreach ( $payments as $payment ) {
-			$view->set_conditions(
-				$view::prepare_columns(
-					array(
-						'payment_id' => $payment->id,
+		if ( ! $this->payers_columns && ! $this->shipping_columns && ! $this->record_columns ) {
+			foreach ( $payments as $payment ) {
+				$export->add_row(
+					$this->prepare_row(
+						$payment,
+						array(),
+						array(),
+						array()
 					)
-				)
-			);
-
-			try {
-				$shipping = $view->query()->query_one();
-				$payer    = $shipping['payer'];
-				unset( $shipping['payer'] );
-
-			} catch ( Query_Builder_Exception $exception ) {
-				$shipping = $empty_ship;
-				$payer    = $empty_payer;
+				);
 			}
 
-			$export->add_row(
-				$this->prepare_row(
-					$payment,
-					$payer,
-					$shipping
-				)
-			);
+			return;
 		}
+
+		foreach ( $payments as $payment ) {
+			$this->add_row( $export, $payment );
+		}
+	}
+
+	/**
+	 * @throws Query_Builder_Exception
+	 */
+	protected function generate_payments(): \Generator {
+		$view = ( new Payment_For_Export_View() )->set_filters(
+		// phpcs:ignore WordPress.Security
+			(array) ( $_GET['filters'] ?? array() )
+		);
+		$view->set_select( array_keys( $this->columns ) );
+
+		return $view->query()->generate_all();
+	}
+
+	protected function modify_columns() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$columns = array_map( 'sanitize_key', (array) ( $_GET['columns'] ?? array() ) );
+
+		foreach ( $this->columns as $column_name => $label ) {
+			if ( ! in_array( $column_name, $columns, true ) ) {
+				unset( $this->columns[ $column_name ] );
+			}
+		}
+	}
+
+	protected function modify_record_columns() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$columns = array_map( 'sanitize_key', (array) ( $_GET['columns'] ?? array() ) );
+
+		foreach ( $this->record_columns as $column_name => $label ) {
+			if ( ! in_array( $column_name, $columns, true ) ) {
+				unset( $this->record_columns[ $column_name ] );
+			}
+		}
+
+		$this->update_record_empty_columns();
+	}
+
+	protected function modify_payer_columns() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$columns = array_map( 'sanitize_key', (array) ( $_GET['payerColumns'] ?? array() ) );
+
+		foreach ( $this->payers_columns as $column_name => $label ) {
+			if ( ! in_array( $column_name, $columns, true ) ) {
+				unset( $this->payers_columns[ $column_name ] );
+			}
+		}
+
+		$this->update_payer_empty_columns();
+	}
+
+	protected function modify_shipping_columns() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$columns = array_map( 'sanitize_key', (array) ( $_GET['shippingColumns'] ?? array() ) );
+
+		foreach ( $this->shipping_columns as $column_name => $label ) {
+			if ( ! in_array( $column_name, $columns, true ) ) {
+				unset( $this->shipping_columns[ $column_name ] );
+			}
+		}
+
+		$this->update_shipping_empty_columns();
 	}
 }

@@ -4,6 +4,7 @@
 namespace JFB_Modules\Gateways\Export;
 
 use JFB_Components\Export\Export_Tools;
+use JFB_Modules\Gateways\Query_Views\Payment_For_Export_View;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -11,10 +12,6 @@ if ( ! defined( 'WPINC' ) ) {
 
 
 class Single_Controller extends Base_Export_Controller {
-
-	protected $payment_id;
-	protected $payment;
-	protected $payer;
 
 	/**
 	 * @throws \Exception
@@ -26,7 +23,29 @@ class Single_Controller extends Base_Export_Controller {
 			);
 		}
 
+		$payment_id   = $this->get_payment_id();
+		$payment_view = Payment_For_Export_View::find( array( 'id' => $payment_id ) );
+		$payment_view->set_select( array_keys( $this->columns ) );
+
+		$payment  = $payment_view->set_limit( array( 1 ) )->query()->query_one();
 		$exporter = Export_Tools::get_exporter_by_format();
+
+		$exporter->set_file_name( 'jfb-payment-' . $payment_id );
+		$exporter->headers();
+
+		// headings
+		$exporter->add_row(
+			$this->prepare_row(
+				$this->columns,
+				$this->record_columns,
+				$this->payers_columns,
+				$this->shipping_columns
+			)
+		);
+
+		$this->add_row( $exporter, $payment );
+		$exporter->close();
+		die;
 	}
 
 	/**

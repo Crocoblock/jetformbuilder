@@ -26,10 +26,10 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Form_Record_Export_Box extends Base_List_Box {
+class Form_Record_Inline_Actions_Box extends Base_List_Box {
 
 	public function get_title(): string {
-		return __( 'Export', 'jet-form-builder' );
+		return __( 'Actions', 'jet-form-builder' );
 	}
 
 	public function get_columns(): array {

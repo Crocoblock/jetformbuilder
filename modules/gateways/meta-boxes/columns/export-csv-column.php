@@ -31,7 +31,7 @@ class Export_Csv_Column extends Column_Advanced_Base {
 		$record_id = (int) $record['id'];
 
 		/** @var Module $module */
-		$module = jet_form_builder()->module( 'form-record' );
+		$module = jet_form_builder()->module( 'gateways' );
 
 		return array(
 			'text' => __( 'Export in CSV', 'jet-form-builder' ),

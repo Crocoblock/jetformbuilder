@@ -9,6 +9,7 @@ use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
 use JFB_Modules\Gateways\Meta_Boxes\Payer_Box;
 use JFB_Modules\Gateways\Meta_Boxes\Payer_Shipping_Box;
 use Jet_Form_Builder\Gateways\Meta_Boxes\Payment_Details_Box;
+use JFB_Modules\Gateways\Meta_Boxes\Payment_Actions_Box;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -37,7 +38,8 @@ class Single_Payment_Page extends Base_Single_Page {
 				new Payer_Shipping_Box()
 			),
 			new Meta_Containers\Side_Meta_Container(
-				new Payment_Details_Box()
+				new Payment_Details_Box(),
+				new Payment_Actions_Box()
 			),
 		);
 	}

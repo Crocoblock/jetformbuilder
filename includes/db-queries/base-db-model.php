@@ -6,7 +6,6 @@ namespace Jet_Form_Builder\Db_Queries;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Migrations\Migration_Exception;
 use Jet_Form_Builder\Migrations\Versions\Base_Migration;
-use JFB_Modules\Wp_Cli\Cli_Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -53,16 +52,12 @@ abstract class Base_Db_Model {
 
 	public static function schema_columns( $prefix = '' ): array {
 		$columns   = array();
-		$generator = self::generate_columns();
+		$generator = self::generate_scoped_columns( $prefix );
 
 		foreach ( $generator as $column ) {
-			$item = sprintf( '`%s`.`%s`', static::table(), $column );
+			$generator->next();
 
-			if ( $prefix ) {
-				$item .= sprintf( " as '%s'", "{$prefix}.{$column}" );
-			}
-
-			$columns[] = array( 'as' => $item );
+			$columns[] = $generator->current();
 		}
 
 		return $columns;
@@ -278,7 +273,7 @@ abstract class Base_Db_Model {
 		$schema_keys = array_keys( static::schema() );
 
 		if ( in_array( self::UPDATED_AT, $schema_keys, true ) &&
-		     ! array_key_exists( self::UPDATED_AT, $columns )
+			! array_key_exists( self::UPDATED_AT, $columns )
 		) {
 			$columns[ self::UPDATED_AT ] = current_time( 'mysql' );
 		}

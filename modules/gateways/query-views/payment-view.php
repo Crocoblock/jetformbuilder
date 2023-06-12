@@ -11,6 +11,7 @@ use JFB_Modules\Gateways\Db_Models\Payer_Model;
 use JFB_Modules\Gateways\Db_Models\Payer_Shipping_Model;
 use JFB_Modules\Gateways\Db_Models\Payment_Model;
 use JFB_Modules\Gateways\Db_Models\Payment_To_Payer_Shipping_Model;
+use JFB_Modules\Gateways\Db_Models\Payment_To_Record;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -26,6 +27,8 @@ class Payment_View extends View_Base {
 		'COMPLETED',
 		'VOIDED',
 	);
+
+	protected $with_record = false;
 
 	public function __construct() {
 		$this->set_select(
@@ -92,10 +95,38 @@ LEFT JOIN `{$payers_ship}` ON 1=1
 LEFT JOIN `{$payers}` ON 1=1
 	AND `{$payers}`.`id` = `{$payers_ship}`.`payer_id` 
 		";
+
+		if ( ! $this->with_record ) {
+			return;
+		}
+
+		$payment_to_record = ( new Payment_To_Record() )->create()::table();
+
+		$builder->join .= "
+LEFT JOIN `{$payment_to_record}` ON 1=1
+	AND `$payment_to_record`.`payment_id` = `{$payments}`.`id`
+		";
 	}
 
 	public function table(): string {
 		return Payment_Model::table();
+	}
+
+	public function set_payment_id( $payment_id ) {
+		$this->set_conditions(
+			static::prepare_columns(
+				array(
+					'id' => $payment_id,
+				)
+			)
+		);
+	}
+
+	/**
+	 * @param bool $with_record
+	 */
+	public function set_with_record( bool $with_record ) {
+		$this->with_record = $with_record;
 	}
 
 }

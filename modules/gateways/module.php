@@ -65,9 +65,9 @@ final class Module implements
 	private $gateways_form_data = array();
 	private $form_id;
 
-	public  $message = null;
-	public  $data    = null;
-	public  $is_sandbox;
+	public $message = null;
+	public $data    = null;
+	public $is_sandbox;
 	private $current_gateway_type;
 
 	/** @var Single_Controller */
@@ -99,6 +99,7 @@ final class Module implements
 	public function init_hooks() {
 		add_action( 'init', array( $this, 'register_gateways' ) );
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
+		add_action( 'admin_action_' . self::EXPORT_ACTION, array( $this, 'do_export_payments' ) );
 
 		add_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ), 0 );
 		add_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
@@ -115,6 +116,8 @@ final class Module implements
 
 	public function remove_hooks() {
 		remove_action( 'init', array( $this, 'register_gateways' ) );
+		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
+		remove_action( 'admin_action_' . self::EXPORT_ACTION, array( $this, 'do_export_payments' ) );
 
 		remove_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ), 0 );
 		remove_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
@@ -424,6 +427,15 @@ final class Module implements
 	 */
 	public function get_export_single(): Single_Controller {
 		return $this->export_single;
+	}
+
+	public function do_export_payments() {
+		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( array_key_exists( 'id', $_GET ) ) {
+			$this->export_single->run();
+		} else {
+			$this->export_multiple->run();
+		}
 	}
 
 }

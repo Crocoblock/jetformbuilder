@@ -5,7 +5,7 @@ function SubtractYearFilter() {
 	Filter.call( this );
 
 	this.getSlug = function () {
-		return 'subDay';
+		return 'subYear';
 	};
 
 	this.apply = function ( value, years ) {

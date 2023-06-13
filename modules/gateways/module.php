@@ -4,12 +4,8 @@ namespace JFB_Modules\Gateways;
 
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_With_Gateway_Executor;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
-use Jet_Form_Builder\Admin\Tabs_Handlers\Base_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Payments_Gateways_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
-use Jet_Form_Builder\Admin\Tabs_Handlers\With_Tab_Handler_It;
-use Jet_Form_Builder\Classes\Instance_Trait;
-use JFB_Components\Export\Table_Entries_Export_It;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;

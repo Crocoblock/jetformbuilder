@@ -53,7 +53,6 @@
 import * as captcha from './tabs/captcha';
 import * as mailchimp from './tabs/mailchimp';
 import * as getResponse from './tabs/getresponse';
-import * as activecampaign from './tabs/activecampaign';
 import * as paymentGateways from './tabs/payments-gateways';
 import * as options from './tabs/options';
 import SettingsSideBar from './sidebar/SettingsSideBar';
@@ -81,7 +80,6 @@ const settingTabs = applyFilters( 'jet.fb.register.settings-page.tabs', [
 	captcha,
 	mailchimp,
 	getResponse,
-	activecampaign,
 ] );
 
 const changeHash = hash => {

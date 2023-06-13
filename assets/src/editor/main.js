@@ -8,7 +8,6 @@ import './form-actions/call.webhook/index';
 import './form-actions/redirect.to.page/index';
 import './form-actions/mailchimp/index';
 import './form-actions/getresponse/index';
-import './form-actions/activecampaign/index';
 import './form-actions/save.record/index';
 
 import RegisterPlugins from './plugins/manager';

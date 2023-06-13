@@ -32,6 +32,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Advanced_Choices\Module(),
 			new Captcha\Module(),
 			new Gateways\Module(),
+			new Active_Campaign\Module(),
 		);
 	}
 

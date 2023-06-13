@@ -52,7 +52,6 @@ final class Tab_Handler_Manager {
 			'jet-form-builder/register-tabs-handlers',
 			array(
 				new Mailchimp_Handler(),
-				new Active_Campaign_Handler(),
 				new Get_Response_Handler(),
 				new Options_Handler(),
 			)

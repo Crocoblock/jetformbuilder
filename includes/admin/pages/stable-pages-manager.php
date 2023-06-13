@@ -57,6 +57,7 @@ class Stable_Pages_Manager {
 	public function add_pages() {
 		$parent = $this->get_parent_slug();
 
+		/** @var Base_Page $page */
 		foreach ( $this->rep_get_items() as $page ) {
 			add_submenu_page(
 				$parent,

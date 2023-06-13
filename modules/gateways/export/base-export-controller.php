@@ -5,8 +5,8 @@ namespace JFB_Modules\Gateways\Export;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
-use JFB_Components\Export\Base_Export_It;
-use JFB_Components\Export\Table_Entries_Export_It;
+use JFB_Components\Export\Interfaces\Base_Export_Controller_It;
+use JFB_Components\Export\Traits\Base_Export_Controller_Trait;
 use JFB_Components\Wp_Nonce\Wp_Nonce_It;
 use JFB_Components\Wp_Nonce\Wp_Nonce_Trait;
 use JFB_Modules\Gateways\Db_Models\Payer_Model;
@@ -19,9 +19,10 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-abstract class Base_Export_Controller implements Wp_Nonce_It {
+abstract class Base_Export_Controller implements Base_Export_Controller_It, Wp_Nonce_It {
 
 	use Wp_Nonce_Trait;
+	use Base_Export_Controller_Trait;
 
 	protected $columns = array();
 
@@ -38,8 +39,6 @@ abstract class Base_Export_Controller implements Wp_Nonce_It {
 	 * @var Payment_View
 	 */
 	protected $view;
-
-	abstract protected function do_export();
 
 	public function run() {
 		$this->columns = array(
@@ -121,12 +120,11 @@ abstract class Base_Export_Controller implements Wp_Nonce_It {
 	}
 
 	/**
-	 * @param Base_Export_It|Table_Entries_Export_It $export
 	 * @param $payment
 	 *
 	 * @return void
 	 */
-	public function add_row( Base_Export_It $export, $payment ) {
+	public function add_row( $payment ) {
 		if ( ! $this->view ) {
 			$this->view = $this->get_payment_view();
 		}
@@ -147,7 +145,7 @@ abstract class Base_Export_Controller implements Wp_Nonce_It {
 			$record   = $this->record_columns_empty;
 		}
 
-		$export->add_row(
+		$this->get_exporter()->add_row(
 			$this->prepare_row(
 				$payment,
 				$record,

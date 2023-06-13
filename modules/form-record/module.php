@@ -178,12 +178,13 @@ final class Module implements
 	}
 
 	public function do_export_records() {
+		$exporter = Export_Tools::get_exporter_by_format();
+
 		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( array_key_exists( 'id', $_GET ) ) {
-			$this->export_single->run();
-		} else {
-			$this->export_multiple->run();
-		}
+		$controller = array_key_exists( 'id', $_GET ) ? $this->export_single : $this->export_multiple;
+
+		$controller->set_exporter( $exporter );
+		$controller->run();
 	}
 
 	public function get_export_multiple(): Export\Multiple_Controller {

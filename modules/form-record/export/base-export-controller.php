@@ -3,8 +3,8 @@
 
 namespace JFB_Modules\Form_Record\Export;
 
-use JFB_Components\Export\Export_Tools;
-use JFB_Components\Export\Table_Entries_Export_It;
+use JFB_Components\Export\Interfaces\Base_Export_Controller_It;
+use JFB_Components\Export\Traits\Base_Export_Controller_Trait;
 use JFB_Components\Wp_Nonce\Wp_Nonce_It;
 use JFB_Components\Wp_Nonce\Wp_Nonce_Trait;
 use JFB_Modules\Form_Record\Module;
@@ -14,14 +14,13 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-abstract class Base_Export_Controller implements Wp_Nonce_It {
+abstract class Base_Export_Controller implements Base_Export_Controller_It, Wp_Nonce_It {
 
 	use Wp_Nonce_Trait;
+	use Base_Export_Controller_Trait;
 
 	protected $extra_columns  = array();
 	protected $fields_columns = array();
-
-	abstract protected function do_export();
 
 	public function run() {
 		$this->extra_columns = array(

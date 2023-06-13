@@ -3,19 +3,19 @@
 
 namespace JFB_Components\Export\Csv;
 
-use JFB_Components\Export\Table_Entries_Export_It;
+use JFB_Components\Export\Interfaces\Base_Export_It;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Service implements Table_Entries_Export_It {
+class Service implements Base_Export_It {
 
 	private $file;
 	private $file_name;
 
-	public function headers() {
+	public function open() {
 		if ( false === strpos( ini_get( 'disable_functions' ), 'set_time_limit' ) ) {
 			set_time_limit( 0 );
 		}
@@ -60,10 +60,6 @@ class Service implements Table_Entries_Export_It {
 		return $this->file;
 	}
 
-	public function set_file_name( string $file_name, string $fallback = '' ) {
-		$this->file_name = sanitize_title( $file_name, $fallback ) . '.csv';
-	}
-
 	public function add_row( array $row ) {
 		fputcsv( $this->get_file(), $row );
 	}
@@ -71,5 +67,13 @@ class Service implements Table_Entries_Export_It {
 	public function close() {
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		fclose( $this->get_file() );
+	}
+
+	public function set_title( string $title ) {
+		$this->file_name = sanitize_title( $title ) . '.csv';
+	}
+
+	public function get_title(): string {
+		return $this->file_name;
 	}
 }

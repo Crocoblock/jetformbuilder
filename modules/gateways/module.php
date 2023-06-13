@@ -6,6 +6,7 @@ use Jet_Form_Builder\Actions\Events\Default_Process\Default_With_Gateway_Executo
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Payments_Gateways_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use JFB_Components\Export\Export_Tools;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
@@ -426,12 +427,13 @@ final class Module implements
 	}
 
 	public function do_export_payments() {
+		$exporter = Export_Tools::get_exporter_by_format();
+
 		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( array_key_exists( 'id', $_GET ) ) {
-			$this->export_single->run();
-		} else {
-			$this->export_multiple->run();
-		}
+		$controller = array_key_exists( 'id', $_GET ) ? $this->export_single : $this->export_multiple;
+
+		$controller->set_exporter( $exporter );
+		$controller->run();
 	}
 
 }

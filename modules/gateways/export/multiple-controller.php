@@ -5,7 +5,7 @@ namespace JFB_Modules\Gateways\Export;
 
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use JFB_Components\Export\Export_Tools;
-use JFB_Components\Export\Table_Entries_Export_It;
+use JFB_Components\Export\Interfaces\Base_Export_It;
 use JFB_Modules\Gateways\Query_Views\Payment_For_Export_View;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -17,7 +17,7 @@ class Multiple_Controller extends Base_Export_Controller {
 	/**
 	 * @throws \Exception
 	 */
-	protected function do_export() {
+	public function do_export() {
 		if ( ! $this->get_wp_nonce()->verify() || ! current_user_can( 'manage_options' ) ) {
 			throw new \Exception(
 				__( 'You don`t have access to this URL', 'jet-form-builder' )
@@ -39,13 +39,11 @@ class Multiple_Controller extends Base_Export_Controller {
 			);
 		}
 
-		$exporter = Export_Tools::get_exporter_by_format();
-
-		$exporter->set_file_name( 'jfb-payments' );
-		$exporter->headers();
+		$this->get_exporter()->set_title( __( 'JFB Payments', 'jet-form-builder' ) );
+		$this->get_exporter()->open();
 
 		// headings
-		$exporter->add_row(
+		$this->get_exporter()->add_row(
 			$this->prepare_row(
 				$this->columns,
 				$this->record_columns,
@@ -54,12 +52,12 @@ class Multiple_Controller extends Base_Export_Controller {
 			)
 		);
 
-		$this->add_rows( $exporter );
-		$exporter->close();
+		$this->add_rows();
+		$this->get_exporter()->close();
 		die;
 	}
 
-	protected function add_rows( Table_Entries_Export_It $export ) {
+	protected function add_rows() {
 		try {
 			$payments = $this->generate_payments();
 		} catch ( Query_Builder_Exception $exception ) {
@@ -68,7 +66,7 @@ class Multiple_Controller extends Base_Export_Controller {
 
 		if ( ! $this->payers_columns && ! $this->shipping_columns && ! $this->record_columns ) {
 			foreach ( $payments as $payment ) {
-				$export->add_row(
+				$this->get_exporter()->add_row(
 					$this->prepare_row(
 						$payment,
 						array(),
@@ -82,7 +80,7 @@ class Multiple_Controller extends Base_Export_Controller {
 		}
 
 		foreach ( $payments as $payment ) {
-			$this->add_row( $export, $payment );
+			$this->add_row( $payment );
 		}
 	}
 

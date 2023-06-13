@@ -5,8 +5,6 @@ namespace JFB_Modules\Form_Record\Export;
 
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
-use JFB_Components\Export\Export_Tools;
-use JFB_Components\Export\Table_Entries_Export_It;
 use JFB_Modules\Form_Record\Query_Views\Record_Fields_View;
 use JFB_Modules\Form_Record\Query_Views\Record_View;
 
@@ -22,18 +20,10 @@ class Multiple_Controller extends Base_Export_Controller {
 	/**
 	 * @throws \Exception
 	 */
-	protected function do_export() {
+	public function do_export() {
 		if ( ! $this->get_wp_nonce()->verify() || ! current_user_can( 'manage_options' ) ) {
 			throw new \Exception(
 				__( 'You don`t have access to this URL', 'jet-form-builder' )
-			);
-		}
-
-		$exporter = Export_Tools::get_exporter_by_format();
-
-		if ( ! is_a( $exporter, Table_Entries_Export_It::class ) ) {
-			throw new \Exception(
-				__( 'Invalid format for export', 'jet-form-builder' )
 			);
 		}
 
@@ -47,22 +37,18 @@ class Multiple_Controller extends Base_Export_Controller {
 			);
 		}
 
-		$exporter->set_file_name( $this->get_file_name(), 'jfb-form-records' );
-		$exporter->headers();
+		$this->get_exporter()->set_title( $this->get_file_name() );
+		$this->get_exporter()->open();
 
 		// headings
-		$exporter->add_row( $this->prepare_row( $this->fields_columns, $this->extra_columns ) );
+		$this->get_exporter()->add_row( $this->prepare_row( $this->fields_columns, $this->extra_columns ) );
 
-		$this->add_rows( $exporter );
-		$exporter->close();
+		$this->add_rows();
+		$this->get_exporter()->close();
 		die;
 	}
 
-
-	/**
-	 * @param Table_Entries_Export_It $export
-	 */
-	protected function add_rows( Table_Entries_Export_It $export ) {
+	protected function add_rows() {
 		try {
 			$records = $this->get_records();
 		} catch ( Query_Builder_Exception $exception ) {
@@ -92,7 +78,7 @@ class Multiple_Controller extends Base_Export_Controller {
 				$fields_values = $fields_empty;
 			}
 
-			$export->add_row( $this->prepare_row( $fields_values, $record ) );
+			$this->get_exporter()->add_row( $this->prepare_row( $fields_values, $record ) );
 		}
 	}
 

@@ -298,7 +298,7 @@ class Form_Handler {
 	}
 
 	/**
-	 * @throws Request_Exception|Action_Exception|Modules\Security\Exceptions\Spam_Exception
+	 * @throws Request_Exception|Action_Exception|Spam_Exception
 	 */
 	public function send_form() {
 		$this->action_handler->set_form_id( $this->form_id );

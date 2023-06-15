@@ -3,9 +3,8 @@
 
 namespace Jet_Form_Builder\Admin\Pages\Settings;
 
-use Jet_Form_Builder\Addons\Manager;
-use Jet_Form_Builder\Admin\Buttons\Base_Vui_Button as Button;
-use Jet_Form_Builder\Admin\Notices\Base_Notice;
+use JFB_Components\Admin\Buttons\Base_Vui_Button as Button;
+use JFB_Components\Admin\Notices\Base_Notice;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 
 // If this file is called directly, abort.

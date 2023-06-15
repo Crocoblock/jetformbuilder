@@ -3,8 +3,7 @@
 
 namespace Jet_Form_Builder\Admin\Pages\Actions;
 
-use Jet_Form_Builder\Admin\Admin_Page_Interface;
-use Jet_Form_Builder\Admin\Buttons\Base_Vui_Button;
+use JFB_Components\Admin\Buttons\Base_Vui_Button;
 use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;

@@ -27,6 +27,10 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It {
 		$this->controller = new Controller();
 	}
 
+	public function on_uninstall() {
+		unset( $this->controller );
+	}
+
 	public function init_hooks() {
 		add_action( 'rest_api_init', array( $this->controller, 'register_routes' ) );
 	}

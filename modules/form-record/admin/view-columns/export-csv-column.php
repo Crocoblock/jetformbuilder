@@ -3,9 +3,8 @@
 
 namespace JFB_Modules\Form_Record\Admin\View_Columns;
 
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
-use JFB_Modules\Form_Record\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -25,23 +24,20 @@ class Export_Csv_Column extends Column_Advanced_Base {
 	 * @param array $record
 	 *
 	 * @return array
-	 * @throws Repository_Exception
 	 */
 	public function get_value( array $record = array() ) {
 		$record_id = (int) $record['id'];
 
-		/** @var Module $module */
-		$module = jet_form_builder()->module( 'form-record' );
-
 		return array(
-			'text' => __( 'Export in CSV', 'jet-form-builder' ),
-			'href' => add_query_arg(
+			'text'   => __( 'Export in CSV', 'jet-form-builder' ),
+			'href'   => Pages_Manager::instance()->get_action_url(
+				'records-export',
 				array(
 					'id' => $record_id,
-				),
-				$module->get_export_single()->get_url()
+				)
 			),
-			'type' => 'media-spreadsheet',
+			'target' => '_blank',
+			'type'   => 'media-spreadsheet',
 		);
 	}
 }

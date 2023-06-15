@@ -7,6 +7,7 @@ module.exports = {
 	entry: {
 		'admin/pages/jfb-records': './admin/pages/jfb-records/index',
 		'admin/pages/jfb-records-single': './admin/pages/jfb-records-single/index',
+		'admin/pages/record-print': './admin/pages/record-print/index',
 	},
 	output: {
 		path: path.resolve( __dirname, '../assets/build/js' ),

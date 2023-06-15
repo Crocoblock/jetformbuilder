@@ -4,9 +4,7 @@ namespace JFB_Modules\Gateways;
 
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_With_Gateway_Executor;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
-use Jet_Form_Builder\Admin\Tabs_Handlers\Payments_Gateways_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
-use JFB_Components\Export\Export_Tools;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
@@ -19,15 +17,11 @@ use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use JFB_Components\Wp_Nonce\Wp_Nonce;
-use JFB_Modules\Gateways\Export\Multiple_Controller;
-use JFB_Modules\Gateways\Export\Single_Controller;
 use JFB_Modules\Gateways\Meta_Boxes\Payment_Info_For_Record;
-use JFB_Modules\Gateways\Pages\Payments_Page;
-use JFB_Modules\Gateways\Pages\Single_Payment_Page;
 use JFB_Modules\Gateways\Paypal;
 use JFB_Modules\Gateways\Rest_Api\Rest_Api_Controller;
 use Jet_Form_Builder\Plugin;
+use JFB_Modules\Gateways\Pages;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -57,7 +51,6 @@ final class Module implements
 
 	const PAYMENT_TYPE_PARAM = 'jet_form_gateway';
 	const OPTION_NAME        = 'payments-gateways';
-	const EXPORT_ACTION      = 'jfb_payments_export_admin';
 
 	private $gateways_form_data = array();
 	private $form_id;
@@ -67,11 +60,7 @@ final class Module implements
 	public $is_sandbox;
 	private $current_gateway_type;
 
-	/** @var Single_Controller */
-	private $export_single;
-
-	/** @var Multiple_Controller */
-	private $export_multiple;
+	private $rest;
 
 	public static function get_instance_id(): string {
 		return 'gateways';
@@ -94,12 +83,13 @@ final class Module implements
 	}
 
 	public function init_hooks() {
+		add_action( 'rest_api_init', array( $this->get_rest(), 'register_routes' ) );
 		add_action( 'init', array( $this, 'register_gateways' ) );
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
-		add_action( 'admin_action_' . self::EXPORT_ACTION, array( $this, 'do_export_payments' ) );
 
 		add_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ), 0 );
 		add_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
+		add_filter( 'jet-form-builder/admin/action-pages', array( $this, 'add_action_admin_pages' ) );
 		add_filter(
 			'jet-form-builder/page-containers/jfb-records-single',
 			array( $this, 'add_box_to_single_record' ),
@@ -112,12 +102,13 @@ final class Module implements
 	}
 
 	public function remove_hooks() {
+		remove_action( 'rest_api_init', array( $this->get_rest(), 'register_routes' ) );
 		remove_action( 'init', array( $this, 'register_gateways' ) );
 		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
-		remove_action( 'admin_action_' . self::EXPORT_ACTION, array( $this, 'do_export_payments' ) );
 
 		remove_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ), 0 );
 		remove_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
+		remove_filter( 'jet-form-builder/admin/action-pages', array( $this, 'add_action_admin_pages' ) );
 		remove_filter(
 			'jet-form-builder/page-containers/jfb-records-single',
 			array( $this, 'add_box_to_single_record' ),
@@ -145,19 +136,18 @@ final class Module implements
 			$this->is_sandbox = $options['enable_test_mode'];
 		}
 
-		$nonce = new Wp_Nonce( self::EXPORT_ACTION );
-
-		$this->export_single   = new Export\Single_Controller();
-		$this->export_multiple = new Export\Multiple_Controller();
-
-		$this->get_export_multiple()->set_wp_nonce( $nonce );
-		$this->get_export_single()->set_wp_nonce( $nonce );
-
 		// rest api
-		( new Rest_Api_Controller() )->rest_api_init();
+		$this->rest = new Rest_Api_Controller();
 
 		// catch webhook by get param
 		$this->catch_payment_result();
+	}
+
+	public function on_uninstall() {
+		// install tab handlers for Settings page
+		Tab_Handler_Manager::instance()->uninstall( new Tab_Handlers\Payments_Gateways_Handler() );
+
+		unset( $this->is_sandbox, $this->rest );
 	}
 
 	public function rep_instances(): array {
@@ -186,13 +176,23 @@ final class Module implements
 	}
 
 	public function add_stable_pages( $pages ): array {
-		$pages[] = new Payments_Page();
+		$pages[] = new Pages\Payments_Page();
 
 		return $pages;
 	}
 
 	public function add_single_pages( $pages ): array {
-		$pages[] = new Single_Payment_Page();
+		$pages[] = new Pages\Single_Payment_Page();
+
+		return $pages;
+	}
+
+	public function add_action_admin_pages( array $pages ): array {
+		array_push(
+			$pages,
+			new Pages\Export_Page(),
+			new Pages\Print_Page()
+		);
 
 		return $pages;
 	}
@@ -415,25 +415,8 @@ final class Module implements
 		return apply_filters( 'jet-form-builder/gateways/currency-symbol', $symbol, $currency );
 	}
 
-	public function get_export_multiple(): Multiple_Controller {
-		return $this->export_multiple;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function get_export_single(): Single_Controller {
-		return $this->export_single;
-	}
-
-	public function do_export_payments() {
-		$exporter = Export_Tools::get_exporter_by_format();
-
-		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$controller = array_key_exists( 'id', $_GET ) ? $this->export_single : $this->export_multiple;
-
-		$controller->set_exporter( $exporter );
-		$controller->run();
+	public function get_rest(): Rest_Api_Controller {
+		return $this->rest;
 	}
 
 }

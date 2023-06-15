@@ -4,7 +4,7 @@
 namespace JFB_Modules\Form_Record;
 
 use JFB_Modules\Form_Record\Rest_Endpoints;
-use Jet_Form_Builder\Rest_Api\Rest_Api_Controller_Base;
+use JFB_Components\Rest_Api\Rest_Api_Controller_Base;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

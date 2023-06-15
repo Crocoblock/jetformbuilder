@@ -1,5 +1,5 @@
-const path = require( 'path' );
-const { VueLoaderPlugin }      = require( 'vue-loader' );
+const path                = require( 'path' );
+const { VueLoaderPlugin } = require( 'vue-loader' );
 
 module.exports = {
 	name: 'prod:jfb-gateways',
@@ -8,6 +8,7 @@ module.exports = {
 		'editor': './editor/main.js',
 		'admin/pages/jfb-payments': './admin/pages/jfb-payments/index',
 		'admin/pages/jfb-payments-single': './admin/pages/jfb-payments-single/index',
+		'admin/pages/payment-print': './admin/pages/payment-print/index',
 	},
 	output: {
 		path: path.resolve( __dirname, '../assets/build/js' ),

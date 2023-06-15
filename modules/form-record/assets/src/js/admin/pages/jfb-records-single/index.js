@@ -1,6 +1,6 @@
 import SingleRecord from './SingleRecord';
 import fieldType from './field-type-column';
-import fieldName from './field-name-column';
+import fieldName from '../columns/field-name-column';
 
 const { addFilter } = wp.hooks;
 

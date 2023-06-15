@@ -3,9 +3,9 @@
 
 namespace JFB_Modules\Form_Record\Admin\Notices;
 
-use Jet_Form_Builder\Admin\Buttons\Base_Vui_Button as Button;
-use Jet_Form_Builder\Admin\Notices\Base_Notice;
-use Jet_Form_Builder\Migrations\Rest_Api\Install_Migrations_Endpoint;
+use JFB_Components\Admin\Buttons\Base_Vui_Button as Button;
+use JFB_Components\Admin\Notices\Base_Notice;
+use JFB_Modules\Rest_Api\Endpoints\Install_Migrations_Endpoint;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

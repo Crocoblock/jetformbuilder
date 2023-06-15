@@ -3,7 +3,7 @@
 
 namespace JFB_Modules\Security;
 
-use Jet_Form_Builder\Dev_Mode\Logger;
+use JFB_Modules\Logger;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
@@ -50,6 +50,14 @@ class Module implements
 		jet_form_builder()->get_modules()->install( new Wp_Nonce\Module() );
 	}
 
+	public function on_uninstall() {
+		$this->spam_statuses = array();
+
+		jet_form_builder()->get_modules()->uninstall( new Csrf\Module() );
+		jet_form_builder()->get_modules()->uninstall( new Honeypot\Module() );
+		jet_form_builder()->get_modules()->uninstall( new Wp_Nonce\Module() );
+	}
+
 	public function condition(): bool {
 		return true;
 	}
@@ -65,7 +73,7 @@ class Module implements
 
 		return (
 			in_array( $status, $this->spam_statuses, true ) ||
-			Logger::instance()->has_log( Spam_Exception::class )
+			Logger\Module::instance()->has_log( Spam_Exception::class )
 		);
 	}
 

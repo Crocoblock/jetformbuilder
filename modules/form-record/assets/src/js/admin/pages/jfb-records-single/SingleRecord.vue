@@ -13,11 +13,11 @@
 
 <script>
 const {
-	PostBoxGrid,
-	TablePagination,
-	FormBuilderPage,
-	AlertsList,
-} = JetFBComponents;
+	      PostBoxGrid,
+	      TablePagination,
+	      FormBuilderPage,
+	      AlertsList,
+      } = JetFBComponents;
 
 const { apiFetch } = wp;
 
@@ -84,6 +84,27 @@ export default {
 #actions-log {
 	.cell--created_at {
 		flex: 0.5;
+	}
+}
+
+@media print {
+	div#wpadminbar,
+	div#adminmenumain,
+	.wrap > *:not(h1.wp-heading-inline, .jet-form-builder-page #poststuff),
+	.jfb-post-box,
+	.jfb-pagination {
+		display: none;
+	}
+	div#wpcontent {
+		margin-left: unset;
+		margin-right: unset;
+	}
+	html.wp-toolbar {
+		padding-top: unset;
+	}
+
+	#form-fields-wrapper, #general-values-wrapper {
+		display: block;
 	}
 }
 

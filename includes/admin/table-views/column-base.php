@@ -102,11 +102,21 @@ abstract class Column_Base {
 			case 'array':
 				return (array) $value;
 			case 'string':
+				if ( is_array( $value ) && array_key_exists( 'text', $value ) ) {
+					return (string) $value['text'];
+				}
+
 				return (string) $value;
 			case 'rawArray':
 			default:
 				return $value;
 		}
+	}
+
+	public function set_type( string $type ): Column_Base {
+		$this->type = $type;
+
+		return $this;
 	}
 
 }

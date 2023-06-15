@@ -3,12 +3,15 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
-use Jet_Form_Builder\Admin\Admin_Page_Interface;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
+use JFB_Components\Admin\Page\Interfaces\Action_Page_It;
+use JFB_Components\Admin\Page\Interfaces\Admin_Page_It;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
+use JFB_Modules\Framework\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -25,12 +28,12 @@ class Pages_Manager {
 
 	use Instance_Trait;
 
-	/** @var Base_Page */
+	/** @var Base_Page|Base_Single_Page|Action_Page_It */
 	private $current_page;
 
-	/** @var Stable_Pages_Manager */
 	private $stable_manager;
 	private $single_manager;
+	private $action_manager;
 
 	const STYLE_ADMIN         = 'jet-form-builder-admin-style';
 	const STYLE_DASHICONS     = 'dashicons';
@@ -42,6 +45,7 @@ class Pages_Manager {
 		/** Register pages */
 		$this->stable()->rep_install();
 		$this->single()->rep_install();
+		$this->actions()->rep_install();
 	}
 
 	public function set_up() {
@@ -49,25 +53,19 @@ class Pages_Manager {
 		add_action( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
 	}
 
-	public function stable(): Stable_Pages_Manager {
-		if ( ! $this->stable_manager ) {
-			$this->stable_manager = new Stable_Pages_Manager();
-		}
-
-		return $this->stable_manager;
-	}
-
-	public function single(): Single_Pages_Manager {
-		if ( ! $this->single_manager ) {
-			$this->single_manager = new Single_Pages_Manager();
-		}
-
-		return $this->single_manager;
-	}
-
 	public function get_stable_url( string $slug, array $query_args = array() ): string {
 		try {
 			$page = $this->get_stable( $slug );
+		} catch ( Repository_Exception $exception ) {
+			return '';
+		}
+
+		return $page->get_url( $query_args );
+	}
+
+	public function get_action_url( string $slug, array $query_args = array() ): string {
+		try {
+			$page = $this->get_action( $slug );
 		} catch ( Repository_Exception $exception ) {
 			return '';
 		}
@@ -96,17 +94,59 @@ class Pages_Manager {
 	}
 
 	/**
+	 * @param string $slug
+	 *
+	 * @return Action_Page_It
+	 * @throws Repository_Exception
+	 */
+	public function get_action( string $slug ): Action_Page_It {
+		return $this->actions()->rep_get_item( $slug );
+	}
+
+	/**
+	 * @throws Not_Found_Page_Exception
+	 * @since 3.1.0
+	 */
+	public function is_current_single() {
+		if ( is_a( $this->get_current(), Base_Single_Page::class ) ) {
+			return;
+		}
+		throw new Not_Found_Page_Exception( 'not_single' );
+	}
+
+	/**
+	 * @throws Not_Found_Page_Exception
+	 * @since 3.1.0
+	 */
+	public function is_current_stable() {
+		if ( is_a( $this->get_current(), Base_Page::class ) ) {
+			return;
+		}
+		throw new Not_Found_Page_Exception( 'not_stable' );
+	}
+
+	/**
+	 * @throws Not_Found_Page_Exception
+	 * @since 3.1.0
+	 */
+	public function is_current_action() {
+		if ( is_a( $this->get_current(), Action_Page_It::class ) ) {
+			return;
+		}
+		throw new Not_Found_Page_Exception( 'not_action' );
+	}
+
+	/**
 	 * @return Base_Page|Base_Single_Page
 	 * @throws Not_Found_Page_Exception
 	 */
-	public function get_current(): Admin_Page_Interface {
-		if ( is_a( $this->current_page, Admin_Page_Interface::class ) ) {
+	public function get_current(): Admin_Page_It {
+		if ( is_a( $this->current_page, Admin_Page_It::class ) ) {
 			return $this->current_page;
 		}
 
 		throw new Not_Found_Page_Exception( 'Current page is not defined' );
 	}
-
 
 	public function admin_footer_text( string $footer_text ): string {
 		try {
@@ -116,7 +156,7 @@ class Pages_Manager {
 		}
 
 		return sprintf(
-			/* translators: %s - link to the JetFormBuilder reviews page */
+		/* translators: %s - link to the JetFormBuilder reviews page */
 			__(
 				'Enjoyed <strong>JetFormBuilder</strong>? 
 Please leave us a <a href="%s" target="_blank">★★★★★</a> rating. 
@@ -126,6 +166,7 @@ We really appreciate your support!',
 			'https://wordpress.org/support/plugin/jetformbuilder/reviews/?filter=5'
 		);
 	}
+
 
 	/**
 	 * Set current admin page
@@ -146,13 +187,13 @@ We really appreciate your support!',
 		}
 
 		try {
-			$this->current_page = $this->get_single( $slug );
+			$this->set_current_page_raw( $this->get_single( $slug ) );
 			$this->current_page->make();
 
 		} catch ( Not_Found_Page_Exception $exception ) {
-			$this->current_page = $page;
+			$this->set_current_page_raw( $page );
 		} catch ( Repository_Exception $exception ) {
-			$this->current_page = $page;
+			$this->set_current_page_raw( $page );
 		}
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'assets' ) );
@@ -161,10 +202,13 @@ We really appreciate your support!',
 
 	/**
 	 * Dashboard assets
+	 *
+	 * @throws Repository_Exception
 	 */
 	public function assets() {
-		$ui_data = Plugin::instance()->framework->get_included_module_data( 'cherry-x-vue-ui.php' );
-		( new \CX_Vue_UI( $ui_data ) )->enqueue_assets();
+		/** @var Module $module */
+		$module = jet_form_builder()->module( 'framework' );
+		$module->get_cx_vue_ui()->enqueue_assets();
 
 		$this->current_page->render_config();
 		$this->register_scripts();
@@ -218,8 +262,8 @@ We really appreciate your support!',
 			self::SCRIPT_VUEX_PACKAGE,
 			Plugin::instance()->plugin_url( 'assets/js/admin/vuex.package{min}.js' ),
 			array(
-				'jet-form-builder-admin-vuex',
-				'jet-form-builder-admin-package',
+				self::SCRIPT_VUEX,
+				self::SCRIPT_PACKAGE,
 			),
 			Plugin::instance()->get_version(),
 			true
@@ -238,6 +282,34 @@ We really appreciate your support!',
 			'jet-form-builder',
 			Plugin::instance()->plugin_dir( 'languages' )
 		);
+	}
+
+	public function set_current_page_raw( Admin_Page_It $page ) {
+		$this->current_page = $page;
+	}
+
+	public function stable(): Stable_Pages_Manager {
+		if ( ! $this->stable_manager ) {
+			$this->stable_manager = new Stable_Pages_Manager();
+		}
+
+		return $this->stable_manager;
+	}
+
+	public function single(): Single_Pages_Manager {
+		if ( ! $this->single_manager ) {
+			$this->single_manager = new Single_Pages_Manager();
+		}
+
+		return $this->single_manager;
+	}
+
+	public function actions(): Action_Pages_Manager {
+		if ( ! $this->action_manager ) {
+			$this->action_manager = new Action_Pages_Manager();
+		}
+
+		return $this->action_manager;
 	}
 
 }

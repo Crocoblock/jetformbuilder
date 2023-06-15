@@ -3,7 +3,7 @@
 
 namespace Jet_Form_Builder\Admin\Table_Views;
 
-use Jet_Form_Builder\Admin\Table_Record_Prepare_Trait;
+use JFB_Components\Admin\Page\Traits\Table_Record_Prepare_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

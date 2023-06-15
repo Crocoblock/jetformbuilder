@@ -6,8 +6,8 @@ namespace JFB_Modules\Form_Record;
 use Jet_Form_Builder\Actions\Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
-use JFB_Components\Export\Export_Tools;
-use JFB_Components\Wp_Nonce\Wp_Nonce;
+use JFB_Modules\Form_Record\Admin\Pages\Export_Page;
+use JFB_Modules\Form_Record\Admin\Pages\Print_Page;
 use JFB_Modules\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
@@ -21,7 +21,6 @@ use JFB_Modules\Form_Record\Action_Types\Save_Record;
 use JFB_Modules\Form_Record\Admin\Meta_Boxes\Record_To_Payment_Box;
 use JFB_Modules\Form_Record\Admin\Pages\Form_Records;
 use JFB_Modules\Form_Record\Admin\Pages\Single_Form_Record_Page;
-use JFB_Modules\Form_Record\Export;
 use JFB_Modules\Dev;
 
 // If this file is called directly, abort.
@@ -40,36 +39,30 @@ final class Module implements
 	use Base_Module_Url_Trait;
 	use Base_Module_Dir_Trait;
 
-	const EXPORT_ACTION = 'jfb_records_export_admin';
-
-	/** @var Export\Multiple_Controller */
-	private $export_multiple;
-
-	/** @var Export\Single_Controller */
-	private $export_single;
+	private $rest;
 
 	public function rep_item_id() {
 		return 'form-record';
-	}
-
-	public function on_install() {
-		( new Records_Rest_Controller() )->rest_api_init();
-
-		$nonce = new Wp_Nonce( self::EXPORT_ACTION );
-
-		$this->export_multiple = new Export\Multiple_Controller();
-		$this->export_single   = new Export\Single_Controller();
-
-		$this->export_multiple->set_wp_nonce( $nonce );
-		$this->export_single->set_wp_nonce( $nonce );
 	}
 
 	public function condition(): bool {
 		return true;
 	}
 
+	public function on_install() {
+		$this->rest = new Records_Rest_Controller();
+	}
+
+	public function on_uninstall() {
+		unset( $this->rest );
+	}
+
 	public function init_hooks() {
 		// actions
+		add_action(
+			'rest_api_init',
+			array( $this->get_rest(), 'register_routes' )
+		);
 		add_action(
 			'jet-form-builder/actions/register',
 			array( $this, 'register_actions' )
@@ -80,10 +73,6 @@ final class Module implements
 			10,
 			3
 		);
-		add_action(
-			'admin_action_' . self::EXPORT_ACTION,
-			array( $this, 'do_export_records' )
-		);
 
 		// filters
 		add_filter(
@@ -97,23 +86,26 @@ final class Module implements
 		add_filter(
 			'jet-form-builder/page-containers/jfb-payments-single',
 			array( $this, 'add_box_to_single_payment' )
+		);
+		add_filter(
+			'jet-form-builder/admin/action-pages',
+			array( $this, 'add_action_admin_pages' )
 		);
 	}
 
 	public function remove_hooks() {
 		// actions
 		remove_action(
+			'rest_api_init',
+			array( $this->get_rest(), 'register_routes' )
+		);
+		remove_action(
 			'jet-form-builder/actions/register',
 			array( $this, 'register_actions' )
 		);
 		remove_action(
 			'jet-form-builder/gateways/before-send',
-			array( $this, 'before_send_gateway' ),
-			10
-		);
-		remove_action(
-			'admin_action_' . self::EXPORT_ACTION,
-			array( $this, 'do_export_records' )
+			array( $this, 'before_send_gateway' )
 		);
 
 		// filters
@@ -128,6 +120,10 @@ final class Module implements
 		remove_filter(
 			'jet-form-builder/page-containers/jfb-payments-single',
 			array( $this, 'add_box_to_single_payment' )
+		);
+		remove_filter(
+			'jet-form-builder/admin/action-pages',
+			array( $this, 'add_action_admin_pages' )
 		);
 	}
 
@@ -143,6 +139,16 @@ final class Module implements
 
 	public function add_single_admin_pages( array $pages ): array {
 		$pages[] = new Single_Form_Record_Page();
+
+		return $pages;
+	}
+
+	public function add_action_admin_pages( array $pages ): array {
+		array_push(
+			$pages,
+			new Export_Page(),
+			new Print_Page()
+		);
 
 		return $pages;
 	}
@@ -177,22 +183,8 @@ final class Module implements
 		}
 	}
 
-	public function do_export_records() {
-		$exporter = Export_Tools::get_exporter_by_format();
-
-		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$controller = array_key_exists( 'id', $_GET ) ? $this->export_single : $this->export_multiple;
-
-		$controller->set_exporter( $exporter );
-		$controller->run();
-	}
-
-	public function get_export_multiple(): Export\Multiple_Controller {
-		return $this->export_multiple;
-	}
-
-	public function get_export_single(): Export\Single_Controller {
-		return $this->export_single;
+	public function get_rest(): Records_Rest_Controller {
+		return $this->rest;
 	}
 
 }

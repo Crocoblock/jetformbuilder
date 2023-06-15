@@ -120,14 +120,14 @@ final class Tab_Handler_Manager {
 	}
 
 	public function install( Base_Handler $item ): bool {
-		try {
-			$this->rep_install_item( $item );
-			$this->rep_after_install_item( $item );
+		return $this->rep_install_item_soft( $item );
+	}
 
-			return true;
-		} catch ( Repository_Exception $exception ) {
-			return false;
-		}
+	/**
+	 * @param Base_Handler|string $item
+	 */
+	public function uninstall( $item ) {
+		$this->rep_remove( $item );
 	}
 
 

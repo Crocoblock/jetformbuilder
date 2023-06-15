@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Gateways\Table_Views;
 
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Table_Views\Column_Base;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Record_Id_Column_Advanced;
 use Jet_Form_Builder\Admin\Table_Views\View_Advanced_Base;
@@ -83,16 +84,9 @@ class Payments extends View_Advanced_Base {
 		);
 	}
 
-	/**
-	 * @return array[]
-	 * @throws Repository_Exception
-	 */
 	public function load_data(): array {
-		/** @var Module $module */
-		$module = jet_form_builder()->module( Module::class );
-
 		return array(
-			'export_url' => $module->get_export_multiple()->get_url(),
+			'export_url' => Pages_Manager::instance()->get_action_url( 'payments-export' ),
 			'messages'   => array(
 				'empty_checked' => __( 'You have not selected any payment.', 'jet-form-builder' ),
 				'empty_action'  => __( 'You have not selected an action.', 'jet-form-builder' ),

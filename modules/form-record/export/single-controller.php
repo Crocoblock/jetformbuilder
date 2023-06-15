@@ -23,12 +23,6 @@ class Single_Controller extends Base_Export_Controller {
 	 * @throws \Exception
 	 */
 	public function do_export() {
-		if ( ! $this->get_wp_nonce()->verify() || ! current_user_can( 'manage_options' ) ) {
-			throw new \Exception(
-				__( 'You don`t have access to this URL', 'jet-form-builder' )
-			);
-		}
-
 		$this->record_id = $this->get_record_id();
 		$fields          = Record_Fields_View::get_request( $this->record_id );
 

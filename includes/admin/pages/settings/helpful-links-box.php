@@ -3,7 +3,7 @@
 
 namespace Jet_Form_Builder\Admin\Pages\Settings;
 
-use Jet_Form_Builder\Admin\Vui_Boxes\Base_Vui_Panel_Box;
+use JFB_Components\Admin\Vui_Boxes\Base_Vui_Panel_Box;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 
 // If this file is called directly, abort.

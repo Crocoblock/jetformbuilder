@@ -12,4 +12,6 @@ interface Base_Module_After_Install_It {
 
 	public function on_install();
 
+	public function on_uninstall();
+
 }

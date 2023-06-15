@@ -91,4 +91,17 @@ final class Module implements Base_Module_It {
 		return $this;
 	}
 
+	public function unregister( Base_Block_Sanitizer $item ): Module {
+		foreach ( $this->sanitizers as $index => $sanitizer ) {
+			if ( get_class( $sanitizer ) !== get_class( $item ) ) {
+				continue;
+			}
+			unset( $this->sanitizers[ $index ] );
+		}
+
+		$this->sanitizers = array_values( $this->sanitizers );
+
+		return $this;
+	}
+
 }

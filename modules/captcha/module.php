@@ -69,6 +69,10 @@ final class Module implements
 		Tab_Handler_Manager::instance()->install( new Admin_Tabs\Captcha_Handler() );
 	}
 
+	public function on_uninstall() {
+		Tab_Handler_Manager::instance()->uninstall( 'captcha-tab' );
+	}
+
 	public function rep_instances(): array {
 		return apply_filters(
 			'jet-form-builder/captcha/types',

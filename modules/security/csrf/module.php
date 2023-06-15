@@ -18,7 +18,7 @@ use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Security\Exceptions\Spam_Exception;
 
-class Module implements Base_Module_After_Install_It, Base_Module_It, Base_Module_Url_It, Base_Module_Handle_It, Base_Module_Dir_It {
+class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_It, Base_Module_Dir_It {
 
 	use Base_Module_Dir_Trait;
 	use Base_Module_Url_Trait;
@@ -26,9 +26,6 @@ class Module implements Base_Module_After_Install_It, Base_Module_It, Base_Modul
 
 	private $token;
 	private $client;
-
-	public function on_install() {
-	}
 
 	public function rep_item_id() {
 		return 'csrf';

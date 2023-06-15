@@ -14,8 +14,6 @@ use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
 use Jet_Form_Builder\Form_Messages;
 use Jet_Form_Builder\Form_Patterns\Manager as PatternsManager;
-use Jet_Form_Builder\Framework\CX_Loader;
-use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Addons\Manager as AddonsManager;
 use JFB_Compatibility\Compatibility_Controller;
 use JFB_Components\Module\Base_Module_After_Install_It;
@@ -27,6 +25,7 @@ use JFB_Modules\Modules_Controller;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Migrations;
 use JFB_Modules\Cli;
+use JFB_Modules\Framework;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -39,7 +38,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @property Form_Handler $form_handler
  * @property Admin\Editor $editor
  * @property AddonsManager $addons_manager
- * @property \Jet_Admin_Bar $admin_bar
  * @property Form_Messages\Msg_Router $msg_router
  * @property Regexp_Tools $regexp
  *
@@ -83,8 +81,6 @@ class Plugin {
 			},
 			0
 		);
-
-		$this->init_framework();
 	}
 
 	/**
@@ -99,7 +95,6 @@ class Plugin {
 		$this->get_modules()->init_hooks();
 		$this->get_compat()->init_hooks();
 
-		$this->admin_bar      = \Jet_Admin_Bar::get_instance();
 		$this->msg_router     = new Form_Messages\Msg_Router();
 		$this->post_type      = new Post_Type();
 		$this->actions        = new Actions\Manager();
@@ -111,7 +106,6 @@ class Plugin {
 		/**
 		 * Modules & components
 		 */
-		Dev_Mode\Manager::instance();
 		File_Upload::instance();
 		Validation::instance();
 		Render_State::instance();
@@ -120,7 +114,6 @@ class Plugin {
 		/**
 		 * REST API
 		 */
-		( new Migrations\Rest_Api\Controller() )->rest_api_init();
 		( new Blocks\Conditional_Block\Rest_Api\Rest_Api_Controller() )->rest_api_init();
 		( new Blocks\Ssr_Validation\Rest_Controller() )->rest_api_init();
 
@@ -135,17 +128,6 @@ class Plugin {
 		} else {
 			$this->form_handler->call_form();
 		}
-	}
-
-	public function init_framework() {
-		require $this->plugin_dir( 'framework/loader.php' );
-
-		$this->framework = new CX_Loader(
-			array(
-				$this->plugin_dir( 'framework/vue-ui/cherry-x-vue-ui.php' ),
-				$this->plugin_dir( 'framework/admin-bar/jet-admin-bar.php' ),
-			)
-		);
 	}
 
 	/**
@@ -286,3 +268,4 @@ class Plugin {
 }
 
 Plugin::instance()->get_modules()->install( new Cli\Module() );
+Plugin::instance()->get_modules()->install( new Framework\Module() );

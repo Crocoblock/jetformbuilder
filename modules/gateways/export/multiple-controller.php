@@ -4,10 +4,9 @@
 namespace JFB_Modules\Gateways\Export;
 
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
-use JFB_Components\Export\Export_Tools;
-use JFB_Components\Export\Interfaces\Base_Export_It;
 use JFB_Modules\Gateways\Query_Views\Payment_For_Export_View;
 
+// If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -18,12 +17,6 @@ class Multiple_Controller extends Base_Export_Controller {
 	 * @throws \Exception
 	 */
 	public function do_export() {
-		if ( ! $this->get_wp_nonce()->verify() || ! current_user_can( 'manage_options' ) ) {
-			throw new \Exception(
-				__( 'You don`t have access to this URL', 'jet-form-builder' )
-			);
-		}
-
 		$this->modify_columns();
 		$this->modify_record_columns();
 		$this->modify_payer_columns();

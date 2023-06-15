@@ -29,6 +29,9 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It {
 		$this->rep_install();
 	}
 
+	public function on_uninstall() {
+	}
+
 	public function rep_instances(): array {
 		return array(
 			new Commands\Upgrade_Database(),

@@ -51,7 +51,11 @@ abstract class View_Base implements Model_Dependencies_Interface {
 		$limit   = $table_args['limit'] ?? 15;
 		$filters = $table_args['filters'] ?? array();
 
-		$this->set_limit( array( $offset, $limit ) );
+		if ( -1 === $limit ) {
+			$this->set_limit( array() );
+		} else {
+			$this->set_limit( array( $offset, $limit ) );
+		}
 		$this->set_filters( $filters );
 
 		return $this;

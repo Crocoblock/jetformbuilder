@@ -436,7 +436,7 @@ class Form extends Base {
 			return $this->get_placeholder();
 		}
 
-		Plugin::instance()->admin_bar->register_item(
+		\Jet_Admin_Bar::get_instance()->register_item(
 			$form_id,
 			array(
 				'title'     => get_the_title( $form ),

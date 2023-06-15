@@ -3,12 +3,12 @@
 
 namespace Jet_Form_Builder\Admin\Table_Views;
 
+use JFB_Components\Admin\Page\Traits\Table_Advanced_Record_Prepare_Trait;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-
-use Jet_Form_Builder\Admin\Table_Advanced_Record_Prepare_Trait;
 
 abstract class View_Advanced_Base extends View_Base {
 

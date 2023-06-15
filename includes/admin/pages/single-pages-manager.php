@@ -3,8 +3,12 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
+use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use JFB_Components\Admin\Print_Page\Footer;
+use JFB_Components\Admin\Print_Page\Header;
 use JFB_Components\Repository\Repository_Pattern_Trait;
-use Jet_Form_Builder\Gateways\Pages\Single_Payment_Page;
+use JFB_Modules\Framework\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -21,9 +25,53 @@ class Single_Pages_Manager {
 	public function rep_instances(): array {
 		return apply_filters(
 			'jet-form-builder/admin/single-pages',
+			array()
+		);
+	}
+
+	public function render_standalone() {
+		try {
+			$page = Pages_Manager::instance()->get_current();
+
+			$page->make();
+		} catch ( Not_Found_Page_Exception $exception ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			wp_die( 'Invalid request: ' . $exception->getMessage() );
+		}
+
+
+		try {
+			Pages_Manager::instance()->assets();
+
+			/** @var Module $framework */
+			$framework = jet_form_builder()->module( 'framework' );
+
+		} catch ( Repository_Exception $exception ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			wp_die( 'Something wen\'t wrong: ' . $exception->getMessage() );
+		}
+
+		$header = new Header();
+		$footer = new Footer();
+
+		$header->add_styles(
 			array(
-				new Single_Payment_Page(),
+				'dashicons',
+				'common',
+				'edit',
 			)
 		);
+		$footer->add_scripts(
+			array(
+				'cx-vue-ui',
+				Pages_Manager::SCRIPT_VUEX_PACKAGE,
+				$page->slug(),
+			)
+		);
+
+		$header->output();
+		$page->render_page();
+		$framework->get_cx_vue_ui()->print_templates();
+		$footer->output();
 	}
 }

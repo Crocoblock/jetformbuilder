@@ -46,6 +46,10 @@ class Module implements
 		);
 	}
 
+	public function on_uninstall() {
+		\WP_Block_Supports::get_instance()->register( self::SUPPORT_NAME, array() );
+	}
+
 	public function init_hooks() {
 		add_action(
 			'jet-form-builder/editor-assets/before',
@@ -95,7 +99,7 @@ class Module implements
 		}
 
 		if ( block_has_support( $block_type, array( self::SUPPORT_NAME ) ) &&
-			! array_key_exists( self::ATTRIBUTE_NAME, $block_type->attributes )
+		     ! array_key_exists( self::ATTRIBUTE_NAME, $block_type->attributes )
 		) {
 			$block_type->attributes[ self::ATTRIBUTE_NAME ] = array(
 				'type'    => 'boolean',

@@ -5,6 +5,7 @@ namespace JFB_Modules\Gateways\Export;
 
 use JFB_Modules\Gateways\Query_Views\Payment_For_Export_View;
 
+// If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -16,12 +17,6 @@ class Single_Controller extends Base_Export_Controller {
 	 * @throws \Exception
 	 */
 	public function do_export() {
-		if ( ! $this->get_wp_nonce()->verify() || ! current_user_can( 'manage_options' ) ) {
-			throw new \Exception(
-				__( 'You don`t have access to this URL', 'jet-form-builder' )
-			);
-		}
-
 		$payment_id   = $this->get_payment_id();
 		$payment_view = Payment_For_Export_View::find( array( 'id' => $payment_id ) );
 		$payment_view->set_select( array_keys( $this->columns ) );
@@ -29,7 +24,7 @@ class Single_Controller extends Base_Export_Controller {
 		$payment = $payment_view->set_limit( array( 1 ) )->query()->query_one();
 
 		$this->get_exporter()->set_title(
-			/* translators: %d - record ID */
+		/* translators: %d - record ID */
 			sprintf( __( 'JFB Payment %d', 'jet-form-builder' ), $payment_id )
 		);
 		$this->get_exporter()->open();

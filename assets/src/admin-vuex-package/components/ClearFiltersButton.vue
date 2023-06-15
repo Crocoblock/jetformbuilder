@@ -1,10 +1,15 @@
 <template>
 	<cx-vui-button
 		@click="dispatch('clearFiltersWithFetch' )"
-		button-style="accent-border"
+		button-style="link-error"
 		size="mini"
+		:disabled="!hasSelectedFilters"
 	>
-		<template #label>{{ label }}</template>
+		<template #label>
+<!--			<span class="dashicons dashicons-trash"></span>-->
+			<span class="dashicons dashicons-no-alt"></span>
+			{{ label }}
+		</template>
 	</cx-vui-button>
 </template>
 
@@ -26,9 +31,14 @@ export default {
 	props: {
 		label: {
 			type: String,
-			default: __( 'Clear all filters', 'jet-form-builder' ),
+			default: __( 'Clear filters', 'jet-form-builder' ),
 		},
 	},
 	mixins: [ ScopeStoreMixin ],
+	computed: {
+		hasSelectedFilters() {
+			return this.getter( 'hasSelectedFilters' );
+		},
+	},
 };
 </script>

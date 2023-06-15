@@ -90,8 +90,10 @@ class Record_View extends View_Base {
 		$this->add_conditions(
 			array(
 				array(
-					'type'   => Query_Conditions_Builder::TYPE_MORE_STATIC,
-					'values' => array( 'created_at', $date_from ),
+					'type'       => Query_Conditions_Builder::TYPE_MORE_OR_EQUAL_STATIC,
+					'format'     => 'DATE(%s)',
+					'format_col' => 'DATE(%s)',
+					'values'     => array( 'created_at', $date_from ),
 				),
 			)
 		);
@@ -108,8 +110,10 @@ class Record_View extends View_Base {
 		$this->add_conditions(
 			array(
 				array(
-					'type'   => Query_Conditions_Builder::TYPE_LESS_STATIC,
-					'values' => array( 'created_at', $date_to ),
+					'type'       => Query_Conditions_Builder::TYPE_LESS_OR_EQUAL_STATIC,
+					'format'     => 'DATE(%s)',
+					'format_col' => 'DATE(%s)',
+					'values'     => array( 'created_at', $date_to ),
 				),
 			)
 		);

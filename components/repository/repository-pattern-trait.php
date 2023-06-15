@@ -18,6 +18,8 @@ trait Repository_Pattern_Trait {
 	// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 	private $__repository      = array();
 	private $__failed_installs = array();
+	private $__rep_installed   = array();
+
 	// phpcs:enable PSR2.Classes.PropertyDeclaration.Underscore
 
 	abstract public function rep_instances(): array;
@@ -49,7 +51,7 @@ trait Repository_Pattern_Trait {
 		}
 
 		foreach ( $this->rep_get_items() as $item ) {
-			$this->rep_after_install_item( $item );
+			$this->rep_after_install( $item );
 		}
 	}
 
@@ -63,11 +65,19 @@ trait Repository_Pattern_Trait {
 			$this->rep_throw_if_cant_rewrite( $item_trait );
 			$this->rep_run_install_flow( $item_trait->rep_item_id(), $item_trait );
 
-			$this->rep_after_install_item( $item_trait );
+			if ( ! $this->rep_isset_item( $item_trait->rep_item_id() ) ) {
+				return false;
+			}
+
+			$this->rep_after_install( $item_trait );
 
 		} catch ( Repository_Exception $exception ) {
 			$this->_rep_save_fail( $exception );
+
+			return false;
 		}
+
+		return true;
 	}
 
 	/**
@@ -123,6 +133,15 @@ trait Repository_Pattern_Trait {
 	public function rep_before_install_item( $item ) {
 	}
 
+	public function rep_after_install( $item ) {
+		if ( array_key_exists( $item->rep_item_id(), $this->__rep_installed ) ) {
+			return;
+		}
+		$this->__rep_installed[ $item->rep_item_id() ] = 1;
+
+		$this->rep_after_install_item( $item );
+	}
+
 	public function rep_after_install_item( $item ) {
 	}
 
@@ -131,9 +150,8 @@ trait Repository_Pattern_Trait {
 	}
 
 	/**
-	 * @since 3.1.0
-	 *
 	 * @return \Generator
+	 * @since 3.1.0
 	 */
 	public function rep_generate_items(): \Generator {
 		foreach ( $this->__repository as $item ) {
@@ -291,6 +309,21 @@ trait Repository_Pattern_Trait {
 	// phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
 	public function _rep_get_fails(): array {
 		return $this->__failed_installs;
+	}
+
+	/**
+	 * @param string|Repository_Item_Instance_Trait|Repository_Item_Dynamic_Id|Repository_Static_Item_It $item_trait
+	 */
+	public function rep_remove( $item_trait ) {
+		if ( is_object( $item_trait ) ) {
+			$item_trait = $item_trait->rep_item_id();
+		}
+
+		if ( ! $this->rep_isset_item( $item_trait ) ) {
+			return;
+		}
+
+		unset( $this->__repository[ $item_trait ] );
 	}
 
 }

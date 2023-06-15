@@ -60,6 +60,16 @@ Base_Module_After_Install_It {
 		$sanitizer->register( new Choices_Default_Value_Sanitizer() );
 	}
 
+	/**
+	 * @throws Repository_Exception
+	 */
+	public function on_uninstall() {
+		/** @var Block_Sanitizer\Module $sanitizer */
+		$sanitizer = jet_form_builder()->module( 'block-sanitizer' );
+
+		$sanitizer->unregister( new Choices_Default_Value_Sanitizer() );
+	}
+
 	public function init_hooks() {
 		add_filter( 'jet-form-builder/blocks/items', array( $this, 'add_blocks_types' ) );
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_admin_assets' ) );

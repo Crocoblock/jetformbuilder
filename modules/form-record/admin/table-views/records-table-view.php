@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Form_Record\Admin\Table_Views;
 
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Form_Record\Admin\View_Columns\Classes_Column;
 use JFB_Modules\Form_Record\Admin\View_Columns\Header_Actions_Column;
@@ -100,19 +101,15 @@ class Records_Table_View extends View_Advanced_Base {
 
 	/**
 	 * @return array
-	 * @throws Repository_Exception
 	 */
 	public function load_data(): array {
-		/** @var Module $module */
-		$module = jet_form_builder()->module( 'form-record' );
-
 		return array(
 			'filters_endpoint'     => array(
 				'methods' => Fetch_Filters_Endpoint::get_methods(),
 				'url'     => Fetch_Filters_Endpoint::rest_url(),
 			),
 			'load_fields_endpoint' => Get_Form_Fields::get_endpoint(),
-			'export_url'           => $module->get_export_multiple()->get_url(),
+			'export_url'           => Pages_Manager::instance()->get_action_url( 'records-export' ),
 			'messages'             => array(
 				'filter_form'       => __( 'Select Form', 'jet-form-builder' ),
 				'filter_form_title' => __( 'All Forms', 'jet-form-builder' ),

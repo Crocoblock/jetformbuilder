@@ -5,9 +5,7 @@ namespace Jet_Form_Builder\Admin\Pages\Settings;
 
 use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
-use Jet_Form_Builder\Admin\Vui_Boxes\With_Boxes_Trait;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
-use Jet_Form_Builder\Classes\Theme\With_Theme_Info;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

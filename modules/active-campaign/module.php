@@ -5,6 +5,7 @@ namespace JFB_Modules\Active_Campaign;
 
 use Jet_Form_Builder\Actions\Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use JFB_Components\Rest_Api\Rest_Api_Controller_Base;
 use JFB_Modules\Active_Campaign\Actions\Active_Campaign_Action;
 use JFB_Modules\Active_Campaign\Rest_Api\Rest_Controller;
 use JFB_Components\Module\Base_Module_After_Install_It;
@@ -26,6 +27,8 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It,
 	use Base_Module_Url_Trait;
 	use Base_Module_Handle_Trait;
 
+	private $rest;
+
 	public function rep_item_id() {
 		return 'active-campaign';
 	}
@@ -35,13 +38,20 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It,
 	}
 
 	public function on_install() {
-		( new Rest_Controller() )->rest_api_init();
+		$this->rest = new Rest_Controller();
 
 		// install tab handler for Settings page
 		Tab_Handler_Manager::instance()->install( new Tabs\Active_Campaign_Handler() );
 	}
 
+	public function on_uninstall() {
+		unset( $this->rest );
+		// remove tab handler from Settings page
+		Tab_Handler_Manager::instance()->uninstall( 'active-campaign-tab' );
+	}
+
 	public function init_hooks() {
+		add_action( 'rest_api_init', array( $this->get_rest(), 'register_routes' ) );
 		add_action( 'jet-form-builder/actions/register', array( $this, 'add_action' ) );
 		add_action(
 			'jet-form-builder/editor-assets/before',
@@ -56,6 +66,7 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It,
 	}
 
 	public function remove_hooks() {
+		remove_action( 'rest_api_init', array( $this->get_rest(), 'register_routes' ) );
 		remove_action( 'jet-form-builder/actions/register', array( $this, 'add_action' ) );
 		remove_action(
 			'jet-form-builder/editor-assets/before',
@@ -91,5 +102,9 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It,
 			jet_form_builder()->get_version(),
 			true
 		);
+	}
+
+	public function get_rest(): Rest_Api_Controller_Base {
+		return $this->rest;
 	}
 }

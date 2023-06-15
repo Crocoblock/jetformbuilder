@@ -43,13 +43,28 @@ trait Module_Controller_Trait {
 	}
 
 	public function install( Base_Module_It $item ): bool {
-		try {
-			$this->rep_install_item( $item );
+		return $this->rep_install_item_soft( $item );
+	}
 
-			return true;
-		} catch ( Repository_Exception $exception ) {
-			return false;
+	/**
+	 * @param Base_Module_It|string $item
+	 */
+	public function uninstall( $item ) {
+		if ( is_object( $item ) ) {
+			$item = $item->rep_item_id();
 		}
+		try {
+			$module = $this->module( $item );
+		} catch ( Repository_Exception $exception ) {
+			return;
+		}
+		$module->remove_hooks();
+
+		if ( $module instanceof Base_Module_After_Install_It ) {
+			$module->on_uninstall();
+		}
+
+		$this->rep_remove( $module );
 	}
 
 	/**

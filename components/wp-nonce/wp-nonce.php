@@ -17,6 +17,8 @@ class Wp_Nonce {
 	protected $action;
 	protected $options;
 
+	private $nonce;
+
 	/**
 	 * Wp_Nonce constructor.
 	 *
@@ -31,7 +33,12 @@ class Wp_Nonce {
 	 * @return false|string
 	 */
 	public function create() {
-		return wp_create_nonce( $this->action );
+		if ( $this->nonce ) {
+			return $this->nonce;
+		}
+		$this->nonce = wp_create_nonce( $this->action );
+
+		return $this->nonce;
 	}
 
 	/**

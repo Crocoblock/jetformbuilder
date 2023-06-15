@@ -21,12 +21,6 @@ class Multiple_Controller extends Base_Export_Controller {
 	 * @throws \Exception
 	 */
 	public function do_export() {
-		if ( ! $this->get_wp_nonce()->verify() || ! current_user_can( 'manage_options' ) ) {
-			throw new \Exception(
-				__( 'You don`t have access to this URL', 'jet-form-builder' )
-			);
-		}
-
 		$this->form_id        = $this->get_form_id();
 		$this->fields_columns = $this->get_field_columns();
 		$this->modify_extra_columns();

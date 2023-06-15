@@ -59,6 +59,12 @@ class Module implements
 		);
 	}
 
+	public function on_uninstall() {
+		unset( $this->compiler );
+
+		\WP_Block_Supports::get_instance()->register( self::SUPPORT_NAME, array() );
+	}
+
 	public function init_hooks() {
 		add_action(
 			'jet-form-builder/editor-assets/before',

@@ -3,7 +3,7 @@
 
 namespace JFB_Modules\Form_Record\Admin\Pages;
 
-use JFB_Components\Module\Module_Tools;
+use JFB_Modules\Form_Record\Admin\Pages\Traits\Form_Records_Pages_Trait;
 use JFB_Modules\Form_Record\Admin\Table_Views\Records_Table_View;
 use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
@@ -14,6 +14,8 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 class Form_Records extends Base_Page {
+
+	use Form_Records_Pages_Trait;
 
 	const SLUG = 'jfb-records';
 
@@ -35,10 +37,4 @@ class Form_Records extends Base_Page {
 		parent::assets();
 	}
 
-	public function base_script_url(): string {
-		return Module_Tools::get_url(
-			'form-record',
-			"assets/build/js/admin/pages/{$this->slug()}{min}.js"
-		);
-	}
 }

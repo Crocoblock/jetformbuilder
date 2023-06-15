@@ -3,13 +3,13 @@
 
 namespace JFB_Modules\Form_Record\Admin\Pages;
 
-use JFB_Components\Module\Module_Tools;
+use JFB_Components\Admin\Notices\Traits\With_Notices_Trait;
 use JFB_Modules\Form_Record\Admin\Meta_Boxes;
 use JFB_Modules\Form_Record\Admin\Notices\Update_Db_Notice;
-use Jet_Form_Builder\Admin\Notices\With_Notices_Trait;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
+use JFB_Modules\Form_Record\Admin\Pages\Traits\Form_Records_Pages_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -19,6 +19,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Single_Form_Record_Page extends Base_Single_Page {
 
 	use With_Notices_Trait;
+	use Form_Records_Pages_Trait;
 
 	public function parent_slug(): string {
 		return Form_Records::SLUG;
@@ -69,10 +70,4 @@ class Single_Form_Record_Page extends Base_Single_Page {
 		parent::assets();
 	}
 
-	public function base_script_url(): string {
-		return Module_Tools::get_url(
-			'form-record',
-			"assets/build/js/admin/pages/{$this->slug()}{min}.js"
-		);
-	}
 }

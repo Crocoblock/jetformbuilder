@@ -3,25 +3,21 @@
 
 namespace JFB_Modules\Gateways\Export;
 
-// If this file is called directly, abort.
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use JFB_Components\Export\Interfaces\Base_Export_Controller_It;
 use JFB_Components\Export\Traits\Base_Export_Controller_Trait;
-use JFB_Components\Wp_Nonce\Wp_Nonce_It;
-use JFB_Components\Wp_Nonce\Wp_Nonce_Trait;
 use JFB_Modules\Gateways\Db_Models\Payer_Model;
 use JFB_Modules\Gateways\Db_Models\Payer_Shipping_Model;
 use JFB_Modules\Gateways\Db_Models\Payment_To_Record;
-use JFB_Modules\Gateways\Module;
 use JFB_Modules\Gateways\Query_Views\Payment_View;
 
+// If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-abstract class Base_Export_Controller implements Base_Export_Controller_It, Wp_Nonce_It {
+abstract class Base_Export_Controller implements Base_Export_Controller_It {
 
-	use Wp_Nonce_Trait;
 	use Base_Export_Controller_Trait;
 
 	protected $columns = array();
@@ -40,7 +36,7 @@ abstract class Base_Export_Controller implements Base_Export_Controller_It, Wp_N
 	 */
 	protected $view;
 
-	public function run() {
+	public function __construct() {
 		$this->columns = array(
 			'id'             => __( 'ID (primary)', 'jet-form-builder' ),
 			'amount_value'   => __( 'Amount Value', 'jet-form-builder' ),
@@ -106,17 +102,6 @@ abstract class Base_Export_Controller implements Base_Export_Controller_It, Wp_N
 		}
 
 		$this->update_shipping_empty_columns();
-
-		try {
-			$this->do_export();
-		} catch ( \Exception $exception ) {
-			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die(
-				$exception->getMessage(),
-				__( 'Error', 'jet-form-builder' )
-			);
-			// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-		}
 	}
 
 	/**
@@ -152,16 +137,6 @@ abstract class Base_Export_Controller implements Base_Export_Controller_It, Wp_N
 				$payer,
 				$shipping
 			)
-		);
-	}
-
-	public function get_url(): string {
-		return add_query_arg(
-			array(
-				'action'                          => Module::EXPORT_ACTION,
-				$this->get_wp_nonce()->get_name() => $this->get_wp_nonce()->create(),
-			),
-			admin_url( 'admin.php' )
 		);
 	}
 

@@ -12,8 +12,6 @@ interface Base_Export_Controller_It {
 
 	public function do_export();
 
-	public function run();
-
 	public function set_exporter( Base_Export_It $exporter );
 
 	public function get_exporter(): Base_Export_It;

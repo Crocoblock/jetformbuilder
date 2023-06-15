@@ -3,27 +3,24 @@
 
 namespace Jet_Form_Builder\Admin\Single_Pages;
 
-use Jet_Form_Builder\Admin\Admin_Page_Interface;
-use Jet_Form_Builder\Admin\Admin_Page_Trait;
+use JFB_Components\Admin\Page\Interfaces\Admin_Dashboard_Page_It;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
-use Jet_Form_Builder\Admin\Notices\With_Notices_Trait;
 use Jet_Form_Builder\Admin\Pages\Base_Page;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Classes\Arrayable\Array_Convert_Once;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
-use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Theme\With_Theme_Info;
-use Jet_Form_Builder\Db_Queries\Execution_Builder;
+use JFB_Components\Admin\Page\Traits\Admin_Dashboard_Page_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-abstract class Base_Single_Page implements Admin_Page_Interface, Repository_Item_Instance_Trait {
+abstract class Base_Single_Page implements Admin_Dashboard_Page_It {
 
-	use Admin_Page_Trait;
+	use Admin_Dashboard_Page_Trait;
 	use With_Theme_Info;
 
 	protected $id;

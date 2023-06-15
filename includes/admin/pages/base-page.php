@@ -2,13 +2,13 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
-use Jet_Form_Builder\Admin\Admin_Page_Interface;
-use Jet_Form_Builder\Admin\Admin_Page_Trait;
+use JFB_Components\Admin\Page\Interfaces\Admin_Dashboard_Page_It;
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
-use Jet_Form_Builder\Admin\Notices\With_Notices_Trait;
-use Jet_Form_Builder\Admin\Vui_Boxes\With_Boxes_Trait;
+use JFB_Components\Admin\Page\Traits\Admin_Dashboard_Page_Trait;
+use JFB_Components\Admin\Vui_Boxes\Traits\With_Boxes_Trait;
 use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Theme\With_Theme_Info;
+use JFB_Components\Admin\Notices\Traits\With_Notices_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -20,9 +20,9 @@ if ( ! defined( 'WPINC' ) ) {
  */
 abstract class Base_Page implements
 	Repository_Item_Instance_Trait,
-	Admin_Page_Interface {
+	Admin_Dashboard_Page_It {
 
-	use Admin_Page_Trait;
+	use Admin_Dashboard_Page_Trait;
 	use With_Notices_Trait;
 	use With_Theme_Info;
 	use With_Boxes_Trait;

@@ -4,10 +4,10 @@
 namespace Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes;
 
 use Jet_Form_Builder\Admin\Pages\Actions\Base_Page_Action;
-use Jet_Form_Builder\Admin\Table_Advanced_Record_Prepare_Trait;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Rest_Api\Rest_Endpoint;
 use Jet_Form_Builder\Rest_Api\Traits\Rest_Fetch_Endpoint;
+use JFB_Components\Admin\Page\Traits\Table_Advanced_Record_Prepare_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

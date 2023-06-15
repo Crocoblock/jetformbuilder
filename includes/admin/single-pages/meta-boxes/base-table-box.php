@@ -3,9 +3,9 @@
 
 namespace Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes;
 
-use Jet_Form_Builder\Admin\Table_Advanced_Record_Prepare_Trait;
 use Jet_Form_Builder\Rest_Api\Rest_Endpoint;
 use Jet_Form_Builder\Rest_Api\Traits\Rest_Fetch_Endpoint;
+use JFB_Components\Admin\Page\Traits\Table_Advanced_Record_Prepare_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -133,6 +133,13 @@ abstract class Base_Table_Box extends Base_Meta_Box implements
 				'receive_url'  => ( new Rest_Endpoint( $this ) )->to_array(),
 			)
 		);
+	}
+
+	/**
+	 * @param int $limit
+	 */
+	public function set_limit( int $limit ) {
+		$this->limit = $limit;
 	}
 
 }

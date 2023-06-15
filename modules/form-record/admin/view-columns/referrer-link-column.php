@@ -3,6 +3,8 @@
 
 namespace JFB_Modules\Form_Record\Admin\View_Columns;
 
+use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Table_Views\Column_Advanced_Base;
 use Jet_Form_Builder\Classes\Post\Post_Tools;
 

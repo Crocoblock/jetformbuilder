@@ -1,5 +1,8 @@
 <template>
 	<FormBuilderPage>
+		<template #heading-after>
+			<PrintButton/>
+		</template>
 		<PostBoxGrid/>
 	</FormBuilderPage>
 </template>
@@ -8,6 +11,7 @@
 const {
 	      PostBoxGrid,
 	      FormBuilderPage,
+	      PrintButton,
       } = JetFBComponents;
 
 const {
@@ -21,6 +25,7 @@ export default {
 	components: {
 		PostBoxGrid,
 		FormBuilderPage,
+		PrintButton,
 	},
 };
 </script>

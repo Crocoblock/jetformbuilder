@@ -27,6 +27,7 @@ import CxVuiFSelect from './components/CxVuiFSelect';
 import CxVuiDate from './components/CxVuiDate';
 import Tooltip from './components/Tooltip';
 import Delimiter from './components/Delimiter';
+import PrintButton from './components/PrintButton';
 
 window.JetFBActions = {
 	renderCurrentPage,
@@ -58,6 +59,7 @@ window.JetFBComponents = {
 	CxVuiDate,
 	Tooltip,
 	Delimiter,
+	PrintButton,
 };
 
 window.JetFBMixins = {

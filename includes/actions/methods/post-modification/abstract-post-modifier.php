@@ -18,7 +18,7 @@ abstract class Abstract_Post_Modifier extends Abstract_Modifier {
 	abstract public function get_id(): string;
 
 	public function before_run( Insert_Post $action ) {
-		$request      = jet_fb_action_handler()->request_data;
+		$request      = jet_fb_context()->resolve_request();
 		$fields_map   = $action->settings['fields_map'] ?? array();
 		$post_status  = $action->settings['post_status'] ?? '';
 		$default_meta = $action->settings['default_meta'] ?? array();

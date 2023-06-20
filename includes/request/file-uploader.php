@@ -14,6 +14,7 @@ use Jet_Form_Builder\Classes\Resources\Uploaded_File;
 use Jet_Form_Builder\Classes\Resources\Upload_Exception;
 use Jet_Form_Builder\Classes\Resources\Upload_Permission_Exception;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Request\Fields\Media_Field_Parser;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -38,8 +39,8 @@ class File_Uploader {
 	protected $allowed_mimes;
 	protected $insert_attachment;
 
-	/** @var Parser_Context */
-	protected $context;
+	/** @var Field_Data_Parser|Media_Field_Parser */
+	protected $parser;
 
 	/**
 	 * @return Media_Block_Value
@@ -229,7 +230,7 @@ class File_Uploader {
 	public function is_insert_attachment(): bool {
 		// Prevent non logged-in users insert attachment
 		if ( ! is_user_logged_in() ) {
-			return $this->context->is_allowed_for_guest();
+			return $this->parser->get_context()->is_allowed_for_guest();
 		}
 
 		return ! empty( $this->settings['insert_attachment'] );
@@ -300,12 +301,12 @@ class File_Uploader {
 		return $this;
 	}
 
-	public function set_context( Parser_Context $context ): File_Uploader {
-		$this->context = $context;
+	public function set_context( Field_Data_Parser $parser ): File_Uploader {
+		$this->parser = $parser;
 
-		$this->set_settings( $context->get_settings() );
-		$this->set_preset( Tools::decode_json( $context->get_value() ) );
-		$this->set_file( $context->get_file() );
+		$this->set_settings( $parser->get_settings() );
+		$this->set_preset( Tools::decode_json( $parser->get_value() ) );
+		$this->set_file( $parser->get_file() );
 
 		return $this;
 	}

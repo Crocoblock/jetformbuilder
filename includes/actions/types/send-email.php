@@ -276,8 +276,9 @@ To prevent this, enable this option.',
 		switch ( $mail_to ) {
 			case 'form':
 				$field = $this->settings['from_field'] ?? '';
+				$email = jet_fb_context()->get_value( $field );
 
-				return jet_fb_action_handler()->request_data[ $field ] ?? '';
+				return $email ?: '';
 			case 'custom':
 				return ! empty( $this->settings['custom_email'] ) ? $this->settings['custom_email'] : '';
 			case 'admin':
@@ -293,7 +294,7 @@ To prevent this, enable this option.',
 			case 'form':
 				$field = $this->settings['reply_from_field'] ?? '';
 
-				return jet_fb_action_handler()->request_data[ $field ] ?? '';
+				return Tools::to_string( jet_fb_context()->get_value( $field ) );
 			case 'custom':
 				return ! empty( $this->settings['reply_to_email'] ) ? $this->settings['reply_to_email'] : '';
 			default:

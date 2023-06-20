@@ -20,7 +20,12 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Action_Handler {
 
-	public $form_id      = null;
+	public $form_id = null;
+
+	/**
+	 * @deprecated 3.1.0 Use jet_fb_context() instead
+	 * @var Legacy_Request_Data
+	 */
 	public $request_data = array();
 	/**
 	 * @var Base[]
@@ -50,6 +55,10 @@ class Action_Handler {
 	 */
 	protected $skipped = array();
 
+	public function __construct() {
+		$this->request_data = new Legacy_Request_Data();
+	}
+
 	public function get_form_id() {
 		return (int) $this->form_id;
 	}
@@ -71,15 +80,17 @@ class Action_Handler {
 
 	public function add_request( $request ): Action_Handler {
 		if ( ! $this->in_loop() ) {
-			$this->request_data = array_merge( $this->request_data, $request );
+			foreach ( $request as $name => $value ) {
+				jet_fb_context()->update_request( $value, $name );
+			}
 
 			return $this;
 		}
 
 		foreach ( $request as $field_name => $value ) {
-			$field_name = $this->get_unique_field_id( $field_name );
+			$field_name = jet_fb_context()->get_unique_name( $field_name );
 
-			$this->request_data[ $field_name ] = $value;
+			jet_fb_context()->update_request( $value, $field_name );
 		}
 
 		return $this;
@@ -205,7 +216,7 @@ class Action_Handler {
 		/**
 		 * Process single action
 		 */
-		$action->do_action( $this->request_data, $this );
+		$action->do_action( jet_fb_request_handler()->get_context()->resolve_request(), $this );
 
 		/**
 		 * We save the ID of the current action,
@@ -423,16 +434,6 @@ class Action_Handler {
 		return false;
 	}
 
-	/**
-	 * Use jet_fb_handler()->refer
-	 *
-	 * @return mixed|string
-	 * @deprecated 2.1.3
-	 */
-	public function get_refer() {
-		return $this->request_data['__refer'] ?? '';
-	}
-
 	public function get_passed_actions(): array {
 		return $this->passed;
 	}
@@ -561,19 +562,6 @@ class Action_Handler {
 		}
 
 		return $this->get_unique_action_id( ++$start_from );
-	}
-
-	public function get_unique_field_id( string $computed_field ): string {
-		if (
-			! array_key_exists( $computed_field, $this->request_data ) ||
-			! $this->in_loop()
-		) {
-			return $computed_field;
-		}
-
-		$computed_field .= '_' . $this->get_current_action()->_id;
-
-		return $computed_field;
 	}
 
 }

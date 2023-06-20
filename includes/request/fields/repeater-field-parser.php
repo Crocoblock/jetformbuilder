@@ -4,7 +4,10 @@
 namespace Jet_Form_Builder\Request\Fields;
 
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;
 use Jet_Form_Builder\Request\Field_Data_Parser;
+use Jet_Form_Builder\Request\Parser_Context;
+use Jet_Form_Builder\Request\Parser_List_Context;
 use Jet_Form_Builder\Request\Parser_Manager;
 
 // If this file is called directly, abort.
@@ -19,20 +22,21 @@ class Repeater_Field_Parser extends Field_Data_Parser {
 	}
 
 	public function get_response() {
-		$response = array();
-		$indexes  = $this->get_indexes();
-		$context  = clone $this->context;
+		$indexes = $this->get_indexes();
 
 		foreach ( $indexes as $index ) {
-			$row   = $this->value[ $index ] ?? array();
-			$files = $this->file[ $index ] ?? array();
+			$context = new Parser_Context();
+			$this->add_inner( $context, $index );
 
-			$context->set_request_context( $row )->set_files_context( $files );
+			$context->set_request( $this->value[ $index ] ?? array() )
+					->set_files( $this->file[ $index ] ?? array() );
 
-			$response[ $index ] = Parser_Manager::instance()->get_values_fields( $this->inner, $context );
+			$context->apply( $this->get_inner_blocks() );
 		}
 
-		return $response;
+		$this->set_file( false );
+
+		return count( $indexes );
 	}
 
 	protected function get_indexes(): array {

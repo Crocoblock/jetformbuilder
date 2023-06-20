@@ -127,7 +127,7 @@ class Request_Tools {
 			return $file;
 		}
 
-		$file_data = jet_fb_action_handler()->request_data[ $field_name ] ?? false;
+		$file_data = jet_fb_context()->get_value( $field_name );
 
 		// parse value in json format (both)
 		if ( is_string( $file_data ) && ! is_numeric( $file_data ) ) {

@@ -28,12 +28,12 @@ class Media_Field_Parser extends Field_Data_Parser {
 	 * @throws Sanitize_Value_Exception
 	 */
 	public function get_response() {
-		if ( empty( $this->context->get_file() ) ) {
+		if ( empty( $this->get_file() ) ) {
 			return false;
 		}
 		do_action( 'jet-form-builder/media-field/before-upload', $this );
 
-		$uploader = ( new File_Uploader() )->set_context( $this->context );
+		$uploader = ( new File_Uploader() )->set_context( $this );
 
 		try {
 			/** @var Media_Block_Value $uploads */
@@ -42,7 +42,7 @@ class Media_Field_Parser extends Field_Data_Parser {
 			throw new Sanitize_Value_Exception( $exception->getMessage(), $this->name );
 		}
 
-		jet_fb_request_handler()->update_file( $this->name, $uploads );
+		$this->context->update_file( $uploads );
 
 		switch ( $this->get_value_format() ) {
 			case 'id':
@@ -55,11 +55,9 @@ class Media_Field_Parser extends Field_Data_Parser {
 	}
 
 	protected function get_value_format(): string {
-		if ( empty( $this->get_context()->get_settings()['insert_attachment'] ) ) {
-			return 'url';
-		}
-
-		return $this->get_context()->get_settings()['value_format'] ?? 'url';
+		return empty( $this->settings['insert_attachment'] )
+			? 'url'
+			: ( $this->settings['value_format'] ?? 'url' );
 	}
 
 }

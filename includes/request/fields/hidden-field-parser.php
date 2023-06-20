@@ -19,6 +19,7 @@ class Hidden_Field_Parser extends Field_Data_Parser {
 
 	/**
 	 * @return mixed
+	 * @throws \Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field
 	 */
 	public function get_response() {
 		if ( $this->settings['render'] ?? true ) {

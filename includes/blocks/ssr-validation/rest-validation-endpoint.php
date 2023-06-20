@@ -93,8 +93,8 @@ class Rest_Validation_Endpoint extends Rest_Api_Endpoint_Base {
 			jet_fb_request_handler()->set_raw_request( $body );
 			jet_fb_request_handler()->set_raw_files( $files );
 
-			$context->set_request_context( $body );
-			$context->set_files_context( $files );
+			$context->set_request( $body );
+			$context->set_files( $files );
 
 			$value = $body[ $field_name ] ?? false;
 
@@ -106,7 +106,7 @@ class Rest_Validation_Endpoint extends Rest_Api_Endpoint_Base {
 		$row_values = array_values( $body[ $parent_name ] )[0];
 		$all_values = $body[ self::ROOT_KEY ] ?? array();
 
-		$context->set_request_context( $row_values );
+		$context->set_request( $row_values );
 		jet_fb_request_handler()->set_raw_request( $all_values );
 		jet_fb_handler()->set_form_id( $all_values[ jet_fb_handler()->form_key ] ?? false );
 

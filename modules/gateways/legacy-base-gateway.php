@@ -242,9 +242,9 @@ abstract class Legacy_Base_Gateway {
 	}
 
 	protected function get_price_from_request() {
-		return $this->get_price(
-			jet_fb_action_handler()->request_data[ $this->price_field ] ?? 0
-		);
+		$number = jet_fb_context()->get_value( $this->price_field );
+
+		return $this->get_price( is_numeric( $number ) ? $number : 0 );
 	}
 
 	protected function get_price( $price ) {

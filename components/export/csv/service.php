@@ -3,6 +3,7 @@
 
 namespace JFB_Components\Export\Csv;
 
+use Jet_Form_Builder\Classes\Tools;
 use JFB_Components\Export\Interfaces\Base_Export_It;
 
 // If this file is called directly, abort.
@@ -12,8 +13,29 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Service implements Base_Export_It {
 
+	/**
+	 * Add BOM to fix UTF-8 in Excel
+	 *
+	 * @see https://www.php.net/manual/en/function.fputcsv.php#118252
+	 */
+	const UTF8_BOM = "\xEF\xBB\xBF";
+
+	/**
+	 * @see https://owasp.org/www-community/attacks/CSV_Injection
+	 */
+	const FORMULAS_START_CHARACTERS = array(
+		'=',
+		'-',
+		'+',
+		'@',
+		"\t",
+		"\r",
+	);
+
 	private $file;
 	private $file_name;
+	private $separator = ',';
+	private $enclosure = '"';
 
 	public function open() {
 		if ( false === strpos( ini_get( 'disable_functions' ), 'set_time_limit' ) ) {
@@ -47,21 +69,33 @@ class Service implements Base_Export_It {
 		}
 
 		$this->file = fopen( 'php://output', 'w' );
-		/**
-		 * Add BOM to fix UTF-8 in Excel
-		 *
-		 * @see https://www.php.net/manual/en/function.fputcsv.php#118252
-		 */
-		$bom = chr( 0xEF ) . chr( 0xBB ) . chr( 0xBF );
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fputs
-		fputs( $this->file, $bom );
+		fputs( $this->file, self::UTF8_BOM );
 
 		return $this->file;
 	}
 
 	public function add_row( array $row ) {
-		fputcsv( $this->get_file(), $row );
+		$this->flatten( $row );
+
+		fputcsv( $this->get_file(), $row, $this->separator, $this->enclosure );
+	}
+
+	private function flatten( array &$row ) {
+		foreach ( $row as $key => &$value ) {
+			if ( ! is_string( $value ) ) {
+				$value = Tools::to_string( $value );
+			}
+
+			if ( in_array(
+				substr( $value, 0, 1 ),
+				self::FORMULAS_START_CHARACTERS,
+				true
+			) ) {
+				$value = "'" . $value;
+			}
+		}
 	}
 
 	public function close() {
@@ -75,5 +109,19 @@ class Service implements Base_Export_It {
 
 	public function get_title(): string {
 		return $this->file_name;
+	}
+
+	/**
+	 * @param string $separator
+	 */
+	public function set_separator( string $separator ) {
+		$this->separator = $separator;
+	}
+
+	/**
+	 * @param string $enclosure
+	 */
+	public function set_enclosure( string $enclosure ) {
+		$this->enclosure = $enclosure;
 	}
 }

@@ -17,20 +17,10 @@ class Array_Tools {
 	 */
 	public static function to_array( $payload ): array {
 		if ( $payload instanceof \Generator ) {
-			return self::from_generator( $payload );
+			return iterator_to_array( $payload );
 		}
 
 		return self::from_array( $payload );
-	}
-
-	public static function from_generator( \Generator $generator ): array {
-		$response = array();
-
-		foreach ( $generator as $value ) {
-			$response[] = $value;
-		}
-
-		return $response;
 	}
 
 	/**
@@ -70,7 +60,7 @@ class Array_Tools {
 	 * Copy-paste from WP-core function
 	 *
 	 * @param array $input_array
-	 * @param array $path
+	 * @param array|string $path
 	 * @param mixed $default_value
 	 *
 	 * @return array|mixed
@@ -78,7 +68,9 @@ class Array_Tools {
 	 *
 	 * @since 3.1.0
 	 */
-	public static function get( array $input_array, array $path, $default_value = false ) {
+	public static function get( array $input_array, $path, $default_value = false ) {
+		$path = self::path( $path );
+
 		foreach ( $path as $path_element ) {
 			if (
 				( ! is_string( $path_element ) && ! is_integer( $path_element ) && ! is_null( $path_element ) ) ||
@@ -96,14 +88,15 @@ class Array_Tools {
 	 * Copy-paste from WP-core function
 	 *
 	 * @param array $input_array
-	 * @param array $path
+	 * @param array|string $path
 	 * @param null $value
 	 *
 	 * @since 3.1.0
 	 *
 	 * @see \_wp_array_set()
 	 */
-	public static function set( array &$input_array, array $path, $value = null ) {
+	public static function set( array &$input_array, $path, $value = null ) {
+		$path        = self::path( $path );
 		$path_length = count( $path );
 
 		if ( 0 === $path_length ) {
@@ -144,6 +137,19 @@ class Array_Tools {
 		}
 
 		return $source[ count( $source ) - 1 ];
+	}
+
+	public static function path( $items ): array {
+		return iterator_to_array( self::generate_path( $items ) );
+	}
+
+	private static function generate_path( $items ): \Generator {
+		if ( is_string( $items ) ) {
+			$items = explode( '.', $items );
+		}
+		foreach ( $items as $item ) {
+			yield $item;
+		}
 	}
 
 }

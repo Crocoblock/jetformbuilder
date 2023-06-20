@@ -95,8 +95,8 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 	 * @return array
 	 */
 	public function init_request(): array {
-		if ( ! empty( jet_fb_action_handler()->request_data ) ) {
-			return jet_fb_action_handler()->request_data;
+		if ( jet_fb_context()->has_request() ) {
+			return jet_fb_context()->resolve_request();
 		}
 		$record = $this->get_scenario_row( 'record' );
 		$values = Tools::apply_record( $record );

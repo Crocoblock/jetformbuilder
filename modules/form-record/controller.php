@@ -217,7 +217,7 @@ class Controller {
 			$saved = Record_Fields_View::get_request_list( $this->record_id );
 		}
 
-		foreach ( jet_fb_action_handler()->request_data as $field_name => $value ) {
+		foreach ( jet_fb_context()->generate_request() as $field_name => $value ) {
 			if (
 				isset( $core_fields[ $field_name ] ) ||
 				( empty( $this->settings['save_empty_fields'] ) && empty( $value ) ) ||
@@ -226,7 +226,7 @@ class Controller {
 				continue;
 			}
 
-			$current_attrs = jet_fb_request_handler()->get_attrs_by_name( $field_name );
+			$current_attrs = jet_fb_context()->get_settings( $field_name );
 
 			if ( 'password' === ( $current_attrs['field_type'] ?? '' ) ) {
 				continue;

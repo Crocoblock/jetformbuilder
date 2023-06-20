@@ -129,7 +129,7 @@ class Condition_Instance {
 	}
 
 	public function get_field_value() {
-		return jet_fb_action_handler()->request_data[ $this->get_field_name() ] ?? false;
+		return jet_fb_context()->get_value( $this->get_field_name() );
 	}
 
 	/**
@@ -211,23 +211,6 @@ class Condition_Instance {
 	public function get_parsed_value( $maybe_json_string ) {
 		return ( new Dynamic_Preset() )->parse_json( $maybe_json_string );
 	}
-
-
-	/**
-	 * @param $field_name
-	 *
-	 * @return mixed
-	 */
-	public function get_request_field( $field_name ) {
-		$handler = jet_fb_action_handler();
-
-		if ( isset( $handler->request_data[ $field_name ] ) ) {
-			return $handler->request_data[ $field_name ];
-		}
-
-		return false;
-	}
-
 
 	public function get_compare_as_array(): array {
 		$compare = $this->get_compare();

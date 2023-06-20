@@ -9,12 +9,12 @@ use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
 use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
 use JFB_Modules\Security\Exceptions\Spam_Exception;
 use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
+use JFB_Modules\Logger;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -24,11 +24,13 @@ if ( ! defined( 'WPINC' ) ) {
 class Request_Handler {
 
 	// phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
-	public $_fields        = array();
-	private $request_types = array();
-	private $request_attrs = array();
-	private $raw_request   = array();
-	private $files         = array();
+	public $_fields = array();
+	private $context;
+
+	public function __construct() {
+		// main context
+		$this->context = new Parser_Context();
+	}
 
 	/**
 	 * Get submitted form data
@@ -36,22 +38,25 @@ class Request_Handler {
 	 * @throws Action_Exception|Spam_Exception|Request_Exception
 	 */
 	public function set_form_data() {
-		$this->set_raw_request( $this->get_raw_request() );
-		$this->set_raw_files( Request_Tools::get_files( $_FILES ) );
+		$this->get_context()
+			->set_files( Request_Tools::get_files( $_FILES ) )
+			->set_request( $this->get_raw_request() );
 
-		$context = ( new Parser_Context() )
-			->set_files_context( $this->files )
-			->set_request_context( $this->raw_request );
-
-		$request = apply_filters(
-			'jet-form-builder/form-handler/form-data',
-			Parser_Manager::instance()->get_values_fields( $this->_fields, $context ),
-			$this
+		$this->_fields = Block_Helper::get_blocks_by_post(
+			jet_fb_handler()->get_form_id()
 		);
 
-		jet_fb_action_handler()->add_request( $request );
+		$this->get_context()->apply( $this->_fields );
 
-		if ( ! Logger::instance()->has_log( Sanitize_Value_Exception::class ) ) {
+		$this->get_context()->update_request(
+			apply_filters(
+				'jet-form-builder/form-handler/form-data',
+				$this->get_context()->resolve_request()
+			),
+			array()
+		);
+
+		if ( ! Logger\Module::instance()->has_log( Sanitize_Value_Exception::class ) ) {
 			return;
 		}
 
@@ -61,15 +66,10 @@ class Request_Handler {
 	}
 
 	/**
-	 * @throws Request_Exception|Spam_Exception
-	 *
 	 * @return array
+	 * @throws Request_Exception|Spam_Exception
 	 */
 	private function get_raw_request(): array {
-		$this->_fields = Block_Helper::get_blocks_by_post(
-			jet_fb_handler()->get_form_id()
-		);
-
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$values = Tools::sanitize_recursive( wp_unslash( $_POST ) );
 
@@ -80,88 +80,69 @@ class Request_Handler {
 		return apply_filters( 'jet-form-builder/request-handler/request', $values );
 	}
 
-	public function exclude( string $field_name ): Request_Handler {
-		$attrs = $this->get_attrs_by_name( $field_name );
-
-		/**
-		 * @see \JFB_Modules\Form_Record\Controller::generate_request
-		 */
-		$attrs['field_type'] = 'password';
-
-		return $this->set_request_attrs(
-			array(
-				$field_name => $attrs,
-			)
-		);
+	/**
+	 * @param string|array $name 'field_name'|'repeater_name.field_name'|['repeater_name', 'field_name']
+	 */
+	public function exclude( $name ) {
+		$this->get_context()->exclude( $name );
 	}
 
 	public function set_request_type( array $types ): Request_Handler {
-		$this->request_types = array_merge( $this->request_types, $types );
+		foreach ( $types as $name => $value ) {
+			$this->get_context()->set_field_type( $value, $name );
+		}
 
 		return $this;
 	}
 
 	public function set_request_attrs( array $attrs ): Request_Handler {
-		$this->request_attrs = array_merge( $this->request_attrs, $attrs );
+		foreach ( $attrs as $name => $value ) {
+			$this->get_context()->set_field_settings( $value, $name );
+		}
 
 		return $this;
 	}
 
-	public function get_types(): array {
-		return $this->request_types;
-	}
-
-	public function get_attrs(): array {
-		return $this->request_attrs;
-	}
-
 	/**
-	 * @param string $name
+	 * @param string|array $name 'field_name'|'repeater_name.field_name'|['repeater_name', 'field_name']
 	 * @param string $field_type
 	 *
 	 * @return bool
 	 */
-	public function is_type( string $name, string $field_type ): bool {
+	public function is_type( $name, string $field_type ): bool {
 		return $this->get_type( $name ) === $field_type;
 	}
 
-	public function get_type( string $name ): string {
-		return $this->request_types[ $name ] ?? '';
+	/**
+	 * @param string|array $name 'field_name'|'repeater_name.field_name'|['repeater_name', 0, 'field_name']
+	 *
+	 * @return string
+	 */
+	public function get_type( $name ): string {
+		return $this->get_context()->get_field_type( $name );
 	}
 
 	/**
-	 * @param string $name
+	 * @param string|array $name 'field_name'|'repeater_name.field_name'|['repeater_name', 'field_name']
 	 *
 	 * @return array
 	 */
-	public function get_attrs_by_name( string $name ): array {
-		return $this->request_attrs[ $name ] ?? array();
-	}
-
-	public function set_raw_request( array $request ): Request_Handler {
-		$this->raw_request = $request;
-
-		return $this;
-	}
-
-	public function set_raw_files( array $files ): Request_Handler {
-		$this->files = $files;
-
-		return $this;
+	public function get_attrs_by_name( $name ): array {
+		return $this->get_context()->get_settings( $name );
 	}
 
 	/**
 	 * @return array
 	 */
 	public function get_request(): array {
-		return $this->raw_request;
+		return $this->get_context()->get_request();
 	}
 
 	/**
 	 * @return File[]|File_Collection[]|array[]
 	 */
 	public function get_files(): array {
-		return $this->files;
+		return $this->get_context()->get_files();
 	}
 
 	/**
@@ -170,13 +151,7 @@ class Request_Handler {
 	 * @return false|Media_Block_Value
 	 */
 	public function get_file( string $name ) {
-		return $this->files[ $name ] ?? false;
-	}
-
-	public function update_file( string $name, $file ): Request_Handler {
-		$this->files[ $name ] = $file;
-
-		return $this;
+		return $this->get_context()->get_file( $name );
 	}
 
 	/**
@@ -189,9 +164,9 @@ class Request_Handler {
 	public function get_attr(
 		$field_name, $attr_name, $if_not_exist = false
 	) {
-		$attrs = $this->get_attrs_by_name( $field_name );
+		$attr = $this->get_context()->get_setting( $attr_name, $field_name );
 
-		return $attrs[ $attr_name ] ?? $if_not_exist;
+		return false === $attr ? $if_not_exist : $attr;
 	}
 
 
@@ -208,6 +183,10 @@ class Request_Handler {
 		$field_name, $attr_name = '', $if_empty = false
 	) {
 		return $this->get_attr( $field_name, $attr_name, $if_empty );
+	}
+
+	public function get_context(): Parser_Context {
+		return $this->context;
 	}
 
 }

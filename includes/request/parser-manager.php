@@ -8,7 +8,6 @@ use Jet_Form_Builder\Classes\Instance_Trait;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Parse_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;
 use Jet_Form_Builder\Request\Fields;
 
 // If this file is called directly, abort.
@@ -40,8 +39,8 @@ class Parser_Manager {
 		return apply_filters(
 			'jet-form-builder/parsers-request/register',
 			array(
+				new Fields\Default_Parser(),
 				new Fields\Date_Field_Parser(),
-				new Fields\Repeater_Field_Parser(),
 				new Fields\Wysiwyg_Field_Parser(),
 				new Fields\Text_Field_Parser(),
 				new Fields\Repeater_Field_Parser(),
@@ -52,81 +51,26 @@ class Parser_Manager {
 		);
 	}
 
-	public function get_values_fields( $fields, Parser_Context $context ) {
-		$response = array();
-		$this->get_values_fields_recursive( $response, $fields, $context );
-
-		return $response;
-	}
-
-	public function get_values_fields_recursive( &$output, $fields, Parser_Context $context ) {
-		foreach ( $fields as $field ) {
-			try {
-				$context->set_field( $field );
-
-				$this->get_value_from_field( $output, $context );
-
-				$context->save_to_request();
-
-			} catch ( Parse_Exception $exception ) {
-				switch ( $exception->getMessage() ) {
-
-					case self::IS_CONDITIONAL:
-						$this->get_values_fields_recursive(
-							$output,
-							$exception->get_inner(),
-							$context->set_inside_conditional( true )
-						);
-						break;
-
-					case self::NOT_FIELD_HAS_INNER:
-						$this->get_values_fields_recursive(
-							$output,
-							$exception->get_inner(),
-							$context
-						);
-						break;
-				}
-			}
-		}
-	}
-
-
 	/**
-	 * @param $output
-	 * @param Parser_Context $context
+	 * @param array $field
+	 *
+	 * @throws Parse_Exception
 	 */
-	public function get_value_from_field( &$output, Parser_Context $context ) {
-		try {
-			$parser = $context->get_parser();
-		} catch ( Repository_Exception $exception ) {
-			$output[ $context->get_name() ] = $context->get_value();
+	public function validate_field( array $field ) {
+		if ( empty( $field['blockName'] ) ) {
+			throw new Parse_Exception( self::EMPTY_BLOCK_ERROR );
+		}
 
+		if ( empty( $field['innerBlocks'] ) ) {
 			return;
 		}
 
-		try {
-			$output[ $context->get_name() ] = $parser->get_parsed_value( $context );
-		} catch ( Parse_Exception $exception ) {
-			$output = array_merge( $output, $exception->get_inner() );
-			return;
-
-		} catch ( Exclude_Field_Exception $exception ) {
-			return;
+		if ( strpos( $field['blockName'], 'conditional-block' ) ) {
+			throw new Parse_Exception( self::IS_CONDITIONAL, $field['innerBlocks'] );
 		}
-	}
-
-	public function save_to_request( $name, $type, $settings ) {
-		jet_fb_request_handler()->set_request_type(
-			array(
-				$name => $type,
-			)
-		);
-		jet_fb_request_handler()->set_request_attrs(
-			array(
-				$name => $settings,
-			)
-		);
+		if ( ! $this->isset_parser( $field['blockName'] ) ) {
+			throw new Parse_Exception( self::NOT_FIELD_HAS_INNER, $field['innerBlocks'] );
+		}
 	}
 
 	/**
@@ -140,14 +84,12 @@ class Parser_Manager {
 		return $this->rep_isset_item( $type );
 	}
 
-	/**
-	 * @param $slug
-	 *
-	 * @return mixed
-	 * @throws Repository_Exception
-	 */
 	public function get_parser( $slug ): Field_Data_Parser {
-		return $this->rep_clone_item( $slug );
+		try {
+			return $this->rep_clone_item( $slug );
+		} catch ( Repository_Exception $exception ) {
+			return $this->rep_clone_item_or_die( 'default' );
+		}
 	}
 
 }

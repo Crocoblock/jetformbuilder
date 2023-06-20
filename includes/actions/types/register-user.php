@@ -95,8 +95,7 @@ class Register_User extends Base {
 			if ( ! $allow_register ) {
 				if ( isset( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
 					jet_fb_action_handler()->response_data['user_id'] = (int) $user->ID;
-					jet_fb_action_handler()->request_data['user_id']  = (int) $user->ID;
-
+					jet_fb_context()->update_request( $user->ID, 'user_id' );
 					return false;
 				}
 
@@ -281,8 +280,8 @@ class Register_User extends Base {
 			}
 
 			if ( ! empty( $this->settings['add_user_id'] ) && $this->settings['add_user_id'] ) {
-				$handler->request_data['user_id']  = $user_id;
 				$handler->response_data['user_id'] = $user_id;
+				jet_fb_context()->update_request( $user_id, 'user_id' );
 			}
 		} else {
 			throw new Action_Exception( 'failed', $userarr );

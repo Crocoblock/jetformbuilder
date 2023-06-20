@@ -137,10 +137,16 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 	}
 
 	function jet_fb_parse_macro( $content ): string {
-		return jet_fb_handler()->parser->parse_macros(
-			$content,
-			jet_fb_action_handler()->request_data
-		);
+		return jet_fb_handler()->parser->parse_macros( $content );
+	}
+
+	/**
+	 * @since 3.1.0
+	 *
+	 * @return \Jet_Form_Builder\Request\Parser_Context
+	 */
+	function jet_fb_context(): \Jet_Form_Builder\Request\Parser_Context {
+		return jet_fb_request_handler()->get_context();
 	}
 } else {
 	add_action(

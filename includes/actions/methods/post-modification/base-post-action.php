@@ -51,7 +51,7 @@ abstract class Base_Post_Action extends Base_Modifier_Action {
 
 		if ( empty( $handler->response_data['inserted_post_id'] ) ) {
 			$handler->response_data['inserted_post_id'] = $this->inserted_id;
-			$handler->request_data['inserted_post_id']  = $this->inserted_id;
+			jet_fb_context()->update_request( $this->inserted_id, 'inserted_post_id' );
 		} else {
 			$handler->response_data['inserted_posts'][] = array(
 				'post_id'   => $this->inserted_id,
@@ -59,13 +59,11 @@ abstract class Base_Post_Action extends Base_Modifier_Action {
 			);
 		}
 
-		$inserted_key = 'inserted_' . $this->modifier->source_arr['post_type'];
-
-		$handler->add_request(
-			array(
-				$inserted_key => $this->inserted_id,
-			)
+		$inserted_key = jet_fb_context()->get_unique_name(
+			'inserted_' . $this->modifier->source_arr['post_type']
 		);
+
+		jet_fb_context()->update_request( $this->inserted_id, $inserted_key );
 	}
 
 	public function add_context_once() {

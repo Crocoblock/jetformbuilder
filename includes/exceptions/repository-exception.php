@@ -8,9 +8,6 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Repository_Exception extends Handler_Exception {
-
-	public function log() {
-	}
+class Repository_Exception extends Silence_Exception {
 
 }

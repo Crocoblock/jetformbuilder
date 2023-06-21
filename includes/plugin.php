@@ -265,6 +265,14 @@ class Plugin {
 		return null;
 	}
 
+	public function __isset( $name ) {
+		switch ( $name ) {
+			case 'allow_gateways':
+				return true;
+		}
+		return false;
+	}
+
 }
 
 Plugin::instance()->get_modules()->install( new Cli\Module() );

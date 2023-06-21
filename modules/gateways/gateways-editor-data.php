@@ -3,8 +3,6 @@
 
 namespace JFB_Modules\Gateways;
 
-use Jet_Form_Builder\Plugin;
-
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -113,15 +111,12 @@ trait Gateways_Editor_Data {
 
 	public function editor_data() {
 		$result = array(
-			'allowed' => true,
+			'allowed'    => true,
+			'labels'     => $this->labels(),
+			'list'       => $this->gateways_for_js(),
+			'messages'   => $this->default_messages(),
+			'additional' => $this->gateways_additional(),
 		);
-
-		if ( $result['allowed'] ) {
-			$result['labels']     = $this->labels();
-			$result['list']       = $this->gateways_for_js();
-			$result['messages']   = $this->default_messages();
-			$result['additional'] = $this->gateways_additional();
-		}
 
 		return apply_filters( 'jet-form-builder/gateways/editor-data', $result );
 	}

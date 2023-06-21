@@ -33,7 +33,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @package JFB_Modules\Gateways
  */
-final class Module implements
+class Module implements
 	Base_Module_Dir_It,
 	Base_Module_It,
 	Base_Module_Handle_It,
@@ -99,6 +99,7 @@ final class Module implements
 			'jet-form-builder/default-process-event/executors',
 			array( $this, 'add_executor_to_default_process' )
 		);
+		add_filter( 'jet-form-builder/editor/config', array( $this, 'on_localize_editor_config' ) );
 	}
 
 	public function remove_hooks() {
@@ -118,6 +119,7 @@ final class Module implements
 			'jet-form-builder/default-process-event/executors',
 			array( $this, 'add_executor_to_default_process' )
 		);
+		remove_filter( 'jet-form-builder/editor/config', array( $this, 'on_localize_editor_config' ) );
 	}
 
 	public function on_install() {
@@ -206,6 +208,12 @@ final class Module implements
 		$containers[1]->add_meta_box( new Payment_Info_For_Record() );
 
 		return $containers;
+	}
+
+	public function on_localize_editor_config( array $config ): array {
+		$config['gateways'] = $this->editor_data();
+
+		return $config;
 	}
 
 	/**

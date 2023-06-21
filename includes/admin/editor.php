@@ -396,7 +396,6 @@ class Editor {
 				array(
 					'presetConfig'            => $this->get_preset_config(),
 					'messagesDefault'         => $messages_meta->messages(),
-					'gateways'                => Gateway_Manager::instance()->editor_data(),
 					'helpForRepeaters'        => $this->get_help_for_repeaters(),
 					'global_settings'         => Tab_Handler_Manager::instance()->all(),
 					'global_settings_url'     => Pages_Manager::instance()->get_stable_url( 'jfb-settings' ),

@@ -11,12 +11,16 @@ if ( ! defined( 'WPINC' ) ) {
 use Jet_Form_Builder\Blocks;
 use JFB_Components\Module\Module_Controller_It;
 use JFB_Components\Module\Module_Controller_Trait;
+use Jet_Form_Builder\Gateways\Gateway_Manager;
 
 class Modules_Controller implements Module_Controller_It {
 
 	use Module_Controller_Trait;
 
 	public function rep_instances(): array {
+		// backward compatibility
+		require_once jet_form_builder()->plugin_dir( 'modules/gateways/legacy/gateway-manager.php' );
+
 		return array(
 			new Logger\Module(),
 			new Dev\Module(),
@@ -32,7 +36,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Form_Record\Module(),
 			new Advanced_Choices\Module(),
 			new Captcha\Module(),
-			new Gateways\Module(),
+			new Gateway_Manager(),
 			new Active_Campaign\Module(),
 		);
 	}

@@ -52,7 +52,6 @@ class Autoloader {
 		'Jet_Form_Builder\\Gateways\\Db_Models\\Payment_To_Record' => 'JFB_Modules\\Gateways\\Db_Models\\Payment_To_Record',
 		'Jet_Form_Builder\\Gateways\\Db_Models\\Constraints\\Payer_Shipping_Model_Constraint' => 'JFB_Modules\\Gateways\\Db_Models\\Constraints\\Payer_Shipping_Model_Constraint',
 		'Jet_Form_Builder\\Gateways\\Db_Models\\Constraints\\Payment_Model_Constraint' => 'JFB_Modules\\Gateways\\Db_Models\\Constraints\\Payment_Model_Constraint',
-		'Jet_Form_Builder\\Gateways\\Gateway_Manager'      => 'JFB_Modules\\Gateways\\Module',
 		'Jet_Form_Builder\\Gateways\\Pages\\Single_Payment_Page' => 'JFB_Modules\\Gateways\\Pages\\Single_Payment_Page',
 		'Jet_Form_Builder\\Gateways\\Rest_Api\\Gateway_Endpoint' => 'JFB_Modules\\Gateways\\Rest_Api\\Gateway_Endpoint',
 		'Jet_Form_Builder\\Gateways\\Rest_Api\\Receive_Payments' => 'JFB_Modules\\Gateways\\Rest_Api\\Receive_Payments',
@@ -76,6 +75,7 @@ class Autoloader {
 		'Jet_Form_Builder\\Gateways\\Table_Views\\Columns\\Payer_Column' => 'JFB_Modules\\Gateways\\Table_Views\\Columns\\Payer_Column',
 		'Jet_Form_Builder\\Gateways\\Table_Views\\Payments' => 'JFB_Modules\\Gateways\\Table_Views\\Payments',
 		'Jet_Form_Builder\\Gateways\\Query_Views\\Payment_View' => 'JFB_Modules\\Gateways\\Query_Views\\Payment_View',
+		'Jet_Form_Builder\\Gateways\\Query_Views\\Payment_With_Record_View' => 'JFB_Modules\\Gateways\\Query_Views\\Payment_With_Record_View',
 		// jet-engine compatibility
 		'Jet_Form_Builder\\Blocks\\Types\\Map_Field'       => 'JFB_Compatibility\\Jet_Engine\\Blocks\\Map_Field',
 		// repository component

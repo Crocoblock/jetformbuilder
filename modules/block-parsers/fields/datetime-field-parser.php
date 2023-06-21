@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Jet_Form_Builder\Request\Fields;
+namespace JFB_Modules\Block_Parsers\Fields;
 
-use Jet_Form_Builder\Request\Field_Data_Parser;
+use JFB_Modules\Block_Parsers\Field_Data_Parser;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

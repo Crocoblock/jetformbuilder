@@ -11,6 +11,7 @@ use Jet_Form_Builder\Classes\Resources\File_Collection;
 use Jet_Form_Builder\Classes\Resources\Uploaded_Collection;
 use Jet_Form_Builder\Classes\Resources\Uploaded_File;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Live_Form;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -63,6 +64,11 @@ class Request_Tools {
 		}
 
 		return $response;
+	}
+
+	public static function get_request(): array {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return Tools::sanitize_recursive( wp_unslash( $_POST ) );
 	}
 
 	public static function get_repeater_files( array $files ): array {
@@ -121,7 +127,7 @@ class Request_Tools {
 	 * @return false|Media_Block_Value
 	 */
 	public static function get_file( string $field_name ) {
-		$file = jet_fb_request_handler()->get_file( $field_name );
+		$file = jet_fb_context()->get_file( $field_name );
 
 		if ( false !== $file ) {
 			return $file;

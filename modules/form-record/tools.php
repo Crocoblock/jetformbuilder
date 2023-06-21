@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Form_Record;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use JFB_Modules\Form_Record\Query_Views\Record_Fields_View;
 use Jet_Form_Builder\Classes\Tools as GlobalTools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
@@ -16,25 +17,18 @@ if ( ! defined( 'WPINC' ) ) {
 class Tools {
 
 	public static function apply_record( array $record ): array {
-		$request = Record_Fields_View::get_request( $record['id'] ?? 0 );
-
-		self::parse_values( $request );
-
-		$values = wp_list_pluck( $request, 'field_value', 'field_name' );
+		$request = Record_Fields_View::get_request_list( $record['id'] ?? 0 );
+		$form_id = $record['form_id'] ?? 0;
 
 		// apply actions
-		jet_fb_action_handler()->set_form_id( $record['form_id'] ?? 0 );
+		jet_fb_action_handler()->set_form_id( $form_id );
+		$blocks = Block_Helper::get_blocks_by_post( $form_id );
 
-		jet_fb_action_handler()->add_request( $values );
-		jet_fb_request_handler()->set_request_type(
-			wp_list_pluck( $request, 'field_type', 'field_name' )
-		);
-		jet_fb_request_handler()->set_request_attrs(
-			wp_list_pluck( $request, 'field_attrs', 'field_name' )
-		);
+		jet_fb_context()->set_request( $request );
+		jet_fb_context()->apply( $blocks );
 		jet_fb_handler()->set_referrer( $record['referrer'] ?? '' );
 
-		return $values;
+		return $request;
 	}
 
 	public static function parse_values( array &$request ) {

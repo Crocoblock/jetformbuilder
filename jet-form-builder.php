@@ -142,11 +142,9 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 
 	/**
 	 * @since 3.1.0
-	 *
-	 * @return \Jet_Form_Builder\Request\Parser_Context
 	 */
-	function jet_fb_context(): \Jet_Form_Builder\Request\Parser_Context {
-		return jet_fb_request_handler()->get_context();
+	function jet_fb_context(): \JFB_Modules\Block_Parsers\Parser_Context {
+		return JFB_Modules\Block_Parsers\Module::instance()->get_context();
 	}
 } else {
 	add_action(

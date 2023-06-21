@@ -1,14 +1,10 @@
 <?php
 
 
-namespace Jet_Form_Builder\Request\Fields;
+namespace JFB_Modules\Block_Parsers\Fields;
 
-use Jet_Form_Builder\Plugin;
-use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;
-use Jet_Form_Builder\Request\Field_Data_Parser;
-use Jet_Form_Builder\Request\Parser_Context;
-use Jet_Form_Builder\Request\Parser_List_Context;
-use Jet_Form_Builder\Request\Parser_Manager;
+use JFB_Modules\Block_Parsers\Field_Data_Parser;
+use JFB_Modules\Block_Parsers\Parser_Context;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

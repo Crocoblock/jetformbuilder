@@ -221,9 +221,9 @@ class Render_State implements Arrayable {
 	}
 
 	public static function get_from_request(): array {
-		$request = jet_fb_request_handler()->get_request();
+		$states = jet_fb_context()->get_request( self::FIELD_NAME );
 
-		return $request[ self::FIELD_NAME ] ?? array();
+		return is_array( $states ) ? $states : array();
 	}
 
 	protected function load_render_states(): string {

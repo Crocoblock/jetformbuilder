@@ -1,20 +1,18 @@
 <?php
 
 
-namespace Jet_Form_Builder\Request;
+namespace JFB_Modules\Block_Parsers;
 
-use Jet_Form_Builder\Blocks\Types\Media_Field;
 use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
 use Jet_Form_Builder\Classes\Resources\File_Tools;
 use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
-use Jet_Form_Builder\Classes\Resources\Upload_Dir;
 use Jet_Form_Builder\Classes\Resources\Uploaded_Collection;
 use Jet_Form_Builder\Classes\Resources\Uploaded_File;
 use Jet_Form_Builder\Classes\Resources\Upload_Exception;
 use Jet_Form_Builder\Classes\Resources\Upload_Permission_Exception;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Request\Fields\Media_Field_Parser;
+use JFB_Modules\Block_Parsers\Fields\Media_Field_Parser;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

@@ -216,7 +216,7 @@ class Action_Handler {
 		/**
 		 * Process single action
 		 */
-		$action->do_action( jet_fb_request_handler()->get_context()->resolve_request(), $this );
+		$action->do_action( jet_fb_context()->resolve_request(), $this );
 
 		/**
 		 * We save the ID of the current action,

@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Jet_Form_Builder\Request\Fields;
+namespace JFB_Modules\Block_Parsers\Fields;
 
 use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
 use Jet_Form_Builder\Classes\Resources\Upload_Exception;
-use Jet_Form_Builder\Request\Field_Data_Parser;
-use Jet_Form_Builder\Request\File_Uploader;
+use JFB_Modules\Block_Parsers\Field_Data_Parser;
+use JFB_Modules\Block_Parsers\File_Uploader;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

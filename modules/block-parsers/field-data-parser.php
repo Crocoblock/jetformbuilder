@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Request;
+namespace JFB_Modules\Block_Parsers;
 
 use Jet_Form_Builder\Exceptions\Parse_Exception;
 use JFB_Components\Repository\Repository_Item_Instance_Trait;
@@ -112,7 +112,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	 *
 	 * @deprecated since 3.1.0
 	 * Use `check_response` instead
-	 * @see \Jet_Form_Builder\Request\Field_Data_Parser::check_response
+	 * @see \JFB_Modules\Block_Parsers\Field_Data_Parser::check_response
 	 */
 	protected function has_error(): bool {
 		return false;

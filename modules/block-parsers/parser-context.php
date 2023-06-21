@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Request;
+namespace JFB_Modules\Block_Parsers;
 
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
@@ -51,20 +51,20 @@ class Parser_Context {
 	public function set_values( $fields ) {
 		foreach ( $fields as $field ) {
 			try {
-				Parser_Manager::instance()->validate_field( $field );
+				Module::instance()->validate_field( $field );
 
 				$this->get_value_from_field( $field );
 
 			} catch ( Parse_Exception $exception ) {
 				switch ( $exception->getMessage() ) {
 
-					case Parser_Manager::IS_CONDITIONAL:
+					case Module::IS_CONDITIONAL:
 						$this->set_inside_conditional( true );
 
 						$this->set_values( $exception->get_inner() );
 						break;
 
-					case Parser_Manager::NOT_FIELD_HAS_INNER:
+					case Module::NOT_FIELD_HAS_INNER:
 						$this->set_values( $exception->get_inner() );
 						break;
 				}
@@ -409,8 +409,10 @@ class Parser_Context {
 	}
 
 	public function clear_all() {
-		$this->raw_request = array();
-		$this->raw_files   = array();
+		foreach ( $this->parsers as $name => $parser ) {
+			unset( $this->raw_request[ $name ] );
+			unset( $this->raw_files[ $name ] );
+		}
 	}
 
 	/**
@@ -549,7 +551,7 @@ class Parser_Context {
 	 */
 	protected function get_parser( array $block ): Field_Data_Parser {
 		$type   = Block_Helper::delete_namespace( $block['blockName'] );
-		$parser = Parser_Manager::instance()->get_parser( $type );
+		$parser = Module::instance()->get_parser( $type );
 		$name   = $this->name ?: $block['attrs']['name'] ?? '';
 
 		$parser->set_type( $type );

@@ -232,7 +232,7 @@ class Controller {
 				continue;
 			}
 
-			$type          = jet_fb_request_handler()->get_type( $field_name );
+			$type          = jet_fb_context()->get_field_type( $field_name );
 			$attrs_to_save = $this->get_attrs_by_field_type( $type, $current_attrs );
 
 			if ( ! is_scalar( $value ) ) {

@@ -90,6 +90,9 @@ class Autoloader {
 		// dev-mode module
 		'Jet_Form_Builder\\Dev_Mode\\Manager'              => 'JFB_Modules\\Dev\\Module',
 		'Jet_Form_Builder\Dev_Mode\Logger'                 => 'JFB_Modules\\Logger\\Module',
+		// request related
+		'Jet_Form_Builder\\Request\\Parser_Manager'        => 'JFB_Modules\\Block_Parsers\\Module',
+		'Jet_Form_Builder\\Request\\Field_Data_Parser'     => 'JFB_Modules\\Block_Parsers\\Field_Data_Parser',
 	);
 
 	/**

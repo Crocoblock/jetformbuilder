@@ -65,8 +65,9 @@ class Module implements Base_Module_It {
 		$field = Live_Form::force_render_field(
 			'text-field',
 			array(
-				'field_type' => 'email',
-				'name'       => self::FIELD,
+				'field_type'   => 'email',
+				'name'         => self::FIELD,
+				'autocomplete' => 'nope',
 			)
 		);
 

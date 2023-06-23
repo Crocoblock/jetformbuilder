@@ -74,7 +74,7 @@ class Form_Handler {
 			return;
 		}
 
-		add_filter( 'jet-form-builder/form-handler/form-data', array( $this, 'merge_request' ), 0 );
+		add_action( 'jet-form-builder/request', array( $this, 'merge_request' ), 1 );
 
 		if ( wp_doing_ajax() ) {
 			add_action(
@@ -107,29 +107,18 @@ class Form_Handler {
 		);
 	}
 
-	/**
-	 * Moved to a separate function to define the hidden field when saving the Form Record
-	 *
-	 * These fields will not be saved to a separate `*_jet_fb_records_fields` table
-	 *
-	 * @return array
-	 */
-	public function hidden_request_fields() {
-		return apply_filters(
-			'jet-form-builder/form-handler/hidden-request-fields',
-			array(
-				'__form_id' => $this->get_form_id(),
-				'__refer'   => $this->get_referrer(),
-				'__is_ajax' => $this->is_ajax(),
-			)
+	public function merge_request() {
+		$fields = array(
+			'__form_id' => $this->get_form_id(),
+			'__refer'   => $this->get_referrer(),
+			'__is_ajax' => $this->is_ajax(),
 		);
-	}
 
-	public function merge_request( $request ): array {
-		return array_merge(
-			$this->hidden_request_fields(),
-			$request
-		);
+		foreach ( $fields as $name => $value ) {
+			jet_fb_context()->set_field_type( 'text-field', $name );
+			jet_fb_context()->update_request( $value, $name );
+			jet_fb_context()->exclude( $name );
+		}
 	}
 
 

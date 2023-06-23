@@ -3,8 +3,8 @@
 
 namespace JFB_Modules\Block_Parsers\Fields;
 
+use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
-use JFB_Modules\Block_Parsers\Parser_Context;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -17,17 +17,29 @@ class Repeater_Field_Parser extends Field_Data_Parser {
 		return 'repeater-field';
 	}
 
+	/**
+	 * @return int|void
+	 * @throws Sanitize_Value_Exception
+	 */
 	public function get_response() {
 		$indexes = $this->get_indexes();
 
+		if ( ! $indexes ) {
+			return '';
+		}
+
+		if ( ! $this->get_inner_template() ) {
+			throw new Sanitize_Value_Exception();
+		}
+
 		foreach ( $indexes as $index ) {
-			$context = new Parser_Context();
-			$this->add_inner( $context, $index );
+			$context = clone $this->get_inner_template();
+			$context->set_index_in_parent( $this->add_inner( $context ) );
 
 			$context->set_request( $this->value[ $index ] ?? array() )
 					->set_files( $this->file[ $index ] ?? array() );
 
-			$context->apply( $this->get_inner_blocks() );
+			$context->apply();
 		}
 
 		$this->set_file( false );

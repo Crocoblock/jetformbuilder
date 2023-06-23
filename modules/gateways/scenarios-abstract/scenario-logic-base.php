@@ -91,20 +91,20 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 		);
 	}
 
-	/**
-	 * @return array
-	 */
-	public function init_request(): array {
+	public function init_request() {
 		if ( jet_fb_context()->has_request() ) {
-			return jet_fb_context()->resolve_request();
+			return;
 		}
 		$record = $this->get_scenario_row( 'record' );
-		$values = Tools::apply_record( $record );
+
+		// apply actions
+		jet_fb_action_handler()->set_form_id( $record['form_id'] );
+		jet_fb_handler()->set_referrer( $record['referrer'] );
+
+		Tools::apply_context( $record );
 
 		// For backward compatibility with JetAppointment & JetBooking
-		jet_fb_gateway_current()->set_form_data( $values );
-
-		return $values;
+		jet_fb_gateway_current()->set_form_data( jet_fb_context()->resolve_request() );
 	}
 
 	public function init_actions() {

@@ -129,14 +129,31 @@ class Array_Tools {
 	/**
 	 * @param $source
 	 *
-	 * @return mixed|false
+	 * @return int|string|null
 	 */
 	public static function last( $source ) {
-		if ( ! is_array( $source ) || empty( $source ) ) {
-			return false;
+		if ( function_exists( 'array_key_last' ) ) {
+			// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions
+			return array_key_last( $source );
 		}
 
-		return $source[ count( $source ) - 1 ];
+		if ( ! is_array( $source ) || empty( $source ) ) {
+			return null;
+		}
+
+		end( $source );
+
+		return key( $source );
+	}
+
+	function array_key_last( array $array ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.arrayFound
+		if ( empty( $array ) ) {
+			return null;
+		}
+
+		end( $array );
+
+		return key( $array );
 	}
 
 	public static function path( $items ): array {

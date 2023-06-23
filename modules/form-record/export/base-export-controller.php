@@ -7,6 +7,7 @@ use JFB_Components\Export\Interfaces\Base_Export_Controller_It;
 use JFB_Components\Export\Traits\Base_Export_Controller_Trait;
 use JFB_Components\Wp_Nonce\Wp_Nonce_It;
 use JFB_Components\Wp_Nonce\Wp_Nonce_Trait;
+use JFB_Modules\Block_Parsers\Field_Data_Parser;
 use JFB_Modules\Form_Record\Module;
 
 // If this file is called directly, abort.
@@ -48,9 +49,17 @@ abstract class Base_Export_Controller implements Base_Export_Controller_It {
 			unset( $extra_values[ $property ] );
 		}
 
-		return array_merge(
-			$fields_values,
-			$extra_values
+		// make ID column first
+		if ( isset( $extra_values['extra|id'] ) ) {
+			$fields_values = array(
+				'extra|id' => $extra_values['extra|id'],
+			) + $fields_values;
+			unset( $extra_values['extra|id'] );
+		}
+
+		return apply_filters(
+			'jet-form-builder/export/form-record/row',
+			array_merge( $fields_values, $extra_values )
 		);
 	}
 
@@ -59,6 +68,26 @@ abstract class Base_Export_Controller implements Base_Export_Controller_It {
 	 */
 	public function set_extra_columns( array $extra_columns ) {
 		$this->extra_columns = $extra_columns;
+	}
+
+	protected function get_field_columns(): array {
+		$columns = array();
+		/**
+		 * @var string $name
+		 * @var Field_Data_Parser $parser
+		 */
+		foreach ( jet_fb_context()->iterate_parsers_list() as $name => $parser ) {
+			if ( $parser->get_inner_template() ) {
+				continue;
+			}
+			$columns[ $name ] = $parser->get_scoped_label();
+
+			if ( $parser->get_context()->get_parent_name() ) {
+				$parser->get_context()->set_hide_index( true );
+			}
+		}
+
+		return $columns;
 	}
 
 }

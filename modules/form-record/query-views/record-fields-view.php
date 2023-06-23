@@ -83,17 +83,13 @@ class Record_Fields_View extends View_Base {
 	 * @since 2.0.0 Introduced
 	 *
 	 * @param $record_id
-	 * @param string $value_key
-	 * @param string $label_key
 	 *
 	 * @return array
 	 */
-	public static function get_request_list( $record_id, $value_key = 'field_name', $label_key = 'field_value' ): array {
+	public static function get_request_list( $record_id ): array {
 		$request = static::get_request( $record_id );
 
-		RecordTools::parse_values( $request );
-
-		return Tools::prepare_list_for_js( $request, $value_key, $label_key, true );
+		return iterator_to_array( RecordTools::iterate_request( $request ) );
 	}
 
 	public function query(): Query_Builder {

@@ -56,6 +56,7 @@ final class Module implements
 	}
 
 	public function on_uninstall() {
+		$this->rep_clear();
 		unset( $this->context );
 	}
 
@@ -100,34 +101,14 @@ final class Module implements
 		$this->get_context()->apply( jet_fb_request_handler()->_fields );
 
 		$this->get_context()->update_request(
-			apply_filters(
+			apply_filters_deprecated(
 				'jet-form-builder/form-handler/form-data',
-				$this->get_context()->resolve_request()
+				array( $this->get_context()->resolve_request( false ) ),
+				'3.1.0',
+				'jet-form-builder/request'
 			),
 			array()
 		);
-	}
-
-	/**
-	 * @param array $field
-	 *
-	 * @throws Parse_Exception
-	 */
-	public function validate_field( array $field ) {
-		if ( empty( $field['blockName'] ) ) {
-			throw new Parse_Exception( self::EMPTY_BLOCK_ERROR );
-		}
-
-		if ( empty( $field['innerBlocks'] ) ) {
-			return;
-		}
-
-		if ( strpos( $field['blockName'], 'conditional-block' ) ) {
-			throw new Parse_Exception( self::IS_CONDITIONAL, $field['innerBlocks'] );
-		}
-		if ( ! $this->isset_parser( $field['blockName'] ) ) {
-			throw new Parse_Exception( self::NOT_FIELD_HAS_INNER, $field['innerBlocks'] );
-		}
 	}
 
 	/**

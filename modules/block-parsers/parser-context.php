@@ -26,6 +26,13 @@ class Parser_Context {
 
 	protected $name = '';
 
+	/** @var Field_Data_Parser */
+	protected $parent_field;
+
+	/** @var string|numeric */
+	protected $index_in_parent = '';
+	private $hide_index        = false;
+
 	protected $raw_request = array();
 	protected $raw_files   = array();
 
@@ -41,19 +48,90 @@ class Parser_Context {
 	/**
 	 * @var Field_Data_Parser[]
 	 */
-	private $parsers = array();
+	protected $parsers = array();
 
-	public function apply( $fields ) {
-		$this->set_values( $fields );
-		$this->clear_all();
+	public function apply( $fields = null ) {
+		if ( is_array( $fields ) ) {
+			$this->set_values( $fields );
+			$this->clear_all();
+
+			return;
+		}
+
+		/** @var Field_Data_Parser $parser */
+		foreach ( $this->iterate_parsers() as $parser ) {
+			$this->parser_update_request( $parser );
+		}
 	}
 
 	public function set_values( $fields ) {
+		foreach ( $this->generate_blocks( $fields ) as $block ) {
+			$name = $block['attrs']['name'] ?? 'field_name';
+
+			if ( ! array_key_exists( $name, $this->get_files() ) &&
+				! array_key_exists( $name, $this->get_request() )
+			) {
+				continue;
+			}
+
+			$parser = $this->set_parser( $block );
+
+			if ( ! $parser ) {
+				continue;
+			}
+
+			$this->parser_update_request( $parser );
+		}
+	}
+
+	protected function parser_update_request( Field_Data_Parser $parser ) {
+		try {
+			$parser->update_request();
+
+		} catch ( Exclude_Field_Exception $exception ) {
+			unset( $this->parsers[ $parser->get_name() ] );
+		} catch ( Parse_Exception $exception ) {
+			unset( $this->parsers[ $parser->get_name() ] );
+
+			foreach ( $exception->get_inner() as $key => $value ) {
+				$this->update_request( $value, $key );
+			}
+		}
+	}
+
+	public function set_parsers( $fields ) {
+		foreach ( $this->generate_blocks( $fields ) as $block ) {
+			$this->set_parser( $block );
+		}
+	}
+
+	/**
+	 * Should used in cases, when no need to check value. Just set
+	 */
+	public function apply_request() {
+		/** @var Field_Data_Parser $parser */
+		foreach ( $this->iterate_parsers() as $parser ) {
+			try {
+				$parser->set_request();
+
+			} catch ( Exclude_Field_Exception $exception ) {
+				unset( $this->parsers[ $parser->get_name() ] );
+			} catch ( Parse_Exception $exception ) {
+				unset( $this->parsers[ $parser->get_name() ] );
+
+				foreach ( $exception->get_inner() as $key => $value ) {
+					$this->update_request( $value, $key );
+				}
+			}
+		}
+	}
+
+	protected function generate_blocks( $fields ): \Generator {
 		foreach ( $fields as $field ) {
 			try {
-				Module::instance()->validate_field( $field );
+				$this->validate_field( $field );
 
-				$this->get_value_from_field( $field );
+				yield $field;
 
 			} catch ( Parse_Exception $exception ) {
 				switch ( $exception->getMessage() ) {
@@ -61,48 +139,60 @@ class Parser_Context {
 					case Module::IS_CONDITIONAL:
 						$this->set_inside_conditional( true );
 
-						$this->set_values( $exception->get_inner() );
+						yield from $this->generate_blocks( $exception->get_inner() );
 						break;
 
 					case Module::NOT_FIELD_HAS_INNER:
-						$this->set_values( $exception->get_inner() );
+						yield from $this->generate_blocks( $exception->get_inner() );
 						break;
 				}
 			}
 		}
 	}
 
-	public function get_value_from_field( array $field ) {
-		$name = $field['attrs']['name'] ?? 'field_name';
+	/**
+	 * @param array $field
+	 *
+	 * @throws Parse_Exception
+	 */
+	public function validate_field( array $field ) {
+		if ( empty( $field['blockName'] ) ) {
+			throw new Parse_Exception( Module::EMPTY_BLOCK_ERROR );
+		}
 
-		if ( ! array_key_exists( $name, $this->get_files() ) &&
-			! array_key_exists( $name, $this->get_request() )
-		) {
+		if ( empty( $field['innerBlocks'] ) ) {
 			return;
 		}
 
+		if ( strpos( $field['blockName'], 'conditional-block' ) ) {
+			throw new Parse_Exception( Module::IS_CONDITIONAL, $field['innerBlocks'] );
+		}
+		if ( ! Module::instance()->isset_parser( $field['blockName'] ) ) {
+			throw new Parse_Exception( Module::NOT_FIELD_HAS_INNER, $field['innerBlocks'] );
+		}
+	}
+
+	/**
+	 * @param array $field
+	 *
+	 * @return false|Field_Data_Parser
+	 */
+	protected function set_parser( array $field ) {
+		if ( ! isset( $field['attrs']['name'] ) ) {
+			return false;
+		}
 		// reset
-		$this->name        = $name;
+		$this->name        = $field['attrs']['name'];
 		$this->guest_allow = false;
 
 		$parser = $this->get_parser( $field );
 
 		$this->parsers[ $this->name ] = $parser;
 
-		try {
-			$parser->set_inner_blocks( $field['innerBlocks'] ?? array() );
-			$parser->update_request( $this );
-			$parser->set_inner_blocks( array() );
+		$parser->set_inner_contexts( $field['innerBlocks'] ?? array() );
+		$parser->set_context( $this );
 
-		} catch ( Exclude_Field_Exception $exception ) {
-			unset( $this->parsers[ $this->name ] );
-		} catch ( Parse_Exception $exception ) {
-			unset( $this->parsers[ $this->name ] );
-
-			foreach ( $exception->get_inner() as $key => $value ) {
-				$this->update_request( $value, $key );
-			}
-		}
+		return $parser;
 	}
 
 	/**
@@ -393,18 +483,97 @@ class Parser_Context {
 	}
 
 	public function iterate_fields_types(): \Generator {
-		foreach ( $this->parsers as $name => $parser ) {
-			if ( $parser instanceof Field_Data_Parser ) {
-				yield $name => $parser->get_type();
-			}
+		/**
+		 * @var string $name
+		 * @var Field_Data_Parser $parser
+		 */
+		foreach ( $this->iterate_parsers() as $name => $parser ) {
+			yield $name => $parser->get_type();
 		}
 	}
 
 	public function iterate_fields_settings(): \Generator {
+		/**
+		 * @var string $name
+		 * @var Field_Data_Parser $parser
+		 */
+		foreach ( $this->iterate_parsers() as $name => $parser ) {
+			yield $name => $parser->get_settings();
+		}
+	}
+
+	/**
+	 * @return \Generator<Field_Data_Parser>
+	 */
+	public function iterate_parsers(): \Generator {
 		foreach ( $this->parsers as $name => $parser ) {
 			if ( $parser instanceof Field_Data_Parser ) {
-				yield $name => $parser->get_settings();
+				yield $name => $parser;
 			}
+		}
+	}
+
+	public function iterate_settings_list(): \Generator {
+		/**
+		 * @var string $name
+		 * @var Field_Data_Parser $parser
+		 */
+		foreach ( $this->iterate_parsers_list() as $name => $parser ) {
+			yield $name => $parser->get_settings();
+		}
+	}
+
+	public function iterate_types_list(): \Generator {
+		/**
+		 * @var string $name
+		 * @var Field_Data_Parser $parser
+		 */
+		foreach ( $this->iterate_parsers_list() as $name => $parser ) {
+			yield $name => $parser->get_type();
+		}
+	}
+
+	public function iterate_values_table(): \Generator {
+		do {
+			yield $this->iterate_values_row();
+
+			/** @var Field_Data_Parser $parser */
+			foreach ( $this->iterate_parsers_list( false ) as $parser ) {
+				$parser->next_inner();
+			}
+		} while ( ! $this->is_inner_over_parsers() );
+	}
+
+	public function iterate_values_row(): \Generator {
+		/**
+		 * @var string $name
+		 * @var Field_Data_Parser $parser
+		 */
+		foreach ( $this->iterate_parsers() as $parser ) {
+			yield from $parser->iterate_row_value();
+		}
+	}
+
+	public function is_inner_over_parsers(): bool {
+		/** @var Field_Data_Parser $parser */
+		foreach ( $this->iterate_parsers_list( false ) as $parser ) {
+			if ( ! $parser->is_inner_over() ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param bool $break_on_first
+	 *
+	 * @return \Generator<Field_Data_Parser>
+	 */
+	public function iterate_parsers_list( bool $break_on_first = true ): \Generator {
+		/** @var Field_Data_Parser $parser */
+		foreach ( $this->iterate_parsers() as $parser ) {
+			yield from $parser->iterate_self( $break_on_first );
 		}
 	}
 
@@ -432,6 +601,7 @@ class Parser_Context {
 		return $parser->has_field( $path );
 	}
 
+
 	public function remove_field( $name ) {
 		$real_path = Array_Tools::path( $name );
 
@@ -454,19 +624,20 @@ class Parser_Context {
 		$parser->remove_field( $path );
 	}
 
-
-	public function resolve_request(): array {
-		return iterator_to_array( $this->generate_request() );
+	public function resolve_request( bool $with_inner = true ): array {
+		return iterator_to_array( $this->generate_request( $with_inner ) );
 	}
 
-	public function generate_request(): \Generator {
+	public function generate_request( bool $with_inner = true ): \Generator {
 		foreach ( $this->parsers as $name => $parser ) {
 			if ( ! ( $parser instanceof Field_Data_Parser ) ) {
 				yield $name => $parser;
 
 				continue;
 			}
+			$parser->set_with_inner( $with_inner );
 			yield from $parser->iterate_value();
+			$parser->set_with_inner( true );
 		}
 	}
 
@@ -475,10 +646,8 @@ class Parser_Context {
 	}
 
 	public function generate_files(): \Generator {
-		foreach ( $this->parsers as $name => $parser ) {
-			if ( ! ( $parser instanceof Field_Data_Parser ) ) {
-				continue;
-			}
+		/** @var Field_Data_Parser $parser */
+		foreach ( $this->iterate_parsers() as $parser ) {
 			yield from $parser->iterate_file();
 		}
 	}
@@ -486,7 +655,7 @@ class Parser_Context {
 	/**
 	 * @param string|array $name
 	 */
-	public function get_self( $name ) {
+	public function get_self( $name = '' ) {
 		if ( empty( $name ) ) {
 			return $this;
 		}
@@ -578,6 +747,51 @@ class Parser_Context {
 		return $computed_field;
 	}
 
+	public function set_parent( Field_Data_Parser $data_parser ) {
+		$this->parent_field = $data_parser;
+	}
+
+	/**
+	 * @param float|int|string $index_in_parent
+	 */
+	public function set_index_in_parent( $index_in_parent ) {
+		$this->index_in_parent = $index_in_parent;
+	}
+
+	/**
+	 * @param bool $hide_index
+	 */
+	public function set_hide_index( bool $hide_index ) {
+		$this->hide_index = $hide_index;
+	}
+
+	public function get_parent_name(): string {
+		if ( ! $this->parent_field ) {
+			return '';
+		}
+
+		if ( $this->hide_index ) {
+			return $this->parent_field->get_scoped_name();
+		}
+
+		return trim(
+			$this->parent_field->get_scoped_name() . '.' . $this->index_in_parent,
+			'.'
+		);
+	}
+
+	public function get_parent_label(): string {
+		return $this->parent_field ? $this->parent_field->get_scoped_label() : '';
+	}
+
+	public function __clone() {
+		/** @var Field_Data_Parser $parser */
+		foreach ( $this->iterate_parsers() as $name => $parser ) {
+			$this->parsers[ $name ] = clone $parser;
+			$this->parsers[ $name ]->set_context( $this );
+		}
+	}
+
 	/**
 	 * @param $name
 	 *
@@ -591,6 +805,14 @@ class Parser_Context {
 		}
 
 		return null;
+	}
+
+	public function __debugInfo(): array {
+		$current = clone $this;
+
+		unset( $current->parent_field );
+
+		return get_object_vars( $current );
 	}
 
 }

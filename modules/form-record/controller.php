@@ -210,8 +210,7 @@ class Controller {
 	}
 
 	private function generate_request(): \Generator {
-		$core_fields = jet_form_builder()->form_handler->hidden_request_fields();
-		$saved       = array();
+		$saved = array();
 
 		if ( ! $this->is_new ) {
 			$saved = Record_Fields_View::get_request_list( $this->record_id );
@@ -219,7 +218,6 @@ class Controller {
 
 		foreach ( jet_fb_context()->generate_request() as $field_name => $value ) {
 			if (
-				isset( $core_fields[ $field_name ] ) ||
 				( empty( $this->settings['save_empty_fields'] ) && empty( $value ) ) ||
 				array_key_exists( $field_name, $saved )
 			) {

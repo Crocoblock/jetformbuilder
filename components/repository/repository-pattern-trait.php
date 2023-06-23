@@ -312,6 +312,8 @@ trait Repository_Pattern_Trait {
 	}
 
 	/**
+	 * @since 3.1.0
+	 *
 	 * @param string|Repository_Item_Instance_Trait|Repository_Item_Dynamic_Id|Repository_Static_Item_It $item_trait
 	 */
 	public function rep_remove( $item_trait ) {
@@ -324,6 +326,10 @@ trait Repository_Pattern_Trait {
 		}
 
 		unset( $this->__repository[ $item_trait ] );
+	}
+
+	public function rep_clear() {
+		$this->__repository = array();
 	}
 
 }

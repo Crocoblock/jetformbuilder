@@ -4,8 +4,12 @@
 namespace JFB_Modules\Rest_Api\Endpoints;
 
 use Jet_Form_Builder\Blocks\Block_Helper;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Exceptions\Silence_Exception;
 use Jet_Form_Builder\Form_Manager;
+use Jet_Form_Builder\Request\Exceptions\Plain_Value_Exception;
 use JFB_Components\Rest_Api\Rest_Api_Endpoint_Base;
+use JFB_Modules\Block_Parsers\Field_Data_Parser;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -44,18 +48,22 @@ class Get_Form_Fields extends Rest_Api_Endpoint_Base {
 		) {
 			return new \WP_REST_Response(
 				array(
-					'message' => 'Not allowed',
+					'message' => __( 'Not allowed', 'jet-form-builder' ),
 				),
 				403
 			);
 		}
 
-		$blocks    = Block_Helper::get_blocks_by_post( $form );
-		$generator = Block_Helper::generate_top_fields( $blocks );
-		$fields    = array();
+		jet_fb_context()->set_parsers(
+			Block_Helper::get_blocks_by_post( $form )
+		);
 
-		foreach ( $generator as $block ) {
-			$fields[] = $this->get_field( $block );
+		foreach ( jet_fb_context()->iterate_parsers() as $name => $parser ) {
+			$fields[] = array(
+				'value' => $name,
+				'label' => $parser->get_label(),
+				'type'  => $parser->get_type(),
+			);
 		}
 
 		if ( empty( $fields ) ) {
@@ -71,17 +79,6 @@ class Get_Form_Fields extends Rest_Api_Endpoint_Base {
 			array(
 				'fields' => $fields,
 			)
-		);
-	}
-
-	protected function get_field( array $block ): array {
-		$name  = $block['attrs']['name'] ?? '';
-		$label = $block['attrs']['label'] ?? '';
-
-		return array(
-			'value' => $name,
-			'label' => $label ?: $name,
-			'type'  => Block_Helper::delete_namespace( $block ),
 		);
 	}
 }

@@ -5,8 +5,11 @@ namespace JFB_Modules\Form_Record\Export;
 
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use JFB_Modules\Block_Parsers\Field_Data_Parser;
 use JFB_Modules\Form_Record\Query_Views\Record_Fields_View;
 use JFB_Modules\Form_Record\Query_Views\Record_View;
+use JFB_Modules\Form_Record\Tools as RecordTools;
+use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -21,7 +24,13 @@ class Multiple_Controller extends Base_Export_Controller {
 	 * @throws \Exception
 	 */
 	public function do_export() {
-		$this->form_id        = $this->get_form_id();
+		$this->form_id = $this->get_form_id();
+
+		// set fields without request
+		jet_fb_context()->set_parsers(
+			Block_Helper::get_blocks_by_post( $this->form_id )
+		);
+
 		$this->fields_columns = $this->get_field_columns();
 		$this->modify_extra_columns();
 
@@ -51,78 +60,74 @@ class Multiple_Controller extends Base_Export_Controller {
 
 		$fields_view     = $this->get_fields_view();
 		$fields_headings = array_keys( $this->fields_columns );
-		$fields_empty    = array();
-
-		foreach ( $fields_headings as $name ) {
-			$fields_empty[ $name ] = '';
-		}
+		$fields_empty    = array_fill_keys( $fields_headings, '' );
+		$names           = $this->get_selected_field_names();
 
 		foreach ( $records as $record ) {
 			$fields_view->set_conditions( array() );
 			$fields_view->set_filters(
 				array(
 					'record_id' => $record['id'],
-					'names'     => $fields_headings,
+					'names'     => $names,
 				)
 			);
 
 			try {
-				$fields_values = $this->get_fields_values( $fields_view, $fields_headings );
+				$request = $this->get_fields_values( $fields_view );
 			} catch ( Query_Builder_Exception $exception ) {
-				$fields_values = $fields_empty;
+				$this->get_exporter()->add_row( $this->prepare_row( $fields_empty, $record ) );
+
+				continue;
 			}
 
-			$this->get_exporter()->add_row( $this->prepare_row( $fields_values, $record ) );
+			jet_fb_context()->set_request( $request );
+			jet_fb_context()->apply_request();
+
+			foreach ( jet_fb_context()->iterate_values_table() as $row ) {
+				$this->get_exporter()->add_row(
+					$this->prepare_row(
+						array_merge( $fields_empty, iterator_to_array( $row ) ),
+						$record
+					)
+				);
+			}
 		}
+	}
+
+	protected function get_selected_field_names(): array {
+		$names = array();
+
+		foreach ( jet_fb_context()->iterate_parsers() as $parser ) {
+			$names[] = $parser->get_name();
+		}
+
+		return $names;
 	}
 
 	/**
 	 * @param Record_Fields_View $view
-	 * @param array $fields_headings
 	 *
 	 * @return array
 	 * @throws Query_Builder_Exception
 	 */
-	protected function get_fields_values( Record_Fields_View $view, array $fields_headings ): array {
-		$fields_values = array();
-		$fields        = $view->query()->generate_all();
-
-		foreach ( $fields as $field ) {
-			foreach ( $fields_headings as $field_name ) {
-				if ( ! isset( $fields_values[ $field_name ] ) ) {
-					$fields_values[ $field_name ] = '';
-				}
-
-				if ( ( $field->field_name ?? '' ) !== $field_name ) {
-					continue;
-				}
-
-				$fields_values[ $field_name ] = $field->field_value;
-			}
-		}
-
-		return $fields_values;
+	protected function get_fields_values( Record_Fields_View $view ): array {
+		return iterator_to_array(
+			RecordTools::iterate_request( $view->query()->generate_all( ARRAY_A ) )
+		);
 	}
 
 	protected function get_field_columns(): array {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$fields  = array_map( 'sanitize_key', (array) ( $_GET['fields'] ?? array() ) );
-		$columns = array();
+		$fields = array_map( 'sanitize_key', (array) ( $_GET['fields'] ?? array() ) );
 
-		$blocks = Block_Helper::get_blocks_by_post( $this->form_id );
-
-		foreach ( $fields as $field_name ) {
-			$block = Block_Helper::find_block_by_name( $field_name, $blocks );
-
-			if ( empty( $block['attrs']['label'] ) ) {
-				$columns[ $field_name ] = $field_name;
+		foreach ( jet_fb_context()->iterate_parsers() as $name => $parser ) {
+			if ( in_array( $name, $fields, true ) ) {
 				continue;
 			}
-
-			$columns[ $field_name ] = $block['attrs']['label'];
+			$parser->remove_field();
 		}
 
-		return $columns;
+		return parent::get_field_columns();
 	}
 
 	protected function modify_extra_columns() {
@@ -173,6 +178,7 @@ class Multiple_Controller extends Base_Export_Controller {
 			array(
 				'field_value',
 				'field_name',
+				'field_attrs',
 			)
 		);
 

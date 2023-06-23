@@ -3,6 +3,8 @@
 
 namespace JFB_Modules\Block_Parsers;
 
+use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Parse_Exception;
 use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Resources\File;
@@ -45,10 +47,12 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	protected $context;
 
 	/** @var Parser_Context[] */
-	protected $inner_contexts;
+	public $inner_contexts;
 
-	/** @var array */
-	protected $inner_blocks;
+	/** @var Parser_Context */
+	protected $inner_template;
+
+	protected $with_inner = true;
 
 	abstract public function type();
 
@@ -64,25 +68,31 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	}
 
 	/**
-	 * @param Parser_Context $context
-	 *
 	 * @throws Exclude_Field_Exception|Parse_Exception
 	 */
-	final public function update_request( Parser_Context $context ) {
-		$this->set_context( $context );
-
+	final public function update_request() {
 		$this->is_field_visible();
-		$this->set_value( $context->get_request( $this->name ) );
-		$this->set_file( $context->get_files( $this->name ) );
+		$this->set_request();
 
-		$this->update_value();
+		try {
+			$this->check_response();
+		} catch ( Sanitize_Value_Exception $exception ) {
+			// silence catch
+		}
 	}
 
-	final public function update_value() {
+	/**
+	 * @throws Exclude_Field_Exception|Parse_Exception
+	 */
+	final public function set_request() {
+		// reset
+		$this->inner_contexts = array();
+
+		$this->set_value( $this->get_context()->get_request( $this->name ) );
+		$this->set_file( $this->get_context()->get_files( $this->name ) );
+
 		try {
 			$this->value = $this->get_response();
-
-			$this->check_response();
 		} catch ( Sanitize_Value_Exception $exception ) {
 			// silence catch
 		}
@@ -135,7 +145,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		}
 	}
 
-	protected function set_context( Parser_Context $context ): Field_Data_Parser {
+	public function set_context( Parser_Context $context ): Field_Data_Parser {
 		$this->context = $context;
 
 		return $this;
@@ -219,10 +229,10 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	}
 
 	/**
-	 * @since 3.1.0
-	 *
 	 * @param array $settings
 	 * @param array $inner_names
+	 *
+	 * @since 3.1.0
 	 */
 	public function set_settings( array $settings, array $inner_names = array() ) {
 		if ( empty( $inner_names ) ) {
@@ -243,11 +253,11 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	}
 
 	/**
-	 * @since 3.1.0
-	 *
 	 * @param string $attr
 	 * @param $value
 	 * @param array $inner_names
+	 *
+	 * @since 3.1.0
 	 */
 	public function set_setting( string $attr, $value, array $inner_names = array() ) {
 		if ( empty( $inner_names ) ) {
@@ -302,6 +312,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 			if ( empty( $this->inner_contexts ) ) {
 				return $this->file;
 			}
+
 			return iterator_to_array( $this->iterate_inner_files() );
 		}
 
@@ -314,6 +325,28 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		}
 
 		return $this->inner_contexts[ $index ]->get_file( $inner_names );
+	}
+
+	public function iterate_self( bool $break_on_first = true ): \Generator {
+		yield $this->get_scoped_name() => $this;
+
+		if ( empty( $this->inner_contexts ) && empty( $this->get_inner_template() ) ) {
+			return;
+		}
+
+		if ( empty( $this->inner_contexts ) ) {
+			yield from $this->get_inner_template()->iterate_parsers_list( $break_on_first );
+
+			return;
+		}
+
+		foreach ( $this->inner_contexts as $context ) {
+			yield from $context->iterate_parsers_list( $break_on_first );
+
+			if ( $break_on_first ) {
+				break;
+			}
+		}
 	}
 
 	/**
@@ -348,11 +381,46 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		yield $this->name => $this->get_value();
 	}
 
+	public function iterate_row_value(): \Generator {
+		if ( ! $this->get_inner_template() ) {
+			yield $this->get_scoped_name() => $this->get_value();
+
+			return;
+		}
+
+		if ( empty( $this->inner_contexts ) ) {
+			return;
+		}
+
+		$inner = current( $this->inner_contexts );
+
+		if ( ! $inner ) {
+			$inner = end( $this->inner_contexts );
+
+			// current() should always return false, if it has reached end once
+			next( $this->inner_contexts );
+		}
+
+		yield from $inner->iterate_values_row();
+	}
+
+	public function is_inner_over(): bool {
+		return empty( $this->inner_contexts ) || key( $this->inner_contexts ) === null;
+	}
+
+	public function next_inner() {
+		if ( empty( $this->inner_contexts ) ) {
+			return;
+		}
+		next( $this->inner_contexts );
+	}
+
 	public function get_value( array $inner_names = array() ) {
 		if ( empty( $inner_names ) ) {
-			if ( empty( $this->inner_contexts ) ) {
+			if ( empty( $this->inner_contexts ) || ! $this->with_inner ) {
 				return $this->value;
 			}
+
 			return iterator_to_array( $this->iterate_inner_values() );
 		}
 
@@ -414,6 +482,9 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	public function remove_field( array $inner_names = array() ) {
 		if ( empty( $inner_names ) ) {
+			// remove self
+			$this->get_context()->remove_field( $this->get_name() );
+
 			return;
 		}
 		$index = array_shift( $inner_names );
@@ -439,6 +510,22 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		} else {
 			$this->inner_contexts[ $key ] = $context;
 		}
+
+		return Array_Tools::last( $this->inner_contexts );
+	}
+
+	/**
+	 * @return Parser_Context|null
+	 */
+	public function get_inner_template() {
+		return $this->inner_template;
+	}
+
+	/**
+	 * @param Parser_Context $inner_template
+	 */
+	public function set_inner_template( Parser_Context $inner_template ) {
+		$this->inner_template = $inner_template;
 	}
 
 	protected function iterate_inner_values(): \Generator {
@@ -456,15 +543,55 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	/**
 	 * @param array $inner_blocks
 	 */
-	public function set_inner_blocks( array $inner_blocks ) {
-		$this->inner_blocks = $inner_blocks;
+	public function set_inner_contexts( array $inner_blocks ) {
+		if ( empty( $inner_blocks ) ) {
+			return;
+		}
+
+		$context = new Parser_Context();
+		$context->set_parent( $this );
+		$context->set_parsers( $inner_blocks );
+
+		if ( ! count( iterator_to_array( $context->iterate_parsers() ) ) ) {
+			return;
+		}
+
+		$this->set_inner_template( $context );
+	}
+
+	public function get_scoped_name(): string {
+		return trim( $this->get_context()->get_parent_name() . '.' . $this->get_name(), '.' );
+	}
+
+	public function get_scoped_label(): string {
+		return trim( $this->get_context()->get_parent_label() . ':' . $this->get_label(), ':' );
+	}
+
+	public function get_label(): string {
+		$label = $this->settings['label'] ?? '';
+
+		return empty( $label ) ? $this->get_name() : $label;
 	}
 
 	/**
-	 * @return array
+	 * @param bool $with_inner
 	 */
-	public function get_inner_blocks(): array {
-		return $this->inner_blocks;
+	public function set_with_inner( bool $with_inner ) {
+		$this->with_inner = $with_inner;
+	}
+
+	public function __clone() {
+		foreach ( $this->inner_contexts as $key => $context ) {
+			$this->inner_contexts[ $key ] = clone $context;
+		}
+	}
+
+	public function __debugInfo(): array {
+		$current = clone $this;
+
+		unset( $current->context );
+
+		return get_object_vars( $current );
 	}
 
 }

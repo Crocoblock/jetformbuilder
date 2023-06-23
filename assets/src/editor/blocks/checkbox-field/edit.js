@@ -3,6 +3,7 @@ import SelectRadioCheck
 	from '../../components/base-select-check-radio/select-radio-check';
 import CustomTemplateControls
 	from '../../components/base-select-check-radio/custom-template';
+import preview from './preview';
 
 const {
 	      AdvancedFields,
@@ -37,7 +38,18 @@ export default function CheckboxEdit( props ) {
 	const {
 		      isSelected,
 		      editProps: { uniqKey },
+		      attributes,
 	      } = props;
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		<ToolBarFields

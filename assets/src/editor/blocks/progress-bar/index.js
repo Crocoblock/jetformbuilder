@@ -17,7 +17,9 @@ const settings = {
 	edit: Progressbar,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {
-		attributes: {},
+		attributes: {
+			isPreview: true,
+		},
 	},
 };
 

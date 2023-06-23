@@ -1,4 +1,5 @@
 import FieldSettings from './FieldSettings';
+import preview from './preview';
 
 const { __ } = wp.i18n;
 
@@ -55,6 +56,16 @@ export default function HiddenEdit( props ) {
 
 	useEffect( resetRender, [] );
 	useEffect( resetRender, [ attributes.field_value ] );
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	const { label = 'Please set `Field Value`' } = JetFormHiddenField.sources.find(
 		option => option.value === attributes.field_value,

@@ -1,6 +1,7 @@
 import { SelectRadioCheckPlaceholder } from '../../components/base-select-check-radio/select-radio-check-placeholder';
 import SelectRadioCheck
 	from '../../components/base-select-check-radio/select-radio-check';
+import preview from './preview';
 
 const {
 	      __,
@@ -54,6 +55,16 @@ export default function SelectEdit( props ) {
 	const blockProps = useBlockProps();
 
 	useUniqueNameOnDuplicate();
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return <>
 		<ToolBarFields

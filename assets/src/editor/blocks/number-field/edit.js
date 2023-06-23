@@ -1,3 +1,5 @@
+import preview from './preview';
+
 const {
 	      ToolBarFields,
 	      BlockLabel,
@@ -48,6 +50,16 @@ export default function NumberEdit( props ) {
 		      isSelected,
 		      editProps: { uniqKey },
 	      } = props;
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	const changeNumberAttr = attr => {
 		for ( const [ name, value ] of Object.entries( attr ) ) {

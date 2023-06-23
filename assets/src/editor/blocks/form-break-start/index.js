@@ -15,7 +15,9 @@ const settings = {
 	edit: FormBreakStart,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {
-		attributes: {},
+		attributes: {
+			isPreview: true,
+		},
 	},
 };
 

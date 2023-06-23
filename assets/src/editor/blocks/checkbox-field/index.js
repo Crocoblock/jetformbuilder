@@ -20,13 +20,7 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],
 	example: {
 		attributes: {
-			label: 'Checkbox Field',
-			desc: 'Field description...',
-			field_options: [
-				{ label: 'First Option', value: '' },
-				{ label: 'Second Option', value: '' },
-				{ label: 'Third Option', value: '' },
-			]
+			isPreview: true,
 		},
 	},
 	transforms: {

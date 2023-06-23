@@ -1,3 +1,5 @@
+import preview from './preview';
+
 const {
 	      AdvancedFields,
 	      GeneralFields,
@@ -33,7 +35,17 @@ function ColorPickerEdit( props ) {
 	const uniqKey    = useUniqKey();
 	useUniqueNameOnDuplicate();
 
-	const { isSelected } = props;
+	const { isSelected, attributes } = props;
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		<ToolBarFields

@@ -18,7 +18,11 @@ const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	edit: GroupBreakEdit,
 	useEditProps: [ 'uniqKey' ],
-	example: {},
+	example: {
+		attributes: {
+			isPreview: true,
+		},
+	},
 	transforms: {
 		to: [
 			{

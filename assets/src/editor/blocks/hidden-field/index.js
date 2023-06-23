@@ -20,7 +20,7 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'blockName' ],
 	example: {
 		attributes: {
-			field_value: 'post_id',
+			isPreview: true,
 		},
 	},
 	transforms: {

@@ -20,8 +20,7 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'blockName' ],
 	example: {
 		attributes: {
-			label: 'Heading Field',
-			desc: 'Field description...',
+			isPreview: true,
 		},
 	},
 	/**

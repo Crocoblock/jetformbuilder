@@ -1,3 +1,5 @@
+import preview from './preview';
+
 const { FieldSettingsWrapper } = JetFBComponents;
 
 const { __ } = wp.i18n;
@@ -22,7 +24,6 @@ export default function ProgressBar( props ) {
 			  attributes,
 			  setAttributes,
 			  editProps: { uniqKey, attrHelp },
-			  context,
 		  } = props;
 
 	const [ progressHtml, setProgressHtml ] = useState( '' );
@@ -39,7 +40,17 @@ export default function ProgressBar( props ) {
 
 	useEffect( () => {
 		setProgressHtml( getProgressTypeHtml( attributes.progress_type ) );
-	}, [] )
+	}, [] );
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>
+	}
 
 	return [
 		<InspectorControls key={ uniqKey( 'InspectorControls' ) }>

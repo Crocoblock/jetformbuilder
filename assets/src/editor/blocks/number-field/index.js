@@ -20,10 +20,8 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'blockName' ],
 	example: {
 		attributes: {
-			label: 'Number Field',
-			desc: 'Field description...',
-			placeholder: 'Input your number...'
-		}
+			isPreview: true,
+		},
 	},
 	transforms: {
 		to: [

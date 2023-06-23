@@ -23,12 +23,8 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {
 		attributes: {
-			label: 'Select Field',
-			desc: 'Field description...',
-			field_options: [
-				{ label: 'Choose option...', value: '' },
-			]
-		}
+			isPreview: true,
+		},
 	},
 	transforms: {
 		to: [

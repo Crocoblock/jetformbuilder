@@ -1,3 +1,5 @@
+import preview from './preview';
+
 const {
 	      ToolBarFields,
 	      AdvancedFields,
@@ -51,6 +53,16 @@ export default function TextareaEdit( props ) {
 	const isAdvancedValidation = useIsAdvancedValidation();
 
 	useUniqueNameOnDuplicate();
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	const changeNumberAttr = attr => {
 		for ( const [ name, value ] of Object.entries( attr ) ) {

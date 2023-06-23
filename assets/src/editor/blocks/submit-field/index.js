@@ -20,7 +20,7 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],
 	example: {
 		attributes: {
-			label: 'Action Button',
+			isPreview: true,
 		},
 	},
 	/**

@@ -20,9 +20,8 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
 	example: {
 		attributes: {
-			label: 'Textarea Field',
-			desc: 'Field description...'
-		}
+			isPreview: true,
+		},
 	},
 	transforms: {
 		to: [

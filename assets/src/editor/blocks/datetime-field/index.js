@@ -21,9 +21,8 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {
 		attributes: {
-			label: 'Datetime Field',
-			desc: 'Field description...',
-		}
+			isPreview: true,
+		},
 	},
 	transforms: {
 		to: [

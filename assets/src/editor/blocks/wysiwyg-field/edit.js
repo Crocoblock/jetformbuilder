@@ -1,3 +1,5 @@
+import preview from './preview';
+
 const {
 	      ToolBarFields,
 	      GeneralFields,
@@ -26,12 +28,26 @@ const {
 
 export default function WysiwygEdit( props ) {
 
-	const { editProps: { uniqKey }, isSelected } = props;
+	const {
+		      editProps: { uniqKey },
+		      isSelected,
+		      attributes,
+	      } = props;
 
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
 
 	useUniqueNameOnDuplicate();
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		<ToolBarFields

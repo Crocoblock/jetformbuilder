@@ -1,4 +1,5 @@
 import './change.state.action';
+import preview from './preview';
 
 const {
 	GeneralFields,
@@ -107,6 +108,16 @@ export default function ActionButtonEdit( props ) {
 	}, [ attributes.action_type ] );
 
 	const blockProps = useBlockProps();
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		isSelected && <InspectorControls

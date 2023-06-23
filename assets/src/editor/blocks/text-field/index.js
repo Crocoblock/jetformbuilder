@@ -20,9 +20,7 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
 	example: {
 		attributes: {
-			label: 'Text Field',
-			placeholder: 'Input your text...',
-			desc: 'Field description...',
+			isPreview: true,
 		},
 	},
 	transforms: {

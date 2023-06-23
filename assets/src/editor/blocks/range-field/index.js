@@ -20,9 +20,7 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {
 		attributes: {
-			label: 'Range Field',
-			prefix: 'price: ',
-			suffix: '$',
+			isPreview: true,
 		},
 	},
 	transforms: {

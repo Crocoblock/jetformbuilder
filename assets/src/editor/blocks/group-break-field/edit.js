@@ -1,3 +1,5 @@
+import preview from './preview';
+
 const {
 	AdvancedFields,
 } = JetFBComponents;
@@ -15,8 +17,19 @@ export default function GroupBreakEdit( props ) {
 
 	const {
 		isSelected,
+		attributes,
 		editProps: { uniqKey }
 	} = props;
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		isSelected && <InspectorControls key={ uniqKey( 'InspectorControls' ) }>

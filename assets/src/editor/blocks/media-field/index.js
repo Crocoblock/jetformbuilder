@@ -20,9 +20,8 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {
 		attributes: {
-			label: 'Thumbnail & file',
-			desc: 'Field description...',
-		}
+			isPreview: true,
+		},
 	},
 	transforms: {
 		to: [

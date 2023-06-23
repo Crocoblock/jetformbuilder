@@ -1,3 +1,5 @@
+import preview from './preview';
+
 const {
 	      BlockLabel,
 	      BlockDescription,
@@ -53,6 +55,16 @@ export default function RangeEdit( props ) {
 		      setAttributes,
 		      editProps: { uniqKey, attrHelp },
 	      } = props;
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		props.isSelected && (

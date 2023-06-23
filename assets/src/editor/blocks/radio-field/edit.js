@@ -3,6 +3,7 @@ import SelectRadioCheck
 	from '../../components/base-select-check-radio/select-radio-check';
 import CustomTemplateControls
 	from '../../components/base-select-check-radio/custom-template';
+import preview from './preview';
 
 const {
 	      ToolBarFields,
@@ -34,11 +35,22 @@ export default function RadioEdit( props ) {
 
 	const {
 		      isSelected,
+		      attributes,
 		      editProps: { uniqKey },
 	      } = props;
 
 	const blockProps = useBlockProps();
 	useUniqueNameOnDuplicate();
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return <>
 		<ToolBarFields

@@ -23,8 +23,7 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],
 	example: {
 		attributes: {
-			label: 'Color Picker Field',
-			desc: 'Field description...',
+			isPreview: true,
 		},
 	},
 	transforms: {

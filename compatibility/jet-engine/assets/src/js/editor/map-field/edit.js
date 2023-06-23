@@ -1,3 +1,5 @@
+import preview from './preview';
+
 const {
 	      GeneralFields,
 	      AdvancedFields,
@@ -34,6 +36,16 @@ export default function MapEdit( props ) {
 		      setAttributes,
 		      editProps: { uniqKey },
 	      } = props;
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		JetFBMapField.is_supported && <ToolBarFields
@@ -84,11 +96,7 @@ export default function MapEdit( props ) {
 				key={ uniqKey( 'FieldWrapper' ) }
 				{ ...props }
 			>
-				<img
-					style={ { height: attributes.height ?? 300 } }
-					src={ JetFBMapField.image }
-					alt={ __( 'Map Field placeholder', 'jet-form-builder' ) }
-				/>
+				{ preview }
 			</FieldWrapper> : <RawHTML>{ JetFBMapField.help }</RawHTML> }
 		</div>,
 	];

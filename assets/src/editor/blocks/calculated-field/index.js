@@ -20,8 +20,7 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'blockName' ],
 	example: {
 		attributes: {
-			label: 'Calculated Field',
-			desc: 'Field description...',
+			isPreview: true,
 		},
 	},
 	transforms: {

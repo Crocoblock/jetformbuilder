@@ -20,12 +20,7 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {
 		attributes: {
-			label: 'Radio Field',
-			field_options: [
-				{ label: 'First Option', value: '' },
-				{ label: 'Second Option', value: '' },
-				{ label: 'Third Option', value: '' },
-			]
+			isPreview: true,
 		},
 	},
 	transforms: {

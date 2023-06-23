@@ -1,3 +1,5 @@
+import preview from './preview';
+
 const { __ } = wp.i18n;
 
 const {
@@ -22,6 +24,16 @@ export default function FormBreakStart( props ) {
 	);
 
 	const uniqKey = useUniqKey();
+
+	if ( props.attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		<InspectorControls key={ uniqKey( 'InspectorControls' ) }>

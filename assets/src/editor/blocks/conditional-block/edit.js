@@ -1,6 +1,7 @@
 import ConditionsModal from './conditions.modal';
 import ConditionsList from './conditions.list';
 import ConditionalModalContext from './conditional.model.context';
+import preview from './preview';
 
 const {
 	      getCurrentInnerBlocks,
@@ -84,6 +85,16 @@ export default function ConditionalBlockEdit( props ) {
 	/> : <span className="dashicon dashicons dashicons-randomize"/>;
 
 	// jet-form-builder--hidden
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return <>
 		<div { ...blockProps }>

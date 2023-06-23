@@ -2,6 +2,7 @@ import {
 	calcType,
 	manageItemsCount,
 } from './options';
+import preview from './preview';
 
 const {
 	      ToolBarFields,
@@ -68,6 +69,16 @@ export default function RepeaterEdit( props ) {
 		const formula = attributes.calc_formula || '';
 		props.setAttributes( { calc_formula: formula + '%' + macros + '%' } );
 	};
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		<ToolBarFields

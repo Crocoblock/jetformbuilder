@@ -50,25 +50,9 @@ const settings = {
 		);
 	},
 	example: {
-		innerBlocks: [
-			{
-				name: 'jet-forms/text-field',
-				attributes: {
-					label: 'Title',
-				},
-			},
-			{
-				name: 'jet-forms/radio-field',
-				attributes: {
-					label: 'Item Radio',
-					field_options: [
-						{ label: 'First Option', value: '' },
-						{ label: 'Second Option', value: '' },
-						{ label: 'Third Option', value: '' },
-					],
-				},
-			},
-		],
+		attributes: {
+			isPreview: true,
+		},
 	},
 	transforms: {
 		from: [

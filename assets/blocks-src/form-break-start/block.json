@@ -16,11 +16,15 @@
 		"html": false
 	},
 	"title": "Form Page Start",
-	"icon": "<svg width=\"64\" height=\"64\" viewBox=\"0 0 64 64\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"34\" y=\"2\" width=\"28\" height=\"28\" rx=\"3\" fill=\"white\" stroke=\"#0F172A\" stroke-width=\"2\"/>\n<rect x=\"18\" y=\"12\" width=\"34\" height=\"34\" rx=\"3\" fill=\"white\" stroke=\"#0F172A\" stroke-width=\"2\"/>\n<rect x=\"2\" y=\"22\" width=\"40\" height=\"40\" rx=\"3\" fill=\"#6F8CFF\" stroke=\"#0F172A\" stroke-width=\"2\"/>\n<path d=\"M24.3809 36.1768V49H21.8496V39.0947L18.8086 40.0615V38.0664L24.1084 36.1768H24.3809Z\" fill=\"#0F172A\"/>\n</svg>",
+	"icon": "<svg width=\"64\" height=\"64\" viewBox=\"0 0 64 64\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M19 50.7254C17.6667 51.4952 16 50.533 16 48.9934V36.003C16 34.4634 17.6667 33.5011 19 34.2709L30.25 40.7661C31.5833 41.5359 31.5833 43.4604 30.25 44.2302L19 50.7254ZM18 48.9934V36.003L29.25 42.4982L18 48.9934Z\" fill=\"#0F172A\"/>\n<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M33 11V5C33 2.79086 34.7909 1 37 1H59C61.2091 1 63 2.79086 63 5V27C63 29.2091 61.2091 31 59 31H53V43C53 45.2091 51.2091 47 49 47H43V59C43 61.2091 41.2091 63 39 63H5C2.79086 63 1 61.2091 1 59V25C1 22.7909 2.79086 21 5 21H17V15C17 12.7909 18.7909 11 21 11H33ZM37 3H59C60.1046 3 61 3.89543 61 5V27C61 28.1046 60.1046 29 59 29H53V15C53 12.7909 51.2091 11 49 11H35V5C35 3.89543 35.8954 3 37 3ZM19 21H39C41.2091 21 43 22.7909 43 25V45H49C50.1046 45 51 44.1046 51 43V15C51 13.8954 50.1046 13 49 13H21C19.8954 13 19 13.8954 19 15V21ZM39 23H5C3.89543 23 3 23.8954 3 25V59C3 60.1046 3.89543 61 5 61H39C40.1046 61 41 60.1046 41 59V25C41 23.8954 40.1046 23 39 23Z\" fill=\"#0F172A\"/>\n</svg>",
 	"attributes": {
 		"class_name": {
 			"type": "string",
 			"default": ""
+		},
+		"isPreview": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"usesContext": [

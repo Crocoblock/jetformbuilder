@@ -46,6 +46,10 @@
 		"anchor": {
 			"type": "string",
 			"default": ""
+		},
+		"isPreview": {
+			"type": "boolean",
+			"default": false
 		}
 	}
 }

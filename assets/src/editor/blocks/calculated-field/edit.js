@@ -1,3 +1,5 @@
+import preview from './preview';
+
 const {
 	      AdvancedFields,
 	      FieldWrapper,
@@ -54,6 +56,16 @@ export default function EditCalculated( props ) {
 			calc_formula: `${ attributes.calc_formula || '' }${ macros }`,
 		} );
 	};
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		<ToolBarFields

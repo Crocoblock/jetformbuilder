@@ -20,7 +20,7 @@ const settings = {
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {
 		attributes: {
-			label: 'Next Page',
+			isPreview: true,
 		},
 	},
 	transforms: {

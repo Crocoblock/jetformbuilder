@@ -2,6 +2,7 @@ import {
 	userAccess,
 	valueFormats,
 } from './options';
+import preview from './preview';
 
 const {
 	      ToolBarFields,
@@ -59,6 +60,16 @@ export default function MediaEdit( props ) {
 		      isSelected,
 		      editProps: { uniqKey, attrHelp },
 	      } = props;
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		<ToolBarFields

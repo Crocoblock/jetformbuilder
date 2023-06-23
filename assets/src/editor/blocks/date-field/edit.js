@@ -1,3 +1,5 @@
+import preview from './preview';
+
 const {
 	      ToolBarFields,
 	      BlockLabel,
@@ -52,6 +54,16 @@ export default function DateEdit( props ) {
 
 	const isAdvancedValidation = useIsAdvancedValidation();
 	useUniqueNameOnDuplicate();
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		<ToolBarFields

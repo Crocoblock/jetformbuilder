@@ -4,6 +4,7 @@ import {
 	maskTypesList,
 	maskVisibilitiesList,
 } from './options';
+import preview from './preview';
 
 const {
 	      ToolBarFields,
@@ -63,6 +64,16 @@ export default function TextEdit( props ) {
 	const isAdvancedValidation = useIsAdvancedValidation();
 
 	useUniqueNameOnDuplicate();
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		<ToolBarFields

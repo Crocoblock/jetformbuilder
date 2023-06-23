@@ -1,3 +1,5 @@
+import preview from './preview';
+
 const {
 	      BlockClassName,
 	      BlockAddPrevButton,
@@ -29,6 +31,16 @@ export default function FormBreakEdit( props ) {
 		      setAttributes,
 		      editProps: { uniqKey, attrHelp },
 	      } = props;
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		props.isSelected && <InspectorControls

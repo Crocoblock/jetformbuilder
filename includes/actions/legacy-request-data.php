@@ -15,12 +15,12 @@ class Legacy_Request_Data  implements \Iterator, \ArrayAccess {
 	 */
 	#[\ReturnTypeWillChange]
 	public function current() {
-		return current( jet_fb_request_handler()->get_context()->__danger_parsers );
+		return current( jet_fb_context()->__danger_parsers );
 	}
 
 	#[\ReturnTypeWillChange]
 	public function next() {
-		next( jet_fb_request_handler()->get_context()->__danger_parsers );
+		next( jet_fb_context()->__danger_parsers );
 	}
 
 	/**
@@ -28,7 +28,7 @@ class Legacy_Request_Data  implements \Iterator, \ArrayAccess {
 	 */
 	#[\ReturnTypeWillChange]
 	public function key() {
-		return key( jet_fb_request_handler()->get_context()->__danger_parsers );
+		return key( jet_fb_context()->__danger_parsers );
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Legacy_Request_Data  implements \Iterator, \ArrayAccess {
 
 	#[\ReturnTypeWillChange]
 	public function rewind() {
-		reset( jet_fb_request_handler()->get_context()->__danger_parsers );
+		reset( jet_fb_context()->__danger_parsers );
 	}
 
 	/*
@@ -53,7 +53,7 @@ class Legacy_Request_Data  implements \Iterator, \ArrayAccess {
 	 * @return bool
 	 */
 	public function offsetExists( $offset ): bool {
-		return jet_fb_request_handler()->get_context()->has_field( $offset );
+		return jet_fb_context()->has_field( $offset );
 	}
 
 	/**
@@ -63,7 +63,7 @@ class Legacy_Request_Data  implements \Iterator, \ArrayAccess {
 	 */
 	#[\ReturnTypeWillChange]
 	public function offsetGet( $offset ) {
-		return jet_fb_request_handler()->get_context()->get_value( $offset );
+		return jet_fb_context()->get_value( $offset );
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Legacy_Request_Data  implements \Iterator, \ArrayAccess {
 			return;
 		}
 
-		jet_fb_request_handler()->get_context()->update_request( $value, $offset );
+		jet_fb_context()->update_request( $value, $offset );
 	}
 
 	/**
@@ -84,7 +84,7 @@ class Legacy_Request_Data  implements \Iterator, \ArrayAccess {
 	 */
 	#[\ReturnTypeWillChange]
 	public function offsetUnset( $offset ) {
-		jet_fb_request_handler()->get_context()->remove_field( $offset );
+		jet_fb_context()->remove_field( $offset );
 	}
 
 }

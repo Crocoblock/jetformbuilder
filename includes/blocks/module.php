@@ -273,16 +273,6 @@ final class Module implements Base_Module_It {
 			true
 		);
 
-		wp_register_script(
-			self::LISTING_OPTIONS_HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/listing.options{min}.js' ),
-			array(
-				self::MAIN_SCRIPT_HANDLE,
-			),
-			Plugin::instance()->get_version(),
-			true
-		);
-
 		$options = Tab_Handler_Manager::get_options( 'options-tab' );
 
 		wp_localize_script(

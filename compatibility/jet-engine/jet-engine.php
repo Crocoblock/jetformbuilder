@@ -119,6 +119,16 @@ class Jet_Engine implements
 		$handle = $this->get_handle( 'map-field' );
 
 		wp_register_script(
+			Module::LISTING_OPTIONS_HANDLE,
+			$this->get_url( 'assets/js/frontend/listing.options{min}.js' ),
+			array(
+				Module::MAIN_SCRIPT_HANDLE,
+			),
+			jet_form_builder()->get_version(),
+			true
+		);
+
+		wp_register_script(
 			$handle,
 			$this->get_url( 'assets/build/js/frontend/map.field{min}.js' ),
 			array(

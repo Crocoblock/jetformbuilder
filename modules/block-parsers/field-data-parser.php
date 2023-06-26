@@ -580,6 +580,24 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		$this->with_inner = $with_inner;
 	}
 
+	public function iterate_inner( array $inner_names = array() ): \Generator {
+		if ( empty( $inner_names ) ) {
+			foreach ( $this->inner_contexts as $context ) {
+				yield $context;
+			}
+		}
+
+		$index = array_shift( $inner_names );
+
+		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
+			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
+		) {
+			return;
+		}
+
+		yield from $this->inner_contexts[ $index ]->iterate_inner( $inner_names );
+	}
+
 	public function __clone() {
 		foreach ( $this->inner_contexts as $key => $context ) {
 			$this->inner_contexts[ $key ] = clone $context;

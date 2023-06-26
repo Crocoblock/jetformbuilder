@@ -577,6 +577,25 @@ class Parser_Context {
 		}
 	}
 
+	/**
+	 * @param string|array $name
+	 *
+	 * @return \Generator
+	 */
+	public function iterate_inner( $name ): \Generator {
+		if ( ! $name ) {
+			return;
+		}
+
+		try {
+			list( $parser, $path ) = $this->resolve_parser( $name );
+		} catch ( Silence_Exception $exception ) {
+			return;
+		}
+
+		yield from $parser->iterate_inner( $path );
+	}
+
 	public function clear_all() {
 		foreach ( $this->parsers as $name => $parser ) {
 			unset( $this->raw_request[ $name ] );

@@ -29,12 +29,22 @@ function SignalRenderState() {
 		}
 
 		if ( !states.length ) {
+			if ( !url.searchParams.has( param ) ) {
+				return;
+			}
+
 			url.searchParams.delete( param );
-		}
-		else {
-			url.searchParams.set( param, states.join( ',' ) );
+			window.history.pushState( {}, '', url.toString() );
+
+			return;
 		}
 
+		const paramValue = states.join( ',' );
+		if ( url.searchParams.get( param ) === paramValue ) {
+			return;
+		}
+
+		url.searchParams.set( param, paramValue );
 		window.history.pushState( {}, '', url.toString() );
 	};
 }

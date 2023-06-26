@@ -120,7 +120,7 @@ class Jet_Engine implements
 
 		wp_register_script(
 			Module::LISTING_OPTIONS_HANDLE,
-			$this->get_url( 'assets/js/frontend/listing.options{min}.js' ),
+			$this->get_url( 'assets/build/js/frontend/listing.options{min}.js' ),
 			array(
 				Module::MAIN_SCRIPT_HANDLE,
 			),

@@ -13,8 +13,9 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Macros_Parser {
 
-	private $content      = '';
-	private $replacements = array();
+	private $content       = '';
+	private $replacements  = array();
+	private $current_macro = '';
 
 	public function set_content( $content ): Macros_Parser {
 		if ( is_array( $content ) ) {
@@ -82,6 +83,8 @@ class Macros_Parser {
 					return $replace_match[0];
 				}
 
+				$this->current_macro = $name;
+
 				$value = $this->get_replace( $name );
 
 				if ( ! empty( $filters ) ) {
@@ -114,7 +117,7 @@ class Macros_Parser {
 	 */
 	protected function verbose_repeater( array $items, $name ) {
 
-		$result  = apply_filters( 'jet-form-builder/send-email/template-repeater', '', $items, $this, $name );
+		$result  = apply_filters( 'jet-form-builder/send-email/template-repeater', '', $items, $this );
 		$counter = 1;
 
 		if ( $result ) {
@@ -161,6 +164,13 @@ class Macros_Parser {
 		}
 
 		return jet_fb_context()->get_value( $name );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_current_macro(): string {
+		return $this->current_macro;
 	}
 
 }

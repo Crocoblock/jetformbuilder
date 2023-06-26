@@ -4,7 +4,6 @@ namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -77,7 +76,7 @@ class Send_Email extends Base {
 to a separate paragraph element. And each link turns into a clickable hyperlink. 
 To prevent this, enable this option.',
 				'jet-form-builder'
-			)
+			),
 		);
 	}
 
@@ -243,6 +242,8 @@ To prevent this, enable this option.',
 			);
 		}
 
+		$this->validate();
+
 		$sent = wp_mail(
 			$this->get_mail_to(),
 			$this->get_subject(),
@@ -271,6 +272,23 @@ To prevent this, enable this option.',
 		do_action( 'jet-form-builder/send-email/send-after', $this );
 	}
 
+	/**
+	 * @throws Action_Exception
+	 */
+	protected function validate() {
+		$this->validate_mail_to();
+	}
+
+	/**
+	 * @throws Action_Exception
+	 */
+	protected function validate_mail_to() {
+		foreach ( $this->mail_to as $value ) {
+			if ( ! $value || ! is_email( $value ) ) {
+				throw new Action_Exception( 'invalid_email' );
+			}
+		}
+	}
 
 	public function get_default_mail_to() {
 		$mail_to = ! empty( $this->settings['mail_to'] ) ? $this->settings['mail_to'] : 'admin';
@@ -361,7 +379,7 @@ To prevent this, enable this option.',
 		$headers = array(
 			"From: {$this->get_from_name()} <{$this->get_from_address()}>",
 			"Reply-To: {$this->get_reply_to()}",
-			"Content-Type: {$this->get_content_type()}; charset=utf-8"
+			"Content-Type: {$this->get_content_type()}; charset=utf-8",
 		);
 
 		return implode( "\r\n", $headers );
@@ -369,8 +387,6 @@ To prevent this, enable this option.',
 
 	/**
 	 * @param string|array $email
-	 *
-	 * @throws Action_Exception
 	 */
 	public function set_mail_to( $email ) {
 		if ( ! is_array( $email ) && ! is_string( $email ) ) {
@@ -383,10 +399,6 @@ To prevent this, enable this option.',
 
 		foreach ( $email as &$value ) {
 			$value = trim( $value );
-
-			if ( ! $value || ! is_email( $value ) ) {
-				throw new Action_Exception( 'invalid_email' );
-			}
 		}
 
 		$this->mail_to = $email;

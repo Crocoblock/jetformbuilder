@@ -238,6 +238,10 @@ abstract class Base_Source {
 			return $source->data->$prop;
 		}
 
+		if ( ! is_object( $source ) ) {
+			throw new Preset_Exception( "Source isn't object" );
+		}
+
 		throw new Preset_Exception( "Can't get value from " . get_class( $source ) );
 	}
 

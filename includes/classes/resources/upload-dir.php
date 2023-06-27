@@ -100,6 +100,18 @@ class Upload_Dir {
 			return false;
 		}
 
+<<<<<<< HEAD
+=======
+		$content = apply_filters(
+			'jet-form-builder/file-upload/htaccess-content',
+			self::htaccess_content()
+		);
+
+		if ( ! $content ) {
+			return false;
+		}
+
+>>>>>>> main
 		$path  = trailingslashit( $path ) . '.htaccess';
 		$index = wp_normalize_path( $path );
 
@@ -108,7 +120,7 @@ class Upload_Dir {
 		}
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions
-		return file_put_contents( $index, static::htaccess_content() );
+		return file_put_contents( $index, $content );
 	}
 
 	protected static function htaccess_content(): string {

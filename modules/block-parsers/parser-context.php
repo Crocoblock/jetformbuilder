@@ -728,6 +728,7 @@ class Parser_Context {
 		}
 		$this->parsers[ $name ] = $parser;
 		$parser->set_value( $value );
+		$parser->set_context( $this );
 
 		return $parser;
 	}

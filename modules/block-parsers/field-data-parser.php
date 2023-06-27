@@ -599,6 +599,9 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	}
 
 	public function __clone() {
+		if ( ! is_array( $this->inner_contexts ) ) {
+			return;
+		}
 		foreach ( $this->inner_contexts as $key => $context ) {
 			$this->inner_contexts[ $key ] = clone $context;
 		}

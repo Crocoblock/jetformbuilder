@@ -5,6 +5,7 @@ namespace JFB_Modules\Gateways\Scenarios_Abstract;
 
 use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
 use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
+use Jet_Form_Builder\Live_Form;
 use JFB_Modules\Form_Record\Tools;
 use Jet_Form_Builder\Actions\Types\Save_Record;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -96,6 +97,8 @@ abstract class Scenario_Logic_Base implements Scenario_Item {
 			return;
 		}
 		$record = $this->get_scenario_row( 'record' );
+
+		Live_Form::instance()->set_form_id( $record['form_id'] );
 
 		// apply actions
 		jet_fb_action_handler()->set_form_id( $record['form_id'] );

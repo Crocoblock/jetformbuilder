@@ -87,6 +87,7 @@ class Autoloader {
 		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Error_Message_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Error_Message_Column',
 		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Models\\Record_Model' => 'JFB_Modules\\Form_Record\\Models\\Record_Model',
 		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Pages\\Single_Form_Record_Page' => 'JFB_Modules\\Form_Record\\Admin\\Pages\\Single_Form_Record_Page',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Constraints\\Record_Model_Constraint' => 'JFB_Modules\\Form_Record\\Constraints\\Record_Model_Constraint',
 		// dev-mode module
 		'Jet_Form_Builder\\Dev_Mode\\Manager'              => 'JFB_Modules\\Dev\\Module',
 		'Jet_Form_Builder\Dev_Mode\Logger'                 => 'JFB_Modules\\Logger\\Module',

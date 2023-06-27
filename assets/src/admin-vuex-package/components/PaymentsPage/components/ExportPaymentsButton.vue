@@ -170,20 +170,39 @@
 				</RowWrapper>
 			</template>
 			<template #footer>
-				<cx-vui-button
-					:button-style="'accent'"
-					:size="'mini'"
-					:disabled="isEmptyColumns"
-					@click="startExport"
-				>
-					<template #label>{{ __( 'Export', 'jet-form-builder' ) }}</template>
-				</cx-vui-button>
-				<cx-vui-button
-					:size="'mini'"
-					@click="showPopup = false"
-				>
-					<template #label>{{ __( 'Cancel', 'jet-form-builder' ) }}</template>
-				</cx-vui-button>
+				<div class="footer-buttons">
+					<cx-vui-button
+						:button-style="'accent'"
+						:size="'mini'"
+						:disabled="!canBeExported"
+						@click="startExport"
+					>
+						<template #label>{{ __( 'Export', 'jet-form-builder' ) }}</template>
+					</cx-vui-button>
+					<cx-vui-button
+						:size="'mini'"
+						@click="showPopup = false"
+					>
+						<template #label>{{ __( 'Cancel', 'jet-form-builder' ) }}</template>
+					</cx-vui-button>
+				</div>
+				<div class="footer-counter">
+					<div class="footer-counter--message">
+						{{ countMessage }}
+					</div>
+					<cx-vui-button
+						button-style="link-accent"
+						size="link"
+						tagName="a"
+						:disabled="isLoading( 'count' )"
+						:loading="isLoading( 'count' )"
+						@click="onClickUpdateCount"
+					>
+						<template #label>
+							{{ __( 'Update', 'jet-form-builder' ) }}
+						</template>
+					</cx-vui-button>
+				</div>
 			</template>
 		</CxVuiPopup>
 	</div>
@@ -194,6 +213,7 @@ import ScopeStoreMixin from '../../../mixins/ScopeStoreMixin';
 
 const {
 	      __,
+	      sprintf,
       } = wp.i18n;
 
 const {
@@ -243,6 +263,9 @@ export default {
 			showPopup: false,
 		}
 	),
+	created() {
+		this.resolveCount();
+	},
 	computed: {
 		exportUrl() {
 			return addQueryArgs(
@@ -269,7 +292,16 @@ export default {
 			'exportPayments/selectedShippingColumns',
 			'exportPayments/statusesList',
 			'exportPayments/status',
+			'exportPayments/isLoading',
+			'exportPayments/count',
 		] ),
+		canBeExported() {
+			return (
+				!this.isLoading() &&
+				!this.isEmptyColumns &&
+				this.count > 0
+			);
+		},
 		isEmptyColumns() {
 			return (
 				!this.selectedColumns?.length &&
@@ -320,6 +352,15 @@ export default {
 		selectedShippingColumns() {
 			return this[ 'exportPayments/selectedShippingColumns' ];
 		},
+		count() {
+			return this[ 'exportPayments/count' ];
+		},
+		countMessage() {
+			return sprintf(
+				__( '%d items can be exported', 'jet-form-builder' ),
+				this.count,
+			);
+		},
 	},
 	methods: {
 		...mapMutations( 'exportPayments', [
@@ -335,9 +376,16 @@ export default {
 			'selectAllPayerColumns',
 			'clearAllShippingColumns',
 			'selectAllShippingColumns',
+			'resolveCount',
 		] ),
 		startExport() {
 			window.location = this.exportUrl;
+		},
+		onClickUpdateCount() {
+			this.resolveCount();
+		},
+		isLoading( type ) {
+			return this[ 'exportPayments/isLoading' ]( type );
 		},
 	},
 };
@@ -348,6 +396,15 @@ export default {
 .cx-vui-popup.export-popup {
 	.cx-vui-popup__body {
 		width: 65vw;
+	}
+
+	.cx-vui-popup__footer {
+		justify-content: space-between;
+	}
+
+	.footer-counter {
+		display: flex;
+		gap: 1em;
 	}
 }
 </style>

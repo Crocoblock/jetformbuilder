@@ -12,6 +12,16 @@ function ExportPaymentsPlugin( store ) {
 				store.dispatch( 'exportPayments/handleFilters' );
 				return;
 		}
+
+		if ( 'exportPayments' !== typeParts[ 0 ] ) {
+			return;
+		}
+
+		switch ( typeParts.at( -1 ) ) {
+			case 'setStatus':
+				store.dispatch( 'exportPayments/resolveCount' ).then( () => {} );
+				break;
+		}
 	} );
 }
 

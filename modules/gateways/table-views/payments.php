@@ -8,15 +8,11 @@ use Jet_Form_Builder\Admin\Table_Views\Column_Base;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Record_Id_Column_Advanced;
 use Jet_Form_Builder\Admin\Table_Views\View_Advanced_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Gateways\Db_Models\Payment_To_Payer_Shipping_Model;
 use JFB_Modules\Gateways\Db_Models\Payment_To_Record;
-use JFB_Modules\Gateways\Module;
 use JFB_Modules\Gateways\Query_Views\Payment_Count_View;
 use JFB_Modules\Gateways\Query_Views\Payment_View;
-use JFB_Modules\Gateways\Paypal\Rest_Endpoints;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Created_At_Column;
-use JFB_Modules\Gateways\Rest_Api\Receive_Payments;
 use JFB_Modules\Gateways\Table_Views\Columns\Gross_Column;
 use JFB_Modules\Gateways\Table_Views\Columns\Header_Actions_Column;
 use JFB_Modules\Gateways\Table_Views\Columns\Payer_Column;
@@ -24,6 +20,7 @@ use JFB_Modules\Gateways\Table_Views\Columns\Payment_Status_Column;
 use JFB_Modules\Gateways\Table_Views\Columns\Payment_Type_Column;
 use JFB_Modules\Gateways\Table_Views\Columns\Row_Actions_Column;
 use JFB_Modules\Gateways\Table_Views\Columns\Transaction_Column;
+use JFB_Modules\Gateways\Rest_Api;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -51,11 +48,11 @@ class Payments extends View_Advanced_Base {
 	}
 
 	public function get_rest_url(): string {
-		return Receive_Payments::rest_url();
+		return Rest_Api\Receive_Payments::rest_url();
 	}
 
 	public function get_rest_methods(): string {
-		return Receive_Payments::get_methods();
+		return Rest_Api\Receive_Payments::get_methods();
 	}
 
 	public function get_total(): int {
@@ -86,8 +83,9 @@ class Payments extends View_Advanced_Base {
 
 	public function load_data(): array {
 		return array(
-			'export_url' => Pages_Manager::instance()->get_action_url( 'payments-export' ),
-			'messages'   => array(
+			'export_url'       => Pages_Manager::instance()->get_action_url( 'payments-export' ),
+			'counter_endpoint' => Rest_Api\Count_Payments_Endpoint::get_endpoint(),
+			'messages'         => array(
 				'empty_checked' => __( 'You have not selected any payment.', 'jet-form-builder' ),
 				'empty_action'  => __( 'You have not selected an action.', 'jet-form-builder' ),
 			),

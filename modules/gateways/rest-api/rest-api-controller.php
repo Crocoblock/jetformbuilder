@@ -18,6 +18,7 @@ class Rest_Api_Controller extends Rest_Api_Controller_Base {
 			new Receive_Payments(),
 			new Delete_Payments_Endpoint(),
 			new Delete_Payment_Endpoint(),
+			new Count_Payments_Endpoint(),
 		);
 	}
 }

@@ -42,6 +42,14 @@ const shippingColumns = [
 	{ value: 'country_code', label: __( 'Country Code', 'jet-form-builder' ) },
 ];
 
+const {
+	      counter_endpoint,
+      } = window.JetFBPageConfig;
+
+const {
+	      addQueryArgs,
+      } = JetFBActions;
+
 const getters = {
 	status: state => state.status,
 	statusesList: state => state.statusesList,
@@ -59,6 +67,19 @@ const getters = {
 	selectedShippingColumns: state => state.selectedShippingColumns,
 	shippingColumnsValues: state => getters.shippingColumns( state ).map(
 		( { value } ) => value,
+	),
+	isLoading: state => type => {
+		if ( !type ) {
+			return Object.values( state.loading ).some( Boolean );
+		}
+
+		return state.loading?.[ type ] ?? false;
+	},
+	count: state => state.count,
+	filtersObj: state => (
+		{
+			status: state.status,
+		}
 	),
 };
 
@@ -79,6 +100,8 @@ const ExportPaymentsModule = {
 			selectedShippingColumns: shippingColumns.map(
 				( { value } ) => value
 			),
+			count: 0,
+			loading: {},
 		}
 	),
 	mutations: {
@@ -93,6 +116,17 @@ const ExportPaymentsModule = {
 		},
 		setShippingColumns( state, columns ) {
 			state.selectedShippingColumns = columns;
+		},
+		setCount( state, count ) {
+			state.count = count;
+		},
+		toggleLoading( state, type ) {
+			state.loading = {
+				...state.loading,
+				[ type ]: !(
+					state.loading?.[ type ] ?? false
+				),
+			};
 		},
 	},
 	getters,
@@ -122,6 +156,29 @@ const ExportPaymentsModule = {
 		},
 		clearAllShippingColumns( { commit } ) {
 			commit( 'setShippingColumns', [] );
+		},
+		async resolveCount( { commit, dispatch } ) {
+			let response;
+			commit( 'toggleLoading', 'count' );
+
+			try {
+				response = await dispatch( 'fetchPaymentsCount' );
+			}
+			finally {
+				commit( 'toggleLoading', 'count' );
+			}
+
+			commit( 'setCount', response.total );
+		},
+		fetchPaymentsCount( { getters } ) {
+			const url = addQueryArgs(
+				{
+					filters: getters.filtersObj,
+				},
+				counter_endpoint.url,
+			);
+
+			return wp.apiFetch( { ...counter_endpoint, url } );
 		},
 	},
 };

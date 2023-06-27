@@ -2,7 +2,6 @@
 
 namespace JFB_Modules\Block_Parsers;
 
-use Jet_Form_Builder\Exceptions\Parse_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Request\Request_Tools;
@@ -132,6 +131,17 @@ final class Module implements
 
 	public function get_context(): Parser_Context {
 		return $this->context;
+	}
+
+	public function install( Field_Data_Parser $item ): bool {
+		return $this->rep_install_item_soft( $item );
+	}
+
+	/**
+	 * @param Field_Data_Parser|string $item
+	 */
+	public function uninstall( $item ) {
+		$this->rep_remove( $item );
 	}
 
 

@@ -16,6 +16,7 @@ use JFB_Compatibility\Jet_Engine\Preset_Sources\Preset_User;
 use JFB_Components\Compatibility\Base_Compat_Dir_Trait;
 use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
 use JFB_Components\Compatibility\Base_Compat_Url_Trait;
+use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_It;
@@ -31,7 +32,8 @@ class Jet_Engine implements
 	Base_Module_It,
 	Base_Module_Handle_It,
 	Base_Module_Dir_It,
-	Base_Module_Url_It {
+	Base_Module_Url_It,
+	Base_Module_After_Install_It {
 
 	use Base_Compat_Handle_Trait;
 	use Base_Compat_Url_Trait;
@@ -43,6 +45,22 @@ class Jet_Engine implements
 
 	public function condition(): bool {
 		return function_exists( 'jet_engine' );
+	}
+
+	public function on_install() {
+		/** @var \JFB_Modules\Block_Parsers\Module $module */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$module = jet_form_builder()->module( 'block-parsers' );
+
+		$module->install( new Map_Field_Parser() );
+	}
+
+	public function on_uninstall() {
+		/** @var \JFB_Modules\Block_Parsers\Module $module */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$module = jet_form_builder()->module( 'block-parsers' );
+
+		$module->uninstall( new Map_Field_Parser() );
 	}
 
 	public function init_hooks() {
@@ -57,10 +75,6 @@ class Jet_Engine implements
 		add_filter(
 			'jet-form-builder/forms/options-generators',
 			array( $this, 'add_generators' )
-		);
-		add_filter(
-			'jet-form-builder/parsers-request/register',
-			array( $this, 'add_parsers' )
 		);
 		add_filter(
 			'jet-form-builder/blocks/items',
@@ -91,10 +105,6 @@ class Jet_Engine implements
 		remove_filter(
 			'jet-form-builder/forms/options-generators',
 			array( $this, 'add_generators' )
-		);
-		remove_filter(
-			'jet-form-builder/parsers-request/register',
-			array( $this, 'add_parsers' )
 		);
 		remove_filter(
 			'jet-form-builder/blocks/items',
@@ -196,12 +206,6 @@ class Jet_Engine implements
 		);
 
 		return $generators;
-	}
-
-	public function add_parsers( array $parsers ): array {
-		$parsers[] = new Map_Field_Parser();
-
-		return $parsers;
 	}
 
 	public function add_blocks( array $blocks ): array {

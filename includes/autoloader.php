@@ -94,6 +94,7 @@ class Autoloader {
 		// request related
 		'Jet_Form_Builder\\Request\\Parser_Manager'        => 'JFB_Modules\\Block_Parsers\\Module',
 		'Jet_Form_Builder\\Request\\Field_Data_Parser'     => 'JFB_Modules\\Block_Parsers\\Field_Data_Parser',
+		'Jet_Form_Builder\\Request\\Parser_Context'        => 'JFB_Modules\\Block_Parsers\\Parser_Context',
 	);
 
 	/**

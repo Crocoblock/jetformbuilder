@@ -4,7 +4,6 @@
 namespace JFB_Modules\Form_Record\Admin\Table_Views;
 
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Form_Record\Admin\View_Columns\Classes_Column;
 use JFB_Modules\Form_Record\Admin\View_Columns\Header_Actions_Column;
 use JFB_Modules\Form_Record\Admin\View_Columns\Primary_Form_Column;
@@ -13,11 +12,8 @@ use JFB_Modules\Form_Record\Admin\View_Columns\Row_Actions_Column;
 use JFB_Modules\Form_Record\Admin\View_Columns\Status_Column;
 use JFB_Modules\Form_Record\Admin\View_Columns\User_Login_Column;
 use JFB_Modules\Form_Record\Models;
-use JFB_Modules\Form_Record\Module;
 use JFB_Modules\Form_Record\Query_Views\Record_View;
 use JFB_Modules\Form_Record\Query_Views\Record_View_Count;
-use JFB_Modules\Form_Record\Rest_Endpoints\Fetch_Filters_Endpoint;
-use JFB_Modules\Form_Record\Rest_Endpoints\Fetch_Records_Page_Endpoint;
 use Jet_Form_Builder\Admin\Table_Views\Column_Base;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Created_At_Column;
 use Jet_Form_Builder\Admin\Table_Views\Columns\Record_Id_Column_Advanced;
@@ -25,7 +21,7 @@ use Jet_Form_Builder\Admin\Table_Views\View_Advanced_Base;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use JFB_Modules\Rest_Api\Endpoints\Get_Form_Fields;
-use JFB_Modules\Form_Record\Export;
+use JFB_Modules\Form_Record\Rest_Endpoints;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -75,8 +71,8 @@ class Records_Table_View extends View_Advanced_Base {
 
 	public function get_receive_endpoint(): array {
 		return array(
-			'url'     => Fetch_Records_Page_Endpoint::rest_url(),
-			'methods' => Fetch_Records_Page_Endpoint::get_methods(),
+			'url'     => Rest_Endpoints\Fetch_Records_Page_Endpoint::rest_url(),
+			'methods' => Rest_Endpoints\Fetch_Records_Page_Endpoint::get_methods(),
 		);
 	}
 
@@ -105,10 +101,11 @@ class Records_Table_View extends View_Advanced_Base {
 	public function load_data(): array {
 		return array(
 			'filters_endpoint'     => array(
-				'methods' => Fetch_Filters_Endpoint::get_methods(),
-				'url'     => Fetch_Filters_Endpoint::rest_url(),
+				'methods' => Rest_Endpoints\Fetch_Filters_Endpoint::get_methods(),
+				'url'     => Rest_Endpoints\Fetch_Filters_Endpoint::rest_url(),
 			),
 			'load_fields_endpoint' => Get_Form_Fields::get_endpoint(),
+			'counter_endpoint'     => Rest_Endpoints\Fetch_Records_Count_Endpoint::get_endpoint(),
 			'export_url'           => Pages_Manager::instance()->get_action_url( 'records-export' ),
 			'messages'             => array(
 				'filter_form'       => __( 'Select Form', 'jet-form-builder' ),

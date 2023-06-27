@@ -92,6 +92,9 @@ export function setTableSeed( store, source ) {
 
 		switch ( typeParts.at( -1 ) ) {
 			case 'setFilter':
+				if ( ! mutation?.payload?.props?.hasOwnProperty?.( 'selected' ) ) {
+					return;
+				}
 				store.dispatch( getName( 'fetchPageWithFilters' ) );
 				return;
 		}

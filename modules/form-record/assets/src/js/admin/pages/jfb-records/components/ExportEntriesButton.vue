@@ -184,20 +184,39 @@
 				</template>
 			</template>
 			<template #footer>
-				<cx-vui-button
-					:button-style="'accent'"
-					:size="'mini'"
-					:disabled="!canBeExported"
-					@click="startExport"
-				>
-					<template #label>{{ __( 'Export', 'jet-form-builder' ) }}</template>
-				</cx-vui-button>
-				<cx-vui-button
-					:size="'mini'"
-					@click="showPopup = false"
-				>
-					<template #label>{{ __( 'Cancel', 'jet-form-builder' ) }}</template>
-				</cx-vui-button>
+				<div class="footer-buttons">
+					<cx-vui-button
+						:button-style="'accent'"
+						:size="'mini'"
+						:disabled="!canBeExported"
+						@click="startExport"
+					>
+						<template #label>{{ __( 'Export', 'jet-form-builder' ) }}</template>
+					</cx-vui-button>
+					<cx-vui-button
+						:size="'mini'"
+						@click="showPopup = false"
+					>
+						<template #label>{{ __( 'Cancel', 'jet-form-builder' ) }}</template>
+					</cx-vui-button>
+				</div>
+				<div class="footer-counter">
+					<div class="footer-counter--message">
+						{{ countMessage }}
+					</div>
+					<cx-vui-button
+						button-style="link-accent"
+						size="link"
+						tagName="a"
+						:disabled="isLoading( 'count' )"
+						:loading="isLoading( 'count' )"
+						@click="onClickUpdateCount"
+					>
+						<template #label>
+							{{ __( 'Update', 'jet-form-builder' ) }}
+						</template>
+					</cx-vui-button>
+				</div>
 			</template>
 		</CxVuiPopup>
 	</div>
@@ -207,6 +226,7 @@
 
 const {
 	      __,
+	      sprintf,
       } = wp.i18n;
 
 const {
@@ -280,6 +300,8 @@ export default {
 			'export/dateFrom',
 			'export/dateTo',
 			'export/removableSelectedExtra',
+			'export/filtersObj',
+			'export/count',
 		] ),
 		formFilter() {
 			return this.getter( 'getFilter', 'form' );
@@ -354,6 +376,17 @@ export default {
 
 			return this[ 'export/removableSelectedExtra' ];
 		},
+		countMessage() {
+			return sprintf(
+				__( '%d items can be exported', 'jet-form-builder' ),
+				this.count,
+			);
+		},
+		count() {
+			jfbEventBus.reactiveCounter;
+
+			return this[ 'export/count' ];
+		},
 		isEmptyProperties() {
 			return !this.selectedFields?.length && !this.selectedExtra?.length;
 		},
@@ -361,7 +394,8 @@ export default {
 			return (
 				this.selectedForm &&
 				!this.isLoading() &&
-				!this.isEmptyProperties
+				!this.isEmptyProperties &&
+				this.count > 0
 			);
 		},
 		fieldState() {
@@ -391,12 +425,9 @@ export default {
 			};
 		},
 		filtersObj() {
-			return {
-				form: this.selectedForm,
-				status: this.status,
-				date_from: this.dateFrom,
-				date_to: this.dateTo,
-			};
+			jfbEventBus.reactiveCounter;
+
+			return this['export/filtersObj'];
 		},
 		iframeSrc() {
 			return addQueryArgs(
@@ -424,10 +455,14 @@ export default {
 			'clearAllFields',
 			'selectAllExtra',
 			'clearAllExtra',
+			'resolveCount',
 		] ),
 		onClick() {
 			this.showPopup = true;
 			this.resolveFields();
+		},
+		onClickUpdateCount() {
+			this.resolveCount();
 		},
 		startExport() {
 			window.location = this.iframeSrc;
@@ -450,6 +485,15 @@ export default {
 		&__body {
 			width: 65vw;
 		}
+
+		&__footer {
+			justify-content: space-between;
+		}
+	}
+
+	.footer-counter {
+		display: flex;
+		gap: 1em;
 	}
 }
 </style>

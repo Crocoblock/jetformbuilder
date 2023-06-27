@@ -5,7 +5,7 @@
 		:id="elementId"
 		class="cx-vui-input size-fullwidth"
 		:value="value"
-		@input="$emit( 'input' )"
+		@input="handleInput"
 		:max="max"
 		:min="min"
 	>
@@ -45,6 +45,11 @@ export default {
 			max: 'now' === this.maxDate ? now : this.maxDate,
 			min: 'now' === this.minDate ? now : this.minDate,
 		};
+	},
+	methods: {
+		handleInput( event ) {
+			this.$emit( 'input', event.target.value );
+		},
 	},
 	inject: [ 'elementId' ],
 };

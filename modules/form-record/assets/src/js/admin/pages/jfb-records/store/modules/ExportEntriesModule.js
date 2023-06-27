@@ -4,10 +4,12 @@ const {
 
 const {
 	      load_fields_endpoint,
+	      counter_endpoint,
       } = window.JetFBPageConfig;
 
 const {
 	      resolveRestUrl,
+	      addQueryArgs,
       } = JetFBActions;
 
 const getters = {
@@ -37,6 +39,15 @@ const getters = {
 		( { value, nonRemovable } ) => (
 			state.selectedExtra.includes( value ) && !nonRemovable
 		),
+	),
+	count: state => state.count,
+	filtersObj: state => (
+		{
+			form: state.form,
+			status: state.status,
+			date_from: state.date_from,
+			date_to: state.date_to,
+		}
 	),
 };
 
@@ -108,6 +119,7 @@ const ExportEntriesModule = {
 			fields: {},
 			extra,
 			loading: {},
+			count: 0,
 		}
 	),
 	mutations: {
@@ -142,6 +154,9 @@ const ExportEntriesModule = {
 					state.loading?.[ type ] ?? false
 				),
 			};
+		},
+		setCount( state, count ) {
+			state.count = count;
 		},
 	},
 	getters,
@@ -217,6 +232,33 @@ const ExportEntriesModule = {
 					( { value } ) => value,
 				),
 			);
+		},
+		async resolveCount( { state, commit, dispatch } ) {
+			let response;
+			commit( 'toggleLoading', 'count' );
+
+			try {
+				response = await dispatch( 'fetchRecordsCount' );
+			}
+			finally {
+				commit( 'toggleLoading', 'count' );
+			}
+
+			commit( 'setCount', response.total );
+		},
+		fetchRecordsCount( { state, getters } ) {
+			if ( Number.isNaN( Number( state.form ) ) ) {
+				return { total: 0 };
+			}
+
+			const url = addQueryArgs(
+				{
+					filters: getters.filtersObj,
+				},
+				counter_endpoint.url,
+			);
+
+			return wp.apiFetch( { ...counter_endpoint, url } );
 		},
 	},
 };

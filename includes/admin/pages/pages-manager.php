@@ -42,6 +42,9 @@ class Pages_Manager {
 	const SCRIPT_VUEX_PACKAGE = 'jet-form-builder-admin-vuex-package';
 
 	protected function __construct() {
+		// backward compatibility
+		require_once jet_form_builder()->plugin_dir( 'components/admin/buttons/legacy/base-vui-button.php' );
+
 		/** Register pages */
 		$this->stable()->rep_install();
 		$this->single()->rep_install();

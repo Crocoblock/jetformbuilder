@@ -22,7 +22,6 @@ class Map_Field_Parser extends Field_Data_Parser {
 
 	/**
 	 * @return mixed
-	 * @throws Parse_Exception
 	 */
 	public function get_response() {
 		if ( empty( $this->value ) ) {
@@ -34,14 +33,10 @@ class Map_Field_Parser extends Field_Data_Parser {
 		$lat_name = $this->name . '_lat';
 		$lng_name = $this->name . '_lng';
 
-		throw new Parse_Exception(
-			'Merge with request',
-			array(
-				$this->name => $this->value,
-				$lat_name   => $request[ $lat_name ] ?? 0,
-				$lng_name   => $request[ $lng_name ] ?? 0,
-			)
-		);
+		$this->get_context()->update_request( $request[ $lat_name ] ?? 0, $lat_name );
+		$this->get_context()->update_request( $request[ $lng_name ] ?? 0, $lng_name );
+
+		return $this->value;
 	}
 
 }

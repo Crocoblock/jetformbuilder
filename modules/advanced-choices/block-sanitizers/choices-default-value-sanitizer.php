@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Advanced_Choices\Block_Sanitizers;
 
+use Jet_Form_Builder\Blocks\Module;
 use JFB_Modules\Block_Sanitizer\Base_Block_Sanitizer;
 
 // If this file is called directly, abort.
@@ -19,11 +20,14 @@ class Choices_Default_Value_Sanitizer extends Base_Block_Sanitizer {
 	}
 
 	public function apply_data( array $parsed_block ): array {
-		$block = jet_form_builder()->blocks->get_field_by_name( $parsed_block );
 
-		if ( ! $block || empty( $parsed_block['attrs']['default'] ) ) {
-			$parsed_block['attrs']['default'] = array();
+		/** @var Module $blocks */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$blocks = jet_form_builder()->module( 'blocks' );
 
+		$block = $blocks->get_field_by_name( $parsed_block );
+
+		if ( ! $block ) {
 			return $parsed_block;
 		}
 

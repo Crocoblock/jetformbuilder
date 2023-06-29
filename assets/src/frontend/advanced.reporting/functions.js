@@ -71,7 +71,7 @@ function getPreparedRules( rules, reporting ) {
 		advancedRules = getAdvancedRules();
 	}
 
-	for ( const rule of rules ) {
+	for ( const [ index, rule ] of Object.entries( rules ) ) {
 		for ( const advancedRule of advancedRules ) {
 			const current = new advancedRule();
 
@@ -81,7 +81,7 @@ function getPreparedRules( rules, reporting ) {
 			delete rule.type;
 
 			current.setReporting( reporting );
-			current.setAttrs( { ...rule } );
+			current.setAttrs( { ...rule, index } );
 			current.onReady();
 
 			response.push( current );

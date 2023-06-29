@@ -1,11 +1,10 @@
 import BaseSignal from './BaseSignal';
-import { isRadio } from '../supports';
 
 function SignalRadio() {
 	BaseSignal.call( this );
 
 	this.isSupported = function ( node, inputData ) {
-		return isRadio( node );
+		return 'radio' === node.type;
 	};
 	this.runSignal   = function () {
 		this.input.calcValue = 0;

@@ -26,7 +26,7 @@ class Parser_Context {
 
 	protected $name = '';
 
-	/** @var Field_Data_Parser */
+	/** @var Field_Data_Parser|null */
 	protected $parent_field;
 
 	/** @var string|numeric */
@@ -195,9 +195,6 @@ class Parser_Context {
 		return $parser;
 	}
 
-	/**
-	 * @return mixed
-	 */
 	public function get_file( $name = '' ) {
 		if ( '' === $name ) {
 			$name = $this->name;
@@ -210,12 +207,12 @@ class Parser_Context {
 		$path = Array_Tools::path( $name );
 
 		try {
-			list( $parser, $path ) = $this->resolve_parser( $path );
+			$parser = $this->resolve( $path );
 		} catch ( Silence_Exception $exception ) {
 			return $this->raw_files[ $path[0] ] ?? false;
 		}
 
-		return $parser->get_file( $path );
+		return ( $path instanceof Field_Data_Parser ) ? $parser->get_file() : $parser->get_file( array() );
 	}
 
 	public function get_value( $name = '' ) {
@@ -230,14 +227,14 @@ class Parser_Context {
 		$path = Array_Tools::path( $name );
 
 		try {
-			list( $parser, $path ) = $this->resolve_parser( $path );
+			$parser = $this->resolve( $path );
 		} catch ( Plain_Value_Exception $exception ) {
 			return $this->parsers[ $path[0] ];
 		} catch ( Repository_Exception $exception ) {
 			return $this->raw_request[ $path[0] ] ?? '';
 		}
 
-		return $parser->get_value( $path );
+		return ( $path instanceof Field_Data_Parser ) ? $parser->get_value() : $parser->get_value( array() );
 	}
 
 	/**
@@ -260,14 +257,14 @@ class Parser_Context {
 		$path = Array_Tools::path( $name );
 
 		try {
-			list( $parser, $path ) = $this->resolve_parser( $path );
+			$parser = $this->resolve_parser( $path );
 		} catch ( Silence_Exception $exception ) {
 			$this->parsers[ $path[0] ] = $value;
 
 			return;
 		}
 
-		$parser->set_value( $value, $path );
+		$parser->set_value( $value );
 	}
 
 	public function update_file( $value, $name = '' ) {
@@ -276,12 +273,12 @@ class Parser_Context {
 		}
 
 		try {
-			list( $parser, $path ) = $this->resolve_parser( $name );
+			$parser = $this->resolve_parser( $name );
 		} catch ( Silence_Exception $exception ) {
 			return;
 		}
 
-		$parser->set_file( $value, $path );
+		$parser->set_file( $value );
 	}
 
 	public function set_request( array $request ): Parser_Context {
@@ -343,7 +340,7 @@ class Parser_Context {
 	/**
 	 * @param string $attr_name
 	 * @param $value
-	 * @param string|array $name 'field_name'|'repeater_name.field_name'|['repeater_name', 'field_name']
+	 * @param string|array $name
 	 *
 	 * @since 3.0.4
 	 */
@@ -353,12 +350,12 @@ class Parser_Context {
 		}
 
 		try {
-			list( $parser, $path ) = $this->resolve_parser( $name );
+			$parser = $this->resolve_parser( $name );
 		} catch ( Silence_Exception $exception ) {
 			return;
 		}
 
-		$parser->set_setting( $attr_name, $value, $path );
+		$parser->set_setting( $attr_name, $value );
 	}
 
 	/**
@@ -386,15 +383,13 @@ class Parser_Context {
 			$name = $this->name;
 		}
 
-		$path = Array_Tools::path( $name );
-
 		try {
-			list( $parser, $path ) = $this->resolve_parser( $path );
+			$parser = $this->resolve_parser( $name );
 		} catch ( Silence_Exception $exception ) {
 			return;
 		}
 
-		$parser->set_settings( $fields_settings, $path );
+		$parser->set_settings( $fields_settings );
 	}
 
 	/**
@@ -411,7 +406,7 @@ class Parser_Context {
 		$path = Array_Tools::path( $name );
 
 		try {
-			list( $parser, $path ) = $this->resolve_parser( $path );
+			$parser = $this->resolve_parser( $path );
 		} catch ( Silence_Exception $exception ) {
 			if ( 1 === count( $path ) ) {
 				$this->insert_parser( $path[0], $field_type );
@@ -420,7 +415,7 @@ class Parser_Context {
 			return;
 		}
 
-		$parser->set_type( $field_type, $path );
+		$parser->set_type( $field_type );
 	}
 
 	/**
@@ -435,12 +430,12 @@ class Parser_Context {
 		}
 
 		try {
-			list( $parser, $path ) = $this->resolve_parser( $name );
+			$parser = $this->resolve_parser( $name );
 		} catch ( Silence_Exception $exception ) {
 			return '';
 		}
 
-		return $parser->get_type( $path );
+		return $parser->get_type();
 	}
 
 	/**
@@ -460,7 +455,17 @@ class Parser_Context {
 	 * @return false|mixed
 	 */
 	public function get_setting( string $setting, $name = '' ) {
-		return $this->get_settings( $name )[ $setting ] ?? false;
+		if ( '' === $name ) {
+			$name = $this->name;
+		}
+
+		try {
+			$parser = $this->resolve_parser( $name );
+		} catch ( Silence_Exception $exception ) {
+			return false;
+		}
+
+		return $parser->get_setting( $setting );
 	}
 
 	/**
@@ -474,12 +479,12 @@ class Parser_Context {
 		}
 
 		try {
-			list( $parser, $path ) = $this->resolve_parser( $name );
+			$parser = $this->resolve_parser( $name );
 		} catch ( Silence_Exception $exception ) {
 			return array();
 		}
 
-		return $parser->get_settings( $path );
+		return $parser->get_settings();
 	}
 
 	public function iterate_fields_types(): \Generator {
@@ -588,12 +593,12 @@ class Parser_Context {
 		}
 
 		try {
-			list( $parser, $path ) = $this->resolve_parser( $name );
+			$parser = $this->resolve_parser( $name );
 		} catch ( Silence_Exception $exception ) {
 			return;
 		}
 
-		yield from $parser->iterate_inner( $path );
+		yield from $parser->iterate_inner();
 	}
 
 	public function clear_all() {
@@ -610,22 +615,22 @@ class Parser_Context {
 	 */
 	public function has_field( $name ): bool {
 		try {
-			list( $parser, $path ) = $this->resolve_parser( $name );
+			$this->resolve_parser( $name );
+
+			return true;
 		} catch ( Repository_Exception $exception ) {
 			return false;
 		} catch ( Plain_Value_Exception $exception ) {
 			return true;
 		}
-
-		return $parser->has_field( $path );
 	}
 
 
-	public function remove_field( $name ) {
+	public function remove( $name ) {
 		$real_path = Array_Tools::path( $name );
 
 		try {
-			list( $parser, $path ) = $this->resolve_parser( $name );
+			$parser = $this->resolve( $name );
 		} catch ( Repository_Exception $exception ) {
 			return;
 		} catch ( Plain_Value_Exception $exception ) {
@@ -634,13 +639,19 @@ class Parser_Context {
 			return;
 		}
 
-		if ( ! count( $path ) ) {
-			unset( $this->parsers[ $real_path[0] ] );
+		if ( 1 === count( $real_path ) && ( $parser instanceof Field_Data_Parser ) ) {
+			unset( $this->parsers[ $parser->get_name() ] );
 
 			return;
 		}
 
-		$parser->remove_field( $path );
+		if ( $parser instanceof Field_Data_Parser ) {
+			$parser->get_context()->remove( $parser->get_name() );
+		}
+
+		if ( $parser instanceof Parser_Context ) {
+			$parser->get_parent_field()->remove_context( $parser->get_index_in_parent() );
+		}
 	}
 
 	public function resolve_request( bool $with_inner = true ): array {
@@ -672,30 +683,45 @@ class Parser_Context {
 	}
 
 	/**
-	 * @param string|array $name
+	 * @param $path
+	 *
+	 * @return Field_Data_Parser
+	 * @throws Plain_Value_Exception|Repository_Exception
 	 */
-	public function get_self( $name = '' ) {
-		if ( empty( $name ) ) {
-			return $this;
+	public function resolve_parser( $path ): Field_Data_Parser {
+		$item = $this->resolve( $path );
+
+		if ( ! ( $item instanceof Field_Data_Parser ) ) {
+			throw new Repository_Exception();
 		}
 
-		try {
-			list( $parser, $path ) = $this->resolve_parser( $name );
-		} catch ( Silence_Exception $exception ) {
-			return false;
-		}
-
-		return $parser->get_context( $path );
+		return $item;
 	}
 
 	/**
 	 * @param $path
 	 *
-	 * @return array<Field_Data_Parser>|array<string[]>
+	 * @return Parser_Context
+	 * @throws Plain_Value_Exception|Repository_Exception
+	 */
+	public function resolve_context( $path ): Parser_Context {
+		$item = $this->resolve( $path );
+
+		if ( ! ( $item instanceof Parser_Context ) ) {
+			throw new Repository_Exception();
+		}
+
+		return $item;
+	}
+
+	/**
+	 * @param $path
+	 *
+	 * @return Field_Data_Parser|Parser_Context
 	 * @throws Plain_Value_Exception
 	 * @throws Repository_Exception
 	 */
-	public function resolve_parser( $path ): array {
+	public function resolve( $path ) {
 		if ( ! is_array( $path ) ) {
 			$path = Array_Tools::path( $path );
 		}
@@ -709,7 +735,7 @@ class Parser_Context {
 
 		$name = array_shift( $path );
 
-		return array( $this->parsers[ $name ], $path );
+		return empty( $path ) ? $this->parsers[ $name ] : $this->parsers[ $name ]->resolve( $path );
 	}
 
 	protected function insert_parser( string $name, string $field_type ): Field_Data_Parser {
@@ -772,6 +798,13 @@ class Parser_Context {
 	}
 
 	/**
+	 * @return float|int|string
+	 */
+	public function get_index_in_parent() {
+		return $this->index_in_parent;
+	}
+
+	/**
 	 * @param float|int|string $index_in_parent
 	 */
 	public function set_index_in_parent( $index_in_parent ) {
@@ -786,22 +819,26 @@ class Parser_Context {
 	}
 
 	public function get_parent_name(): string {
-		if ( ! $this->parent_field ) {
+		if ( ! $this->get_parent_field() ) {
 			return '';
 		}
 
 		if ( $this->hide_index ) {
-			return $this->parent_field->get_scoped_name();
+			return $this->get_parent_field()->get_scoped_name();
 		}
 
 		return trim(
-			$this->parent_field->get_scoped_name() . '.' . $this->index_in_parent,
+			$this->get_parent_field()->get_scoped_name() . '.' . $this->index_in_parent,
 			'.'
 		);
 	}
 
 	public function get_parent_label(): string {
-		return $this->parent_field ? $this->parent_field->get_scoped_label() : '';
+		return $this->get_parent_field() ? $this->get_parent_field()->get_scoped_label() : '';
+	}
+
+	public function get_parent_field() {
+		return $this->parent_field;
 	}
 
 	public function __clone() {

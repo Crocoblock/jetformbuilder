@@ -1,13 +1,16 @@
 import InputData from './InputData';
-import { isRadio } from '../supports';
 import ReactiveHook from '../reactive/ReactiveHook';
 import { STRICT_MODE } from '../signals/BaseSignal';
+import { getParsedName } from './functions';
 
 function RadioData() {
 	InputData.call( this );
 
-	this.isSupported    = function ( node ) {
-		return isRadio( node );
+	this.isSupported  = function ( node ) {
+		return (
+			node.classList.contains( 'checkradio-wrap' ) &&
+			node.querySelector( '.radio-wrap' )
+		);
 	};
 	this.addListeners   = function () {
 		this.enterKey = new ReactiveHook();
@@ -42,8 +45,17 @@ function RadioData() {
 		return '';
 	};
 
-	this.merge = function ( inputData ) {
-		this.nodes.push( ...inputData.getNode() );
+	this.setNode = function ( node ) {
+		node.jfbSync = this;
+		/**
+		 * It should be live collection for the case when items may change
+		 */
+		this.nodes = node.getElementsByClassName(
+			'jet-form-builder__field radio-field' );
+
+		this.rawName   = this.nodes[ 0 ].name;
+		this.name      = getParsedName( this.rawName );
+		this.inputType = 'radio';
 	};
 }
 

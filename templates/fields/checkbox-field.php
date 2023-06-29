@@ -17,7 +17,6 @@ $default  = $args['default'] ?? array();
 $this->add_attribute( 'class', 'jet-form-builder__field checkboxes-field checkradio-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'required', $required );
-$this->add_attribute( 'data-jfb-sync' );
 $custom_template = false;
 
 if ( ! empty( $args['field_options'] ) ) {
@@ -32,7 +31,7 @@ if ( ! empty( $args['field_options'] ) ) {
 		$this->add_attribute( 'class', 'checkboxes-group-required' );
 	}
 
-	echo '<div class="jet-form-builder__fields-group checkradio-wrap">';
+	echo '<div class="jet-form-builder__fields-group checkradio-wrap" data-jfb-sync>';
 
 	foreach ( $args['field_options'] as $value => $option ) {
 

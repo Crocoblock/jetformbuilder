@@ -18,11 +18,10 @@ $default  = ! empty( $args['default'] ) ? $args['default'] : false;
 $this->add_attribute( 'class', 'jet-form-builder__field radio-field checkradio-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $custom_template = false;
-$this->add_attribute( 'data-jfb-sync' );
 
 if ( ! empty( $args['field_options'] ) ) {
 
-	echo '<div class="jet-form-builder__fields-group checkradio-wrap">';
+	echo '<div class="jet-form-builder__fields-group checkradio-wrap" data-jfb-sync>';
 
 	foreach ( $args['field_options'] as $value => $option ) {
 

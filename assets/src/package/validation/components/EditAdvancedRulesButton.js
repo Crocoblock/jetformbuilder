@@ -1,5 +1,3 @@
-import useBlockAttributes from '../../blocks/hooks/useBlockAttributes';
-import useUniqKey from '../../blocks/hooks/useUniqKey';
 import AdvancedRulesModal from './AdvancedRulesModal';
 import ActionModal from '../../action-modal/components/ActionModal';
 import AdvancedRulesList from './AdvancedRulesList';

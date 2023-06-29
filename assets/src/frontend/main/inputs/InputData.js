@@ -29,14 +29,28 @@ const { doAction } = JetPlugins.hooks;
  * @constructor
  */
 function InputData() {
-	this.rawName       = '';
-	this.name          = '';
-	this.comment       = false;
-	this.nodes         = [];
+	this.rawName = '';
+	this.name    = '';
+	this.comment = false;
+	/**
+	 * @type {HTMLElement[]|HTMLInputElement[]}
+	 */
+	this.nodes = [];
 	this.attrs         = {};
 	this.enterKey      = null;
 	this.inputType     = null;
 	this.offsetOnFocus = 75;
+
+	/**
+	 * Path from top of form to current field name
+	 * Ex.: [ 'repeater_name', 0, 'text_field' ]
+	 * Where:
+	 *  - 'repeater_name': name of repeater, where current field is placed
+	 *  - 0: index of repeater row, where current field is placed
+	 *  - 'text_field': name of current field name
+	 * @type {Array<String|Number>}
+	 */
+	this.path = [];
 
 	/**
 	 * @type {ReactiveVar}
@@ -63,8 +77,13 @@ function InputData() {
 	this.loading.make();
 }
 
-InputData.prototype.attrs        = {};
-InputData.prototype.isSupported  = function ( node ) {
+InputData.prototype.attrs = {};
+
+/**
+ * @param node {HTMLElement}
+ * @returns {boolean}
+ */
+InputData.prototype.isSupported = function ( node ) {
 	return true;
 };
 InputData.prototype.addListeners = function () {
@@ -155,7 +174,10 @@ InputData.prototype.setValue = function () {
 	}
 	this.calcValue = this.value.current;
 };
-InputData.prototype.setNode  = function ( node ) {
+/**
+ * @param node {HTMLElement|HTMLInputElement}
+ */
+InputData.prototype.setNode = function ( node ) {
 	this.nodes   = [ node ];
 	this.rawName = node.name ?? '';
 	this.name    = getParsedName( this.rawName );
@@ -255,7 +277,10 @@ InputData.prototype.getSubmit = function () {
  * @returns {Observable}
  */
 InputData.prototype.getRoot = function () {
-	return this.root?.parent?.root ?? this.root;
+	if ( ! this.root?.parent ) {
+		return this.root;
+	}
+	return this.root.parent.getRoot();
 };
 
 InputData.prototype.isVisible = function () {
@@ -393,6 +418,28 @@ InputData.prototype.hasAutoScroll = function () {
  */
 InputData.prototype.getReportingNode = function () {
 	return this.nodes[ 0 ];
+};
+
+InputData.prototype.getParentPath = function () {
+	if ( !this.root?.parent ) {
+		return [];
+	}
+
+	/**
+	 * @type {Array|Object}
+	 */
+	const value = this.root.parent.value.current;
+
+	for ( const [ index, row ] of Object.entries( value ) ) {
+		if ( row !== this.root ) {
+			continue;
+		}
+		return [
+			...this.root.parent.getParentPath(),
+			this.root.parent.rawName,
+			index,
+		];
+	}
 };
 
 export default InputData;

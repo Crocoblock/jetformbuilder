@@ -124,7 +124,7 @@ class Multiple_Controller extends Base_Export_Controller {
 			if ( in_array( $name, $fields, true ) ) {
 				continue;
 			}
-			$parser->remove_field();
+			$parser->get_context()->remove( $parser->get_name() );
 		}
 
 		return parent::get_field_columns();

@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Blocks\Ssr_Validation;
 
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use JFB_Components\Repository\Repository_Item_Instance_Trait;
-use Jet_Form_Builder\Request\Parser_Context;
+use JFB_Modules\Block_Parsers\Parser_Context;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -21,6 +21,7 @@ abstract class Base_Validation_Callback
 
 	/**
 	 * @param mixed $value
+	 * @param Parser_Context $context
 	 *
 	 * @return bool
 	 */

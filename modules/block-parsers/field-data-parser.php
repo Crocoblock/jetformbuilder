@@ -4,8 +4,9 @@
 namespace JFB_Modules\Block_Parsers;
 
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Parse_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Request\Exceptions\Plain_Value_Exception;
 use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
@@ -151,74 +152,19 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		return $this;
 	}
 
-	/**
-	 * @param $value
-	 * @param array $inner_names
-	 *
-	 * @return $this
-	 */
-	public function set_value( $value, array $inner_names = array() ): Field_Data_Parser {
-		if ( empty( $inner_names ) ) {
-			$this->value = $this->parse_value( $value );
-
-			return $this;
-		}
-
-		$index = array_shift( $inner_names );
-
-		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
-		) {
-			return $this;
-		}
-
-		$this->inner_contexts[ $index ]->update_request( $value, $inner_names );
-
-		return $this;
+	public function set_value( $value ) {
+		$this->value = $this->parse_value( $value );
 	}
 
 	/**
 	 * @param bool|File|File_Collection $file
-	 * @param array $inner_names
-	 *
-	 * @return Field_Data_Parser
 	 */
-	public function set_file( $file, array $inner_names = array() ): Field_Data_Parser {
-		if ( empty( $inner_names ) ) {
-			$this->file = $file;
-
-			return $this;
-		}
-
-		$index = array_shift( $inner_names );
-
-		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
-		) {
-			return $this;
-		}
-
-		$this->inner_contexts[ $index ]->update_file( $file, $inner_names );
-
-		return $this;
+	public function set_file( $file ) {
+		$this->file = $file;
 	}
 
-	public function set_type( string $type, array $inner_names = array() ) {
-		if ( empty( $inner_names ) ) {
-			$this->type = $type;
-
-			return;
-		}
-
-		$index = array_shift( $inner_names );
-
-		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
-		) {
-			return;
-		}
-
-		$this->inner_contexts[ $index ]->set_field_type( $type, $inner_names );
+	public function set_type( string $type ) {
+		$this->type = $type;
 	}
 
 	/**
@@ -230,74 +176,32 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	/**
 	 * @param array $settings
-	 * @param array $inner_names
 	 *
 	 * @since 3.1.0
 	 */
-	public function set_settings( array $settings, array $inner_names = array() ) {
-		if ( empty( $inner_names ) ) {
-			$this->settings = $settings;
-
-			return;
-		}
-
-		$index = array_shift( $inner_names );
-
-		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
-		) {
-			return;
-		}
-
-		$this->inner_contexts[ $index ]->set_field_settings( $settings, $inner_names );
+	public function set_settings( array $settings ) {
+		$this->settings = $settings;
 	}
 
 	/**
 	 * @param string $attr
 	 * @param $value
-	 * @param array $inner_names
 	 *
 	 * @since 3.1.0
 	 */
-	public function set_setting( string $attr, $value, array $inner_names = array() ) {
-		if ( empty( $inner_names ) ) {
-			if ( ! is_array( $this->settings ) ) {
-				$this->set_settings( array(), $inner_names );
-			}
-			$this->settings[ $attr ] = $value;
-
-			return;
+	public function set_setting( string $attr, $value ) {
+		if ( ! is_array( $this->settings ) ) {
+			$this->set_settings( array() );
 		}
-
-		$index = array_shift( $inner_names );
-
-		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
-		) {
-			return;
-		}
-
-		$this->inner_contexts[ $index ]->update_setting( $attr, $value, $inner_names );
+		$this->settings[ $attr ] = $value;
 	}
 
 	/**
-	 * @return Parser_Context|false
+	 * @return Parser_Context
 	 * @since 3.0.4
 	 */
-	public function get_context( array $inner_names = array() ) {
-		if ( empty( $inner_names ) ) {
-			return $this->context;
-		}
-
-		$index = array_shift( $inner_names );
-
-		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
-		) {
-			return false;
-		}
-
-		return $this->inner_contexts[ $index ]->get_self( $inner_names );
+	public function get_context(): Parser_Context {
+		return $this->context;
 	}
 
 	public function iterate_file(): \Generator {
@@ -307,24 +211,12 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	/**
 	 * @return bool|File|File_Collection|array
 	 */
-	public function get_file( array $inner_names = array() ) {
-		if ( empty( $inner_names ) ) {
-			if ( empty( $this->inner_contexts ) ) {
-				return $this->file;
-			}
-
-			return iterator_to_array( $this->iterate_inner_files() );
+	public function get_file() {
+		if ( empty( $this->inner_contexts ) ) {
+			return $this->file;
 		}
 
-		$index = array_shift( $inner_names );
-
-		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
-		) {
-			return false;
-		}
-
-		return $this->inner_contexts[ $index ]->get_file( $inner_names );
+		return iterator_to_array( $this->iterate_inner_files() );
 	}
 
 	public function iterate_self( bool $break_on_first = true ): \Generator {
@@ -350,24 +242,10 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	}
 
 	/**
-	 * @param array $inner_names
-	 *
 	 * @return string
 	 */
-	public function get_type( array $inner_names = array() ): string {
-		if ( empty( $inner_names ) ) {
-			return $this->type;
-		}
-
-		$index = array_shift( $inner_names );
-
-		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
-		) {
-			return false;
-		}
-
-		return $this->inner_contexts[ $index ]->get_field_type( $inner_names );
+	public function get_type(): string {
+		return $this->type;
 	}
 
 	/**
@@ -415,45 +293,26 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		next( $this->inner_contexts );
 	}
 
-	public function get_value( array $inner_names = array() ) {
-		if ( empty( $inner_names ) ) {
-			if ( empty( $this->inner_contexts ) || ! $this->with_inner ) {
-				return $this->value;
-			}
-
-			return iterator_to_array( $this->iterate_inner_values() );
+	/**
+	 * @return mixed
+	 */
+	public function get_value() {
+		if ( empty( $this->inner_contexts ) || ! $this->with_inner ) {
+			return $this->value;
 		}
 
-		$index = array_shift( $inner_names );
+		return iterator_to_array( $this->iterate_inner_values() );
+	}
 
-		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
-		) {
-			return '';
-		}
-
-		return $this->inner_contexts[ $index ]->get_value( $inner_names );
+	public function get_setting( string $attr_name ) {
+		return $this->settings[ $attr_name ] ?? false;
 	}
 
 	/**
-	 * @param string[] $inner_names
-	 *
 	 * @return array
 	 */
-	public function get_settings( array $inner_names = array() ): array {
-		if ( empty( $inner_names ) ) {
-			return $this->settings;
-		}
-
-		$index = array_shift( $inner_names );
-
-		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
-		) {
-			return array();
-		}
-
-		return $this->inner_contexts[ $index ]->get_settings( $inner_names );
+	public function get_settings(): array {
+		return $this->settings;
 	}
 
 	public function __get( $name ) {
@@ -465,43 +324,17 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		}
 	}
 
-	public function has_field( array $inner_names = array() ): bool {
-		if ( empty( $inner_names ) ) {
-			return true;
-		}
-		$index = array_shift( $inner_names );
-
-		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
-		) {
-			return false;
-		}
-
-		return $this->inner_contexts[ $index ]->has_field( $inner_names );
-	}
-
-	public function remove_field( array $inner_names = array() ) {
-		if ( empty( $inner_names ) ) {
-			// remove self
-			$this->get_context()->remove_field( $this->get_name() );
-
-			return;
-		}
-		$index = array_shift( $inner_names );
-
+	/**
+	 * @param string|int $index
+	 */
+	public function remove_context( $index ) {
 		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
 			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
 		) {
 			return;
 		}
 
-		if ( empty( $inner_names ) ) {
-			unset( $this->inner_contexts[ $index ] );
-
-			return;
-		}
-
-		$this->inner_contexts[ $index ]->remove_field( $inner_names );
+		unset( $this->inner_contexts[ $index ] );
 	}
 
 	public function add_inner( Parser_Context $context, $key = '' ) {
@@ -580,22 +413,38 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		$this->with_inner = $with_inner;
 	}
 
-	public function iterate_inner( array $inner_names = array() ): \Generator {
-		if ( empty( $inner_names ) ) {
-			foreach ( $this->inner_contexts as $context ) {
-				yield $context;
-			}
+	public function iterate_inner(): \Generator {
+		if ( empty( $this->inner_contexts ) ) {
+			return;
 		}
 
-		$index = array_shift( $inner_names );
+		foreach ( $this->inner_contexts as $context ) {
+			yield $context;
+		}
+	}
+
+	/**
+	 * @param array $path
+	 *
+	 * @return Field_Data_Parser|Parser_Context
+	 * @throws Plain_Value_Exception|Repository_Exception
+	 */
+	public function resolve( array $path ) {
+		if ( empty( $this->inner_contexts ) ) {
+			throw new Repository_Exception();
+		}
+
+		$index = array_shift( $path );
 
 		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
 			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
 		) {
-			return;
+			throw new Repository_Exception();
 		}
 
-		yield from $this->inner_contexts[ $index ]->iterate_inner( $inner_names );
+		return empty( $path )
+			? $this->inner_contexts[ $index ]
+			: $this->inner_contexts[ $index ]->resolve( $path );
 	}
 
 	public function __clone() {

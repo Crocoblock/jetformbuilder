@@ -3,11 +3,9 @@
 
 namespace Jet_Form_Builder\Blocks\Ssr_Validation;
 
-use Jet_Form_Builder\Blocks\Block_Helper;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Request\Parser_Context;
-use JET_SM\Gutenberg\Block_Manager;
+use JFB_Modules\Block_Parsers\Field_Data_Parser;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -17,6 +15,20 @@ if ( ! defined( 'WPINC' ) ) {
 class Validation_Callbacks {
 
 	use Repository_Pattern_Trait;
+
+	const NOT_ALLOWED = array(
+		'var_dump',
+		'var_export',
+		'print_r',
+		'sprintf',
+		'printf',
+		'shell_exec',
+		'system',
+		'exec',
+		'unserialize',
+		'file_get_contents',
+		'maybe_unserialize',
+	);
 
 	public function __construct() {
 		$this->rep_install();
@@ -40,63 +52,39 @@ class Validation_Callbacks {
 	}
 
 
-	public function validate( $value, string $function_name, Parser_Context $context ): bool {
+	public function validate( Field_Data_Parser $parser, string $function_name ): bool {
 		try {
 			/** @var Base_Validation_Callback $callback */
 			$callback = $this->rep_get_item( $function_name );
 		} catch ( Repository_Exception $exception ) {
-			return $this->validate_custom( $value, $function_name, $context );
+			return $this->validate_custom( $parser, $function_name );
 		}
 
-		return $callback->is_valid( $value, $context );
+		return $callback->is_valid( $parser->get_value(), $parser->get_context() );
 	}
 
-	protected function validate_custom( $value, string $function_name, Parser_Context $context ): bool {
-		$name = $this->validate_callback( $function_name, $context );
+	protected function validate_custom( Field_Data_Parser $parser, string $function_name ): bool {
+		$name = $this->validate_callback( $function_name );
 
 		if ( ! $name ) {
 			return false;
 		}
 
-		return (bool) call_user_func( $name, $value, $context );
+		return (bool) call_user_func( $name, $parser->get_value(), $parser->get_context() );
 	}
 
-	protected function validate_callback( string $function_name, Parser_Context $context ): string {
-		$name    = preg_replace( '/[^\w]/i', '', $function_name );
-		$form_id = jet_fb_handler()->get_form_id();
+	protected function validate_callback( string $function_name ): string {
+		$name = preg_replace( '/[^\w]/i', '', $function_name );
 
-		if ( ! function_exists( $name ) || ! $form_id ) {
+		if ( $name !== $function_name ||
+			// not in the blacklist
+			in_array( $name, self::NOT_ALLOWED, true ) ||
+			// not starts with `wp_`
+			0 === strpos( $name, 'wp_' )
+		) {
 			return '';
 		}
 
-		$all_blocks = Block_Helper::get_blocks_by_post( $form_id );
-
-		$block = Block_Helper::find_block(
-			function ( $block ) use ( $name, $context ) {
-				if (
-					empty( $block['attrs']['validation']['rules'] ) ||
-					empty( $block['attrs']['name'] ) ||
-					$block['attrs']['name'] !== $context->get_name()
-				) {
-					return false;
-				}
-
-				foreach ( $block['attrs']['validation']['rules'] as $rule ) {
-					if (
-						'ssr' !== ( $rule['type'] ?? '' ) ||
-						( $rule['value'] ?? '' ) !== $name
-					) {
-						continue;
-					}
-
-					return true;
-				}
-
-				return false;
-			},
-			$all_blocks
-		);
-
-		return empty( $block ) ? '' : $function_name;
+		return function_exists( $name ) ? $name : '';
 	}
 }

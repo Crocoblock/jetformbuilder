@@ -1,11 +1,10 @@
 import BaseSignal from './BaseSignal';
-import { isCheckbox } from '../supports';
 
 function SignalCheckbox() {
 	BaseSignal.call( this );
 
 	this.isSupported = function ( node, inputData ) {
-		return isCheckbox( node );
+		return 'checkbox' === node.type;
 	};
 	this.runSignal   = function () {
 		this.input.calcValue = 0;

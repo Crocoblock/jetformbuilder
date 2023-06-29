@@ -1,16 +1,31 @@
 import InputData from './InputData';
-import { isCheckbox } from '../supports';
 import ReactiveHook from '../reactive/ReactiveHook';
-import { STRICT_MODE } from '../signals/BaseSignal';
+import { getParsedName } from './functions';
 
+function sanitizeValue( value ) {
+	if ( Array.isArray( value ) ) {
+		return value;
+	}
+
+	return [ value ].filter(
+		Boolean,
+	);
+}
+
+/**
+ * @property HTMLCollectionOf<HTMLInputElement> nodes
+ */
 function CheckboxData() {
 	InputData.call( this );
 
 	this.isSupported  = function ( node ) {
-		return isCheckbox( node );
+		return (
+			node.classList.contains( 'checkradio-wrap' ) &&
+			node.querySelector( '.checkboxes-wrap' )
+		);
 	};
 	this.addListeners = function () {
-		this.enterKey = new ReactiveHook();
+		this.enterKey  = new ReactiveHook();
 
 		for ( const node of this.nodes ) {
 			node.addEventListener( 'change', () => this.setValue() );
@@ -18,34 +33,29 @@ function CheckboxData() {
 				'keydown',
 				this.handleEnterKey.bind( this ),
 			);
-
-			!STRICT_MODE && jQuery( node ).on( 'change', event => {
-				this.callable.lockTrigger();
-				this.setValue();
-				this.callable.unlockTrigger();
-			} );
 		}
 
 		if ( !this.isArray() ) {
 			return;
 		}
 
-		this.sanitize( value => {
-			if ( Array.isArray( value ) ) {
-				return value;
-			}
-
-			return [ value ].filter(
-				Boolean,
-			);
-		} );
+		this.sanitize( sanitizeValue );
 	};
 	this.setValue     = function () {
 		this.value.current = this.getActiveValue();
 	};
 
-	this.merge = function ( inputData ) {
-		this.nodes.push( ...inputData.getNode() );
+	this.setNode = function ( node ) {
+		node.jfbSync = this;
+		/**
+		 * It should be live collection for the case when items may change
+		 */
+		this.nodes = node.getElementsByClassName(
+			'jet-form-builder__field checkboxes-field' );
+
+		this.rawName   = this.nodes[ 0 ].name;
+		this.name      = getParsedName( this.rawName );
+		this.inputType = 'checkbox';
 	};
 
 	this.getActiveValue = function () {

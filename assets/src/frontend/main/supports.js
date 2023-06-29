@@ -10,14 +10,6 @@ function isChangeType( node ) {
  * @param node {HTMLElement}
  * @returns {boolean}
  */
-function isCheckbox( node ) {
-	return 'checkbox' === node.type;
-}
-
-/**
- * @param node {HTMLElement}
- * @returns {boolean}
- */
 function isInputMask( node ) {
 	return (
 		node.classList.contains( 'jet-form-builder__masked-field' ) &&
@@ -49,14 +41,6 @@ function isHidden( node ) {
  * @param node {HTMLElement}
  * @returns {boolean}
  */
-function isRadio( node ) {
-	return 'radio' === node.type;
-}
-
-/**
- * @param node {HTMLElement}
- * @returns {boolean}
- */
 function isRange( node ) {
 	return 'range' === node.type;
 }
@@ -70,11 +54,9 @@ function isWysiwyg( node ) {
 }
 
 export {
-	isRadio,
 	isWysiwyg,
 	isHidden,
 	isRange,
-	isCheckbox,
 	isSelect,
 	isMultiSelect,
 	isChangeType,

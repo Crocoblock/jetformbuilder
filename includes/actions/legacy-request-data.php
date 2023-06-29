@@ -84,7 +84,7 @@ class Legacy_Request_Data  implements \Iterator, \ArrayAccess {
 	 */
 	#[\ReturnTypeWillChange]
 	public function offsetUnset( $offset ) {
-		jet_fb_context()->remove_field( $offset );
+		jet_fb_context()->remove( $offset );
 	}
 
 }

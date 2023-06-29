@@ -6,6 +6,7 @@ function ReactiveVar( value = null ) {
 	this.sanitizers = [];
 	this.isDebug    = false;
 	this.isSilence  = false;
+	this.isMaked    = false;
 }
 
 ReactiveVar.prototype = {
@@ -23,8 +24,12 @@ ReactiveVar.prototype = {
 			return false;
 		}
 
+		if ( this.signals.some( ( { signal } ) => signal === callable ) ) {
+			return true;
+		}
+
 		this.signals.push( {
-			signal: callable.bind( this ),
+			signal: callable,
 			trace: new Error().stack,
 		} );
 
@@ -37,13 +42,21 @@ ReactiveVar.prototype = {
 			return false;
 		}
 
-		this.sanitizers.push( callable.bind( this ) );
+		if ( -1 !== this.sanitizers.indexOf( callable ) ) {
+			return true;
+		}
+
+		this.sanitizers.push( callable );
 
 		const index = this.sanitizers.length - 1;
 
 		return () => this.sanitizers.splice( index, 1 );
 	},
 	make: function () {
+		if ( this.isMaked ) {
+			return;
+		}
+		this.isMaked  = true;
 		let current   = this.current;
 		let prevValue = null;
 		const self    = this;
@@ -74,11 +87,12 @@ ReactiveVar.prototype = {
 		} );
 	},
 	notify: function ( prevValue = null ) {
-		this.signals.forEach( ( { signal } ) => signal( prevValue ) );
+		this.signals.forEach(
+			( { signal } ) => signal.call( this, prevValue ) );
 	},
 	applySanitizers: function ( value ) {
 		for ( const sanitizer of this.sanitizers ) {
-			value = sanitizer( value );
+			value = sanitizer.call( this, value );
 		}
 
 		return value;

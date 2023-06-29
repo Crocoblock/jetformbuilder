@@ -100,8 +100,6 @@ class Upload_Dir {
 			return false;
 		}
 
-<<<<<<< HEAD
-=======
 		$content = apply_filters(
 			'jet-form-builder/file-upload/htaccess-content',
 			self::htaccess_content()
@@ -111,7 +109,6 @@ class Upload_Dir {
 			return false;
 		}
 
->>>>>>> main
 		$path  = trailingslashit( $path ) . '.htaccess';
 		$index = wp_normalize_path( $path );
 

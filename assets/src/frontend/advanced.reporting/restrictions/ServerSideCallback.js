@@ -30,62 +30,19 @@ function ServerSideCallback() {
 	};
 
 	this.getFormData = function () {
-		const { input } = this.reporting;
-		const formData  = this.getInitialFormData();
+		const { input }    = this.reporting;
+		const { rootNode } = input.getRoot();
 
-		formData.set( '_jfb_validation_field', input.name );
-		formData.set( '_jfb_validation_callback', this.attrs.value );
-
-		if ( !input.hasParent() ) {
-			return formData;
-		}
-		formData.set( '_jfb_validation_parent', input.root.parent.name );
-		const { rootNode: globalRootNode } = input.root.parent.root;
-
-		const globalFormData = new FormData( globalRootNode );
-
-		for ( const [ name, value ] of globalFormData.entries() ) {
-			if ( name === input.root.parent.name ) {
-				continue;
-			}
-			const nameParts = name.match( /([\w\-]+)(.*)?/ );
-
-			if ( !nameParts?.length ) {
-				console.error( 'Invalid field name', name );
-				continue;
-			}
-
-			const [ , clearName, rightName ] = nameParts;
-
-			formData.append(
-				`_jfb_validation_root[${ clearName }]` + (
-					rightName ?? ''
-				),
-				value,
-			);
+		const formData = new FormData( rootNode );
+		formData.delete( '_wpnonce' );
+		formData.set( '_jfb_validation_rule_index', this.attrs.index );
+		for ( const pathElement of input.path ) {
+			formData.append( '_jfb_validation_path[]', pathElement );
 		}
 
 		return formData;
 	};
 
-	this.getInitialFormData = function () {
-		const { input }    = this.reporting;
-		const { rootNode } = input.root;
-
-		if ( !input.hasParent() ) {
-			const formData = new FormData( rootNode );
-			formData.delete( '_wpnonce' );
-
-			return formData;
-		}
-		/**
-		 * @type {Element}
-		 */
-		const formElement = document.createElement( 'form' );
-		formElement.append( rootNode.cloneNode( true ) );
-
-		return new FormData( formElement );
-	};
 }
 
 ServerSideCallback.prototype = Object.create(

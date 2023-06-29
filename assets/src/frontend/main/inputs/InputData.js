@@ -207,6 +207,8 @@ InputData.prototype.onObserve = function () {
 
 	this.loading.watch( () => this.onChangeLoading() );
 
+	this.path = [ ...this.getParentPath(), this.name ];
+
 	if (
 		// is ajax
 		!this.getSubmit().submitter.hasOwnProperty( 'status' ) ||

@@ -10,9 +10,9 @@ if ( ! defined( 'WPINC' ) ) {
 
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Actions_Abstract\Action_Application_Raw_Body_It;
-use Jet_Form_Builder\Gateways\Base_Gateway_Action;
-use Jet_Form_Builder\Integrations\Forms_Captcha;
+use JFB_Modules\Gateways\Actions_Abstract\Action_Application_Raw_Body_It;
+use JFB_Modules\Gateways\Base_Gateway_Action;
+use JFB_Modules\Captcha\Module;
 
 class Verify_Token_Action extends Base_Gateway_Action implements
 	Action_Application_Raw_Body_It {
@@ -85,7 +85,7 @@ class Verify_Token_Action extends Base_Gateway_Action implements
 	 * @return Verify_Token_Action
 	 */
 	public function set_action( $action ): Verify_Token_Action {
-		$this->action = is_numeric( $action ) ? Forms_Captcha::PREFIX . $action : $action;
+		$this->action = is_numeric( $action ) ? Module::PREFIX . $action : $action;
 
 		return $this;
 	}

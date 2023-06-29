@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
+use JFB_Modules\Block_Parsers\Field_Data_Parser;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -15,12 +17,14 @@ class Legacy_Request_Data  implements \Iterator, \ArrayAccess {
 	 */
 	#[\ReturnTypeWillChange]
 	public function current() {
-		return current( jet_fb_context()->__danger_parsers );
+		$parser = current( jet_fb_context()->parsers );
+
+		return ( $parser instanceof Field_Data_Parser ) ? $parser->get_value() : $parser;
 	}
 
 	#[\ReturnTypeWillChange]
 	public function next() {
-		next( jet_fb_context()->__danger_parsers );
+		next( jet_fb_context()->parsers );
 	}
 
 	/**
@@ -28,7 +32,7 @@ class Legacy_Request_Data  implements \Iterator, \ArrayAccess {
 	 */
 	#[\ReturnTypeWillChange]
 	public function key() {
-		return key( jet_fb_context()->__danger_parsers );
+		return key( jet_fb_context()->parsers );
 	}
 
 	/**
@@ -40,7 +44,7 @@ class Legacy_Request_Data  implements \Iterator, \ArrayAccess {
 
 	#[\ReturnTypeWillChange]
 	public function rewind() {
-		reset( jet_fb_context()->__danger_parsers );
+		reset( jet_fb_context()->parsers );
 	}
 
 	/*

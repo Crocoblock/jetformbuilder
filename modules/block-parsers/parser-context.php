@@ -17,8 +17,6 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * @property array __danger_parsers
- *
  * Class Parser_Context
  * @package Jet_Form_Builder\Request
  */
@@ -46,9 +44,11 @@ class Parser_Context {
 	private $guest_allow = false;
 
 	/**
+	 * Don't use it outside
+	 *
 	 * @var Field_Data_Parser[]
 	 */
-	protected $parsers = array();
+	public $parsers = array();
 
 	public function apply( $fields = null ) {
 		if ( is_array( $fields ) ) {
@@ -847,21 +847,6 @@ class Parser_Context {
 			$this->parsers[ $name ] = clone $parser;
 			$this->parsers[ $name ]->set_context( $this );
 		}
-	}
-
-	/**
-	 * @param $name
-	 *
-	 * @return array|null
-	 * @see \Jet_Form_Builder\Actions\Legacy_Request_Data
-	 */
-	public function __get( $name ) {
-		switch ( $name ) {
-			case '__danger_parsers':
-				return $this->parsers;
-		}
-
-		return null;
 	}
 
 	public function __debugInfo(): array {

@@ -4,8 +4,8 @@
 namespace JFB_Modules\Captcha\Friendly_Captcha;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Actions_Abstract\Action_Application_Raw_Body_It;
-use Jet_Form_Builder\Gateways\Base_Gateway_Action;
+use JFB_Modules\Gateways\Actions_Abstract\Action_Application_Raw_Body_It;
+use JFB_Modules\Gateways\Base_Gateway_Action;
 
 class Verify_Token_Action extends Base_Gateway_Action implements
 	Action_Application_Raw_Body_It {

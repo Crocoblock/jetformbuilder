@@ -4,9 +4,9 @@
 namespace JFB_Modules\Captcha\Re_Captcha_V3;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Gateways\Actions_Abstract\Action_Application_Raw_Body_It;
-use Jet_Form_Builder\Gateways\Base_Gateway_Action;
-use Jet_Form_Builder\Integrations\Forms_Captcha;
+use JFB_Modules\Gateways\Actions_Abstract\Action_Application_Raw_Body_It;
+use JFB_Modules\Gateways\Base_Gateway_Action;
+use JFB_Modules\Captcha\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -75,7 +75,7 @@ class Verify_Token_Action extends Base_Gateway_Action implements
 	 * @return $this
 	 */
 	public function set_action( $action ): Verify_Token_Action {
-		$this->action = is_numeric( $action ) ? Forms_Captcha::PREFIX . $action : $action;
+		$this->action = is_numeric( $action ) ? Module::PREFIX . $action : $action;
 
 		return $this;
 	}

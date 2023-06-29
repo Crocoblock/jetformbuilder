@@ -3,8 +3,7 @@
 
 namespace JFB_Modules\Advanced_Choices;
 
-use Jet_Form_Builder\Blocks\Manager;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Blocks\Module as BlocksModule;
 use JFB_Modules\Advanced_Choices\Block_Parsers\Choices_Field_Parser;
 use JFB_Modules\Advanced_Choices\Block_Sanitizers\Choices_Default_Value_Sanitizer;
 use JFB_Components\Module\Base_Module_After_Install_It;
@@ -18,6 +17,7 @@ use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use Jet_Form_Builder\Plugin;
 use JFB_Modules\Block_Sanitizer;
+use JFB_Modules\Block_Parsers;
 
 
 // If this file is called directly, abort.
@@ -51,23 +51,29 @@ Base_Module_After_Install_It {
 	}
 
 	/**
-	 * @throws Repository_Exception
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function on_install() {
 		/** @var Block_Sanitizer\Module $sanitizer */
 		$sanitizer = jet_form_builder()->module( 'block-sanitizer' );
+		/** @var Block_Parsers\Module $parsers */
+		$parsers = jet_form_builder()->module( 'block-parsers' );
 
 		$sanitizer->register( new Choices_Default_Value_Sanitizer() );
+		$parsers->install( new Choices_Field_Parser() );
 	}
 
 	/**
-	 * @throws Repository_Exception
+	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function on_uninstall() {
 		/** @var Block_Sanitizer\Module $sanitizer */
 		$sanitizer = jet_form_builder()->module( 'block-sanitizer' );
+		/** @var Block_Parsers\Module $parsers */
+		$parsers = jet_form_builder()->module( 'block-parsers' );
 
 		$sanitizer->unregister( new Choices_Default_Value_Sanitizer() );
+		$parsers->uninstall( new Choices_Field_Parser() );
 	}
 
 	public function init_hooks() {
@@ -80,8 +86,6 @@ Base_Module_After_Install_It {
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
-
-		add_filter( 'jet-form-builder/parsers-request/register', array( $this, 'add_block_parsers' ) );
 	}
 
 	public function remove_hooks() {
@@ -94,8 +98,6 @@ Base_Module_After_Install_It {
 
 		remove_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		remove_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
-
-		remove_filter( 'jet-form-builder/parsers-request/register', array( $this, 'add_block_parsers' ) );
 	}
 
 	public function add_blocks_types( array $block_types ): array {
@@ -111,18 +113,12 @@ Base_Module_After_Install_It {
 		return array_merge( $block_types, $types );
 	}
 
-	public function add_block_parsers( array $types ): array {
-		$types[] = new Choices_Field_Parser();
-
-		return $types;
-	}
-
 	public function register_frontend_scripts() {
 		wp_register_script(
 			$this->get_handle(),
 			$this->get_url( 'assets-build/js/frontend/choices.field{min}.js' ),
 			array(
-				Manager::MAIN_SCRIPT_HANDLE,
+				BlocksModule::MAIN_SCRIPT_HANDLE,
 			),
 			Plugin::instance()->get_version(),
 			true

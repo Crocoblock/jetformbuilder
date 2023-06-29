@@ -3,7 +3,7 @@
 
 namespace JFB_Modules\Advanced_Choices\Block_Parsers;
 
-use Jet_Form_Builder\Request\Field_Data_Parser;
+use JFB_Modules\Block_Parsers\Field_Data_Parser;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

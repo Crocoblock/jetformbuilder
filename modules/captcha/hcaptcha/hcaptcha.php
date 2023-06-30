@@ -4,10 +4,12 @@
 namespace JFB_Modules\Captcha\Hcaptcha;
 
 use Jet_Form_Builder\Blocks\Validation;
+use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Captcha\Abstract_Captcha\Base_Captcha;
 use JFB_Modules\Captcha\Abstract_Captcha\Base_Captcha_From_Options;
+use JFB_Modules\Captcha\Abstract_Captcha\Captcha_Frontend_Style_It;
 use JFB_Modules\Captcha\Abstract_Captcha\Captcha_Separate_Editor_Script;
 use JFB_Modules\Captcha\Abstract_Captcha\Captcha_Separate_Frontend_Script;
 use JFB_Modules\Captcha\Module;
@@ -15,7 +17,8 @@ use JFB_Modules\Security\Exceptions\Spam_Exception;
 
 class Hcaptcha extends Base_Captcha_From_Options implements
 	Captcha_Separate_Frontend_Script,
-	Captcha_Separate_Editor_Script {
+	Captcha_Separate_Editor_Script,
+	Captcha_Frontend_Style_It {
 
 	public function get_id(): string {
 		return 'hcaptcha';
@@ -127,6 +130,17 @@ class Hcaptcha extends Base_Captcha_From_Options implements
 			array( $handle ),
 			'1.0.0',
 			true
+		);
+	}
+
+	public function register_frontend_styles() {
+		wp_add_inline_style(
+			'jet-form-builder-frontend',
+			'
+			div[style*="z-index: 2147483647"] div[style*="border-width: 11px"][style*="position: absolute"][style*="pointer-events: none"] {
+				border-style: none;
+			}
+			'
 		);
 	}
 }

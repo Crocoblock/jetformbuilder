@@ -2,10 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
-// If this file is called directly, abort.
-use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
-use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Default_State;
 use Jet_Form_Builder\Blocks\Modules\Fields_Errors\Error_Handler;
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
@@ -13,10 +10,8 @@ use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Classes\Post\Not_Found_Post_Exception;
 use Jet_Form_Builder\Classes\Post\Post_Tools;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Plugin;
-use JET_SM\Gutenberg\Style_Manager;
 
+// If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -504,8 +499,10 @@ class Form extends Base {
 		}
 
 		foreach ( $form_ids as $form_id ) {
+			jet_fb_live()->set_form_id( $form_id );
 			Builder_Helper::enqueue_style_form( $form_id );
 		}
+		jet_fb_live()->set_form_id( false );
 	}
 
 

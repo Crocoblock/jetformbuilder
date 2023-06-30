@@ -28,6 +28,10 @@ abstract class Base_Captcha implements
 
 	protected $options;
 	protected $locked_render = false;
+	/**
+	 * @var bool
+	 */
+	protected $exist_container;
 
 	const FIELD_CLASS = 'captcha-token';
 	const FIELD       = '_captcha_token';
@@ -100,5 +104,16 @@ abstract class Base_Captcha implements
 		} catch ( Repository_Exception $exception ) {
 			return false;
 		}
+	}
+
+	public function set_exist_container( bool $exist_container ) {
+		$this->exist_container = $exist_container;
+	}
+
+	/**
+	 * @return bool|null
+	 */
+	public function is_exist_container() {
+		return $this->exist_container;
 	}
 }

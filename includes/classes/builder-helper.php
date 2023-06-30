@@ -132,6 +132,8 @@ class Builder_Helper {
 			Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $form_id )
 		);
 
+		do_action( 'jet-form-builder/enqueue-style' );
+
 		if ( $result ) {
 			self::$styled_form_ids[ $form_id ] = 1;
 		}

@@ -14,6 +14,7 @@ use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Captcha\Abstract_Captcha\Base_Captcha;
+use JFB_Modules\Captcha\Abstract_Captcha\Captcha_Frontend_Style_It;
 use JFB_Modules\Captcha\Abstract_Captcha\Captcha_Separate_Editor_Script;
 use JFB_Modules\Captcha\Abstract_Captcha\Captcha_Separate_Frontend_Script;
 use JFB_Modules\Captcha\Abstract_Captcha\Captcha_Settings_From_Options;
@@ -54,10 +55,9 @@ final class Module implements
 	const PREFIX = 'jet_form_builder_captcha__';
 
 	/**
-	 * @var Base_Captcha
+	 * @var Base_Captcha[]
 	 */
-	private $current;
-	private $exist_container;
+	private $current = array();
 
 	public function rep_item_id() {
 		return 'captcha';
@@ -70,6 +70,8 @@ final class Module implements
 	}
 
 	public function on_uninstall() {
+		$this->rep_clear();
+
 		Tab_Handler_Manager::instance()->uninstall( 'captcha-tab' );
 	}
 
@@ -102,6 +104,7 @@ final class Module implements
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_package_assets' ), 0 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
+		add_action( 'jet-form-builder/enqueue-style', array( $this, 'register_frontend_styles' ) );
 	}
 
 	public function remove_hooks() {
@@ -121,6 +124,7 @@ final class Module implements
 		);
 		remove_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		remove_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
+		remove_action( 'jet-form-builder/enqueue-style', array( $this, 'register_frontend_styles' ) );
 	}
 
 	/**
@@ -147,18 +151,22 @@ final class Module implements
 	 * @see Forms_Captcha::check_is_container_exist
 	 */
 	public function on_render_submit( string $content, array $attrs ): string {
+		try {
+			$current = $this->get_current();
+		} catch ( Repository_Exception $exception ) {
+			return $content;
+		}
+
 		$type = $attrs['action_type'] ?? '';
 
 		if (
 			'submit' !== $type ||
-			$this->exist_container
+			$current->is_exist_container()
 		) {
 			return $content;
 		}
 
-		$content .= $this->render();
-
-		return $content;
+		return ( $content . $this->render() );
 	}
 
 	/**
@@ -172,9 +180,6 @@ final class Module implements
 	 */
 	public function on_end_render_form( string $content ): string {
 		$content .= $this->render();
-
-		$this->current         = null;
-		$this->exist_container = false;
 
 		return $content;
 	}
@@ -193,6 +198,18 @@ final class Module implements
 			}
 			$captcha->register_frontend_scripts();
 		}
+	}
+
+	public function register_frontend_styles() {
+		try {
+			$current = $this->get_current();
+		} catch ( Repository_Exception $exception ) {
+			return;
+		}
+		if ( ! ( $current instanceof Captcha_Frontend_Style_It ) ) {
+			return;
+		}
+		$current->register_frontend_styles();
 	}
 
 	public function enqueue_editor_assets() {
@@ -251,14 +268,20 @@ final class Module implements
 	 * @throws Repository_Exception
 	 */
 	public function get_current(): Base_Captcha {
-		if ( $this->current ) {
-			return $this->current;
+		if ( array_key_exists( jet_fb_live()->form_id, $this->current ) ) {
+			if ( $this->current[ jet_fb_live()->form_id ] instanceof Base_Captcha ) {
+				return $this->current[ jet_fb_live()->form_id ];
+			}
+
+			throw new Repository_Exception( 'no_captcha' );
 		}
 
 		$settings = Plugin::instance()->post_type->get_captcha( jet_fb_live()->form_id );
 
 		if ( ! $settings || ! is_array( $settings ) ) {
-			throw new Repository_Exception( 'Empty captcha settings' );
+			$this->current[ jet_fb_live()->form_id ] = false;
+
+			throw new Repository_Exception( 'no_captcha' );
 		}
 
 		$captcha = $settings['captcha'] ?? false;
@@ -275,9 +298,9 @@ final class Module implements
 		 */
 		$current = $this->rep_clone_item( $captcha );
 
-		$this->current = $current->sanitize_options( $settings );
+		$this->current[ jet_fb_live()->form_id ] = $current->sanitize_options( $settings );
 
-		return $this->current;
+		return $this->current[ jet_fb_live()->form_id ];
 	}
 
 	public function on_localize_config( array $config ): array {
@@ -297,10 +320,22 @@ final class Module implements
 	}
 
 	public function check_is_container_exist( array $blocks ): array {
-		$this->exist_container = ! empty(
-			Block_Helper::find_by_block_name(
-				$blocks,
-				'jet-forms/captcha-container'
+		try {
+			$current = $this->get_current();
+		} catch ( Repository_Exception $exception ) {
+			return $blocks;
+		}
+
+		if ( ! is_null( $current->is_exist_container() ) ) {
+			return $blocks;
+		}
+
+		$current->set_exist_container(
+			! empty(
+				Block_Helper::find_by_block_name(
+					$blocks,
+					'jet-forms/captcha-container'
+				)
 			)
 		);
 

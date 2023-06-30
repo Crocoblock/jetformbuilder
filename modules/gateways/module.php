@@ -125,6 +125,7 @@ class Module implements
 	public function on_install() {
 		// backward compatibility
 		require_once $this->get_dir( 'legacy/payment-details-box.php' );
+		require_once $this->get_dir( 'legacy/base-gateway-action.php' );
 
 		$options          = Tab_Handler_Manager::get_options( self::OPTION_NAME );
 		$this->is_sandbox = apply_filters_deprecated(

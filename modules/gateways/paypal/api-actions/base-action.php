@@ -3,7 +3,7 @@
 
 namespace JFB_Modules\Gateways\Paypal\Api_Actions;
 
-use JFB_Modules\Gateways\Base_Gateway_Action;
+use Jet_Form_Builder\Gateways\Base_Gateway_Action;
 use JFB_Modules\Gateways\Module;
 
 // If this file is called directly, abort.

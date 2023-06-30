@@ -36,7 +36,6 @@ class Autoloader {
 		'Jet_Form_Builder\\Rest_Api\\Traits\\Rest_Fetch_Endpoint' => 'JFB_Components\\Rest_Api\\Traits\\Rest_Fetch_Endpoint',
 		'Jet_Form_Builder\\Blocks\\Manager'                => 'Jet_Form_Builder\\Blocks\\Module',
 		// gateways
-		'Jet_Form_Builder\\Gateways\\Base_Gateway_Action'  => 'JFB_Modules\\Gateways\\Base_Gateway_Action',
 		'Jet_Form_Builder\\Gateways\\Base_Gateway'         => 'JFB_Modules\\Gateways\\Base_Gateway',
 		'Jet_Form_Builder\\Gateways\\Base_Scenario_Gateway' => 'JFB_Modules\\Gateways\\Base_Scenario_Gateway',
 		'Jet_Form_Builder\\Gateways\\Scenarios_Abstract\\Scenario_Logic_Base' => 'JFB_Modules\\Gateways\\Scenarios_Abstract\\Scenario_Logic_Base',

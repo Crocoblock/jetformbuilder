@@ -51,6 +51,14 @@ class Request_Handler {
 		jet_fb_context()->exclude( $name );
 	}
 
+	public function get_types(): array {
+		return iterator_to_array( jet_fb_context()->iterate_fields_types() );
+	}
+
+	public function get_attrs(): array {
+		return iterator_to_array( jet_fb_context()->iterate_fields_settings() );
+	}
+
 	/**
 	 * @param string|array $name 'field_name'|'repeater_name.field_name'|['repeater_name', 'field_name']
 	 * @param string $field_type

@@ -6,6 +6,8 @@ import { getParsedName } from './functions';
 function RadioData() {
 	InputData.call( this );
 
+	this.wrapper = null;
+
 	this.isSupported  = function ( node ) {
 		return (
 			node.classList.contains( 'checkradio-wrap' ) &&
@@ -15,22 +17,20 @@ function RadioData() {
 	this.addListeners   = function () {
 		this.enterKey = new ReactiveHook();
 
-		for ( const nodeElement of this.nodes ) {
-			nodeElement.addEventListener( 'change', () => this.setValue() );
-			nodeElement.addEventListener(
-				'keydown',
-				this.handleEnterKey.bind( this ),
-			);
+		this.wrapper.addEventListener( 'change', () => this.setValue() );
+		this.wrapper.addEventListener(
+			'keydown',
+			this.handleEnterKey.bind( this ),
+		);
 
-			!STRICT_MODE && jQuery( nodeElement ).on( 'change', event => {
-				if ( this.value.current == event.target.value ) {
-					return;
-				}
-				this.callable.lockTrigger();
-				this.setValue();
-				this.callable.unlockTrigger();
-			} );
-		}
+		!STRICT_MODE && jQuery( this.wrapper ).on( 'change', event => {
+			if ( this.value.current == event.target.value ) {
+				return;
+			}
+			this.callable.lockTrigger();
+			this.setValue();
+			this.callable.unlockTrigger();
+		} );
 	};
 	this.setValue       = function () {
 		this.value.current = this.getActiveValue();
@@ -56,6 +56,11 @@ function RadioData() {
 		this.rawName   = this.nodes[ 0 ].name;
 		this.name      = getParsedName( this.rawName );
 		this.inputType = 'radio';
+
+		/**
+		 * @type {HTMLElement|HTMLInputElement}
+		 */
+		this.wrapper = node;
 	};
 }
 

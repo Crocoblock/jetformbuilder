@@ -18,6 +18,8 @@ function sanitizeValue( value ) {
 function CheckboxData() {
 	InputData.call( this );
 
+	this.wrapper = null;
+
 	this.isSupported  = function ( node ) {
 		return (
 			node.classList.contains( 'checkradio-wrap' ) &&
@@ -25,15 +27,13 @@ function CheckboxData() {
 		);
 	};
 	this.addListeners = function () {
-		this.enterKey  = new ReactiveHook();
+		this.enterKey = new ReactiveHook();
 
-		for ( const node of this.nodes ) {
-			node.addEventListener( 'change', () => this.setValue() );
-			node.addEventListener(
-				'keydown',
-				this.handleEnterKey.bind( this ),
-			);
-		}
+		this.wrapper.addEventListener( 'change', () => this.setValue() );
+		this.wrapper.addEventListener(
+			'keydown',
+			this.handleEnterKey.bind( this ),
+		);
 
 		if ( !this.isArray() ) {
 			return;
@@ -56,6 +56,11 @@ function CheckboxData() {
 		this.rawName   = this.nodes[ 0 ].name;
 		this.name      = getParsedName( this.rawName );
 		this.inputType = 'checkbox';
+
+		/**
+		 * @type {HTMLElement|HTMLInputElement}
+		 */
+		this.wrapper = node;
 	};
 
 	this.getActiveValue = function () {

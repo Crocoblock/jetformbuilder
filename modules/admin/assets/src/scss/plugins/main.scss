@@ -1,0 +1,42 @@
+.jet-form-builder-modal {
+	max-width: calc((100% - 6px) - 20em);
+
+	ul {
+		margin: 0 1.5em;
+		list-style: initial;
+	}
+
+	button.continue {
+		$bg_color: #d63638;
+
+		background-color: $bg_color;
+		color: white;
+
+		&:hover {
+			background: darken($bg_color, 10%);
+			color: darken(white, 10%);
+		}
+
+		&:focus {
+			background: darken($bg_color, 10%);
+			color: darken(white, 10%);
+		}
+	}
+
+	&::backdrop {
+		/*
+		Chrome ~78 doesn't differentiate the pseudo's cursor from the element's, so this overrides.
+		*/
+		cursor: pointer;
+		pointer-events: all;
+	}
+}
+
+.jet-fb-go-pro-link {
+	color: #4272f9;
+	font-weight: bold;
+
+	&:hover {
+		color: #135e96;
+	}
+}

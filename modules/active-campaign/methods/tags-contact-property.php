@@ -5,6 +5,7 @@ namespace JFB_Modules\Active_Campaign\Methods;
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
@@ -56,8 +57,9 @@ class Tags_Contact_Property extends Base_Object_Property {
 		}
 
 		$existed = $api_tags->to_array();
+		$value   = Tools::to_string( $this->value );
 
-		$tags = array_map( 'trim', explode( ',', $this->value ) );
+		$tags = array_map( 'trim', explode( ',', $value ) );
 
 		foreach ( $tags as $index => $tag ) {
 			// save tag id

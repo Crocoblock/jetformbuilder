@@ -28,33 +28,6 @@ function jet_form_builder_init() {
 	define( 'JET_FORM_BUILDER_SITE', 'https://jetformbuilder.com' );
 
 	require JET_FORM_BUILDER_PATH . 'includes/plugin.php';
-
-	add_filter(
-		'plugin_action_links_' . JET_FORM_BUILDER_PLUGIN_BASE,
-		function ( $links ) {
-			if ( jet_form_builder()->addons_manager->is_active() ) {
-				return $links;
-			}
-
-			$utm = new \Jet_Form_Builder\Classes\Http\Utm_Url( 'wp-dashboard/jet-form-builder-plugins-page' );
-			$utm->set_campaign( 'go-pro-button' );
-
-			$url = $utm->add_query( JET_FORM_BUILDER_SITE . '/pricing/' );
-
-			wp_enqueue_style(
-				'jet-fb-admin',
-				JET_FORM_BUILDER_URL . 'assets/css/admin/plugins.css',
-				array(),
-				JET_FORM_BUILDER_VERSION
-			);
-
-			$label = __( 'Go Pro', 'jet-form-builder' );
-
-			$links['go_pro'] = "<a href=\"{$url}\" target=\"_blank\" class=\"jet-fb-go-pro-link\">{$label}</a>";
-
-			return $links;
-		}
-	);
 }
 
 if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {

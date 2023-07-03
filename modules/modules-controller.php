@@ -24,6 +24,7 @@ class Modules_Controller implements Module_Controller_It {
 		return array(
 			new Logger\Module(),
 			new Dev\Module(),
+			new Admin\Module(),
 			new Block_Parsers\Module(),
 			new Wp_Experiments\Module(),
 			new Deprecated\Module(),

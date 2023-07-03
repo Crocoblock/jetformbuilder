@@ -1,0 +1,32 @@
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./plugins/main.js":
+/*!*************************!*\
+  !*** ./plugins/main.js ***!
+  \*************************/
+/***/ (() => {
+
+eval("const pluginSlug = JetFBPluginConfig.slug;\nconst modalSlug = 'modal-' + pluginSlug;\nconst modal = document.querySelector('#' + modalSlug);\nconst closeButton = modal.querySelector('.button.close');\nconst continueButton = modal.querySelector('.button.continue');\nlet deactivateLink = '';\nmodal.addEventListener('click', event => {\n  if (closeButton === event.target) {\n    modal.close();\n    return;\n  }\n  if (continueButton === event.target) {\n    window.location = deactivateLink;\n    return;\n  }\n\n  // close by click on backdrop\n\n  let rect = event.target.getBoundingClientRect();\n  if (rect.left > event.clientX || rect.right < event.clientX || rect.top > event.clientY || rect.bottom < event.clientY) {\n    modal.close();\n  }\n});\ndocument.querySelector('#bulk-action-form').addEventListener('click', function (event) {\n  if ('A' !== event.target.nodeName || !event.target?.id?.includes?.('deactivate-') || !event.target.closest(`tr.active[data-slug=\"${pluginSlug}\"]`)) {\n    return;\n  }\n  event.preventDefault();\n  deactivateLink = event.target.href;\n  modal.showModal();\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9wbHVnaW5zL21haW4uanMiLCJuYW1lcyI6WyJwbHVnaW5TbHVnIiwiSmV0RkJQbHVnaW5Db25maWciLCJzbHVnIiwibW9kYWxTbHVnIiwibW9kYWwiLCJkb2N1bWVudCIsInF1ZXJ5U2VsZWN0b3IiLCJjbG9zZUJ1dHRvbiIsImNvbnRpbnVlQnV0dG9uIiwiZGVhY3RpdmF0ZUxpbmsiLCJhZGRFdmVudExpc3RlbmVyIiwiZXZlbnQiLCJ0YXJnZXQiLCJjbG9zZSIsIndpbmRvdyIsImxvY2F0aW9uIiwicmVjdCIsImdldEJvdW5kaW5nQ2xpZW50UmVjdCIsImxlZnQiLCJjbGllbnRYIiwicmlnaHQiLCJ0b3AiLCJjbGllbnRZIiwiYm90dG9tIiwibm9kZU5hbWUiLCJpZCIsImluY2x1ZGVzIiwiY2xvc2VzdCIsInByZXZlbnREZWZhdWx0IiwiaHJlZiIsInNob3dNb2RhbCJdLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vamZiLWFkbWluLy4vcGx1Z2lucy9tYWluLmpzPzZjNjkiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc3QgcGx1Z2luU2x1ZyA9IEpldEZCUGx1Z2luQ29uZmlnLnNsdWc7XHJcbmNvbnN0IG1vZGFsU2x1ZyAgPSAnbW9kYWwtJyArIHBsdWdpblNsdWc7XHJcblxyXG5jb25zdCBtb2RhbCAgICAgICAgICA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoICcjJyArIG1vZGFsU2x1ZyApO1xyXG5jb25zdCBjbG9zZUJ1dHRvbiAgICA9IG1vZGFsLnF1ZXJ5U2VsZWN0b3IoICcuYnV0dG9uLmNsb3NlJyApO1xyXG5jb25zdCBjb250aW51ZUJ1dHRvbiA9IG1vZGFsLnF1ZXJ5U2VsZWN0b3IoICcuYnV0dG9uLmNvbnRpbnVlJyApO1xyXG5cclxubGV0IGRlYWN0aXZhdGVMaW5rID0gJyc7XHJcblxyXG5tb2RhbC5hZGRFdmVudExpc3RlbmVyKCAnY2xpY2snLCBldmVudCA9PiB7XHJcblx0aWYgKCBjbG9zZUJ1dHRvbiA9PT0gZXZlbnQudGFyZ2V0ICkge1xyXG5cdFx0bW9kYWwuY2xvc2UoKTtcclxuXHJcblx0XHRyZXR1cm47XHJcblx0fVxyXG5cclxuXHRpZiAoIGNvbnRpbnVlQnV0dG9uID09PSBldmVudC50YXJnZXQgKSB7XHJcblx0XHR3aW5kb3cubG9jYXRpb24gPSBkZWFjdGl2YXRlTGluaztcclxuXHJcblx0XHRyZXR1cm47XHJcblx0fVxyXG5cclxuXHQvLyBjbG9zZSBieSBjbGljayBvbiBiYWNrZHJvcFxyXG5cclxuXHRsZXQgcmVjdCA9IGV2ZW50LnRhcmdldC5nZXRCb3VuZGluZ0NsaWVudFJlY3QoKTtcclxuXHJcblx0aWYgKCByZWN0LmxlZnQgPiBldmVudC5jbGllbnRYIHx8XHJcblx0XHRyZWN0LnJpZ2h0IDwgZXZlbnQuY2xpZW50WCB8fFxyXG5cdFx0cmVjdC50b3AgPiBldmVudC5jbGllbnRZIHx8XHJcblx0XHRyZWN0LmJvdHRvbSA8IGV2ZW50LmNsaWVudFlcclxuXHQpIHtcclxuXHRcdG1vZGFsLmNsb3NlKCk7XHJcblx0fVxyXG59ICk7XHJcblxyXG5kb2N1bWVudC5xdWVyeVNlbGVjdG9yKCAnI2J1bGstYWN0aW9uLWZvcm0nICkuXHJcblx0YWRkRXZlbnRMaXN0ZW5lciggJ2NsaWNrJywgZnVuY3Rpb24gKCBldmVudCApIHtcclxuXHRcdGlmIChcclxuXHRcdFx0J0EnICE9PSBldmVudC50YXJnZXQubm9kZU5hbWUgfHxcclxuXHRcdFx0IWV2ZW50LnRhcmdldD8uaWQ/LmluY2x1ZGVzPy4oICdkZWFjdGl2YXRlLScgKSB8fFxyXG5cdFx0XHQhZXZlbnQudGFyZ2V0LmNsb3Nlc3QoIGB0ci5hY3RpdmVbZGF0YS1zbHVnPVwiJHsgcGx1Z2luU2x1ZyB9XCJdYCApXHJcblx0XHQpIHtcclxuXHRcdFx0cmV0dXJuO1xyXG5cdFx0fVxyXG5cdFx0ZXZlbnQucHJldmVudERlZmF1bHQoKTtcclxuXHRcdGRlYWN0aXZhdGVMaW5rID0gZXZlbnQudGFyZ2V0LmhyZWY7XHJcblx0XHRtb2RhbC5zaG93TW9kYWwoKTtcclxuXHR9ICk7Il0sIm1hcHBpbmdzIjoiQUFBQSxNQUFNQSxVQUFVLEdBQUdDLGlCQUFpQixDQUFDQyxJQUFJO0FBQ3pDLE1BQU1DLFNBQVMsR0FBSSxRQUFRLEdBQUdILFVBQVU7QUFFeEMsTUFBTUksS0FBSyxHQUFZQyxRQUFRLENBQUNDLGFBQWEsQ0FBRSxHQUFHLEdBQUdILFNBQVUsQ0FBQztBQUNoRSxNQUFNSSxXQUFXLEdBQU1ILEtBQUssQ0FBQ0UsYUFBYSxDQUFFLGVBQWdCLENBQUM7QUFDN0QsTUFBTUUsY0FBYyxHQUFHSixLQUFLLENBQUNFLGFBQWEsQ0FBRSxrQkFBbUIsQ0FBQztBQUVoRSxJQUFJRyxjQUFjLEdBQUcsRUFBRTtBQUV2QkwsS0FBSyxDQUFDTSxnQkFBZ0IsQ0FBRSxPQUFPLEVBQUVDLEtBQUssSUFBSTtFQUN6QyxJQUFLSixXQUFXLEtBQUtJLEtBQUssQ0FBQ0MsTUFBTSxFQUFHO0lBQ25DUixLQUFLLENBQUNTLEtBQUssQ0FBQyxDQUFDO0lBRWI7RUFDRDtFQUVBLElBQUtMLGNBQWMsS0FBS0csS0FBSyxDQUFDQyxNQUFNLEVBQUc7SUFDdENFLE1BQU0sQ0FBQ0MsUUFBUSxHQUFHTixjQUFjO0lBRWhDO0VBQ0Q7O0VBRUE7O0VBRUEsSUFBSU8sSUFBSSxHQUFHTCxLQUFLLENBQUNDLE1BQU0sQ0FBQ0sscUJBQXFCLENBQUMsQ0FBQztFQUUvQyxJQUFLRCxJQUFJLENBQUNFLElBQUksR0FBR1AsS0FBSyxDQUFDUSxPQUFPLElBQzdCSCxJQUFJLENBQUNJLEtBQUssR0FBR1QsS0FBSyxDQUFDUSxPQUFPLElBQzFCSCxJQUFJLENBQUNLLEdBQUcsR0FBR1YsS0FBSyxDQUFDVyxPQUFPLElBQ3hCTixJQUFJLENBQUNPLE1BQU0sR0FBR1osS0FBSyxDQUFDVyxPQUFPLEVBQzFCO0lBQ0RsQixLQUFLLENBQUNTLEtBQUssQ0FBQyxDQUFDO0VBQ2Q7QUFDRCxDQUFFLENBQUM7QUFFSFIsUUFBUSxDQUFDQyxhQUFhLENBQUUsbUJBQW9CLENBQUMsQ0FDNUNJLGdCQUFnQixDQUFFLE9BQU8sRUFBRSxVQUFXQyxLQUFLLEVBQUc7RUFDN0MsSUFDQyxHQUFHLEtBQUtBLEtBQUssQ0FBQ0MsTUFBTSxDQUFDWSxRQUFRLElBQzdCLENBQUNiLEtBQUssQ0FBQ0MsTUFBTSxFQUFFYSxFQUFFLEVBQUVDLFFBQVEsR0FBSSxhQUFjLENBQUMsSUFDOUMsQ0FBQ2YsS0FBSyxDQUFDQyxNQUFNLENBQUNlLE9BQU8sQ0FBRyx3QkFBd0IzQixVQUFZLElBQUksQ0FBQyxFQUNoRTtJQUNEO0VBQ0Q7RUFDQVcsS0FBSyxDQUFDaUIsY0FBYyxDQUFDLENBQUM7RUFDdEJuQixjQUFjLEdBQUdFLEtBQUssQ0FBQ0MsTUFBTSxDQUFDaUIsSUFBSTtFQUNsQ3pCLEtBQUssQ0FBQzBCLFNBQVMsQ0FBQyxDQUFDO0FBQ2xCLENBQUUsQ0FBQyJ9\n//# sourceURL=webpack-internal:///./plugins/main.js\n");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval-source-map devtool is used.
+/******/ 	var __webpack_exports__ = {};
+/******/ 	__webpack_modules__["./plugins/main.js"]();
+/******/ 	
+/******/ })()
+;

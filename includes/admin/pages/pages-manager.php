@@ -53,7 +53,6 @@ class Pages_Manager {
 
 	public function set_up() {
 		add_action( 'init', array( $this, 'set_current_page' ), 100 );
-		add_action( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
 	}
 
 	public function get_stable_url( string $slug, array $query_args = array() ): string {
@@ -150,26 +149,6 @@ class Pages_Manager {
 
 		throw new Not_Found_Page_Exception( 'Current page is not defined' );
 	}
-
-	public function admin_footer_text( string $footer_text ): string {
-		try {
-			$this->get_current();
-		} catch ( Not_Found_Page_Exception $exception ) {
-			return $footer_text;
-		}
-
-		return sprintf(
-		/* translators: %s - link to the JetFormBuilder reviews page */
-			__(
-				'Enjoyed <strong>JetFormBuilder</strong>? 
-Please leave us a <a href="%s" target="_blank">★★★★★</a> rating. 
-We really appreciate your support!',
-				'jet-form-builder'
-			),
-			'https://wordpress.org/support/plugin/jetformbuilder/reviews/?filter=5'
-		);
-	}
-
 
 	/**
 	 * Set current admin page

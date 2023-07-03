@@ -22,6 +22,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Form_Record_Print_Fields_Box extends Form_Record_Fields_Box {
 
+	protected $limit = - 1;
+
 	public function get_columns(): array {
 		return array(
 			'name'  => new Field_Name_Column(),

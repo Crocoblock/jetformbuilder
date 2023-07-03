@@ -72,6 +72,13 @@ class Multiple_Controller extends Base_Export_Controller {
 				)
 			);
 
+			/**
+			 * @see https://github.com/Crocoblock/issues-tracker/issues/3112
+			 */
+			if ( empty( $this->extra_columns['id'] ) ) {
+				unset( $record['id'] );
+			}
+
 			try {
 				$request = $this->get_fields_values( $fields_view );
 			} catch ( Query_Builder_Exception $exception ) {

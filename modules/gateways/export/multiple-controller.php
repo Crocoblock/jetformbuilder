@@ -59,6 +59,12 @@ class Multiple_Controller extends Base_Export_Controller {
 
 		if ( ! $this->payers_columns && ! $this->shipping_columns && ! $this->record_columns ) {
 			foreach ( $payments as $payment ) {
+				/**
+				 * @see https://github.com/Crocoblock/issues-tracker/issues/3112
+				 */
+				if ( empty( $this->columns['id'] ) ) {
+					unset( $payment->id );
+				}
 				$this->get_exporter()->add_row(
 					$this->prepare_row(
 						$payment,

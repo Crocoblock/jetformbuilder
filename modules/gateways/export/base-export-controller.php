@@ -114,9 +114,14 @@ abstract class Base_Export_Controller implements Base_Export_Controller_It {
 			$this->view = $this->get_payment_view();
 		}
 
-		$payment_id = is_array( $payment ) ? $payment['id'] : $payment->id;
+		$this->view->set_payment_id( $payment->id );
 
-		$this->view->set_payment_id( $payment_id );
+		/**
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/3112
+		 */
+		if ( empty( $this->columns['id'] ) ) {
+			unset( $payment->id );
+		}
 
 		try {
 			$shipping = $this->view->query()->query_one();

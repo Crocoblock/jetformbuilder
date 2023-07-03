@@ -66,14 +66,6 @@ class Parser_Context {
 
 	public function set_values( $fields ) {
 		foreach ( $this->generate_blocks( $fields ) as $block ) {
-			$name = $block['attrs']['name'] ?? 'field_name';
-
-			if ( ! array_key_exists( $name, $this->get_files() ) &&
-				! array_key_exists( $name, $this->get_request() )
-			) {
-				continue;
-			}
-
 			$parser = $this->set_parser( $block );
 
 			if ( ! $parser ) {

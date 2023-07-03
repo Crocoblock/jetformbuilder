@@ -51,8 +51,8 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		}
 
 		wp_enqueue_style(
-			$this->get_handle(),
-			$this->get_url( 'assets/build/css/plugins.css' ),
+			$this->get_handle( 'go-pro' ),
+			$this->get_url( 'assets/build/css/go-pro.css' ),
 			array(),
 			jet_form_builder()->get_version()
 		);
@@ -83,15 +83,17 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 			return;
 		}
 
+		$handle = $this->get_handle( 'deactivate' );
+
 		wp_enqueue_style(
-			$this->get_handle(),
-			$this->get_url( 'assets/build/css/plugins.css' ),
+			$handle,
+			$this->get_url( 'assets/build/css/deactivate.css' ),
 			array(),
 			jet_form_builder()->get_version()
 		);
 
 		wp_enqueue_script(
-			$this->get_handle(),
+			$handle,
 			$this->get_url( 'assets/build/js/plugins{min}.js' ),
 			array(),
 			jet_form_builder()->get_version(),
@@ -101,7 +103,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		$slug = basename( jet_form_builder()->plugin_dir() );
 
 		wp_localize_script(
-			$this->get_handle(),
+			$handle,
 			'JetFBPluginConfig',
 			array(
 				'slug' => $slug,
@@ -111,25 +113,25 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		ob_start();
 		?>
-        <dialog class="jet-form-builder-modal" id="modal-<?php echo esc_attr( $slug ); ?>">
-            <h2><?php echo __( 'Deactivating JetFormBuilder', 'jet-form-builder' ); ?></h2>
-            <hr/>
-            <p>
+		<dialog class="jet-form-builder-modal" id="modal-<?php echo esc_attr( $slug ); ?>">
+			<h2><?php echo __( 'Deactivating JetFormBuilder', 'jet-form-builder' ); ?></h2>
+			<hr/>
+			<p>
 				<?php
 				echo __(
 					'You have the "<b>Clear data on uninstall plugin</b>" option enabled, which deletes the following information when the plugin is removed:',
 					'jet-form-builder'
 				);
 				?>
-            </p>
-            <ul>
-                <li><?php echo __( 'All forms', 'jet-form-builder' ); ?></li>
-                <li><?php echo __( 'All saved Form Records', 'jet-form-builder' ); ?></li>
-                <li><?php echo __( 'All saved files', 'jet-form-builder' ); ?></li>
-                <li><?php echo __( 'All custom sql-tables', 'jet-form-builder' ); ?></li>
-                <li><?php echo __( 'All global options', 'jet-form-builder' ); ?></li>
-            </ul>
-            <p>
+			</p>
+			<ul>
+				<li><?php echo __( 'All forms', 'jet-form-builder' ); ?></li>
+				<li><?php echo __( 'All saved Form Records', 'jet-form-builder' ); ?></li>
+				<li><?php echo __( 'All saved files', 'jet-form-builder' ); ?></li>
+				<li><?php echo __( 'All custom sql-tables', 'jet-form-builder' ); ?></li>
+				<li><?php echo __( 'All global options', 'jet-form-builder' ); ?></li>
+			</ul>
+			<p>
 				<?php
 				echo __(
 					'If you are sure that you want to delete all this information, 
@@ -137,11 +139,11 @@ then click "<b>Continue</b>", if not, click "<b>Cancel</b>".',
 					'jet-form-builder'
 				);
 				?>
-            </p>
-            <hr/>
-            <button type="button" class="button continue"><?php echo __( 'Continue', 'jet-form-builder' ); ?></button>
-            <button type="button" class="button close"><?php echo __( 'Cancel', 'jet-form-builder' ); ?></button>
-        </dialog>
+			</p>
+			<hr/>
+			<button type="button" class="button continue"><?php echo __( 'Continue', 'jet-form-builder' ); ?></button>
+			<button type="button" class="button close"><?php echo __( 'Cancel', 'jet-form-builder' ); ?></button>
+		</dialog>
 		<?php
 		echo ob_get_clean();
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

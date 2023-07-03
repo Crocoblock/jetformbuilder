@@ -8,7 +8,7 @@
 	"scripts": {
 		"hidden:dev:js": "webpack --config .config/dev.webpack.config.js --progress -w",
 		"hidden:build:js": "webpack --config .config/prod.webpack.config.js --progress",
-		"hidden:build:css": "sass assets\\src\\scss\\plugins\\main.scss:assets\\build\\css\\plugins.css -s compressed --watch --no-source-map"
+		"hidden:build:css": "sass assets\\src\\scss\\plugins\\go-pro.scss:assets\\build\\css\\go-pro.css assets\\src\\scss\\plugins\\deactivate.scss:assets\\build\\css\\deactivate.css -s compressed --watch --no-source-map"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.14.3",

@@ -167,7 +167,17 @@ class Multiple_Controller extends Base_Export_Controller {
 		// phpcs:ignore WordPress.Security
 			(array) ( $_GET['filters'] ?? array() )
 		);
-		$view->set_select( array_keys( $this->extra_columns ) );
+
+		$columns = $this->extra_columns;
+
+		/**
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/3112
+		 */
+		if ( empty( $columns['id'] ) ) {
+			$columns['id'] = true;
+		}
+
+		$view->set_select( array_keys( $columns ) );
 
 		return $view->query()->generate_all( ARRAY_A );
 	}

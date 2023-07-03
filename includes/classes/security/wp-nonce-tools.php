@@ -57,7 +57,7 @@ class Wp_Nonce_Tools {
 	public static function handle_messages( array $messages ): array {
 		$messages['nonce_failed'] = array(
 			'label' => __( 'WP nonce validation failed', 'jet-form-builder' ),
-			'value' => __( 'Invalid nonce', 'jet-form-builder' ),
+			'value' => __( 'Invalid wpnonce', 'jet-form-builder' ),
 		);
 
 		return $messages;

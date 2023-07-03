@@ -16,8 +16,8 @@ class Form_Record_Print_Values_Box extends Form_Record_Values_Box {
 		/** @var Column_Advanced_Base[] $columns */
 		$columns = parent::get_columns();
 
-		/*$columns['form']     = $columns['form']->set_type( 'string' );
-		$columns['referrer'] = $columns['referrer']->set_type( 'string' );*/
+		$columns['form']     = $columns['form']->set_type( 'string' );
+		$columns['referrer'] = $columns['referrer']->set_type( 'string' );
 
 		return $columns;
 	}

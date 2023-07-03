@@ -3,8 +3,10 @@
 namespace JFB_Modules\Gateways;
 
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_With_Gateway_Executor;
+use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use JFB_Components\Admin\Print_Page\Header;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
@@ -86,6 +88,12 @@ class Module implements
 		add_action( 'rest_api_init', array( $this->get_rest(), 'register_routes' ) );
 		add_action( 'init', array( $this, 'register_gateways' ) );
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
+		add_action(
+			'jet-form-builder/before-print-page/header',
+			array( $this, 'before_print_page' ),
+			10,
+			2
+		);
 
 		add_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ), 0 );
 		add_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
@@ -106,6 +114,10 @@ class Module implements
 		remove_action( 'rest_api_init', array( $this->get_rest(), 'register_routes' ) );
 		remove_action( 'init', array( $this, 'register_gateways' ) );
 		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
+		remove_action(
+			'jet-form-builder/before-print-page/header',
+			array( $this, 'before_print_page' )
+		);
 
 		remove_filter( 'jet-form-builder/admin/pages', array( $this, 'add_stable_pages' ), 0 );
 		remove_filter( 'jet-form-builder/admin/single-pages', array( $this, 'add_single_pages' ), 0 );
@@ -198,6 +210,17 @@ class Module implements
 		);
 
 		return $pages;
+	}
+
+	/**
+	 * @param Header $header
+	 * @param Base_Single_Page $page
+	 */
+	public function before_print_page( Header $header, Base_Single_Page $page ) {
+		if ( ! ( $page instanceof Pages\Single_Payment_Print_Page ) ) {
+			return;
+		}
+		$header->set_title( __( 'JetFormBuilder Payment', 'jet-form-builder' ) );
 	}
 
 	/**

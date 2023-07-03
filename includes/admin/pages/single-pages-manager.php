@@ -69,9 +69,14 @@ class Single_Pages_Manager {
 			)
 		);
 
+		do_action( 'jet-form-builder/before-print-page/header', $header, $page );
+
 		$header->output();
 		$page->render_page();
 		$framework->get_cx_vue_ui()->print_templates();
+
+		do_action( 'jet-form-builder/before-print-page/footer', $footer, $page );
+
 		$footer->output();
 	}
 }

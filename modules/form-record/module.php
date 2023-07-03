@@ -4,10 +4,19 @@
 namespace JFB_Modules\Form_Record;
 
 use Jet_Form_Builder\Actions\Manager;
+use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
+use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Side_Meta_Container;
+use Jet_Form_Builder\Classes\Post\Post_Tools;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
+use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use JFB_Components\Admin\Print_Page\Header;
+use JFB_Modules\Form_Record\Admin\Meta_Boxes\Form_Record_Print_Values_Box;
 use JFB_Modules\Form_Record\Admin\Pages\Export_Page;
 use JFB_Modules\Form_Record\Admin\Pages\Print_Page;
+use JFB_Modules\Form_Record\Admin\Pages\Single_Form_Record_Print_Page;
+use JFB_Modules\Form_Record\Query_Views\Record_View;
 use JFB_Modules\Gateways\Scenarios_Abstract\Scenario_Logic_Base;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
@@ -73,6 +82,12 @@ final class Module implements
 			10,
 			3
 		);
+		add_action(
+			'jet-form-builder/before-print-page/header',
+			array( $this, 'before_print_page' ),
+			10,
+			2
+		);
 
 		// filters
 		add_filter(
@@ -106,6 +121,10 @@ final class Module implements
 		remove_action(
 			'jet-form-builder/gateways/before-send',
 			array( $this, 'before_send_gateway' )
+		);
+		remove_action(
+			'jet-form-builder/before-print-page/header',
+			array( $this, 'before_print_page' )
 		);
 
 		// filters
@@ -151,6 +170,32 @@ final class Module implements
 		);
 
 		return $pages;
+	}
+
+	/**
+	 * @param Header $header
+	 * @param Base_Single_Page $page
+	 */
+	public function before_print_page( Header $header, Base_Single_Page $page ) {
+		if ( ! ( $page instanceof Single_Form_Record_Print_Page ) ) {
+			return;
+		}
+
+		try {
+			$record = Record_View::findById( $page->get_id() );
+		} catch ( Query_Builder_Exception $exception ) {
+			return;
+		}
+
+		$form_title = Post_Tools::get_title( $record['form_id'] );
+
+		$header->set_title(
+			sprintf(
+				/* translators: %s - form title */
+				__( '%s ‹ JetFormBuilder Record', 'jet-form-builder' ),
+				$form_title
+			)
+		);
 	}
 
 	/**

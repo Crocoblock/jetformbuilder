@@ -34,4 +34,10 @@ export default {
 	}
 }
 
+.jet-form-builder-page {
+	pre {
+		white-space: normal;
+	}
+}
+
 </style>

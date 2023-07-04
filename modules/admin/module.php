@@ -146,37 +146,40 @@ We really appreciate your support!',
 		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		ob_start();
 		?>
-        <dialog class="jet-form-builder-modal" id="modal-<?php echo esc_attr( $slug ); ?>">
-            <h2><?php echo __( 'Deactivating JetFormBuilder', 'jet-form-builder' ); ?></h2>
-            <hr/>
-            <p>
-				<?php
-				echo __(
-					'You have the "<b>Clear data on uninstall plugin</b>" option enabled, which deletes the following information when the plugin is removed:',
-					'jet-form-builder'
-				);
-				?>
-            </p>
-            <ul>
-                <li><?php echo __( 'All forms', 'jet-form-builder' ); ?></li>
-                <li><?php echo __( 'All saved Form Records', 'jet-form-builder' ); ?></li>
-                <li><?php echo __( 'All saved files', 'jet-form-builder' ); ?></li>
-                <li><?php echo __( 'All custom sql-tables', 'jet-form-builder' ); ?></li>
-                <li><?php echo __( 'All global options', 'jet-form-builder' ); ?></li>
-            </ul>
-            <p>
-				<?php
-				echo __(
-					'If you are sure that you want to delete all this information, 
+		<div class="jet-form-builder-modal" id="modal-<?php echo esc_attr( $slug ); ?>">
+			<div class="jet-form-builder-modal-bg jet-form-builder-modal-exit"></div>
+			<div class="jet-form-builder-modal-container">
+				<h2><?php echo __( 'Deactivating JetFormBuilder', 'jet-form-builder' ); ?></h2>
+				<hr/>
+				<p>
+					<?php
+					echo __(
+						'You have the "<b>Clear data on uninstall plugin</b>" option enabled, which deletes the following information when the plugin is removed:',
+						'jet-form-builder'
+					);
+					?>
+				</p>
+				<ul>
+					<li><?php echo __( 'All forms', 'jet-form-builder' ); ?></li>
+					<li><?php echo __( 'All saved Form Records', 'jet-form-builder' ); ?></li>
+					<li><?php echo __( 'All saved files', 'jet-form-builder' ); ?></li>
+					<li><?php echo __( 'All custom sql-tables', 'jet-form-builder' ); ?></li>
+					<li><?php echo __( 'All global options', 'jet-form-builder' ); ?></li>
+				</ul>
+				<p>
+					<?php
+					echo __(
+						'If you are sure that you want to delete all this information, 
 then click "<b>Continue</b>", if not, click "<b>Cancel</b>".',
-					'jet-form-builder'
-				);
-				?>
-            </p>
-            <hr/>
-            <button type="button" class="button continue"><?php echo __( 'Continue', 'jet-form-builder' ); ?></button>
-            <button type="button" class="button close"><?php echo __( 'Cancel', 'jet-form-builder' ); ?></button>
-        </dialog>
+						'jet-form-builder'
+					);
+					?>
+				</p>
+				<hr/>
+				<button type="button" class="button continue"><?php echo __( 'Continue', 'jet-form-builder' ); ?></button>
+				<button type="button" class="button close"><?php echo __( 'Cancel', 'jet-form-builder' ); ?></button>
+			</div>
+		</div>
 		<?php
 		echo ob_get_clean();
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

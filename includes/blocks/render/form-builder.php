@@ -4,6 +4,7 @@ namespace Jet_Form_Builder\Blocks\Render;
 
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
+use Jet_Form_Builder\Blocks\Module;
 use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Attributes_Trait;
@@ -169,13 +170,12 @@ class Form_Builder {
 		return $start_form;
 	}
 
-	/**
-	 * Close form wrapper
-	 *
-	 * @return string [type] [description]
-	 */
 	public function end_form() {
-		Plugin::instance()->blocks->enqueue_frontend_assets();
+		/** @var Module $blocks */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$blocks = jet_form_builder()->module( 'blocks' );
+
+		$blocks->enqueue_frontend_assets();
 
 		$end_form = apply_filters( 'jet-form-builder/before-end-form', '', $this );
 		$form_id  = $this->form_id;

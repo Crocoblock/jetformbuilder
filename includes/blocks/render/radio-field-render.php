@@ -37,19 +37,15 @@ class Radio_Field_Render extends Base_Select_Radio_Check {
 		$this->add_attribute( 'class', $this->args['class_name'] );
 		$this->add_attribute( 'required', $required );
 
-		$html = '';
+		$html = '<div class="jet-form-builder__fields-group checkradio-wrap" data-jfb-sync>';
 
 		if ( ! empty( $this->args['field_options'] ) ) {
-
-			$html .= '<div class="jet-form-builder__fields-group checkradio-wrap" data-jfb-sync>';
-
 			foreach ( $this->args['field_options'] as $value => $option ) {
 				$html .= $this->render_option( $value, $option );
 			}
-
-			$html .= '</div>';
-
 		}
+
+		$html .= '</div>';
 		$this->reset_attributes();
 
 		return $html;

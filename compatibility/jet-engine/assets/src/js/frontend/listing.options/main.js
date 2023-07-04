@@ -7,7 +7,10 @@ const {
  */
 function isSupported( input ) {
 	for ( const node of input.nodes ) {
-		if ( [ 'radio', 'checkbox' ].includes( node?.type ) ) {
+		if (
+			[ 'radio', 'checkbox' ].includes( node?.type ) &&
+			node.classList.contains( 'checkradio-field' )
+		) {
 			return true;
 		}
 	}

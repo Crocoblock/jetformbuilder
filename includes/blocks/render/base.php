@@ -140,7 +140,7 @@ abstract class Base {
 			$template = $this->block_type->get_field_template( $template_name . '.php' );
 		}
 
-		if ( Tools::is_readable( $template ) ) {
+		if ( $template && Tools::is_readable( $template ) ) {
 			ob_start();
 			include $template;
 			$template = ob_get_clean();

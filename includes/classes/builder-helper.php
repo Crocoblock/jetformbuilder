@@ -3,7 +3,7 @@
 
 namespace Jet_Form_Builder\Classes;
 
-use Jet_Form_Builder\Blocks\Manager;
+use Jet_Form_Builder\Blocks\Module;
 use Jet_Form_Builder\Plugin;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -65,7 +65,7 @@ class Builder_Helper {
 
 		$content .= ob_get_clean();
 
-		wp_enqueue_script( Manager::LISTING_OPTIONS_HANDLE );
+		wp_enqueue_script( Module::LISTING_OPTIONS_HANDLE );
 
 		$result = sprintf(
 			'<div class="%3$s" data-value="%1$d">%2$s</div>',

@@ -4,6 +4,9 @@
 namespace JFB_Compatibility\Jet_Engine;
 
 use Jet_Form_Builder\Actions\Methods\Object_Properties_Collection;
+use Jet_Form_Builder\Blocks\Render\Checkbox_Field_Render;
+use Jet_Form_Builder\Blocks\Render\Radio_Field_Render;
+use Jet_Form_Builder\Classes\Builder_Helper;
 use JFB_Compatibility\Jet_Engine\Actions\Update_Options;
 use JFB_Compatibility\Jet_Engine\Blocks\Map_Field;
 use JFB_Compatibility\Jet_Engine\Blocks\Map_Tools;
@@ -39,6 +42,8 @@ class Jet_Engine implements
 	use Base_Compat_Url_Trait;
 	use Base_Compat_Dir_Trait;
 
+	private $has_custom_template;
+
 	public function rep_item_id() {
 		return 'jet-engine';
 	}
@@ -67,6 +72,7 @@ class Jet_Engine implements
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
 		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_scripts' ) );
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_admin_assets' ) );
+		add_action( 'jet-form-builder/actions/register', array( $this, 'add_actions' ) );
 
 		add_filter(
 			'jet-form-builder/preset/source-types',
@@ -81,9 +87,25 @@ class Jet_Engine implements
 			array( $this, 'add_blocks' ),
 			0
 		);
-		add_action(
-			'jet-form-builder/actions/register',
-			array( $this, 'add_actions' )
+		add_filter(
+			'jet-form-builder/render/checkbox-field/option',
+			array( $this, 'on_render_field_option' ),
+			10,
+			4
+		);
+		add_filter(
+			'jet-form-builder/render/radio-field/option',
+			array( $this, 'on_render_field_option' ),
+			10,
+			4
+		);
+		add_filter(
+			'render_block_jet-forms/checkbox-field',
+			array( $this, 'reset_post_data_after_render_options' )
+		);
+		add_filter(
+			'render_block_jet-forms/radio-field',
+			array( $this, 'reset_post_data_after_render_options' )
 		);
 
 		if ( jet_engine()->relations ) {
@@ -110,6 +132,22 @@ class Jet_Engine implements
 			'jet-form-builder/blocks/items',
 			array( $this, 'add_blocks' ),
 			0
+		);
+		remove_filter(
+			'jet-form-builder/render/checkbox-field/option',
+			array( $this, 'on_render_field_option' )
+		);
+		remove_filter(
+			'jet-form-builder/render/radio-field/option',
+			array( $this, 'on_render_field_option' )
+		);
+		remove_filter(
+			'render_block_jet-forms/checkbox-field',
+			array( $this, 'reset_post_data_after_render_options' )
+		);
+		remove_filter(
+			'render_block_jet-forms/radio-field',
+			array( $this, 'reset_post_data_after_render_options' )
 		);
 
 		remove_action(
@@ -222,6 +260,41 @@ class Jet_Engine implements
 		Object_Properties_Collection $collection
 	): Object_Properties_Collection {
 		return $collection->add( new Post_Je_Relation_Property() );
+	}
+
+	/**
+	 * @param string $item
+	 * @param $value
+	 * @param $option
+	 * @param Checkbox_Field_Render|Radio_Field_Render $render
+	 *
+	 * @return string
+	 */
+	public function on_render_field_option( string $item, $value, $option, $render ): string {
+		$template = '';
+
+		if ( ! empty( $render->args['custom_item_template'] ) ) {
+			$template = ( new Builder_Helper() )->get_custom_template(
+				$option['object_id'] ?? $value,
+				$render->args
+			);
+		}
+
+		if ( $template ) {
+			$this->has_custom_template = true;
+		}
+
+		return ( $template . $item );
+	}
+
+	public function reset_post_data_after_render_options( string $content ): string {
+		if ( $this->has_custom_template ) {
+			wp_reset_postdata();
+		}
+
+		$this->has_custom_template = null;
+
+		return $content;
 	}
 
 }

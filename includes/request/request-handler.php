@@ -45,22 +45,36 @@ class Request_Handler {
 
 
 	/**
+	 * @deprecated 3.1.0
+	 *
 	 * @param string|array $name 'field_name'|'repeater_name.field_name'|['repeater_name', 'field_name']
 	 */
 	public function exclude( $name ) {
 		jet_fb_context()->exclude( $name );
 	}
 
+	/**
+	 * @deprecated 3.1.0
+	 *
+	 * @return array
+	 */
 	public function get_types(): array {
 		return iterator_to_array( jet_fb_context()->iterate_fields_types() );
 	}
 
+	/**
+	 * @deprecated 3.1.0
+	 *
+	 * @return array
+	 */
 	public function get_attrs(): array {
 		return iterator_to_array( jet_fb_context()->iterate_fields_settings() );
 	}
 
 	/**
-	 * @param string|array $name 'field_name'|'repeater_name.field_name'|['repeater_name', 'field_name']
+	 * @deprecated 3.1.0
+	 *
+	 * @param string|array $name 'field_name'|'repeater_name.0.field_name'|['repeater_name', 0, 'field_name']
 	 * @param string $field_type
 	 *
 	 * @return bool
@@ -70,6 +84,18 @@ class Request_Handler {
 	}
 
 	/**
+	 * @deprecated 3.1.0
+	 * @param $name
+	 *
+	 * @return string
+	 */
+	public function get_type( $name ): string {
+		return jet_fb_context()->get_field_type( $name );
+	}
+
+	/**
+	 * @deprecated 3.1.0
+	 *
 	 * @return array
 	 */
 	public function get_request(): array {
@@ -77,6 +103,7 @@ class Request_Handler {
 	}
 
 	/**
+	 * @deprecated 3.1.0
 	 * @param string $name
 	 *
 	 * @return false|Media_Block_Value
@@ -86,6 +113,8 @@ class Request_Handler {
 	}
 
 	/**
+	 * @deprecated 3.1.0
+	 *
 	 * @param $field_name
 	 * @param $attr_name
 	 * @param false $if_not_exist

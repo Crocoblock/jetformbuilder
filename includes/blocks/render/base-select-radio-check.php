@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * @property SRC_Base block_type
+ * @property SRC_Base|\Jet_Form_Builder\Blocks\Types\Base block_type
  *
  * Class Base_Select_Radio_Check
  * @package Jet_Form_Builder\Blocks\Render

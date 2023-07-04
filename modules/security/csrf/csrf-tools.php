@@ -18,10 +18,6 @@ class Csrf_Tools {
 	const FIELD = '_jfb_csrf_token';
 
 	public static function get_field(): string {
-		if ( ! jet_fb_live_args()->is_use_csrf() ) {
-			return '';
-		}
-
 		// generate new unique token
 		$csrf = static::generate();
 

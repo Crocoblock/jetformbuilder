@@ -17,12 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Form_Hidden_Fields {
 
 	public static function render() {
-		// render wp nonce
-		$fields = Wp_Nonce\Module::get_nonce_field();
-
-		$fields .= Csrf_Tools::get_field();
-
-		$fields .= Render_State::instance()->set_current()->render();
+		$fields = Render_State::instance()->set_current()->render();
 
 		$fields .= Live_Form::force_render_field(
 			'hidden-field',

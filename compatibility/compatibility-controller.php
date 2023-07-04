@@ -17,6 +17,7 @@ class Compatibility_Controller implements Module_Controller_It {
 
 	public function rep_instances(): array {
 		return array(
+			new Litespeed\Litespeed(),
 			new Woocommerce\Woocommerce(),
 			new Elementor\Elementor(),
 			new Jet_Engine\Jet_Engine(),

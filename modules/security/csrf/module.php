@@ -38,11 +38,21 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	public function init_hooks() {
 		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'handle_request' ) );
 		add_filter( 'jet-form-builder/message-types', array( $this, 'handle_messages' ) );
+		add_filter( 'jet-form-builder/after-start-form', array( $this, 'on_render_form' ) );
 	}
 
 	public function remove_hooks() {
 		remove_filter( 'jet-form-builder/request-handler/request', array( $this, 'handle_request' ) );
 		remove_filter( 'jet-form-builder/message-types', array( $this, 'handle_messages' ) );
+		remove_filter( 'jet-form-builder/after-start-form', array( $this, 'on_render_form' ) );
+	}
+
+	public function on_render_form( string $html ): string {
+		if ( ! jet_fb_live_args()->is_use_csrf() ) {
+			return $html;
+		}
+
+		return ( $html . Csrf_Tools::get_field() );
 	}
 
 	/**

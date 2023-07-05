@@ -13,8 +13,8 @@ class Uploaded_Collection implements Media_Block_Value, Uploaded_File_Path {
 	/** @var Uploaded_File[]  */
 	protected $uploads;
 
-	public function __construct( array $uploads ) {
-		$this->uploads = $uploads;
+	public function __construct( array $uploads = array() ) {
+		$this->set_uploads( $uploads );
 	}
 
 	/*
@@ -77,5 +77,16 @@ class Uploaded_Collection implements Media_Block_Value, Uploaded_File_Path {
 		}
 
 		return implode( ',', $files );
+	}
+
+	/**
+	 * @param Uploaded_File[] $uploads
+	 */
+	public function set_uploads( array $uploads ) {
+		foreach ( $uploads as $uploaded_file ) {
+			if ( $uploaded_file instanceof Uploaded_File ) {
+				$this->uploads[] = $uploaded_file;
+			}
+		}
 	}
 }

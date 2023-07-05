@@ -146,8 +146,7 @@ function ListActionItem( props ) {
 						key={ action.id + '__' + type.value }
 						value={ type.value }
 						disabled={ type.disabled }
-						dangerouslySetInnerHTML={ { __html: type.label } }
-					/> ) }
+					>{ type.label }</option> ) }
 				</SelectControl>
 			</div>
 			{ applyFilters(

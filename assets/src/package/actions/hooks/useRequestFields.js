@@ -105,7 +105,7 @@ function getComputedFields( fields, actions, computed ) {
 	return fields;
 }
 
-function useRequestFields() {
+function useRequestFields( { returnOnEmptyCurrentAction = true } = {} ) {
 	const meta = useSelect( ( select ) => {
 		return select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 	}, [] );
@@ -122,13 +122,16 @@ function useRequestFields() {
 		[],
 	);
 
-	if ( !actionProps?.actionId ) {
+	if ( !actionProps?.actionId && returnOnEmptyCurrentAction ) {
 		return [];
 	}
 
 	const actions = JSON.parse( meta._jf_actions || '[]' );
 
-	actions.splice( currentAction.index );
+	// current action could be empty object
+	if ( !Number.isNaN( Number( currentAction?.index ) ) ) {
+		actions.splice( currentAction.index );
+	}
 
 	/**
 	 * Should be deprecated

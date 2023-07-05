@@ -1,5 +1,6 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
 import useIsHasAttribute from '../../hooks/useIsHasAttribute';
+import useIsUniqueFieldName from '../hooks/useIsUniqueFieldName';
 
 const {
 	      __,
@@ -11,14 +12,8 @@ const {
 	      Tooltip,
       } = wp.components;
 const {
-	      useSelect,
-      } = wp.data;
-const {
 	      useInstanceId,
       } = wp.compose;
-const {
-	      useBlockEditContext,
-      } = wp.blockEditor;
 
 function BlockName( { label, help } ) {
 	const [
@@ -26,13 +21,8 @@ function BlockName( { label, help } ) {
 		      setAttributes,
 	      ] = useBlockAttributes();
 
-	const { clientId } = useBlockEditContext();
-
-	const isUniqueName = useSelect(
-		select => select( 'jet-forms/fields' ).isUniqueName( clientId ),
-	);
-
-	const instanceId = useInstanceId( BlockName, 'AdvancedInspectorControl' );
+	const { message } = useIsUniqueFieldName();
+	const instanceId  = useInstanceId( BlockName, 'AdvancedInspectorControl' );
 
 	if ( !useIsHasAttribute( 'name' ) ) {
 		return null;
@@ -50,11 +40,10 @@ function BlockName( { label, help } ) {
 				htmlFor={ instanceId }
 				className={ 'jet-fb label' }
 			>{ label ?? __( 'Form field name', 'jet-form-builder' ) }</label>
-			{ !isUniqueName && <Tooltip
-				text={ __(
-					'The form field name must be unique. Please change it',
-					'jet-form-builder',
-				) }
+			{ (
+				!!message
+			) && <Tooltip
+				text={ message }
 				delay={ 200 }
 				position={ 'top center' }
 			>

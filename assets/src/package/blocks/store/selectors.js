@@ -161,6 +161,9 @@ const selectors = {
 
 		return block?.name ?? '';
 	},
+	getBlockById( state, clientId ) {
+		return state.blockMap[ clientId ] ?? false;
+	},
 };
 
 export default {

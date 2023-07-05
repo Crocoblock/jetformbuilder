@@ -56,9 +56,13 @@ function useIsUniqueFieldName() {
 	const computed = actionFields.find(
 		( { value } ) => fieldNames.includes( value ) );
 
+	if ( ! computed ) {
+		return {};
+	}
+
 	return {
 		error: 'not_unique_in_actions',
-		message: computed.from
+		message: computed?.from
 		         ? sprintf(
 				__(
 					`The %s action already uses this field name. Please change it`,

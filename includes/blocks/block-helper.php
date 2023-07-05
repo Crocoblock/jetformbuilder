@@ -19,48 +19,6 @@ if ( ! defined( 'WPINC' ) ) {
 class Block_Helper {
 
 	/**
-	 * @since 3.1.0
-	 *
-	 * @param array $blocks
-	 *
-	 * @return \Generator
-	 */
-	public static function generate_top_fields( array $blocks ): \Generator {
-		$in_repeater = false;
-
-		return self::generate_blocks(
-			static function ( $block ) use ( &$in_repeater ) {
-				$is_field = (
-					! empty( $block['attrs']['name'] ) &&
-					! $in_repeater &&
-
-					// it's not a conditional block
-					Form_Manager::NAMESPACE_FIELDS . 'conditional-block' !== $block['blockName'] &&
-
-					// has 'jet-forms/' namespace
-					false !== stripos( $block['blockName'], Form_Manager::NAMESPACE_FIELDS )
-				);
-
-				if ( ! $is_field ) {
-					return false;
-				}
-
-				if ( 'jet-forms/repeater-field' === $block['blockName'] ) {
-					$in_repeater = true;
-				}
-
-				return true;
-			},
-			$blocks,
-			static function ( $block ) use ( &$in_repeater ) {
-				if ( 'jet-forms/repeater-field' === $block['blockName'] ) {
-					$in_repeater = false;
-				}
-			}
-		);
-	}
-
-	/**
 	 * @param $value
 	 * @param $blocks
 	 *
@@ -183,12 +141,11 @@ class Block_Helper {
 	/**
 	 * @param $callback
 	 * @param array $source
-	 * @param null $after_callback
 	 *
 	 * @return \Generator
 	 * @since 3.1.0
 	 */
-	public static function generate_blocks( $callback, array $source, $after_callback = null ): \Generator {
+	public static function generate_blocks( $callback, array $source ): \Generator {
 		foreach ( $source as $index => $block ) {
 			if ( ! isset( $block['blockName'] ) ) {
 				continue;
@@ -199,10 +156,6 @@ class Block_Helper {
 
 			if ( ! empty( $block['innerBlocks'] ) ) {
 				yield from self::generate_blocks( $callback, $block['innerBlocks'] );
-			}
-
-			if ( is_callable( $after_callback ) ) {
-				call_user_func( $after_callback, $block );
 			}
 		}
 	}
@@ -216,16 +169,29 @@ class Block_Helper {
 
 		return array_map(
 			function ( $block ) {
-				if ( 'core/block' !== $block['blockName'] ) {
-					return $block;
-				}
-				$reusable_id          = $block['attrs']['ref'] ?? 0;
-				$block['innerBlocks'] = self::get_blocks_by_post( $reusable_id );
+				self::walk_by_reusable( $block );
 
 				return $block;
 			},
 			parse_blocks( $post->post_content )
 		);
+	}
+
+	private static function walk_by_reusable( array &$block ) {
+		if ( ! empty( $block['innerBlocks'] ) ) {
+			foreach ( $block['innerBlocks'] as &$current ) {
+				self::walk_by_reusable( $current );
+			}
+
+			return;
+		}
+
+		if ( 'core/block' !== $block['blockName'] ) {
+			return;
+		}
+
+		$reusable_id          = $block['attrs']['ref'] ?? 0;
+		$block['innerBlocks'] = self::get_blocks_by_post( $reusable_id );
 	}
 
 	public static function delete_namespace( $block ): string {

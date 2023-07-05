@@ -69,12 +69,13 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		return sprintf(
 		/* translators: %s - link to the JetFormBuilder reviews page */
 			__(
-				'Enjoyed <strong>JetFormBuilder</strong>? 
-Please leave us a <a href="%s" target="_blank">★★★★★</a> rating. 
-We really appreciate your support!',
+				'Liked <strong>JetFormBuilder</strong>? 
+Please <a href="%1$s" target="_blank">rate it ★★★★★</a>. 
+For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</a>.',
 				'jet-form-builder'
 			),
-			'https://wordpress.org/support/plugin/jetformbuilder/reviews/?filter=5'
+			'https://wordpress.org/support/plugin/jetformbuilder/reviews/?filter=5',
+			'https://support.crocoblock.com/support/home/'
 		);
 	}
 
@@ -154,7 +155,7 @@ We really appreciate your support!',
 				<p>
 					<?php
 					echo __(
-						'You have the "<b>Clear data on uninstall plugin</b>" option enabled, which deletes the following information when the plugin is removed:',
+						'You have the "<b>Clear plugin data after the uninstall</b>" option enabled, which deletes the following when the plugin is removed:',
 						'jet-form-builder'
 					);
 					?>
@@ -163,14 +164,14 @@ We really appreciate your support!',
 					<li><?php echo __( 'All forms', 'jet-form-builder' ); ?></li>
 					<li><?php echo __( 'All saved Form Records', 'jet-form-builder' ); ?></li>
 					<li><?php echo __( 'All saved files', 'jet-form-builder' ); ?></li>
-					<li><?php echo __( 'All custom sql-tables', 'jet-form-builder' ); ?></li>
+					<li><?php echo __( 'All custom SQL tables', 'jet-form-builder' ); ?></li>
 					<li><?php echo __( 'All global options', 'jet-form-builder' ); ?></li>
 				</ul>
 				<p>
 					<?php
 					echo __(
-						'If you are sure that you want to delete all this information, 
-then click "<b>Continue</b>", if not, click "<b>Cancel</b>".',
+						'If you are sure that you want to delete all this data, 
+click "<b>Continue</b>". If not, click ""<b>Cancel</b>".',
 						'jet-form-builder'
 					);
 					?>

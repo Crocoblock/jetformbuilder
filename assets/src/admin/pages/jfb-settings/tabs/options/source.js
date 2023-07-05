@@ -4,7 +4,7 @@ const label = {
 	enable_dev_mode: __( 'Enable Dev-Mode', 'jet-form-builder' ),
 	disable_next_button: __( 'Disable "Next" button', 'jet-form-builder' ),
 	clear_on_uninstall: __(
-		'Clear data on uninstall plugin',
+		'Clear plugin data after the uninstall',
 		'jet-form-builder',
 	),
 	scroll_on_next: __(

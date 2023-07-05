@@ -13,12 +13,13 @@ const addNotice = () => {
 
 	const message = sprintf(
 		__(
-			`Enjoyed <strong>JetFormBuilder</strong>? 
-Please leave us a <a href="%s" target="_blank">★★★★★</a> rating. 
-We really appreciate your support!`,
+			`Liked <strong>JetFormBuilder</strong>? 
+Please <a href="%1$s" target="_blank">rate it ★★★★★</a>. 
+For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</a>.`,
 			'jet-form-builder',
 		),
 		'https://wordpress.org/support/plugin/jetformbuilder/reviews/?filter=5',
+		'https://support.crocoblock.com/support/home/',
 	);
 
 	container.append(

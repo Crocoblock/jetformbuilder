@@ -2,6 +2,8 @@ const {
 	      addAction,
       } = JetPlugins.hooks;
 
+const { isEmpty } = JetFormBuilderFunctions;
+
 /**
  * @param input {InputData}
  */
@@ -96,7 +98,7 @@ addAction(
 
 		ListingAddTemplateWatcher( input );
 
-		if ( input.getValue() ) {
+		if ( !isEmpty( input.getValue() ) ) {
 			input.value.notify();
 		}
 	},

@@ -12,6 +12,8 @@ const {
 	      BlockName,
 	      BlockAdvancedValue,
 	      EditAdvancedRulesButton,
+	      AdvancedInspectorControl,
+	      AttributeHelp,
       } = JetFBComponents;
 
 const {
@@ -30,6 +32,7 @@ const {
 
 const {
 	      TextareaControl,
+	      TextControl,
 	      PanelBody,
 	      __experimentalNumberControl,
       } = wp.components;
@@ -64,14 +67,6 @@ export default function TextareaEdit( props ) {
 		</div>;
 	}
 
-	const changeNumberAttr = attr => {
-		for ( const [ name, value ] of Object.entries( attr ) ) {
-			attr[ name ] = '' === value ? '' : Number( value );
-		}
-
-		setAttributes( attr );
-	};
-
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
@@ -87,22 +82,34 @@ export default function TextareaEdit( props ) {
 				<BlockAdvancedValue/>
 			</PanelBody>
 			<FieldSettingsWrapper { ...props }>
-				<NumberControl
-					label={ __( 'Min length (symbols)' ) }
-					labelPosition="top"
-					key="minlength"
-					min={ 1 }
+				<AdvancedInspectorControl
 					value={ attributes.minlength }
-					onChange={ minlength => changeNumberAttr( { minlength } ) }
-				/>
-				<NumberControl
-					label={ __( 'Max length (symbols)' ) }
-					labelPosition="top"
-					key="maxlength"
-					min={ 1 }
+					label={ __( 'Min length (symbols)', 'jet-form-builder' ) }
+					onChangePreset={ minlength => setAttributes(
+						{ minlength } ) }
+				>
+					{ ( { instanceId } ) => <TextControl
+						id={ instanceId }
+						className="jet-fb m-unset"
+						value={ attributes.minlength }
+						onChange={ minlength => setAttributes( { minlength } ) }
+					/> }
+				</AdvancedInspectorControl>
+				<AttributeHelp name="minlength"/>
+				<AdvancedInspectorControl
 					value={ attributes.maxlength }
-					onChange={ maxlength => changeNumberAttr( { maxlength } ) }
-				/>
+					label={ __( 'Max length (symbols)', 'jet-form-builder' ) }
+					onChangePreset={ maxlength => setAttributes(
+						{ maxlength } ) }
+				>
+					{ ( { instanceId } ) => <TextControl
+						id={ instanceId }
+						className="jet-fb m-unset"
+						value={ attributes.maxlength }
+						onChange={ maxlength => setAttributes( { maxlength } ) }
+					/> }
+				</AdvancedInspectorControl>
+				<AttributeHelp name="maxlength"/>
 			</FieldSettingsWrapper>
 			<PanelBody
 				title={ __( 'Validation', 'jet-form-builder' ) }

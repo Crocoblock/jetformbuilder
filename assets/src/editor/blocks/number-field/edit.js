@@ -11,6 +11,8 @@ const {
 	      FieldSettingsWrapper,
 	      ValidationToggleGroup,
 	      ValidationBlockMessage,
+	      AdvancedInspectorControl,
+	      AttributeHelp,
       } = JetFBComponents;
 const {
 	      useIsAdvancedValidation,
@@ -25,6 +27,7 @@ const {
       } = wp.blockEditor;
 const {
 	      PanelBody,
+	      TextControl,
 	      __experimentalInputControl,
 	      __experimentalNumberControl,
       } = wp.components;
@@ -61,14 +64,6 @@ export default function NumberEdit( props ) {
 		</div>;
 	}
 
-	const changeNumberAttr = attr => {
-		for ( const [ name, value ] of Object.entries( attr ) ) {
-			attr[ name ] = '' === value ? '' : Number( value );
-		}
-
-		setAttributes( attr );
-	};
-
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
@@ -87,28 +82,45 @@ export default function NumberEdit( props ) {
 					<BlockAdvancedValue/>
 				</PanelBody>
 				<FieldSettingsWrapper { ...props }>
-					<NumberControl
-						label={ __( 'Min Value' ) }
-						labelPosition="top"
-						step={ 0.01 }
+					<AdvancedInspectorControl
 						value={ attributes.min }
-						onChange={ min => changeNumberAttr( { min } ) }
-					/>
-					<NumberControl
-						label={ __( 'Max Value' ) }
-						labelPosition="top"
-						step={ 0.01 }
+						label={ __( 'Min Value', 'jet-form-builder' ) }
+						onChangePreset={ min => setAttributes( { min } ) }
+					>
+						{ ( { instanceId } ) => <TextControl
+							id={ instanceId }
+							className="jet-fb m-unset"
+							value={ attributes.min }
+							onChange={ min => setAttributes( { min } ) }
+						/> }
+					</AdvancedInspectorControl>
+					<AttributeHelp name="min"/>
+					<AdvancedInspectorControl
 						value={ attributes.max }
-						onChange={ max => changeNumberAttr( { max } ) }
-					/>
-					<NumberControl
-						label={ __( 'Step' ) }
-						labelPosition="top"
-						key="step"
-						step={ 0.01 }
+						label={ __( 'Max Value', 'jet-form-builder' ) }
+						onChangePreset={ max => setAttributes( { max } ) }
+					>
+						{ ( { instanceId } ) => <TextControl
+							id={ instanceId }
+							className="jet-fb m-unset"
+							value={ attributes.max }
+							onChange={ max => setAttributes( { max } ) }
+						/> }
+					</AdvancedInspectorControl>
+					<AttributeHelp name="max"/>
+					<AdvancedInspectorControl
 						value={ attributes.step }
-						onChange={ step => changeNumberAttr( { step } ) }
-					/>
+						label={ __( 'Step', 'jet-form-builder' ) }
+						onChangePreset={ step => setAttributes( { step } ) }
+					>
+						{ ( { instanceId } ) => <TextControl
+							id={ instanceId }
+							className="jet-fb m-unset"
+							value={ attributes.step }
+							onChange={ step => setAttributes( { step } ) }
+						/> }
+					</AdvancedInspectorControl>
+					<AttributeHelp name="step"/>
 				</FieldSettingsWrapper>
 				<PanelBody
 					title={ __( 'Validation', 'jet-form-builder' ) }

@@ -24,12 +24,26 @@
 			"default": {}
 		},
 		"minlength": {
-			"type": "number",
-			"default": ""
+			"type": [
+				"number",
+				"string"
+			],
+			"default": "",
+			"jfb": {
+				"preset": true,
+				"shortcode": true
+			}
 		},
 		"maxlength": {
-			"type": "number",
-			"default": ""
+			"type": [
+				"number",
+				"string"
+			],
+			"default": "",
+			"jfb": {
+				"preset": true,
+				"shortcode": true
+			}
 		},
 		"label": {
 			"type": "string",

@@ -19,6 +19,8 @@ const {
 	      BlockAdvancedValue,
 	      EditAdvancedRulesButton,
 	      BaseHelp,
+	      AdvancedInspectorControl,
+	      AttributeHelp,
       } = JetFBComponents;
 const {
 	      useIsAdvancedValidation,
@@ -51,14 +53,6 @@ export default function TextEdit( props ) {
 		      isSelected,
 		      editProps: { uniqKey, attrHelp },
 	      } = props;
-
-	const changeNumberAttr = attr => {
-		for ( const [ name, value ] of Object.entries( attr ) ) {
-			attr[ name ] = '' === value ? '' : Number( value );
-		}
-
-		setAttributes( attr );
-	};
 
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
@@ -102,22 +96,37 @@ export default function TextEdit( props ) {
 					} }
 					options={ fieldTypesList }
 				/>
-				<NumberControl
-					label={ __( 'Min length (symbols)' ) }
-					labelPosition="top"
-					key="minlength"
-					min={ 1 }
+				<AdvancedInspectorControl
 					value={ attributes.minlength }
-					onChange={ minlength => changeNumberAttr( { minlength } ) }
-				/>
-				<NumberControl
-					label={ __( 'Max length (symbols)' ) }
-					labelPosition="top"
-					key="maxlength"
-					min={ 1 }
+					label={ __( 'Min length (symbols)', 'jet-form-builder' ) }
+					onChangePreset={ minlength => setAttributes(
+						{ minlength } ) }
+				>
+					{ ( { instanceId } ) => (
+						<TextControl
+							id={ instanceId }
+							className="jet-fb m-unset"
+							value={ attributes.minlength }
+							onChange={ minlength => setAttributes(
+								{ minlength } ) }
+						/>
+					) }
+				</AdvancedInspectorControl>
+				<AttributeHelp name="minlength"/>
+				<AdvancedInspectorControl
 					value={ attributes.maxlength }
-					onChange={ maxlength => changeNumberAttr( { maxlength } ) }
-				/>
+					label={ __( 'Max length (symbols)', 'jet-form-builder' ) }
+					onChangePreset={ maxlength => setAttributes(
+						{ maxlength } ) }
+				>
+					{ ( { instanceId } ) => <TextControl
+						id={ instanceId }
+						className="jet-fb m-unset"
+						value={ attributes.maxlength }
+						onChange={ maxlength => setAttributes( { maxlength } ) }
+					/> }
+				</AdvancedInspectorControl>
+				<AttributeHelp name="maxlength"/>
 				<ToggleControl
 					key={ 'enable_input_mask' }
 					label={ __( 'Set Input Mask' ) }

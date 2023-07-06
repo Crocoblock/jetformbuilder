@@ -9,6 +9,8 @@ const {
 	      FieldWrapper,
 	      ValidationToggleGroup,
 	      ValidationBlockMessage,
+	      AdvancedInspectorControl,
+	      AttributeHelp,
       } = JetFBComponents;
 const {
 	      useIsAdvancedValidation,
@@ -83,33 +85,45 @@ export default function RangeEdit( props ) {
 					title={ __( 'Field', 'jet-form-builder' ) }
 					key={ uniqKey( 'PanelBody' ) }
 				>
-					<NumberControl
-						label={ __( 'Min Value' ) }
-						labelPosition="top"
-						key="min"
+					<AdvancedInspectorControl
 						value={ attributes.min }
-						onChange={ ( newValue ) => {
-							setAttributes( { min: parseFloat( newValue ) } );
-						} }
-					/>
-					<NumberControl
-						label={ __( 'Max Value' ) }
-						labelPosition="top"
-						key="max"
+						label={ __( 'Min Value', 'jet-form-builder' ) }
+						onChangePreset={ min => setAttributes( { min } ) }
+					>
+						{ ( { instanceId } ) => <TextControl
+							id={ instanceId }
+							className="jet-fb m-unset"
+							value={ attributes.min }
+							onChange={ min => setAttributes( { min } ) }
+						/> }
+					</AdvancedInspectorControl>
+					<AttributeHelp name="min"/>
+					<AdvancedInspectorControl
 						value={ attributes.max }
-						onChange={ ( newValue ) => {
-							setAttributes( { max: parseFloat( newValue ) } );
-						} }
-					/>
-					<NumberControl
-						label={ __( 'Step' ) }
-						labelPosition="top"
-						key="step"
+						label={ __( 'Max Value', 'jet-form-builder' ) }
+						onChangePreset={ max => setAttributes( { max } ) }
+					>
+						{ ( { instanceId } ) => <TextControl
+							id={ instanceId }
+							className="jet-fb m-unset"
+							value={ attributes.max }
+							onChange={ max => setAttributes( { max } ) }
+						/> }
+					</AdvancedInspectorControl>
+					<AttributeHelp name="max"/>
+					<AdvancedInspectorControl
 						value={ attributes.step }
-						onChange={ ( newValue ) => {
-							setAttributes( { step: parseFloat( newValue ) } );
-						} }
-					/>
+						label={ __( 'Step', 'jet-form-builder' ) }
+						onChangePreset={ step => setAttributes( { step } ) }
+					>
+						{ ( { instanceId } ) => <TextControl
+							id={ instanceId }
+							className="jet-fb m-unset"
+							value={ attributes.step }
+							onChange={ step => setAttributes( { step } ) }
+						/> }
+					</AdvancedInspectorControl>
+					<AttributeHelp name="step"/>
 					<TextControl
 						key="prefix"
 						label={ __( 'Value prefix' ) }

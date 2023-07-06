@@ -38,12 +38,26 @@
 			"default": ""
 		},
 		"max_files": {
-			"type": "number",
-			"default": null
+			"type": [
+				"number",
+				"string"
+			],
+			"default": "",
+			"jfb": {
+				"preset": true,
+				"shortcode": true
+			}
 		},
 		"max_size": {
-			"type": "number",
-			"default": null
+			"type": [
+				"number",
+				"string"
+			],
+			"default": "",
+			"jfb": {
+				"preset": true,
+				"shortcode": true
+			}
 		},
 		"allowed_mimes": {
 			"type": "array",

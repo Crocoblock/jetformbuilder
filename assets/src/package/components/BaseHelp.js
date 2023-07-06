@@ -1,10 +1,13 @@
 function BaseHelp( {
 	children,
+	className = '',
 	style = {},
 	...props
 } ) {
 	return <p
-		className={ 'jet-fb-base-control__help' }
+		className={ 'jet-fb-base-control__help' + (
+			className ? ` ${ className }` : ''
+		) }
 		style={ {
 			fontSize: '12px',
 			fontStyle: 'normal',

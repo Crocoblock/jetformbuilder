@@ -327,7 +327,12 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 */
 	protected function apply_attribute( string $name ) {
 		$shortcode = $this->attrs[ $name ]['jfb']['shortcode'] ?? false;
+		$preset    = $this->attrs[ $name ]['jfb']['preset'] ?? false;
 		$value     = $this->block_attrs[ $name ];
+
+		if ( $preset ) {
+			$value = jet_fb_parse_dynamic( $value );
+		}
 
 		if ( $shortcode ) {
 			$value = do_shortcode( $value );

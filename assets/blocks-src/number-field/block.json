@@ -26,16 +26,37 @@
 			"default": {}
 		},
 		"min": {
-			"type": "number",
-			"default": ""
+			"type": [
+				"number",
+				"string"
+			],
+			"default": "",
+			"jfb": {
+				"preset": true,
+				"shortcode": true
+			}
 		},
 		"max": {
-			"type": "number",
-			"default": ""
+			"type": [
+				"number",
+				"string"
+			],
+			"default": "",
+			"jfb": {
+				"preset": true,
+				"shortcode": true
+			}
 		},
 		"step": {
-			"type": "number",
-			"default": ""
+			"type": [
+				"number",
+				"string"
+			],
+			"default": "",
+			"jfb": {
+				"preset": true,
+				"shortcode": true
+			}
 		},
 		"label": {
 			"type": "string",

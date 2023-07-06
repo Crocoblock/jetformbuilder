@@ -176,6 +176,7 @@ import SelectVariations from './blocks/components/SelectVariations';
 import ToggleGroupVariations from './blocks/components/ToggleGroupVariations';
 import BaseLabel from './components/BaseLabel';
 import useSupport from './blocks/hooks/useSupport';
+import AttributeHelp from './blocks/components/AttributeHelp';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -263,6 +264,7 @@ window.JetFBComponents = {
 	ActionsFlow,
 	SelectVariations,
 	ToggleGroupVariations,
+	AttributeHelp,
 };
 
 // JFBFunctions

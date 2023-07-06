@@ -12,6 +12,8 @@ const {
 	      FieldSettingsWrapper,
 	      ValidationBlockMessage,
 	      ValidationToggleGroup,
+	      AdvancedInspectorControl,
+	      AttributeHelp,
       } = JetFBComponents;
 const {
 	      useIsAdvancedValidation,
@@ -116,29 +118,45 @@ export default function MediaEdit( props ) {
 							options={ valueFormats }
 						/> }
 					</> }
-					<NumberControl
-						key="max_files"
-						label={ __( 'Maximum allowed files to upload' ) }
-						labelPosition="top"
-						help={ attrHelp( 'max_files' ) }
+					<AdvancedInspectorControl
 						value={ attributes.max_files }
-						onChange={ ( newValue ) => {
-							props.setAttributes(
-								{ max_files: parseInt( newValue ) } );
-						} }
-					/>
-					<NumberControl
-						label={ __( 'Maximum size in Mb' ) }
-						labelPosition="top"
-						key="max_size"
-						help={ attrHelp( 'max_size' ) }
+						label={ __( 'Maximum allowed files to upload',
+							'jet-form-builder' ) }
+						onChangePreset={ max_files => setAttributes(
+							{ max_files } ) }
+					>
+						{ ( { instanceId } ) => <TextControl
+							id={ instanceId }
+							className="jet-fb m-unset"
+							value={ attributes.max_files }
+							onChange={ max_files => setAttributes(
+								{ max_files } ) }
+						/> }
+					</AdvancedInspectorControl>
+					<AttributeHelp name="max_files">
+						{ __(
+							'If not set allow to upload 1 file.',
+							'jet-form-builder',
+						) }
+					</AttributeHelp>
+					<AdvancedInspectorControl
 						value={ attributes.max_size }
-						step={ 0.01 }
-						onChange={ newValue => {
-							props.setAttributes(
-								{ max_size: Number( newValue ) } );
-						} }
-					/>
+						label={ __( 'Maximum allowed files to upload',
+							'jet-form-builder' ) }
+						onChangePreset={ max_size => setAttributes(
+							{ max_size } ) }
+					>
+						{ ( { instanceId } ) => <TextControl
+							id={ instanceId }
+							className="jet-fb m-unset"
+							value={ attributes.max_size }
+							onChange={ max_size => setAttributes(
+								{ max_size } ) }
+						/> }
+					</AdvancedInspectorControl>
+					<AttributeHelp name="max_size">
+						{ __( 'Write the size in MB.', 'jet-form-builder' ) }
+					</AttributeHelp>
 					<TextControl
 						label={ __(
 							'Maximum file size message',

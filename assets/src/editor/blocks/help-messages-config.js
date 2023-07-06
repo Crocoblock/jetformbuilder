@@ -43,16 +43,6 @@ const messagesConfig = [
 		Note: work only for logged-in users!` )
 	},
 	{
-		attribute: 'max_files',
-		to: [ MEDIA ],
-		message: __( 'If not set allow to upload 1 file' )
-	},
-	{
-		attribute: 'max_size',
-		to: [ MEDIA ],
-		message: __( 'Mb' )
-	},
-	{
 		attribute: 'allowed_mimes',
 		to: [ MEDIA ],
 		message: __( `If no MIME type selected will allow all types. 

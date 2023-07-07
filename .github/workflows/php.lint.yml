@@ -26,17 +26,11 @@ jobs:
             -   name: Checkout code
                 uses: actions/checkout@v2
 
-            -   name: Set up PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: '7.4'
-
             -   name: WPCS check
                 uses: 10up/wpcs-action@stable
                 with:
                     enable_warnings: false # Enable checking for warnings (-w)
-                    use_local_config: './phpcs.xml' # Use local config if available
-                    extra_args: '--report-json=./phpcs.json'
+                    extra_args: '--standard=./phpcs.xml --report-json=./phpcs.json'
 
             -   name: Update summary
                 run: |

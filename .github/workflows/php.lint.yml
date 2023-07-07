@@ -1,29 +1,46 @@
 name: PHP CodeSniffer Linter
 
 on:
-  push:
-    branches:
-      - 3.1.0
-  pull_request:
-    branches:
-      - 3.1.0
+    push:
+        branches:
+            - 3.1.0
+    pull_request:
+        branches:
+            - 3.1.0
+    # Allow manually triggering the workflow.
+    workflow_dispatch:
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+    # The concurrency group contains the workflow name and the branch name for pull requests
+    # or the commit hash for any other events.
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
 
 jobs:
-  phpcs_linter:
-    name: PHP CodeSniffer Linter
-    runs-on: ubuntu-latest
+    phpcs_linter:
+        name: PHP CodeSniffer Linter
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v2
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4'
+            -   name: Set up PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '7.4'
 
-      - name: Install Composer dependencies
-        run: composer install
+            -   name: WPCS check
+                uses: 10up/wpcs-action@stable
+                with:
+                    enable_warnings: false # Enable checking for warnings (-w)
+                    use_local_config: './phpcs.xml' # Use local config if available
+                    extra_args: '--report-json=./phpcs.json'
 
-      - name: Run PHP CodeSniffer
-        run: composer phpcs
+            -   name: Update summary
+                run: |
+                    npm i -g github:10up/phpcs-json-to-md
+                    phpcs-json-to-md --path ./phpcs.json --output ./phpcs.md
+                    cat phpcs.md >> $GITHUB_STEP_SUMMARY
+                if: always()

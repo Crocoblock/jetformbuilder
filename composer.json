@@ -11,7 +11,7 @@
 	],
 	"scripts": {
 		"phpcbf": "phpcbf -p -n --standard=./phpcs.xml .",
-		"phpcs": "phpcs -p -s -n --standard=./phpcs.xml ."
+		"phpcs": "phpcs --colors"
 	},
 	"minimum-stability": "stable",
 	"require-dev": {

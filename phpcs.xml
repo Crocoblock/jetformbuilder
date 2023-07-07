@@ -3,12 +3,23 @@
     <description>JetFormBuilder dev PHP_CodeSniffer ruleset.</description>
     <config name="testVersion" value="7.0-"/>
 
+    <file>.</file>
     <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>assets/*</exclude-pattern>
     <exclude-pattern>modules/framework/*</exclude-pattern>
     <exclude-pattern>\.idea/*</exclude-pattern>
     <exclude-pattern>*\.(js|css|scss|json)$</exclude-pattern>
+
+    <!-- Show sniff and progress -->
+    <arg value="sp"/>
+
+    <!-- Strip the file paths down to the relevant bit -->
+    <arg name="basepath" value="./"/>
+    <arg name="extensions" value="php"/>
+
+    <!-- Enables parallel processing when available for faster results. -->
+    <arg name="parallel" value="8"/>
 
     <rule ref="PHPCompatibility"/>
 

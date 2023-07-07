@@ -10,8 +10,8 @@
 		}
 	],
 	"scripts": {
-		"phpcs": "phpcs --standard=./phpcs.xml .",
-		"phpcbf": "phpcbf --standard=./phpcs.xml ."
+		"phpcbf": "phpcbf -p -n . --standard=./phpcs.xml",
+		"phpcs": "phpcs -p -s -n . --standard=./phpcs.xml"
 	},
 	"minimum-stability": "stable",
 	"require-dev": {

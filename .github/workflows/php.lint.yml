@@ -26,7 +26,7 @@ jobs:
         run: composer install
 
       - name: Run PHP CodeSniffer Beatify
-        run: composer phpcbf
+        run: vendor/bin/phpcs -p -n . --standard=./phpcs.xml --extensions=php
 
       - name: Run PHP CodeSniffer
-        run: composer phpcs
+        run: vendor/bin/phpcs -p -s -n . --standard=./phpcs.xml --extensions=php

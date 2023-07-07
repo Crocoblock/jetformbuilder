@@ -8,7 +8,7 @@
     <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>assets/*</exclude-pattern>
-    <exclude-pattern>framework/*</exclude-pattern>
+    <exclude-pattern>modules/framework/*</exclude-pattern>
     <exclude-pattern>\.idea/*</exclude-pattern>
     <exclude-pattern>*\.(js|css|scss|json)$</exclude-pattern>
 

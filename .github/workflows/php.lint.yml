@@ -18,28 +18,18 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    run:
-        runs-on: ${{ matrix.os }}
-
-        strategy:
-            matrix:
-                os: [ ubuntu-latest ]
-                # , '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2'
-                php-version: [ '7.0' ]
-
-        name: PHP ${{ matrix.php-version }} on ${{ matrix.os }}
-
+    phpcs:
+        name: WPCS
+        runs-on: ubuntu-latest
         steps:
-            - name: Checkout
-              uses: actions/checkout@v2
-
-            - name: Install PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: ${{ matrix.php-version }}
-
-            - name: Install dependencies
-              run: composer install
-
-            - name: Run code sniffer
-              run: composer phpcs
+            -   uses: actions/checkout@v2
+            -   name: WPCS check
+                uses: 10up/wpcs-action@stable
+                with:
+                    use_local_config: 'true' # Use local config if available
+                    extra_args: '--report-json=./phpcs-report.json'
+            -   name: Update summary
+                run: |
+                    npx github:10up/phpcs-json-to-md --path ./phpcs-report.json --output ./phpcs-report.md
+                    cat phpcs-report.md >> $GITHUB_STEP_SUMMARY
+                if: ${{ failure() }}

@@ -1,14 +1,9 @@
 name: PHP CodeSniffer Linter
 
 on:
-    push:
-        branches:
-            - 3.1.0
     pull_request:
         branches:
             - 3.1.0
-    # Allow manually triggering the workflow.
-    workflow_dispatch:
 
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
@@ -18,20 +13,12 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    phpcs:
-        name: WPCS
+    runPHPCSInspection:
+        name: Run PHPCS inspection
         runs-on: ubuntu-latest
         steps:
-            -   name: Checkout
-                uses: actions/checkout@v2
-
-            -   name: Install PHP
-                uses: shivammathur/setup-php@v2
+            -   uses: actions/checkout@v3
                 with:
-                    php-version: '7.4'
-
-            -   name: Install dependencies and update PHPUnit
-                run: composer install
-
-            -   name: Run code sniffer
-                run: vendor/bin/phpcs
+                    ref: ${{ github.event.pull_request.head.sha }}
+            -   name: Run PHPCS inspection
+                uses: rtCamp/action-phpcs-code-review@v3

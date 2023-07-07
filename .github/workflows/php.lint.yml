@@ -18,23 +18,20 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    phpcs_linter:
-        name: PHP CodeSniffer Linter
+    phpcs:
+        name: WPCS
         runs-on: ubuntu-latest
-
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v2
-
+            -   uses: actions/checkout@v2
             -   name: WPCS check
                 uses: 10up/wpcs-action@stable
                 with:
-                    enable_warnings: false # Enable checking for warnings (-w)
-                    extra_args: '--standard=./phpcs.xml --report-json=./phpcs.json'
+                    standart: './phpcs.xml'
+                    use_local_config: true
+                    extra_args: '--report-json=./phpcs-report.json'
 
             -   name: Update summary
                 run: |
-                    npm i -g github:10up/phpcs-json-to-md
-                    phpcs-json-to-md --path ./phpcs.json --output ./phpcs.md
-                    cat phpcs.md >> $GITHUB_STEP_SUMMARY
-                if: always()
+                    npx github:10up/phpcs-json-to-md --path ./phpcs-report.json --output ./phpcs-report.md
+                    cat phpcs-report.md >> $GITHUB_STEP_SUMMARY
+                if: ${{ failure() }}

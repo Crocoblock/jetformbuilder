@@ -1,0 +1,32 @@
+name: PHP CodeSniffer Linter
+
+on:
+  push:
+    branches:
+      - 3.1.0
+  pull_request:
+    branches:
+      - 3.1.0
+
+jobs:
+  phpcs_linter:
+    name: PHP CodeSniffer Linter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Run PHP CodeSniffer Beatify
+        run: composer phpcbf
+
+      - name: Run PHP CodeSniffer
+        run: composer phpcs

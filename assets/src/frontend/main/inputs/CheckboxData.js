@@ -19,6 +19,13 @@ function CheckboxData() {
 				this.handleEnterKey.bind( this ),
 			);
 
+			node.addEventListener( 'blur', event => {
+				if ( this.nodes.includes( event?.relatedTarget ) ) {
+					return;
+				}
+				this.reportOnBlur();
+			} );
+
 			!STRICT_MODE && jQuery( node ).on( 'change', event => {
 				this.callable.lockTrigger();
 				this.setValue();

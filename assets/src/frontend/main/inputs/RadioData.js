@@ -18,6 +18,7 @@ function RadioData() {
 				'keydown',
 				this.handleEnterKey.bind( this ),
 			);
+			nodeElement.addEventListener( 'blur', () => this.reportOnBlur() );
 
 			!STRICT_MODE && jQuery( nodeElement ).on( 'change', event => {
 				if ( this.value.current == event.target.value ) {

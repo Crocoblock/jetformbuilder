@@ -146,16 +146,6 @@ class Array_Tools {
 		return key( $source );
 	}
 
-	function array_key_last( array $array ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.arrayFound
-		if ( empty( $array ) ) {
-			return null;
-		}
-
-		end( $array );
-
-		return key( $array );
-	}
-
 	public static function path( $items ): array {
 		return iterator_to_array( self::generate_path( $items ) );
 	}

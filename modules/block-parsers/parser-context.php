@@ -18,6 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 /**
  * Class Parser_Context
+ *
  * @package Jet_Form_Builder\Request
  */
 class Parser_Context {

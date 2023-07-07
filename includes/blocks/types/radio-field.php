@@ -204,9 +204,9 @@ class Radio_Field extends Base implements Native_Block_Wrapper_Attributes {
 
 		$this->controls_manager->add_control(
 			array(
-				'id'    => 'item_normal_background_color',
-				'type'  => 'color-picker',
-				'label' => __( 'Background Color', 'jet-form-builder' ),
+				'id'           => 'item_normal_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
 
 				'css_selector' => array(
 					// editor

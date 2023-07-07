@@ -3,7 +3,6 @@
 
 namespace Jet_Form_Builder\Actions\Methods\Post_Modification;
 
-
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 

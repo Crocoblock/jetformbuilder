@@ -39,7 +39,6 @@ class Single_Pages_Manager {
 			wp_die( 'Invalid request: ' . $exception->getMessage() );
 		}
 
-
 		try {
 			Pages_Manager::instance()->assets();
 

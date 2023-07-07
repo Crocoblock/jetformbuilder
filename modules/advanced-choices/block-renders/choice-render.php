@@ -3,7 +3,6 @@
 
 namespace JFB_Modules\Advanced_Choices\Block_Renders;
 
-
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Render\Base;

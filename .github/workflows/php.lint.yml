@@ -22,3 +22,5 @@ jobs:
                     ref: ${{ github.event.pull_request.head.sha }}
             -   name: Run PHPCS inspection
                 uses: rtCamp/action-phpcs-code-review@v3
+                env:
+                    GH_BOT_TOKEN: ${{ secrets.GH_BOT_TOKEN }}

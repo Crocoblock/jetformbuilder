@@ -150,9 +150,9 @@ For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</
 		<div class="jet-form-builder-modal" id="modal-<?php echo esc_attr( $slug ); ?>">
 			<div class="jet-form-builder-modal-bg jet-form-builder-modal-exit"></div>
 			<div class="jet-form-builder-modal-container">
-				<h2><?php echo __( 'Deactivating JetFormBuilder', 'jet-form-builder' ); ?></h2>
+				<h2 class="mb-unset"><?php echo __( 'Deactivating JetFormBuilder', 'jet-form-builder' ); ?></h2>
 				<hr/>
-				<p>
+				<p class="mt-unset">
 					<?php
 					echo __(
 						'You have the "<b>Clear plugin data after the uninstall</b>" option enabled, which deletes the following when the plugin is removed:',
@@ -167,18 +167,22 @@ For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</
 					<li><?php echo __( 'All custom SQL tables', 'jet-form-builder' ); ?></li>
 					<li><?php echo __( 'All global options', 'jet-form-builder' ); ?></li>
 				</ul>
-				<p>
+				<p class="mb-unset">
 					<?php
 					echo __(
 						'If you are sure that you want to delete all this data, 
-click "<b>Continue</b>". If not, click ""<b>Cancel</b>".',
+click "<b>Continue</b>". If not, click "<b>Cancel</b>".',
 						'jet-form-builder'
 					);
 					?>
 				</p>
 				<hr/>
-				<button type="button" class="button continue"><?php echo __( 'Continue', 'jet-form-builder' ); ?></button>
-				<button type="button" class="button close"><?php echo __( 'Cancel', 'jet-form-builder' ); ?></button>
+				<div class="jet-form-builder-modal-container-footer">
+					<button type="button"
+							class="button continue"><?php echo __( 'Continue', 'jet-form-builder' ); ?></button>
+					<button type="button"
+							class="button close"><?php echo __( 'Cancel', 'jet-form-builder' ); ?></button>
+				</div>
 			</div>
 		</div>
 		<?php

@@ -18,19 +18,32 @@
 		transition-delay: 0s;
 	}
 
+	.mb-unset {
+		margin-bottom: unset;
+	}
+
+	.mt-unset {
+		margin-top: unset;
+	}
+
 	&-bg {
 		position: absolute;
-		background: rgba(0, 0, 0, 0.1);
+		background: rgba(0, 0, 0, 0.35);
 		width: 100%;
 		height: 100%;
 	}
 
 	&-container {
-		border-radius: 10px;
+		border-radius: 2px;
+		box-shadow: 0 0.7px 1px rgba(0, 0, 0, .15), 0 2.7px 3.8px -0.2px rgba(0, 0, 0, .15), 0 5.5px 7.8px -0.3px rgba(0, 0, 0, .15), 0.1px 11.5px 16.4px -0.5px rgba(0, 0, 0, .15);
 		background: #fff;
 		position: relative;
-		padding: 30px;
+		padding: 0 30px;
 		max-width: calc((100% - 6px) - 20em);
+
+		&-footer {
+			padding-bottom: 1.5em;
+		}
 	}
 
 	&-close {
@@ -51,20 +64,29 @@
 		list-style: initial;
 	}
 
+	hr {
+		margin: 1em 0;
+		border-bottom: unset;
+	}
+
 	button.continue {
 		$bg_color: #d63638;
+		$border_color: darken($bg_color, 20%);
 
 		background-color: $bg_color;
 		color: white;
+		border-color: $border_color;
 
 		&:hover {
 			background: darken($bg_color, 10%);
 			color: darken(white, 10%);
+			border-color: darken($border_color, 10%);
 		}
 
 		&:focus {
 			background: darken($bg_color, 10%);
 			color: darken(white, 10%);
+			border-color: darken($border_color, 10%);
 		}
 	}
 

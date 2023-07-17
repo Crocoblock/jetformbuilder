@@ -18,7 +18,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Border_Radius_Css_Compiler extends Base_Css_Compiler {
 
-	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
 	public function is_supported( array $path ): bool {
 		return (
 			'border' === ( $path[1] ?? '' ) &&

@@ -131,7 +131,7 @@ class Array_Tools {
 	 *
 	 * @return int|string|null
 	 */
-	public static function last( $source ) {
+	public static function last_key( $source ) {
 		if ( function_exists( 'array_key_last' ) ) {
 			// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions
 			return array_key_last( $source );
@@ -144,6 +144,21 @@ class Array_Tools {
 		end( $source );
 
 		return key( $source );
+	}
+
+	/**
+	 * @param $source
+	 *
+	 * @return int|string|null
+	 */
+	public static function last( $source ) {
+		if ( ! is_array( $source ) || empty( $source ) ) {
+			return null;
+		}
+
+		$key = self::last_key( $source );
+
+		return $source[ $key ];
 	}
 
 	public static function path( $items ): array {

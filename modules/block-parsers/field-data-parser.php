@@ -345,7 +345,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 			$this->inner_contexts[ $key ] = $context;
 		}
 
-		return Array_Tools::last( $this->inner_contexts );
+		return Array_Tools::last_key( $this->inner_contexts );
 	}
 
 	/**

@@ -141,7 +141,7 @@ export default function MediaEdit( props ) {
 					</AttributeHelp>
 					<AdvancedInspectorControl
 						value={ attributes.max_size }
-						label={ __( 'Maximum allowed files to upload',
+						label={ __( 'Maximum size in Mb',
 							'jet-form-builder' ) }
 						onChangePreset={ max_size => setAttributes(
 							{ max_size } ) }
@@ -154,9 +154,7 @@ export default function MediaEdit( props ) {
 								{ max_size } ) }
 						/> }
 					</AdvancedInspectorControl>
-					<AttributeHelp name="max_size">
-						{ __( 'Write the size in MB.', 'jet-form-builder' ) }
-					</AttributeHelp>
+					<AttributeHelp name="max_size"/>
 					<TextControl
 						label={ __(
 							'Maximum file size message',

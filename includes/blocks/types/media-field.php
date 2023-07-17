@@ -219,13 +219,13 @@ class Media_Field extends Base {
 	protected function set_max_size() {
 		$size_in_mb = $this->block_attrs['max_size'] ?? false;
 
-		if ( false === $size_in_mb ) {
+		if ( ! is_numeric( $size_in_mb ) ) {
 			$this->max_size = wp_max_upload_size();
 
 			return;
 		}
 
-		$this->max_size = ( MB_IN_BYTES * $size_in_mb );
+		$this->max_size = ( MB_IN_BYTES * ( (int) $size_in_mb ) );
 	}
 
 	protected function set_value_format() {

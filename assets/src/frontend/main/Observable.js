@@ -56,11 +56,13 @@ Observable.prototype = {
 	 */
 	rootNode: null,
 	isObserved: false,
-	observe: function ( root ) {
+	observe: function ( root = null ) {
 		if ( this.isObserved ) {
 			return;
 		}
-		this.rootNode   = root;
+		if ( null !== root ) {
+			this.rootNode = root;
+		}
 		this.isObserved = true;
 
 		doAction( 'jet.fb.observe.before', this );

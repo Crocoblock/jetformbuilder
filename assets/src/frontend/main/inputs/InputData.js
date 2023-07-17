@@ -432,16 +432,22 @@ InputData.prototype.getParentPath = function () {
 	 */
 	const value = this.root.parent.value.current;
 
+	if ( 'object' !== typeof value ) {
+		return [];
+	}
+
 	for ( const [ index, row ] of Object.entries( value ) ) {
 		if ( row !== this.root ) {
 			continue;
 		}
 		return [
 			...this.root.parent.getParentPath(),
-			this.root.parent.rawName,
+			this.root.parent.name,
 			index,
 		];
 	}
+
+	return [];
 };
 
 export default InputData;

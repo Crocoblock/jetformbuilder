@@ -34,9 +34,13 @@ function RepeaterData() {
 			'.jet-form-builder-repeater__row',
 		) ) {
 			const current = new ObservableRow( this );
-			current.observe( row );
+			current.rootNode = row;
 
 			this.value.current.push( current );
+		}
+
+		for ( const currentElement of this.value.current ) {
+			currentElement.observe();
 		}
 
 		const removeButtons = this.container.querySelectorAll(

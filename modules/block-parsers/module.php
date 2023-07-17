@@ -4,7 +4,10 @@ namespace JFB_Modules\Block_Parsers;
 
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Live_Form;
+use Jet_Form_Builder\Request\Parser_Context;
 use Jet_Form_Builder\Request\Request_Tools;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Static_Instance_It;
 use JFB_Components\Module\Base_Module_Static_Instance_Trait;
 use JFB_Components\Module\Base_Module_After_Install_It;
@@ -29,7 +32,8 @@ if ( ! defined( 'WPINC' ) ) {
 final class Module implements
 	Base_Module_It,
 	Base_Module_After_Install_It,
-	Base_Module_Static_Instance_It {
+	Base_Module_Static_Instance_It,
+	Base_Module_Dir_It {
 
 	const EMPTY_BLOCK_ERROR   = '0';
 	const NOT_FIELD_HAS_INNER = '1';
@@ -38,6 +42,7 @@ final class Module implements
 
 	use Repository_Pattern_Trait;
 	use Base_Module_Static_Instance_Trait;
+	use Base_Module_Dir_Trait;
 
 	private $context;
 
@@ -50,6 +55,8 @@ final class Module implements
 	}
 
 	public function on_install() {
+		require_once $this->get_dir( 'parser-context.php' );
+
 		$this->rep_install();
 		$this->context = new Parser_Context();
 	}

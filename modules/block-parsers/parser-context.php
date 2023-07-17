@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JFB_Modules\Block_Parsers;
+namespace Jet_Form_Builder\Request;
 
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
@@ -10,6 +10,8 @@ use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;
 use Jet_Form_Builder\Request\Exceptions\Plain_Value_Exception;
+use JFB_Modules\Block_Parsers\Field_Data_Parser;
+use JFB_Modules\Block_Parsers\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -292,7 +294,15 @@ class Parser_Context {
 	 * @return array|mixed|string
 	 */
 	public function get_request( string $name = '' ) {
-		return $name ? ( $this->raw_request[ $name ] ?? '' ) : $this->raw_request;
+		if ( $name && array_key_exists( $name, $this->raw_request ) ) {
+			return $this->raw_request[ $name ];
+		}
+		$real_request = $this->resolve_request();
+
+		return $name ? ( $real_request[ $name ] ?? '' ) : array_merge(
+			$real_request,
+			$this->raw_request
+		);
 	}
 
 	/**

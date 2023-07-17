@@ -40,6 +40,17 @@ function SignalMapField() {
 
 		this.setPreview( JetMapFieldsSettings.i18n.loading );
 
+		/**
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/3158
+		 */
+		const onEndRequest = () => {
+			this.input.reporting.valuePrev = null;
+			this.input.report();
+			this.input.loading.end();
+		};
+
+		this.input.loading.start();
+
 		switch ( this.input.fieldSettings.format ) {
 			case 'location_string':
 
@@ -48,7 +59,7 @@ function SignalMapField() {
 				this.updateHashFieldPromise( location ).then( () => {
 					main.value = location;
 					this.setPreview( position );
-				} );
+				} ).finally( onEndRequest );
 
 				break;
 
@@ -59,7 +70,7 @@ function SignalMapField() {
 				this.updateHashFieldPromise( location ).then( () => {
 					main.value = location;
 					this.setPreview( position );
-				} );
+				} ).finally( onEndRequest );
 
 				break;
 
@@ -81,19 +92,22 @@ function SignalMapField() {
 								then( () => {
 									main.value = response.data;
 									this.setPreview( response.data );
-								} );
+
+								} ).finally( onEndRequest );
 						}
 						else {
 							main.value = null;
 							this.setPreview(
 								JetMapFieldsSettings.i18n.notFound,
 							);
+							onEndRequest();
 						}
 
 					}
 					else {
 						main.value = null;
 						this.setPreview( response.html );
+						onEndRequest();
 					}
 
 				} ).catch( function ( e ) {

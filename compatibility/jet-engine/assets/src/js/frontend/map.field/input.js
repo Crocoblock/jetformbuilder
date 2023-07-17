@@ -31,6 +31,8 @@ function MapFieldData() {
 			...this.fieldSettings,
 			...JSON.parse( node.dataset.settings ),
 		};
+
+		this.inputType = 'map';
 	};
 
 	this.setValue = function () {

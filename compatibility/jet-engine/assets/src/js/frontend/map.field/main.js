@@ -1,5 +1,7 @@
 import MapFieldData from './input';
 import SignalMapField from './signal';
+import NotEmptyMapRestriction from './NotEmptyMapRestriction';
+import RequiredMapRestriction from './RequiredMapRestriction';
 
 const { addFilter } = JetPlugins.hooks;
 
@@ -20,5 +22,25 @@ addFilter(
 		signals = [ SignalMapField, ...signals ];
 
 		return signals;
+	},
+);
+
+addFilter(
+	'jet.fb.restrictions',
+	'jet-form-builder/map-field',
+	function ( restrictions ) {
+		restrictions.push( NotEmptyMapRestriction );
+
+		return restrictions;
+	},
+);
+
+addFilter(
+	'jet.fb.restrictions.default',
+	'jet-form-builder/map-field',
+	function ( restrictions ) {
+		restrictions.push( RequiredMapRestriction );
+
+		return restrictions;
 	},
 );

@@ -40,7 +40,7 @@ import {
 	observeComment,
 	iterateJfbComments,
 } from './html.macro/functions';
-import removeForm from './init/removeForm';
+import RequiredRestriction from './reporting/restrictions/RequiredRestriction';
 
 window.JetFormBuilderAbstract = {
 	...(
@@ -59,6 +59,7 @@ window.JetFormBuilderAbstract = {
 	RestrictionError,
 	BaseHtmlAttr,
 	ReactiveSet,
+	RequiredRestriction,
 };
 
 window.JetFormBuilderFunctions = {

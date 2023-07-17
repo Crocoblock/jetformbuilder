@@ -197,6 +197,7 @@ ReportingInterface.prototype = {
 
 		this.input = input;
 		this.setRestrictions();
+		this.filterRestrictions();
 	},
 	setRestrictions: function () {
 	},
@@ -239,6 +240,22 @@ ReportingInterface.prototype = {
 	hasAutoScroll: function () {
 		return false;
 	},
+	/**
+	 * With the help of filters that add new restrictions,
+	 * you can overwrite a particular restriction
+	 * if the "type" property is defined in it
+	 */
+	filterRestrictions: function() {
+		const map = {};
+
+		for ( let [ index, restriction ] of Object.entries( this.restrictions ) ) {
+			index = restriction.getType() ? restriction.getType() : index;
+
+			map[ index ] = restriction;
+		}
+
+		this.restrictions = Object.values( map );
+	}
 };
 
 export default ReportingInterface;

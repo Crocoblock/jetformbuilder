@@ -1,5 +1,6 @@
 import AdvancedReporting from './AdvancedReporting';
 import AdvancedRestriction from './restrictions/AdvancedRestriction';
+import NotEmptyRestriction from './restrictions/NotEmptyRestriction';
 
 const {
 	      addFilter,
@@ -14,11 +15,13 @@ addAction(
 	 */
 	function ( observable ) {
 		observable.getInputs().forEach( input => {
-			if ( ! (input.reporting instanceof AdvancedReporting ) ) {
+			if ( !(
+				input.reporting instanceof AdvancedReporting
+			) ) {
 				return;
 			}
 			input.reporting.observeAttrs();
-		} )
+		} );
 	},
 	11,
 );
@@ -38,4 +41,5 @@ window.JetFormBuilderAbstract = {
 		window.JetFormBuilderAbstract ?? {}
 	),
 	AdvancedRestriction,
+	NotEmptyRestriction,
 };

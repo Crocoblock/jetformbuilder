@@ -1,9 +1,17 @@
-
 function Restriction() {
 	/**
 	 * @type {ReportingInterface}
 	 */
 	this.reporting = null;
+	/**
+	 * You can override this property
+	 * if you want to make this Restriction overridable
+	 *
+	 * @since 3.1.0
+	 *
+	 * @type {string}
+	 */
+	this.type = '';
 }
 
 Restriction.prototype = {
@@ -14,7 +22,13 @@ Restriction.prototype = {
 	isSupported: function ( node, reporting ) {
 		return true;
 	},
-
+	/**
+	 * @since 3.1.0
+	 * @returns {string}
+	 */
+	getType: function () {
+		return this.type;
+	},
 	/**
 	 * @param reporting {ReportingInterface}
 	 */

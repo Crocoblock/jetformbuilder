@@ -35,6 +35,13 @@ function CheckboxData() {
 			this.handleEnterKey.bind( this ),
 		);
 
+		this.wrapper.addEventListener( 'blur', event => {
+			if ( this.nodes.includes( event?.relatedTarget ) ) {
+				return;
+			}
+			this.reportOnBlur();
+		} );
+
 		if ( !this.isArray() ) {
 			return;
 		}

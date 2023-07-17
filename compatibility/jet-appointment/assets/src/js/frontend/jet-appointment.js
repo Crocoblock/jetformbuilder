@@ -163,3 +163,37 @@ addFilter(
 		return inputs;
 	},
 );
+
+addAction(
+	'jet.fb.input.makeReactive',
+	'jet-form-builder/appointment-compatibility',
+	/**
+	 * @param input {InputData}
+	 */
+	function ( input ) {
+		for ( const currentInput of input.root.getInputs() ) {
+			// is calendar
+			if ( currentInput instanceof AppointmentInput ) {
+				const [ node ] = currentInput.nodes;
+
+				const wrapper = node.closest( '.appointment-calendar' );
+				const args    = JSON.parse( wrapper.dataset.args );
+
+				if ( args?.service?.field === input.name ) {
+					input.callable.triggerJQuery = () => {};
+				}
+			}
+
+			if ( currentInput instanceof AppointmentProvider ) {
+				const [ node ] = currentInput.nodes;
+
+				const args = JSON.parse( node.dataset.args );
+
+				if ( args?.service?.field === input.name ) {
+					input.callable.triggerJQuery = () => {};
+				}
+			}
+		}
+	},
+);
+

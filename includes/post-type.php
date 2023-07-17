@@ -59,6 +59,10 @@ class Post_Type {
 		 */
 		add_filter( 'gutenberg_can_edit_post_type', array( $this, 'can_edit_post_type' ), 150, 2 );
 		add_filter( 'use_block_editor_for_post_type', array( $this, 'can_edit_post_type' ), 150, 2 );
+
+		/** @since 3.0.9 */
+		add_action( 'admin_init', array( $this, 'add_admin_capabilities' ) );
+		register_deactivation_hook( JET_FORM_BUILDER__FILE__, array( $this, 'remove_admin_capabilities' ) );
 	}
 
 	public function rep_instances(): array {
@@ -182,7 +186,7 @@ class Post_Type {
 			'query_var'           => false,
 			'can_export'          => true,
 			'rewrite'             => false,
-			'capability_type'     => 'post',
+			'capability_type'     => 'jet_fb_form',
 			'menu_icon'           => $this->get_post_type_icon(),
 			'menu_position'       => 120,
 			'supports'            => array( 'title', 'editor', 'custom-fields' ),
@@ -199,6 +203,42 @@ class Post_Type {
 		/** @var Base_Meta_Type $item */
 		foreach ( $this->rep_get_items() as $item ) {
 			register_post_meta( $this->slug(), $item->get_id(), $item->to_array() );
+		}
+	}
+
+	public function add_admin_capabilities() {
+		$role = get_role( 'administrator' );
+
+		foreach ( $this->generate_capabilities() as $capability ) {
+			$role->add_cap( $capability );
+		}
+	}
+
+	public function remove_admin_capabilities() {
+		$role = get_role( 'administrator' );
+
+		foreach ( $this->generate_capabilities() as $capability ) {
+			$role->remove_cap( $capability );
+		}
+	}
+
+	private function generate_capabilities(): \Generator {
+		list( $singular, $plural ) = array( 'jet_fb_form', 'jet_fb_forms' );
+
+		$caps = array(
+			'edit_' . $singular,
+			'read_' . $singular,
+			'delete_' . $singular,
+			'edit_' . $plural,
+			'edit_others_' . $plural,
+			'edit_others_' . $plural,
+			'delete_' . $plural,
+			'publish_' . $plural,
+			'read_private_' . $plural,
+		);
+
+		foreach ( $caps as $cap ) {
+			yield $cap;
 		}
 	}
 

@@ -4,6 +4,14 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.0.9
+* UPD: Now only administrators can edit/create/delete forms.
+* UPD: Starting frontend validation when losing focus on radio and checkbox fields
+* FIX: Multiple browser history changes
+* FIX: Critical error when open General Messages tab in form editor
+* FIX: An error occurred while importing the form
+* FIX: Compatibility with Appointment Provider field with custom listing template
+
 ## 3.0.8
 * UPD: Removed support for required attribute in Calculated Field
 * FIX: Forms are displayed on the front when their status is trash

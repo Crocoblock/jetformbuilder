@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 5.6
 Tested up to: 6.2.2
 Requires PHP: 7.0
-Stable tag: 3.0.8
+Stable tag: 3.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,14 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.0.9**
+ - UPD: Now only administrators can edit/create/delete forms.
+ - UPD: Starting frontend validation when losing focus on radio and checkbox fields
+ - FIX: Multiple browser history changes
+ - FIX: Critical error when open General Messages tab in form editor
+ - FIX: An error occurred while importing the form
+ - FIX: Compatibility with Appointment Provider field with custom listing template
 
 **3.0.8**
  - UPD: Removed support for required attribute in Calculated Field

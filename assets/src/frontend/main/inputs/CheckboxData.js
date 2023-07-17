@@ -35,8 +35,8 @@ function CheckboxData() {
 			this.handleEnterKey.bind( this ),
 		);
 
-		this.wrapper.addEventListener( 'blur', event => {
-			if ( this.nodes.includes( event?.relatedTarget ) ) {
+		this.wrapper.addEventListener( 'focusout', event => {
+			if ( [ ...this.nodes ].includes( event?.relatedTarget ) ) {
 				return;
 			}
 			this.reportOnBlur();

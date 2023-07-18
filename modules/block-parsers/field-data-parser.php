@@ -38,7 +38,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	/**
 	 * @var array
 	 */
-	protected $settings;
+	protected $settings = array();
 
 	protected $value;
 
@@ -191,9 +191,6 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	 * @since 3.1.0
 	 */
 	public function set_setting( string $attr, $value ) {
-		if ( ! is_array( $this->settings ) ) {
-			$this->set_settings( array() );
-		}
 		$this->settings[ $attr ] = $value;
 	}
 

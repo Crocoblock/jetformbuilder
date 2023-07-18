@@ -11,6 +11,8 @@ use Jet_Form_Builder\Exceptions\Silence_Exception;
 use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;
 use Jet_Form_Builder\Request\Exceptions\Plain_Value_Exception;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
+use JFB_Modules\Block_Parsers\Interfaces\Exclude_Self_Parser;
+use JFB_Modules\Block_Parsers\Interfaces\Multiple_Parsers;
 use JFB_Modules\Block_Parsers\Module;
 
 // If this file is called directly, abort.
@@ -32,7 +34,7 @@ class Parser_Context {
 
 	/** @var string|numeric */
 	protected $index_in_parent = '';
-	private $hide_index        = false;
+	private   $hide_index      = false;
 
 	protected $raw_request = array();
 	protected $raw_files   = array();
@@ -55,28 +57,15 @@ class Parser_Context {
 
 	public function apply( $fields = null ) {
 		if ( is_array( $fields ) ) {
-			$this->set_values( $fields );
-			$this->clear_all();
-
-			return;
+			$this->set_parsers( $fields );
 		}
 
 		/** @var Field_Data_Parser $parser */
 		foreach ( $this->iterate_parsers() as $parser ) {
 			$this->parser_update_request( $parser );
 		}
-	}
 
-	public function set_values( $fields ) {
-		foreach ( $this->generate_blocks( $fields ) as $block ) {
-			$parser = $this->set_parser( $block );
-
-			if ( ! $parser ) {
-				continue;
-			}
-
-			$this->parser_update_request( $parser );
-		}
+		$this->clear_all();
 	}
 
 	protected function parser_update_request( Field_Data_Parser $parser ) {
@@ -96,7 +85,13 @@ class Parser_Context {
 
 	public function set_parsers( $fields ) {
 		foreach ( $this->generate_blocks( $fields ) as $block ) {
-			$this->set_parser( $block );
+			/** @var Field_Data_Parser $parser */
+			foreach ( $this->generate_parsers( $block ) as $parser ) {
+				if ( ! $parser->get_name() ) {
+					continue;
+				}
+				$this->parsers[ $parser->get_name() ] = $parser;
+			}
 		}
 	}
 
@@ -172,22 +167,25 @@ class Parser_Context {
 	 *
 	 * @return false|Field_Data_Parser
 	 */
-	protected function set_parser( array $field ) {
-		if ( ! isset( $field['attrs']['name'] ) ) {
-			return false;
-		}
+	protected function generate_parsers( array $field ): \Generator {
 		// reset
-		$this->name        = $field['attrs']['name'];
+		$this->name        = $field['attrs']['name'] ?? '';
 		$this->guest_allow = false;
 
 		$parser = $this->get_parser( $field );
 
-		$this->parsers[ $this->name ] = $parser;
-
 		$parser->set_inner_contexts( $field['innerBlocks'] ?? array() );
 		$parser->set_context( $this );
 
-		return $parser;
+		if ( ! ( $parser instanceof Exclude_Self_Parser ) ) {
+			yield $parser;
+		}
+
+		if ( ! ( $parser instanceof Multiple_Parsers ) ) {
+			return;
+		}
+
+		yield from $parser->generate_parsers();
 	}
 
 	public function get_file( $name = '' ) {
@@ -743,7 +741,7 @@ class Parser_Context {
 
 	protected function insert_parser( string $name, string $field_type ): Field_Data_Parser {
 		if ( array_key_exists( $name, $this->parsers ) &&
-			$this->parsers[ $name ] instanceof Field_Data_Parser
+		     $this->parsers[ $name ] instanceof Field_Data_Parser
 		) {
 			return $this->parsers[ $name ];
 		}

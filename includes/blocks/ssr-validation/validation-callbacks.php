@@ -78,9 +78,7 @@ class Validation_Callbacks {
 
 		if ( $name !== $function_name ||
 			// not in the blacklist
-			in_array( $name, self::NOT_ALLOWED, true ) ||
-			// not starts with `wp_`
-			0 === strpos( $name, 'wp_' )
+			in_array( $name, self::NOT_ALLOWED, true )
 		) {
 			return '';
 		}

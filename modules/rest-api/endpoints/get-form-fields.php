@@ -59,6 +59,9 @@ class Get_Form_Fields extends Rest_Api_Endpoint_Base {
 		);
 
 		foreach ( jet_fb_context()->iterate_parsers() as $name => $parser ) {
+			if ( 'password' === $parser->get_setting( 'field-type' ) ) {
+				continue;
+			}
 			$fields[] = array(
 				'value' => $name,
 				'label' => $parser->get_label(),

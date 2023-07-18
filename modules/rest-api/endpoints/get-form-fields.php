@@ -36,7 +36,7 @@ class Get_Form_Fields extends Rest_Api_Endpoint_Base {
 	}
 
 	public function check_permission(): bool {
-		return current_user_can( 'edit_posts' );
+		return current_user_can( 'edit_jet_fb_forms' );
 	}
 
 	public function run_callback( \WP_REST_Request $request ) {

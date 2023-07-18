@@ -231,7 +231,6 @@ class Post_Type {
 			'delete_' . $singular,
 			'edit_' . $plural,
 			'edit_others_' . $plural,
-			'edit_others_' . $plural,
 			'delete_' . $plural,
 			'publish_' . $plural,
 			'read_private_' . $plural,

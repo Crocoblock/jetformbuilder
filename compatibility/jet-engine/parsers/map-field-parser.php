@@ -5,13 +5,15 @@ namespace JFB_Compatibility\Jet_Engine\Parsers;
 
 use Jet_Form_Builder\Exceptions\Parse_Exception;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
+use JFB_Modules\Block_Parsers\Fields\Default_Parser;
+use JFB_Modules\Block_Parsers\Interfaces\Multiple_Parsers;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Map_Field_Parser extends Field_Data_Parser {
+class Map_Field_Parser extends Field_Data_Parser implements Multiple_Parsers {
 
 	/**
 	 * @return mixed
@@ -20,23 +22,18 @@ class Map_Field_Parser extends Field_Data_Parser {
 		return 'map-field';
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function get_response() {
-		if ( empty( $this->value ) ) {
-			return $this->value;
-		}
+	public function generate_parsers(): \Generator {
+		$lat_parser = new Default_Parser();
+		$lng_parser = clone $lat_parser;
 
-		$request = $this->context->get_request();
+		$lat_parser->set_type( 'map-field-lat' );
+		$lng_parser->set_type( 'map-field-lng' );
 
-		$lat_name = $this->name . '_lat';
-		$lng_name = $this->name . '_lng';
+		$lat_parser->set_name( $this->name . '_lat' );
+		$lng_parser->set_name( $this->name . '_lng' );
 
-		$this->get_context()->update_request( $request[ $lat_name ] ?? 0, $lat_name );
-		$this->get_context()->update_request( $request[ $lng_name ] ?? 0, $lng_name );
-
-		return $this->value;
+		yield $lat_parser;
+		yield $lng_parser;
 	}
 
 }

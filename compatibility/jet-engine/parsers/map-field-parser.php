@@ -24,6 +24,7 @@ class Map_Field_Parser extends Field_Data_Parser implements Multiple_Parsers {
 
 	public function generate_parsers(): \Generator {
 		$lat_parser = new Default_Parser();
+		$lat_parser->set_context( $this->get_context() );
 		$lng_parser = clone $lat_parser;
 
 		$lat_parser->set_type( 'map-field-lat' );

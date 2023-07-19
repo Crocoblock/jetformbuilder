@@ -1,14 +1,43 @@
+import ActionMessagesSlotFills from './ActionMessagesSlotFills';
+
 const {
 	      TextControl,
 	      BaseControl,
       } = wp.components;
 
 const {
-	      useState,
+	      useMemo,
 	      useEffect,
       } = wp.element;
 
 const { __ } = wp.i18n;
+
+function ActionMessageRow( props ) {
+	const {
+		      type,
+		      label,
+		      value,
+		      onChange,
+	      } = props;
+
+	const { Slot: RowSlot } = useMemo( () => ActionMessagesSlotFills[ type ],
+		[ type ] );
+
+	return <div
+		className="jet-user-meta__row"
+	>
+		<RowSlot fillProps={ props }>
+			{ ( fills ) => (
+				Boolean( fills?.length ) ? fills :
+				<TextControl
+					label={ label }
+					value={ value }
+					onChange={ onChange }
+				/>
+			) }
+		</RowSlot>
+	</div>;
+}
 
 function ActionMessages( props ) {
 
@@ -49,24 +78,19 @@ function ActionMessages( props ) {
 	};
 
 	return <BaseControl
-		label={ __( 'Messages Settings:' ) }
+		label={ __( 'Messages Settings:', 'jet-form-builder' ) }
 		key="messages_settings_fields"
 	>
 		<div className="jet-user-fields-map__list">
 			{ settings.messages && Object.entries( settings.messages ).
-				map( ( [ type, data ], id ) => <div
-						className="jet-user-meta__row"
+				map( ( [ type, data ], id ) => <ActionMessageRow
 						key={ 'message_' + type + id }
-					>
-						<TextControl
-							key={ type + id }
-							label={ messages( type ).label }
-							value={ getMessage( type ) }
-							onChange={ newValue => setMessage( newValue, type ) }
-						/>
-					</div>,
+						type={ type }
+						label={ messages( type ).label }
+						value={ getMessage( type ) }
+						onChange={ newValue => setMessage( newValue, type ) }
+					/>,
 				) }
-
 		</div>
 	</BaseControl>;
 }

@@ -107,4 +107,23 @@ class Manager {
 		return explode( '|', $status );
 	}
 
+	/**
+	 * @since 3.1.0
+	 *
+	 * @param string $message
+	 */
+	public function set_success( string $message ) {
+		$this->set_message( 'success', $message );
+	}
+
+	/**
+	 * @since 3.1.0
+	 *
+	 * @param string $type
+	 * @param string $message
+	 */
+	public function set_message( string $type, string $message ) {
+		$this->_types[ $type ] = $message;
+	}
+
 }

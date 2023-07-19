@@ -177,6 +177,8 @@ import ToggleGroupVariations from './blocks/components/ToggleGroupVariations';
 import BaseLabel from './components/BaseLabel';
 import useSupport from './blocks/hooks/useSupport';
 import AttributeHelp from './blocks/components/AttributeHelp';
+import ActionMessagesSlotFills
+	from './actions/components/ActionMessagesSlotFills';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -265,6 +267,7 @@ window.JetFBComponents = {
 	SelectVariations,
 	ToggleGroupVariations,
 	AttributeHelp,
+	ActionMessagesSlotFills,
 };
 
 // JFBFunctions

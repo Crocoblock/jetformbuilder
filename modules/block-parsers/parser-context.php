@@ -34,7 +34,7 @@ class Parser_Context {
 
 	/** @var string|numeric */
 	protected $index_in_parent = '';
-	private   $hide_index      = false;
+	private $hide_index        = false;
 
 	protected $raw_request = array();
 	protected $raw_files   = array();
@@ -329,13 +329,29 @@ class Parser_Context {
 		return $this;
 	}
 
+	public function is_secure( $name ): bool {
+		try {
+			$parser = $this->resolve_parser( $name );
+		} catch ( Silence_Exception $exception ) {
+			return false;
+		}
+
+		return $parser->is_secure();
+	}
+
 	/**
 	 * @param string|array $name
 	 *
 	 * @see \JFB_Modules\Form_Record\Controller::generate_request
 	 */
-	public function exclude( $name = '' ) {
-		$this->update_setting( 'field_type', 'password', $name );
+	public function make_secure( $name ) {
+		try {
+			$parser = $this->resolve_parser( $name );
+		} catch ( Silence_Exception $exception ) {
+			return;
+		}
+
+		$parser->make_secure();
 	}
 
 	/**
@@ -741,7 +757,7 @@ class Parser_Context {
 
 	protected function insert_parser( string $name, string $field_type ): Field_Data_Parser {
 		if ( array_key_exists( $name, $this->parsers ) &&
-		     $this->parsers[ $name ] instanceof Field_Data_Parser
+			$this->parsers[ $name ] instanceof Field_Data_Parser
 		) {
 			return $this->parsers[ $name ];
 		}

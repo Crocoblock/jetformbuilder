@@ -224,13 +224,12 @@ class Controller {
 				continue;
 			}
 
-			$current_attrs = jet_fb_context()->get_settings( $field_name );
-
-			if ( 'password' === ( $current_attrs['field_type'] ?? '' ) ) {
+			if ( jet_fb_context()->is_secure( $field_name ) ) {
 				continue;
 			}
 
 			$type          = jet_fb_context()->get_field_type( $field_name );
+			$current_attrs = jet_fb_context()->get_settings( $field_name );
 			$attrs_to_save = $this->get_attrs_by_field_type( $type, $current_attrs );
 
 			if ( ! is_scalar( $value ) ) {

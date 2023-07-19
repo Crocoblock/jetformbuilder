@@ -117,7 +117,7 @@ class Form_Handler {
 		foreach ( $fields as $name => $value ) {
 			jet_fb_context()->set_field_type( 'text-field', $name );
 			jet_fb_context()->update_request( $value, $name );
-			jet_fb_context()->exclude( $name );
+			jet_fb_context()->make_secure( $name );
 		}
 	}
 

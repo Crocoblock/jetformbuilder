@@ -184,6 +184,14 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		$this->settings = $settings;
 	}
 
+	public function is_secure(): bool {
+		return 'password' === $this->get_setting( 'field_type' );
+	}
+
+	public function make_secure() {
+		$this->set_setting( 'field_type', 'password' );
+	}
+
 	/**
 	 * @param string $attr
 	 * @param $value
@@ -327,7 +335,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	 */
 	public function remove_context( $index ) {
 		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
+		     ! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
 		) {
 			return;
 		}
@@ -435,7 +443,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		$index = array_shift( $path );
 
 		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
+		     ! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
 		) {
 			throw new Repository_Exception();
 		}

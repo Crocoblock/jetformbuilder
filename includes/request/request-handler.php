@@ -50,7 +50,7 @@ class Request_Handler {
 	 * @param string|array $name 'field_name'|'repeater_name.field_name'|['repeater_name', 'field_name']
 	 */
 	public function exclude( $name ) {
-		jet_fb_context()->exclude( $name );
+		jet_fb_context()->make_secure( $name );
 	}
 
 	/**

@@ -77,7 +77,7 @@ abstract class Base_Export_Controller implements Base_Export_Controller_It {
 		 * @var Field_Data_Parser $parser
 		 */
 		foreach ( jet_fb_context()->iterate_parsers_list() as $name => $parser ) {
-			if ( 'password' === $parser->get_setting( 'field-type' ) ) {
+			if ( $parser->is_secure() ) {
 				$parser->get_context()->remove( $parser->get_name() );
 				continue;
 			}

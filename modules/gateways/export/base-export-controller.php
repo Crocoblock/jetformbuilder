@@ -161,11 +161,15 @@ abstract class Base_Export_Controller implements Base_Export_Controller_It {
 			unset( $payer_shipping[ $property ] );
 		}
 
-		return array_merge(
-			is_array( $payment_values ) ? $payment_values : get_object_vars( $payment_values ),
-			$record,
-			$payer_values,
-			$payer_shipping
+		return apply_filters(
+			'jet-form-builder/export/payment/row',
+			array_merge(
+				is_array( $payment_values ) ? $payment_values : get_object_vars( $payment_values ),
+				$record,
+				$payer_values,
+				$payer_shipping
+			),
+			$this
 		);
 	}
 

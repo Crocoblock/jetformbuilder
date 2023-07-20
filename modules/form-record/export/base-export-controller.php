@@ -59,7 +59,8 @@ abstract class Base_Export_Controller implements Base_Export_Controller_It {
 
 		return apply_filters(
 			'jet-form-builder/export/form-record/row',
-			array_merge( $fields_values, $extra_values )
+			array_merge( $fields_values, $extra_values ),
+			$this
 		);
 	}
 

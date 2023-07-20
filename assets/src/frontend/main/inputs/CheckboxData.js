@@ -79,6 +79,10 @@ function CheckboxData() {
 			value?.[ 0 ] ?? ''
 		);
 	};
+
+	this.isArray = function () {
+		return this.nodes.item( 0 )?.name?.includes?.( '[]' );
+	};
 }
 
 CheckboxData.prototype = Object.create( InputData.prototype );

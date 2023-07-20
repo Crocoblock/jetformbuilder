@@ -31,5 +31,7 @@ document.querySelector( '#bulk-action-form' ).
 		}
 		event.preventDefault();
 		deactivateLink = event.target.href;
+
+		modal.style.display = 'flex';
 		modal.classList.add( 'open' );
 	} );

@@ -147,7 +147,7 @@ For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</
 		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		ob_start();
 		?>
-		<div class="jet-form-builder-modal" id="modal-<?php echo esc_attr( $slug ); ?>">
+		<div style="display:none;" class="jet-form-builder-modal" id="modal-<?php echo esc_attr( $slug ); ?>">
 			<div class="jet-form-builder-modal-bg jet-form-builder-modal-exit"></div>
 			<div class="jet-form-builder-modal-container">
 				<h2 class="mb-unset"><?php echo __( 'Deactivating JetFormBuilder', 'jet-form-builder' ); ?></h2>

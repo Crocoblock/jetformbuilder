@@ -10,6 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Block_Helper;
+use Jet_Form_Builder\Exceptions\Handler_Exception;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -268,7 +269,11 @@ final class Module implements
 	 * @throws Repository_Exception
 	 */
 	public function get_current(): Base_Captcha {
-		if ( array_key_exists( jet_fb_live()->form_id, $this->current ) ) {
+		if ( ! jet_fb_live()->form_id ) {
+			throw new Repository_Exception( 'no_captcha' );
+		}
+
+		if ( array_key_exists( (int) jet_fb_live()->form_id, $this->current ) ) {
 			if ( $this->current[ jet_fb_live()->form_id ] instanceof Base_Captcha ) {
 				return $this->current[ jet_fb_live()->form_id ];
 			}
@@ -332,10 +337,10 @@ final class Module implements
 
 		$current->set_exist_container(
 			! empty(
-				Block_Helper::find_by_block_name(
-					$blocks,
-					'jet-forms/captcha-container'
-				)
+			Block_Helper::find_by_block_name(
+				$blocks,
+				'jet-forms/captcha-container'
+			)
 			)
 		);
 

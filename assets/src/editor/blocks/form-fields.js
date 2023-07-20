@@ -65,6 +65,9 @@ const registerFormField = block => {
 
 	settings.edit = wrappers.withCustomProps( block );
 
+	/**
+	 * @since 3.0.0
+	 */
 	if ( !settings.hasOwnProperty( 'jfbGetFields' ) ) {
 		settings.jfbGetFields = function ( context = 'default' ) {
 			if ( !this.attributes?.name ) {

@@ -52,7 +52,7 @@ class Jet_Appointment implements
 			array( $this, 'register_scripts' )
 		);
 
-		remove_action(
+		remove_filter(
 			'render_block_jet-forms/appointment-date',
 			array( $this, 'add_compatibility_script' )
 		);
@@ -72,7 +72,6 @@ class Jet_Appointment implements
 	}
 
 	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
-
 	public function add_compatibility_script( string $markup, array $parsed, $block ): string {
 		wp_enqueue_script( $this->get_handle() );
 

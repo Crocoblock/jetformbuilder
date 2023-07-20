@@ -41,6 +41,8 @@ function AppointmentInput() {
 function AppointmentProvider() {
 	InputData.call( this );
 
+	this.providerArgs = {};
+
 	/**
 	 * Node can be <div> or <select>
 	 *
@@ -54,14 +56,12 @@ function AppointmentProvider() {
 	this.setNode = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
 
-		this.name = node.dataset?.field || node.name;
+		this.name         = node.dataset?.field || node.name;
+		this.providerArgs = JSON.parse( node.dataset.args );
 	};
 
 	this.checkIsRequired = function () {
-		const [ node ] = this.nodes;
-		const args     = JSON.parse( node.dataset.args );
-
-		return args?.args_str?.includes( 'required' );
+		return this.providerArgs?.args_str?.includes( 'required' );
 	};
 
 	this.addListeners = function () {
@@ -80,15 +80,11 @@ function AppointmentProvider() {
 	};
 
 	this.addServiceListener = function () {
-		const [ node ] = this.nodes;
-
-		const args = JSON.parse( node.dataset.args );
-
-		if ( !args?.service?.field ) {
+		if ( !this.providerArgs?.service?.field ) {
 			return;
 		}
 
-		const service = this.root.getInput( args.service.field );
+		const service = this.root.getInput( this.providerArgs.service.field );
 
 		if ( !service ) {
 			return;
@@ -193,6 +189,30 @@ addAction(
 					input.callable.triggerJQuery = () => {};
 				}
 			}
+		}
+	},
+);
+
+addAction(
+	'jet.fb.multistep.page.init',
+	'jet-form-builder/appointment-compatibility/switch-page-on-change',
+	/**
+	 * @param page {PageState}
+	 */
+	function ( page ) {
+		const wrappers = page.node.querySelectorAll(
+			'.appointment-provider[data-args*="data-switch"]',
+		);
+		if ( !wrappers?.length ) {
+			return;
+		}
+		for ( const wrapper of wrappers ) {
+			wrapper.jfbSync.watch( () => {
+				if ( !wrapper.jfbSync.value.current ) {
+					return;
+				}
+				page.changePage( false ).then( () => {} ).catch( () => {} );
+			} );
 		}
 	},
 );

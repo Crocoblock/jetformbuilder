@@ -1,5 +1,9 @@
 const { addAction } = JetPlugins.hooks;
 
+const {
+	      isEmpty,
+      } = JetFormBuilderFunctions;
+
 addAction(
 	'jet.fb.multistep.page.init',
 	'jet-form-builder/switch-page-on-change',
@@ -24,6 +28,9 @@ addAction(
 				continue;
 			}
 			node.jfbSync.watch( () => {
+				if ( isEmpty( node.jfbSync.getValue() ) ) {
+					return;
+				}
 				page.changePage( false ).then( () => {} ).catch( () => {} );
 			} );
 		}

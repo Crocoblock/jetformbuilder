@@ -4,6 +4,8 @@ import SaveAdvancedChoice from './save';
 
 const { name, icon } = metadata;
 
+const { __ } = wp.i18n;
+
 /**
  * Available items for `useEditProps`:
  *  - uniqKey
@@ -13,6 +15,10 @@ const { name, icon } = metadata;
  */
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	description: __(
+		`Apply a variety of settings of the one particular choice block.`,
+		'jet-form-builder',
+	),
 	edit: EditAdvancedChoice,
 	save: SaveAdvancedChoice,
 	example: {

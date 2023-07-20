@@ -9,8 +9,17 @@ const {
 	      icon,
       } = metadata;
 
+const {
+	      __,
+      } = wp.i18n;
+
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	description: __(
+		`Turn any block, text, images, or other objects into the object 
+for selection with this block.`,
+		'jet-form-builder',
+	),
 	edit: EditAdvancedChoicesField,
 	save: SaveAdvancedChoicesField,
 	example: {

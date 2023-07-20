@@ -14,11 +14,14 @@ const { name, icon } = metadata;
  *  - blockName
  *  - attrHelp
  */
-const description = 'Try more options with Advanced Color Picker addon';
 
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
-	description,
+	description: __(
+		`Give your users an opportunity to design your website and pick 
+a certain color in the form with the help of the Color Picker Field.`,
+		'jet-form-builder'
+	),
 	edit: BlockEdit,
 	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],
 	example: {

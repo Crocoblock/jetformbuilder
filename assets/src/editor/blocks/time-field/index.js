@@ -16,6 +16,11 @@ const { name, icon = '' } = metadata;
  */
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	description: __(
+		`Allow the user to enter the desirable time. Let them type the time 
+manually or choose from the convenient drop-down timer.`,
+		'jet-form-builder'
+	),
 	edit: TimeEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
 	example: {

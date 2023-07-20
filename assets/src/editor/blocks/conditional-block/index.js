@@ -18,6 +18,11 @@ const { name, icon = '' } = metadata;
  */
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	description: __(
+		`Utilize the Conditional Visibility functionality allowing 
+to make fields of the form invisible to the users until some conditions are met.`,
+		'jet-form-builder',
+	),
 	edit: ConditionalBlockEdit,
 	save: ConditionalSave,
 	useEditProps: [ 'uniqKey' ],

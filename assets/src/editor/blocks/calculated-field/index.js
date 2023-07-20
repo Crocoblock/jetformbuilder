@@ -16,6 +16,11 @@ const { name, icon } = metadata;
  */
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	description: __(
+		`Pull out the values from the form fields and meta fields and 
+use them to calculate the formula of any complexity you've set before.`,
+		'jet-form-builder',
+	),
 	edit: EditCalculated,
 	useEditProps: [ 'uniqKey', 'blockName' ],
 	example: {
@@ -29,7 +34,8 @@ const settings = {
 				type: 'block',
 				blocks: [ 'jet-forms/number-field' ],
 				transform: ( attributes ) => {
-					return createBlock( 'jet-forms/number-field', { ...attributes } );
+					return createBlock( 'jet-forms/number-field',
+						{ ...attributes } );
 				},
 				priority: 0,
 			},
@@ -39,7 +45,7 @@ const settings = {
 				type: 'block',
 				blocks: [
 					'jet-forms/number-field',
-					'jet-forms/text-field'
+					'jet-forms/text-field',
 				],
 				transform: ( attributes ) => {
 					return createBlock( name, { ...attributes } );

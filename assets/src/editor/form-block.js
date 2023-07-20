@@ -1,4 +1,5 @@
 import metadata from "@blocks/form-block/block.json"
+import preview from './form-block.preview';
 
 const {
 		  registerBlockType,
@@ -28,6 +29,16 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 
 	const localize = window.JetFormData;
 	const blockProps = useBlockProps();
+
+	if ( attributes.isPreview ) {
+		return <div style={ {
+			width: '100%',
+			display: 'flex',
+			justifyContent: 'center',
+		} }>
+			{ preview }
+		</div>;
+	}
 
 	return [
 		isSelected && <InspectorControls
@@ -96,9 +107,20 @@ registerBlockType(
 	metadata.name,
 	{
 		...metadata,
-		title: __( 'JetForm' ),
+		title: __( 'JetForm', 'jet-form-builder' ),
+		description: __(
+			`Display the created form on any WordPress page with 
+the JetForm widget or block. Set the fields layout, 
+required mark, and submit type.`,
+			'jet-form-builder'
+		),
 		icon: <span dangerouslySetInnerHTML={ { __html: metadata.icon } }></span>,
 		attributes: metadata.attributes,
 		edit: FormEdit,
+		example: {
+			attributes: {
+				isPreview: true,
+			},
+		},
 	},
 );

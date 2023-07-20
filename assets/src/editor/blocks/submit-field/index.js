@@ -16,6 +16,11 @@ const { name, icon = '' } = metadata;
  */
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	description: __(
+		`Add the button by clicking which users can submit the form, proceed 
+to any form part, or change the render state (switch login to sign-up form).`,
+		'jet-form-builder'
+	),
 	edit: ActionButtonEdit,
 	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],
 	example: {

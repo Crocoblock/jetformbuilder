@@ -16,6 +16,11 @@ const { name, icon = '' } = metadata;
  */
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	description: __(
+		`Make a bar in the form that will be filled with numbers or set 
+a range with the Min/Max Value options for the user to choose from.`,
+		'jet-form-builder'
+	),
 	edit: NumberEdit,
 	useEditProps: [ 'uniqKey', 'blockName' ],
 	example: {

@@ -1,5 +1,5 @@
-import FormBreakEdit from "./edit";
-import metadata from "@blocks/form-break-field/block.json";
+import FormBreakEdit from './edit';
+import metadata from '@blocks/form-break-field/block.json';
 
 const { __ } = wp.i18n;
 
@@ -16,6 +16,11 @@ const { name, icon = '' } = metadata;
  */
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	description: __(
+		`With the help of Form Break Field, divide one big form into 
+several parts and make those parts appear after filling in the previous part.`,
+		'jet-form-builder',
+	),
 	edit: FormBreakEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {
@@ -29,7 +34,8 @@ const settings = {
 				type: 'block',
 				blocks: [ 'jet-forms/text-field' ],
 				transform: ( attributes ) => {
-					return createBlock( 'jet-forms/text-field', { ...attributes } );
+					return createBlock( 'jet-forms/text-field',
+						{ ...attributes } );
 				},
 				priority: 0,
 			},
@@ -71,7 +77,9 @@ const settings = {
 			{
 				type: 'block',
 				blocks: [ 'jet-forms/submit-field' ],
-				isMatch: attributes => ( 'next' === attributes.action_type ),
+				isMatch: attributes => (
+					'next' === attributes.action_type
+				),
 				transform: ( attributes ) => {
 					return createBlock( name, { ...attributes } );
 				},

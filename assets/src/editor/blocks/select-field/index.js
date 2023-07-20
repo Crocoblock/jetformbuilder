@@ -14,11 +14,14 @@ const { name, icon = '' } = metadata;
  *  - blockName
  *  - attrHelp
  */
-const description = 'Try more options with Hierarchical Select addon';
 
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
-	description,
+	description: __(
+		`Creates a drop-down list, where the user can choose one option. 
+Add as many options in the list as needed as the number of them is not limited.`,
+		'jet-form-builder'
+	),
 	edit: SelectEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {

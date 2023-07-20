@@ -16,6 +16,11 @@ const { name, icon = '' } = metadata;
  */
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	description: __(
+		`Create a list of available options from which the user can 
+choose only a single variant. Build the lists of various lengths.`,
+		'jet-form-builder'
+	),
 	edit: RadioEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
 	example: {

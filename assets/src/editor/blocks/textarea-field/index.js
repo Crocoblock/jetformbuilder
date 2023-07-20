@@ -16,6 +16,11 @@ const { name, icon = '' } = metadata;
  */
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	description: __(
+		`Give the user enough space to type in a bigger piece of text. 
+Add a text area where the data can be placed in several lines.`,
+		'jet-form-builder'
+	),
 	edit: TextareaEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
 	example: {

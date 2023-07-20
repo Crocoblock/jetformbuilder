@@ -5,7 +5,7 @@ namespace Jet_Form_Builder\Classes\Resources;
 
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 
-class File implements Arrayable, Media_Block_Value {
+class File implements Arrayable, Media_Block_Value, Has_Error_File {
 
 	protected $error    = 0;
 	protected $size     = 0;
@@ -180,5 +180,9 @@ class File implements Arrayable, Media_Block_Value {
 	 */
 	public function get_attachment_both(): array {
 		return array();
+	}
+
+	public function has_error(): bool {
+		return 0 < $this->get_error();
 	}
 }

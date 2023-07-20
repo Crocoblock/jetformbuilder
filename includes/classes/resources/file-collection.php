@@ -10,7 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class File_Collection extends Collection implements Media_Block_Value {
+class File_Collection extends Collection implements Media_Block_Value, Has_Error_File {
 
 	public function push( array $file ): bool {
 		try {
@@ -29,6 +29,17 @@ class File_Collection extends Collection implements Media_Block_Value {
 		}
 
 		return $this;
+	}
+
+	public function has_error(): bool {
+		/** @var File $file */
+		foreach ( $this as $file ) {
+			if ( $file->has_error() ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/*

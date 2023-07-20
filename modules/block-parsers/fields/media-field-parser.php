@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Block_Parsers\Fields;
 
+use Jet_Form_Builder\Classes\Resources\Has_Error_File;
 use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
@@ -28,7 +29,14 @@ class Media_Field_Parser extends Field_Data_Parser {
 	 * @throws Sanitize_Value_Exception
 	 */
 	public function get_response() {
-		if ( empty( $this->get_file() ) ) {
+		if (
+			empty( $this->get_file() ) ||
+			(
+				is_object( $this->get_file() ) &&
+				is_a( $this->get_file(), Has_Error_File::class ) &&
+				$this->get_file()->has_error()
+			)
+		) {
 			return false;
 		}
 		do_action( 'jet-form-builder/media-field/before-upload', $this );

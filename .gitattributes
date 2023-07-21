@@ -17,5 +17,6 @@ assets/*.json           export-ignore
 assets/.config          export-ignore
 assets/.helpers         export-ignore
 
-.husky                  export-ignore
+.bin                    export-ignore
+.github                 export-ignore
 

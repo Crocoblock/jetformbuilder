@@ -2,10 +2,6 @@
 
 namespace Jet_Form_Builder\Integrations;
 
-/**
- * GetResponse Handler
- */
-
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;

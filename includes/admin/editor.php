@@ -14,11 +14,6 @@ use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager as Block_Condition_Manager;
 use Jet_Form_Builder\Post_Meta\Messages_Meta;
 
-/**
- * Form editor class
- * Thanks Tom J Nowell for initial editor idea and inspiration!
- */
-
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;

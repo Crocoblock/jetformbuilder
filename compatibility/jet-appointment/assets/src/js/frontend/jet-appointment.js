@@ -201,7 +201,7 @@ addAction(
 	 */
 	function ( page ) {
 		const wrappers = page.node.querySelectorAll(
-			'.appointment-provider[data-args*="data-switch"]',
+			'.appointment-provider[data-args*="data-switch"], .appointment-provider[data-switch="1"]',
 		);
 		if ( !wrappers?.length ) {
 			return;

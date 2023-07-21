@@ -32,6 +32,7 @@
         <exclude name="Squiz.Commenting.ClassComment.Missing"/>
         <exclude name="Squiz.Commenting.FileComment.Missing"/>
         <exclude name="Squiz.Commenting.FunctionComment"/>
+        <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/>
     </rule>
 
     <rule ref="WordPress-Extra">
@@ -49,14 +50,14 @@
     <rule ref="WordPress.WP.Capabilities">
         <properties>
             <property name="custom_capabilities" type="array">
-                <element value="edit_jet_fb_form" />
-                <element value="read_jet_fb_form" />
-                <element value="delete_jet_fb_form" />
-                <element value="edit_jet_fb_forms" />
-                <element value="edit_others_jet_fb_forms" />
-                <element value="delete_jet_fb_forms" />
-                <element value="publish_jet_fb_forms" />
-                <element value="read_private_jet_fb_forms" />
+                <element value="edit_jet_fb_form"/>
+                <element value="read_jet_fb_form"/>
+                <element value="delete_jet_fb_form"/>
+                <element value="edit_jet_fb_forms"/>
+                <element value="edit_others_jet_fb_forms"/>
+                <element value="delete_jet_fb_forms"/>
+                <element value="publish_jet_fb_forms"/>
+                <element value="read_private_jet_fb_forms"/>
             </property>
         </properties>
     </rule>

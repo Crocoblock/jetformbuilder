@@ -20,6 +20,7 @@
     <rule ref="WordPress">
         <exclude name="Universal.Operators.DisallowShortTernary.Found"/>
         <exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
         <exclude name="Generic.Commenting.DocComment.MissingShort"/>
         <exclude name="Generic.Commenting.DocComment.ShortNotCapital"/>
         <exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedCatch"/>

@@ -13,6 +13,7 @@ const {
 	      ValidationToggleGroup,
 	      ValidationBlockMessage,
 	      ClientSideMacros,
+	      AttributeHelp,
       } = JetFBComponents;
 const {
 	      useInsertMacro,
@@ -31,6 +32,7 @@ const {
 	      TextControl,
 	      ToggleControl,
 	      PanelBody,
+	      ExternalLink,
       } = wp.components;
 
 export default function DateTimeEdit( props ) {
@@ -59,6 +61,21 @@ export default function DateTimeEdit( props ) {
 		</div>;
 	}
 
+	const help = <>
+		{ __(
+			'Plain date should be in yyyy-MM-ddThh:mm format.',
+			'jet-form-builder',
+		) }
+		&nbsp;
+		{ __( 'Or you can use', 'jet-form-builder' ) }
+		&nbsp;
+		<ExternalLink
+			href="https://github.com/Crocoblock/jetformbuilder/wiki/Frontend-Macros---External-Macros#ctcurrentdate"
+		>
+			{ __( 'macros', 'jet-form-builder' ) }
+		</ExternalLink>.
+	</>;
+
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
@@ -75,10 +92,7 @@ export default function DateTimeEdit( props ) {
 				</PanelBody>
 				<PanelBody title={ __( 'Value', 'jet-form-builder' ) }>
 					<BlockAdvancedValue
-						help={ __(
-							'Plain date should be in yyyy-MM-ddThh:mm format',
-							'jet-form-builder',
-						) }
+						help={ help }
 						style={ { marginBottom: '1em' } }
 					/>
 					<ClientSideMacros>
@@ -89,16 +103,16 @@ export default function DateTimeEdit( props ) {
 							onChangePreset={ min => setAttributes( { min } ) }
 							onChangeMacros={ updateMin }
 						>
-							{ ( { instanceId } ) => <TextControl
-								id={ instanceId }
-								ref={ minInput }
-								value={ attributes.min }
-								help={ __(
-									'Plain date should be in yyyy-MM-ddThh:mm format',
-									'jet-form-builder',
-								) }
-								onChange={ min => setAttributes( { min } ) }
-							/> }
+							{ ( { instanceId } ) => <>
+								<TextControl
+									id={ instanceId }
+									ref={ minInput }
+									className="jet-fb m-unset"
+									value={ attributes.min }
+									onChange={ min => setAttributes( { min } ) }
+								/>
+								<AttributeHelp>{ help }</AttributeHelp>
+							</> }
 						</AdvancedInspectorControl>
 						<AdvancedInspectorControl
 							value={ attributes.max }
@@ -106,16 +120,16 @@ export default function DateTimeEdit( props ) {
 							onChangePreset={ max => setAttributes( { max } ) }
 							onChangeMacros={ updateMax }
 						>
-							{ ( { instanceId } ) => <TextControl
-								id={ instanceId }
-								ref={ maxInput }
-								value={ attributes.max }
-								help={ __(
-									'Plain date should be in yyyy-MM-ddThh:mm format',
-									'jet-form-builder',
-								) }
-								onChange={ max => setAttributes( { max } ) }
-							/> }
+							{ ( { instanceId } ) => <>
+								<TextControl
+									id={ instanceId }
+									ref={ maxInput }
+									className="jet-fb m-unset"
+									value={ attributes.max }
+									onChange={ max => setAttributes( { max } ) }
+								/>
+								<AttributeHelp>{ help }</AttributeHelp>
+							</> }
 						</AdvancedInspectorControl>
 					</ClientSideMacros>
 				</PanelBody>

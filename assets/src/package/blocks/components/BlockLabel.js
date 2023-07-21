@@ -1,5 +1,6 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
 import ChangeNameByLabel from '../helpers/ChangeNameByLabel';
+import AttributeHelp from './AttributeHelp';
 
 const {
 	      __,
@@ -27,13 +28,18 @@ function BlockLabel( { label, help } ) {
 
 	const ref = useFocusOutside( onBlurLabel );
 
-	return <TextControl
-		label={ label ?? __( 'Field Label', 'jet-form-builder' ) }
-		value={ attributes.label }
-		help={ help ?? '' }
-		onChange={ label => setAttributes( { label } ) }
-		{ ...ref }
-	/>;
+	return <>
+		<TextControl
+			label={ label ?? __( 'Field Label', 'jet-form-builder' ) }
+			className="jet-fb m-unset"
+			value={ attributes.label }
+			onChange={ label => setAttributes( { label } ) }
+			{ ...ref }
+		/>
+		<AttributeHelp name="label">
+			{ help ?? '' }
+		</AttributeHelp>
+	</>;
 }
 
 export default BlockLabel;

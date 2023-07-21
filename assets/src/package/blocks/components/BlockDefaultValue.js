@@ -4,6 +4,7 @@ import AdvancedInspectorControl
 import useIsHasAttribute from '../../hooks/useIsHasAttribute';
 import ClientSideMacros from '../../macros.button/components/ClientSideMacros';
 import useInsertMacro from '../../macros.button/hooks/useInsertMacro';
+import AttributeHelp from './AttributeHelp';
 
 const {
 	      __,
@@ -31,13 +32,20 @@ function BlockDefaultValue( { label, help, hasMacro = true } ) {
 			onChangePreset={ val => setAttributes( { default: val } ) }
 			onChangeMacros={ hasMacro ? updateInput : false }
 		>
-			{ ( { instanceId } ) => <TextControl
-				ref={ input }
-				id={ instanceId }
-				value={ attributes.default }
-				help={ help ?? '' }
-				onChange={ val => setAttributes( { default: val } ) }
-			/> }
+			{ ({ instanceId }) => {
+				return <>
+					<TextControl
+						ref={ input }
+						id={ instanceId }
+						value={ attributes.default }
+						className="jet-fb m-unset"
+						onChange={ val => setAttributes( { default: val } ) }
+					/>
+					<AttributeHelp name="default">
+						{ help ?? '' }
+					</AttributeHelp>
+				</>;
+			} }
 		</AdvancedInspectorControl>
 	</ClientSideMacros>;
 }

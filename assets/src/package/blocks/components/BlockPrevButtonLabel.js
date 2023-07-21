@@ -1,4 +1,5 @@
 import useBlockAttributes from '../hooks/useBlockAttributes';
+import AttributeHelp from './AttributeHelp';
 
 const {
 	      __,
@@ -17,12 +18,19 @@ function BlockPrevButtonLabel( { label, help } ) {
 		return null;
 	}
 
-	return <TextControl
-		label={ label ?? __( 'Prev Page Button Label', 'jet-form-builder' ) }
-		value={ attributes.prev_label }
-		help={ help ?? '' }
-		onChange={ prev_label => setAttributes( { prev_label } ) }
-	/>;
+	return <>
+		<TextControl
+			label={
+				label ?? __( 'Prev Page Button Label', 'jet-form-builder' )
+			}
+			value={ attributes.prev_label }
+			className="jet-fb m-unset"
+			onChange={ prev_label => setAttributes( { prev_label } ) }
+		/>
+		<AttributeHelp name="prev_label">
+			{ help ?? '' }
+		</AttributeHelp>
+	</>;
 }
 
 export default BlockPrevButtonLabel;

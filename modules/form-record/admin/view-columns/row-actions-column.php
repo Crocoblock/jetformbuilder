@@ -13,5 +13,4 @@ if ( ! defined( 'WPINC' ) ) {
 class Row_Actions_Column extends Base_Row_Actions_Column {
 
 	use Actions_List_For_Column;
-
 }

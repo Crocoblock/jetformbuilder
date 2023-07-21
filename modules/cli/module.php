@@ -60,4 +60,3 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It {
 		);
 	}
 }
-

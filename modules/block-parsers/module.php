@@ -101,6 +101,7 @@ final class Module implements
 		$request = apply_filters( 'jet-form-builder/request-handler/request', Request_Tools::get_request() );
 
 		$this->get_context()
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			->set_files( Request_Tools::get_files( $_FILES ) )
 			->set_request( $request );
 

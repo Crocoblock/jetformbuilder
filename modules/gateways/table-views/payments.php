@@ -93,4 +93,3 @@ class Payments extends View_Advanced_Base {
 	}
 
 }
-

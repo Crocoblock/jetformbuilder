@@ -94,5 +94,3 @@ class Update_Options extends Base {
 	}
 
 }
-
-

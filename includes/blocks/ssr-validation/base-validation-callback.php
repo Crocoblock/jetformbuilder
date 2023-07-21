@@ -12,8 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-abstract class Base_Validation_Callback
-	implements Arrayable, Repository_Item_Instance_Trait {
+abstract class Base_Validation_Callback implements Arrayable, Repository_Item_Instance_Trait {
 
 	abstract public function get_id(): string;
 

@@ -8,7 +8,7 @@ use Jet_Form_Builder\Blocks\Types\Conditional_Block;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Plugin;
 
-use \Jet_Form_Builder\Blocks\Render\Base as RenderBase;
+use Jet_Form_Builder\Blocks\Render\Base as RenderBase;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

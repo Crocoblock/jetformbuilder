@@ -13,5 +13,4 @@ if ( ! defined( 'WPINC' ) ) {
 class Record_Fields_View_Count extends Record_Fields_View {
 
 	use View_Base_Count_Trait;
-
 }

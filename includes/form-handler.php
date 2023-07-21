@@ -17,10 +17,6 @@ use Jet_Form_Builder\Request\Form_Request_Router;
 use Jet_Form_Builder\Request\Request_Handler;
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
 
-/**
- * Form builder class
- */
-
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;

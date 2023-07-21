@@ -346,5 +346,3 @@ class Mailchimp extends Integration_Base_Action {
 
 
 }
-
-

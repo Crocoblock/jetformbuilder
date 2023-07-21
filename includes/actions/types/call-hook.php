@@ -82,6 +82,3 @@ class Call_Hook extends Base {
 	}
 
 }
-
-
-

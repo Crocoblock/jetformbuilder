@@ -191,5 +191,3 @@ class Redirect_To_Page extends Base {
 
 
 }
-
-

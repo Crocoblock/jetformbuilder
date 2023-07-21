@@ -10,7 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Legacy_Request_Data  implements \Iterator, \ArrayAccess {
+class Legacy_Request_Data implements \Iterator, \ArrayAccess {
 
 	/**
 	 * @return mixed

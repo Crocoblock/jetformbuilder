@@ -26,5 +26,8 @@ jobs:
             -   name: Install Composer dependencies
                 run: composer install
 
+            -   name: Run PHP CodeSniffFixer
+                run: composer phpcbf
+
             -   name: Run PHP CodeSniffer
-                run: vendor/bin/phpcs -p -s -n --colors --standard=./phpcs.xml .
+                run: composer phpcs

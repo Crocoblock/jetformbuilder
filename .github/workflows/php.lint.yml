@@ -27,7 +27,7 @@ jobs:
                 run: composer install
 
             -   name: Run PHP CodeSniffFixer
-                run: ./.bin/phpcbf
+                run: ./.bin/phpcbf.sh
 
             -   name: Run PHP CodeSniffer
                 run: composer phpcs

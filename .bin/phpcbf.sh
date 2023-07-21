@@ -7,7 +7,6 @@
 #   Exit code 2 is used to indicate that PHPCBF failed to fix some of the fixable errors it found
 #   Exit code 3 is used for general script execution errors
 
-cd ..
 composer phpcbf
 
 if [ "$?" == 1 ]; then

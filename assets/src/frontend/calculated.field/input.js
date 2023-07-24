@@ -76,7 +76,7 @@ function CalculatedData() {
 
 			formula.setResult();
 			resolve();
-		} );
+		}, this );
 	};
 
 	this.setNode      = function ( node ) {

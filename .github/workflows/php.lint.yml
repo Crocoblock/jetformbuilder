@@ -1,13 +1,14 @@
 name: PHP CodeSniffer Linter
 
-on: [ push, pull_request ]
-
-# Cancels all previous workflow runs for pull requests that have not completed.
-concurrency:
-    # The concurrency group contains the workflow name and the branch name for pull requests
-    # or the commit hash for any other events.
-    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
-    cancel-in-progress: true
+on:
+    # allow to manually run this workflow from the UI
+    workflow_dispatch:
+    push:
+        paths:
+            - '**.php'
+    pull_request:
+        paths:
+            - '**.php'
 
 jobs:
     phpcs_linter:

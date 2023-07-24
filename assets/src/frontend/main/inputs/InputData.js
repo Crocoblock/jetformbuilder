@@ -265,9 +265,10 @@ InputData.prototype.isArray = function () {
 };
 /**
  * @param callable {Function|mixed}
+ * @param inputContext {InputData|Boolean}
  */
-InputData.prototype.beforeSubmit = function ( callable ) {
-	this.getSubmit().submitter.promise( callable );
+InputData.prototype.beforeSubmit = function ( callable, inputContext = false ) {
+	this.getSubmit().submitter.promise( callable, inputContext );
 };
 /**
  * @returns {FormSubmit}

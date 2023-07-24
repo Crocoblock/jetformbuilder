@@ -21,7 +21,7 @@ function AjaxSubmit( form ) {
 		).then(
 			callbacks => this.runSubmit( callbacks ),
 		).catch(
-			() => this.form.toggle(),
+			errors => this.form.toggle(),
 		);
 	};
 	this.runSubmit     = function ( callbacks ) {

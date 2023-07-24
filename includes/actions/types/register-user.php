@@ -390,7 +390,4 @@ class Register_User extends Base {
 		);
 	}
 
-
 }
-
-

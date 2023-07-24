@@ -151,5 +151,3 @@ class Active_Campaign_Action extends Base {
 
 
 }
-
-

@@ -180,5 +180,3 @@ class Getresponse extends Integration_Base_Action {
 
 
 }
-
-

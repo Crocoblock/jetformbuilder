@@ -13,5 +13,4 @@ if ( ! defined( 'WPINC' ) ) {
 abstract class Scenario_Logic_Repository {
 
 	use Repository_Pattern_Trait;
-
 }

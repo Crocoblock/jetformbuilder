@@ -8,7 +8,6 @@ use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
-use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use JFB_Components\Repository\Repository_Item_With_Class;
 use JFB_Components\Repository\Repository_Static_Item_It;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
@@ -20,9 +19,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-abstract class Base_Meta_Box
-	implements
-	Model_Dependencies_Interface,
+abstract class Base_Meta_Box implements Model_Dependencies_Interface,
 	Arrayable,
 	Repository_Static_Item_It {
 

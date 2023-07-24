@@ -26,8 +26,5 @@ jobs:
             -   name: Install Composer dependencies
                 run: composer install
 
-            -   name: Run PHP CodeSniffFixer
-                run: ./.bin/phpcbf.sh
-
             -   name: Run PHP CodeSniffer
                 run: composer phpcs

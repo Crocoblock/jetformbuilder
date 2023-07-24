@@ -10,8 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-abstract class Base_Captcha_From_Options extends Base_Captcha
-	implements Captcha_Settings_From_Options {
+abstract class Base_Captcha_From_Options extends Base_Captcha implements Captcha_Settings_From_Options {
 
 	public function sanitize_options( array $options ): Base_Captcha {
 		parent::sanitize_options( $options );

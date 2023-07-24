@@ -19,7 +19,6 @@ use Jet_Form_Builder\Plugin;
 use JFB_Modules\Block_Sanitizer;
 use JFB_Modules\Block_Parsers;
 
-
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -31,12 +30,11 @@ if ( ! defined( 'WPINC' ) ) {
  * Class Module
  * @package JFB_Modules\Advanced_Choices
  */
-class Module implements
-	Base_Module_It,
+class Module implements Base_Module_It,
 	Base_Module_Dir_It,
 	Base_Module_Handle_It,
 	Base_Module_Url_It,
-Base_Module_After_Install_It {
+	Base_Module_After_Install_It {
 
 	use Base_Module_Dir_Trait;
 	use Base_Module_Handle_Trait;
@@ -152,4 +150,3 @@ Base_Module_After_Install_It {
 		);
 	}
 }
-

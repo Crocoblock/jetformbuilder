@@ -3,9 +3,9 @@
 
 namespace Jet_Form_Builder\Exceptions;
 
-use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Form_Messages\Manager;
-use \Jet_Form_Builder\Dev_Mode\Manager as DevManager;
+use JFB_Modules\Dev;
+use JFB_Modules\Logger;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -54,14 +54,14 @@ abstract class Handler_Exception extends \Exception {
 	}
 
 	public function unset_log() {
-		Logger::instance()->unset_last( static::class );
+		Logger\Module::instance()->unset_last( static::class );
 	}
 
 	public function log() {
-		if ( ! DevManager::instance()->active() ) {
+		if ( ! jet_form_builder()->has_module( 'dev' ) ) {
 			return;
 		}
-		Logger::instance()->push_log(
+		Logger\Module::instance()->push_log(
 			static::class,
 			array(
 				'message'   => $this->getMessage(),

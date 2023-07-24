@@ -114,5 +114,3 @@ class MailChimp_Handler extends Integration_Base {
 		return $result;
 	}
 }
-
-

@@ -77,8 +77,4 @@ class Update_User extends Base {
 		);
 	}
 
-
-
 }
-
-

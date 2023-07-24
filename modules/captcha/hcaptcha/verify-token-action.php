@@ -4,7 +4,7 @@
 namespace JFB_Modules\Captcha\Hcaptcha;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use \JFB_Modules\Captcha\Re_Captcha_V3\Verify_Token_Action as BaseVerify;
+use JFB_Modules\Captcha\Re_Captcha_V3\Verify_Token_Action as BaseVerify;
 
 class Verify_Token_Action extends BaseVerify {
 

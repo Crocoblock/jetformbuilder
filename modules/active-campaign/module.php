@@ -21,7 +21,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-final class Module implements Base_Module_It,
+final class Module implements
+	Base_Module_It,
 	Base_Module_After_Install_It,
 	Base_Module_Url_It,
 	Base_Module_Handle_It {

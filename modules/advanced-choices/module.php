@@ -30,7 +30,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Class Module
  * @package JFB_Modules\Advanced_Choices
  */
-class Module implements Base_Module_It,
+class Module implements
+	Base_Module_It,
 	Base_Module_Dir_It,
 	Base_Module_Handle_It,
 	Base_Module_Url_It,

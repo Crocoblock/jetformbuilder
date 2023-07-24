@@ -19,7 +19,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-abstract class Base_Meta_Box implements Model_Dependencies_Interface,
+abstract class Base_Meta_Box implements
+	Model_Dependencies_Interface,
 	Arrayable,
 	Repository_Static_Item_It {
 

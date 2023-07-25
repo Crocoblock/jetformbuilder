@@ -21,6 +21,7 @@ function ChoicesData() {
 	this.isSupported = isChoicesField;
 
 	this.setNode = function ( node ) {
+		node.jfbSync   = this;
 		this.nodes     = Array.from(
 			node.querySelectorAll( '.jet-form-builder-choice--item input' ),
 		);

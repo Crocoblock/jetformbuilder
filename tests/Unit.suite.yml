@@ -1,0 +1,10 @@
+# Codeception Test Suite Configuration
+#
+# Suite for unit or integration tests.
+bootstrap: ../bootstrap.php
+actor: UnitTester
+modules:
+    enabled:
+        - Asserts
+        - Mockery
+step_decorators: ~

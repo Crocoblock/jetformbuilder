@@ -4,7 +4,6 @@
 .gitignore              export-ignore
 composer.json           export-ignore
 phpcs.xml               export-ignore
-phpunit.xml             export-ignore
 README.md               export-ignore
 readme.txt              export-ignore
 wp-cli.local.yml        export-ignore
@@ -18,7 +17,6 @@ assets/*.json           export-ignore
 assets/.config          export-ignore
 assets/.helpers         export-ignore
 
-.bin                    export-ignore
 .github                 export-ignore
 tests                   export-ignore
 

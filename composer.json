@@ -1,27 +1,33 @@
 {
-	"name": "crocoblock/jetformbuilder",
-	"description": "Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up \u0000 all in one editor",
-	"type": "wordpress-plugin",
-	"license": "GPL-3.0+",
-	"authors": [
-		{
-			"name": "Sasha Ivanenko",
-			"email": "46720998+girafffee@users.noreply.github.com"
-		}
-	],
-	"scripts": {
-		"phpcbf": "./vendor/bin/phpcbf -p -n --colors --standard=./phpcs.xml .",
-		"phpcs": "./vendor/bin/phpcs -p -s -n --colors --standard=./phpcs.xml ."
-	},
-	"minimum-stability": "stable",
-	"require-dev": {
-		"wp-coding-standards/wpcs": "dev-develop",
-		"wp-cli/wp-cli-bundle": "*",
-		"phpcompatibility/php-compatibility": "^9.3"
-	},
-	"config": {
-		"allow-plugins": {
-			"dealerdirect/phpcodesniffer-composer-installer": true
-		}
-	}
+    "name": "crocoblock/jetformbuilder",
+    "description": "Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up \u0000 all in one editor",
+    "type": "wordpress-plugin",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Sasha Ivanenko",
+            "email": "46720998+girafffee@users.noreply.github.com"
+        }
+    ],
+    "scripts": {
+        "phpcbf": "./vendor/bin/phpcbf -p -n --colors --standard=./phpcs.xml .",
+        "phpcs": "./vendor/bin/phpcs -p -s -n --colors --standard=./phpcs.xml .",
+	    "test": "./vendor/bin/codecept run"
+    },
+    "minimum-stability": "stable",
+    "require-dev": {
+        "wp-coding-standards/wpcs": "dev-develop",
+        "wp-cli/wp-cli-bundle": "*",
+        "phpcompatibility/php-compatibility": "^9.3",
+        "codeception/codeception": "^5.0",
+        "codeception/module-phpbrowser": "*",
+        "codeception/module-asserts": "*",
+        "codeception/module-webdriver": "^3.2",
+        "codeception/mockery-module": "^0.5.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
 }

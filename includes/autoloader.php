@@ -2,7 +2,7 @@
 
 namespace Jet_Form_Builder;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! defined( 'WPINC' ) ) {
 	exit; // Exit if accessed directly.
 }
 

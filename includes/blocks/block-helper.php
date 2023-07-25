@@ -81,14 +81,14 @@ class Block_Helper {
 			return array();
 		}
 		foreach ( $blocks as $block ) {
-			if ( ! isset( $block['blockName'] ) || ! isset( $block['attrs'] ) ) {
+			if ( ! isset( $block['blockName'] ) && ! isset( $block['attrs'] ) ) {
 				continue;
 			}
 			if ( call_user_func( $callback, $block ) ) {
 				return $block;
 			}
 
-			if ( 0 < count( $block['innerBlocks'] ) ) {
+			if ( 0 < count( $block['innerBlocks'] ?? array() ) ) {
 				$find = self::find_block( $callback, $block['innerBlocks'] );
 
 				if ( $find ) {

@@ -12,6 +12,10 @@
  * Domain Path: /languages
  */
 
+use Jet_Form_Builder\Plugin;
+use JFB_Modules\Cli;
+use JFB_Modules\Framework;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die();
@@ -28,6 +32,9 @@ function jet_form_builder_init() {
 	define( 'JET_FORM_BUILDER_SITE', 'https://jetformbuilder.com' );
 
 	require JET_FORM_BUILDER_PATH . 'includes/plugin.php';
+
+	Plugin::instance()->get_modules()->install( new Cli\Module() );
+	Plugin::instance()->get_modules()->install( new Framework\Module() );
 }
 
 if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {

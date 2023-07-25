@@ -10,3 +10,11 @@ actor_suffix: Tester
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
+settings:
+    colors: true
+coverage:
+    enabled: true
+    show_only_summary: true
+    include:
+        - includes/*
+        - components/*

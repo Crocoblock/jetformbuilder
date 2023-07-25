@@ -23,9 +23,6 @@ use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Modules\Modules_Controller;
 use Jet_Form_Builder\Presets\Preset_Manager;
-use Jet_Form_Builder\Migrations;
-use JFB_Modules\Cli;
-use JFB_Modules\Framework;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -65,7 +62,7 @@ class Plugin {
 	/**
 	 * Plugin constructor.
 	 */
-	private function __construct() {
+	public function __construct() {
 
 		$this->register_autoloader();
 		$this->init_lang();
@@ -274,6 +271,3 @@ class Plugin {
 	}
 
 }
-
-Plugin::instance()->get_modules()->install( new Cli\Module() );
-Plugin::instance()->get_modules()->install( new Framework\Module() );

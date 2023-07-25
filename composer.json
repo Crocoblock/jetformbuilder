@@ -11,7 +11,8 @@
     ],
     "scripts": {
         "phpcbf": "./vendor/bin/phpcbf -p -n --colors --standard=./phpcs.xml .",
-        "phpcs": "./vendor/bin/phpcs -p -s -n --colors --standard=./phpcs.xml ."
+        "phpcs": "./vendor/bin/phpcs -p -s -n --colors --standard=./phpcs.xml .",
+	    "test": "./vendor/bin/codecept run"
     },
     "minimum-stability": "stable",
     "require-dev": {

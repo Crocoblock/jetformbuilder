@@ -1,0 +1,94 @@
+name: PHP Lint & Test
+
+on:
+    # allow to manually run this workflow from the UI
+    workflow_dispatch:
+    push:
+        paths:
+            - '**.php'
+        branches:
+            - main
+            - 3.1.0
+    pull_request:
+        paths:
+            - '**.php'
+        branches:
+            - main
+            - 3.1.0
+
+env:
+    DB_HOST: 127.0.0.1
+    DB_TABLE_PREFIX: wp_
+    DB_NAME: wp.codeception.test
+    DB_USER: root
+    DB_PASSWORD:
+    WP_URL: https://jetformbuilder.test
+    WP_ADMIN_PATH: /wp-admin
+    WP_DOMAIN: jetformbuilder.test
+    WP_ADMIN_USERNAME: admin
+    WP_ADMIN_PASSWORD: 1
+    WP_ADMIN_EMAIL: admin@jetformbuilder.test
+
+jobs:
+    linter:
+        name: PHP CodeSniffer Linter
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v3
+
+            -   name: Set up PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.0'
+
+            -   name: Install Composer dependencies
+                run: composer install
+
+            -   name: Run PHP CodeSniffer
+                run: composer cs
+    codeception-tests:
+        name: PHP Codeception tests
+        timeout-minutes: 15
+
+        runs-on: ubuntu-latest
+
+        services:
+            mysql:
+                image: mysql:5.7
+                env:
+                    MYSQL_USER: ${{ env.DB_USER }}
+                    MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
+                    MYSQL_DATABASE: ${{ env.DB_NAME }}
+                    MYSQL_ALLOW_EMPTY_PASSWORD: yes
+                ports:
+                    - 3306:3306
+                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v3
+
+            -   name: Set up PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.0'
+
+            -   name: Install Composer dependencies
+                run: composer install
+
+            -   name: "Set up WordPress"
+                run: |
+                    mv ./vendor/bin/wp /usr/local/bin/wp
+                    mkdir -p /tmp/WP
+                    cd /tmp/WP
+                    wp core download
+                    wp config create --dbname="${{ env.DB_NAME }}" --dbuser="${{ env.DB_USER }}" --dbpass="${{ env.DB_PASSWORD }}" --dbhost="${{ env.DB_HOST }}" --dbprefix="${{ env.DB_TABLE_PREFIX }}"
+                    wp core install --url="${{ env.WP_URL }}" --title="Test" --admin_user="${{ env.WP_ADMIN_USERNAME }}" --admin_password="${{ env.WP_ADMIN_PASSWORD }}" --admin_email="${{ env.WP_ADMIN_EMAIL }}" --skip-email
+                    wp rewrite structure '/%postname%/' --hard
+                    # Needs changes to be used outside the boilerplate
+                    ln -s ${GITHUB_WORKSPACE} /tmp/WP/wp-content/plugins/
+
+            -   name: Run PHP tests
+                run: composer test:wpunit

@@ -80,13 +80,11 @@ jobs:
 
             -   name: "Set up WordPress"
                 run: |
-                    mv ./vendor/bin/wp /usr/local/bin/wp
                     mkdir -p /tmp/WP
-                    cd /tmp/WP
-                    wp core download
-                    wp config create --dbname="${{ env.DB_NAME }}" --dbuser="${{ env.DB_USER }}" --dbpass="${{ env.DB_PASSWORD }}" --dbhost="${{ env.DB_HOST }}" --dbprefix="${{ env.DB_TABLE_PREFIX }}"
-                    wp core install --url="${{ env.WP_URL }}" --title="Test" --admin_user="${{ env.WP_ADMIN_USERNAME }}" --admin_password="${{ env.WP_ADMIN_PASSWORD }}" --admin_email="${{ env.WP_ADMIN_EMAIL }}" --skip-email
-                    wp rewrite structure '/%postname%/' --hard
+                    ./vendor/bin/wp core download --path="/tmp/WP"
+                    ./vendor/bin/wp config create --path="/tmp/WP" --dbname="${{ env.DB_NAME }}" --dbuser="${{ env.DB_USER }}" --dbpass="${{ env.DB_PASSWORD }}" --dbhost="${{ env.DB_HOST }}" --dbprefix="${{ env.DB_TABLE_PREFIX }}"
+                    ./vendor/bin/wp core install --path="/tmp/WP" --url="${{ env.WP_URL }}" --title="Test" --admin_user="${{ env.WP_ADMIN_USERNAME }}" --admin_password="${{ env.WP_ADMIN_PASSWORD }}" --admin_email="${{ env.WP_ADMIN_EMAIL }}" --skip-email
+                    ./vendor/bin/wp rewrite structure '/%postname%/' --path="/tmp/WP" --hard
                     # Needs changes to be used outside the boilerplate
                     ln -s ${GITHUB_WORKSPACE} /tmp/WP/wp-content/plugins/
 

@@ -33,6 +33,15 @@ function jet_form_builder_init() {
 
 	require JET_FORM_BUILDER_PATH . 'includes/plugin.php';
 
+	jet_form_builder()->register_autoloader();
+	jet_form_builder()->init_lang();
+
+	add_action(
+		'after_setup_theme',
+		array( jet_form_builder(), 'init_plugin' ),
+		0
+	);
+
 	Plugin::instance()->get_modules()->install( new Cli\Module() );
 	Plugin::instance()->get_modules()->install( new Framework\Module() );
 }

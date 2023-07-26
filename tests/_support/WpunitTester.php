@@ -1,13 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
-namespace JFB_Tests\Support;
 
 /**
  * Inherited Methods
- * @method void wantTo($text)
  * @method void wantToTest($text)
+ * @method void wantTo($text)
  * @method void execute($callable)
  * @method void expectTo($prediction)
  * @method void expect($prediction)
@@ -15,13 +12,13 @@ namespace JFB_Tests\Support;
  * @method void am($role)
  * @method void lookForwardTo($achieveValue)
  * @method void comment($description)
- * @method void pause($vars = [])
+ * @method void pause()
  *
  * @SuppressWarnings(PHPMD)
 */
-class UnitTester extends \Codeception\Actor
+class WpunitTester extends \Codeception\Actor
 {
-    use _generated\UnitTesterActions;
+    use _generated\WpunitTesterActions;
 
     /**
      * Define custom actions here

@@ -59,25 +59,12 @@ class Plugin {
 
 	public static $instance;
 
-	/**
-	 * Plugin constructor.
-	 */
-	public function __construct() {
+	public function init_plugin() {
+		do_action( 'jet-form-builder/before-init' );
 
-		$this->register_autoloader();
-		$this->init_lang();
+		jet_form_builder()->init_components();
 
-		add_action(
-			'after_setup_theme',
-			function () {
-				do_action( 'jet-form-builder/before-init' );
-
-				$this->init_components();
-
-				do_action( 'jet-form-builder/after-init' );
-			},
-			0
-		);
+		do_action( 'jet-form-builder/after-init' );
 	}
 
 	/**
@@ -235,7 +222,7 @@ class Plugin {
 	/**
 	 * Register autoloader.
 	 */
-	private function register_autoloader() {
+	public function register_autoloader() {
 		require JET_FORM_BUILDER_PATH . 'includes' . DIRECTORY_SEPARATOR . 'autoloader.php';
 		Autoloader::run();
 	}

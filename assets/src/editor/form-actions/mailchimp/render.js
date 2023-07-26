@@ -91,7 +91,7 @@ function MailChimpRender( props ) {
 		const { data = {} } = loadingState.response || {};
 
 		if ( data.groups ) {
-			return data.groups[ settings.list_id ];
+			return data.groups[ settings.list_id ] ?? [];
 		}
 		return [];
 	};

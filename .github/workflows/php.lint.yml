@@ -1,4 +1,4 @@
-name: PHP CodeSniffer Linter
+name: PHP Lint & Test
 
 on:
     # allow to manually run this workflow from the UI
@@ -45,5 +45,5 @@ jobs:
             -   name: Install Composer dependencies
                 run: composer install
 
-            -   name: Run PHP CodeSniffer
+            -   name: Run PHP tests
                 run: composer test

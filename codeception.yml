@@ -1,4 +1,4 @@
-namespace: Tests
+namespace: JFB_Tests
 support_namespace: Support
 paths:
     tests: tests

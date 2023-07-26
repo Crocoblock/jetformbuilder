@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Tests\Unit;
+namespace JFB_Tests\Unit;
 
 use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use JFB_Components\Repository\Interfaces\Repository_Pattern_Interface;
-use Tests\Support\UnitTester;
+use JFB_Tests\Support\UnitTester;
 
 class RepositoryTest extends \Codeception\Test\Unit {
 

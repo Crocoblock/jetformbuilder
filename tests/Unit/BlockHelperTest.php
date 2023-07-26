@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Tests\Unit;
+namespace JFB_Tests\Unit;
 
 use Jet_Form_Builder\Blocks\Block_Helper;
-use Tests\Support\UnitTester;
+use JFB_Tests\Support\UnitTester;
 
 class BlockHelperTest extends \Codeception\Test\Unit {
 

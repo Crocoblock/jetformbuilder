@@ -9,14 +9,14 @@ modules:
         - \Helper\Wpunit
     config:
         WPLoader:
-            wpRootFolder: "%WP_ROOT_FOLDER%"
-            dbName: "%TEST_DB_NAME%"
-            dbHost: "%TEST_DB_HOST%"
-            dbUser: "%TEST_DB_USER%"
-            dbPassword: "%TEST_DB_PASSWORD%"
-            tablePrefix: "%TEST_TABLE_PREFIX%"
-            domain: "%TEST_SITE_WP_DOMAIN%"
-            adminEmail: "%TEST_SITE_ADMIN_EMAIL%"
             title: "Codeception Test"
+            wpRootFolder: '%WP_ROOT%'
+            dbName: '%DB_NAME%'
+            dbHost: '%DB_HOST%'
+            dbUser: '%DB_USER%'
+            dbPassword: '%DB_PASSWORD%'
+            tablePrefix: wp_
+            domain: '%WP_DOMAIN%'
+            adminEmail: 'admin@%WP_DOMAIN%'
             plugins: ['jetformbuilder/jet-form-builder.php']
             activatePlugins: ['jetformbuilder/jet-form-builder.php']

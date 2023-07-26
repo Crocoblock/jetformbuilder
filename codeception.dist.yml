@@ -17,8 +17,7 @@ extensions:
         - Codeception\Command\GenerateWPCanonical
         - Codeception\Command\GenerateWPXMLRPC
 params:
-    - .env.testing
-    - tests/_config/params.php
+    - tests/_envs/.env
 settings:
     colors: true
 coverage:

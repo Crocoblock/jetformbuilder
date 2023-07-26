@@ -26,7 +26,7 @@ env:
     WP_ADMIN_PATH: /wp-admin
     WP_DOMAIN: jetformbuilder.test
     WP_ADMIN_USERNAME: admin
-    WP_ADMIN_PASSWORD: 1
+    WP_ADMIN_PASSWORD: password
     WP_ADMIN_EMAIL: admin@jetformbuilder.test
 
 jobs:
@@ -87,6 +87,11 @@ jobs:
                     ./vendor/bin/wp rewrite structure '/%postname%/' --path="/tmp/WP" --hard
                     # Needs changes to be used outside the boilerplate
                     ln -s ${GITHUB_WORKSPACE} /tmp/WP/wp-content/plugins/
+
+            -   name: "Set Codeception parameters"
+                run: |
+                    rm tests/_envs/.env
+                    mv tests/_envs/.env.testing tests/_envs/.env
 
             -   name: Run PHP tests
                 run: composer test:wpunit

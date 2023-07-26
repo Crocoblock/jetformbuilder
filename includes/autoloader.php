@@ -82,14 +82,16 @@ class Autoloader {
 		'Jet_Form_Builder\\Classes\\Repository\\Repository_Static_Item_It' => 'JFB_Components\\Repository\\Repository_Static_Item_It',
 		// form-record
 		'Jet_Form_Builder\\Actions\\Types\\Save_Record'    => 'JFB_Modules\\Form_Record\\Action_Types\\Save_Record',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Controller' => 'JFB_Modules\\Form_Record\\Controller',
 		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Values_Box' => 'JFB_Modules\\Form_Record\\Admin\\Meta_Boxes\\Form_Record_Values_Box',
 		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\View_Columns\\Error_Message_Column' => 'JFB_Modules\\Form_Record\\Admin\\View_Columns\\Error_Message_Column',
 		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Models\\Record_Model' => 'JFB_Modules\\Form_Record\\Models\\Record_Model',
 		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Admin\\Pages\\Single_Form_Record_Page' => 'JFB_Modules\\Form_Record\\Admin\\Pages\\Single_Form_Record_Page',
 		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Constraints\\Record_Model_Constraint' => 'JFB_Modules\\Form_Record\\Constraints\\Record_Model_Constraint',
+		'Jet_Form_Builder\\Actions\\Methods\\Form_Record\\Query_View\\Record_Fields_View' => 'JFB_Modules\\Form_Record\\Query_Views\\Record_Fields_View',
 		// dev-mode module
 		'Jet_Form_Builder\\Dev_Mode\\Manager'              => 'JFB_Modules\\Dev\\Module',
-		'Jet_Form_Builder\Dev_Mode\Logger'                 => 'JFB_Modules\\Logger\\Module',
+		'Jet_Form_Builder\\Dev_Mode\\Logger'               => 'JFB_Modules\\Logger\\Module',
 		// request related
 		'Jet_Form_Builder\\Request\\Parser_Manager'        => 'JFB_Modules\\Block_Parsers\\Module',
 		'Jet_Form_Builder\\Request\\Field_Data_Parser'     => 'JFB_Modules\\Block_Parsers\\Field_Data_Parser',

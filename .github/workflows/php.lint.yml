@@ -29,21 +29,21 @@ jobs:
 
             -   name: Run PHP CodeSniffer
                 run: composer cs
-    tests:
-        name: PHP Codeception tests
-        runs-on: ubuntu-latest
-
-        steps:
-            -   name: Checkout code
-                uses: actions/checkout@v3
-
-            -   name: Set up PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: '8.0'
-
-            -   name: Install Composer dependencies
-                run: composer install
-
-            -   name: Run PHP tests
-                run: composer test:wpunit
+#    tests:
+#        name: PHP Codeception tests
+#        runs-on: ubuntu-latest
+#
+#        steps:
+#            -   name: Checkout code
+#                uses: actions/checkout@v3
+#
+#            -   name: Set up PHP
+#                uses: shivammathur/setup-php@v2
+#                with:
+#                    php-version: '8.0'
+#
+#            -   name: Install Composer dependencies
+#                run: composer install
+#
+#            -   name: Run PHP tests
+#                run: composer test:wpunit

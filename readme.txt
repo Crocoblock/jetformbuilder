@@ -273,6 +273,7 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 == Changelog ==
 
 **3.1.0**
+ - UPD: Upgraded the minimum supported version of WordPress to 6.0
  - ADD: Turnstile support (JetForm -> Captcha Settings OR Turnstile block)
  - ADD: hCaptcha support (JetForm -> Captcha Settings OR hCaptcha block)
  - ADD: Friendly Captcha support (JetForm -> Captcha Settings OR Friendly Captcha block)

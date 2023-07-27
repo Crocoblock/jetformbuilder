@@ -5,6 +5,7 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 # ChangeLog
 
 ## 3.1.0
+* UPD: Upgraded the minimum supported version of WordPress to 6.0
 * ADD: Turnstile support (JetForm -> Captcha Settings OR Turnstile block)
 * ADD: hCaptcha support (JetForm -> Captcha Settings OR hCaptcha block)
 * ADD: Friendly Captcha support (JetForm -> Captcha Settings OR Friendly Captcha block)

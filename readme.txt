@@ -1,10 +1,10 @@
 ﻿=== JetFormBuilder — Dynamic Blocks Form Builder ===
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
-Requires at least: 5.6
+Requires at least: 6.0
 Tested up to: 6.2.2
 Requires PHP: 7.0
-Stable tag: 3.0.9
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,27 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.1.0**
+ - ADD: Turnstile support (JetForm -> Captcha Settings OR Turnstile block)
+ - ADD: hCaptcha support (JetForm -> Captcha Settings OR hCaptcha block)
+ - ADD: Friendly Captcha support (JetForm -> Captcha Settings OR Friendly Captcha block)
+ - ADD: Option to add Honeypot (JetForm -> Validation)
+ - ADD: Advanced Choices Field
+ - ADD: Ability to export Form Records
+ - ADD: Ability to filter Form Records by status and creation date
+ - ADD: Ability to export Payments
+ - ADD: Ability to filter Payments by status and creation date
+ - ADD: Dynamic min/max for: Text Field, Textarea Field, Number Field, Range Field, Media Field
+ - ADD: Modal window with confirmation of deletion of all data after uninstalling the plugin
+ - ADD: Support for LiteSpeed cache esi feature
+ - UPD: Refactor request parser
+ - FIX: Field in reusable block not saved in Form Records if it is not used in any action
+ - FIX: Fatal error when trying to add an attachment to an email because of the wrong field
+ - FIX: Appointment Date field not displayed in Elementor editor
+ - FIX: Validation message for unlogged user do not display
+ - FIX: An error occurred while importing the form
+ - Tweak: Add listener not to radio/checkbox field but to the whole field
 
 **3.0.9**
  - UPD: Now only administrators can edit/create/delete forms.

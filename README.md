@@ -4,6 +4,27 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.1.0
+* ADD: Turnstile support (JetForm -> Captcha Settings OR Turnstile block)
+* ADD: hCaptcha support (JetForm -> Captcha Settings OR hCaptcha block)
+* ADD: Friendly Captcha support (JetForm -> Captcha Settings OR Friendly Captcha block)
+* ADD: Option to add Honeypot (JetForm -> Validation)
+* ADD: Advanced Choices Field
+* ADD: Ability to export Form Records
+* ADD: Ability to filter Form Records by status and creation date
+* ADD: Ability to export Payments
+* ADD: Ability to filter Payments by status and creation date
+* ADD: Dynamic min/max for: Text Field, Textarea Field, Number Field, Range Field, Media Field
+* ADD: Modal window with confirmation of deletion of all data after uninstalling the plugin
+* ADD: Support for LiteSpeed cache esi feature
+* UPD: Refactor request parser
+* FIX: Field in reusable block not saved in Form Records if it is not used in any action
+* FIX: Fatal error when trying to add an attachment to an email because of the wrong field
+* FIX: Appointment Date field not displayed in Elementor editor
+* FIX: Validation message for unlogged user do not display
+* FIX: An error occurred while importing the form
+* Tweak: Add listener not to radio/checkbox field but to the whole field
+
 ## 3.0.9
 * UPD: Now only administrators can edit/create/delete forms.
 * UPD: Starting frontend validation when losing focus on radio and checkbox fields

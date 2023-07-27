@@ -10,3 +10,8 @@ executeCommandForPackages(
 	path.resolve( __dirname, '../../modules' ),
 	{ script: 'hidden:dev:js' }
 );
+
+executeCommandForPackages(
+	path.resolve( __dirname, '../../compatibility' ),
+	{ script: 'hidden:dev:js' }
+);

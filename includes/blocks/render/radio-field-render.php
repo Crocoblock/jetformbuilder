@@ -73,7 +73,7 @@ class Radio_Field_Render extends Base_Select_Radio_Check {
 					array( 'name', esc_attr( $this->block_type->get_field_name() ) ),
 					array( 'value', esc_attr( $val ) ),
 					array( 'data-field-name', esc_attr( $this->args['name'] ) ),
-					array( 'checked', $default === (string) $value ? 'checked' : '' ),
+					array( 'checked', ( (string) $val ) === $default ? 'checked' : '' ),
 					array(
 						'data-calculate',
 						( is_array( $option ) && isset( $option['calculate'] ) && '' !== $option['calculate'] )
@@ -86,10 +86,13 @@ class Radio_Field_Render extends Base_Select_Radio_Check {
 			wp_kses_post( $label )
 		);
 
+		/**
+		 * @since 3.1.0
+		 */
 		$html .= apply_filters(
 			'jet-form-builder/render/radio-field/option',
 			$item,
-			$value,
+			$val,
 			$option,
 			$this
 		);

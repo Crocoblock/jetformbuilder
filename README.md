@@ -4,6 +4,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.1.0.1
+* FIX: Fatal error when sending email with attachments
+
 ## 3.1.0
 * UPD: Upgraded the minimum supported version of WordPress to 6.0
 * ADD: Turnstile support (JetForm -> Captcha Settings OR Turnstile block)

@@ -12,6 +12,7 @@ use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
+use Jet_Form_Builder\Classes\Tools;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
@@ -51,7 +52,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		);
 	}
 
-	public function admin_footer_text( string $footer_text ): string {
+	public function admin_footer_text( $footer_text ): string {
 		try {
 			Pages_Manager::instance()->get_current();
 		} catch ( Not_Found_Page_Exception $exception ) {
@@ -59,7 +60,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 
 			return ( $screen && 'edit-jet-form-builder' === $screen->id )
 				? $this->get_footer_text()
-				: $footer_text;
+				: Tools::to_string( $footer_text );
 		}
 
 		return $this->get_footer_text();

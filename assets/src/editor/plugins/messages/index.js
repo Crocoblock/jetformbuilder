@@ -1,3 +1,5 @@
+import PluginMessages from './render';
+
 const { __ } = wp.i18n;
 
 const base = {
@@ -5,17 +7,8 @@ const base = {
 	title: __( 'General Messages Settings' ),
 };
 
-const {
-	      lazy,
-	      Suspense,
-      } = wp.element;
-
-const PluginMessages = lazy( () => import('./render') );
-
 const settings = {
-	render: () => <Suspense fallback={ 'Loading...' }>
-		<PluginMessages/>
-	</Suspense>,
+	render: PluginMessages,
 	icon: 'format-status'
 };
 

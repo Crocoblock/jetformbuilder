@@ -168,7 +168,7 @@ class Jet_Engine implements
 
 		wp_register_script(
 			Module::LISTING_OPTIONS_HANDLE,
-			$this->get_url( 'assets/build/js/frontend/listing.options{min}.js' ),
+			$this->get_url( 'assets/build/js/frontend/listing.options.js' ),
 			array(
 				Module::MAIN_SCRIPT_HANDLE,
 			),
@@ -178,7 +178,7 @@ class Jet_Engine implements
 
 		wp_register_script(
 			$handle,
-			$this->get_url( 'assets/build/js/frontend/map.field{min}.js' ),
+			$this->get_url( 'assets/build/js/frontend/map.field.js' ),
 			array(
 				Module::MAIN_SCRIPT_HANDLE,
 			),
@@ -208,7 +208,7 @@ class Jet_Engine implements
 
 		wp_enqueue_script(
 			$handle,
-			$this->get_url( 'assets/build/js/editor{min}.js' ),
+			$this->get_url( 'assets/build/js/editor.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true

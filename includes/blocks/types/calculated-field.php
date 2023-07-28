@@ -28,7 +28,7 @@ class Calculated_Field extends Base {
 	public function register_scripts() {
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/calculated.field{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/frontend/calculated.field.js' ),
 			array(
 				Manager::MAIN_SCRIPT_HANDLE,
 			),

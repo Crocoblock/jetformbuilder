@@ -128,7 +128,7 @@ For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</
 
 		wp_enqueue_script(
 			$handle,
-			$this->get_url( 'assets/build/js/plugins{min}.js' ),
+			$this->get_url( 'assets/build/js/plugins.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true

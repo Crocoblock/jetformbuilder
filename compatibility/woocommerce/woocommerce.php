@@ -53,7 +53,7 @@ class Woocommerce implements Base_Module_Url_It, Base_Module_It, Base_Module_Han
 	public function enqueue_admin_assets() {
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/editor{min}.js' ),
+			$this->get_url( 'assets/build/js/editor.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true

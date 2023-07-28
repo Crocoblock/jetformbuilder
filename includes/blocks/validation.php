@@ -112,7 +112,7 @@ class Validation implements Arrayable {
 	public function register_scripts() {
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/advanced.reporting{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/frontend/advanced.reporting.js' ),
 			array(
 				Manager::MAIN_SCRIPT_HANDLE,
 			),

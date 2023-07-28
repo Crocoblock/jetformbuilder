@@ -1,3 +1,5 @@
+import PluginArgs from './render';
+
 const { __ } = wp.i18n;
 
 const base = {
@@ -6,17 +8,8 @@ const base = {
 	jfbTest: 2,
 };
 
-const {
-	      lazy,
-	      Suspense,
-      } = wp.element;
-
-const PluginArgs = lazy( () => import('./render') );
-
 const settings = {
-	render: () => <Suspense fallback={ 'Loading...' }>
-		<PluginArgs/>
-	</Suspense>,
+	render: PluginArgs,
 	icon: 'admin-settings',
 };
 

@@ -95,7 +95,7 @@ class Hcaptcha extends Base_Captcha_From_Options implements
 	public function enqueue_editor_script() {
 		wp_enqueue_script(
 			$this->module()->get_handle( $this->get_id() ),
-			$this->module()->get_url( 'assets-build/js/hcaptcha/editor{min}.js' ),
+			$this->module()->get_url( 'assets-build/js/hcaptcha/editor.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true
@@ -118,7 +118,7 @@ class Hcaptcha extends Base_Captcha_From_Options implements
 
 		wp_register_script(
 			$handle,
-			$this->module()->get_url( 'assets-build/js/hcaptcha/frontend{min}.js' ),
+			$this->module()->get_url( 'assets-build/js/hcaptcha/frontend.js' ),
 			array( 'jet-plugins' ),
 			jet_form_builder()->get_version(),
 			true

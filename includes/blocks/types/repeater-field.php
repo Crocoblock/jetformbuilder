@@ -365,7 +365,7 @@ class Repeater_Field extends Base {
 	public function register_scripts() {
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/repeater.field{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/frontend/repeater.field.js' ),
 			array(
 				Manager::MAIN_SCRIPT_HANDLE,
 			),

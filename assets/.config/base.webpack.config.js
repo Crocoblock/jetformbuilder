@@ -26,13 +26,7 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve( __dirname, '..', 'js' ),
-		filename: '[name].min.js',
-		chunkFilename: 'chunks/[name].[contenthash:8].js',
-		clean: {
-			keep( asset ) {
-				return !/^chunks\/\d+\.\w+\.js$/g.test( asset );
-			},
-		},
+		filename: '[name].js',
 	},
 	resolve: {
 		modules: [

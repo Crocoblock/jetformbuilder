@@ -35,7 +35,7 @@ class Form_Break_Field extends Base {
 	public function register_scripts() {
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/multi.step{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/frontend/multi.step.js' ),
 			array(
 				Conditional_Block::HANDLE,
 				Manager::MAIN_SCRIPT_HANDLE,

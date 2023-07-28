@@ -32,6 +32,10 @@ $border-radius: 4px;
 	$radius-bottom-right: var(--jfb-choice-border-radius-bottom-right, $border-radius);
 	$radius-bottom-left: var(--jfb-choice-border-radius-bottom-left, $border-radius);
 
+	&--item * {
+		cursor: pointer;
+	}
+
 	&--item {
 		border-width: $border-top-width $border-right-width $border-bottom-width $border-left-width;
 		border-style: $border-top-style $border-right-style $border-bottom-style $border-left-style;

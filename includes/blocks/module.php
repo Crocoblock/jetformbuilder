@@ -255,7 +255,7 @@ final class Module implements Base_Module_It {
 
 		wp_register_script(
 			'jet-plugins',
-			Plugin::instance()->plugin_url( 'assets/js/frontend/lib/jet.plugins{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/frontend/lib/jet.plugins.js' ),
 			array( 'jquery' ),
 			'1.0.0',
 			true
@@ -263,7 +263,7 @@ final class Module implements Base_Module_It {
 
 		wp_register_script(
 			self::MAIN_SCRIPT_HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/main{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/frontend/main.js' ),
 			array(
 				'jet-plugins',
 				'wp-i18n',

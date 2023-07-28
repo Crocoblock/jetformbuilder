@@ -9,7 +9,7 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve( __dirname, '../assets-build/js' ),
-		filename: '[name].min.js',
+		filename: '[name].js',
 	},
 	resolve: {
 		modules: [

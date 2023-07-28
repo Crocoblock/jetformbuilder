@@ -115,7 +115,7 @@ class Module implements
 	public function register_frontend_scripts() {
 		wp_register_script(
 			$this->get_handle(),
-			$this->get_url( 'assets-build/js/frontend/choices.field{min}.js' ),
+			$this->get_url( 'assets-build/js/frontend/choices.field.js' ),
 			array(
 				BlocksModule::MAIN_SCRIPT_HANDLE,
 			),
@@ -132,8 +132,8 @@ class Module implements
 
 	public function enqueue_admin_assets() {
 		$path = jet_form_builder()->has_module( 'jet-style' )
-			? 'assets-build/js/editor/main{min}.js'
-			: 'assets-build/js/editor-not-supported/main{min}.js';
+			? 'assets-build/js/editor/main.js'
+			: 'assets-build/js/editor-not-supported/main.js';
 
 		wp_enqueue_script(
 			$this->get_handle(),

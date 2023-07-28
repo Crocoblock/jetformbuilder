@@ -133,7 +133,7 @@ class Media_Field extends Base {
 		);
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field.js' ),
 			array(
 				Manager::MAIN_SCRIPT_HANDLE,
 				'jet-form-builder-sortable',
@@ -143,7 +143,7 @@ class Media_Field extends Base {
 		);
 		wp_register_script(
 			self::RESTRICTIONS,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field.restrictions{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field.restrictions.js' ),
 			array(
 				Validation::HANDLE,
 				Manager::MAIN_SCRIPT_HANDLE,

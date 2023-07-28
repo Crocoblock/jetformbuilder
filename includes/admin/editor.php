@@ -313,7 +313,7 @@ class Editor {
 
 		wp_enqueue_script(
 			self::EDITOR_PACKAGE_HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/editor/package{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/editor/package.js' ),
 			array(
 				'wp-editor',
 				'wp-core-data',
@@ -354,7 +354,7 @@ class Editor {
 
 		wp_enqueue_script(
 			self::EDITOR_HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/editor/form.builder{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/editor/form.builder.js' ),
 			array(),
 			JET_FORM_BUILDER_VERSION,
 			true
@@ -436,7 +436,7 @@ class Editor {
 
 		wp_register_script(
 			$handle,
-			Plugin::instance()->plugin_url( 'assets/js/editor/default.builder{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/editor/default.builder.js' ),
 			array(
 				'wp-core-data',
 				'wp-data',

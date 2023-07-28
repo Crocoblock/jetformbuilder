@@ -17,8 +17,8 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve( __dirname, '../assets-build/js' ),
-		filename: '[name].min.js',
-		chunkFilename: 'chunks/[name].[contenthash:8].js',
+		filename: '[name].js',
+		chunkFilename: 'chunks/[id].[contenthash:8].js',
 		clean: {
 			keep( asset ) {
 				return !/^chunks\/\d+\.\w+\.js$/g.test( asset );

@@ -61,7 +61,7 @@ class Jet_Appointment implements
 	public function register_scripts() {
 		wp_register_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/frontend{min}.js' ),
+			$this->get_url( 'assets/build/js/frontend.js' ),
 			array(
 				Module::MAIN_SCRIPT_HANDLE,
 				Module::LISTING_OPTIONS_HANDLE,

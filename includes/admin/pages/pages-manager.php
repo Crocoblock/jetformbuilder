@@ -204,7 +204,7 @@ class Pages_Manager {
 	public function register_scripts() {
 		wp_register_script(
 			self::SCRIPT_VUEX,
-			Plugin::instance()->plugin_url( 'assets/lib/vuex{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/lib/vuex.js' ),
 			array(),
 			'3.6.2',
 			true
@@ -223,7 +223,7 @@ class Pages_Manager {
 
 		wp_register_script(
 			self::SCRIPT_PACKAGE,
-			Plugin::instance()->plugin_url( 'assets/js/admin/package{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/admin/package.js' ),
 			array(
 				'wp-api',
 				'wp-api-fetch',
@@ -242,7 +242,7 @@ class Pages_Manager {
 
 		wp_register_script(
 			self::SCRIPT_VUEX_PACKAGE,
-			Plugin::instance()->plugin_url( 'assets/js/admin/vuex.package{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/admin/vuex.package.js' ),
 			array(
 				self::SCRIPT_VUEX,
 				self::SCRIPT_PACKAGE,

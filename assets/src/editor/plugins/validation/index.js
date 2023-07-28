@@ -1,3 +1,5 @@
+import ValidationPlugin from './render';
+
 const { __ } = wp.i18n;
 
 const base = {
@@ -5,17 +7,8 @@ const base = {
 	title: __( 'Validation', 'jet-form-builder' )
 };
 
-const {
-	      lazy,
-	      Suspense,
-      } = wp.element;
-
-const ValidationPlugin = lazy( () => import('./render') );
-
 const settings = {
-	render: () => <Suspense fallback={ 'Loading...' }>
-		<ValidationPlugin/>
-	</Suspense>,
+	render: ValidationPlugin,
 	icon: 'shield-alt'
 };
 

@@ -34,7 +34,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 
 	public function init_hooks() {
 		add_action( 'admin_footer', array( $this, 'add_modal_on_deactivate' ) );
-		add_action( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
+		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
 
 		add_filter(
 			'plugin_action_links_' . JET_FORM_BUILDER_PLUGIN_BASE,
@@ -44,7 +44,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 
 	public function remove_hooks() {
 		remove_action( 'admin_init', array( $this, 'add_modal_on_deactivate' ) );
-		remove_action( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
+		remove_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
 
 		remove_filter(
 			'plugin_action_links_' . JET_FORM_BUILDER_PLUGIN_BASE,

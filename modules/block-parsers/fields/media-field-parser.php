@@ -50,7 +50,7 @@ class Media_Field_Parser extends Field_Data_Parser {
 			throw new Sanitize_Value_Exception( $exception->getMessage(), $this->name );
 		}
 
-		$this->context->update_file( $uploads );
+		$this->set_file( $uploads );
 
 		switch ( $this->get_value_format() ) {
 			case 'id':

@@ -4,6 +4,10 @@
 namespace JFB_Modules\Block_Parsers;
 
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
+use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
+use Jet_Form_Builder\Classes\Resources\Uploaded_Collection;
+use Jet_Form_Builder\Classes\Resources\Uploaded_File;
+use Jet_Form_Builder\Classes\Resources\Uploaded_File_Path;
 use Jet_Form_Builder\Exceptions\Parse_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Request\Exceptions\Plain_Value_Exception;
@@ -158,7 +162,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	}
 
 	/**
-	 * @param bool|File|File_Collection $file
+	 * @param bool|Media_Block_Value|Uploaded_File_Path $file
 	 */
 	public function set_file( $file ) {
 		$this->file = $file;

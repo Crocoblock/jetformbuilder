@@ -37,4 +37,14 @@ class Term_Titles_By_Ids_Filter extends Base_Filter {
 		return wp_kses_post( implode( $delimiter, $titles ) );
 	}
 
+	protected function get_term_title( $term_id ): string {
+		$term = get_term( $term_id );
+
+		if ( ! is_a( $term, \WP_Term::class ) ) {
+			return '';
+		}
+
+		return $term->name;
+	}
+
 }

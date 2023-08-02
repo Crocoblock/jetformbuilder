@@ -50,7 +50,6 @@ class Plugin {
 	public $editor;
 	public $framework;
 	public $addons_manager;
-	public $admin_bar;
 	public $msg_router;
 	public $regexp;
 

@@ -42,9 +42,15 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It, Base
 	}
 
 	public function init_hooks() {
+		add_action( 'after_setup_theme', array( $this, 'init_admin_bar' ) );
 	}
 
 	public function remove_hooks() {
+		remove_action( 'after_setup_theme', array( $this, 'init_admin_bar' ) );
+	}
+
+	public function init_admin_bar() {
+		\Jet_Admin_Bar::get_instance();
 	}
 
 	/**

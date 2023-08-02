@@ -1,37 +1,40 @@
 {
-    "name": "crocoblock/jetformbuilder",
-    "description": "Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up \u0000 all in one editor",
-    "type": "wordpress-plugin",
-    "license": "GPL-3.0+",
-    "authors": [
-        {
-            "name": "Sasha Ivanenko",
-            "email": "46720998+girafffee@users.noreply.github.com"
-        }
-    ],
-    "scripts": {
-        "cbf": "./vendor/bin/phpcbf -p -n --colors --standard=./phpcs.xml .",
-        "cs": "./vendor/bin/phpcs -p -s -n --colors --standard=./phpcs.xml .",
-	    "test:wpunit": "./vendor/bin/codecept run wpunit"
-    },
-    "minimum-stability": "stable",
-    "require-dev": {
-        "wp-coding-standards/wpcs": "dev-develop",
-        "wp-cli/wp-cli-bundle": "*",
-        "phpcompatibility/php-compatibility": "^9.3",
-        "codeception/codeception": "^4.0",
-	    "lucatume/wp-browser": "^3.0",
-	    "codeception/module-asserts": "^1.0",
-	    "codeception/module-phpbrowser": "^1.0",
-	    "codeception/module-webdriver": "^1.0",
-	    "codeception/module-db": "^1.0",
-	    "codeception/module-filesystem": "^1.0",
-	    "codeception/module-cli": "^1.0",
-	    "codeception/util-universalframework": "^1.0"
-    },
-    "config": {
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
-    }
+	"name": "crocoblock/jetformbuilder",
+	"description": "Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up \u0000 all in one editor",
+	"type": "wordpress-plugin",
+	"license": "GPL-3.0+",
+	"authors": [
+		{
+			"name": "Sasha Ivanenko",
+			"email": "46720998+girafffee@users.noreply.github.com"
+		}
+	],
+	"scripts": {
+		"cbf": [
+			"Composer\\Config::disableProcessTimeout",
+			"./vendor/bin/phpcbf -p -n --colors --standard=./phpcs.xml ."
+		],
+		"cs": "./vendor/bin/phpcs -p -s -n --colors --standard=./phpcs.xml .",
+		"test:wpunit": "./vendor/bin/codecept run wpunit"
+	},
+	"minimum-stability": "stable",
+	"require-dev": {
+		"wp-coding-standards/wpcs": "dev-develop",
+		"wp-cli/wp-cli-bundle": "*",
+		"phpcompatibility/php-compatibility": "^9.3",
+		"codeception/codeception": "^4.0",
+		"lucatume/wp-browser": "^3.0",
+		"codeception/module-asserts": "^1.0",
+		"codeception/module-phpbrowser": "^1.0",
+		"codeception/module-webdriver": "^1.0",
+		"codeception/module-db": "^1.0",
+		"codeception/module-filesystem": "^1.0",
+		"codeception/module-cli": "^1.0",
+		"codeception/util-universalframework": "^1.0"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
 }

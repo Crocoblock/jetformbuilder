@@ -44,6 +44,17 @@ class Post_Type {
 	 */
 	public $is_form_editor = false;
 
+	const CAPABILITIES = array(
+		'edit_jet_fb_form',
+		'read_jet_fb_form',
+		'delete_jet_fb_form',
+		'edit_jet_fb_forms',
+		'edit_others_jet_fb_forms',
+		'delete_jet_fb_forms',
+		'publish_jet_fb_forms',
+		'read_private_jet_fb_forms',
+	);
+
 	/**
 	 * Constructor for the class
 	 */
@@ -61,8 +72,12 @@ class Post_Type {
 		add_filter( 'use_block_editor_for_post_type', array( $this, 'can_edit_post_type' ), 150, 2 );
 
 		/** @since 3.0.9 */
-		add_action( 'admin_init', array( $this, 'add_admin_capabilities' ) );
+		add_action( 'admin_init', array( $this, 'remove_admin_capabilities' ) );
 		register_deactivation_hook( JET_FORM_BUILDER__FILE__, array( $this, 'remove_admin_capabilities' ) );
+
+		/** @since 3.1.1 */
+		// watch on this methods performance because it executed multiple times on each page load
+		add_filter( 'user_has_cap', array( $this, 'add_admin_capabilities' ) );
 	}
 
 	public function rep_instances(): array {
@@ -105,7 +120,6 @@ class Post_Type {
 		);
 	}
 
-
 	/**
 	 * Returns current post type slug
 	 *
@@ -114,7 +128,6 @@ class Post_Type {
 	public function slug() {
 		return 'jet-form-builder';
 	}
-
 
 	public function set_current_screen() {
 		$screen = get_current_screen();
@@ -206,38 +219,28 @@ class Post_Type {
 		}
 	}
 
-	public function add_admin_capabilities() {
-		$role = get_role( 'administrator' );
+	public function add_admin_capabilities( $allcaps ) {
+		$capability = apply_filters( 'jet-form-builder/capability/form', 'manage_options' );
 
-		foreach ( $this->generate_capabilities() as $capability ) {
-			$role->add_cap( $capability );
+		if ( empty( $allcaps[ $capability ] ) ) {
+			return $allcaps;
 		}
+
+		foreach ( self::CAPABILITIES as $capability ) {
+			$allcaps[ $capability ] = true;
+		}
+
+		return $allcaps;
 	}
 
 	public function remove_admin_capabilities() {
 		$role = get_role( 'administrator' );
 
-		foreach ( $this->generate_capabilities() as $capability ) {
+		foreach ( self::CAPABILITIES as $capability ) {
+			if ( ! $role->has_cap( $capability ) ) {
+				continue;
+			}
 			$role->remove_cap( $capability );
-		}
-	}
-
-	private function generate_capabilities(): \Generator {
-		list( $singular, $plural ) = array( 'jet_fb_form', 'jet_fb_forms' );
-
-		$caps = array(
-			'edit_' . $singular,
-			'read_' . $singular,
-			'delete_' . $singular,
-			'edit_' . $plural,
-			'edit_others_' . $plural,
-			'delete_' . $plural,
-			'publish_' . $plural,
-			'read_private_' . $plural,
-		);
-
-		foreach ( $caps as $cap ) {
-			yield $cap;
 		}
 	}
 
@@ -376,11 +379,10 @@ class Post_Type {
 	/**
 	 * Returns captcha settings
 	 *
-	 * @deprecated 3.1.0 Use ::get_captcha() instead
-	 *
 	 * @param int|false $form_id
 	 *
 	 * @return array
+	 * @deprecated 3.1.0 Use ::get_captcha() instead
 	 */
 	public function get_recaptcha( $form_id = false ) {
 		_deprecated_function( __METHOD__, '3.1.0', __CLASS__ . '::get_captcha()' );

@@ -19,7 +19,7 @@
 	},
 	"minimum-stability": "stable",
 	"require-dev": {
-		"wp-coding-standards/wpcs": "^2.3.0",
+		"wp-coding-standards/wpcs": "dev-develop",
 		"wp-cli/wp-cli-bundle": "*",
 		"phpcompatibility/php-compatibility": "^9.3",
 		"codeception/codeception": "^4.0",

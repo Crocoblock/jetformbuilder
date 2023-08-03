@@ -22,7 +22,6 @@
         <exclude name="Universal.Operators.DisallowShortTernary.Found"/>
         <exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
         <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
-        <exclude name="WordPress.PHP.DisallowShortTernary.Found" />
         <exclude name="Generic.Commenting.DocComment.MissingShort"/>
         <exclude name="Generic.Commenting.DocComment.ShortNotCapital"/>
         <exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedCatch"/>
@@ -46,6 +45,21 @@
     <rule ref="WordPress.WP.I18n">
         <properties>
             <property name="text_domain" type="array" value="jet-form-builder"/>
+        </properties>
+    </rule>
+
+    <rule ref="WordPress.WP.Capabilities">
+        <properties>
+            <property name="custom_capabilities" type="array">
+                <element value="edit_jet_fb_form"/>
+                <element value="read_jet_fb_form"/>
+                <element value="delete_jet_fb_form"/>
+                <element value="edit_jet_fb_forms"/>
+                <element value="edit_others_jet_fb_forms"/>
+                <element value="delete_jet_fb_forms"/>
+                <element value="publish_jet_fb_forms"/>
+                <element value="read_private_jet_fb_forms"/>
+            </property>
         </properties>
     </rule>
 

@@ -10,6 +10,7 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 * FIX: An error in the console when the "Switch page on change" option is enabled in the Radio or Select field
 * FIX: Button Edit JetForm not visible anymore in the Admin bar
 * FIX: Forced conversion of the maximum file size in the Media field to an integer value
+* FIX: Wrong rendering of Repeater field with preset
 
 ## 3.1.0.1
 * FIX: Fatal error when sending email with attachments

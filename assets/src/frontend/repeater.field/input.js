@@ -43,6 +43,10 @@ function RepeaterData() {
 			currentElement.observe();
 		}
 
+		for ( const currentElement of this.value.current ) {
+			currentElement.initCalc();
+		}
+
 		const removeButtons = this.container.querySelectorAll(
 			'.jet-form-builder-repeater__remove',
 		);

@@ -43,9 +43,13 @@ class Import_Action extends Base_Form_Action {
 			wp_die( 'Access denied', 'Error' );
 		}
 
+		add_filter( 'upload_mimes', array( $this, 'allow_json' ) );
+
 		/** @var File_Collection[] $files */
 		// phpcs:ignore WordPress.Security
 		$files = Request_Tools::get_files( $_FILES );
+
+		remove_filter( 'upload_mimes', array( $this, 'allow_json' ) );
 
 		if ( ! is_array( $files ) ) {
 			wp_die( 'File not found in request', 'Error' );
@@ -114,6 +118,12 @@ class Import_Action extends Base_Form_Action {
 
 		wp_safe_redirect( $url );
 		die();
+	}
+
+	public function allow_json( $mimes ): array {
+		$mimes['json'] = 'application/json';
+
+		return $mimes;
 	}
 
 	public function import_form_js() {

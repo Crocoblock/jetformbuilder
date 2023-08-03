@@ -86,7 +86,7 @@ class Module implements
 		wp_register_script(
 			$this->get_handle(),
 			$this->get_url( 'assets-build/js/frontend/main{min}.js' ),
-			array( 'jet-plugins' ),
+			array( \Jet_Form_Builder\Blocks\Module::MAIN_SCRIPT_HANDLE ),
 			jet_form_builder()->get_version(),
 			true
 		);

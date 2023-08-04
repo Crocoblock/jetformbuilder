@@ -86,7 +86,7 @@ class Module implements
 		wp_register_script(
 			$this->get_handle(),
 			$this->get_url( 'assets-build/js/frontend/main.js' ),
-			array( 'jet-plugins' ),
+			array( \Jet_Form_Builder\Blocks\Module::MAIN_SCRIPT_HANDLE ),
 			jet_form_builder()->get_version(),
 			true
 		);
@@ -109,6 +109,9 @@ class Module implements
 	}
 
 	public function apply_support( \WP_Block_Type $block_type, array $block_attributes ): array {
+		if ( ! is_array( $block_type->supports ) ) {
+			return array();
+		}
 		$support_config = Array_Tools::get( $block_type->supports, array( self::SUPPORT_NAME ), false );
 		$value          = $block_attributes[ self::ATTRIBUTE_NAME ] ?? array();
 

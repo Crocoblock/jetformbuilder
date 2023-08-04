@@ -124,17 +124,17 @@ class Manager {
 		);
 
 		if ( is_wp_error( $response ) || 200 !== ( (int) wp_remote_retrieve_response_code( $response ) ) ) {
-			return false;
+			return array();
 		}
 
 		$response = json_decode( $response['body'], true );
 
 		if ( ! $response['success'] ) {
-			return false;
+			return array();
 		}
 
 		if ( ! isset( $response['plugins'] ) ) {
-			return false;
+			return array();
 		}
 
 		$jfb_remote_addons_list = $response['plugins'];

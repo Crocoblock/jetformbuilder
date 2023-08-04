@@ -225,7 +225,7 @@ class Media_Field extends Base {
 			return;
 		}
 
-		$this->max_size = ( MB_IN_BYTES * ( (int) $size_in_mb ) );
+		$this->max_size = ( MB_IN_BYTES * $size_in_mb );
 	}
 
 	protected function set_value_format() {

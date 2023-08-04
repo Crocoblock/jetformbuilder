@@ -37,8 +37,6 @@ class Repeater_Field_Render extends Base {
 		$this->add_attribute( 'data-required', $this->block_type->get_required_val() );
 		$this->add_attribute( 'data-jfb-sync' );
 
-		$html = '<div class="jet-form-builder__field-wrap">';
-
 		$attrs = Builder_Helper::attrs(
 			array(
 				array( 'data-field-name', esc_attr( $this->block_type->block_attrs['name'] ) ),
@@ -50,10 +48,11 @@ class Repeater_Field_Render extends Base {
 			)
 		);
 
+		$html    = '<div class="jet-form-builder__field-wrap">';
 		$content = '';
 
-		foreach ( $this->iterate_rows_html( $wp_block ) as $html ) {
-			$content .= $html;
+		foreach ( $this->iterate_rows_html( $wp_block ) as $part ) {
+			$content .= $part;
 		}
 
 		$html .= sprintf(

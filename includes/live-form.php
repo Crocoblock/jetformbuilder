@@ -35,7 +35,6 @@ class Live_Form {
 	public $post;
 	// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 	public $_conditional_blocks = array();
-	public $_repeaters          = array();
 	public $blocks              = array();
 	// phpcs:enable PSR2.Classes.PropertyDeclaration.Underscore
 
@@ -196,14 +195,6 @@ class Live_Form {
 
 	public function isset_form_break( $name ) {
 		return isset( $this->_conditional_blocks[ $name ] );
-	}
-
-	public function get_repeater( $name ) {
-		return $this->_repeaters[ $name ] ?? array();
-	}
-
-	public function set_repeater( $name, $attrs ) {
-		$this->_repeaters[ $name ] = array_merge( $this->get_repeater( $name ), $attrs );
 	}
 
 	private function current_post() {

@@ -4,13 +4,19 @@ namespace Jet_Form_Builder\Blocks\Render;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Block_Helper;
+use Jet_Form_Builder\Blocks\Types\Repeater_Field;
+use Jet_Form_Builder\Classes\Builder_Helper;
+use Jet_Form_Builder\Classes\Tools;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
 /**
- * Define text field renderer class
+ * @property Repeater_Field block_type
+ *
+ * Class Repeater_Field_Render
+ * @package Jet_Form_Builder\Blocks\Render
  */
 class Repeater_Field_Render extends Base {
 
@@ -31,29 +37,32 @@ class Repeater_Field_Render extends Base {
 		$this->add_attribute( 'data-required', $this->block_type->get_required_val() );
 		$this->add_attribute( 'data-jfb-sync' );
 
-		$template = sprintf(
-			'<template class="jet-form-builder-repeater__initial">%1$s</template>',
-			$this->with_repeater_row_wrapper( $this->block_type->block_content )
+		$attrs = Builder_Helper::attrs(
+			array(
+				array( 'data-field-name', esc_attr( $this->block_type->block_attrs['name'] ) ),
+				array( 'name', esc_attr( $this->block_type->block_attrs['name'] ) ),
+				array( 'data-calc-type', esc_attr( $this->block_type->calc_type ) ),
+				array( 'data-formula', esc_attr( $this->block_type->get_calculated_formula() ) ),
+				array( 'data-manage-items', esc_attr( $this->block_type->manage_items ) ),
+				array( 'data-items-field', esc_attr( $this->block_type->items_field ) ),
+			)
 		);
 
-		$html = '<div class="jet-form-builder__field-wrap">';
+		$html    = '<div class="jet-form-builder__field-wrap">';
+		$content = '';
+
+		foreach ( $this->iterate_rows_html( $wp_block ) as $part ) {
+			$content .= $part;
+		}
 
 		$html .= sprintf(
-			'<div %5$s data-repeater="1" 
-            data-field-name="%1$s" name="%1$s" data-settings="%2$s" %3$s>%4$s',
-			esc_attr( $this->block_type->block_attrs['name'] ),
-			$this->block_type->settings,
-			$this->block_type->calc_dataset,
-			$template,
-			$this->get_attributes_string()
+			'<div data-repeater="1" %1$s %2$s>%3$s',
+			$attrs,
+			$this->get_attributes_string(),
+			$content
 		);
 
-		$html .= sprintf(
-			'<div class="jet-form-builder-repeater__items">%s</div>',
-			$this->maybe_render_rows( $wp_block )
-		);
-
-		if ( 'manually' === $this->block_type->manage_items ) {
+		if ( ! $this->block_type->manage_items ) {
 			$html .= sprintf(
 				'<div class="jet-form-builder-repeater__actions">
                 <button type="button" class="jet-form-builder-repeater__new">%1$s</button>
@@ -68,75 +77,63 @@ class Repeater_Field_Render extends Base {
 		return parent::render( null, $html );
 	}
 
-	public function maybe_render_rows( $wp_block ) {
-		$values   = $this->block_type->get_current_repeater( 'values' );
-		$response = '';
+	protected function iterate_rows_html( $wp_block ): \Generator {
+		foreach ( $this->populate_blocks_or_html( $wp_block ) as $row ) {
+			// just html
+			if ( is_string( $row ) ) {
+				yield $row;
 
-		if ( empty( $values ) || ! is_array( $values ) ) {
-			return $response;
-		}
+				continue;
+			}
 
-		$count_values = count( $values );
-
-		for ( $i = 0; $i < $count_values; $i++ ) {
-			$response .= $this->render_repeater_row( $wp_block, $i );
-		}
-
-		$this->block_type->set_current_repeater(
-			array(
-				'index' => false,
-			)
-		);
-
-		return $response;
-	}
-
-	/**
-	 * Render current repeater row
-	 *
-	 * @param $wp_block
-	 * @param int $index
-	 *
-	 * @return string
-	 */
-	public function render_repeater_row( $wp_block, $index = 0 ) {
-		$html = '';
-
-		$this->block_type->set_current_repeater(
-			array(
-				'index' => $index,
-			)
-		);
-
-		foreach ( $wp_block['innerBlocks'] as $block ) {
-			$html .= Block_Helper::render_with_context(
-				$block,
-				array(
-					'jet-forms/repeater-field--name' => $this->block_type->parent_repeater_name(),
+			yield Block_Helper::render_with_context(
+				$row,
+				$this->block_type->block_context + array(
+					Repeater_Field::CONTEXT_NAME         => $this->block_type->block_attrs['name'] ?? '',
+					Repeater_Field::CONTEXT_MANAGE_ITEMS => $this->block_type->manage_items,
 				)
 			);
 		}
-
-		return $this->with_repeater_row_wrapper( $html, $index );
 	}
 
-	public function with_repeater_row_wrapper( $content, $index = 0 ) {
-		$html = sprintf(
-			'<div class="jet-form-builder-repeater__row" data-repeater-row="1" data-index="%1$s" %2$s>',
-			$index,
-			$this->block_type->calc_dataset
+	protected function populate_blocks_or_html( $wp_block ): \Generator {
+		// repeater template should always render
+		yield array(
+			'blockName'    => 'jet-forms/repeater-row',
+			'attrs'        => array(
+				'isTemplate' => true,
+			),
+			'innerBlocks'  => $wp_block['innerBlocks'],
+			'innerContent' => $wp_block['innerContent'],
 		);
 
-		$html .= sprintf( '<div class="jet-form-builder-repeater__row-fields">%s</div>', $content );
+		$repeater_rows = $this->block_type->block_attrs['default'];
 
-		if ( 'manually' === $this->block_type->manage_items ) {
-			$html .= '<div class="jet-form-builder-repeater__row-remove">';
-			$html .= '<button type="button" class="jet-form-builder-repeater__remove">&times;</button>';
-			$html .= '</div>';
+		if ( ! $repeater_rows || ! is_array( $repeater_rows ) ) {
+			yield '<div class="jet-form-builder-repeater__items"></div>';
+
+			return;
 		}
 
-		return $html . '</div>';
-	}
+		yield '<div class="jet-form-builder-repeater__items">';
 
+		$repeater_rows = array_values( $repeater_rows );
+		$counter       = 0;
+
+		foreach ( $repeater_rows as $row ) {
+			yield array(
+				'blockName'    => 'jet-forms/repeater-row',
+				'attrs'        => array(
+					'rowDefault'   => $row,
+					'currentIndex' => $counter,
+				),
+				'innerBlocks'  => $wp_block['innerBlocks'],
+				'innerContent' => $wp_block['innerContent'],
+			);
+			++$counter;
+		}
+
+		yield '</div>';
+	}
 
 }

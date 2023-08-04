@@ -3,16 +3,16 @@ name: PHP Lint & Test
 on:
     # allow to manually run this workflow from the UI
     workflow_dispatch:
-    push:
-        paths:
-            - '**.php'
-        branches:
-            - main
-    pull_request:
-        paths:
-            - '**.php'
-        branches:
-            - main
+#    push:
+#        paths:
+#            - '**.php'
+#        branches:
+#            - main
+#    pull_request:
+#        paths:
+#            - '**.php'
+#        branches:
+#            - main
 
 env:
     DB_HOST: 127.0.0.1

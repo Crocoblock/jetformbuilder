@@ -55,6 +55,13 @@ class Parser_Context {
 	 */
 	public $parsers = array();
 
+	/**
+	 * Available only while rendering form. Used for
+	 *
+	 * @var Field_Data_Parser
+	 */
+	private $current_parser;
+
 	public function apply( $fields = null ) {
 		if ( is_array( $fields ) ) {
 			$this->set_parsers( $fields );

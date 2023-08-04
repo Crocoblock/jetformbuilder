@@ -12,6 +12,7 @@ use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
+use Jet_Form_Builder\Classes\Tools;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
@@ -33,7 +34,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 
 	public function init_hooks() {
 		add_action( 'admin_footer', array( $this, 'add_modal_on_deactivate' ) );
-		add_action( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
+		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
 
 		add_filter(
 			'plugin_action_links_' . JET_FORM_BUILDER_PLUGIN_BASE,
@@ -42,8 +43,8 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	}
 
 	public function remove_hooks() {
-		remove_action( 'admin_init', array( $this, 'add_modal_on_deactivate' ) );
-		remove_action( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
+		remove_action( 'admin_footer', array( $this, 'add_modal_on_deactivate' ) );
+		remove_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
 
 		remove_filter(
 			'plugin_action_links_' . JET_FORM_BUILDER_PLUGIN_BASE,
@@ -51,7 +52,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		);
 	}
 
-	public function admin_footer_text( string $footer_text ): string {
+	public function admin_footer_text( $footer_text ): string {
 		try {
 			Pages_Manager::instance()->get_current();
 		} catch ( Not_Found_Page_Exception $exception ) {
@@ -59,7 +60,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 
 			return ( $screen && 'edit-jet-form-builder' === $screen->id )
 				? $this->get_footer_text()
-				: $footer_text;
+				: Tools::to_string( $footer_text );
 		}
 
 		return $this->get_footer_text();

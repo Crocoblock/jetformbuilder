@@ -4,14 +4,18 @@
 namespace JFB_Modules\Advanced_Choices\Block_Sanitizers;
 
 use Jet_Form_Builder\Blocks\Module;
-use JFB_Modules\Block_Sanitizer\Base_Block_Sanitizer;
+use JFB_Modules\Block_Sanitizer\Interfaces\Block_Data_Sanitizer_Interface;
+use JFB_Modules\Block_Sanitizer\Interfaces\For_Blocks_Sanitizer_Interface;
+use JFB_Modules\Block_Sanitizer\Traits\For_Blocks_Sanitizer_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Choices_Default_Value_Sanitizer extends Base_Block_Sanitizer {
+class Choices_Default_Value_Sanitizer implements Block_Data_Sanitizer_Interface, For_Blocks_Sanitizer_Interface {
+
+	use For_Blocks_Sanitizer_Trait;
 
 	public function for_blocks(): array {
 		return array(
@@ -19,7 +23,10 @@ class Choices_Default_Value_Sanitizer extends Base_Block_Sanitizer {
 		);
 	}
 
-	public function apply_data( array $parsed_block ): array {
+	public function apply_block_data( array $parsed_block, array $source_block, $parent_block = null ): array {
+		if ( ! is_null( $parent_block ) ) {
+			return $parsed_block;
+		}
 
 		/** @var Module $blocks */
 		/** @noinspection PhpUnhandledExceptionInspection */

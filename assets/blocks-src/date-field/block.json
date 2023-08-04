@@ -94,6 +94,8 @@
 		}
 	},
 	"usesContext": [
-		"jet-forms/repeater-field--name"
+		"jet-forms/repeater-field--name",
+		"jet-forms/repeater-row--default",
+		"jet-forms/repeater-row--current-index"
 	]
 }

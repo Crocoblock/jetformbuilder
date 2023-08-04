@@ -96,6 +96,18 @@ class Request_Handler {
 
 	/**
 	 * @deprecated 3.1.0
+	 *
+	 * @return array
+	 */
+	public function get_files(): array {
+		return array_merge(
+			jet_fb_context()->resolve_files(),
+			jet_fb_context()->get_files()
+		);
+	}
+
+	/**
+	 * @deprecated 3.1.0
 	 * @param string $name
 	 *
 	 * @return false|Media_Block_Value

@@ -39,7 +39,7 @@
 	},
 	"supports": {
 		"html": false,
-		"__experimentalLayout": {
+		"layout": {
 			"allowSwitching": false,
 			"allowInheriting": false,
 			"allowVerticalAlignment": false,

@@ -85,6 +85,14 @@ class Module implements
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
+
+		// compatibility with WordPress <= 6.2
+		if ( ! function_exists( 'wp_is_development_mode' ) ) {
+			add_filter(
+				'block_type_metadata',
+				array( $this, 'migrate_block_supports' )
+			);
+		}
 	}
 
 	public function remove_hooks() {
@@ -97,6 +105,13 @@ class Module implements
 
 		remove_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		remove_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
+
+		if ( ! function_exists( 'wp_is_development_mode' ) ) {
+			remove_filter(
+				'block_type_metadata',
+				array( $this, 'migrate_block_supports' )
+			);
+		}
 	}
 
 	public function add_blocks_types( array $block_types ): array {
@@ -149,5 +164,21 @@ class Module implements
 			array(),
 			jet_form_builder()->get_version()
 		);
+	}
+
+	public function migrate_block_supports( array $metadata ): array {
+		$need_to_migrate = array(
+			'jet-forms/choices-field',
+			'jet-forms/choice',
+		);
+
+		if ( ! in_array( $metadata['name'], $need_to_migrate, true ) ) {
+			return $metadata;
+		}
+
+		$metadata['supports']['__experimentalLayout'] = $metadata['supports']['layout'];
+		unset( $metadata['supports']['layout'] );
+
+		return $metadata;
 	}
 }

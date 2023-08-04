@@ -13,6 +13,9 @@ const {
 	      __,
       } = wp.i18n;
 
+// compatibility with WordPress <= 6.2
+metadata.supports.__experimentalLayout = metadata.supports.layout;
+
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(

@@ -6,13 +6,9 @@ const { name, icon } = metadata;
 
 const { __ } = wp.i18n;
 
-/**
- * Available items for `useEditProps`:
- *  - uniqKey
- *  - formFields
- *  - blockName
- *  - attrHelp
- */
+// compatibility with WordPress <= 6.2
+metadata.supports.__experimentalLayout = metadata.supports.layout;
+
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(

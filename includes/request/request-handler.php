@@ -33,14 +33,6 @@ class Request_Handler {
 		);
 
 		do_action( 'jet-form-builder/request' );
-
-		if ( ! Logger\Module::instance()->has_log( Sanitize_Value_Exception::class ) ) {
-			return;
-		}
-
-		jet_fb_events()->execute( Bad_Request_Event::class );
-
-		throw new Request_Exception( 'validation_failed' );
 	}
 
 

@@ -5,8 +5,6 @@ namespace JFB_Modules\Block_Parsers;
 
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
-use Jet_Form_Builder\Classes\Resources\Uploaded_Collection;
-use Jet_Form_Builder\Classes\Resources\Uploaded_File;
 use Jet_Form_Builder\Classes\Resources\Uploaded_File_Path;
 use Jet_Form_Builder\Exceptions\Parse_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -16,7 +14,6 @@ use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
 use Jet_Form_Builder\Request\Exceptions\Exclude_Field_Exception;
-use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -60,6 +57,11 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	protected $with_inner = true;
 
+	/**
+	 * @var string[]
+	 */
+	protected $errors = array();
+
 	abstract public function type();
 
 	/**
@@ -79,12 +81,9 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	final public function update_request() {
 		$this->is_field_visible();
 		$this->set_request();
+		$this->check_response();
 
-		try {
-			$this->check_response();
-		} catch ( Sanitize_Value_Exception $exception ) {
-			// silence catch
-		}
+		do_action( 'jet-form-builder/validate-field', $this );
 	}
 
 	/**
@@ -97,21 +96,16 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		$this->set_value( $this->get_context()->get_request( $this->name ) );
 		$this->set_file( $this->get_context()->get_files( $this->name ) );
 
-		try {
-			$this->value = $this->get_response();
-		} catch ( Sanitize_Value_Exception $exception ) {
-			// silence catch
-		}
+		$this->value = $this->get_response();
 	}
 
 	public function parse_value( $value ) {
 		return $value;
 	}
 
-	/**
-	 * @throws Sanitize_Value_Exception
-	 */
 	protected function check_response() {
+		$this->errors = array();
+
 		if (
 			$this->context->is_inside_conditional() ||
 			( empty( $this->value ) && ! $this->is_required ) ||
@@ -120,18 +114,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 			return;
 		}
 
-		throw new Sanitize_Value_Exception( 'empty_field', $this->name, $this->settings );
-	}
-
-	/**
-	 * @return bool
-	 *
-	 * @deprecated since 3.1.0
-	 * Use `check_response` instead
-	 * @see \JFB_Modules\Block_Parsers\Field_Data_Parser::check_response
-	 */
-	protected function has_error(): bool {
-		return false;
+		$this->collect_error( 'empty_field' );
 	}
 
 	/**
@@ -339,7 +322,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	 */
 	public function remove_context( $index ) {
 		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			 ! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
+			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
 		) {
 			return;
 		}
@@ -433,6 +416,21 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		}
 	}
 
+	public function collect_error( $error ) {
+		if ( ! is_string( $error ) ) {
+			return;
+		}
+		$this->errors[] = $error;
+	}
+
+	public function is_collected_error( string $error_name ): bool {
+		return in_array( $error_name, $this->errors, true );
+	}
+
+	public function get_errors(): array {
+		return $this->errors;
+	}
+
 	/**
 	 * @param array $path
 	 *
@@ -447,7 +445,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		$index = array_shift( $path );
 
 		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			 ! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
+			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
 		) {
 			throw new Repository_Exception();
 		}

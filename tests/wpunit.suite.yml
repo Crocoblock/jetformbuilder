@@ -5,17 +5,29 @@
 actor: WpunitTester
 modules:
     enabled:
-        - WPLoader
+#        - WPDb # BEFORE the WPLoader one!
+        - WPLoader # AFTER the WPDb one!
         - \Helper\Wpunit
     config:
+#        WPDb:
+#            dsn: 'mysql:host=%DB_HOST%;dbname=%DB_NAME%'
+#            user: '%DB_USER%'
+#            password: '%DB_PASSWORD%'
+#            dump: 'tests/_data/dump.sql'
+#            populate: true
+#            cleanup: true
+#            url: 'http://%DB_HOST%'
+#            urlReplacement: false
+#            tablePrefix: wptests_
         WPLoader:
+#            loadOnly: true
             title: "Codeception Test"
             wpRootFolder: '%WP_ROOT%'
             dbName: '%DB_NAME%'
             dbHost: '%DB_HOST%'
             dbUser: '%DB_USER%'
             dbPassword: '%DB_PASSWORD%'
-            tablePrefix: wp_
+            tablePrefix: wptests_
             domain: '%WP_DOMAIN%'
             adminEmail: 'admin@%WP_DOMAIN%'
             plugins: ['jetformbuilder/jet-form-builder.php']

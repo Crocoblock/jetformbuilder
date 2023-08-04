@@ -642,6 +642,51 @@ class Parser_Context {
 		}
 	}
 
+	public function is_collected_error( $name, string $error_name ): bool {
+		try {
+			$parser = $this->resolve_parser( $name );
+		} catch ( Silence_Exception $exception ) {
+			return false;
+		}
+
+		return $parser->is_collected_error( $error_name );
+	}
+
+	public function get_errors( $name ): array {
+		try {
+			$parser = $this->resolve_parser( $name );
+		} catch ( Silence_Exception $exception ) {
+			return array();
+		}
+
+		return $parser->get_errors();
+	}
+
+
+	public function collect_error( $name, $error_name ) {
+		try {
+			$parser = $this->resolve_parser( $name );
+		} catch ( Silence_Exception $exception ) {
+			return;
+		}
+
+		$parser->collect_error( $error_name );
+	}
+
+	public function iterate_errors(): \Generator {
+		/** @var Field_Data_Parser $parser */
+		foreach ( $this->iterate_parsers() as $parser ) {
+			yield $parser->get_name() => $parser->get_errors();
+		}
+	}
+
+	public function iterate_errors_list(): \Generator {
+		/** @var Field_Data_Parser $parser */
+		foreach ( $this->iterate_parsers_list() as $name => $parser ) {
+			yield $name => $parser->get_errors();
+		}
+	}
+
 
 	public function remove( $name ) {
 		$real_path = Array_Tools::path( $name );

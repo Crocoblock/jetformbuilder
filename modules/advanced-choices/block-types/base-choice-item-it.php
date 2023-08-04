@@ -20,6 +20,4 @@ interface Base_Choice_Item_It {
 
 	public function get_calculated_value(): string;
 
-	public function get_raw_field_name(): string;
-
 }

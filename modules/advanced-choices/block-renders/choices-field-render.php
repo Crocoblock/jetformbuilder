@@ -56,10 +56,26 @@ class Choices_Field_Render extends Base {
 			)
 		);
 
+		$content   = '';
+		$full_name = $this->block_type->get_field_name() . ( $this->block_type->is_allowed_multiple() ? '[]' : '' );
+
+		foreach ( $wp_block['innerBlocks'] as $inner_block ) {
+			$content .= Block_Helper::render_with_context(
+				$inner_block,
+				$this->block_type->block_context + array(
+					Choices_Field::CONTEXT_RAW_NAME => $this->block_type->block_attrs['name'] ?? '',
+					Choices_Field::CONTEXT_NAME     => $full_name,
+					Choices_Field::CONTEXT_DEFAULT  => $this->block_type->block_attrs['default'],
+					Choices_Field::CONTEXT_MULTIPLE => $this->block_type->is_allowed_multiple(),
+					Choices_Field::CONTEXT_REQUIRED => $this->block_type->block_attrs['required'] ?? false,
+				)
+			);
+		}
+
 		$html = sprintf(
 			'<ul %1$s %3$s>%2$s</ul>',
 			$attrs,
-			$this->block_type->block_content,
+			$content,
 			$accessibility
 		);
 

@@ -209,9 +209,16 @@ class Post_Type {
 	public function add_admin_capabilities() {
 		$role = get_role( 'administrator' );
 
+		do_action( 'qm/debug', admin_url() );
+
 		foreach ( $this->generate_capabilities() as $capability ) {
+			if ( $role->has_cap( $capability ) ) {
+				return;
+			}
+
 			$role->add_cap( $capability );
 		}
+
 	}
 
 	public function remove_admin_capabilities() {
@@ -376,11 +383,11 @@ class Post_Type {
 	/**
 	 * Returns captcha settings
 	 *
-	 * @deprecated 3.1.0 Use ::get_captcha() instead
-	 *
 	 * @param int|false $form_id
 	 *
 	 * @return array
+	 * @deprecated 3.1.0 Use ::get_captcha() instead
+	 *
 	 */
 	public function get_recaptcha( $form_id = false ) {
 		_deprecated_function( __METHOD__, '3.1.0', __CLASS__ . '::get_captcha()' );

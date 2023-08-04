@@ -6,6 +6,7 @@ namespace JFB_Modules\Advanced_Choices;
 use Jet_Form_Builder\Blocks\Module as BlocksModule;
 use JFB_Modules\Advanced_Choices\Block_Parsers\Choices_Field_Parser;
 use JFB_Modules\Advanced_Choices\Block_Sanitizers\Choices_Default_Value_Sanitizer;
+use JFB_Modules\Advanced_Choices\Block_Sanitizers\Choice_Single_Context_Sanitizer;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
@@ -53,12 +54,9 @@ class Module implements
 	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function on_install() {
-		/** @var Block_Sanitizer\Module $sanitizer */
-		$sanitizer = jet_form_builder()->module( 'block-sanitizer' );
 		/** @var Block_Parsers\Module $parsers */
 		$parsers = jet_form_builder()->module( 'block-parsers' );
 
-		$sanitizer->register( new Choices_Default_Value_Sanitizer() );
 		$parsers->install( new Choices_Field_Parser() );
 	}
 
@@ -66,12 +64,9 @@ class Module implements
 	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function on_uninstall() {
-		/** @var Block_Sanitizer\Module $sanitizer */
-		$sanitizer = jet_form_builder()->module( 'block-sanitizer' );
 		/** @var Block_Parsers\Module $parsers */
 		$parsers = jet_form_builder()->module( 'block-parsers' );
 
-		$sanitizer->unregister( new Choices_Default_Value_Sanitizer() );
 		$parsers->uninstall( new Choices_Field_Parser() );
 	}
 

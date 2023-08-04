@@ -72,9 +72,12 @@
 	},
 	"usesContext": [
 		"jet-forms/repeater-field--name",
+		"jet-forms/repeater-row--default",
+		"jet-forms/repeater-row--current-index",
 		"jet-forms/choices-field--multiple",
 		"jet-forms/choices-field--required",
 		"jet-forms/choices-field--name",
+		"jet-forms/choices-field--raw-name",
 		"jet-forms/choices-field--default",
 		"jet-forms/choice--value",
 		"jet-forms/choice--calc_value"

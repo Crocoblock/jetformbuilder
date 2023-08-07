@@ -1,5 +1,7 @@
 <?php
 
+namespace JFB_Tests\Wpunit;
+
 use Jet_Form_Builder\Blocks\Block_Helper;
 
 class BlockHelperTest extends \Codeception\TestCase\WPTestCase

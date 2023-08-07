@@ -1,5 +1,7 @@
 <?php
 
+namespace JFB_Tests\Wpunit;
+
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Components\Repository\Interfaces\Repository_Pattern_Interface;
 use JFB_Components\Repository\Repository_Item_Instance_Trait;

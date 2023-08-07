@@ -22,14 +22,15 @@
 		"wp-coding-standards/wpcs": "dev-develop",
 		"wp-cli/wp-cli-bundle": "*",
 		"phpcompatibility/php-compatibility": "^9.3",
-		"codeception/codeception": "^4.0",
-		"lucatume/wp-browser": "^3.0",
+		"codeception/codeception": "4.2.*",
+		"lucatume/wp-browser": "^3.1",
 		"codeception/module-asserts": "^1.0",
 		"codeception/module-phpbrowser": "^1.0",
 		"codeception/module-webdriver": "^1.0",
 		"codeception/module-db": "^1.0",
 		"codeception/module-filesystem": "^1.0",
 		"codeception/module-cli": "^1.0",
+		"codeception/module-rest": "^1.2",
 		"codeception/util-universalframework": "^1.0"
 	},
 	"config": {

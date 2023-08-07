@@ -26,4 +26,56 @@ coverage:
     include:
         - includes/*
         - components/*
+        - modules/*
+        - components/*
+modules:
+    config:
+        WPBrowser:
+            url: '%WP_URL%'
+            adminUsername: admin
+            adminPassword: 1
+            adminPath: /wp-admin
+            browser: chrome
+            port: 4444
+            capabilities:
+                chromeOptions:
+                    args:
+                          [
+                                  '--headless',
+                                  '--disable-gpu',
+                                  "--proxy-server='direct://'",
+                                  '--proxy-bypass-list=*',
+                          ]
+        WPDb:
+            dsn: 'mysql:host=%DB_HOST%;dbname=%DB_NAME%'
+            user: '%DB_USER%'
+            password: '%DB_PASSWORD%'
+            dump: 'tests/_data/dump.sql'
+            populate: true
+            cleanup: true
+            reconnect: true
+            waitlock: 0
+            url: '%WP_URL%'
+            urlReplacement: false
+            tablePrefix: wptests_
+            # Check https://github.com/lucatume/wp-browser
+        WPLoader:
+            title: "Codeception Test"
+            wpRootFolder: '%WP_ROOT%'
+            dbName: '%DB_NAME%'
+            dbHost: '%DB_HOST%'
+            dbUser: '%DB_USER%'
+            dbPassword: '%DB_PASSWORD%'
+            tablePrefix: wptests_
+            domain: '%WP_DOMAIN%'
+            adminEmail: 'admin@%WP_DOMAIN%'
+            plugins: [ 'jetformbuilder/jet-form-builder.php' ]
+            activatePlugins: [ 'jetformbuilder/jet-form-builder.php' ]
+        WPFilesystem:
+            wpRootFolder: '%WP_ROOT%'
+            plugins: '/wp-content/plugins'
+            mu-plugins: '/wp-content/mu-plugins'
+            themes: '/wp-content/themes'
+            uploads: '/wp-content/uploads'
+
 

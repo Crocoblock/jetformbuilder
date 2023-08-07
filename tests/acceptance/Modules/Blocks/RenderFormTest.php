@@ -55,17 +55,17 @@ enable_progress="" fields_label_tag="div" load_nonce="render" use_csrf=""]
 		parent::tearDown();
 	}
 
-	public function testRenderShortcode() {
-		/*$I = $this->tester;
+	/*public function testRenderShortcode() {
+		$I = $this->tester;
 
 		$I->amOnPage( '/testing-shortcode' );
-		$I->seeElement( 'form.jet-form-builder' );*/
+		$I->seeElement( 'form.jet-form-builder' );
 	}
 
 	public function testRenderBlock() {
-		/*$I = $this->tester;
+		$I = $this->tester;
 
 		$I->amOnPage( '/testing-block' );
-		$I->seeElement( 'form.jet-form-builder' );*/
-	}
+		$I->seeElement( 'form.jet-form-builder' );
+	}*/
 }

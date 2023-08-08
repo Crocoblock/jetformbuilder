@@ -7,11 +7,13 @@ function ObservableRow( parent ) {
 	Observable.call( this, parent );
 
 	// By default we return the number of repeater rows
-	this.calc = 1;
+	this.calc       = 1;
+	this.initedCalc = false;
 }
 
-ObservableRow.prototype      = Object.create( Observable.prototype );
-ObservableRow.prototype.calc = 1;
+ObservableRow.prototype            = Object.create( Observable.prototype );
+ObservableRow.prototype.calc       = 1;
+ObservableRow.prototype.initedCalc = false;
 
 ObservableRow.prototype.observe = function ( root ) {
 	Observable.prototype.observe.call( this, root );
@@ -27,6 +29,11 @@ ObservableRow.prototype.removeManually = function () {
 };
 
 ObservableRow.prototype.initCalc = function () {
+	if ( this.initedCalc ) {
+		return;
+	}
+
+	this.initedCalc     = true;
 	const [ node ]      = this.parent.nodes;
 	const formulaString = node.dataset?.formula;
 

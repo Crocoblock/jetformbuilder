@@ -67,7 +67,7 @@ class Jet_Booking implements
 
 		wp_register_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/frontend{min}.js' ),
+			$this->get_url( 'assets/build/js/frontend.js' ),
 			array(
 				Module::MAIN_SCRIPT_HANDLE,
 				$deprecated->get_handle(),

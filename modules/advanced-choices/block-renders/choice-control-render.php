@@ -9,6 +9,7 @@ use Jet_Form_Builder\Blocks\Types\Base as BaseType;
 use Jet_Form_Builder\Classes\Builder_Helper;
 use JFB_Modules\Advanced_Choices\Block_Types\Base_Choice_Item_It;
 use JFB_Modules\Advanced_Choices\Block_Types\Choice_Control;
+use JFB_Modules\Advanced_Choices\Block_Types\Choices_Field;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -63,13 +64,7 @@ class Choice_Control_Render extends Base {
 		}
 
 		$attributes = array(
-			array(
-				'for',
-				$this->block_type->get_field_id(
-					$this->block_type->get_raw_field_name(),
-					'label'
-				),
-			),
+			array( 'for', $this->block_type->get_field_id( '', 'label' ) ),
 			array( 'class', 'jet-form-builder__label' ),
 		);
 
@@ -88,7 +83,7 @@ class Choice_Control_Render extends Base {
 			array(
 				array( 'type', $block_type->is_allowed_multiple() ? 'checkbox' : 'radio' ),
 				array( 'name', $block_type->get_field_name() ),
-				array( 'id', $block_type->get_field_id( $block_type->get_raw_field_name() ) ),
+				array( 'id', $block_type->get_field_id() ),
 				array( 'value', esc_attr( $block_type->get_field_value() ) ),
 				array( 'data-calculate', esc_attr( $block_type->get_calculated_value() ) ),
 				array( 'required', $block_type->get_required_val() ),
@@ -116,7 +111,8 @@ class Choice_Control_Render extends Base {
 			return '';
 		}
 
-		$alt = $this->block_type->get_raw_field_name() . ' ' . __( 'control', 'jet-form-builder' );
+		$alt = $this->block_type->block_context[ Choices_Field::CONTEXT_RAW_NAME ] .
+				' ' . __( 'control', 'jet-form-builder' );
 
 		$default_attrs = array(
 			array( 'src', $default_image ),

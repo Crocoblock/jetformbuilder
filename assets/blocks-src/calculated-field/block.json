@@ -76,10 +76,6 @@
 				"shortcode": true
 			}
 		},
-		"default": {
-			"type": "string",
-			"default": ""
-		},
 		"placeholder": {
 			"type": "string",
 			"default": ""
@@ -111,8 +107,5 @@
 			"type": "boolean",
 			"default": false
 		}
-	},
-	"usesContext": [
-		"jet-forms/repeater-field--name"
-	]
+	}
 }

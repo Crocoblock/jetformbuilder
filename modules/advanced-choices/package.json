@@ -6,7 +6,8 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"hidden:dev:js": "webpack --config .config/dev.webpack.config.js --progress -w",
+		"hidden:dev:js": "webpack --config .config/dev.webpack.config.js --progress",
+		"hidden:dev:js:w": "webpack --config .config/dev.webpack.config.js --progress -w",
 		"hidden:build:js": "webpack --config .config/prod.webpack.config.js --progress",
 		"css": "sass assets-src\\scss\\main.scss:assets-build\\css\\main.css -s compressed --no-source-map"
 	},

@@ -2,6 +2,7 @@
 <ruleset name="JetFormBuilder Coding Standards">
     <description>JetFormBuilder dev PHP_CodeSniffer ruleset.</description>
     <config name="testVersion" value="7.0-"/>
+    <config name="minimum_supported_wp_version" value="6.0"/>
 
     <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>

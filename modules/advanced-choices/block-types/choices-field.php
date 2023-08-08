@@ -18,14 +18,22 @@ class Choices_Field extends Base {
 
 	use Block_Metadata_Trait;
 
+	const CONTEXT_DEFAULT  = 'jet-forms/choices-field--default';
+	const CONTEXT_NAME     = 'jet-forms/choices-field--name';
+	const CONTEXT_RAW_NAME = 'jet-forms/choices-field--raw-name';
+	const CONTEXT_REQUIRED = 'jet-forms/choices-field--required';
+	const CONTEXT_MULTIPLE = 'jet-forms/choices-field--multiple';
+
 	public $use_style_manager = false;
 
 	public function get_name() {
 		return 'choices-field';
 	}
 
-	public function use_preset() {
-		return false;
+	protected function iterate_args_metadata_block(): \Generator {
+		yield from parent::iterate_args_metadata_block();
+
+		yield 'skip_inner_blocks' => true;
 	}
 
 	public function expected_preset_type(): array {

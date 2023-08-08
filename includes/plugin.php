@@ -136,8 +136,6 @@ class Plugin {
 	 * @return string
 	 */
 	public function plugin_url( string $path = '' ): string {
-		$path = str_replace( '{min}', Tools::get_suffix(), $path );
-
 		return JET_FORM_BUILDER_URL . $path;
 	}
 

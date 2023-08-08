@@ -107,7 +107,7 @@ class Conditional_Block extends Base {
 	public function register_scripts() {
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/conditional.block{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/frontend/conditional.block.js' ),
 			array(
 				Manager::MAIN_SCRIPT_HANDLE,
 			),

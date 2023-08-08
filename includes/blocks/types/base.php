@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Types;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
+use Jet_Form_Builder\Blocks\Module;
 use Jet_Form_Builder\Blocks\Modules\Base_Module;
 use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Classes\Compatibility;
@@ -136,6 +137,14 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 */
 	abstract public function get_block_renderer( $wp_block = null );
 
+	protected function iterate_args_metadata_block(): \Generator {
+		/** @var Module $module */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$module = jet_form_builder()->module( 'blocks' );
+
+		yield 'render_callback' => $module->render_callback( $this );
+	}
+
 	public function get_path_metadata_block() {
 		$path_parts = array( 'assets', 'blocks-src', $this->get_name() );
 		$path       = implode( DIRECTORY_SEPARATOR, $path_parts );
@@ -150,14 +159,12 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 		$block = register_block_type_from_metadata(
 			$this->get_path_metadata_block(),
-			array(
-				'render_callback' => Plugin::instance()->blocks->render_callback( $this ),
-			)
+			iterator_to_array( $this->iterate_args_metadata_block() )
 		);
 
 		if ( ! $block ) {
 			_doing_it_wrong(
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				static::class . '::' . __FUNCTION__,
 				esc_html__(
 					'Unsuccessful field (block) registration. 
@@ -385,36 +392,21 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	}
 
 	/**
-	 * @since 3.1.0 Make public
-	 *
 	 * @param array $attributes
 	 *
 	 * @return mixed|string|void
+	 * @since 3.1.0 Make public
 	 */
 	public function get_default_from_preset( $attributes = array() ) {
 		jet_fb_preset( jet_fb_live()->form_id );
+		$index = $this->get_repeater_index();
 
-		if ( ! $this->parent_repeater_name() ) {
-			return $this->get_field_value( $attributes );
-		}
-
-		if ( ! $this->get_current_repeater() ) {
-			$this->set_current_repeater(
-				array(
-					'index'  => false,
-					'values' => $this->load_current_repeater_preset(),
-				)
-			);
-		}
-
-		$repeater = $this->get_current_repeater();
-
-		if ( false === $repeater['index'] ) {
+		if ( ! $this->get_repeater_name() || - 1 === $index ) {
 			return $this->get_field_value( $attributes );
 		}
 
 		$name = $this->block_attrs['name'] ?? '';
-		$row  = $repeater['values'][ $repeater['index'] ] ?? array();
+		$row  = $this->block_context[ Repeater_Row::CONTEXT_DEFAULT ] ?? array();
 
 		$custom_value = $this->get_value_from_repeater( $row, $name );
 
@@ -453,11 +445,13 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			$name = $this->block_attrs['name'] ?? '';
 		}
 
-		if ( $this->parent_repeater_name() ) {
+		$index = $this->get_repeater_index();
+
+		if ( $this->get_repeater_name() ) {
 			$name = sprintf(
 				'%1$s_%2$s_%3$s',
-				$this->parent_repeater_name(),
-				$this->get_current_repeater_index(),
+				$this->get_repeater_name(),
+				- 1 === $index ? '__i__' : $index,
 				$name
 			);
 		}
@@ -476,16 +470,22 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		if ( ! $name ) {
 			$name = $this->block_attrs['name'] ?? '';
 		}
-		if ( $this->parent_repeater_name() ) {
+		$index = $this->get_repeater_index();
+
+		if ( $this->get_repeater_name() ) {
 			$name = sprintf(
 				'%1$s[%2$s][%3$s]',
-				$this->parent_repeater_name(),
-				$this->get_current_repeater_index(),
+				$this->get_repeater_name(),
+				- 1 === $index ? '__i__' : $index,
 				$name
 			);
 		}
 
 		return $name;
+	}
+
+	protected function get_repeater_index(): int {
+		return intval( $this->block_context[ Repeater_Row::CONTEXT_INDEX ] ?? - 1 );
 	}
 
 	/**
@@ -717,50 +717,8 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		return $break;
 	}
 
-	public function get_current_repeater( $prop = '', $if_empty = false ) {
-		$repeater = Live_Form::instance()->get_repeater( $this->parent_repeater_name() );
-
-		return $prop ? ( $repeater[ $prop ] ?? $if_empty ) : $repeater;
-	}
-
-	public function get_current_repeater_index() {
-		$index = $this->get_current_repeater( 'index' );
-
-		return false !== $index ? $index : '__i__';
-	}
-
-	public function parent_repeater_name() {
-		$context = 'jet-forms/repeater-field--name';
-
-		return $this->block_context[ $context ] ?? '';
-	}
-
-	public function load_current_repeater_preset(): array {
-		$repeater_block = Plugin::instance()->form->get_field_by_name(
-			0,
-			$this->parent_repeater_name(),
-			Live_Form::instance()->blocks
-		);
-
-		if ( ! $repeater_block ) {
-			return array();
-		}
-
-		$repeater_preset = $this->get_field_value(
-			array_merge(
-				$repeater_block['attrs'],
-				array(
-					'type'      => Block_Helper::delete_namespace( $repeater_block['blockName'] ),
-					'blockName' => $repeater_block['blockName'],
-				)
-			)
-		);
-
-		if ( ! $repeater_preset || ! is_array( $repeater_preset ) ) {
-			return array();
-		}
-
-		return array_values( $repeater_preset );
+	public function get_repeater_name(): string {
+		return $this->block_context[ Repeater_Field::CONTEXT_NAME ] ?? '';
 	}
 
 	public function get_field_value( $attributes = array() ) {
@@ -769,10 +727,6 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		}
 
 		return Preset_Manager::instance()->get_field_value( $attributes );
-	}
-
-	public function set_current_repeater( $attrs ) {
-		Live_Form::instance()->set_repeater( $this->parent_repeater_name(), $attrs );
 	}
 
 	/**

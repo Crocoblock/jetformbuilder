@@ -2,8 +2,9 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
-use Jet_Form_Builder\Blocks\Manager;
+use Jet_Form_Builder\Blocks\Module;
 use Jet_Form_Builder\Blocks\Render\Repeater_Field_Render;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Plugin;
 
 // If this file is called directly, abort.
@@ -16,17 +17,15 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Repeater_Field extends Base {
 
-	const HANDLE = 'jet-fb-repeater-field';
+	const HANDLE               = 'jet-fb-repeater-field';
+	const CONTEXT_NAME         = 'jet-forms/repeater-field--name';
+	const CONTEXT_MANAGE_ITEMS = 'jet-forms/repeater-field--manage-items';
 
 	public $manage_items;
-	public $items_field;
-	public $repeater_calc_type;
+	public $items_field = '';
+	public $calc_type;
 	public $new_item_label;
-	public $settings;
 	public $default_value;
-
-	public $calc_data    = array();
-	public $calc_dataset = '';
 
 	/**
 	 * Returns block name
@@ -343,14 +342,6 @@ class Repeater_Field extends Base {
 		$this->controls_manager->end_section();
 	}
 
-	public function parent_repeater_name() {
-		return $this->block_attrs['name'] ?? '';
-	}
-
-	public function use_preset() {
-		return false;
-	}
-
 	public function register_block_type() {
 		parent::register_block_type();
 
@@ -362,12 +353,22 @@ class Repeater_Field extends Base {
 		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_scripts' ) );
 	}
 
+	public function expected_preset_type(): array {
+		return array( self::PRESET_EXACTLY );
+	}
+
+	protected function iterate_args_metadata_block(): \Generator {
+		yield from parent::iterate_args_metadata_block();
+
+		yield 'skip_inner_blocks' => true;
+	}
+
 	public function register_scripts() {
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/repeater.field{min}.js' ),
+			Plugin::instance()->plugin_url( 'assets/js/frontend/repeater.field.js' ),
 			array(
-				Manager::MAIN_SCRIPT_HANDLE,
+				Module::MAIN_SCRIPT_HANDLE,
 			),
 			Plugin::instance()->get_version(),
 			true
@@ -383,66 +384,40 @@ class Repeater_Field extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		wp_enqueue_script( self::HANDLE );
-		do_action( 'jet_plugins/frontend/register_script', self::HANDLE );
 
 		$this->set_manage_items();
 		$this->set_items_field();
-		$this->set_repeater_calc_type();
+		$this->set_calc_type();
 		$this->set_new_repeater_label();
-		$this->set_settings();
-		$this->set_calc_data();
-		$this->set_calc_dataset();
 
 		return ( new Repeater_Field_Render( $this ) )->render( $wp_block );
 	}
 
 	public function set_manage_items() {
-		$this->manage_items = ! empty( $this->block_attrs['manage_items_count'] ) ? $this->block_attrs['manage_items_count'] : 'manually';
+		$this->manage_items = $this->block_attrs['manage_items_count'] ?? '';
+
+		if ( 'manually' === $this->manage_items ) {
+			$this->manage_items = '';
+		}
 	}
 
 	public function set_items_field() {
+		if ( ! $this->manage_items ) {
+			return;
+		}
 		$this->items_field = ! empty( $this->block_attrs['manage_items_count_field'] ) ? $this->block_attrs['manage_items_count_field'] : false;
 	}
 
-	public function set_repeater_calc_type() {
-		$this->repeater_calc_type = ! empty( $this->block_attrs['repeater_calc_type'] ) ? $this->block_attrs['repeater_calc_type'] : 'default';
+	public function set_calc_type() {
+		$this->calc_type = $this->block_attrs['repeater_calc_type'] ?? '';
+
+		if ( 'default' === $this->calc_type ) {
+			$this->calc_type = '';
+		}
 	}
 
 	public function set_new_repeater_label() {
 		$this->new_item_label = ! empty( $this->block_attrs['new_item_label'] ) ? $this->block_attrs['new_item_label'] : __( 'Add new', 'jet-form-builder' );
-	}
-
-	public function set_settings() {
-		$this->settings = htmlspecialchars(
-			wp_json_encode(
-				array(
-					'manageItems' => $this->manage_items,
-					'itemsField'  => $this->items_field,
-					'calcType'    => $this->repeater_calc_type,
-				)
-			)
-		);
-	}
-
-	public function set_calc_data() {
-		if ( 'custom' === $this->repeater_calc_type ) {
-			$this->calc_data = $this->get_calculated_data();
-		}
-	}
-
-	public function set_calc_dataset() {
-		if ( ! $this->calc_data ) {
-			return;
-		}
-		$this->calc_dataset = '';
-
-		foreach ( $this->calc_data as $data_key => $data_value ) {
-
-			if ( is_array( $data_value ) ) {
-				$data_value = wp_json_encode( $data_value );
-			}
-			$this->calc_dataset .= sprintf( ' data-%1$s="%2$s"', $data_key, htmlspecialchars( $data_value ) );
-		}
 	}
 
 	/**
@@ -450,9 +425,9 @@ class Repeater_Field extends Base {
 	 *
 	 * @return [type] [description]
 	 */
-	public function get_calculated_data() {
+	public function get_calculated_formula(): string {
 
-		if ( empty( $this->block_attrs['calc_formula'] ) ) {
+		if ( empty( $this->block_attrs['calc_formula'] ) || ! $this->calc_type ) {
 			return '';
 		}
 
@@ -482,9 +457,7 @@ class Repeater_Field extends Base {
 			$this->block_attrs['calc_formula']
 		);
 
-		return array(
-			'formula' => $formula,
-		);
+		return (string) $formula;
 	}
 
 }

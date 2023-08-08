@@ -96,7 +96,7 @@ class Turnstile extends Base_Captcha_From_Options implements
 	public function enqueue_editor_script() {
 		wp_enqueue_script(
 			$this->module()->get_handle( $this->get_id() ),
-			$this->module()->get_url( 'assets-build/js/turnstile/editor{min}.js' ),
+			$this->module()->get_url( 'assets-build/js/turnstile/editor.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true
@@ -119,7 +119,7 @@ class Turnstile extends Base_Captcha_From_Options implements
 
 		wp_register_script(
 			$handle,
-			$this->module()->get_url( 'assets-build/js/turnstile/frontend{min}.js' ),
+			$this->module()->get_url( 'assets-build/js/turnstile/frontend.js' ),
 			array( Manager::MAIN_SCRIPT_HANDLE ),
 			jet_form_builder()->get_version(),
 			true

@@ -174,7 +174,7 @@ class Module implements
 	public function enqueue_editor_assets() {
 		wp_enqueue_script(
 			$this->get_handle( 'editor' ),
-			$this->get_url( 'assets/build/js/editor{min}.js' ),
+			$this->get_url( 'assets/build/js/editor.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true

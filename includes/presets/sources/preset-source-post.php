@@ -140,6 +140,7 @@ class Preset_Source_Post extends Base_Source {
 
 	protected function get_post_terms_by_format( $value, $format ) {
 		switch ( $format ) {
+			case 'list':
 			case 'array':
 				return array_map(
 					function ( $term ) {

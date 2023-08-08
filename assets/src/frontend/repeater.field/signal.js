@@ -15,17 +15,22 @@ function SignalRepeater() {
 	};
 	this.runSignal   = function ( prevValue = [] ) {
 		const { current } = this.input.value;
-		let calcValue     = 0;
 
 		if ( prevValue?.length && prevValue.length > current.length ) {
 			this.removePrevItems( prevValue );
 		}
 
-		for ( const [ index, row ] of Object.entries( current ) ) {
+		for ( const index of Object.keys( current ) ) {
 			if ( !current.hasOwnProperty( index ) ) {
 				continue;
 			}
 			this.runItem( +index );
+		}
+
+		let calcValue = 0;
+
+		for ( const row of Object.values( current ) ) {
+			row.initCalc();
 			calcValue += row.calc;
 		}
 

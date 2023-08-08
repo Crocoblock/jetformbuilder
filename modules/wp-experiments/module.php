@@ -6,6 +6,7 @@ namespace JFB_Modules\Wp_Experiments;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
+use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_It;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -18,9 +19,11 @@ if ( ! defined( 'WPINC' ) ) {
  * Class Wp_Experiments
  * @package JFB_Modules\Wp_Experiments
  */
-class Module implements Base_Module_It {
+class Module implements Base_Module_It, Base_Module_After_Install_It {
 
 	const SUPPORT_CUSTOM_LAYOUT = 'jetCustomWrapperLayout';
+
+	private $layout_prop = 'layout';
 
 	public function rep_item_id() {
 		return 'wp-experiments';
@@ -44,6 +47,16 @@ class Module implements Base_Module_It {
 		);
 	}
 
+	public function on_install() {
+		if ( function_exists( 'wp_is_development_mode' ) ) {
+			return;
+		}
+		$this->layout_prop = '__experimentalLayout';
+	}
+
+	public function on_uninstall() {
+	}
+
 	public function disable_layout_support( array $metadata ): array {
 		if (
 			! Block_Helper::is_field( $metadata['name'] ) ||
@@ -53,8 +66,8 @@ class Module implements Base_Module_It {
 			return $metadata;
 		}
 
-		$metadata['supports'][ self::SUPPORT_CUSTOM_LAYOUT ] = $metadata['supports']['__experimentalLayout'];
-		unset( $metadata['supports']['__experimentalLayout'] );
+		$metadata['supports'][ self::SUPPORT_CUSTOM_LAYOUT ] = $metadata['supports'][ $this->layout_prop ];
+		unset( $metadata['supports'][ $this->layout_prop ] );
 
 		return $metadata;
 	}
@@ -66,7 +79,7 @@ class Module implements Base_Module_It {
 			return;
 		}
 
-		$block_type->supports['__experimentalLayout'] = $block_type->supports[ self::SUPPORT_CUSTOM_LAYOUT ];
+		$block_type->supports[ $this->layout_prop ] = $block_type->supports[ self::SUPPORT_CUSTOM_LAYOUT ];
 		unset( $block_type->supports[ self::SUPPORT_CUSTOM_LAYOUT ] );
 	}
 
@@ -77,7 +90,7 @@ class Module implements Base_Module_It {
 			return;
 		}
 
-		$block_type->supports[ self::SUPPORT_CUSTOM_LAYOUT ] = $block_type->supports['__experimentalLayout'];
-		unset( $block_type->supports['__experimentalLayout'] );
+		$block_type->supports[ self::SUPPORT_CUSTOM_LAYOUT ] = $block_type->supports[ $this->layout_prop ];
+		unset( $block_type->supports[ $this->layout_prop ] );
 	}
 }

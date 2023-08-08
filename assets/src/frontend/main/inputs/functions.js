@@ -8,9 +8,11 @@ import RadioData from './RadioData';
 import NoListenData from './NoListenData';
 import InputMaskedData from './InputMaskedData';
 import RenderStateData from './RenderStateData';
+import { setAttrs } from '../functions';
 
 const {
 	      applyFilters,
+	      doAction,
       } = JetPlugins.hooks;
 
 /**
@@ -51,6 +53,9 @@ function createInput( node, observable ) {
 		}
 		current.setRoot( observable );
 		current.setNode( node );
+		setAttrs( current );
+
+		doAction( 'jet.fb.input.created', current );
 
 		return current;
 	}

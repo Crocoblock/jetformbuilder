@@ -85,7 +85,8 @@ class Module implements
 		if ( ! function_exists( 'wp_is_development_mode' ) ) {
 			add_filter(
 				'block_type_metadata',
-				array( $this, 'migrate_block_supports' )
+				array( $this, 'migrate_block_supports' ),
+				0
 			);
 		}
 	}
@@ -104,7 +105,8 @@ class Module implements
 		if ( ! function_exists( 'wp_is_development_mode' ) ) {
 			remove_filter(
 				'block_type_metadata',
-				array( $this, 'migrate_block_supports' )
+				array( $this, 'migrate_block_supports' ),
+				0
 			);
 		}
 	}

@@ -21,9 +21,8 @@ function MaxFilesHtmlAttr() {
 	this.setInput = function ( input ) {
 		BaseHtmlAttr.prototype.setInput.call( this, input );
 
-		const { previewsContainer } = input.callable;
-		const { max_files = 1 }     = JSON.parse(
-			previewsContainer.dataset.args,
+		const { max_files = 1 } = JSON.parse(
+			input.previewsContainer.dataset.args,
 		);
 
 		this.initial = +max_files;

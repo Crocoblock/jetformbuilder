@@ -13,21 +13,6 @@ function SignalFile() {
 	this.isSupported = function ( node, inputData ) {
 		return isFile( node );
 	};
-	this.setInput    = function ( input ) {
-		BaseSignal.prototype.setInput.call( this, input );
-
-		const [ node ] = input.nodes;
-
-		this.wrapper           = node.closest(
-			'.jet-form-builder-file-upload',
-		);
-		this.previewsContainer = this.wrapper.querySelector(
-			'.jet-form-builder-file-upload__files',
-		);
-		this.template          = this.wrapper.
-			closest( '.field-type-media-field' ).
-			querySelector( '.jet-form-builder__preview-template' );
-	};
 
 	this.runSignal = function () {
 		const [ node ]    = this.input.nodes;
@@ -39,7 +24,7 @@ function SignalFile() {
 			previews.push( this.getPreview( file ) );
 		}
 
-		appendNodes( this.previewsContainer, previews );
+		appendNodes( this.input.previewsContainer, previews );
 
 		node.files           = createFileList( [ ...files ] );
 		this.input.prevFiles = files;
@@ -49,28 +34,10 @@ function SignalFile() {
 }
 
 SignalFile.prototype = Object.create( BaseSignal.prototype );
-/**
- * @type {HTMLElement}
- */
-SignalFile.prototype.wrapper = null;
-/**
- * @type {HTMLElement}
- */
-SignalFile.prototype.previewsContainer = null;
-/**
- * @type {HTMLTemplateElement}
- */
-SignalFile.prototype.template = null;
-/**
- * @type {{
- *     max_files: {Number}
- *     max_size: {Number}
- * }}
- */
-SignalFile.prototype.settings = {};
+
 
 SignalFile.prototype.loadFiles = function () {
-	const files = this.previewsContainer.querySelectorAll(
+	const files = this.input.previewsContainer.querySelectorAll(
 		'.jet-form-builder-file-upload__file',
 	);
 
@@ -113,9 +80,9 @@ SignalFile.prototype.loadFiles = function () {
 };
 
 SignalFile.prototype.sortable = function () {
-	jQuery( this.previewsContainer ).unbind();
+	jQuery( this.input.previewsContainer ).unbind();
 
-	jQuery( this.previewsContainer ).sortable( {
+	jQuery( this.input.previewsContainer ).sortable( {
 		items: '.jet-form-builder-file-upload__file',
 		forcePlaceholderSize: true,
 	} ).bind( 'sortupdate', () => this.onSortCallback() );
@@ -125,7 +92,7 @@ SignalFile.prototype.onSortCallback = function ( e, ui ) {
 	const transfer  = new DataTransfer();
 	const [ input ] = this.input.nodes;
 
-	const removeButtons = this.previewsContainer.querySelectorAll(
+	const removeButtons = this.input.previewsContainer.querySelectorAll(
 		'.jet-form-builder-file-upload__file-remove',
 	);
 
@@ -154,7 +121,7 @@ SignalFile.prototype.addRemoveHandler = function ( preview ) {
 };
 
 SignalFile.prototype.getPreview = function ( file ) {
-	const removeButton = this.previewsContainer.querySelector(
+	const removeButton = this.input.previewsContainer.querySelector(
 		`[data-file-name="${ file.name }"]`,
 	);
 
@@ -172,7 +139,7 @@ SignalFile.prototype.getPreview = function ( file ) {
 
 SignalFile.prototype.createPreview = function ( file ) {
 	const url         = URL.createObjectURL( file );
-	let { innerHTML } = this.template;
+	let { innerHTML } = this.input.template;
 	innerHTML         = innerHTML.replace( '%file_url%', url );
 	innerHTML         = innerHTML.replace( '%file_name%', file.name );
 
@@ -213,12 +180,6 @@ SignalFile.prototype.removeFile = function ( { target } ) {
 	value.current = dt.files;
 };
 
-SignalFile.prototype.isSingle = function () {
-	return (
-		!this.settings?.max_files || this.settings.max_files <= 1
-	);
-};
-
 /**
  * @param fileName
  * @return {Element}
@@ -226,7 +187,7 @@ SignalFile.prototype.isSingle = function () {
 SignalFile.prototype.getFileNode = function ( fileName ) {
 	const attr = `data-file-name="${ fileName }"`;
 
-	const removeBtn = this.previewsContainer.querySelector(
+	const removeBtn = this.input.previewsContainer.querySelector(
 		`.jet-form-builder-file-upload__file-remove[${ attr }]`,
 	);
 

@@ -1,4 +1,5 @@
 import { createFileList, isFile } from './functions';
+import SignalFile from './signal';
 
 const { InputData } = window.JetFormBuilderAbstract;
 
@@ -21,8 +22,11 @@ const { InputData } = window.JetFormBuilderAbstract;
 function FileData() {
 	InputData.call( this );
 
-	this.isMultiple = false;
-	this.prevFiles  = null;
+	this.isMultiple        = false;
+	this.prevFiles         = null;
+	this.template          = null;
+	this.previewsContainer = null;
+	this.wrapper           = null;
 
 	this.isSupported = function ( node ) {
 		return isFile( node );
@@ -43,6 +47,16 @@ function FileData() {
 		InputData.prototype.setNode.call( this, node );
 
 		this.isMultiple = node.multiple;
+
+		this.wrapper           = node.closest(
+			'.jet-form-builder-file-upload',
+		);
+		this.previewsContainer = this.wrapper.querySelector(
+			'.jet-form-builder-file-upload__files',
+		);
+		this.template          = this.wrapper.
+			closest( '.field-type-media-field' ).
+			querySelector( '.jet-form-builder__preview-template' );
 	};
 
 	this.setValue = function () {
@@ -53,5 +67,18 @@ function FileData() {
 }
 
 FileData.prototype = Object.create( InputData.prototype );
+
+/**
+ * @type {HTMLElement}
+ */
+FileData.prototype.wrapper = null;
+/**
+ * @type {HTMLElement}
+ */
+FileData.prototype.previewsContainer = null;
+/**
+ * @type {HTMLTemplateElement}
+ */
+FileData.prototype.template = null;
 
 export default FileData;

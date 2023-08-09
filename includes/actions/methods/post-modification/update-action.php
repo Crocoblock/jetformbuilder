@@ -37,7 +37,7 @@ class Update_Action extends Base_Post_Action {
 
 		throw new Action_Exception(
 			'failed',
-			$this->inserted_id->get_error_message()
+			esc_html( $this->inserted_id->get_error_message() )
 		);
 	}
 }

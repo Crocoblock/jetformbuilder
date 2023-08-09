@@ -47,7 +47,10 @@ class Media_Field_Parser extends Field_Data_Parser {
 			/** @var Media_Block_Value $uploads */
 			$uploads = $uploader->upload();
 		} catch ( Upload_Exception $exception ) {
-			throw new Sanitize_Value_Exception( $exception->getMessage(), $this->name );
+			throw new Sanitize_Value_Exception(
+				esc_html( $exception->getMessage() ),
+				esc_html( $this->name )
+			);
 		}
 
 		$this->set_file( $uploads );

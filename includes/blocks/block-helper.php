@@ -19,19 +19,6 @@ if ( ! defined( 'WPINC' ) ) {
 class Block_Helper {
 
 	/**
-	 * @param array $source_block
-	 * @param \WP_Block|null $parent_block
-	 *
-	 * @return \WP_Block
-	 * @noinspection PhpMissingParamTypeInspection
-	 */
-	public static function get_wp_block_instance( array $source_block, $parent_block ): \WP_Block {
-		if ( is_null( $parent_block ) ) {
-
-		}
-	}
-
-	/**
 	 * @since 3.1.1
 	 *
 	 * @param $parsed_block

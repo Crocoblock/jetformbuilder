@@ -121,7 +121,11 @@ class Preset_Source_Post extends Base_Source {
 	 */
 	public function source__post_terms() {
 		if ( empty( $this->field_data['key'] ) ) {
-			throw new Preset_Exception( 'Undefined `key` in `field_data`', $this->field_data );
+			throw new Preset_Exception(
+				'Undefined `key` in `field_data`',
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$this->field_data
+			);
 		}
 
 		$value = wp_get_post_terms( $this->src()->ID, $this->field_data['key'] );

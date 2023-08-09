@@ -127,6 +127,7 @@ class Redirect_To_Page extends Base {
 		$to_url = $this->get_redirect_url();
 
 		if ( ! $to_url ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			throw new Action_Exception( 'failed', $this->settings );
 		}
 

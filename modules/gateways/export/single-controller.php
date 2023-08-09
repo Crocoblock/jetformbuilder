@@ -54,7 +54,7 @@ class Single_Controller extends Base_Export_Controller {
 
 		if ( ! $payment_id ) {
 			throw new \Exception(
-				__( 'Payment ID is empty', 'jet-form-builder' )
+				esc_html__( 'Payment ID is empty', 'jet-form-builder' )
 			);
 		}
 

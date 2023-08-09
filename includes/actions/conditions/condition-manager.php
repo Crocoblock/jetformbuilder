@@ -127,13 +127,17 @@ class Condition_Manager {
 						return;
 					case self::THROW_IF_ONE_WRONG:
 					default:
-						throw new Condition_Exception( $exception->getMessage(), ...$exception->get_additional() );
+						throw new Condition_Exception(
+							esc_html( $exception->getMessage() ),
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							...$exception->get_additional()
+						);
 				}
 			}
 		}
 
 		if ( 'or' === $this->operator ) {
-			throw new Condition_Exception( 'None of the conditions are met' );
+			throw new Condition_Exception( esc_html__( 'None of the conditions are met', 'jet-form-builder' ) );
 		}
 	}
 
@@ -168,16 +172,18 @@ class Condition_Manager {
 			case 'or':
 				if ( $is_success ) {
 					throw new Condition_Silence_Exception(
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						self::THROW_IF_ONE_MATCH,
-						...$additional
+						...$additional // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					);
 				}
 				break;
 			case 'and':
 				if ( ! $is_success ) {
 					throw new Condition_Silence_Exception(
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						self::THROW_IF_ONE_WRONG,
-						...$additional
+						...$additional // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					);
 				}
 				break;

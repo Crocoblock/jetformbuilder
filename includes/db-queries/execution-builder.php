@@ -90,7 +90,11 @@ class Execution_Builder {
 		$wpdb->insert( $model::table(), $insert_columns, $format );
 
 		if ( ! $wpdb->insert_id ) {
-			throw new Sql_Exception( "Something went wrong on insert into: {$model::table()}", $insert_columns );
+			throw new Sql_Exception(
+				esc_html( "Something went wrong on insert into: {$model::table()}" ),
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$insert_columns
+			);
 		}
 
 		$model->after_insert( $insert_columns );
@@ -120,9 +124,9 @@ class Execution_Builder {
 
 		if ( ! $wpdb->rows_affected ) {
 			throw new Sql_Exception(
-				"Something went wrong on update rows in: {$model::table()}",
-				$columns,
-				$where
+				esc_html( "Something went wrong on update rows in: {$model::table()}" ),
+				$columns, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$where // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			);
 		}
 
@@ -147,8 +151,8 @@ class Execution_Builder {
 
 		if ( ! $result ) {
 			throw new Sql_Exception(
-				"Something went wrong on delete rows in: {$model->table()}",
-				$where
+				esc_html( "Something went wrong on delete rows in: {$model->table()}" ),
+				$where // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			);
 		}
 
@@ -173,8 +177,8 @@ class Execution_Builder {
 
 		if ( ! $wpdb->rows_affected ) {
 			throw new Query_Builder_Exception(
-				"Something went wrong on delete rows in: {$view->table()}",
-				$where
+				esc_html( "Something went wrong on delete rows in: {$view->table()}" ),
+				$where // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			);
 		}
 
@@ -203,9 +207,9 @@ class Execution_Builder {
 
 		if ( ! $wpdb->rows_affected ) {
 			throw new Sql_Exception(
-				"Something went wrong on update rows in: {$view->table()}",
-				$query,
-				$wpdb->rows_affected
+				esc_html( "Something went wrong on update rows in: {$view->table()}" ),
+				$query, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$wpdb->rows_affected // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			);
 		}
 

@@ -89,7 +89,7 @@ abstract class Scenarios_Manager_Abstract {
 				$this->queried_scenario = $this->logic()->rep_get_item( $scenario );
 			}
 		} catch ( Repository_Exception $exception ) {
-			throw new Gateway_Exception( $exception->getMessage() );
+			throw new Gateway_Exception( esc_html( $exception->getMessage() ) );
 		}
 
 		return $this->queried_scenario;

@@ -28,7 +28,7 @@ class Multiple_Controller extends Base_Export_Controller {
 			! $this->record_columns
 		) {
 			throw new \Exception(
-				__( 'General or additional columns must be specified', 'jet-form-builder' )
+				esc_html__( 'General or additional columns must be specified', 'jet-form-builder' )
 			);
 		}
 

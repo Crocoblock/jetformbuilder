@@ -153,6 +153,7 @@ class Parser_Context {
 	 * @throws Parse_Exception
 	 */
 	public function validate_field( array $field ) {
+		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		if ( empty( $field['blockName'] ) ) {
 			throw new Parse_Exception( Module::EMPTY_BLOCK_ERROR );
 		}
@@ -167,6 +168,7 @@ class Parser_Context {
 		if ( ! Module::instance()->isset_parser( $field['blockName'] ) ) {
 			throw new Parse_Exception( Module::NOT_FIELD_HAS_INNER, $field['innerBlocks'] );
 		}
+		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -808,6 +810,7 @@ class Parser_Context {
 		}
 
 		if ( ! array_key_exists( $path[0], $this->parsers ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			throw new Repository_Exception( 'undefined_parser', $path );
 		}
 		if ( ! ( $this->parsers[ $path[0] ] instanceof Field_Data_Parser ) ) {

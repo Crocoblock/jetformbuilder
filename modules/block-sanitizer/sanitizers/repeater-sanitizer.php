@@ -36,7 +36,6 @@ class Repeater_Sanitizer implements Block_Data_Sanitizer_Interface, For_Blocks_S
 			return $parsed_block;
 		}
 
-
 		return $parsed_block;
 	}
 

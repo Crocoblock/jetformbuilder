@@ -34,7 +34,7 @@ class Post_Id_Property extends Base_Object_Property {
 			return false;
 		}
 		if ( empty( $value ) ) {
-			throw new Action_Exception( 'empty_field', $key );
+			throw new Action_Exception( 'empty_field', esc_html( $key ) );
 		}
 
 		$post = get_post( (int) $value );
@@ -50,7 +50,7 @@ class Post_Id_Property extends Base_Object_Property {
 			throw new Action_Exception(
 				'failed',
 				array(
-					'post' => $post,
+					'post' => $post, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				)
 			);
 		}

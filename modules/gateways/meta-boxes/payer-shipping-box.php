@@ -50,7 +50,11 @@ class Payer_Shipping_Box extends Base_List_Box {
 
 			return $payment['ship'] ?? array();
 		} catch ( Query_Builder_Exception $exception ) {
-			throw new Empty_Box_Exception( $exception->getMessage(), ...$exception->get_additional() );
+			throw new Empty_Box_Exception(
+				esc_html( $exception->getMessage() ),
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				...$exception->get_additional()
+			);
 		}
 	}
 }

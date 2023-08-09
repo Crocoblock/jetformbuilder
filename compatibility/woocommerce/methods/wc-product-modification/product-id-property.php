@@ -25,7 +25,7 @@ class Product_Id_Property extends Post_Id_Property {
 		try {
 			$this->value = new \WC_Product( $value );
 		} catch ( \Exception $exception ) {
-			throw new Action_Exception( $exception->getMessage() );
+			throw new Action_Exception( esc_html( $exception->getMessage() ) );
 		}
 	}
 

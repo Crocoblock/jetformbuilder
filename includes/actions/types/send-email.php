@@ -2,13 +2,13 @@
 
 namespace Jet_Form_Builder\Actions\Types;
 
-// If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Request\Request_Tools;
 
+// If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -254,10 +254,10 @@ To prevent this, enable this option.',
 			throw new Action_Exception(
 				'failed',
 				array(
-					'to'      => $this->get_mail_to(),
-					'subject' => $this->get_subject(),
-					'message' => $message,
-					'headers' => $this->get_headers(),
+					'to'      => $this->get_mail_to(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'subject' => $this->get_subject(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'message' => $message, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'headers' => $this->get_headers(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				)
 			);
 		}

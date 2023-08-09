@@ -83,7 +83,7 @@ abstract class Base_Migration implements Repository_Static_Item_It {
 		$this->profiler->on_up_end( $this, $timer_stop );
 
 		if ( $wpdb->last_error ) {
-			throw new Migration_Exception( $wpdb->last_error );
+			throw new Migration_Exception( esc_html( $wpdb->last_error ) );
 		}
 
 		$this->save( $time );
@@ -102,13 +102,13 @@ abstract class Base_Migration implements Repository_Static_Item_It {
 		$this->profiler->on_down_end( $this, $timer_stop );
 
 		if ( $wpdb->last_error ) {
-			throw new Migration_Exception( $wpdb->last_error );
+			throw new Migration_Exception( esc_html( $wpdb->last_error ) );
 		}
 
 		try {
 			$this->delete();
 		} catch ( Sql_Exception $exception ) {
-			throw new Migration_Exception( $exception->getMessage() );
+			throw new Migration_Exception( esc_html( $exception->getMessage() ) );
 		}
 	}
 

@@ -57,7 +57,11 @@ class Form_Record_Values_Box extends Base_List_Box {
 		try {
 			$record = Record_View::findById( $this->get_id() );
 		} catch ( Query_Builder_Exception $exception ) {
-			throw new Not_Found_Page_Exception( $exception->getMessage(), ...$exception->get_additional() );
+			throw new Not_Found_Page_Exception(
+				esc_html( $exception->getMessage() ),
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				...$exception->get_additional()
+			);
 		}
 
 		if ( $record['is_viewed'] ) {
@@ -75,7 +79,11 @@ class Form_Record_Values_Box extends Base_List_Box {
 			);
 			$record['is_viewed'] = 1;
 		} catch ( Sql_Exception $exception ) {
-			throw new Not_Found_Page_Exception( $exception->getMessage(), ...$exception->get_additional() );
+			throw new Not_Found_Page_Exception(
+				esc_html( $exception->getMessage() ),
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				...$exception->get_additional()
+			);
 		}
 
 		return $record;

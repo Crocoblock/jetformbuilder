@@ -87,7 +87,11 @@ abstract class Base_Meta_Box implements
 		try {
 			$this->prepare_dependencies();
 		} catch ( Sql_Exception $exception ) {
-			throw new Empty_Box_Exception( $exception->getMessage(), ...$exception->get_additional() );
+			throw new Empty_Box_Exception(
+				esc_html( $exception->getMessage() ),
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				...$exception->get_additional()
+			);
 		}
 
 		return array(

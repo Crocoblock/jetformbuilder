@@ -59,7 +59,7 @@ class Single_Controller extends Base_Export_Controller {
 
 		if ( ! $record_id ) {
 			throw new \Exception(
-				__( 'Record ID is empty', 'jet-form-builder' )
+				esc_html__( 'Record ID is empty', 'jet-form-builder' )
 			);
 		}
 

@@ -36,7 +36,7 @@ class Multiple_Controller extends Base_Export_Controller {
 
 		if ( ! $this->fields_columns && ! $this->extra_columns ) {
 			throw new \Exception(
-				__( 'Fields or additional columns must be specified', 'jet-form-builder' )
+				esc_html__( 'Fields or additional columns must be specified', 'jet-form-builder' )
 			);
 		}
 
@@ -158,7 +158,7 @@ class Multiple_Controller extends Base_Export_Controller {
 
 		if ( ! $form_id ) {
 			throw new \Exception(
-				__( 'Form ID is empty', 'jet-form-builder' )
+				esc_html__( 'Form ID is empty', 'jet-form-builder' )
 			);
 		}
 

@@ -1,10 +1,10 @@
-<?php
+<?php // phpcs:ignore Internal.Exception
 
 
 namespace Jet_Form_Builder\Actions\Events\Default_Process;
 
 use Jet_Form_Builder\Actions\Types\Base;
-use Jet_Form_Builder\Actions\Types\Save_Record;
+use JFB_Modules\Form_Record\Action_Types\Save_Record;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;

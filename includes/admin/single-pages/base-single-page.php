@@ -73,7 +73,9 @@ abstract class Base_Single_Page implements Admin_Dashboard_Page_It {
 	 */
 	public function set_id( int $id ): Base_Single_Page {
 		if ( ! $id ) {
-			throw new Not_Found_Page_Exception( 'Item id is empty: ' . $id . ' in ' . static::class );
+			throw new Not_Found_Page_Exception(
+				esc_html( 'Item id is empty: ' . $id . ' in ' . static::class )
+			);
 		}
 		$this->id = $id;
 

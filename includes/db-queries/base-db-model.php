@@ -259,7 +259,7 @@ abstract class Base_Db_Model {
 				$migration->install();
 			}
 		} catch ( Migration_Exception $exception ) {
-			throw new Sql_Exception( $exception->getMessage() );
+			throw new Sql_Exception( esc_html( $exception->getMessage() ) );
 		}
 	}
 
@@ -290,7 +290,7 @@ abstract class Base_Db_Model {
 		}
 		if ( ! current_user_can( 'manage_options' ) ) {
 			throw new Sql_Exception(
-				"Not enough capabilities for current user to delete rows in {$this::table()}"
+				esc_html( "Not enough capabilities for current user to delete rows in {$this::table()}" )
 			);
 		}
 	}

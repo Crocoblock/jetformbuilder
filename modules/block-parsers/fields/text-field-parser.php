@@ -21,7 +21,7 @@ class Text_Field_Parser extends Field_Data_Parser {
 
 		$type = $this->settings['field_type'] ?? 'text';
 
-		if ( $this->is_collected_error( 'empty_field' ) ) {
+		if ( empty( $this->value ) ) {
 			return;
 		}
 

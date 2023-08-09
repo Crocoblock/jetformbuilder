@@ -683,14 +683,26 @@ class Parser_Context {
 	public function iterate_errors(): \Generator {
 		/** @var Field_Data_Parser $parser */
 		foreach ( $this->iterate_parsers() as $parser ) {
-			yield $parser->get_name() => $parser->get_errors();
+			$errors = $parser->get_errors();
+
+			if ( ! $errors ) {
+				continue;
+			}
+
+			yield $parser->get_name() => $errors;
 		}
 	}
 
 	public function iterate_errors_list(): \Generator {
 		/** @var Field_Data_Parser $parser */
 		foreach ( $this->iterate_parsers_list() as $name => $parser ) {
-			yield $name => $parser->get_errors();
+			$errors = $parser->get_errors();
+
+			if ( ! $errors ) {
+				continue;
+			}
+
+			yield $name => $errors;
 		}
 	}
 

@@ -3,7 +3,12 @@ import Observable from '../Observable';
 window.JetFormBuilder = window.JetFormBuilder ?? {};
 
 function initForm( $scope ) {
-	const form       = $scope[ 0 ].querySelector( 'form' );
+	const form = $scope[ 0 ].querySelector( 'form.jet-form-builder' );
+
+	if ( !form ) {
+		return;
+	}
+
 	const observable = new Observable();
 
 	JetFormBuilder[ form.dataset.formId ] = observable;

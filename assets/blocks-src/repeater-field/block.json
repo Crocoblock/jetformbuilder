@@ -90,13 +90,10 @@
 		"className": {
 			"type": "string",
 			"default": ""
-		},
-		"isPreview": {
-			"type": "boolean",
-			"default": false
 		}
 	},
 	"providesContext": {
-		"jet-forms/repeater-field--name": "name"
+		"jet-forms/repeater-field--name": "name",
+		"jet-forms/repeater-field--manage-items": "manage_items_count"
 	}
 }

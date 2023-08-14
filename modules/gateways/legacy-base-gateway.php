@@ -144,7 +144,7 @@ abstract class Legacy_Base_Gateway {
 		$this->order_token = $this->query_order_token( $this->order_id, jet_fb_handler()->form_id );
 
 		if ( ! $this->order_token ) {
-			throw new Gateway_Exception( 'Invalid token', $this->order_token );
+			throw new Gateway_Exception( 'Invalid token', esc_html( $this->order_token ) );
 		}
 	}
 
@@ -203,7 +203,7 @@ abstract class Legacy_Base_Gateway {
 		);
 
 		if ( ! $this->price_field ) {
-			throw new Gateway_Exception( 'Invalid price field', $this->gateways_meta );
+			throw new Gateway_Exception( 'Invalid price field' );
 		}
 	}
 

@@ -36,7 +36,7 @@ class Product_Tax_Status_Property extends Base_Product_Property {
 		try {
 			$product->set_tax_status( $this->value );
 		} catch ( \WC_Data_Exception $exception ) {
-			throw new Action_Exception( $exception->getMessage() );
+			throw new Action_Exception( esc_html( $exception->getMessage() ) );
 		}
 	}
 

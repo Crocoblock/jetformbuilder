@@ -79,7 +79,7 @@ class Choice_Render extends Base {
 		 * Although this input will be hidden and has no LABEL, if it is not done,
 		 * the availability of other LABEL elements will be broken
 		 */
-		$this->block_type->get_field_id( $this->block_type->get_raw_field_name(), 'label' );
+		$this->block_type->get_field_id( '', 'label' );
 
 		return Choice_Control_Render::get_input_control(
 			$this->block_type,

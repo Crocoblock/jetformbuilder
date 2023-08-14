@@ -21,7 +21,7 @@ trait Form_Records_Pages_Trait {
 		/** @var Module $module */
 		$module = jet_form_builder()->module( Module::class );
 
-		return $module->get_url( "assets/build/js/admin/pages/{$this->slug()}{min}.js" );
+		return $module->get_url( "assets/build/js/admin/pages/{$this->slug()}.js" );
 	}
 
 }

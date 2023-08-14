@@ -211,7 +211,11 @@ abstract class View_Base implements Model_Dependencies_Interface {
 		$prepared = $this->prepare_row( $row );
 
 		if ( empty( $prepared ) ) {
-			throw new Query_Builder_Exception( $this->empty_message(), $row );
+			throw new Query_Builder_Exception(
+				esc_html( $this->empty_message() ),
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$row
+			);
 		}
 
 		return $prepared;
@@ -227,7 +231,11 @@ abstract class View_Base implements Model_Dependencies_Interface {
 		$prepared = $this->prepare_values( $values );
 
 		if ( empty( $prepared ) ) {
-			throw new Query_Builder_Exception( $this->empty_message(), $values );
+			throw new Query_Builder_Exception(
+				esc_html( $this->empty_message() ),
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$values
+			);
 		}
 
 		return $prepared;
@@ -438,7 +446,7 @@ abstract class View_Base implements Model_Dependencies_Interface {
 			$model->create();
 
 			foreach ( $model->get_migrations() as $migration ) {
-				throw new Query_Builder_Exception( get_class( $model ) . ' is not updated' );
+				throw new Query_Builder_Exception( esc_html( get_class( $model ) . ' is not updated' ) );
 			}
 		}
 	}

@@ -3,6 +3,8 @@
 
 namespace JFB_Modules\Advanced_Choices\Block_Types;
 
+use Jet_Form_Builder\Blocks\Types\Repeater_Row;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -15,11 +17,11 @@ if ( ! defined( 'WPINC' ) ) {
 trait Base_Choice_Item_Trait {
 
 	public function is_allowed_multiple(): bool {
-		return $this->block_context['jet-forms/choices-field--multiple'] ?? false;
+		return $this->block_context[ Choices_Field::CONTEXT_MULTIPLE ] ?? false;
 	}
 
 	public function is_checked_current(): bool {
-		$context = $this->block_context['jet-forms/choices-field--default'] ?? array();
+		$context = $this->block_context[ Choices_Field::CONTEXT_DEFAULT ] ?? array();
 
 		if ( ! is_array( $context ) ) {
 			return false;
@@ -29,21 +31,16 @@ trait Base_Choice_Item_Trait {
 	}
 
 	public function get_required_val(): bool {
-		return $this->block_context['jet-forms/choices-field--required'] ?? false;
+		return $this->block_context[ Choices_Field::CONTEXT_REQUIRED ] ?? false;
 	}
 
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
 	public function get_field_name( $name = '' ) {
-		$suffix = $this->is_allowed_multiple() ? '[]' : '';
-
-		if ( $name ) {
-			return parent::get_field_name( $name ) . $suffix;
-		}
-
-		return parent::get_field_name( $this->get_raw_field_name() ) . $suffix;
+		return $this->block_context[ Choices_Field::CONTEXT_NAME ] ?? '';
 	}
 
-	public function get_raw_field_name(): string {
-		return $this->block_context['jet-forms/choices-field--name'] ?? '';
+	public function get_field_id( $name = '', $for_element = 'input' ) {
+		return parent::get_field_id( $this->block_context[ Choices_Field::CONTEXT_RAW_NAME ], $for_element );
 	}
 
 }

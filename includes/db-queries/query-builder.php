@@ -234,7 +234,7 @@ class Query_Builder {
 		$rows = $this->db()->get_results( $this->sql(), ARRAY_A );
 
 		if ( empty( $rows ) ) {
-			throw new Query_Builder_Exception( "Empty {$this->view()->table()} rows" );
+			throw new Query_Builder_Exception( esc_html( "Empty {$this->view()->table()} rows" ) );
 		}
 
 		$response = array();
@@ -257,7 +257,7 @@ class Query_Builder {
 		$this->db()->query( $this->sql() );
 
 		if ( empty( $this->db()->last_result ) ) {
-			throw new Query_Builder_Exception( "Empty {$this->view()->table()} rows" );
+			throw new Query_Builder_Exception( esc_html( "Empty {$this->view()->table()} rows" ) );
 		}
 
 		foreach ( (array) $this->db()->last_result as $row ) {

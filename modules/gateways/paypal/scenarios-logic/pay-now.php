@@ -3,7 +3,7 @@
 
 namespace JFB_Modules\Gateways\Paypal\Scenarios_Logic;
 
-use Jet_Form_Builder\Actions\Types\Save_Record;
+use JFB_Modules\Form_Record\Action_Types\Save_Record;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -99,7 +99,8 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		$payment = $action->send_request();
 
 		if ( empty( $payment['id'] ) ) {
-			throw new Gateway_Exception( $payment['message'], $payment );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			throw new Gateway_Exception( esc_html( $payment['message'] ), $payment );
 		}
 
 		do_action( 'jet-form-builder/gateways/after-create', $action, $payment );
@@ -151,7 +152,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			);
 
 		} catch ( Sql_Exception $exception ) {
-			throw new Gateway_Exception( $exception->getMessage() );
+			throw new Gateway_Exception( esc_html( $exception->getMessage() ) );
 		}
 	}
 
@@ -179,7 +180,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			)->query()->query_one();
 
 		} catch ( Query_Builder_Exception $exception ) {
-			throw new Gateway_Exception( $exception->getMessage() );
+			throw new Gateway_Exception( esc_html( $exception->getMessage() ) );
 		}
 	}
 
@@ -207,7 +208,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		} catch ( Sql_Exception $exception ) {
 			Execution_Builder::instance()->transaction_rollback();
 
-			throw new Gateway_Exception( $exception->getMessage() );
+			throw new Gateway_Exception( esc_html( $exception->getMessage() ) );
 		}
 	}
 
@@ -234,7 +235,8 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		} catch ( Sql_Exception $exception ) {
 			return;
 		} finally {
-			throw new Gateway_Exception( 'Payment was voided', $payment['message'] );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			throw new Gateway_Exception( 'Payment was voided', $payment );
 		}
 	}
 

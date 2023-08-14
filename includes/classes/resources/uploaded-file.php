@@ -48,7 +48,7 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 		);
 
 		if ( ! empty( $upload['error'] ) ) {
-			throw new Upload_Exception( $upload['error'] );
+			throw new Upload_Exception( esc_html( $upload['error'] ) );
 		}
 
 		$this->set_from_array( $upload );
@@ -80,7 +80,7 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 		);
 
 		if ( is_wp_error( $attachment ) ) {
-			throw new Upload_Exception( $attachment->get_error_message() );
+			throw new Upload_Exception( esc_html( $attachment->get_error_message() ) );
 		}
 
 		wp_update_attachment_metadata(

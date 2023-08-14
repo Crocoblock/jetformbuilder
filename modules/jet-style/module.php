@@ -84,7 +84,7 @@ class Module implements
 	public function register_scripts() {
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets-build/js/editor/main{min}.js' ),
+			$this->get_url( 'assets-build/js/editor/main.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true

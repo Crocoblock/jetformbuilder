@@ -43,7 +43,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	}
 
 	public function remove_hooks() {
-		remove_action( 'admin_init', array( $this, 'add_modal_on_deactivate' ) );
+		remove_action( 'admin_footer', array( $this, 'add_modal_on_deactivate' ) );
 		remove_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
 
 		remove_filter(
@@ -129,7 +129,7 @@ For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</
 
 		wp_enqueue_script(
 			$handle,
-			$this->get_url( 'assets/build/js/plugins{min}.js' ),
+			$this->get_url( 'assets/build/js/plugins.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true

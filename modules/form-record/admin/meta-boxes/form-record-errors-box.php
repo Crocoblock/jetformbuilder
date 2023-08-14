@@ -51,7 +51,11 @@ class Form_Record_Errors_Box extends Base_Table_Box {
 			->query_all();
 
 		} catch ( Query_Builder_Exception $exception ) {
-			throw new Empty_Box_Exception( $exception->getMessage(), ...$exception->get_additional() );
+			throw new Empty_Box_Exception(
+				esc_html( $exception->getMessage() ),
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				...$exception->get_additional()
+			);
 		}
 	}
 }

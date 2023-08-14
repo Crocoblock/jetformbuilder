@@ -36,7 +36,11 @@ class Payment_Actions_Box extends Base_List_Box {
 		try {
 			return Payment_For_Export_View::findById( $this->get_id() );
 		} catch ( Query_Builder_Exception $exception ) {
-			throw new Not_Found_Page_Exception( $exception->getMessage(), ...$exception->get_additional() );
+			throw new Not_Found_Page_Exception(
+				esc_html( $exception->getMessage() ),
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				...$exception->get_additional()
+			);
 		}
 	}
 

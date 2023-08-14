@@ -3,8 +3,11 @@
 
 namespace JFB_Modules\Block_Sanitizer;
 
+use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_It;
-use Jet_Form_Builder\Blocks\Block_Helper;
+use JFB_Modules\Block_Sanitizer\Interfaces\Block_Context_Sanitizer_Interface;
+use JFB_Modules\Block_Sanitizer\Interfaces\Block_Data_Sanitizer_Interface;
+use JFB_Modules\Block_Sanitizer\Interfaces\Is_Supported_Sanitizer_Interface;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -27,15 +30,15 @@ if ( ! defined( 'WPINC' ) ) {
  * Class Module
  * @package Jet_Form_Builder\Blocks\Block_Sanitizer
  */
-final class Module implements Base_Module_It {
+final class Module implements Base_Module_It, Base_Module_After_Install_It {
 
 	/**
-	 * @var Base_Block_Sanitizer[]
+	 * @var Is_Supported_Sanitizer_Interface[]
 	 */
 	private $sanitizers = array();
 
 	public function condition(): bool {
-		return true;
+		return false;
 	}
 
 	public function rep_item_id() {
@@ -43,55 +46,129 @@ final class Module implements Base_Module_It {
 	}
 
 	public function init_hooks() {
+		/**
+		 * Modify the blocks that inside the form
+		 */
 		add_filter(
-			'render_block_data',
-			array( $this, 'apply_blocks_data' ),
-			10,
-			2
+			'jet-form-builder/before-start-form',
+			array( $this, 'init_form_blocks_hooks' )
+		);
+		add_filter(
+			'jet-form-builder/after-end-form',
+			array( $this, 'remove_form_blocks_hooks' )
 		);
 	}
 
 	public function remove_hooks() {
 		remove_filter(
-			'render_block_data',
-			array( $this, 'apply_blocks_data' )
+			'jet-form-builder/before-start-form',
+			array( $this, 'init_form_blocks_hooks' )
+		);
+		remove_filter(
+			'jet-form-builder/after-end-form',
+			array( $this, 'remove_form_blocks_hooks' )
 		);
 	}
 
-	public function apply_blocks_data( array $block_data, array $initial_block ): array {
-		$name = $initial_block['blockName'] ?? '';
+	public function init_form_blocks_hooks( $markup ) {
+		add_filter(
+			'render_block_data',
+			array( $this, 'blocks_data_handler' ),
+			10,
+			3
+		);
+		add_filter(
+			'render_block_context',
+			array( $this, 'blocks_context_handler' ),
+			10,
+			3
+		);
 
-		// is has 'jet-forms/' namespace in 'blockName' property
-		if ( ! is_string( $name ) || ! Block_Helper::is_field( $name ) ) {
+		return $markup;
+	}
+
+	public function remove_form_blocks_hooks( $markup ) {
+		remove_filter(
+			'render_block_data',
+			array( $this, 'blocks_data_handler' )
+		);
+		remove_filter(
+			'render_block_context',
+			array( $this, 'blocks_context_handler' )
+		);
+
+		return $markup;
+	}
+
+	public function on_install() {
+		$this->register( new Sanitizers\Repeater_Sanitizer() );
+	}
+
+	public function on_uninstall() {
+		$this->unregister( new Sanitizers\Repeater_Sanitizer() );
+	}
+
+	public function blocks_data_handler( array $block_data, array $initial_block, $parent_block ): array {
+		if ( ! is_null( $parent_block ) ) {
 			return $block_data;
 		}
 
-		$block_type = \WP_Block_Type_Registry::get_instance()->get_registered( $name );
+		return $this->apply_blocks_data( $block_data, $initial_block, $parent_block );
+	}
 
-		if ( ! ( $block_type instanceof \WP_Block_Type ) ) {
-			return $block_data;
+	public function blocks_context_handler( array $block_context, array $initial_block, $parent_block ): array {
+		if ( ! is_null( $parent_block ) ) {
+			return $block_context;
 		}
 
-		$name = Block_Helper::delete_namespace( $name );
+		return $this->apply_blocks_context( $block_context, $initial_block, $parent_block );
+	}
 
-		foreach ( $this->sanitizers as $item ) {
-			if ( ! in_array( $name, $item->for_blocks(), true ) ) {
+	/**
+	 * @param array $block_data
+	 * @param array $initial_block
+	 * @param null|\WP_Block $parent_block
+	 *
+	 * @return array
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
+	public function apply_blocks_data( array $block_data, array $initial_block, $parent_block ): array {
+		foreach ( $this->iterate_sanitizers( $block_data ) as $item ) {
+			if ( ! ( $item instanceof Block_Data_Sanitizer_Interface ) ) {
 				continue;
 			}
-
-			$block_data = $item->apply_data( $block_data );
+			$block_data = $item->apply_block_data( $block_data, $initial_block, $parent_block );
 		}
 
 		return $block_data;
 	}
 
-	public function register( Base_Block_Sanitizer $item ): Module {
+	/**
+	 * @param array $block_context
+	 * @param array $initial_block
+	 * @param null|\WP_Block $parent_block
+	 *
+	 * @return array
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
+	public function apply_blocks_context( array $block_context, array $initial_block, $parent_block ): array {
+		foreach ( $this->iterate_sanitizers( $initial_block ) as $item ) {
+			if ( ! ( $item instanceof Block_Context_Sanitizer_Interface ) ) {
+				continue;
+			}
+			$block_context = $item->apply_block_context( $block_context, $initial_block, $parent_block );
+		}
+
+		return $block_context;
+	}
+
+	public function register( Is_Supported_Sanitizer_Interface $item ): Module {
 		$this->sanitizers[] = $item;
 
 		return $this;
 	}
 
-	public function unregister( Base_Block_Sanitizer $item ): Module {
+	public function unregister( Is_Supported_Sanitizer_Interface $item ): Module {
 		foreach ( $this->sanitizers as $index => $sanitizer ) {
 			if ( get_class( $sanitizer ) !== get_class( $item ) ) {
 				continue;
@@ -104,4 +181,13 @@ final class Module implements Base_Module_It {
 		return $this;
 	}
 
+	protected function iterate_sanitizers( array $parsed_block ): \Generator {
+		foreach ( $this->sanitizers as $item ) {
+			if ( ! $item->is_supported( $parsed_block ) ) {
+				continue;
+			}
+
+			yield $item;
+		}
+	}
 }

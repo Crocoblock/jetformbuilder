@@ -11,9 +11,8 @@ function MaxFileSizeHtmlAttr() {
 	this.setInput = function ( input ) {
 		MaxFilesHtmlAttr.prototype.setInput.call( this, input );
 
-		const { previewsContainer } = input.callable;
-		const { max_size = 1 }      = JSON.parse(
-			previewsContainer.dataset.args,
+		const { max_size = 1 } = JSON.parse(
+			input.previewsContainer.dataset.args,
 		);
 
 		this.initial = +max_size;

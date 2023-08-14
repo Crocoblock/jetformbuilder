@@ -55,6 +55,13 @@ class Parser_Context {
 	 */
 	public $parsers = array();
 
+	/**
+	 * Available only while rendering form. Used for
+	 *
+	 * @var Field_Data_Parser
+	 */
+	private $current_parser;
+
 	public function apply( $fields = null ) {
 		if ( is_array( $fields ) ) {
 			$this->set_parsers( $fields );
@@ -146,6 +153,7 @@ class Parser_Context {
 	 * @throws Parse_Exception
 	 */
 	public function validate_field( array $field ) {
+		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		if ( empty( $field['blockName'] ) ) {
 			throw new Parse_Exception( Module::EMPTY_BLOCK_ERROR );
 		}
@@ -160,6 +168,7 @@ class Parser_Context {
 		if ( ! Module::instance()->isset_parser( $field['blockName'] ) ) {
 			throw new Parse_Exception( Module::NOT_FIELD_HAS_INNER, $field['innerBlocks'] );
 		}
+		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -642,6 +651,63 @@ class Parser_Context {
 		}
 	}
 
+	public function is_collected_error( $name, string $error_name ): bool {
+		try {
+			$parser = $this->resolve_parser( $name );
+		} catch ( Silence_Exception $exception ) {
+			return false;
+		}
+
+		return $parser->is_collected_error( $error_name );
+	}
+
+	public function get_errors( $name ): array {
+		try {
+			$parser = $this->resolve_parser( $name );
+		} catch ( Silence_Exception $exception ) {
+			return array();
+		}
+
+		return $parser->get_errors();
+	}
+
+
+	public function collect_error( $name, $error_name ) {
+		try {
+			$parser = $this->resolve_parser( $name );
+		} catch ( Silence_Exception $exception ) {
+			return;
+		}
+
+		$parser->collect_error( $error_name );
+	}
+
+	public function iterate_errors(): \Generator {
+		/** @var Field_Data_Parser $parser */
+		foreach ( $this->iterate_parsers() as $parser ) {
+			$errors = $parser->get_errors();
+
+			if ( ! $errors ) {
+				continue;
+			}
+
+			yield $parser->get_name() => $errors;
+		}
+	}
+
+	public function iterate_errors_list(): \Generator {
+		/** @var Field_Data_Parser $parser */
+		foreach ( $this->iterate_parsers_list() as $name => $parser ) {
+			$errors = $parser->get_errors();
+
+			if ( ! $errors ) {
+				continue;
+			}
+
+			yield $name => $errors;
+		}
+	}
+
 
 	public function remove( $name ) {
 		$real_path = Array_Tools::path( $name );
@@ -744,6 +810,7 @@ class Parser_Context {
 		}
 
 		if ( ! array_key_exists( $path[0], $this->parsers ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			throw new Repository_Exception( 'undefined_parser', $path );
 		}
 		if ( ! ( $this->parsers[ $path[0] ] instanceof Field_Data_Parser ) ) {

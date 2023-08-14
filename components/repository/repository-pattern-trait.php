@@ -1,9 +1,7 @@
-<?php
-
+<?php // phpcs:ignore Internal.Exception
 
 namespace JFB_Components\Repository;
 
-use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 
 // If this file is called directly, abort.
@@ -47,6 +45,7 @@ trait Repository_Pattern_Trait {
 						esc_html( $exception->getMessage() ),
 						'2.0.0'
 					);
+					break;
 			}
 		}
 

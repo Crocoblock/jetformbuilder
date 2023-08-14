@@ -26,8 +26,8 @@ class Update_Action extends Base_Modifier_Action {
 
 		if ( is_wp_error( $response ) ) {
 			throw new Action_Exception(
-				$response->get_error_message(),
-				$response->get_error_data()
+				esc_html( $response->get_error_message() ),
+				esc_html( $response->get_error_data() )
 			);
 		}
 	}

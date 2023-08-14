@@ -158,7 +158,11 @@ class Controller extends \Jet_Form_Builder\Gateways\Base_Scenario_Gateway {
 	 */
 	public static function get_token_with_credits( $client_id, $secret ) {
 		if ( ! $client_id || ! $secret ) {
-			throw new Gateway_Exception( 'Empty `client_id` or `secret_key`.', array( $client_id, $secret ) );
+			throw new Gateway_Exception(
+				'Empty `client_id` or `secret_key`.',
+				esc_html( $client_id ),
+				esc_html( $secret )
+			);
 		}
 		$hash  = 'jet_fb_pp_token_' . md5( $client_id . $secret );
 		$token = get_transient( $hash );
@@ -173,7 +177,8 @@ class Controller extends \Jet_Form_Builder\Gateways\Base_Scenario_Gateway {
 		$response = $request->send_request();
 
 		if ( empty( $response['access_token'] ) ) {
-			throw new Gateway_Exception( $response['error_description'], $response, $request->get_request_args() );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			throw new Gateway_Exception( esc_html( $response['error_description'] ), $response, $request->get_request_args() );
 		}
 
 		$token = $response['access_token'];

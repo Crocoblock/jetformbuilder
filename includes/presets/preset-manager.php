@@ -204,7 +204,9 @@ class Preset_Manager {
 	 */
 	public function get_source_by_type( $type ): Sources\Base_Source {
 		if ( ! isset( $this->_source_types[ $type ] ) ) {
-			throw new Preset_Exception( "Undefined source type: {$type}" );
+			throw new Preset_Exception(
+				esc_html( "Undefined source type: {$type}" )
+			);
 		}
 
 		return clone $this->_source_types[ $type ];

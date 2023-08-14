@@ -19,6 +19,29 @@ if ( ! defined( 'WPINC' ) ) {
 class Block_Helper {
 
 	/**
+	 * @since 3.1.1
+	 *
+	 * @param $parsed_block
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
+	public static function resolve_name( $parsed_block ): string {
+		$name = is_string( $parsed_block ) ? $parsed_block : $parsed_block['blockName'] ?? '';
+
+		// is has 'jet-forms/' namespace in 'blockName' property
+		if ( ! is_string( $name ) || ! self::is_field( $name ) ) {
+			throw new \Exception( 'empty_or_not_field' );
+		}
+
+		if ( ! \WP_Block_Type_Registry::get_instance()->is_registered( $name ) ) {
+			throw new \Exception( 'not_block_type' );
+		}
+
+		return self::delete_namespace( $name );
+	}
+
+	/**
 	 * @param $value
 	 * @param $blocks
 	 *

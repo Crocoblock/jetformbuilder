@@ -121,7 +121,7 @@ class Getresponse extends Integration_Base_Action {
 			throw new Action_Exception(
 				'empty_field',
 				array(
-					'email' => $body_args['email'],
+					'email' => esc_html( $body_args['email'] ),
 				)
 			);
 		}
@@ -139,7 +139,11 @@ class Getresponse extends Integration_Base_Action {
 
 		// Error response
 		if ( isset( $response['httpStatus'] ) && isset( $response['code'] ) ) {
-			throw new Action_Exception( "derror|{$response['message']}", $response );
+			throw new Action_Exception(
+				esc_html( "derror|{$response['message']}" ),
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$response
+			);
 		}
 	}
 

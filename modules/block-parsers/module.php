@@ -2,8 +2,12 @@
 
 namespace JFB_Modules\Block_Parsers;
 
+use Jet_Form_Builder\Actions\Events\Bad_Request\Bad_Request_Event;
+use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Live_Form;
+use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
 use Jet_Form_Builder\Request\Parser_Context;
 use Jet_Form_Builder\Request\Request_Tools;
 use JFB_Components\Module\Base_Module_Dir_It;
@@ -90,6 +94,9 @@ final class Module implements
 		);
 	}
 
+	/**
+	 * @throws Action_Exception|Request_Exception
+	 */
 	public function init_request() {
 		Live_Form::instance()
 				->set_form_id( jet_fb_handler()->get_form_id() )
@@ -116,6 +123,20 @@ final class Module implements
 			),
 			array()
 		);
+
+		$errors = iterator_to_array( $this->get_context()->iterate_errors_list() );
+
+		if ( empty( $errors ) ) {
+			return;
+		}
+
+		// log errors
+		new Sanitize_Value_Exception( 'has_errors', $errors );
+
+		jet_fb_events()->execute( Bad_Request_Event::class );
+
+		// break the form submission
+		throw new Request_Exception( 'validation_failed' );
 	}
 
 	/**

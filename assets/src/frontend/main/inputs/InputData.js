@@ -201,8 +201,6 @@ InputData.prototype.onObserve = function () {
 	this.callable = getSignal( node, this );
 	this.callable.setInput( this );
 
-	setAttrs( this );
-
 	this.reporting = createReport( this );
 
 	this.loading.watch( () => this.onChangeLoading() );

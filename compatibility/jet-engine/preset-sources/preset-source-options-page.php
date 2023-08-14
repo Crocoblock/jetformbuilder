@@ -32,7 +32,12 @@ class Preset_Source_Options_Page extends Base_Source {
 		$item = jet_engine()->options_pages->registered_pages[ $this->page ] ?? false;
 
 		if ( ! $item ) {
-			throw new Preset_Exception( "Undefined option page: {$this->page}" );
+			throw new Preset_Exception(
+				sprintf(
+					'Undefined option page: %s',
+					esc_html( $this->page )
+				)
+			);
 		}
 
 		return $item;

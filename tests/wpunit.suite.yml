@@ -7,16 +7,6 @@ modules:
     enabled:
         - WPLoader
         - \Helper\Wpunit
-    config:
-        WPLoader:
-            title: "Codeception Test"
-            wpRootFolder: '%WP_ROOT%'
-            dbName: '%DB_NAME%'
-            dbHost: '%DB_HOST%'
-            dbUser: '%DB_USER%'
-            dbPassword: '%DB_PASSWORD%'
-            tablePrefix: wp_
-            domain: '%WP_DOMAIN%'
-            adminEmail: 'admin@%WP_DOMAIN%'
-            plugins: ['jetformbuilder/jet-form-builder.php']
-            activatePlugins: ['jetformbuilder/jet-form-builder.php']
+    disabled:
+        - WPDb
+        - WPBrowser

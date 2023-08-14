@@ -124,7 +124,7 @@
 			]
 		},
 		"jetCustomWrapperLayout": true,
-		"__experimentalLayout": {
+		"layout": {
 			"allowSwitching": false,
 			"allowInheriting": false,
 			"allowVerticalAlignment": false,
@@ -156,7 +156,9 @@
 		"jet-forms/choices-field--default": "default"
 	},
 	"usesContext": [
-		"jet-forms/repeater-field--name"
+		"jet-forms/repeater-field--name",
+		"jet-forms/repeater-row--default",
+		"jet-forms/repeater-row--current-index"
 	],
 	"viewScript": "jet-fb-advanced-choices",
 	"style": "jet-fb-advanced-choices"

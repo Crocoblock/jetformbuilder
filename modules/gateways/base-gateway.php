@@ -203,7 +203,7 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 			$default_val = $option['default'] ?? false;
 
 			if ( $is_required && ! $this->current_gateway( $name ) && false === $default_val ) {
-				throw new Gateway_Exception( 'Invalid gateway options', $name );
+				throw new Gateway_Exception( 'Invalid gateway options', esc_html( $name ) );
 			}
 
 			$this->options[ $name ] = $this->isset_current_gateway( $name )

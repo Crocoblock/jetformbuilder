@@ -6,6 +6,7 @@ namespace JFB_Modules\Advanced_Choices;
 use Jet_Form_Builder\Blocks\Module as BlocksModule;
 use JFB_Modules\Advanced_Choices\Block_Parsers\Choices_Field_Parser;
 use JFB_Modules\Advanced_Choices\Block_Sanitizers\Choices_Default_Value_Sanitizer;
+use JFB_Modules\Advanced_Choices\Block_Sanitizers\Choice_Single_Context_Sanitizer;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
@@ -53,12 +54,9 @@ class Module implements
 	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function on_install() {
-		/** @var Block_Sanitizer\Module $sanitizer */
-		$sanitizer = jet_form_builder()->module( 'block-sanitizer' );
 		/** @var Block_Parsers\Module $parsers */
 		$parsers = jet_form_builder()->module( 'block-parsers' );
 
-		$sanitizer->register( new Choices_Default_Value_Sanitizer() );
 		$parsers->install( new Choices_Field_Parser() );
 	}
 
@@ -66,12 +64,9 @@ class Module implements
 	 * @noinspection PhpUnhandledExceptionInspection
 	 */
 	public function on_uninstall() {
-		/** @var Block_Sanitizer\Module $sanitizer */
-		$sanitizer = jet_form_builder()->module( 'block-sanitizer' );
 		/** @var Block_Parsers\Module $parsers */
 		$parsers = jet_form_builder()->module( 'block-parsers' );
 
-		$sanitizer->unregister( new Choices_Default_Value_Sanitizer() );
 		$parsers->uninstall( new Choices_Field_Parser() );
 	}
 
@@ -85,6 +80,15 @@ class Module implements
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
+
+		// compatibility with WordPress <= 6.2
+		if ( ! function_exists( 'wp_is_development_mode' ) ) {
+			add_filter(
+				'block_type_metadata',
+				array( $this, 'migrate_block_supports' ),
+				0
+			);
+		}
 	}
 
 	public function remove_hooks() {
@@ -97,6 +101,14 @@ class Module implements
 
 		remove_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		remove_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
+
+		if ( ! function_exists( 'wp_is_development_mode' ) ) {
+			remove_filter(
+				'block_type_metadata',
+				array( $this, 'migrate_block_supports' ),
+				0
+			);
+		}
 	}
 
 	public function add_blocks_types( array $block_types ): array {
@@ -115,7 +127,7 @@ class Module implements
 	public function register_frontend_scripts() {
 		wp_register_script(
 			$this->get_handle(),
-			$this->get_url( 'assets-build/js/frontend/choices.field{min}.js' ),
+			$this->get_url( 'assets-build/js/frontend/choices.field.js' ),
 			array(
 				BlocksModule::MAIN_SCRIPT_HANDLE,
 			),
@@ -132,8 +144,8 @@ class Module implements
 
 	public function enqueue_admin_assets() {
 		$path = jet_form_builder()->has_module( 'jet-style' )
-			? 'assets-build/js/editor/main{min}.js'
-			: 'assets-build/js/editor-not-supported/main{min}.js';
+			? 'assets-build/js/editor/main.js'
+			: 'assets-build/js/editor-not-supported/main.js';
 
 		wp_enqueue_script(
 			$this->get_handle(),
@@ -149,5 +161,21 @@ class Module implements
 			array(),
 			jet_form_builder()->get_version()
 		);
+	}
+
+	public function migrate_block_supports( array $metadata ): array {
+		$need_to_migrate = array(
+			'jet-forms/choices-field',
+			'jet-forms/choice',
+		);
+
+		if ( ! in_array( $metadata['name'], $need_to_migrate, true ) ) {
+			return $metadata;
+		}
+
+		$metadata['supports']['__experimentalLayout'] = $metadata['supports']['layout'];
+		unset( $metadata['supports']['layout'] );
+
+		return $metadata;
 	}
 }

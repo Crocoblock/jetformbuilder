@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:ignore Internal.Exception
 
 namespace Jet_Form_Builder\Actions\Types;
 
@@ -299,6 +299,7 @@ class Mailchimp extends Integration_Base_Action {
 					break;
 				default:
 					$body_args['merge_fields'][ $param ] = $this->request[ $field ];
+					break;
 			}
 		}
 

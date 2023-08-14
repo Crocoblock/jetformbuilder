@@ -46,6 +46,10 @@ class Builder_Helper {
 			$object = get_post( $object_id );
 		}
 
+		if ( ! is_object( $object ) ) {
+			return '';
+		}
+
 		$classes = array(
 			'jet-form-builder__field-template',
 			'jet-listing-dynamic-post-' . $object_id,

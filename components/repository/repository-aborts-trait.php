@@ -1,5 +1,4 @@
-<?php
-
+<?php // phpcs:ignore Internal.Exception
 
 namespace JFB_Components\Repository;
 
@@ -10,9 +9,9 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
-
 trait Repository_Aborts_Trait {
+
+	// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
 
 	/**
 	 * @throws Repository_Exception
@@ -46,5 +45,7 @@ trait Repository_Aborts_Trait {
 	final public function _rep_abort_and_die_code() {
 		return 3;
 	}
+
+	// phpcs:enable PSR2.Methods.MethodDeclaration.Underscore
 
 }

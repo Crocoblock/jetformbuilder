@@ -16,10 +16,23 @@ class Text_Field_Parser extends Field_Data_Parser {
 		return 'text-field';
 	}
 
-	protected function has_error(): bool {
+	protected function check_response() {
+		parent::check_response();
+
 		$type = $this->settings['field_type'] ?? 'text';
 
-		return ( 'email' === $type && ! is_email( $this->value ) && parent::has_error() );
+		if ( empty( $this->value ) ) {
+			return;
+		}
+
+		switch ( $type ) {
+			case 'email':
+				if ( is_email( $this->value ) ) {
+					break;
+				}
+				$this->collect_error( 'invalid_email' );
+				break;
+		}
 	}
 
 }

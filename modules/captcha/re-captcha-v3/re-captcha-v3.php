@@ -47,8 +47,8 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options implements
 		} catch ( Gateway_Exception $exception ) {
 			throw new Spam_Exception(
 				'captcha_failed',
-				$exception->getMessage(),
-				...$exception->get_additional()
+				$exception->getMessage(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				...$exception->get_additional() // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			);
 		}
 	}
@@ -153,7 +153,7 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options implements
 	public function enqueue_editor_script() {
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->module()->get_url( 'assets-build/js/re-captcha-v3/editor{min}.js' ),
+			$this->module()->get_url( 'assets-build/js/re-captcha-v3/editor.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true
@@ -168,7 +168,7 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options implements
 		}
 		wp_register_script(
 			$handle,
-			$this->module()->get_url( 'assets-build/js/re-captcha-v3/frontend{min}.js' ),
+			$this->module()->get_url( 'assets-build/js/re-captcha-v3/frontend.js' ),
 			array( 'jet-plugins' ),
 			jet_form_builder()->get_version(),
 			true

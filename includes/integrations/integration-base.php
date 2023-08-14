@@ -56,7 +56,7 @@ abstract class Integration_Base {
 		if ( ! in_array( $code, $this->success_codes(), true ) ) {
 			$message = wp_remote_retrieve_response_message( $response );
 
-			throw new Silence_Exception( $message );
+			throw new Silence_Exception( esc_html( $message ) );
 		}
 	}
 

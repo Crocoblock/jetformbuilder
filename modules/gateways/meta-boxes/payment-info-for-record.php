@@ -48,7 +48,11 @@ class Payment_Info_For_Record extends Payment_Details_Box {
 				)
 			)->query()->query_col();
 		} catch ( Query_Builder_Exception $exception ) {
-			throw new Empty_Box_Exception( $exception->getMessage(), ...$exception->get_additional() );
+			throw new Empty_Box_Exception(
+				esc_html( $exception->getMessage() ),
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				...$exception->get_additional()
+			);
 		}
 
 		return $payment_id;

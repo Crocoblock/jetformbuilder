@@ -75,7 +75,7 @@ class Module implements
 	public function register_editor_scripts() {
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets-build/js/editor/main{min}.js' ),
+			$this->get_url( 'assets-build/js/editor/main.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true
@@ -85,7 +85,7 @@ class Module implements
 	public function register_frontend_scripts() {
 		wp_register_script(
 			$this->get_handle(),
-			$this->get_url( 'assets-build/js/frontend/main{min}.js' ),
+			$this->get_url( 'assets-build/js/frontend/main.js' ),
 			array( \Jet_Form_Builder\Blocks\Module::MAIN_SCRIPT_HANDLE ),
 			jet_form_builder()->get_version(),
 			true

@@ -63,7 +63,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	public function register_scripts() {
 		wp_register_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/frontend{min}.js' ),
+			$this->get_url( 'assets/build/js/frontend.js' ),
 			array(),
 			Plugin::instance()->get_version(),
 			true

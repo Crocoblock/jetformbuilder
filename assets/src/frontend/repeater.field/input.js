@@ -88,18 +88,9 @@ function RepeaterData() {
 		this.rawName   = this.name;
 		this.inputType = 'repeater';
 
-		try {
-			const settings = JSON.parse( node.dataset.settings );
-
-			this.manageItems = settings?.manageItems || 'manually';
-			this.calcType    = settings?.calcType || 'default';
-			this.itemsField  = settings?.itemsField;
-		}
-		catch ( error ) {
-			this.calcType    = 'default';
-			this.manageItems = 'manually';
-			// silence
-		}
+		this.manageItems = node.dataset?.manageItems || 'manually';
+		this.calcType    = node.dataset?.calcType || 'default';
+		this.itemsField  = node.dataset?.itemsField;
 
 		this.isManualCount = (
 			!this.itemsField || 'manually' === this.manageItems

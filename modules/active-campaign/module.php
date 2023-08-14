@@ -90,7 +90,7 @@ final class Module implements
 	public function editor_assets() {
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/editor{min}.js' ),
+			$this->get_url( 'assets/build/js/editor.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true
@@ -100,7 +100,7 @@ final class Module implements
 	public function admin_settings_assets() {
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/admin/jfb-settings{min}.js' ),
+			$this->get_url( 'assets/build/js/admin/jfb-settings.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true

@@ -37,7 +37,10 @@ class Call_Webhook extends Base {
 		$webhook_url = ! empty( $this->settings['webhook_url'] ) ? trim( $this->settings['webhook_url'] ) : false;
 
 		if ( ! $webhook_url ) {
-			throw new Action_Exception( 'failed', $this->settings );
+			throw new Action_Exception(
+				'failed',
+				esc_html__( 'Empty webhook url', 'jet-form-builder' )
+			);
 		}
 
 		$args = array(
@@ -71,7 +74,11 @@ class Call_Webhook extends Base {
 		$response = wp_remote_post( $webhook_url, $args );
 
 		if ( $response instanceof \WP_Error ) {
-			throw new Action_Exception( 'failed', $response );
+			throw new Action_Exception(
+				'failed',
+				esc_html__( 'Remote request returned error', 'jet-form-builder' ),
+				$response // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			);
 		}
 		/**
 		 * Fires whe webhook response received

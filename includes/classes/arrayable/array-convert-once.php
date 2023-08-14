@@ -98,7 +98,7 @@ class Array_Convert_Once {
 			return $this;
 		}
 
-		throw new Array_Continue_Exception( 'Undefined item: ' . $slug );
+		throw new Array_Continue_Exception( esc_html( 'Undefined item: ' . $slug ) );
 	}
 
 

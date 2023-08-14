@@ -229,6 +229,7 @@ export default {
 				dataType: 'json',
 				data: {
 					action: `jfb_addon_${ self.actionPlugin }_action`,
+					nonce: window.JetFBPageConfig.nonce,
 					data: {
 						plugin: self.addonData[ 'slug' ],
 					},

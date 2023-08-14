@@ -126,7 +126,9 @@ class Request_Handler {
 	 * @return mixed
 	 */
 	public function get_attr(
-		$field_name, $attr_name, $if_not_exist = false
+		$field_name,
+		$attr_name,
+		$if_not_exist = false
 	) {
 		$attr = jet_fb_context()->get_setting( $attr_name, $field_name );
 
@@ -144,7 +146,9 @@ class Request_Handler {
 	 * Use jfb_request_handler()->get_attr instead
 	 */
 	public function get_field_attrs_by_name(
-		$field_name, $attr_name = '', $if_empty = false
+		$field_name,
+		$attr_name = '',
+		$if_empty = false
 	) {
 		return $this->get_attr( $field_name, $attr_name, $if_empty );
 	}

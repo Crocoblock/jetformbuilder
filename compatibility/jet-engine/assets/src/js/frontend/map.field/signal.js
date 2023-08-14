@@ -262,7 +262,7 @@ SignalMapField.prototype.render = function () {
 		this.mapDefaults = {
 			...this.mapDefaults,
 			center: this.input.value.current,
-			zoom: 14,
+			zoom: this.input.fieldSettings.zoom,
 		};
 	}
 

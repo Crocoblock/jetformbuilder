@@ -114,6 +114,7 @@ MapFieldData.prototype.fieldSettings = {
 	height: '300',
 	format: 'location_string',
 	field_prefix: false,
+	zoom: 14,
 };
 
 export default MapFieldData;

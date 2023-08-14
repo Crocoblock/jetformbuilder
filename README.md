@@ -4,6 +4,12 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.1.2
+* FIX: The operation of the preset in the Advanced Choices Field inside the repeater
+* FIX: Calculating a custom formula for each element of the repeater
+* FIX: Compatibility with WordPress 6.3 (Layout updates in the editor)
+* Tweak: Improved compatibility with [jfb-attributes-for-macros](https://github.com/giraffffee/jfb-attributes-for-macros) addon
+
 ## 3.1.1
 * FIX: An error in admin footer text filter
 * FIX: `term_titles_by_ids filter` return fatal error

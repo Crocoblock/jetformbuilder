@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Uploaded_Collection implements Media_Block_Value, Uploaded_File_Path {
 
 	/** @var Uploaded_File[]  */
-	protected $uploads;
+	protected $uploads = array();
 
 	public function __construct( array $uploads = array() ) {
 		$this->set_uploads( $uploads );

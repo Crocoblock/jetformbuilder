@@ -1714,6 +1714,24 @@ class Form extends Widget_Base implements Widget_Base_It {
 				)
 			);
 
+			$this->add_control(
+				'fields_color_scheme',
+				array(
+					'label'       => __( 'Color Scheme', 'jet-form-builder' ),
+					'type'        => Controls_Manager::SELECT,
+					'description' => __( 'Affects default browser UI elements like date and time icons, UI etc.', 'jet-form-builder' ),
+					'default'     => 'normal',
+					'options'     => array(
+						'normal' => __( 'Normal', 'jet-form-builder' ),
+						'light'  => __( 'Light', 'jet-form-builder' ),
+						'dark'   => __( 'Dark', 'jet-form-builder' ),
+					),
+					'selectors'   => array(
+						$this->selector( ' input' ) => 'color-scheme: {{VALUE}};',
+					),
+				)
+			);
+
 			$this->end_controls_section();
 		};
 		$closure();

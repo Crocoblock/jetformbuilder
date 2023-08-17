@@ -79,6 +79,8 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	 * @throws Exclude_Field_Exception|Parse_Exception
 	 */
 	final public function update_request() {
+		$this->errors = array();
+
 		$this->is_field_visible();
 		$this->set_request();
 		$this->check_response();
@@ -104,8 +106,6 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	}
 
 	protected function check_response() {
-		$this->errors = array();
-
 		if (
 			$this->context->is_inside_conditional() ||
 			( empty( $this->value ) && ! $this->is_required ) ||

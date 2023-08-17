@@ -32,7 +32,6 @@ class Live_Form {
 	public $form_id = false;
 	/** @var Form_Arguments */
 	public $spec_data;
-	public $post;
 	// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 	public $_conditional_blocks = array();
 	public $blocks              = array();
@@ -44,13 +43,14 @@ class Live_Form {
 	public $form_break;
 	public $field_names = array();
 
+	private $ajax_post_id;
+
 	/**
 	 * Create form instance
 	 *
 	 * @param [type] $form_id [description]
 	 */
 	private function __construct() {
-		$this->post      = $this->current_post();
 		$this->spec_data = new Form_Arguments();
 
 		add_filter(
@@ -197,17 +197,25 @@ class Live_Form {
 		return isset( $this->_conditional_blocks[ $name ] );
 	}
 
+	public function __get( string $name ) {
+		switch ( $name ) {
+			case 'post':
+				return $this->current_post();
+			default:
+				return null;
+		}
+	}
+
 	private function current_post() {
 		global $post;
 
-		if ( wp_doing_ajax() && empty( $post->ID ) ) {
-			$url     = wp_get_referer();
-			$post_id = url_to_postid( $url );
+		if ( wp_doing_ajax() && empty( $post->ID ) && ! $this->ajax_post_id ) {
+			$url = wp_get_referer();
 
-			return get_post( $post_id );
-		} else {
-			return $post;
+			$this->ajax_post_id = url_to_postid( $url );
 		}
+
+		return $this->ajax_post_id ? get_post( $this->ajax_post_id ) : $post;
 	}
 
 }

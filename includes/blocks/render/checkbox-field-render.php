@@ -89,7 +89,7 @@ class Checkbox_Field_Render extends Base_Select_Radio_Check {
 		$html .= apply_filters(
 			'jet-form-builder/render/checkbox-field/option',
 			$item,
-			$value,
+			$val,
 			$option,
 			$this
 		);

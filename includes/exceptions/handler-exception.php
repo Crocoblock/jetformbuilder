@@ -80,4 +80,12 @@ abstract class Handler_Exception extends \Exception {
 		return $path[1] ?? ( explode( 'wp-content/', $file )[1] ?? $file );
 	}
 
+	public function is_success(): bool {
+		if ( 'success' === $this->message ) {
+			return true;
+		}
+
+		return is_string( $this->message ) && 0 === strpos( $this->message, Manager::DYNAMIC_SUCCESS_PREF );
+	}
+
 }

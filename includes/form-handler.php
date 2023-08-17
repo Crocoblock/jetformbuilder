@@ -268,6 +268,11 @@ class Form_Handler {
 				)
 			);
 		} catch ( Action_Exception $exception ) {
+			/**
+			 * @see https://github.com/Crocoblock/jetformbuilder/issues/334
+			 */
+			$this->is_success = $exception->is_success();
+
 			$this->send_response(
 				array(
 					'status' => $exception->get_form_status(),

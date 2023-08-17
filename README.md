@@ -4,6 +4,12 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.1.3
+* ADD: Color Scheme option for Input fields in Elementor widget
+* FIX: Remove unused files
+* FIX: `jet-form-builder/form-handler/after-send` hook, gets the wrong form result
+* FIX: Custom Listing Template not working properly with checkbox and generator
+
 ## 3.1.2
 * FIX: The operation of the preset in the Advanced Choices Field inside the repeater
 * FIX: Calculating a custom formula for each element of the repeater

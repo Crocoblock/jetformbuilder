@@ -4,6 +4,7 @@
 namespace JFB_Modules\Bulk_Options;
 
 use Jet_Form_Builder\Admin\Editor;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
@@ -69,6 +70,8 @@ final class Module implements
 	public function rep_instances(): array {
 		return array(
 			new Base_Source_Resolver(),
+			new Days_Source_Resolver(),
+			new Months_Source_Resolver(),
 			new Countries_Source_Resolver(),
 		);
 	}
@@ -95,5 +98,19 @@ final class Module implements
 			"jet-form-builder/bulk-options/{$source->rep_item_id()}",
 			$source->resolve()
 		);
+	}
+
+	public function install( Source_Resolve_Interface $source ): bool {
+		return $this->rep_install_item_soft( $source );
+	}
+
+	/**
+	 * @param string $id
+	 *
+	 * @return Source_Resolve_Interface
+	 * @throws Repository_Exception
+	 */
+	public function get_source( string $id ): Source_Resolve_Interface {
+		return $this->rep_get_item( $id );
 	}
 }

@@ -179,6 +179,12 @@ import useSupport from './blocks/hooks/useSupport';
 import AttributeHelp from './blocks/components/AttributeHelp';
 import ActionMessagesSlotFills
 	from './actions/components/ActionMessagesSlotFills';
+import ActionModalFooterSlotFill
+	from './action-modal/components/ActionModalFooterSlotFill';
+import useScopedAttributesContext
+	from './blocks/hooks/useScopedAttributesContext';
+import ScopedAttributesProvider
+	from './blocks/components/ScopedAttributesProvider';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -268,6 +274,8 @@ window.JetFBComponents = {
 	ToggleGroupVariations,
 	AttributeHelp,
 	ActionMessagesSlotFills,
+	ActionModalFooterSlotFill,
+	ScopedAttributesProvider,
 };
 
 // JFBFunctions
@@ -343,5 +351,6 @@ window.JetFBHooks = {
 	useUniqueNameOnDuplicate,
 	useFields: useFields,
 	useSupport,
+	useScopedAttributesContext,
 };
 

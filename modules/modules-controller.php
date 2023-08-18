@@ -25,6 +25,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Logger\Module(),
 			new Dev\Module(),
 			new Admin\Module(),
+			new Bulk_Options\Module(),
 			new Block_Parsers\Module(),
 			new Wp_Experiments\Module(),
 			new Deprecated\Module(),

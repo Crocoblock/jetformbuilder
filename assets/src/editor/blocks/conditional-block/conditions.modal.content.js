@@ -2,16 +2,11 @@ const {
 	      Repeater,
 	      RepeaterAddNew,
 	      RepeaterAddOrOperator,
-	      RepeaterHeadContext,
-	      RepeaterButtonsContext,
 	      ConditionItem,
 	      RepeaterState,
 	      ToggleControl,
 	      ConditionsRepeaterContextProvider,
       } = JetFBComponents;
-const {
-	      humanReadableCondition,
-      } = JetFBActions;
 const {
 	      useState,
       } = wp.element;

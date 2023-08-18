@@ -22,7 +22,7 @@ const {
       } = wp.i18n;
 
 /**
- * @param props
+ * @param props {{ items, onSetState, functions, children }}
  * @returns {JSX.Element}
  * @constructor
  */

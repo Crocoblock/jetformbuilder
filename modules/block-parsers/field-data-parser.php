@@ -109,6 +109,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		if (
 			$this->context->is_inside_conditional() ||
 			( empty( $this->value ) && ! $this->is_required ) ||
+			( is_numeric( $this->value ) && 0 === ( (int) $this->value ) ) ||
 			! empty( $this->value )
 		) {
 			return;

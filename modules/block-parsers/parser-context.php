@@ -134,9 +134,11 @@ class Parser_Context {
 				switch ( $exception->getMessage() ) {
 
 					case Module::IS_CONDITIONAL:
+						$prev = $this->is_inside_conditional();
 						$this->set_inside_conditional( true );
 
 						yield from $this->generate_blocks( $exception->get_inner() );
+						$this->set_inside_conditional( $prev );
 						break;
 
 					case Module::NOT_FIELD_HAS_INNER:

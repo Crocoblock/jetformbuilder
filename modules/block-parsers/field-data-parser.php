@@ -6,6 +6,7 @@ namespace JFB_Modules\Block_Parsers;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
 use Jet_Form_Builder\Classes\Resources\Uploaded_File_Path;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Parse_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Request\Exceptions\Plain_Value_Exception;
@@ -108,9 +109,8 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 		if (
 			$this->context->is_inside_conditional() ||
-			( empty( $this->value ) && ! $this->is_required ) ||
-			( is_numeric( $this->value ) && 0 === ( (int) $this->value ) ) ||
-			! empty( $this->value )
+			( Tools::is_empty( $this->value ) && ! $this->is_required ) ||
+			! Tools::is_empty( $this->value )
 		) {
 			return;
 		}

@@ -218,13 +218,10 @@ class Controller {
 
 		foreach ( jet_fb_context()->generate_request() as $field_name => $value ) {
 			if (
-				( empty( $this->settings['save_empty_fields'] ) && empty( $value ) ) ||
-				array_key_exists( $field_name, $saved )
+				( empty( $this->settings['save_empty_fields'] ) && Tools::is_empty( $value ) ) ||
+				array_key_exists( $field_name, $saved ) ||
+				jet_fb_context()->is_secure( $field_name )
 			) {
-				continue;
-			}
-
-			if ( jet_fb_context()->is_secure( $field_name ) ) {
 				continue;
 			}
 

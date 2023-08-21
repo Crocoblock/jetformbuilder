@@ -618,4 +618,8 @@ class Tools {
 		return (string) $value;
 	}
 
+	public static function is_empty( $value ): bool {
+		return '0' !== $value && empty( $value );
+	}
+
 }

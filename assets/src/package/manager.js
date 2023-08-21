@@ -179,6 +179,7 @@ import useSupport from './blocks/hooks/useSupport';
 import AttributeHelp from './blocks/components/AttributeHelp';
 import ActionMessagesSlotFills
 	from './actions/components/ActionMessagesSlotFills';
+import getSupport from './blocks/helpers/getSupport';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -307,6 +308,7 @@ window.JetFBActions = {
 	assetUrl,
 	set,
 	isEmpty,
+	getSupport,
 };
 
 // JFBHooks

@@ -30,7 +30,6 @@ class Modules_Controller implements Module_Controller_It {
 			new Deprecated\Module(),
 			new Rest_Api\Module(),
 			new Blocks\Module(),
-			new Block_Sanitizer\Module(),
 			new Jet_Style\Module(),
 			new Security\Module(),
 			new Switch_Page_On_Change\Module(),

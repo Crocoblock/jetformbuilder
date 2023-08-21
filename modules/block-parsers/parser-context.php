@@ -923,6 +923,9 @@ class Parser_Context {
 		return $this->get_parent_field() ? $this->get_parent_field()->get_scoped_label() : '';
 	}
 
+	/**
+	 * @return Field_Data_Parser|null
+	 */
 	public function get_parent_field() {
 		return $this->parent_field;
 	}

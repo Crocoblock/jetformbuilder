@@ -69,7 +69,7 @@ final class Module implements
 	}
 
 	public function init_hooks() {
-		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'register_editor_scripts' ) );
+		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'register_editor_scripts' ), 0 );
 
 		/**
 		 * Sanitize values after 'block-parsers' module
@@ -80,7 +80,11 @@ final class Module implements
 	}
 
 	public function remove_hooks() {
-		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'register_editor_scripts' ) );
+		remove_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'register_editor_scripts' ),
+			0
+		);
 		remove_action( 'jet-form-builder/request', array( $this, 'init_request' ), 1 );
 	}
 

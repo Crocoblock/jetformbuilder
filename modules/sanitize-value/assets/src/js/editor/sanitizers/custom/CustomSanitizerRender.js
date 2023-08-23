@@ -1,5 +1,5 @@
-import useCurrentSanitizer from '../hooks/useCurrentSanitizer';
-import SanitizeValueButton from './SanitizeValueButton';
+import useCurrentSanitizer from '../../hooks/useCurrentSanitizer';
+import SanitizeValueButton from '../../components/SanitizeValueButton';
 
 const {
 	      TextControl,

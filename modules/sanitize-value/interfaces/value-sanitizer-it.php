@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-interface Value_Sanitizer extends Repository_Item_Instance_Trait {
+interface Value_Sanitizer_It extends Repository_Item_Instance_Trait {
 
 	/**
 	 * @param Field_Data_Parser $parser

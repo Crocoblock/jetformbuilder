@@ -9,11 +9,20 @@ const {
 const {
 	      ToolbarDropdownMenu,
 	      Button,
+	      Flex,
       } = wp.components;
 
 const {
 	      useBlockAttributes,
       } = JetFBHooks;
+
+const {
+	      isEmpty,
+      } = JetFBActions;
+
+const {
+	      BaseHelp,
+      } = JetFBComponents;
 
 /**
  * @see https://github.com/WordPress/gutenberg/blob/trunk/packages/components/src/dropdown-menu/index.tsx#L169
@@ -40,26 +49,33 @@ const ControlButton = function ( {
 	                       ? control.render
 	                       : null;
 
+	const isActive = !isEmpty( current );
+
 	return RenderCallback
-	       ? <RenderCallback control={ control }/>
+	       ? <RenderCallback
+		       control={ control }
+		       current={ current }
+		       addNew={ addNew }
+		       remove={ remove }
+		       edit={ edit }
+	       />
 	       : <Button
 		       onClick={ ( event ) => {
 			       event.stopPropagation();
 			       onClose();
-			       if ( control.onClick ) {
-				       control.onClick();
-			       }
+
+			       isActive ? remove() : addNew();
 		       } }
 		       className={ [
 			       'components-dropdown-menu__menu-item',
 			       'has-text',
-			       control.isActive ? 'is-active' : '',
+			       isActive ? 'is-active' : '',
 		       ].join( ' ' ) }
 		       icon={ control.icon }
 		       aria-checked={
 			       control.role === 'menuitemcheckbox' ||
 			       control.role === 'menuitemradio'
-			       ? control.isActive
+			       ? isActive
 			       : undefined
 		       }
 		       role={
@@ -68,6 +84,8 @@ const ControlButton = function ( {
 			       ? control.role
 			       : 'menuitem'
 		       }
+		       label={ control.help || '' }
+		       showTooltip
 		       disabled={ control.isDisabled }
 	       >
 		       { control.label }
@@ -79,73 +97,71 @@ const SanitizeValueButton = function () {
 
 	const current = attributes[ ATTRIBUTE_NAME ];
 
+	const getControlIndex = controlSlug => (
+		current?.length
+		? current.findIndex( element => (
+			'string' === typeof element
+			? element === controlSlug
+			: element.value === controlSlug
+		) )
+		: -1
+	);
+
+	const remove = controlSlug => setAttributes( prev => (
+		{
+			...prev,
+			[ ATTRIBUTE_NAME ]: prev[ ATTRIBUTE_NAME ].filter(
+				prevItem => (
+					(
+						prevItem?.value ?? prevItem
+					) !== controlSlug
+				),
+			),
+		}
+	) );
+
+	const add = controlSlug => setAttributes( prev => (
+		{
+			...prev,
+			[ ATTRIBUTE_NAME ]: [
+				...(
+					prev[ ATTRIBUTE_NAME ] || []
+				),
+				controlSlug,
+			],
+		}
+	) );
+
+	const edit = ( controlSlug, editProps ) => setAttributes( prev => {
+		const allSanitizers = JSON.parse(
+			JSON.stringify(
+				prev[ ATTRIBUTE_NAME ] || [],
+			),
+		);
+
+		let currentIndex = getControlIndex( controlSlug );
+
+		if ( -1 === currentIndex ) {
+			currentIndex = allSanitizers.push( { value: controlSlug } ) - 1;
+		}
+
+		if ( 'string' === allSanitizers[ currentIndex ] ) {
+			allSanitizers[ currentIndex ] = { value: controlSlug };
+		}
+
+		allSanitizers[ currentIndex ] = {
+			...allSanitizers[ currentIndex ],
+			...editProps,
+		};
+
+		return {
+			...prev,
+			[ ATTRIBUTE_NAME ]: [ ...allSanitizers ],
+		};
+	} );
+
 	const transformControl = control => {
 		control.icon = control.icon || lifeSaverIcon;
-
-		let currentIndex = current?.length
-		                   ? current.findIndex( element => (
-				'string' === typeof element
-				? element === control.value
-				: element.value === control.value
-			) )
-		                   : -1;
-
-		control.isActive = -1 !== currentIndex;
-
-		const remove = () => setAttributes( prev => (
-			{
-				...prev,
-				[ ATTRIBUTE_NAME ]: prev[ ATTRIBUTE_NAME ].filter(
-					prevItem => (
-						(
-							prevItem?.value ?? prevItem
-						) !== control.value
-					),
-				),
-			}
-		) );
-
-		const add = () => setAttributes( prev => (
-			{
-				...prev,
-				[ ATTRIBUTE_NAME ]: [
-					...(
-						prev[ ATTRIBUTE_NAME ] || []
-					),
-					control.value,
-				],
-			}
-		) );
-
-		const edit = editProps => setAttributes( prev => {
-			if ( -1 === currentIndex ) {
-				prev[ ATTRIBUTE_NAME ] = prev[ ATTRIBUTE_NAME ] || [];
-				currentIndex           = prev[ ATTRIBUTE_NAME ].push( {
-					value: control.value,
-				} );
-			}
-
-			if ( 'string' === prev[ ATTRIBUTE_NAME ][ currentIndex ] ) {
-				prev[ ATTRIBUTE_NAME ][ currentIndex ] = {
-					value: prev[ ATTRIBUTE_NAME ][ currentIndex ],
-				};
-			}
-
-			prev[ ATTRIBUTE_NAME ][ currentIndex ] = {
-				...prev[ ATTRIBUTE_NAME ][ currentIndex ],
-				...editProps,
-			};
-
-			return prev;
-		} );
-
-		control.onClick = control.isActive ? remove : add;
-		control.onEdit  = edit;
-		control.onClear = remove;
-
-		control.currentValue = control.isActive
-		                       ? current[ currentIndex ]
-		                       : false;
 
 		return control;
 	};
@@ -163,6 +179,10 @@ const SanitizeValueButton = function () {
 			key={ index }
 			control={ control }
 			onClose={ onClose }
+			current={ current?.[ getControlIndex( control.value ) ] }
+			addNew={ () => add( control.value ) }
+			remove={ () => remove( control.value ) }
+			edit={ editProps => edit( control.value, editProps ) }
 		/>;
 	} ) }</ToolbarDropdownMenu>;
 };

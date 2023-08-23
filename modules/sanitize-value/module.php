@@ -17,7 +17,8 @@ use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
-use JFB_Modules\Sanitize_Value\Interfaces\Value_Sanitizer;
+use JFB_Modules\Sanitize_Value\Interfaces\Value_Sanitizer_It;
+use JFB_Modules\Sanitize_Value\Interfaces\Value_Sanitizer_Settings_It;
 
 final class Module implements
 	Base_Module_It,
@@ -49,6 +50,7 @@ final class Module implements
 			new Title_Sanitizer(),
 			new Url_Sanitizer(),
 			new User_Sanitizer(),
+			new Custom_Sanitizer(),
 		);
 	}
 
@@ -128,7 +130,7 @@ final class Module implements
 			if ( $parser->is_in_template() ) {
 				continue;
 			}
-			/** @var Value_Sanitizer $sanitizer */
+			/** @var Value_Sanitizer_It $sanitizer */
 			foreach ( $this->iterate_sanitizers( $parser ) as $sanitizer ) {
 				$sanitizer->do_sanitize( $parser );
 			}
@@ -143,16 +145,29 @@ final class Module implements
 		}
 
 		foreach ( $sanitizers as $sanitizer ) {
-			if ( empty( $sanitizer['type'] ) ) {
+			$type = is_array( $sanitizer ) ? ( $sanitizer['value'] ?? '' ) : $sanitizer;
+
+			if ( ! $type ) {
 				continue;
 			}
 
 			try {
-				yield $this->rep_get_item( $sanitizer['type'] );
-
+				$item = $this->rep_get_item( $type );
 			} catch ( Repository_Exception $exception ) {
 				continue;
 			}
+
+			if ( ! ( $item instanceof Value_Sanitizer_Settings_It ) || ! is_array( $sanitizer ) ) {
+				yield $item;
+				continue;
+			}
+
+			unset( $sanitizer['value'] );
+			$item = clone $item;
+
+			$item->set_settings( $sanitizer );
+
+			yield $item;
 		}
 	}
 

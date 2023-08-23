@@ -1,5 +1,5 @@
 import { SUPPORT_NAME } from '../constants';
-import SanitizeValueButton from './SanitizeValueButton';
+import SanitizeValueItems from './SanitizeValueItems';
 
 const {
 	      createHigherOrderComponent,
@@ -23,7 +23,7 @@ const withBlockToolbarControls = createHigherOrderComponent( ( BlockEdit ) => {
 		return <>
 			<BlockEdit { ...props } />
 			{ Boolean( support ) && <BlockControls group="other">
-				<SanitizeValueButton/>
+				<SanitizeValueItems/>
 			</BlockControls> }
 		</>;
 

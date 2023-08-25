@@ -119,6 +119,11 @@ AdvancedReporting.prototype.observeAttrs     = function () {
 };
 AdvancedReporting.prototype.clearReport      = function () {
 	const node = getWrapper( this.getNode() );
+
+	if ( ! node ) {
+		return;
+	}
+
 	node.classList.remove( 'field-has-error' );
 
 	const error = getErrorNode( node );

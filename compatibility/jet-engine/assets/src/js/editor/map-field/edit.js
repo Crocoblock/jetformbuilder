@@ -5,6 +5,8 @@ const {
 	      AdvancedFields,
 	      FieldWrapper,
 	      ToolBarFields,
+	      AdvancedInspectorControl,
+	      AttributeHelp,
       } = JetFBComponents;
 const {
 	      useUniqueNameOnDuplicate,
@@ -13,6 +15,7 @@ const {
 const {
 	      PanelBody,
 	      RangeControl,
+	      TextControl,
 	      __experimentalToggleGroupControl: ToggleGroupControl,
 	      __experimentalToggleGroupControlOption: ToggleGroupControlOption,
       } = wp.components;
@@ -25,6 +28,11 @@ const {
 	      InspectorControls,
 	      useBlockProps,
       } = wp.blockEditor;
+
+const defaults = {
+	height: 300,
+	zoom: 14,
+};
 
 export default function MapEdit( props ) {
 	const blockProps = useBlockProps();
@@ -78,13 +86,33 @@ export default function MapEdit( props ) {
 				</ToggleGroupControl>
 				<RangeControl
 					label={ __( 'Height', 'jet-form-builder' ) }
-					value={ attributes.height ?? 300 }
+					value={ attributes.height ?? defaults.height }
 					onChange={ height => setAttributes( { height } ) }
 					allowReset
-					resetFallbackValue={ 300 }
+					resetFallbackValue={ defaults.height }
 					min={ 50 }
 					max={ 1000 }
 				/>
+				<AdvancedInspectorControl
+					value={ attributes.zoom }
+					label={ __( 'Zoom', 'jet-form-builder' ) }
+					onChangePreset={ zoom => setAttributes( { zoom } ) }
+				>
+					{ ( { instanceId } ) => <>
+						<TextControl
+							id={ instanceId }
+							className="jet-fb m-unset"
+							value={ attributes.zoom ?? defaults.zoom }
+							onChange={ zoom => setAttributes( { zoom } ) }
+						/>
+						<AttributeHelp name="zoom">
+							{ __(
+								'Enter a number from 1 to 18.',
+								'jet-form-builder',
+							) }
+						</AttributeHelp>
+					</> }
+				</AdvancedInspectorControl>
 			</PanelBody>
 			<AdvancedFields
 				key={ uniqKey( 'AdvancedFields' ) }

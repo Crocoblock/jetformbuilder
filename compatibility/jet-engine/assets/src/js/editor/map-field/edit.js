@@ -99,6 +99,22 @@ export default function MapEdit( props ) {
 				<BlockDescription/>
 			</PanelBody>
 			<PanelBody title={ __( 'Value', 'jet-form-builder' ) }>
+				<ToggleGroupControl
+					onChange={ format => setAttributes( { format } ) }
+					value={ attributes.format }
+					label={ __( 'Value format', 'jet-form-builder' ) }
+					isBlock={ true }
+					isAdaptiveWidth={ false }
+				>
+					{ JetFBMapField.formats.map(
+						current => <ToggleGroupControlOption
+							key={ uniqKey( current.value ) }
+							label={ current.label }
+							value={ current.value }
+							aria-label={ current.title }
+							showTooltip
+						/> ) }
+				</ToggleGroupControl>
 				<BlockDefaultValue
 					hasMacro={ false }
 					help={ __(
@@ -128,10 +144,14 @@ them with a comma: 50.45, 30.53`,
 							<ToggleGroupControlOption
 								label={ __( 'Default', 'jet-form-builder' ) }
 								value={ 14 }
+								aria-label={ 14 }
+								showTooltip
 							/>
 							<ToggleGroupControlOption
 								label={ __( 'Small', 'jet-form-builder' ) }
 								value={ 11 }
+								aria-label={ 11 }
+								showTooltip
 							/>
 							<ToggleGroupControlOption
 								label={ __( 'Custom', 'jet-form-builder' ) }
@@ -156,22 +176,6 @@ them with a comma: 50.45, 30.53`,
 				</AdvancedInspectorControl> }
 			</PanelBody>
 			<PanelBody title={ __( 'Map Settings', 'jet-form-builder' ) }>
-				<ToggleGroupControl
-					onChange={ format => setAttributes( { format } ) }
-					value={ attributes.format }
-					label={ __( 'Field format', 'jet-form-builder' ) }
-					isBlock={ true }
-					isAdaptiveWidth={ false }
-				>
-					{ JetFBMapField.formats.map(
-						current => <ToggleGroupControlOption
-							key={ uniqKey( current.value ) }
-							label={ current.label }
-							value={ current.value }
-							aria-label={ current.title }
-							showTooltip
-						/> ) }
-				</ToggleGroupControl>
 				<RangeControl
 					label={ __( 'Height', 'jet-form-builder' ) }
 					value={ attributes.height ?? defaults.height }

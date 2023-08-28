@@ -1,85 +1,47 @@
-import './change.state.action';
 import preview from './preview';
 
 const {
-	GeneralFields,
-	AdvancedFields,
-	FieldSettingsWrapper,
-} = JetFBComponents;
+	      GeneralFields,
+	      AdvancedFields,
+	      ActionButtonBlockEditSlotFills,
+	      ActionButtonPlaceholder,
+      } = JetFBComponents;
 
-const { useActionButtonEdit, useUniqKey } = JetFBHooks;
-
-const { __ } = wp.i18n;
 
 const {
-	InspectorControls,
-	useBlockProps,
-} = wp.blockEditor ? wp.blockEditor : wp.editor;
+	      __,
+      } = wp.i18n;
 
 const {
-	Button,
-	SelectControl,
-} = wp.components;
-
-const {
-	RichText,
-} = wp.blockEditor;
+	      InspectorControls,
+	      useBlockProps,
+      } = wp.blockEditor;
 
 const { useState, useEffect } = wp.element;
 
-const defaultClasses = [ 'jet-form-builder__action-button' ];
+const defaultClasses        = [ 'jet-form-builder__action-button' ];
 const defaultWrapperClasses = [
 	'jet-form-builder__action-button-wrapper',
 ];
 
-const ButtonEdit = ( {
-	attributes: rootAttributes,
-	setAttributes: setRootAttributes,
-} ) => {
-
-	const uniqKey = useUniqKey();
-	const CurrentButtonEdit = useActionButtonEdit( rootAttributes.action_type );
-
-	const setAttributes = attrs => {
-		const buttons = JSON.parse( JSON.stringify( rootAttributes.buttons ) );
-		const current = buttons[ rootAttributes.action_type ] ?? {};
-
-		buttons[ rootAttributes.action_type ] = {
-			...current,
-			...attrs,
-		};
-
-		setRootAttributes( { buttons } );
-	};
-
-	return CurrentButtonEdit && <CurrentButtonEdit
-		key={ uniqKey( 'ButtonControls' ) }
-		rootAttributes={ rootAttributes }
-		setRootAttributes={ setRootAttributes }
-		attributes={ rootAttributes.buttons[ rootAttributes.action_type ] ?? {} }
-		setAttributes={ setAttributes }
-	/>;
-};
-
-export default function ActionButtonEdit( props ) {
+const ButtonEdit = ( props ) => {
 
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey },
-	} = props;
+		      attributes,
+		      setAttributes,
+	      } = props;
 
 	const classesButton = () => {
-		if ( ! attributes.action_type ) {
+		if ( !attributes.action_type ) {
 			return defaultClasses;
 		}
-		const action = JetFormActionButton.actions.find( elem => attributes.action_type === elem.value );
+		const action = JetFormActionButton.actions.find(
+			elem => attributes.action_type === elem.value );
 
-		if ( ! action ) {
+		if ( !action ) {
 			return defaultClasses;
 		}
-		if ( ! attributes.label ) {
+		if ( !attributes.label ) {
 			setAttributes( { label: action.preset_label } );
 		}
 
@@ -87,19 +49,20 @@ export default function ActionButtonEdit( props ) {
 	};
 
 	const classesWrapper = () => {
-		if ( ! attributes.action_type ) {
+		if ( !attributes.action_type ) {
 			return [ ...defaultWrapperClasses ];
 		}
-		const action = JetFormActionButton.actions.find( elem => attributes.action_type === elem.value );
+		const action = JetFormActionButton.actions.find(
+			elem => attributes.action_type === elem.value );
 
-		if ( ! action ) {
+		if ( !action ) {
 			return [ ...defaultWrapperClasses ];
 		}
 
 		return [ ...defaultWrapperClasses, action.wrapper_class ];
 	};
 
-	const [ buttonClasses, setButtonClasses ] = useState( classesButton );
+	const [ buttonClasses, setButtonClasses ]   = useState( classesButton );
 	const [ wrapperClasses, setWrapperClasses ] = useState( classesWrapper );
 
 	useEffect( () => {
@@ -107,7 +70,44 @@ export default function ActionButtonEdit( props ) {
 		setWrapperClasses( classesWrapper() );
 	}, [ attributes.action_type ] );
 
-	const blockProps = useBlockProps();
+	const setActionAttributes = attrs => {
+		const buttons = JSON.parse( JSON.stringify( attributes.buttons ) );
+		const current = buttons[ attributes.action_type ] ?? {};
+
+		buttons[ attributes.action_type ] = {
+			...current,
+			...attrs,
+		};
+
+		setAttributes( { buttons } );
+	};
+
+	const fillProps = {
+		attributes,
+		setAttributes,
+		setActionAttributes,
+		actionAttributes: attributes.buttons[ attributes.action_type ] ?? {},
+		buttonClasses,
+		wrapperClasses,
+	};
+
+	return <ActionButtonBlockEditSlotFills.Slot fillProps={ fillProps }>
+		{ ( fills ) => {
+			return (
+				Boolean( fills?.length ) ? fills : <ActionButtonPlaceholder
+					{ ...fillProps }
+				/>
+			);
+		} }
+	</ActionButtonBlockEditSlotFills.Slot>;
+};
+
+export default function ActionButtonEdit( props ) {
+
+	const {
+		      attributes,
+		      setAttributes,
+	      } = props;
 
 	if ( attributes.isPreview ) {
 		return <div style={ {
@@ -119,52 +119,14 @@ export default function ActionButtonEdit( props ) {
 		</div>;
 	}
 
-	return [
-		isSelected && <InspectorControls
-			key={ uniqKey( 'InspectorControls' ) }
-		>
-			<GeneralFields
-				key={ uniqKey( 'GeneralFields' ) }
-				autoCompleteLabel={ false }
-				{ ...props }
-			/>
-			<FieldSettingsWrapper { ...props } key={ uniqKey( 'FieldSettingsWrapper' ) }>
-				<SelectControl
-					key={ uniqKey( 'action_type' ) }
-					label={ __( 'Button Action Type', 'jet-form-builder' ) }
-					value={ attributes.action_type }
-					options={ JetFormActionButton.actions }
-					onChange={ action_type => setAttributes( { action_type } ) }
-				/>
-				<ButtonEdit
-					key={ uniqKey( 'ButtonControls' ) }
-					attributes={ attributes }
-					setAttributes={ setAttributes }
-				/>
-			</FieldSettingsWrapper>
-			<AdvancedFields
-				key={ uniqKey( 'AdvancedFields' ) }
-				{ ...props }
-			/>
-		</InspectorControls>,
-		<div
-			key={ uniqKey( 'submit-wrap' ) }
-			{ ...blockProps }
-		>
-			<div className={ wrapperClasses.join( ' ' ) }>
-				<Button
-					isPrimary
-					className={ buttonClasses.join( ' ' ) }
-					key={ uniqKey( 'place_holder_block' ) }
-				>
-					<RichText
-						placeholder='Input Submit label...'
-						allowedFormats={ [] }
-						value={ attributes.label }
-						onChange={ label => setAttributes( { label } ) }
-					/>
-				</Button>
-			</div>
-		</div>,
-	];
+	return <>
+		<InspectorControls>
+			<GeneralFields { ...props } />
+			<AdvancedFields { ...props } />
+		</InspectorControls>
+		<ButtonEdit
+			attributes={ attributes }
+			setAttributes={ setAttributes }
+		/>
+	</>;
 }

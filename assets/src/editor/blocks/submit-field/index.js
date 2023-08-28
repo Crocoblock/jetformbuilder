@@ -1,48 +1,31 @@
 import ActionButtonEdit from './edit';
 import metadata from '@blocks/submit-field/block.json';
 
+// action button types variations
+import './submit/main';
+import './next.page/main';
+import './prev.page/main';
+import './change.render.state/main';
+
 const { __ } = wp.i18n;
 
 const { createBlock } = wp.blocks;
 
 const { name, icon = '' } = metadata;
 
-/**
- * Available items for `useEditProps`:
- *  - uniqKey
- *  - formFields
- *  - blockName
- *  - attrHelp
- */
+metadata.attributes.isPreview = {
+	'type': 'boolean',
+	'default': false,
+};
+
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
-	description: __(
-		`Add the button by clicking which users can submit the form, proceed 
-to any form part, or change the render state (switch login to sign-up form).`,
-		'jet-form-builder'
-	),
 	edit: ActionButtonEdit,
 	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],
 	example: {
 		attributes: {
 			isPreview: true,
 		},
-	},
-	/**
-	 * @param attributes
-	 * @param context {{|'accessibility'|'visual'|'list-view'}}
-	 * @returns {*}
-	 * @private
-	 */
-	__experimentalLabel: ( { action_type }, { context } ) => {
-		if ( context !== 'list-view' ) {
-			return;
-		}
-		const action = JetFormActionButton.actions.find(
-			( { value } ) => value === action_type,
-		);
-
-		return action?.label || JetFormActionButton.actions[ 0 ].label;
 	},
 	transforms: {
 		to: [

@@ -4,6 +4,15 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.1.4
+* ADD: User Display Name in dynamic preset
+* FIX: Uncaught Exception: upload_mime_types
+* FIX: Booking form inside listing stopped working
+* FIX: Error in console if no captcha is used.
+* FIX: The value 0 in the field was recognized as empty
+* FIX: Compatibility with JetEngine Lazy load in the listing
+* FIX: Exporting form records, automatically fills in empty form fields
+
 ## 3.1.3
 * ADD: Color Scheme option for Input fields in Elementor widget
 * FIX: Remove unused files

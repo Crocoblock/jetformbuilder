@@ -108,6 +108,15 @@ class Parser_Context {
 	public function apply_request() {
 		/** @var Field_Data_Parser $parser */
 		foreach ( $this->iterate_parsers() as $parser ) {
+			/**
+			 * We need to iterate over the value before setting the context
+			 * for the case when a large number of records are passed through
+			 * a single Field_Data_Parser object. As in the case of exporting
+			 *
+			 * @see https://github.com/Crocoblock/issues-tracker/issues/3356
+			 */
+			$parser->reset();
+
 			try {
 				$parser->set_request();
 

@@ -14,7 +14,7 @@ function observableHandle( observable ) {
 	 */
 	const token     = observable.getInput( '_captcha_token' );
 	const formID    = observable.getSubmit().getFormId();
-	const container = token.nodes[ 0 ].nextElementSibling;
+	const container = token?.nodes?.[ 0 ]?.nextElementSibling;
 
 	let options = (
 		window?.JetFormBuilderCaptchaConfig?.[ formID ] ?? false

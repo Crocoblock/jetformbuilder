@@ -298,6 +298,12 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		return iterator_to_array( $this->iterate_inner_values() );
 	}
 
+	public function reset() {
+		$this->value          = null;
+		$this->file           = null;
+		$this->inner_contexts = null;
+	}
+
 	public function get_setting( string $attr_name ) {
 		return $this->settings[ $attr_name ] ?? false;
 	}

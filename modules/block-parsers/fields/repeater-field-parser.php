@@ -29,7 +29,7 @@ class Repeater_Field_Parser extends Field_Data_Parser {
 		}
 
 		if ( ! $this->get_inner_template() ) {
-			throw new Sanitize_Value_Exception();
+			return -1;
 		}
 
 		foreach ( $indexes as $index ) {

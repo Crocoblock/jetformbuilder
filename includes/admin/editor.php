@@ -271,6 +271,10 @@ class Editor {
 									'label' => __( 'Last Name', 'jet-form-builder' ),
 								),
 								array(
+									'value' => 'display_name',
+									'label' => __( 'Display Name', 'jet-form-builder' ),
+								),
+								array(
 									'value' => 'user_url',
 									'label' => __( 'User URL', 'jet-form-builder' ),
 								),

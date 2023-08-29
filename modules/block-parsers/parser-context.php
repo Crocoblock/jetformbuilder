@@ -55,13 +55,6 @@ class Parser_Context {
 	 */
 	public $parsers = array();
 
-	/**
-	 * Available only while rendering form. Used for
-	 *
-	 * @var Field_Data_Parser
-	 */
-	private $current_parser;
-
 	public function apply( $fields = null ) {
 		if ( is_array( $fields ) ) {
 			$this->set_parsers( $fields );
@@ -69,8 +62,10 @@ class Parser_Context {
 
 		/** @var Field_Data_Parser $parser */
 		foreach ( $this->iterate_parsers() as $parser ) {
+			$this->name = $parser->get_name();
 			$this->parser_update_request( $parser );
 		}
+		$this->name = '';
 
 		$this->clear_all();
 	}

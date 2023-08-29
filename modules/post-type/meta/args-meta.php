@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Post_Meta;
+namespace JFB_Modules\Post_Type\Meta;
 
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Tools;

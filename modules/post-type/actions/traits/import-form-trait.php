@@ -1,9 +1,11 @@
 <?php
 
 
-namespace Jet_Form_Builder\Form_Actions;
+namespace JFB_Modules\Post_Type\Actions\Traits;
 
 // If this file is called directly, abort.
+use JFB_Modules\Post_Type\Module;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -46,7 +48,7 @@ trait Import_Form_Trait {
 			array_merge(
 				$form_data,
 				array(
-					'post_type' => $this->post_type(),
+					'post_type' => Module::SLUG,
 				)
 			)
 		);

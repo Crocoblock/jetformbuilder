@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Jet_Form_Builder\Form_Actions\Types;
+namespace JFB_Modules\Post_Type\Actions;
 
-use Jet_Form_Builder\Form_Actions\Base_Form_Action;
-use Jet_Form_Builder\Form_Actions\Get_Form_Data;
-use Jet_Form_Builder\Form_Actions\Import_Form_Trait;
+use JFB_Modules\Post_Type\Actions\Traits\Get_Form_Data_Trait;
+use JFB_Modules\Post_Type\Actions\Traits\Import_Form_Trait;
+use JFB_Modules\Post_Type\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Duplicate_Action extends Base_Form_Action {
 
-	use Get_Form_Data;
+	use Get_Form_Data_Trait;
 	use Import_Form_Trait;
 
 	public function get_id() {
@@ -38,7 +38,7 @@ class Duplicate_Action extends Base_Form_Action {
 		$this->import_form( $form_data[1] );
 
 		// phpcs:ignore WordPress.Security.SafeRedirect
-		wp_redirect( add_query_arg( array( 'post_type' => $this->post_type() ), admin_url( 'edit.php' ) ) );
+		wp_redirect( add_query_arg( array( 'post_type' => Module::SLUG ), admin_url( 'edit.php' ) ) );
 		die();
 	}
 }

@@ -9,10 +9,9 @@ use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Gateways\Gateway_Manager;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager as Block_Condition_Manager;
-use Jet_Form_Builder\Post_Meta\Messages_Meta;
+use JFB_Modules\Post_Type\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -380,8 +379,9 @@ class Editor {
 
 		$conditions_settings = ( new Action_Condition_Manager() )->get_settings();
 
-		/** @var Messages_Meta $messages_meta */
-		$messages_meta = jet_form_builder()->post_type->get_meta( Messages_Meta::class );
+		/** @var Module $post_type */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$post_type = jet_form_builder()->module( 'post-type' );
 
 		$utm     = new Utm_Url( 'wp-admin/editor-jet-form' );
 		$addons  = JET_FORM_BUILDER_SITE . '/addons/';
@@ -394,7 +394,7 @@ class Editor {
 				'jet-form-builder/editor/config',
 				array(
 					'presetConfig'            => $this->get_preset_config(),
-					'messagesDefault'         => $messages_meta->messages(),
+					'messagesDefault'         => $post_type->get_messages(),
 					'helpForRepeaters'        => $this->get_help_for_repeaters(),
 					'global_settings'         => Tab_Handler_Manager::instance()->all(),
 					'global_settings_url'     => Pages_Manager::instance()->get_stable_url( 'jfb-settings' ),

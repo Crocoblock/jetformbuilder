@@ -1,17 +1,17 @@
 <?php
 
 
-namespace Jet_Form_Builder\Post_Meta;
+namespace JFB_Modules\Post_Type\Meta;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Preset_Meta extends Base_Meta_Type {
+class Validation_Meta extends Base_Meta_Type {
 
 	public function get_id(): string {
-		return '_jf_preset';
+		return '_jf_validation';
 	}
 
 	public function get_type(): string {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Post_Meta;
+namespace JFB_Modules\Post_Type\Meta;
 
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use JFB_Components\Repository\Repository_Item_Instance_Trait;

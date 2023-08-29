@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Jet_Form_Builder\Form_Actions;
+namespace JFB_Modules\Post_Type\Actions\Traits;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-trait Get_Form_Data {
+trait Get_Form_Data_Trait {
 
 	/**
 	 * Get post ID from the current request and validate user acess to this post
@@ -20,7 +20,7 @@ trait Get_Form_Data {
 		/**
 		 * Nonce verifies earlier
 		 *
-		 * @see \Jet_Form_Builder\Form_Actions\Base_Form_Action::do_action
+		 * @see \JFB_Modules\Post_Type\Actions\Base_Form_Action::do_action
 		 */
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$post_id = ! empty( $_GET['post'] ) ? absint( $_GET['post'] ) : false;

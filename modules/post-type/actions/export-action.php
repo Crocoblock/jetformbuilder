@@ -1,11 +1,10 @@
 <?php
 
 
-namespace Jet_Form_Builder\Form_Actions\Types;
+namespace JFB_Modules\Post_Type\Actions;
 
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Form_Actions\Base_Form_Action;
-use Jet_Form_Builder\Form_Actions\Get_Form_Data;
+use JFB_Modules\Post_Type\Actions\Traits\Get_Form_Data_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -14,7 +13,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Export_Action extends Base_Form_Action {
 
-	use Get_Form_Data;
+	use Get_Form_Data_Trait;
 
 	// phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 	private $_file;

@@ -1,13 +1,11 @@
 <?php
 
 
-namespace Jet_Form_Builder\Form_Actions\Types;
+namespace JFB_Modules\Post_Type\Actions;
 
 use Jet_Form_Builder\Classes\Resources\File;
 use Jet_Form_Builder\Classes\Resources\File_Collection;
-use Jet_Form_Builder\Classes\Resources\Sanitize_File_Exception;
-use Jet_Form_Builder\Form_Actions\Base_Form_Action;
-use Jet_Form_Builder\Form_Actions\Import_Form_Trait;
+use JFB_Modules\Post_Type\Actions\Traits\Import_Form_Trait;
 use Jet_Form_Builder\Request\Request_Tools;
 
 // If this file is called directly, abort.
@@ -18,13 +16,6 @@ if ( ! defined( 'WPINC' ) ) {
 class Import_Action extends Base_Form_Action {
 
 	use Import_Form_Trait;
-
-
-	public function __construct() {
-		parent::__construct();
-
-		add_action( 'admin_enqueue_scripts', array( $this, 'import_form_js' ) );
-	}
 
 	public function get_id() {
 		return 'jet_fb_import';
@@ -124,34 +115,5 @@ class Import_Action extends Base_Form_Action {
 		$mimes['json'] = 'application/json';
 
 		return $mimes;
-	}
-
-	public function import_form_js() {
-		if ( ! jet_form_builder()->post_type->is_form_list_page() ) {
-			return;
-		}
-
-		$import_button = __( 'Start Import', 'jet-form-builder' );
-
-		ob_start();
-		include $this->get_global_template( 'admin/import-form.php' );
-		$import_template = ob_get_clean();
-
-		wp_enqueue_script(
-			'jet-form-builder-import-form',
-			jet_form_builder()->plugin_url( 'assets/js/import-form.js' ),
-			array( 'jquery' ),
-			jet_form_builder()->get_version(),
-			true
-		);
-
-		wp_localize_script(
-			'jet-form-builder-import-form',
-			'JetFormBuilderImportForm',
-			array(
-				'id'       => $this->get_id(),
-				'template' => $import_template,
-			)
-		);
 	}
 }

@@ -13,16 +13,24 @@ use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Tools;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
+use JFB_Modules\Post_Type;
 
-class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_It {
+class Module implements
+	Base_Module_It,
+	Base_Module_Url_It,
+	Base_Module_Handle_It,
+	Base_Module_Dir_It {
 
 	use Base_Module_Handle_Trait;
 	use Base_Module_Url_Trait;
+	use Base_Module_Dir_Trait;
 
 	public function rep_item_id() {
 		return 'admin';

@@ -1,42 +1,43 @@
 <?php
 
-namespace Jet_Form_Builder;
 
-use Jet_Form_Builder\Classes\Arguments\Default_Form_Arguments;
-use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
-use Jet_Form_Builder\Classes\Compatibility;
-use Jet_Form_Builder\Classes\Get_Icon_Trait;
-use JFB_Components\Repository\Repository_Pattern_Trait;
-use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Post_Meta\Actions_Meta;
-use Jet_Form_Builder\Post_Meta\Base_Meta_Type;
-use Jet_Form_Builder\Post_Meta\Args_Meta;
-use Jet_Form_Builder\Post_Meta\Preset_Meta;
-use Jet_Form_Builder\Post_Meta\Gateways_Meta;
-use Jet_Form_Builder\Post_Meta\Messages_Meta;
-use Jet_Form_Builder\Post_Meta\Recaptcha_Meta;
-use Jet_Form_Builder\Post_Meta\Validation_Meta;
-use Jet_Form_Builder\Shortcodes\Manager;
-use JFB_Modules\Gateways\Paypal\Controller;
+namespace JFB_Modules\Post_Type;
 
 // If this file is called directly, abort.
-
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-/**
- * @method Base_Meta_Type rep_get_item( $class_or_slug )
- *
- * Class Post_Type
- *
- * @package Jet_Form_Builder
- */
-class Post_Type {
+use Jet_Form_Builder\Classes\Arguments\Default_Form_Arguments;
+use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
+use Jet_Form_Builder\Classes\Compatibility;
+use JFB_Modules\Post_Type\Actions_Repository;
+use Jet_Form_Builder\Shortcodes\Manager;
+use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
+use JFB_Components\Module\Base_Module_Handle_It;
+use JFB_Components\Module\Base_Module_Handle_Trait;
+use JFB_Components\Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_Url_It;
+use JFB_Components\Module\Base_Module_Url_Trait;
 
-	use Get_Icon_Trait;
-	use Repository_Pattern_Trait;
+/**
+ * @since 3.2.0
+ *
+ * Class Module
+ * @package JFB_Modules\Post_Type
+ */
+class Module implements
+	Base_Module_It,
+	Base_Module_Url_It,
+	Base_Module_Handle_It,
+	Base_Module_Dir_It,
+	Base_Module_After_Install_It {
+
+	use Base_Module_Url_Trait;
+	use Base_Module_Handle_Trait;
+	use Base_Module_Dir_Trait;
 
 	/**
 	 * Used to define the editor
@@ -44,6 +45,12 @@ class Post_Type {
 	 * @var boolean
 	 */
 	public $is_form_editor = false;
+
+	/** @var Meta_Repository */
+	private $meta;
+
+	/** @var Actions_Repository */
+	private $actions;
 
 	const CAPABILITIES = array(
 		'edit_jet_fb_form',
@@ -56,15 +63,39 @@ class Post_Type {
 		'read_private_jet_fb_forms',
 	);
 
-	/**
-	 * Constructor for the class
-	 */
-	public function __construct() {
+	const SLUG = 'jet-form-builder';
+
+	public function rep_item_id() {
+		return 'post-type';
+	}
+
+	public function condition(): bool {
+		return true;
+	}
+
+	public function on_install() {
+		$this->meta    = new Meta_Repository();
+		$this->actions = new Actions_Repository();
+
+		$this->get_meta()->rep_install();
+
+		if ( is_admin() ) {
+			$this->actions->rep_install();
+		}
+	}
+
+	public function on_uninstall() {
+		$this->get_meta()->rep_clear();
+		$this->get_actions()->rep_clear();
+	}
+
+	public function init_hooks() {
 		add_action( 'init', array( $this, 'register_post_type' ) );
 		add_action( 'current_screen', array( $this, 'set_current_screen' ) );
 
-		add_filter( "manage_{$this->slug()}_posts_columns", array( $this, 'filter_columns' ) );
-		add_action( "manage_{$this->slug()}_posts_custom_column", array( $this, 'add_admin_column_content' ), 10, 2 );
+		$slug = self::SLUG;
+		add_filter( "manage_{$slug}_posts_columns", array( $this, 'filter_columns' ) );
+		add_action( "manage_{$slug}_posts_custom_column", array( $this, 'add_admin_column_content' ), 10, 2 );
 
 		/**
 		 * @since 3.0.1
@@ -72,25 +103,34 @@ class Post_Type {
 		add_filter( 'gutenberg_can_edit_post_type', array( $this, 'can_edit_post_type' ), 150, 2 );
 		add_filter( 'use_block_editor_for_post_type', array( $this, 'can_edit_post_type' ), 150, 2 );
 
-		/** @since 3.0.9 */
-		add_action( 'admin_init', array( $this, 'remove_admin_capabilities' ) );
-		register_deactivation_hook( JET_FORM_BUILDER__FILE__, array( $this, 'remove_admin_capabilities' ) );
-
 		/** @since 3.1.1 */
 		// watch on this methods performance because it executed multiple times on each page load
 		add_filter( 'user_has_cap', array( $this, 'add_admin_capabilities' ) );
+
+		add_filter( 'post_row_actions', array( $this->get_actions(), 'base_add_action_links' ), 10, 2 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'import_form_js' ) );
 	}
 
-	public function rep_instances(): array {
-		return array(
-			new Args_Meta(),
-			new Messages_Meta(),
-			new Preset_Meta(),
-			new Recaptcha_Meta(),
-			new Actions_Meta(),
-			new Gateways_Meta(),
-			new Validation_Meta(),
-		);
+	public function remove_hooks() {
+		remove_action( 'init', array( $this, 'register_post_type' ) );
+		remove_action( 'current_screen', array( $this, 'set_current_screen' ) );
+
+		$slug = self::SLUG;
+		remove_filter( "manage_{$slug}_posts_columns", array( $this, 'filter_columns' ) );
+		remove_action( "manage_{$slug}_posts_custom_column", array( $this, 'add_admin_column_content' ) );
+
+		/**
+		 * @since 3.0.1
+		 */
+		remove_filter( 'gutenberg_can_edit_post_type', array( $this, 'can_edit_post_type' ), 150 );
+		remove_filter( 'use_block_editor_for_post_type', array( $this, 'can_edit_post_type' ), 150 );
+
+		/** @since 3.1.1 */
+		// watch on this methods performance because it executed multiple times on each page load
+		remove_filter( 'user_has_cap', array( $this, 'add_admin_capabilities' ) );
+
+		remove_filter( 'post_row_actions', array( $this->get_actions(), 'base_add_action_links' ) );
+		remove_action( 'admin_enqueue_scripts', array( $this, 'import_form_js' ) );
 	}
 
 	public function filter_columns( $columns ) {
@@ -106,7 +146,7 @@ class Post_Type {
 		if ( 'jfb_shortcode' !== $column ) {
 			return;
 		}
-		$arguments = array_diff( $this->get_args( $form_id ), Form_Arguments::arguments() );
+		$arguments = array_diff( $this->meta->get_args( $form_id ), Form_Arguments::arguments() );
 
 		$arguments = array_merge(
 			array( 'form_id' => $form_id ),
@@ -121,15 +161,6 @@ class Post_Type {
 		);
 	}
 
-	/**
-	 * Returns current post type slug
-	 *
-	 * @return string [type] [description]
-	 */
-	public function slug() {
-		return 'jet-form-builder';
-	}
-
 	public function set_current_screen() {
 		$screen = get_current_screen();
 
@@ -137,22 +168,22 @@ class Post_Type {
 			return;
 		}
 
-		if ( $this->slug() === $screen->id ) {
+		if ( self::SLUG === $screen->id ) {
 			$this->is_form_editor = true;
 
-		} elseif ( $this->slug() !== $screen->id ) {
+		} elseif ( self::SLUG !== $screen->id ) {
 			$this->is_form_editor = false;
 		}
 	}
 
-	public function is_form_list_page() {
+	public static function is_form_list_page(): bool {
 		if ( ! did_action( 'current_screen' ) ) {
 			return false;
 		}
 
 		$screen = get_current_screen();
 
-		return ( "edit-{$this->slug()}" === $screen->id );
+		return ( 'edit-' . self::SLUG ) === $screen->id;
 	}
 
 	/**
@@ -163,7 +194,7 @@ class Post_Type {
 	 * @since 3.0.1
 	 */
 	public function can_edit_post_type( $can, $post_type ): bool {
-		return $this->slug() === $post_type ? true : $can;
+		return self::SLUG === $post_type ? true : $can;
 	}
 
 	/**
@@ -206,18 +237,13 @@ class Post_Type {
 			'supports'            => array( 'title', 'editor', 'custom-fields' ),
 		);
 
-		$post_type = register_post_type(
-			$this->slug(),
+		register_post_type(
+			self::SLUG,
 			// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 			apply_filters( 'jet-form-builder/post-type/args', $args )
 		);
 
-		$this->rep_install();
-
-		/** @var Base_Meta_Type $item */
-		foreach ( $this->rep_get_items() as $item ) {
-			register_post_meta( $this->slug(), $item->get_id(), $item->to_array() );
-		}
+		$this->get_meta()->after_register_post_type();
 	}
 
 	public function add_admin_capabilities( $allcaps ) {
@@ -234,46 +260,48 @@ class Post_Type {
 		return $allcaps;
 	}
 
-	public function remove_admin_capabilities() {
-		$role = get_role( 'administrator' );
-
-		foreach ( self::CAPABILITIES as $capability ) {
-			if ( ! $role->has_cap( $capability ) ) {
-				continue;
-			}
-			$role->remove_cap( $capability );
-		}
-	}
-
-	/**
-	 * @param string $name
-	 *
-	 * @return false|Base_Meta_Type
-	 */
-	public function get_meta( string $name ) {
-		try {
-			return $this->rep_get_item( $name );
-		} catch ( Repository_Exception $exception ) {
-			return false;
-		}
-	}
-
-	/**
-	 * @param $item
-	 *
-	 * @throws Exceptions\Repository_Exception
-	 */
-	public function rep_before_install_item( $item ) {
-		if ( $item->is_supported() ) {
+	public function import_form_js() {
+		if ( ! self::is_form_list_page() ) {
 			return;
 		}
-		$this->_rep_abort_this();
+
+		$action = $this->get_actions()->get( 'jet_fb_import' );
+
+		$import_button = __( 'Start Import', 'jet-form-builder' );
+
+		ob_start();
+		include $this->get_dir( 'templates/import-form.php' );
+		$import_template = ob_get_clean();
+
+		$handle = $this->get_handle();
+
+		wp_enqueue_script(
+			$handle,
+			$this->get_url( 'assets/build/js/import-form.js' ),
+			array( 'jquery' ),
+			jet_form_builder()->get_version(),
+			true
+		);
+
+		wp_localize_script(
+			$handle,
+			'JetFormBuilderImportForm',
+			array(
+				'id'       => $action->get_id(),
+				'template' => $import_template,
+			)
+		);
 	}
 
 	private function get_post_type_icon() {
-		$path = $this->get_icon_path( 'post-type.php' );
+		$path = $this->get_dir( 'icon.php' );
 
 		return include_once $path;
+	}
+
+
+	public function maybe_get_jet_sm_ready_styles( $form_id ) {
+		return Compatibility::has_jet_sm() ? get_post_meta( $form_id, '_jet_sm_ready_style', true ) : '';
 	}
 
 	/**
@@ -286,7 +314,7 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_args( $form_id = false ): array {
-		return $this->get_meta( Args_Meta::class )->query( $form_id );
+		return $this->get_meta()->get_args( $form_id );
 	}
 
 	/**
@@ -297,18 +325,7 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_messages( $form_id = false ) {
-		return $this->get_meta( Messages_Meta::class )->query( $form_id );
-	}
-
-	/**
-	 * Returns form actions
-	 *
-	 * @param int|false $form_id
-	 *
-	 * @return array
-	 */
-	public function get_actions( $form_id = false ) {
-		return $this->get_meta( Actions_Meta::class )->query( $form_id );
+		return $this->get_meta()->get_messages( $form_id );
 	}
 
 	/**
@@ -319,7 +336,7 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_preset( $form_id = false ) {
-		return $this->get_meta( Preset_Meta::class )->query( $form_id );
+		return $this->get_meta()->get_preset( $form_id );
 	}
 
 	/**
@@ -329,8 +346,8 @@ class Post_Type {
 	 *
 	 * @return array
 	 */
-	public function get_captcha( $form_id = false ): array {
-		return $this->get_meta( Recaptcha_Meta::class )->query( $form_id );
+	public function get_captcha( $form_id = false ) {
+		return $this->get_meta()->get_captcha( $form_id );
 	}
 
 	/**
@@ -341,51 +358,31 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_gateways( $form_id = false ): array {
-		return $this->get_meta( Gateways_Meta::class )->query( $form_id );
+		return $this->get_meta()->get_gateways( $form_id );
 	}
 
 	public function get_validation( $form_id = false ) {
-		return $this->get_meta( Validation_Meta::class )->query( $form_id );
+		return $this->get_meta()->get_validation( $form_id );
+	}
+
+	public function get_meta(): Meta_Repository {
+		return $this->meta;
 	}
 
 	/**
-	 * @param $meta_key
-	 * @param int|false $form_id
-	 *
-	 * @return array|mixed
-	 * @deprecated since 3.0.0
+	 * @return Actions_Repository
 	 */
-	public function get_form_meta( $meta_key, $form_id = false ) {
-		if ( false === $form_id ) {
-			$form_id = jet_fb_live()->form_id;
-		}
-
-		return Tools::decode_json(
-			get_post_meta(
-				$form_id,
-				$meta_key,
-				true
-			)
-		);
-	}
-
-	public function maybe_get_jet_sm_ready_styles( $form_id ) {
-		return Compatibility::has_jet_sm() ? get_post_meta( $form_id, '_jet_sm_ready_style', true ) : '';
+	public function get_actions(): Actions_Repository {
+		return $this->actions;
 	}
 
 	/**
-	 * Returns captcha settings
+	 * @deprecated 3.2.0
 	 *
-	 * @param int|false $form_id
-	 *
-	 * @return array
-	 * @deprecated 3.1.0 Use ::get_captcha() instead
+	 * @return string
 	 */
-	public function get_recaptcha( $form_id = false ) {
-		_deprecated_function( __METHOD__, '3.1.0', __CLASS__ . '::get_captcha()' );
-
-		return $this->get_captcha( $form_id );
+	public function slug(): string {
+		return self::SLUG;
 	}
-
 
 }

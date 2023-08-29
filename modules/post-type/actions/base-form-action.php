@@ -1,18 +1,17 @@
 <?php
 
 
-namespace Jet_Form_Builder\Form_Actions;
+namespace JFB_Modules\Post_Type\Actions;
 
-use Jet_Form_Builder\Classes\Get_Template_Trait;
+use JFB_Components\Repository\Repository_Item_Instance_Trait;
+use JFB_Modules\Post_Type\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-abstract class Base_Form_Action {
-
-	use Get_Template_Trait;
+abstract class Base_Form_Action implements Repository_Item_Instance_Trait {
 
 	const NONCE_ACTION = 'jfb_admin_inline';
 
@@ -35,6 +34,10 @@ abstract class Base_Form_Action {
 	}
 
 	public function action_id() {
+		return $this->get_id();
+	}
+
+	public function rep_item_id() {
 		return $this->get_id();
 	}
 
@@ -65,12 +68,8 @@ abstract class Base_Form_Action {
 		return $this->get_title();
 	}
 
-	public function post_type() {
-		return jet_form_builder()->post_type->slug();
-	}
-
 	final public function register_action( $actions, $post ) {
-		if ( $this->post_type() !== $post->post_type ) {
+		if ( Module::SLUG !== $post->post_type ) {
 			return $actions;
 		}
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Post_Meta;
+namespace JFB_Modules\Post_Type\Meta;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

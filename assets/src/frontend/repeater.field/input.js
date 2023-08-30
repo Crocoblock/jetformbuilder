@@ -33,7 +33,7 @@ function RepeaterData() {
 		for ( const row of node.querySelectorAll(
 			'.jet-form-builder-repeater__row',
 		) ) {
-			const current = new ObservableRow( this );
+			const current    = new ObservableRow( this );
 			current.rootNode = row;
 
 			this.value.current.push( current );
@@ -170,6 +170,9 @@ RepeaterData.prototype.addNew = function ( count = 1 ) {
 };
 
 RepeaterData.prototype.findIndex = function ( observableRow ) {
+	if ( !this.value.current.hasOwnProperty( 'findIndex' ) ) {
+		return -1;
+	}
 	return this.value.current.findIndex(
 		current => current === observableRow,
 	);

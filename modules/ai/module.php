@@ -28,10 +28,33 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	}
 
 	public function init_hooks() {
-		// TODO: Implement init_hooks() method.
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_assets' ) );
+		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'editor_enqueue_assets' ) );
 	}
 
 	public function remove_hooks() {
-		// TODO: Implement remove_hooks() method.
+		remove_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_assets' ) );
+		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'editor_enqueue_assets' ) );
+	}
+
+	public function admin_enqueue_assets() {
+		wp_enqueue_style( 'wp-components' );
+		wp_enqueue_script(
+			$this->get_handle(),
+			$this->get_url( 'assets/build/js/admin/forms.js' ),
+			array( 'wp-dom-ready', 'wp-components', 'wp-i18n' ),
+			jet_form_builder()->get_version(),
+			true
+		);
+	}
+
+	public function editor_enqueue_assets() {
+		wp_enqueue_script(
+			$this->get_handle(),
+			$this->get_url( 'assets/build/js/editor.js' ),
+			array( 'wp-dom-ready', 'wp-components', 'wp-i18n' ),
+			jet_form_builder()->get_version(),
+			true
+		);
 	}
 }

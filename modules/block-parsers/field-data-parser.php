@@ -108,7 +108,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	protected function check_response() {
 		if (
-			$this->context->is_inside_conditional() ||
+			$this->is_inside_conditional() ||
 			( Tools::is_empty( $this->value ) && ! $this->is_required ) ||
 			! Tools::is_empty( $this->value )
 		) {
@@ -436,6 +436,14 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	public function get_errors(): array {
 		return $this->errors;
+	}
+
+	public function set_inside_conditional( bool $is_inside ) {
+		$this->set_setting( '_inside_conditional', $is_inside );
+	}
+
+	public function is_inside_conditional(): bool {
+		return (bool) $this->get_setting( '_inside_conditional' );
 	}
 
 	/**

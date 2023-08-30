@@ -92,6 +92,14 @@ class Parser_Context {
 				if ( ! $parser->get_name() ) {
 					continue;
 				}
+				/**
+				 * We have to set this position directly in each object,
+				 * because the generation of parsers occurs
+				 *
+				 * @see https://github.com/Crocoblock/jetformbuilder/issues/339
+				 */
+				$parser->set_inside_conditional( $this->is_inside_conditional() );
+
 				$this->parsers[ $parser->get_name() ] = $parser;
 			}
 		}

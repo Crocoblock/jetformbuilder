@@ -21,6 +21,7 @@ use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
+use JFB_Modules\Gateways\Paypal\Controller;
 use JFB_Modules\Modules_Controller;
 use Jet_Form_Builder\Presets\Preset_Manager;
 

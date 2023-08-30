@@ -18,6 +18,7 @@ use Jet_Form_Builder\Post_Meta\Messages_Meta;
 use Jet_Form_Builder\Post_Meta\Recaptcha_Meta;
 use Jet_Form_Builder\Post_Meta\Validation_Meta;
 use Jet_Form_Builder\Shortcodes\Manager;
+use JFB_Modules\Gateways\Paypal\Controller;
 
 // If this file is called directly, abort.
 
@@ -328,7 +329,7 @@ class Post_Type {
 	 *
 	 * @return array
 	 */
-	public function get_captcha( $form_id = false ) {
+	public function get_captcha( $form_id = false ): array {
 		return $this->get_meta( Recaptcha_Meta::class )->query( $form_id );
 	}
 
@@ -340,11 +341,7 @@ class Post_Type {
 	 * @return array
 	 */
 	public function get_gateways( $form_id = false ): array {
-		try {
-			return $this->rep_get_item( Gateways_Meta::class )->query( $form_id );
-		} catch ( Repository_Exception $exception ) {
-			return array();
-		}
+		return $this->get_meta( Gateways_Meta::class )->query( $form_id );
 	}
 
 	public function get_validation( $form_id = false ) {

@@ -11,6 +11,9 @@ const {
 const buttonDiv = document.createElement( 'div' );
 buttonDiv.classList.add( 'jfb-generate-form-ai-wrapper' );
 
+// Render our button.
+createRoot( buttonDiv ).render( <GenerateFormButton/> );
+
 const appendButton = function () {
 	const header = document.querySelector(
 		'.edit-post-header-toolbar',
@@ -27,13 +30,8 @@ const appendButton = function () {
 	return null;
 };
 
-const mountGenerateFormAIButton = () => {
-	// Render our button.
-	createRoot( buttonDiv ).render( <GenerateFormButton/> );
-
+wp.domReady( () => {
 	subscribe( () => {
 		setTimeout( appendButton, 0 );
 	} );
-};
-
-wp.domReady( mountGenerateFormAIButton );
+} );

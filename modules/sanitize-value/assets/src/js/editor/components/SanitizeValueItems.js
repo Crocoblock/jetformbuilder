@@ -18,6 +18,10 @@ const {
 	      useBlockAttributes,
       } = JetFBHooks;
 
+const {
+	      BaseHelp,
+      } = JetFBComponents;
+
 /**
  * @see https://github.com/WordPress/gutenberg/blob/trunk/packages/components/src/dropdown-menu/index.tsx#L169
  *
@@ -134,10 +138,16 @@ const SanitizeValueItems = function () {
 	return <ToolbarDropdownMenu
 		icon={ lifeSaverIcon }
 		label={ __(
-			'Choose a value transformation method',
+			'Sanitize value',
 			'jet-form-builder',
 		) }
 	>{ ( { onClose } ) => <>
+		<BaseHelp>
+			{ __(
+				'Select method to clean user input before process form',
+				'jet-form-builder',
+			) }
+		</BaseHelp>
 		{ sanitizers.map( ( control, index ) => {
 			return <ControlButton
 				key={ index }

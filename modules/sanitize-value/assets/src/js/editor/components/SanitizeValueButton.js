@@ -32,8 +32,7 @@ function SanitizeValueButton() {
 		icon={ control.icon }
 		aria-checked={ isActive }
 		role="menuitemcheckbox"
-		label={ control.help || '' }
-		showTooltip
+		shortcut={ control.help || '' }
 	>
 		{ control.label }
 	</Button>;

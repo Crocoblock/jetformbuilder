@@ -1,20 +1,13 @@
-import ListActionItem from '../../../plugins/actions/action.item';
+import toBulk from './toBulk';
+import fromBulk from './fromBulk';
 
 const {
 	      __,
-	      sprintf,
       } = wp.i18n;
-
-const {
-	      SVG,
-	      Path,
-      } = wp.primitives;
 
 const {
 	      useState,
 	      useEffect,
-	      Children,
-	      cloneElement,
       } = wp.element;
 
 let {
@@ -36,10 +29,6 @@ const {
       } = JetFBHooks;
 
 const {
-	      isEmpty,
-      } = JetFBActions;
-
-const {
 	      ActionModalFooterSlotFill,
 	      BaseHelp,
       } = JetFBComponents;
@@ -52,85 +41,12 @@ const baseBulk = window.JetFBBulkOptions.sources[
 	Object.keys( window.JetFBBulkOptions.sources )[ 0 ]
 	];
 
-const toBulk = val => JSON.stringify( val, undefined, 4 );
-
-const resolveErrors = bulk => {
-	let options;
-	let currentErrors = [];
-
-	try {
-		options = JSON.parse( bulk );
-	}
-	catch ( error ) {
-		return [ error.message ];
-	}
-
-	if ( !Array.isArray( options ) ) {
-		return [
-			__(
-				'Your value must be an array.',
-				'jet-form-builder',
-			),
-		];
-	}
-
-	for ( const [ index, current ] of Object.entries(
-		options,
-	) ) {
-		if ( 'object' !== typeof current ) {
-			currentErrors.push(
-				__(
-					`[row:${ index }] Each array element must be an object`,
-					'jet-form-builder',
-				),
-			);
-
-			continue;
-		}
-
-		const { label, value, ...other } = current;
-
-		if ( !isEmpty( label ) ||
-			!isEmpty( value ) ||
-			isEmpty( other )
-		) {
-			continue;
-		}
-
-		currentErrors.push(
-			__(
-				`[row:${ index }] You have an incorrect object format. 
-There are no values for the value or label keys`,
-				'jet-form-builder',
-			),
-		);
-	}
-
-	if ( 1 >= currentErrors.length ) {
-		return currentErrors;
-	}
-
-	const [ first, ...otherErrors ] = currentErrors;
-
-	return [
-		first,
-		sprintf(
-			__(
-				'...and %d more incorrect elements',
-				'jet-form-builder',
-			),
-			otherErrors.length,
-		),
-	];
-};
-
 function BulkOptions( { setModalContent } ) {
 	const [ bulk, setBulk ] = useState(
 		() => toBulk( baseBulk ),
 	);
 
 	const [ bulkSelect, setBulkSelect ] = useState( 'base' );
-	const [ errors, setErrors ]         = useState( [] );
 	const { attributes, setAttributes } = useScopedAttributesContext();
 
 	useEffect(
@@ -138,17 +54,6 @@ function BulkOptions( { setModalContent } ) {
 			setBulk( toBulk( window.JetFBBulkOptions.sources[ bulkSelect ] ) );
 		},
 		[ bulkSelect ],
-	);
-
-	useEffect(
-		() => {
-			setErrors( resolveErrors( bulk ) );
-		},
-		[ bulk ],
-	);
-
-	const errorsElements = errors.map(
-		error => <li>{ error }</li>,
 	);
 
 	return <>
@@ -169,23 +74,18 @@ function BulkOptions( { setModalContent } ) {
 		<TextareaControl
 			className="jet-control-clear"
 			value={ bulk }
-			onChange={ setBulk }
-			rows={ 18 }
+			onChange={ val => setBulk( toBulk( val ) ) }
+			rows={ 16 }
 		/>
-		<BaseHelp style={ {
-			color: Boolean( errors.length )
-			       ? '#9e1313'
-			       : '#208949',
-		} }>
-			{ Boolean( errors.length )
-			  ? <ul className="jet-fb-ul-revert-layer">
-				  { Children.map(
-					  errorsElements,
-					  cloneElement,
-				  ) }
-			  </ul>
-			  : __( 'You have the correct value format', 'jet-form-builder' )
-			}
+		<BaseHelp>
+			{ __(
+				`You can specify a different value and value 
+for the calculator field by separating them with a colon character`,
+				'jet-form-builder',
+			) }
+			<br/>
+			<br/>
+			Book #1 : book_1 : 100
 		</BaseHelp>
 		<ModalFooterFill>
 			<ButtonGroup
@@ -193,12 +93,11 @@ function BulkOptions( { setModalContent } ) {
 			>
 				<Button
 					isPrimary
-					disabled={ Boolean( errors.length ) }
 					onClick={ () => {
 						setAttributes( {
 							field_options: [
 								...attributes.field_options,
-								...JSON.parse( bulk ),
+								...fromBulk( bulk ),
 							],
 						} );
 						setModalContent( false );

@@ -329,13 +329,15 @@ CalculatedFormula.prototype = {
 			return;
 		}
 
+		const index = this.root.parent.findIndex( this.root );
+
 		console.error(
 			sprintf(
 				__( 'Scope: %s', 'jet-form-builder' ),
 				[
 					...this.root.parent.path,
-					this.root.parent.findIndex( this.root ),
-				].join( '.' ),
+					-1 === index ? '' : index,
+				].filter( Boolean ).join( '.' ),
 			),
 		);
 	},

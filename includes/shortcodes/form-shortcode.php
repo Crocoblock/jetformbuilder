@@ -48,7 +48,7 @@ class Form_Shortcode extends Shortcode {
 	public function generate( $settings ) {
 		$form = jet_form_builder()->blocks->get_form_class();
 
-		return $form->render_callback_field( $settings );
+		return do_shortcode( $form->render_callback_field( $settings ) );
 	}
 
 

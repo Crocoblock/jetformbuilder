@@ -1,5 +1,10 @@
 import CalculatedHtmlString from './CalculatedHtmlString';
 
+const {
+	      __,
+	      sprintf,
+      } = wp.i18n;
+
 /**
  * @param comment
  * @param root {Observable}
@@ -9,9 +14,20 @@ function observeComment( comment, root ) {
 	formula.observe( comment.textContent );
 
 	if ( !formula.parts?.length ) {
-		console.info(
-			`Invalid macro ${ comment.textContent } in this scope`,
+		console.group(
+			__(
+				'JetFormBuilder: You have invalid html macro',
+				'jet-form-builder',
+			),
 		);
+		console.error(
+			sprintf(
+				__( 'Content: %s', 'jet-form-builder' ),
+				comment.textContent,
+			)
+		);
+		console.groupEnd();
+		formula.clearWatchers();
 
 		return;
 	}
@@ -28,6 +44,17 @@ function observeComment( comment, root ) {
 	};
 	formula.setResult();
 	comment.jfbObserved = true;
+}
+
+/**
+ * TODO: https://developer.mozilla.org/en-US/docs/Web/API/Node/contains
+ *
+ * @param commentNode
+ * @param root
+ */
+function findClosestField( commentNode, root ) {
+	// it could inside label or description
+	// it could be
 }
 
 /**

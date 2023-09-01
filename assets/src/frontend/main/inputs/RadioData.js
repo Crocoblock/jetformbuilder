@@ -8,7 +8,7 @@ function RadioData() {
 
 	this.wrapper = null;
 
-	this.isSupported  = function ( node ) {
+	this.isSupported    = function ( node ) {
 		return (
 			node.classList.contains( 'checkradio-wrap' ) &&
 			node.querySelector( '.radio-wrap' )
@@ -17,7 +17,7 @@ function RadioData() {
 	this.addListeners   = function () {
 		this.enterKey = new ReactiveHook();
 
-		this.wrapper.addEventListener( 'change', () => this.setValue() );
+		this.wrapper.addEventListener( 'change', () => this.setValue( true ) );
 		this.wrapper.addEventListener(
 			'keydown',
 			this.handleEnterKey.bind( this ),
@@ -34,21 +34,28 @@ function RadioData() {
 				return;
 			}
 			this.callable.lockTrigger();
-			this.setValue();
+			this.setValue( true );
 			this.callable.unlockTrigger();
 		} );
 	};
-	this.setValue       = function () {
-		this.value.current = this.getActiveValue();
+	this.setValue       = function ( isEvent = false ) {
+		this.value.current = this.getActiveValue( isEvent );
 	};
-	this.getActiveValue = function () {
+	this.getActiveValue = function ( isEvent = false ) {
 		for ( const node of this.nodes ) {
+			if ( node.dataset.custom ) {
+				continue;
+			}
 			if ( node.checked ) {
 				return node.value;
 			}
 		}
 
-		return '';
+		if ( !this.hasCustom || !isEvent ) {
+			return '';
+		}
+
+		return this.getCustomInput().value || true;
 	};
 
 	this.setNode = function ( node ) {
@@ -67,9 +74,23 @@ function RadioData() {
 		 * @type {HTMLElement|HTMLInputElement}
 		 */
 		this.wrapper = node;
+
+		this.hasCustom = !!(
+			this.lastNode()?.dataset?.custom
+		);
 	};
 }
 
 RadioData.prototype = Object.create( InputData.prototype );
+
+RadioData.prototype.lastNode = function () {
+	return this.nodes[ this.nodes.length - 1 ];
+};
+
+RadioData.prototype.getCustomInput = function () {
+	const lastWrapper = this.lastNode().closest( '.custom-option' );
+
+	return lastWrapper.querySelector( 'input.text-field' );
+};
 
 export default RadioData;

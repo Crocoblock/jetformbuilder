@@ -23,9 +23,14 @@ const {
 	      useBlockProps,
       } = wp.blockEditor;
 const {
-	      ToggleControl,
 	      PanelBody,
+	      ToolbarButton,
       } = wp.components;
+
+const {
+	      SVG,
+	      Path,
+      } = wp.primitives;
 
 const {
 	      useUniqueNameOnDuplicate,
@@ -37,6 +42,7 @@ export default function RadioEdit( props ) {
 		      isSelected,
 		      attributes,
 		      editProps: { uniqKey },
+		      setAttributes,
 	      } = props;
 
 	const blockProps = useBlockProps();
@@ -53,10 +59,30 @@ export default function RadioEdit( props ) {
 	}
 
 	return <>
-		<ToolBarFields
-			key={ uniqKey( 'ToolBarFields' ) }
-			{ ...props }
-		/>
+		<ToolBarFields>
+			<ToolbarButton
+				icon={ <SVG xmlns="http://www.w3.org/2000/svg"
+				            viewBox="0 0 24 24" width="24" height="24"
+				            aria-hidden="true" focusable="false">
+					<Path
+						d="M4 20h9v-1.5H4V20zm0-5.5V16h16v-1.5H4zm.8-4l.7.7 2-2V12h1V9.2l2 2 .7-.7-2-2H12v-1H9.2l2-2-.7-.7-2 2V4h-1v2.8l-2-2-.7.7 2 2H4v1h2.8l-2 2z"/>
+				</SVG> }
+				title={ attributes.custom_option
+				        ? __(
+						'Click to not show option for custom value',
+						'jet-form-builder',
+					)
+				        : __(
+						'Click to allow custom value option',
+						'jet-form-builder',
+					)
+				}
+				onClick={ () => setAttributes( {
+					custom_option: !attributes.custom_option,
+				} ) }
+				isActive={ attributes.custom_option }
+			/>
+		</ToolBarFields>
 		<SwitchPageOnChangeControls/>
 		{ isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }

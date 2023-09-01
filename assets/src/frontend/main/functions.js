@@ -104,6 +104,10 @@ function toHTML( text ) {
 }
 
 function isEmpty( value ) {
+	if ( 'boolean' === typeof value ) {
+		return !value;
+	}
+
 	if ( null === value || undefined === value ) {
 		return true;
 	}

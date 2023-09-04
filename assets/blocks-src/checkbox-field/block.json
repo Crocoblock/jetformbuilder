@@ -27,7 +27,7 @@
 		"custom_option": {
 			"type": "object",
 			"default": {
-				"allow": true,
+				"allow": false,
 				"label": "+ Add New"
 			}
 		},

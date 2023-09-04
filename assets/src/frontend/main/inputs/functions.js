@@ -100,4 +100,8 @@ function populateInputs( inputs ) {
 	return list;
 }
 
-export { getParsedName, createInput, populateInputs };
+function getCustomCheckboxInput( node ) {
+	return node.nextElementSibling.querySelector( 'input.text-field' );
+}
+
+export { getParsedName, createInput, populateInputs, getCustomCheckboxInput };

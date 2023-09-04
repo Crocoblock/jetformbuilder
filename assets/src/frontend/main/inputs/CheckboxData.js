@@ -1,6 +1,6 @@
 import InputData from './InputData';
 import ReactiveHook from '../reactive/ReactiveHook';
-import { getParsedName } from './functions';
+import { getCustomCheckboxInput, getParsedName } from './functions';
 
 function sanitizeValue( value ) {
 	if ( Array.isArray( value ) ) {
@@ -42,6 +42,17 @@ function CheckboxData() {
 			this.reportOnBlur();
 		} );
 
+		if ( this.addNewButton ) {
+			this.wrapper.addEventListener( 'click', event => {
+				if ( event?.target &&
+					!this.addNewButton.isEqualNode( event.target )
+				) {
+					return;
+				}
+				this.value.current = [ ...this.value.current, true ];
+			} );
+		}
+
 		if ( !this.isArray() ) {
 			return;
 		}
@@ -68,12 +79,46 @@ function CheckboxData() {
 		 * @type {HTMLElement|HTMLInputElement}
 		 */
 		this.wrapper = node;
+
+		this.addNewButton = node.querySelector(
+			'.jet-form-builder__field-wrap.custom-option .add-custom-option',
+		);
 	};
 
 	this.getActiveValue = function () {
-		const value = Array.from( this.nodes ).
-			filter( item => item.checked ).
-			map( item => item.value );
+		const value = [];
+
+		// iterate checkboxes
+		for ( const node of this.nodes ) {
+			if ( !node.dataset.custom && !node.checked ) {
+				continue;
+			}
+
+			// if basic option just return value
+			if ( !node.dataset.custom ) {
+				value.push( node.value );
+				continue;
+			}
+
+			const input = getCustomCheckboxInput( node );
+
+			if ( !node.checked && !input.value ) {
+				continue;
+			}
+
+			// recently added new option
+			if ( !input.value && node.checked ) {
+				value.push( true );
+				continue;
+			}
+
+			if ( !input.value ) {
+				continue;
+			}
+
+			// disabled or enable input, depending on checkbox check state
+			value.push( !node.checked ? false : input.value );
+		}
 
 		return this.isArray() ? value : (
 			value?.[ 0 ] ?? ''

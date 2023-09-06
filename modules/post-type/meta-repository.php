@@ -172,4 +172,34 @@ class Meta_Repository {
 		return $this->get_captcha( $form_id );
 	}
 
+	/**
+	 * If possible, use this method before triggering the `init` hook with priority 10
+	 *
+	 * @param Meta\Base_Meta_Type $type
+	 *
+	 * @see \JFB_Modules\Post_Type\Module::register_post_type
+	 */
+	public function install( Meta\Base_Meta_Type $type ) {
+		$this->rep_install_item_soft( $type );
+
+		if ( ! did_action( 'init' ) ) {
+			return;
+		}
+
+		register_post_meta( Module::SLUG, $type->get_id(), $type->to_array() );
+	}
+
+	/**
+	 * @param $slug string|Meta\Base_Meta_Type
+	 */
+	public function uninstall( $slug ) {
+		$this->rep_remove( $slug );
+
+		if ( is_object( $slug ) ) {
+			$slug = $slug->get_id();
+		}
+
+		unregister_post_meta( Module::SLUG, $slug );
+	}
+
 }

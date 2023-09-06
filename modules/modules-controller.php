@@ -40,6 +40,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Captcha\Module(),
 			new Gateway_Manager(),
 			new Active_Campaign\Module(),
+			new Verification\Module(),
 		);
 	}
 

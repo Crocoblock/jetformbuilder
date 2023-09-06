@@ -8,14 +8,17 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
+use JFB_Modules\Post_Type\Module as PostTypeModule;
+use JFB_Modules\Verification\Post_Type\Meta\Verification_Meta;
 
-class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_It {
+class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_It, Base_Module_After_Install_It {
 
 	use Base_Module_Dir_Trait;
 	use Base_Module_Handle_Trait;
@@ -27,6 +30,22 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 
 	public function condition(): bool {
 		return true;
+	}
+
+	public function on_install() {
+		/** @noinspection PhpUnhandledExceptionInspection */
+		/** @var PostTypeModule $post_type */
+		$post_type = jet_form_builder()->module( PostTypeModule::class );
+
+		$post_type->get_meta()->install( new Verification_Meta() );
+	}
+
+	public function on_uninstall() {
+		/** @noinspection PhpUnhandledExceptionInspection */
+		/** @var PostTypeModule $post_type */
+		$post_type = jet_form_builder()->module( PostTypeModule::class );
+
+		$post_type->get_meta()->uninstall( Verification_Meta::class );
 	}
 
 	public function init_hooks() {

@@ -1,4 +1,4 @@
-import PluginVerification from './verification-plugin/render';
+import PluginVerification from './verification-plugin';
 
 const {
 	      addFilter,

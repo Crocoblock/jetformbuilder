@@ -9,7 +9,7 @@ function NotEmail() {
 	this.validate      = function () {
 		const value = this.getValue();
 
-		return !value || /^[\w-\.]+@([\w-]+\.)+[\w-]{1,6}$/.test( value );
+		return !value || /^[\w-\.\+]+@([\w-]+\.)+[\w-]{1,6}$/.test( value );
 	};
 	this.getRawMessage = function () {
 		return this.getMessageBySlug( 'email' );

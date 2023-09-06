@@ -662,10 +662,14 @@ input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
 	background-color: #e9ecef;
 }
 
-.jet-form-builder__field-wrap.checkradio-wrap span {
-	/*display: contents;*/
-	display: flex;
-	align-items: center;
+.jet-form-builder__field-wrap.checkradio-wrap {
+	margin-bottom: 0.7em;
+
+	span {
+		/*display: contents;*/
+		display: flex;
+		align-items: center;
+	}
 }
 
 .rtl .jet-form-builder-row,

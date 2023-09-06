@@ -103,6 +103,7 @@ function CheckboxData() {
 			const input = getCustomCheckboxInput( node );
 
 			if ( !node.checked && !input.value ) {
+				value.push( null );
 				continue;
 			}
 

@@ -35,8 +35,8 @@ function SignalCheckbox() {
 			let currentNode    = customNodes[ i ];
 			const currentValue = current[ i ];
 
-			// remove
-			if ( 'undefined' === typeof currentValue ) {
+			// value has been removed
+			if ( null === currentValue ) {
 				currentNode.closest( '.custom-option' ).remove();
 
 				continue;
@@ -66,6 +66,12 @@ function SignalCheckbox() {
 
 			input.value = currentValue;
 		}
+
+		this.input.value.silence();
+		this.input.value.current = this.input.value.current.filter(
+			valueItem => null !== valueItem,
+		);
+		this.input.value.silence();
 	};
 }
 

@@ -109,9 +109,25 @@ export default {
 			...state,
 			computedFields: [
 				...state.computedFields,
-				action.field
-			]
+				action.field,
+			],
 		}
 	),
+	[ constants.editAction ]: ( state, action ) => {
+		const list = state.list.map( current => {
+			return current.value !== action.actionType
+			       ? current
+			       : {
+					...current,
+					...action.replace,
+					value: action.actionType, // .value should not changed
+				};
+		} );
+
+		return {
+			...state,
+			list,
+		};
+	},
 
 };

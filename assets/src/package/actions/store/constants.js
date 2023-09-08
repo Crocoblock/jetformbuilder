@@ -9,4 +9,5 @@ export default {
 	setMeta: 'SET_CURRENT_META',
 	clearCurrent: 'CLEAR_CURRENT',
 	addComputedField: 'ADD_COMPUTED_FIELD',
+	editAction: 'EDIT_ACTION',
 };

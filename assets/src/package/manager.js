@@ -89,7 +89,7 @@ import './store.manager';
 import ActionModalContext from './action-modal/context/ActionModalContext';
 import SafeDeleteContext from './repeater/context/safe.delete';
 import RepeaterItemContext from './repeater/context/repeater.item';
-import ActionListItemContext from './context/action.list.item';
+import ActionListItemContext from './actions/context/ActionListItemContext';
 import RepeaterBodyContext from './repeater/context/repeater.custom.item.body';
 import RepeaterHeadContext from './repeater/context/repeater.custom.item.head';
 import RepeaterButtonsContext
@@ -179,6 +179,24 @@ import useSupport from './blocks/hooks/useSupport';
 import AttributeHelp from './blocks/components/AttributeHelp';
 import ActionMessagesSlotFills
 	from './actions/components/ActionMessagesSlotFills';
+import ListActionItem from './actions/components/ListActionItem';
+import ActionItemWrapper from './actions/components/ActionItemWrapper';
+import ActionItemHeader from './actions/components/ActionItemHeader';
+import ActionItemFooter from './actions/components/ActionItemFooter';
+import EditActionSettingsButton
+	from './actions/components/EditActionSettingsButton';
+import AllProActionsLink from './actions/components/AllProActionsLink';
+import AddActionButton from './actions/components/AddActionButton';
+import ActionsAfterNewButtonSlotFill
+	from './actions/components/ActionsAfterNewButtonSlotFill';
+import EditActionConditionsButton
+	from './actions/components/EditActionConditionsButton';
+import ActionItemDetails from './actions/components/ActionItemDetails';
+import ActionItemDetailsSlotFill
+	from './actions/components/ActionItemDetailsSlotFill';
+import ActionItemMoreButton from './actions/components/ActionItemMoreButton';
+import useLoopedAction from './actions/hooks/useLoopedAction';
+import SelectActionsControl from './actions/components/SelectActionsControl';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -268,6 +286,19 @@ window.JetFBComponents = {
 	ToggleGroupVariations,
 	AttributeHelp,
 	ActionMessagesSlotFills,
+	ActionsAfterNewButtonSlotFill,
+	ListActionItem,
+	ActionItemWrapper,
+	ActionItemHeader,
+	ActionItemFooter,
+	EditActionSettingsButton,
+	AllProActionsLink,
+	AddActionButton,
+	EditActionConditionsButton,
+	ActionItemDetails,
+	ActionItemDetailsSlotFill,
+	ActionItemMoreButton,
+	SelectActionsControl,
 };
 
 // JFBFunctions
@@ -343,5 +374,6 @@ window.JetFBHooks = {
 	useUniqueNameOnDuplicate,
 	useFields: useFields,
 	useSupport,
+	useLoopedAction,
 };
 

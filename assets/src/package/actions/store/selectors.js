@@ -20,6 +20,12 @@ const self = {
 	getComputedFields( state ) {
 		return state.computedFields;
 	},
+	getActionsList( state ) {
+		return state.list;
+	},
+	getAction( state, type ) {
+		return state.list.find( ( { value } ) => value === type );
+	},
 };
 
 export default {

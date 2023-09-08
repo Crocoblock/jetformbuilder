@@ -70,4 +70,11 @@ export default {
 			field,
 		};
 	},
+	editAction( actionType, replace ) {
+		return {
+			type: constants.editAction,
+			actionType,
+			replace,
+		};
+	},
 };

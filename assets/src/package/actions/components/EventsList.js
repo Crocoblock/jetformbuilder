@@ -1,18 +1,13 @@
+import useActionsEdit from '../hooks/useActionsEdit';
+import ActionListItemContext from '../context/ActionListItemContext';
+
 const {
-	      useDispatch,
 	      useSelect,
       } = wp.data;
 
 const {
 	      useContext,
       } = wp.element;
-
-const {
-	      ActionListItemContext,
-      } = JetFBComponents;
-const {
-	      useActionsEdit,
-      } = JetFBHooks;
 
 const { __ } = wp.i18n;
 

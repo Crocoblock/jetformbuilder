@@ -1,23 +1,26 @@
 import { defaultActions } from './options';
 import EditSettingsModal from './edit.settings.modal';
 import EditConditionsModal from './edit.conditions.modal';
-import ListActionItem from './action.item';
 
 const {
 	      useEffect,
-	      useState,
 	      Children,
 	      cloneElement,
       } = wp.element;
+
 const {
-	      Button,
-	      ExternalLink,
+	      Flex,
+	      withFilters,
       } = wp.components;
 
 const { __ } = wp.i18n;
 
 const {
-	      BaseAction,
+	      ActionsAfterNewButtonSlotFill,
+	      ActionListItemContext,
+	      ListActionItem,
+	      AllProActionsLink,
+	      AddActionButton,
       } = JetFBComponents;
 const {
 	      useActionsEdit,
@@ -26,7 +29,15 @@ const {
 	      useSelect,
       } = wp.data;
 
+const {
+	      PluginDocumentSettingPanel,
+      } = wp.editPost;
+
 let isSetDefault = false;
+
+const ListActionItemFiltered = withFilters( 'jet.fb.action.item' )(
+	ListActionItem,
+);
 
 function PluginActions() {
 	const { actions, setActions } = useActionsEdit();
@@ -44,37 +55,31 @@ function PluginActions() {
 	}, [] );
 
 	const elements = actions.map(
-		( action, index ) => <ListActionItem
-			action={ action }
-			index={ index }
-		/>,
+		( action, index ) => <ActionListItemContext.Provider
+			value={ { index, action } }
+		>
+			<ListActionItemFiltered/>
+		</ActionListItemContext.Provider>,
 	);
 
-	return <>
+	return <PluginDocumentSettingPanel
+		title={ __( 'Post Submit Actions', 'jet-form-builder' ) }
+		icon="admin-plugins"
+	>
 		{ Children.map(
 			elements,
 			cloneElement,
 		) }
-		<div className="jet-fb flex jc-space-between">
-			<Button
-				isPrimary
-				onClick={ () => {
-					setActions( [ ...actions, { ...new BaseAction() } ] );
-				} }
-			>
-				{ __( '+ New Action', 'jet-form-builder' ) }
-			</Button>
-			{ (
-				!JetFormEditorData.isActivePro
-			) && <div className={ 'jet-fb flex-center' }>
-				<ExternalLink href={ JetFormEditorData.utmLinks.allProActions }>
-					{ __( 'All PRO Actions', 'jet-form-builder' ) }
-				</ExternalLink>
-			</div> }
-		</div>
+		<ActionsAfterNewButtonSlotFill.Slot>
+			{ fills => <Flex wrap>
+				<AddActionButton/>
+				{ fills }
+				<AllProActionsLink/>
+			</Flex> }
+		</ActionsAfterNewButtonSlotFill.Slot>
 		<EditSettingsModal/>
 		<EditConditionsModal/>
-	</>;
+	</PluginDocumentSettingPanel>;
 }
 
 export default PluginActions;

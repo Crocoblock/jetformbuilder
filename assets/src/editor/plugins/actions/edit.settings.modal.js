@@ -1,6 +1,7 @@
 const {
 	      ActionModal,
       } = JetFBComponents;
+
 const {
 	      useCurrentAction,
 	      useActionCallback,
@@ -8,7 +9,13 @@ const {
 	      useUpdateCurrentActionMeta,
       } = JetFBHooks;
 
-const { useSelect } = wp.data;
+const {
+	      useSelect,
+      } = wp.data;
+
+const {
+	      __,
+      } = wp.i18n;
 
 function EditSettingsModal() {
 	const isSettingsModal = useSelect(
@@ -26,11 +33,11 @@ function EditSettingsModal() {
 
 	return <ActionModal
 		classNames={ [ 'width-60' ] }
-		title={ 'Edit Action' }
+		title={ __( 'Edit Action', 'jet-form-builder' ) }
 		onRequestClose={ clearCurrent }
 		onCancelClick={ clearCurrent }
 		onUpdateClick={ () => {
-			updateAction( { settings: currentAction.settings } );
+			updateAction( currentAction );
 			clearCurrent();
 		} }
 	>

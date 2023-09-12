@@ -19,6 +19,7 @@ use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Post_Type\Module as PostTypeModule;
 use JFB_Modules\Verification\Actions\Verification;
 use JFB_Modules\Verification\Post_Type\Meta\Verification_Meta;
+use JFB_Modules\Verification\Events;
 
 class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_It, Base_Module_After_Install_It {
 
@@ -53,11 +54,13 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	public function init_hooks() {
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
 		add_action( 'jet-form-builder/actions/register', array( $this, 'actions_register' ) );
+		add_filter( 'jet-form-builder/event-types', array( $this, 'events_register' ) );
 	}
 
 	public function remove_hooks() {
 		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
 		remove_action( 'jet-form-builder/actions/register', array( $this, 'actions_register' ) );
+		remove_filter( 'jet-form-builder/event-types', array( $this, 'events_register' ) );
 	}
 
 	public function enqueue_editor_assets() {
@@ -72,5 +75,15 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 
 	public function actions_register( Manager $manager ) {
 		$manager->register_action_type( new Verification() );
+	}
+
+	public function events_register( array $types ): array {
+		array_push(
+			$types,
+			new Events\Verification_Success\Event(),
+			new Events\Verification_Failed\Event()
+		);
+
+		return $types;
 	}
 }

@@ -23,6 +23,15 @@ const self = {
 	getActionsList( state ) {
 		return state.list;
 	},
+	getActionsMap( state ) {
+		const map = {};
+
+		for ( const listElement of state.list ) {
+			map[ listElement.value ] = listElement;
+		}
+
+		return map;
+	},
 	getAction( state, type ) {
 		return state.list.find( ( { value } ) => value === type );
 	},

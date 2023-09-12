@@ -129,5 +129,17 @@ export default {
 			list,
 		};
 	},
+	[ constants.openActionSettings ]: ( state, action ) => {
+		const { index, item } = action;
+
+		return {
+			...state,
+			meta: {
+				index,
+				modalType: 'settings',
+			},
+			currentAction: item,
+		};
+	},
 
 };

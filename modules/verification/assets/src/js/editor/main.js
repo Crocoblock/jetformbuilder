@@ -2,6 +2,7 @@ import PluginVerification from './plugin';
 import VerificationRender from './action/VerificationRender';
 import VerificationActionItem from './action/VerificationActionItem';
 import VerificationActionWatcher from './action/VerificationActionWatcher';
+import { ACTION, FAILED_EVENT, SUCCESS_EVENT } from './constants';
 
 const {
 	      addFilter,
@@ -13,9 +14,10 @@ const {
 
 const {
 	      subscribe,
+	      dispatch,
       } = wp.data;
 
-addAction( 'verification', VerificationRender );
+addAction( ACTION, VerificationRender );
 
 addFilter(
 	'jet.fb.register.plugin.jf-actions-panel.before',
@@ -34,3 +36,10 @@ addFilter(
 );
 
 subscribe( VerificationActionWatcher );
+
+dispatch( 'jet-forms/actions' ).editAction(
+	ACTION,
+	{
+		provideEvents: () => [ SUCCESS_EVENT, FAILED_EVENT ],
+	},
+);

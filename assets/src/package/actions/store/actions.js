@@ -77,4 +77,11 @@ export default {
 			replace,
 		};
 	},
+	openActionSettings( { item, index } ) {
+		return {
+			type: constants.openActionSettings,
+			item,
+			index,
+		};
+	},
 };

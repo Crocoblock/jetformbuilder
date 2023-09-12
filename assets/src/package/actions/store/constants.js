@@ -10,4 +10,5 @@ export default {
 	clearCurrent: 'CLEAR_CURRENT',
 	addComputedField: 'ADD_COMPUTED_FIELD',
 	editAction: 'EDIT_ACTION',
+	openActionSettings: 'OPEN_ACTION_SETTINGS',
 };

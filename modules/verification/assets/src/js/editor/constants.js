@@ -1,0 +1,9 @@
+const ACTION        = 'verification';
+const SUCCESS_EVENT = 'VERIFICATION.SUCCESS';
+const FAILED_EVENT  = 'VERIFICATION.FAILED';
+
+export {
+	ACTION,
+	SUCCESS_EVENT,
+	FAILED_EVENT,
+};

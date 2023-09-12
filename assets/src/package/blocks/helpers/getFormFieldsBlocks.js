@@ -32,11 +32,14 @@ function getFormFieldsBlocks(
 			const blockType = select( 'core/blocks' ).
 				getBlockType( block.name );
 
-			if ( !blockType.hasOwnProperty( 'jfbGetFields' ) ) {
-				return;
-			}
+			let { fields: newFields = [] } = blockType.jfbResolveBlock.call(
+				block,
+				context,
+			);
 
-			const newFields = blockType.jfbGetFields.call( block, context );
+			if ( blockType.hasOwnProperty( 'jfbGetFields' ) ) {
+				newFields = blockType.jfbGetFields.call( block, context );
+			}
 
 			formFields.push(
 				...newFields.filter( current => !formFields.some(

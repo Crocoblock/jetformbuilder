@@ -3,6 +3,7 @@ import BaseHelp from './BaseHelp';
 const {
 	      FormToggle,
 	      BaseControl,
+	      Flex,
       } = wp.components;
 
 const {
@@ -22,17 +23,17 @@ function ToggleControl( {
 	const id         = `inspector-jfb-toggle-control-${ instanceId }`;
 
 	return <BaseControl id={ id }>
-		<div className={ 'jet-fb flex gap-default' }>
+		<Flex gap={ 3 }>
 			<FormToggle
 				id={ id }
 				checked={ checked }
 				onChange={ ( event ) => onChange( event.target.checked ) }
 				disabled={ disabled }
 			/>
-			<label htmlFor={ id }>
+			<label htmlFor={ id } style={ { width: '100%' } }>
 				{ children }
 			</label>
-		</div>
+		</Flex>
 		{ 'string' === typeof Help
 		  ? <BaseHelp>{ Help }</BaseHelp>
 		  : Help && <Help/>

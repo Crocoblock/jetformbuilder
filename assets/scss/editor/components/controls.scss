@@ -49,6 +49,12 @@
 		}
 	}
 
+	&.label-reset-margin {
+		.components-base-control__label {
+			margin-right: unset;
+		}
+	}
+
 	&.show {
 		opacity: 1;
 	}

@@ -5,9 +5,6 @@ const selectors = {
 	getBlockMap( state ) {
 		return state.blockMap;
 	},
-	getPropsToSave( state ) {
-		return state.propsToSave;
-	},
 	getFields(
 		state,
 		{
@@ -52,7 +49,8 @@ const selectors = {
 
 		let hasChanged = false;
 
-		let names   = currentBlock.fields.map( ( { value } ) => value );
+		let names   = currentBlock?.fields?.map?.( ( { value } ) => value ) ??
+			[];
 		const scope = currentBlock.hasOwnProperty( 'parentBlock' )
 		              ? currentBlock.parentBlock.innerBlocks
 		              : state.blocks;
@@ -80,7 +78,7 @@ const selectors = {
 			if ( clientId === block.clientId ) {
 				continue;
 			}
-			walkerFields( block.fields );
+			walkerFields( block?.fields ?? [] );
 		}
 
 		return {

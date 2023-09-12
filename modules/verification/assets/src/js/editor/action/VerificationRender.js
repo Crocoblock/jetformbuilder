@@ -12,6 +12,8 @@ let {
 	    ComboboxControl,
 	    Button,
 	    Flex,
+	    SelectControl,
+	    PanelBody,
     } = wp.components;
 
 ToggleGroupControl = (
@@ -43,11 +45,17 @@ const {
 const {
 	      BaseHelp,
 	      BaseAction,
+	      ToggleControl,
       } = JetFBComponents;
 
 const {
 	      useActions,
+	      useFields,
       } = JetFBHooks;
+
+const {
+	      Tools,
+      } = JetFBActions;
 
 /**
  * @param prevPages {Array}
@@ -78,7 +86,16 @@ const mergePages = ( prevPages, newPages ) => {
  * @returns {JSX.Element}
  */
 function VerificationRender( { onChangeSettingObj, settings } ) {
+	const [ hasSuggested, setHasSuggested ] = useState( false );
+
 	const [ actions, setActions ] = useActions( [] );
+
+	const fields = useFields( { withInner: false }, [] );
+
+	const emailField = useMemo(
+		() => fields.find( field => 'email' === field?.attributes?.field_type ),
+		[],
+	);
 
 	const separateSuccessRedirectIdx = useMemo( () => actions.findIndex(
 		( { events = [], type } ) => (
@@ -181,6 +198,55 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 			onChange={ duration => onChangeSettingObj( { duration } ) }
 		/> }
 		<BaseControl
+			label={ __( 'Verify by email', 'jet-form-builder' ) }
+			className="jet-fb label-reset-margin"
+		>
+			<div className="jet-control-clear-full">
+				<SelectControl
+					value={ settings.mail_to }
+					onChange={ mail_to => onChangeSettingObj(
+						{ mail_to } ) }
+					options={ Tools.withPlaceholder( fields ) }
+					hideLabelFromVision
+				/>
+				{ (
+					!hasSuggested && Boolean( emailField )
+				) && <BaseHelp>
+					<Flex justify="flex-start" gap={ 1 }>
+						{ __( 'Choose the:', 'jet-form-builder' ) }
+						<Button
+							isLink
+							onClick={ () => {
+								setHasSuggested( true );
+								onChangeSettingObj(
+									{ mail_to: emailField.value },
+								);
+							} }
+						>
+							{ emailField.label }
+						</Button>
+						{ __( 'field', 'jet-form-builder' ) }
+					</Flex>
+				</BaseHelp> }
+			</div>
+		</BaseControl>
+		<ToggleControl
+			checked={ Boolean( settings.custom_email ) }
+			onChange={ custom_email => onChangeSettingObj( { custom_email } ) }
+		>
+			<Flex gap={ 3 } justify="flex-start">
+				{ __( 'Use custom email?', 'jet-form-builder' ) }
+				{ settings.custom_email && <Button
+					isLink
+					onClick={ () => {
+
+					} }
+				>
+					{ __( '+ Add Send Email action', 'jet-form-builder' ) }
+				</Button> }
+			</Flex>
+		</ToggleControl>
+		<BaseControl
 			label={ __( 'Success Page', 'jet-form-builder' ) }
 			className="control-flex"
 		>
@@ -200,7 +266,8 @@ Redirect to Page action with event:`,
 							  icon={ <svg xmlns="http://www.w3.org/2000/svg"
 							              viewBox="0 0 24 24" width="24"
 							              height="24"
-							              aria-hidden="true" focusable="false">
+							              aria-hidden="true"
+							              focusable="false">
 								  <path
 									  d="m19 7-3-3-8.5 8.5-1 4 4-1L19 7Zm-7 11.5H5V20h7v-1.5Z"/>
 							  </svg> }
@@ -295,7 +362,8 @@ Redirect to Page action with event:`,
 							  icon={ <svg xmlns="http://www.w3.org/2000/svg"
 							              viewBox="0 0 24 24" width="24"
 							              height="24"
-							              aria-hidden="true" focusable="false">
+							              aria-hidden="true"
+							              focusable="false">
 								  <path
 									  d="m19 7-3-3-8.5 8.5-1 4 4-1L19 7Zm-7 11.5H5V20h7v-1.5Z"/>
 							  </svg> }

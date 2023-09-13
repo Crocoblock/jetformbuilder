@@ -26,6 +26,9 @@ function AllProActionsLink() {
 			href={ JetFormEditorData.utmLinks.allProActions }
 			target="_blank"
 			rel="external noreferrer noopener"
+			style={ {
+				textDecoration: 'none',
+			} }
 		>
 			<Flex>
 				{ __( 'All PRO Actions', 'jet-form-builder' ) }

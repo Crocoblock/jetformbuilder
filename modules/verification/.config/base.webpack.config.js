@@ -15,6 +15,9 @@ module.exports = {
 			'node_modules',
 		],
 		extensions: [ '.js' ],
+		alias: {
+			'@root': path.resolve( __dirname, '..' ),
+		},
 	},
 	module: {
 		rules: [

@@ -1,0 +1,14 @@
+[
+	{
+		"type": "send_email",
+		"settings": {
+			"mail_to": "form",
+			"from_field": "_verify_user_email",
+			"subject": "[%CT::SiteName%] Confirm your email",
+			"content": "Please confirm your registration on site %CT::SiteName%.\n\n<b>If this was a mistake, ignore this email and nothing will happen.</b>\n\nTo complete the registration click on the link:\n%_confirm_verification_link%"
+		},
+		"events": [
+			"DEFAULT.PROCESS"
+		]
+	}
+]

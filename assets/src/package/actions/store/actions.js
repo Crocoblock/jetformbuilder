@@ -1,5 +1,9 @@
 import constants from './constants';
 
+const {
+	      dispatch,
+      } = wp.data;
+
 export default {
 	setCurrentAction( item = {} ) {
 		return {
@@ -78,10 +82,17 @@ export default {
 		};
 	},
 	openActionSettings( { item, index } ) {
-		return {
-			type: constants.openActionSettings,
-			item,
+		dispatch( 'jet-forms/actions' ).setCurrentAction( {
+			...item,
 			index,
+		} );
+
+		return {
+			type: constants.setMeta,
+			item: {
+				index,
+				modalType: 'settings',
+			},
 		};
 	},
 };

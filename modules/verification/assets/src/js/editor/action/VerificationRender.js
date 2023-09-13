@@ -1,6 +1,7 @@
 import fetchPages from '../fetchPages';
 import useSearchPages from './useSearchPages';
 import { FAILED_EVENT, SUCCESS_EVENT } from '../constants';
+import SendEmailFlowRaw from '@root/actions/send.email.flow.json';
 
 let {
 	    __experimentalToggleGroupControl,
@@ -55,7 +56,10 @@ const {
 
 const {
 	      Tools,
+	      convertFlow,
       } = JetFBActions;
+
+const SendEmailFlow = convertFlow( SendEmailFlowRaw );
 
 /**
  * @param prevPages {Array}
@@ -146,6 +150,22 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 		return redirect;
 	};
 
+	const addSendEmailAction = () => {
+		const { list: [ sendEmail ] } = SendEmailFlow;
+
+		sendEmail.selfSettings = {
+			...sendEmail.selfSettings,
+			from_field: settings.mail_to,
+		};
+
+		setActions( [
+			...actions,
+			{ ...sendEmail },
+		] );
+
+		return sendEmail;
+	};
+
 	useEffect( () => {
 
 		// fetch base pages
@@ -171,32 +191,11 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 	}, [] );
 
 	return <>
-		<BaseControl
-			label={ __( 'Lifespan', 'jet-form-builder' ) }
-			className="control-flex"
-		>
-			<ToggleGroupControl
-				onChange={ lifespan => onChangeSettingObj( { lifespan } ) }
-				value={ settings.lifespan ?? '' }
-				isBlock={ true }
-				isAdaptiveWidth={ false }
-				hideLabelFromVision
-			>
-				<ToggleGroupControlOption
-					label={ __( 'Default (4 hr)', 'jet-form-builder' ) }
-					value={ '' }
-				/>
-				<ToggleGroupControlOption
-					label={ __( 'Custom', 'jet-form-builder' ) }
-					value={ 'custom' }
-				/>
-			</ToggleGroupControl>
-		</BaseControl>
-		{ 'custom' === settings.lifespan && <TextControl
+		<TextControl
 			label={ __( 'Duration in hours', 'jet-form-builder' ) }
-			value={ settings.duration }
+			value={ settings.duration ?? 4 }
 			onChange={ duration => onChangeSettingObj( { duration } ) }
-		/> }
+		/>
 		<BaseControl
 			label={ __( 'Verify by email', 'jet-form-builder' ) }
 			className="jet-fb label-reset-margin"
@@ -209,11 +208,18 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 					options={ Tools.withPlaceholder( fields ) }
 					hideLabelFromVision
 				/>
+				<BaseHelp>
+					{ __(
+						`If you select a field with an email address 
+from this list, an email will be sent to it with a link to verify the form.`,
+						'jet-form-builder',
+					) }
+				</BaseHelp>
 				{ (
 					!hasSuggested && Boolean( emailField )
 				) && <BaseHelp>
 					<Flex justify="flex-start" gap={ 1 }>
-						{ __( 'Choose the:', 'jet-form-builder' ) }
+						{ __( '(Suggestion) Choose the:', 'jet-form-builder' ) }
 						<Button
 							isLink
 							onClick={ () => {
@@ -230,7 +236,7 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 				</BaseHelp> }
 			</div>
 		</BaseControl>
-		<ToggleControl
+		{ settings.mail_to && <ToggleControl
 			checked={ Boolean( settings.custom_email ) }
 			onChange={ custom_email => onChangeSettingObj( { custom_email } ) }
 		>
@@ -239,13 +245,18 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 				{ settings.custom_email && <Button
 					isLink
 					onClick={ () => {
+						const actionSendEmail = addSendEmailAction();
 
+						openActionSettings( {
+							index: actions.length,
+							item: actionSendEmail,
+						} );
 					} }
 				>
 					{ __( '+ Add Send Email action', 'jet-form-builder' ) }
 				</Button> }
 			</Flex>
-		</ToggleControl>
+		</ToggleControl> }
 		<BaseControl
 			label={ __( 'Success Page', 'jet-form-builder' ) }
 			className="control-flex"

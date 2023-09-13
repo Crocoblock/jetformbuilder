@@ -65,6 +65,7 @@ function PluginVerification() {
 			<Button
 				onClick={ onAddVerification }
 				disabled={ hasVerification }
+				variant="tertiary"
 			>
 				{ __( '+ Verification', 'jet-form-builder' ) }
 			</Button>

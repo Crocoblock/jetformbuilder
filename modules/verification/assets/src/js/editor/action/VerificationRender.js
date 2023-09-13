@@ -199,11 +199,13 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 				<TextControl
 					value={ settings.lifespan ?? 4 }
 					onChange={ lifespan => onChangeSettingObj( { lifespan } ) }
-					help={ __(
+				/>
+				<BaseHelp style={ { marginTop: '-4px' } }>
+					{ __(
 						`How long verification link will be active and available to check`,
 						'jet-form-builder',
 					) }
-				/>
+				</BaseHelp>
 			</div>
 		</BaseControl>
 		<BaseControl
@@ -258,7 +260,6 @@ a separate Send Email action`,
 			<Flex
 				gap={ 3 }
 				justify="flex-start"
-				style={ { marginBottom: '1em' } }
 			>
 				{ __( 'Create custom verification email', 'jet-form-builder' ) }
 				{ settings.custom_email && <Button
@@ -340,7 +341,7 @@ Redirect to Page action with event:`,
 						  hideLabelFromVision
 						  onFilterValueChange={ setInputSuccessPage }
 					  />
-					  <BaseHelp>
+					  <BaseHelp style={ { marginTop: '-1em' } }>
 						  { __(
 							  `Select a page for the redirect after successful 
 verification. By default, you will be redirected to the form page. Or`,
@@ -437,7 +438,7 @@ Redirect to Page action with event:`,
 						  hideLabelFromVision
 						  onFilterValueChange={ setInputFailedPage }
 					  />
-					  <BaseHelp>
+					  <BaseHelp style={ { marginTop: '-1em' } }>
 						  { __(
 							  `Select a page for the redirect after a failed 
 redirect attempt. By default, you will be redirected to the form page. Or`,

@@ -8,11 +8,8 @@ const {
 
 const {
 	      Button,
+	      Tooltip,
       } = wp.components;
-
-const {
-	      useDispatch,
-      } = wp.data;
 
 const {
 	      useActionsEdit,
@@ -42,8 +39,8 @@ function PluginVerification() {
 		[],
 	);
 
-	const noVerification = actions.every(
-		( { type } ) => 'verification' !== type,
+	const hasVerification = actions.some(
+		( { type } ) => 'verification' === type,
 	);
 
 	const onAddVerification = () => {
@@ -53,15 +50,26 @@ function PluginVerification() {
 		] );
 	};
 
-	return noVerification && <>
-		<ActionsAfterNewButtonSlotFill.Fill>
+	return <ActionsAfterNewButtonSlotFill.Fill>
+		<Tooltip
+			text={ hasVerification ? __(
+				'You have already added the Verification action',
+				'jet-form-builder',
+			) : __(
+				'Click here to add Verification action',
+				'jet-form-builder',
+			) }
+			delay={ 200 }
+			position={ 'top center' }
+		>
 			<Button
 				onClick={ onAddVerification }
+				disabled={ hasVerification }
 			>
 				{ __( '+ Verification', 'jet-form-builder' ) }
 			</Button>
-		</ActionsAfterNewButtonSlotFill.Fill>
-	</>;
+		</Tooltip>
+	</ActionsAfterNewButtonSlotFill.Fill>;
 }
 
 export default PluginVerification;

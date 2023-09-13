@@ -191,13 +191,23 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 	}, [] );
 
 	return <>
-		<TextControl
-			label={ __( 'Duration in hours', 'jet-form-builder' ) }
-			value={ settings.duration ?? 4 }
-			onChange={ duration => onChangeSettingObj( { duration } ) }
-		/>
 		<BaseControl
-			label={ __( 'Verify by email', 'jet-form-builder' ) }
+			label={ __( 'Link Lifespan', 'jet-form-builder' ) }
+			className="jet-fb label-reset-margin"
+		>
+			<div style={ { flex: 3 } }>
+				<TextControl
+					value={ settings.lifespan ?? 4 }
+					onChange={ lifespan => onChangeSettingObj( { lifespan } ) }
+					help={ __(
+						`How long verification link will be active and available to check`,
+						'jet-form-builder',
+					) }
+				/>
+			</div>
+		</BaseControl>
+		<BaseControl
+			label={ __( 'Email Field', 'jet-form-builder' ) }
 			className="jet-fb label-reset-margin"
 		>
 			<div className="jet-control-clear-full">
@@ -210,8 +220,7 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 				/>
 				<BaseHelp>
 					{ __(
-						`If you select a field with an email address 
-from this list, an email will be sent to it with a link to verify the form.`,
+						`Send verification link to email address from this field.`,
 						'jet-form-builder',
 					) }
 				</BaseHelp>
@@ -239,9 +248,19 @@ from this list, an email will be sent to it with a link to verify the form.`,
 		{ settings.mail_to && <ToggleControl
 			checked={ Boolean( settings.custom_email ) }
 			onChange={ custom_email => onChangeSettingObj( { custom_email } ) }
+			help={ __(
+				`If disabled - standard verification email will be sent. 
+If enabled - you can create your own verification email with 
+a separate Send Email action`,
+				'jet-form-builder',
+			) }
 		>
-			<Flex gap={ 3 } justify="flex-start">
-				{ __( 'Use custom email?', 'jet-form-builder' ) }
+			<Flex
+				gap={ 3 }
+				justify="flex-start"
+				style={ { marginBottom: '1em' } }
+			>
+				{ __( 'Create custom verification email', 'jet-form-builder' ) }
 				{ settings.custom_email && <Button
 					isLink
 					onClick={ () => {

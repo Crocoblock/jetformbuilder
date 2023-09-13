@@ -65,18 +65,19 @@ function PluginActions() {
 	return <PluginDocumentSettingPanel
 		title={ __( 'Post Submit Actions', 'jet-form-builder' ) }
 		icon="admin-plugins"
+		className="jfb-actions-panel"
 	>
 		{ Children.map(
 			elements,
 			cloneElement,
 		) }
 		<ActionsAfterNewButtonSlotFill.Slot>
-			{ fills => <Flex wrap>
+			{ fills => <Flex wrap className="jfb-actions-panel--buttons">
 				<AddActionButton/>
 				{ fills }
-				<AllProActionsLink/>
 			</Flex> }
 		</ActionsAfterNewButtonSlotFill.Slot>
+		<AllProActionsLink/>
 		<EditSettingsModal/>
 		<EditConditionsModal/>
 	</PluginDocumentSettingPanel>;

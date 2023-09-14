@@ -14,10 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Bricks implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_It {
-
-	use Base_Compat_Handle_Trait;
-	use Base_Compat_Url_Trait;
+class Bricks implements Base_Module_It {
 
 	public function rep_item_id() {
 		return 'bricks';

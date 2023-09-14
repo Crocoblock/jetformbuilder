@@ -26,15 +26,22 @@ class Request_Tools {
 		$response = array();
 
 		foreach ( $initial as $fields_name => $files ) {
-			$is_repeater = isset( $files['name'][0] ) && is_array( $files['name'][0] );
+			$is_collection = isset( $files['name'] ) && is_array( $files['name'] );
+			$is_repeater   = false;
+
+			if ( $is_collection ) {
+				// check the first item
+				foreach ( $files['name'] as $key => $first_item ) {
+					$is_repeater = is_numeric( $key ) && is_array( $first_item );
+					break;
+				}
+			}
 
 			if ( $is_repeater ) {
 				$response[ $fields_name ] = static::get_repeater_files( $files );
 
 				continue;
 			}
-
-			$is_collection = is_array( $files['name'] );
 
 			if ( ! $is_collection ) {
 				try {
@@ -87,7 +94,7 @@ class Request_Tools {
 					if ( is_array( $values ) ) {
 						$count_values = count( $values );
 
-						for ( $index_value = 0; $index_value < $count_values; $index_value++ ) {
+						for ( $index_value = 0; $index_value < $count_values; $index_value ++ ) {
 							if ( ! isset( $row[ $field_name ][ $index_value ] ) ) {
 								$row[ $field_name ][ $index_value ] = array();
 							}

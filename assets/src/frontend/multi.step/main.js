@@ -1,10 +1,14 @@
-import { createMultiStep, getScrollParent } from './functions';
+import { createMultiStep } from './functions';
 import ConditionPageStateItem from './ConditionPageStateItem';
 
 const {
 	      addAction,
 	      addFilter,
       } = JetPlugins.hooks;
+
+const {
+	      getScrollParent,
+      } = JetFormBuilderFunctions;
 
 addAction(
 	'jet.fb.observe.after',
@@ -63,10 +67,10 @@ addAction(
 			 */
 			const page = multistep.getCurrentPage();
 
-			getScrollParent( page.node ).scrollTo( {
-				top: page.getOffsetTop(),
-				behavior: 'smooth',
-			} );
+			const parent = getScrollParent( page.node );
+			const top    = page.getOffsetTop();
+
+			parent.scrollTo( { top, behavior: 'smooth' } );
 		} );
 	},
 );

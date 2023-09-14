@@ -134,7 +134,28 @@ function isVisible( node ) {
 function getOffsetTop( node ) {
 	const rect = node.getBoundingClientRect();
 
-	return rect?.top + window.scrollY;
+	const maybeWindow = getScrollParent( node );
+
+	return rect?.top + (
+		maybeWindow?.scrollY ?? 0
+	);
+}
+
+function getScrollParent( node ) {
+	if ( node == null ) {
+		return null;
+	}
+
+	if ( node === document ) {
+		return window;
+	}
+
+	if ( node.scrollHeight > node.clientHeight ) {
+		return node;
+	}
+	else {
+		return getScrollParent( node.parentNode );
+	}
 }
 
 /**
@@ -159,4 +180,5 @@ export {
 	getOffsetTop,
 	focusOnInvalidInput,
 	isVisible,
+	getScrollParent,
 };

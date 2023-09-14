@@ -90,8 +90,6 @@ const mergePages = ( prevPages, newPages ) => {
  * @returns {JSX.Element}
  */
 function VerificationRender( { onChangeSettingObj, settings } ) {
-	const [ hasSuggested, setHasSuggested ] = useState( false );
-
 	const [ actions, setActions ] = useActions( [] );
 
 	const fields = useFields( { withInner: false }, [] );
@@ -99,6 +97,10 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 	const emailField = useMemo(
 		() => fields.find( field => 'email' === field?.attributes?.field_type ),
 		[],
+	);
+
+	const [ hasSuggested, setHasSuggested ] = useState(
+		Boolean( settings.mail_to ),
 	);
 
 	const separateSuccessRedirectIdx = useMemo( () => actions.findIndex(

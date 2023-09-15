@@ -197,6 +197,8 @@ import ActionItemDetailsSlotFill
 import ActionItemMoreButton from './actions/components/ActionItemMoreButton';
 import useLoopedAction from './actions/hooks/useLoopedAction';
 import SelectActionsControl from './actions/components/SelectActionsControl';
+import ActionModalHeaderSlotFill
+	from './actions/components/ActionModalHeaderSlotFill';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -299,6 +301,7 @@ window.JetFBComponents = {
 	ActionItemDetailsSlotFill,
 	ActionItemMoreButton,
 	SelectActionsControl,
+	ActionModalHeaderSlotFill,
 };
 
 // JFBFunctions

@@ -1,5 +1,6 @@
 const {
 	      ActionModal,
+	      ActionModalHeaderSlotFill,
       } = JetFBComponents;
 
 const {
@@ -33,7 +34,12 @@ function EditSettingsModal() {
 
 	return <ActionModal
 		classNames={ [ 'width-60' ] }
-		title={ __( 'Edit Action', 'jet-form-builder' ) }
+		title={ <ActionModalHeaderSlotFill.Slot>
+			{ fills => Boolean( fills.length )
+			           ? fills
+			           : __( 'Edit Action', 'jet-form-builder' )
+			}
+		</ActionModalHeaderSlotFill.Slot> }
 		onRequestClose={ clearCurrent }
 		onCancelClick={ clearCurrent }
 		onUpdateClick={ () => {

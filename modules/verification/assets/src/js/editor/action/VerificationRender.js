@@ -2,6 +2,7 @@ import fetchPages from '../fetchPages';
 import useSearchPages from './useSearchPages';
 import { FAILED_EVENT, SUCCESS_EVENT } from '../constants';
 import SendEmailFlowRaw from '@root/actions/send.email.flow.json';
+import VerificationActionHelp from './VerificationActionHelp';
 
 let {
 	    __experimentalToggleGroupControl,
@@ -14,7 +15,6 @@ let {
 	    Button,
 	    Flex,
 	    SelectControl,
-	    PanelBody,
     } = wp.components;
 
 ToggleGroupControl = (
@@ -47,6 +47,7 @@ const {
 	      BaseHelp,
 	      BaseAction,
 	      ToggleControl,
+	      ActionModalHeaderSlotFill,
       } = JetFBComponents;
 
 const {
@@ -90,7 +91,8 @@ const mergePages = ( prevPages, newPages ) => {
  * @returns {JSX.Element}
  */
 function VerificationRender( { onChangeSettingObj, settings } ) {
-	const [ actions, setActions ] = useActions( [] );
+	const [ actions, setActions ]   = useActions( [] );
+	const [ showHelp, setShowHelp ] = useState( false );
 
 	const fields = useFields( { withInner: false }, [] );
 
@@ -193,6 +195,23 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 	}, [] );
 
 	return <>
+		<ActionModalHeaderSlotFill.Fill>
+			<Flex gap={ 1 }>
+				{ __( 'Edit Verification action', 'jet-form-builder' ) }
+				<Button
+					variant="tertiary"
+					isPressed={ showHelp }
+					icon={ <svg xmlns="http://www.w3.org/2000/svg"
+					            viewBox="0 0 24 24" width="24" height="24"
+					            aria-hidden="true" focusable="false">
+						<path
+							d="M12 4.75a7.25 7.25 0 100 14.5 7.25 7.25 0 000-14.5zM3.25 12a8.75 8.75 0 1117.5 0 8.75 8.75 0 01-17.5 0zM12 8.75a1.5 1.5 0 01.167 2.99c-.465.052-.917.44-.917 1.01V14h1.5v-.845A3 3 0 109 10.25h1.5a1.5 1.5 0 011.5-1.5zM11.25 15v1.5h1.5V15h-1.5z"/>
+					</svg> }
+					onClick={ () => setShowHelp( prev => !prev ) }
+				/>
+			</Flex>
+		</ActionModalHeaderSlotFill.Fill>
+		{ showHelp && <VerificationActionHelp/> }
 		<BaseControl
 			label={ __( 'Link Lifespan', 'jet-form-builder' ) }
 			className="jet-fb label-reset-margin"
@@ -386,10 +405,8 @@ verification. By default, you will be redirected to the form page. Or`,
 Redirect to Page action with event:`,
 							  'jet-form-builder',
 						  ) }
-
+						  <code>{ FAILED_EVENT }</code>
 					  </BaseHelp>
-					  &nbsp;
-					  <code>{ FAILED_EVENT }</code>
 					  <Flex>
 						  <Button
 							  icon={ <svg xmlns="http://www.w3.org/2000/svg"

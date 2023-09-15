@@ -75,14 +75,27 @@ class Request_Tools {
 
 	public static function get_request(): array {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		return Tools::sanitize_recursive( wp_unslash( $_POST ) );
+		$request = Tools::sanitize_recursive( wp_unslash( $_POST ) );
+
+		/**
+		 * We need to be sure, that repeater rows starts from 0 index
+		 * and they have correct incrementing with order
+		 */
+		foreach ( $request as &$value ) {
+			if ( ! wp_is_numeric_array( $value ) ) {
+				continue;
+			}
+			$value = array_values( $value );
+		}
+
+		return $request;
 	}
 
 	public static function get_repeater_files( array $files ): array {
-		$rows     = count( $files['name'] );
+		$indexes  = array_keys( $files['name'] );
 		$repeater = array();
 
-		for ( $current = 0; $current < $rows; $current++ ) {
+		foreach ( $indexes as $current ) {
 			$row = array();
 
 			foreach ( self::FILE_PROPERTIES as $property ) {
@@ -94,7 +107,7 @@ class Request_Tools {
 					if ( is_array( $values ) ) {
 						$count_values = count( $values );
 
-						for ( $index_value = 0; $index_value < $count_values; $index_value ++ ) {
+						for ( $index_value = 0; $index_value < $count_values; $index_value++ ) {
 							if ( ! isset( $row[ $field_name ][ $index_value ] ) ) {
 								$row[ $field_name ][ $index_value ] = array();
 							}
@@ -121,7 +134,7 @@ class Request_Tools {
 				}
 			}
 
-			$repeater[ $current ] = $row;
+			$repeater[] = $row;
 		}
 
 		return $repeater;

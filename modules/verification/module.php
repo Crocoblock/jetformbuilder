@@ -54,12 +54,14 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	public function init_hooks() {
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
 		add_action( 'jet-form-builder/actions/register', array( $this, 'actions_register' ) );
+		add_action( 'jet-form-builder/webhook/verification', array( $this, 'on_verification' ) );
 		add_filter( 'jet-form-builder/event-types', array( $this, 'events_register' ) );
 	}
 
 	public function remove_hooks() {
 		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
 		remove_action( 'jet-form-builder/actions/register', array( $this, 'actions_register' ) );
+		remove_action( 'jet-form-builder/webhook/verification', array( $this, 'on_verification' ) );
 		remove_filter( 'jet-form-builder/event-types', array( $this, 'events_register' ) );
 	}
 
@@ -85,5 +87,9 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		);
 
 		return $types;
+	}
+
+	public function on_verification() {
+
 	}
 }

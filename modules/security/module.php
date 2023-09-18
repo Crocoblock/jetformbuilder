@@ -77,4 +77,18 @@ class Module implements
 		);
 	}
 
+	public static function get_hasher(): \PasswordHash {
+		global $wp_hasher;
+
+		if ( ! empty( $wp_hasher ) ) {
+			return $wp_hasher;
+		}
+
+		require_once ABSPATH . WPINC . '/class-phpass.php';
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$wp_hasher = new \PasswordHash( 8, true );
+
+		return $wp_hasher;
+	}
+
 }

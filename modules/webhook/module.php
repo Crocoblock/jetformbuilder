@@ -129,12 +129,15 @@ AND {$table}.id = %d
 			return;
 		}
 
+		$action = sanitize_key( $row['action'] );
+
 		$this->logger->log(
 		/* translators: %d - primary id of token row */
-			__( 'Successfully verified webhook (primary ID -> %d)', 'jet-form-builder' )
+			__( 'Successfully verified webhook (primary ID -> %d)', 'jet-form-builder' ),
+			sprintf( 'hook: jet-form-builder/webhook/%s', $action )
 		);
 
-		do_action( "jet-form-builder/webhook/{$row['action']}", $row );
+		do_action( "jet-form-builder/webhook/{$action}", $row );
 	}
 
 	public function set_logger( Logger_It $logger ) {

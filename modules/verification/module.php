@@ -89,7 +89,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		return $types;
 	}
 
-	public function on_verification() {
+	public function on_verification( array $token_row ) {
 
 	}
 }

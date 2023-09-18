@@ -1,7 +1,6 @@
 <?php
 
-
-namespace JFB_Component\Db\Models;
+namespace JFB_Modules\Webhook\Db\Models;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -9,7 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
-use JFB_Component\Db\Constraints\Tokens_Model_Constraint;
+use JFB_Modules\Webhook\Db\Constraints\Tokens_Model_Constraint;
 use JFB_Modules\Form_Record\Constraints\Record_Model_Constraint;
 
 class Tokens_To_Records_Model extends Base_Db_Model {

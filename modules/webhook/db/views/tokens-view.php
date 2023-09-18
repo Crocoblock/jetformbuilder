@@ -1,10 +1,10 @@
 <?php
 
 
-namespace JFB_Components\Db\Views;
+namespace JFB_Modules\Webhook\Db\Views;
 
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
-use JFB_Component\Db\Models\Tokens_Model;
+use JFB_Modules\Webhook\Db\Models\Tokens_Model;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

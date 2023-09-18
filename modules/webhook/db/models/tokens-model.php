@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JFB_Component\Db\Models;
+namespace JFB_Modules\Webhook\Db\Models;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -41,9 +41,8 @@ class Tokens_Model extends Base_Db_Model {
 
 	public static function schema_keys(): array {
 		return array(
-			'id'             => 'primary key',
-			self::CREATED_AT => 'index',
-			'expire_at'      => 'index',
+			'id'        => 'primary key',
+			'expire_at' => 'index',
 		);
 	}
 }

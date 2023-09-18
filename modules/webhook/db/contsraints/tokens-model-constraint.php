@@ -1,10 +1,10 @@
 <?php
 
 
-namespace JFB_Component\Db\Constraints;
+namespace JFB_Modules\Webhook\Db\Constraints;
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Constraint;
-use JFB_Component\Db\Models\Tokens_Model;
+use JFB_Modules\Webhook\Db\Models\Tokens_Model;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

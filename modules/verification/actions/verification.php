@@ -9,6 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Actions_Tools;
 use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
@@ -20,6 +21,7 @@ use JFB_Modules\Form_Record\Action_Types\Save_Record;
 use JFB_Modules\Security\Csrf\Csrf_Tools;
 use JFB_Modules\Verification\Events\Verification_Success;
 use JFB_Modules\Verification\Events\Verification_Failed;
+use JFB_Modules\Verification\Module;
 
 class Verification extends Base {
 
@@ -114,6 +116,31 @@ class Verification extends Base {
 			10,
 			2
 		);
+	}
+
+	public function send_default_email() {
+		if ( ! empty( $this->settings['custom_email'] ) || empty( $this->settings['mail_to'] ) ) {
+			return;
+		}
+
+		/** @var Module $module */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$module = jet_form_builder()->module( Module::class );
+
+		$generator = Actions_Tools::get_flow(
+			$module->get_dir( 'actions/send.email.flow.json' )
+		);
+
+		/**
+		 * @var Base $action
+		 * @var array $props
+		 */
+		foreach ( $generator as list( $action, $props ) ) {
+			$action->settings['mail_to']    = 'form';
+			$action->settings['from_field'] = $this->settings['mail_to'];
+
+			jet_fb_action_handler()->add( $action, $props );
+		}
 	}
 
 	/**

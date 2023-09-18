@@ -53,6 +53,8 @@ const {
 const {
 	      useActions,
 	      useFields,
+	      useCurrentAction,
+	      useUpdateCurrentActionMeta,
       } = JetFBHooks;
 
 const {
@@ -94,7 +96,9 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 	const [ actions, setActions ]   = useActions( [] );
 	const [ showHelp, setShowHelp ] = useState( false );
 
-	const fields = useFields( { withInner: false }, [] );
+	const fields            = useFields( { withInner: false }, [] );
+	const { currentAction } = useCurrentAction();
+	const updateAction      = useUpdateCurrentActionMeta();
 
 	const emailField = useMemo(
 		() => fields.find( field => 'email' === field?.attributes?.field_type ),
@@ -237,7 +241,8 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 				<SelectControl
 					value={ settings.mail_to }
 					onChange={ mail_to => onChangeSettingObj(
-						{ mail_to } ) }
+						{ mail_to },
+					) }
 					options={ Tools.withPlaceholder( fields ) }
 					hideLabelFromVision
 				/>
@@ -287,6 +292,9 @@ a separate Send Email action`,
 					isLink
 					onClick={ () => {
 						const actionSendEmail = addSendEmailAction();
+
+						// save settings before open Send Email action
+						updateAction( currentAction );
 
 						openActionSettings( {
 							index: actions.length,

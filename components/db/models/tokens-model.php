@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JFB_Components;
+namespace JFB_Component\Db\Models;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -18,23 +18,32 @@ class Tokens_Model extends Base_Db_Model {
 
 	public static function schema(): array {
 		return array(
-			'id'         => 'bigint(20) NOT NULL AUTO_INCREMENT',
-			'form_id'    => 'bigint(20) UNSIGNED NOT NULL',
-			'record_id'  => 'bigint(20) NOT NULL',
+			'id'             => 'bigint(20) NOT NULL AUTO_INCREMENT',
 			// slug of action (it has nothing to do with the actions used in the form.)
-			'action'     => 'varchar(100)',
-			'hash'       => 'varchar(255)',
-			// How many times has it been done?
-			'exec_count' => 'int(11)',
+			'action'         => 'varchar(100)',
+			'hash'           => 'text',
+			// How many times was performed
+			'exec_count'     => 'int(11) NOT NULL DEFAULT 0',
 			// How many times can be done
-			'limit_exec' => 'int(11)',
-			'expire_at'  => 'TIMESTAMP',
-			'created_at' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-			'updated_at' => 'TIMESTAMP',
+			'limit_exec'     => 'int(11) NOT NULL DEFAULT 1',
+			'expire_at'      => 'TIMESTAMP',
+			self::CREATED_AT => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+			self::UPDATED_AT => 'TIMESTAMP',
+		);
+	}
+
+	public function get_defaults(): array {
+		return array(
+			// Set current time in UTC+0
+			self::CREATED_AT => current_time( 'mysql', true ),
 		);
 	}
 
 	public static function schema_keys(): array {
-		return array();
+		return array(
+			'id'             => 'primary key',
+			self::CREATED_AT => 'index',
+			'expire_at'      => 'index',
+		);
 	}
 }

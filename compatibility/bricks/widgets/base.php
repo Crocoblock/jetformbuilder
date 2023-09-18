@@ -2,7 +2,6 @@
 
 
 namespace JFB_Compatibility\Bricks\Widgets;
-var_dump('Base');
 
 use Bricks\Element;
 

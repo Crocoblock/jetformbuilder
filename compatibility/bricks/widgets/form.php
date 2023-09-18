@@ -1,7 +1,6 @@
 <?php
 
 namespace JFB_Compatibility\Bricks\Widgets;
-var_dump('Form');
 
 //use Bricks\Element;
 //use Jet_Form_Builder\Blocks\Modules\General_Style_Functions;

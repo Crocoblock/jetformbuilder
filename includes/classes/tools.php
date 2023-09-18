@@ -98,6 +98,7 @@ class Tools {
 	 */
 	public static function sanitize_wysiwyg( $input ): string {
 		$input = wp_kses_post( $input );
+
 		return wp_specialchars_decode( stripslashes( $input ), ENT_COMPAT );
 	}
 
@@ -619,7 +620,7 @@ class Tools {
 	}
 
 	public static function is_empty( $value ): bool {
-		return '0' !== $value && empty( $value );
+		return '0' !== $value && 0 !== $value && empty( $value );
 	}
 
 }

@@ -93,11 +93,15 @@ class Tags_Contact_Property extends Base_Object_Property {
 		$api->set_tag( $tag );
 
 		try {
-			$response = $api->send_request();
+			$api->send_request();
+			$api->check_response_code();
+
 		} catch ( Gateway_Exception $exception ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			throw new Action_Exception( 'internal_error', $api->get_request_args() );
 		}
+
+		$response = $api->get_response_body();
 
 		return (int) ( $response['tag']['id'] ?? 0 );
 	}

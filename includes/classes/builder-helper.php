@@ -177,7 +177,7 @@ class Builder_Helper {
 		$attributes_stack = array();
 
 		foreach ( $attributes as list( $name, $value ) ) {
-			if ( ! $value ) {
+			if ( Tools::is_empty( $value ) ) {
 				continue;
 			}
 			$attributes_stack[] = sprintf( '%1$s="%2$s"', $name, $value );

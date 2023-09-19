@@ -38,6 +38,7 @@ class Form extends Base {
 		$this->control_group_label_style();
 		$this->control_group_description_style();
 		$this->control_group_input_style();
+		$this->control_group_checkradio_style();
 	}
 
 	// Set builder controls
@@ -47,6 +48,7 @@ class Form extends Base {
 		$this->controls_label_style();
 		$this->controls_description_style();
 		$this->controls_input_style();
+		$this->controls_checkradio_style();
 	}
 
 	// Start form settings
@@ -151,7 +153,7 @@ class Form extends Base {
 		$this->register_jet_control(
 			'form_row_gap_before',
 			[
-				'tab'   => 'content',
+				'tab'   => 'style',
 				'label' => esc_html__( 'Gap Before', 'jet-form-builder' ),
 				'type'  => 'number',
 				'units' => true,
@@ -169,7 +171,7 @@ class Form extends Base {
 		$this->register_jet_control(
 			'form_row_gap_after',
 			[
-				'tab'   => 'content',
+				'tab'   => 'style',
 				'label' => esc_html__( 'Gap After', 'jet-form-builder' ),
 				'type'  => 'number',
 				'units' => true,
@@ -523,7 +525,7 @@ class Form extends Base {
 		$this->register_jet_control(
 			'input_width',
 			[
-				'tab'   => 'content',
+				'tab'   => 'style',
 				'label' => esc_html__( 'Fields width', 'jet-form-builder' ),
 				'type'  => 'number',
 				'units' => true,
@@ -554,7 +556,7 @@ class Form extends Base {
 		$this->register_jet_control(
 			'input_textarea_height',
 			[
-				'tab'   => 'content',
+				'tab'   => 'style',
 				'label' => esc_html__( 'Textarea height', 'jet-form-builder' ),
 				'type'  => 'number',
 				'units' => true,
@@ -576,7 +578,7 @@ class Form extends Base {
 		$this->register_jet_control(
 			'input_color_scheme',
 			[
-				'tab'         => 'content',
+				'tab'         => 'style',
 				'label'       => esc_html__( 'Fields label HTML tag', 'jet-form-builder' ),
 				'type'        => 'select',
 				'options'     => [
@@ -591,10 +593,177 @@ class Form extends Base {
 
 		$this->end_jet_control_group();
 	}
-	// End input fields style
+	// End input style
+
+	// Start checkbox & radio fields style
+	public function control_group_checkradio_style() {
+		$this->register_jet_control_group(
+			'section_checkradio_style',
+			[
+				'title' => esc_html__( 'Checkbox & Radio Fields', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_checkradio_style() {
+		$this->start_jet_control_group( 'section_checkradio_style' );
+
+		$this->register_jet_control(
+			'checkradio_fields_layout',
+			[
+				'tab'        => 'style',
+				'label'      => esc_html__( '', 'jet-form-builder' ),
+				'type'       => 'select',
+				'options'    => [
+					'inline-block' => esc_html__( 'Horizontal', 'jet-form-builder' ),
+					'block'        => esc_html__( 'Vertical', 'jet-form-builder' ),
+				],
+				'default'    => 'block',
+				'css'   => [
+					[
+						'property' => 'display',
+						'selector' => $this->css_selector( '__field-wrap.checkradio-wrap' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'checkradio_fields_gap',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Gap between control and label', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 0,
+				'max'   => 50,
+				'css'   => [
+					[
+						'property' => 'margin-right',
+						'selector' => $this->css_selector( '__field-wrap.checkradio-wrap' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'checkradio_fields_control_size',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Control Size', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 0,
+				'max'   => 50,
+				'css'   => [
+					[
+						'property' => 'font-size',
+						'selector' => $this->css_selector( '__field-wrap span::before' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'checkradio_fields_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '__field-wrap label' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'checkradio_fields_box_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'Box', 'jet-form-builder' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'checkradio_fields_box_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '__field-wrap span::before' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'checkradio_fields_box_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [
+					[
+						'property' => 'background-color',
+						'selector' => $this->css_selector( '__field-wrap label > span::before' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'checkradio_fields_box_checked_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'Checked state', 'jet-smart-filters' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'checkradio_fields_box_checked_bg',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-smart-filters' ),
+				'type'  => 'color',
+				'css'   => [
+					[
+						'property' => 'background-color',
+						'selector' => $this->css_selector( '__field-wrap label :checked + span::before' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'checkradio_fields_box_checked_border_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border color', 'jet-smart-filters' ),
+				'type'  => 'color',
+				'css'   => [
+					[
+						'property' => 'border-color',
+						'selector' => $this->css_selector( '__field-wrap label :checked + span::before' ),
+					],
+				],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End checkbox & radio fields style
 
 	// Start
-	public function control_group_form_() {
+	public function control_group_() {
 		$this->register_jet_control_group(
 			'',
 			[
@@ -604,16 +773,16 @@ class Form extends Base {
 		);
 	}
 
-	public function controls_form_() {
+	public function controls_() {
 		$this->start_jet_control_group( '' );
 
 		$this->register_jet_control(
 			'',
 			[
-				'tab'        => 'content',
+				'tab'        => 'style',
 				'label'      => esc_html__( '', 'jet-form-builder' ),
 				'type'       => 'select',
-				'options'    => Tools::get_forms_list_for_js( true ),
+				'options'    => [],
 				'searchable' => true,
 			]
 		);

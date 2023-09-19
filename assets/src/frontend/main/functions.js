@@ -141,21 +141,27 @@ function getOffsetTop( node ) {
 	);
 }
 
+const getNode = current => (
+	current.scrollHeight > current.clientHeight ? current : false
+);
+
 function getScrollParent( node ) {
-	if ( node == null ) {
-		return null;
+
+	// jet-popup compatibility
+	let container = node.closest( '.jet-popup__container-inner' );
+
+	if ( container ) {
+		return getNode( container );
 	}
 
-	if ( node === document ) {
-		return window;
+	// elementor-pro popup compatibility
+	container = node.closest( '.elementor-popup-modal .dialog-message' );
+
+	if ( container ) {
+		return getNode( container );
 	}
 
-	if ( node.scrollHeight > node.clientHeight ) {
-		return node;
-	}
-	else {
-		return getScrollParent( node.parentNode );
-	}
+	return window;
 }
 
 /**

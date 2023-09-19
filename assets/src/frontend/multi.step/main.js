@@ -70,7 +70,7 @@ addAction(
 			const parent = getScrollParent( page.node );
 			const top    = page.getOffsetTop();
 
-			parent.scrollTo( { top, behavior: 'smooth' } );
+			parent?.scrollTo?.( { top, behavior: 'smooth' } );
 		} );
 	},
 );

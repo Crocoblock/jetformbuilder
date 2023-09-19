@@ -213,7 +213,7 @@ abstract class View_Base implements Model_Dependencies_Interface {
 		if ( empty( $prepared ) ) {
 			throw new Query_Builder_Exception(
 				esc_html( $this->empty_message() ),
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				$row
 			);
 		}
@@ -233,7 +233,7 @@ abstract class View_Base implements Model_Dependencies_Interface {
 		if ( empty( $prepared ) ) {
 			throw new Query_Builder_Exception(
 				esc_html( $this->empty_message() ),
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				$values
 			);
 		}

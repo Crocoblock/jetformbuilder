@@ -284,7 +284,7 @@ class Register_User extends Base {
 				jet_fb_context()->update_request( $user_id, 'user_id' );
 			}
 		} else {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Action_Exception( 'failed', $userarr );
 		}
 	}

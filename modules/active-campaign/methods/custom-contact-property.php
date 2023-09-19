@@ -114,7 +114,7 @@ class Custom_Contact_Property extends Base_Object_Property implements Object_Dyn
 		try {
 			$fields->request()->check_response_code()->response_body_as_array();
 		} catch ( Gateway_Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Action_Exception( 'internal_error', $fields->get_request_args() );
 		}
 

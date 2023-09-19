@@ -254,10 +254,10 @@ To prevent this, enable this option.',
 			throw new Action_Exception(
 				'failed',
 				array(
-					'to'      => $this->get_mail_to(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					'subject' => $this->get_subject(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					'message' => $message, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					'headers' => $this->get_headers(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'to'      => $this->get_mail_to(), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+					'subject' => $this->get_subject(), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+					'message' => $message, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+					'headers' => $this->get_headers(), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				)
 			);
 		}

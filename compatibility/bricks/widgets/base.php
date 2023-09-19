@@ -48,12 +48,10 @@ class Base extends Element {
 	 * @return [type]        [description]
 	 */
 	public function start_jet_control_group( $group ) {
-		
 		$data = isset( $this->control_groups[ $group ] ) ? $this->control_groups[ $group ] : [];
 		$this->current_jet_tab = isset( $data['tab'] ) ? $data['tab'] : 'content';
 
 		$this->current_jet_group = $group;
-
 	}
 
 	/**
@@ -73,7 +71,6 @@ class Base extends Element {
 	 * @return [type]       [description]
 	 */
 	public function register_jet_control( $name, $data = [] ) {
-
 		if ( ! $this->current_jet_tab ) {
 			$this->current_jet_tab = 'content';
 		}
@@ -82,7 +79,27 @@ class Base extends Element {
 		$data['group'] = $this->current_jet_group;
 
 		$this->controls[ $name ] = $data;
+	}
 
+	public function get_jet_settings( $setting = null, $default = false ) {
+
+		if ( ! $setting ) {
+			return $this->settings;
+		}
+
+		$value = null;
+
+		if ( isset( $this->settings[ $setting ] ) ) {
+			$value = $this->settings[ $setting ];
+		} else {
+			$value = isset( $this->controls[ $setting ] ) && isset( $this->controls[ $setting ]['default'] ) ? $this->controls[ $setting ]['default'] : $default;
+		}
+
+		return $value;
+	}
+
+	public function parse_jet_render_attributes( $attrs = [] ) {
+		return apply_filters( 'jet-form-builder/bricks/element/parsed-attrs', $attrs, $this );
 	}
 
 	// Set builder control groups

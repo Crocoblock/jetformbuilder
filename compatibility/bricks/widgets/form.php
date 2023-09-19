@@ -36,6 +36,8 @@ class Form extends Base {
 		$this->control_group_form_settings();
 		$this->control_group_form_style();
 		$this->control_group_label_style();
+		$this->control_group_description_style();
+		$this->control_group_input_style();
 	}
 
 	// Set builder controls
@@ -43,6 +45,8 @@ class Form extends Base {
 		$this->controls_form_settings();
 		$this->controls_form_style();
 		$this->controls_label_style();
+		$this->controls_description_style();
+		$this->controls_input_style();
 	}
 
 	// Start form settings
@@ -150,6 +154,7 @@ class Form extends Base {
 				'tab'   => 'content',
 				'label' => esc_html__( 'Gap Before', 'jet-form-builder' ),
 				'type'  => 'number',
+				'units' => true,
 				'min'   => 1,
 				'max'   => 100,
 				'css'   => [
@@ -167,6 +172,7 @@ class Form extends Base {
 				'tab'   => 'content',
 				'label' => esc_html__( 'Gap After', 'jet-form-builder' ),
 				'type'  => 'number',
+				'units' => true,
 				'min'   => 1,
 				'max'   => 100,
 				'css'   => [
@@ -298,6 +304,294 @@ class Form extends Base {
 		$this->end_jet_control_group();
 	}
 	// End label style
+
+	// Start description style
+	public function control_group_description_style() {
+		$this->register_jet_control_group(
+			'section_description_style',
+			[
+				'title' => esc_html__( 'Description', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_description_style() {
+		$this->start_jet_control_group( 'section_description_style' );
+
+		$this->register_jet_control(
+			'description_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '__desc' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'description_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [
+					[
+						'property' => 'background-color',
+						'selector' => $this->css_selector( '__desc' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'description_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '__desc' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'description_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '__desc' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'description_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '__desc' ),
+					],
+				],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End description style
+
+	// Start input style
+	public function control_group_input_style() {
+		$this->register_jet_control_group(
+			'section_input_style',
+			[
+				'title' => esc_html__( 'Input Fields', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_input_style() {
+		$repeater_class = $this->css_selector( '-repeater' );
+		$simple_input   = "__field:not(.checkradio-field):not(.range-field):not($repeater_class):not(.wysiwyg-field)";
+
+		$this->start_jet_control_group( 'section_input_style' );
+
+		$this->register_jet_control(
+			'input_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( $simple_input ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'input_placeholder_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Placeholder color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [
+					[
+						'property' => 'color',
+						'selector' => $this->css_selector( '__field' ) . '::placeholder',
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'input_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [
+					[
+						'property' => 'background-color',
+						'selector' => $this->css_selector( $simple_input ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'input_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( $simple_input ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'input_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( $simple_input ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'input_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( $simple_input ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'input_box_shadow',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Box shadow', 'jet-smart-filters' ),
+				'type'  => 'box-shadow',
+				'css'   => [
+					[
+						'property' => 'box-shadow',
+						'selector' => $this->css_selector( $simple_input ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'input_width',
+			[
+				'tab'   => 'content',
+				'label' => esc_html__( 'Fields width', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 50,
+				'max'   => 1000,
+				'css'   => [
+					[
+						'property' => 'max-width',
+						'selector' => $this->css_selector( $simple_input ),
+					],
+					[
+						'property' => 'width',
+						'selector' => $this->css_selector( $simple_input ),
+					],
+					[
+						'property' => 'flex-basis',
+						'selector' => $this->css_selector( $simple_input ),
+					],
+					[
+						'property' => 'flex-shrink',
+						'selector' => $this->css_selector( $simple_input ),
+						'value'    => '1',
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'input_textarea_height',
+			[
+				'tab'   => 'content',
+				'label' => esc_html__( 'Textarea height', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 10,
+				'max'   => 500,
+				'css'   => [
+					[
+						'property' => 'height',
+						'selector' => $this->css_selector( '__field.textarea-field' ),
+					],
+					[
+						'property' => 'min-height',
+						'selector' => $this->css_selector( '__field.textarea-field' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'input_color_scheme',
+			[
+				'tab'         => 'content',
+				'label'       => esc_html__( 'Fields label HTML tag', 'jet-form-builder' ),
+				'type'        => 'select',
+				'options'     => [
+					'normal' => esc_html__( 'Normal', 'jet-form-builder' ),
+					'light'  => esc_html__( 'Light', 'jet-form-builder' ),
+					'dark'   => esc_html__( 'Dark', 'jet-form-builder' ),
+				],
+				'default'     => 'normal',
+				'description' => esc_html__( 'Affects default browser UI elements like date and time icons, UI etc.', 'jet-form-builder' ),
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End input fields style
 
 	// Start
 	public function control_group_form_() {

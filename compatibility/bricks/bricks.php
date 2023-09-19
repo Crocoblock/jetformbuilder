@@ -44,7 +44,7 @@ class Bricks implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_I
 
 	public function register_elements() {
 		$file_path = $this->get_dir( 'widgets/form.php' );
-		Elements::register_element( $file_path );
+		Elements::register_element( $file_path, '', 'JFB_Compatibility\Bricks\Widgets\Form' );
 
 		do_action( 'jet-form-builder/bricks/register-elements' );
 	}

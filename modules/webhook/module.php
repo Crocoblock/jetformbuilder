@@ -8,7 +8,7 @@ use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Modules\Logger\Empty_Logger;
-use JFB_Modules\Logger\Logger_It;
+use JFB_Modules\Logger\Interfaces\Logger_It;
 use JFB_Modules\Webhook\Db\Models\Tokens_Model;
 use JFB_Modules\Webhook\Db\Views\Tokens_View;
 use JFB_Modules\Security;
@@ -99,7 +99,7 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 				"UPDATE {$table} 
 SET {$table}.exec_count = {$table}.exec_count + 1
 WHERE 1=1
-AND {$table}.exec_count < {$table}.limit
+AND {$table}.exec_count < {$table}.limit_exec
 AND {$table}.id = %d
 ;
 ",

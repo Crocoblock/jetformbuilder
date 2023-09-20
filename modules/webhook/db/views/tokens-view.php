@@ -17,6 +17,10 @@ class Tokens_View extends View_Base {
 		return Tokens_Model::table();
 	}
 
+	public function select_columns(): array {
+		return Tokens_Model::schema_columns();
+	}
+
 	public function get_dependencies(): array {
 		return array(
 			new Tokens_Model(),

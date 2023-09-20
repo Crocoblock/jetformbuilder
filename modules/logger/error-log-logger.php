@@ -8,7 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Error_Log_Logger implements Logger_It {
+class Error_Log_Logger implements Interfaces\Logger_It {
 
 	public function log( string $message, $value = null ) {
 		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log

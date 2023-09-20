@@ -10,6 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Actions_Tools;
+use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
 use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
@@ -43,6 +44,12 @@ class Verification extends Base {
 			Default_Required_Event::class,
 			Verification_Success\Event::class,
 			Verification_Failed\Event::class,
+		);
+	}
+
+	public function get_required_events(): array {
+		return array(
+			Default_Process_Event::class,
 		);
 	}
 
@@ -94,17 +101,17 @@ class Verification extends Base {
 		);
 
 		// generate unique token for current request, which could be used in another actions
-		jet_fb_context()->update_request( self::TOKEN, $token );
-		jet_fb_context()->update_request( self::TOKEN_ID, $id );
+		jet_fb_context()->update_request( $token, self::TOKEN );
+		jet_fb_context()->update_request( $id, self::TOKEN_ID );
 		jet_fb_context()->update_request(
-			self::URL,
 			add_query_arg(
 				array(
 					Webhook\Module::GET_TOKEN_ID => $id,
 					Webhook\Module::GET_TOKEN    => jet_fb_context()->get_value( self::TOKEN ),
 				),
 				jet_fb_handler()->refer
-			)
+			),
+			self::URL
 		);
 
 		add_action(
@@ -139,7 +146,19 @@ class Verification extends Base {
 			$action->settings['from_field'] = $this->settings['mail_to'];
 
 			jet_fb_action_handler()->add( $action, $props );
+			/**
+			 * Execute action immediately, because is should run on the same event.
+			 * If it would be with ON.DEFAULT.STATE - we may not use it line of the code
+			 * But we couldn't be sure, that current process runs with DEFAULT.STATE render-state
+			 */
+			jet_fb_action_handler()->process_single_action( $action );
 		}
+
+		/**
+		 * Reset current action ID, because it was changed
+		 * by `jet_fb_action_handler()->process_single_action`
+		 */
+		jet_fb_action_handler()->set_current_action( $this->_id );
 	}
 
 	/**

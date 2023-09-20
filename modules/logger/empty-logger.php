@@ -8,7 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Empty_Logger implements Logger_It {
+class Empty_Logger implements Interfaces\Logger_It {
 
 	public function log( string $message, $value = null ) {
 		// silence is golden

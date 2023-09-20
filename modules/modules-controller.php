@@ -22,18 +22,21 @@ class Modules_Controller implements Module_Controller_It {
 		require_once jet_form_builder()->plugin_dir( 'modules/gateways/legacy/gateway-manager.php' );
 
 		return array(
+			// core required modules
 			new Logger\Module(),
 			new Dev\Module(),
 			new Admin\Module(),
 			new Post_Type\Module(),
 			new Block_Parsers\Module(),
-			new Wp_Experiments\Module(),
-			new Deprecated\Module(),
+			new Webhook\Module(),
 			new Rest_Api\Module(),
 			new Blocks\Module(),
-			new Block_Sanitizer\Module(),
-			new Jet_Style\Module(),
 			new Security\Module(),
+			new Block_Sanitizer\Module(),
+			// additional
+			new Wp_Experiments\Module(),
+			new Deprecated\Module(),
+			new Jet_Style\Module(),
 			new Switch_Page_On_Change\Module(),
 			new Form_Record\Module(),
 			new Advanced_Choices\Module(),

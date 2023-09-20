@@ -20,6 +20,8 @@ class Event extends Base_Event {
 	 * @inheritDoc
 	 */
 	public function executors(): array {
-		return array();
+		return array(
+			new Executor(),
+		);
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JFB_Modules\Logger;
+namespace JFB_Modules\Logger\Interfaces;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

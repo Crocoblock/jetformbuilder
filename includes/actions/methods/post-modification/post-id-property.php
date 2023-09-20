@@ -50,7 +50,7 @@ class Post_Id_Property extends Base_Object_Property {
 			throw new Action_Exception(
 				'failed',
 				array(
-					'post' => $post, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'post' => $post, // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				)
 			);
 		}

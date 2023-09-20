@@ -77,7 +77,7 @@ class Call_Webhook extends Base {
 			throw new Action_Exception(
 				'failed',
 				esc_html__( 'Remote request returned error', 'jet-form-builder' ),
-				$response // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$response // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			);
 		}
 		/**

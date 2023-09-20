@@ -38,7 +38,7 @@ class Payment_Actions_Box extends Base_List_Box {
 		} catch ( Query_Builder_Exception $exception ) {
 			throw new Not_Found_Page_Exception(
 				esc_html( $exception->getMessage() ),
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				...$exception->get_additional()
 			);
 		}

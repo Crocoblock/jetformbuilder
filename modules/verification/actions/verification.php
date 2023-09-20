@@ -72,7 +72,7 @@ class Verification extends Base {
 		try {
 			$current = new \DateTimeImmutable( 'now', $timezone );
 		} catch ( \Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Action_Exception( $exception->getMessage() );
 		}
 
@@ -109,10 +109,12 @@ class Verification extends Base {
 
 		add_action(
 			'jet-form-builder/form-handler/after-send',
-			array( $this, 'insert_token' ),
+			array( $this, 'connect_record_or_delete_token' ),
 			10,
 			2
 		);
+
+		$this->send_default_email();
 	}
 
 	public function send_default_email() {
@@ -146,7 +148,7 @@ class Verification extends Base {
 	 *
 	 * @throws Sql_Exception
 	 */
-	public function insert_token( $handler, $is_success ) {
+	public function connect_record_or_delete_token( $handler, $is_success ) {
 		$record_id = jet_fb_action_handler()->get_context( Save_Record::ID, 'id' );
 		$token_id  = jet_fb_context()->get_value( self::TOKEN_ID );
 

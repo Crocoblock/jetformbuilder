@@ -28,6 +28,9 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 	 */
 	private $logger;
 
+	private $verified  = false;
+	private $token_row = array();
+
 	public function rep_item_id() {
 		return 'webhook';
 	}
@@ -60,10 +63,10 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 	public function try_to_catch() {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$id = absint( $_GET[ self::GET_TOKEN_ID ] ?? '' );
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		$id    = absint( $_GET[ self::GET_TOKEN_ID ] ?? '' );
 		$token = sanitize_key( $_GET[ self::GET_TOKEN ] ?? '' );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		$conditions = array(
 			array(
@@ -77,7 +80,7 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 		);
 
 		try {
-			$row = Tokens_View::findOne( $conditions )->query()->query_one();
+			$this->token_row = Tokens_View::findOne( $conditions )->query()->query_one();
 		} catch ( Query_Builder_Exception $exception ) {
 			$this->logger->log(
 				$exception->getMessage(),
@@ -105,6 +108,8 @@ AND {$table}.id = %d
 		);
 		// phpcs:enabled WordPress.DB
 
+		$action = sanitize_key( $this->token_row['action'] );
+
 		if ( ! $wpdb->rows_affected ) {
 			$this->logger->log(
 				sprintf(
@@ -113,11 +118,12 @@ AND {$table}.id = %d
 					$id
 				)
 			);
+			do_action( "jet-form-builder/webhook/{$action}", $this );
 
 			return;
 		}
 
-		if ( ! Security\Module::get_hasher()->CheckPassword( $token, $row['hash'] ) ) {
+		if ( ! Security\Module::get_hasher()->CheckPassword( $token, $this->token_row['hash'] ) ) {
 			$this->logger->log(
 				sprintf(
 				/* translators: %d - primary id of token row */
@@ -125,11 +131,10 @@ AND {$table}.id = %d
 					$id
 				)
 			);
+			do_action( "jet-form-builder/webhook/{$action}", $this );
 
 			return;
 		}
-
-		$action = sanitize_key( $row['action'] );
 
 		$this->logger->log(
 		/* translators: %d - primary id of token row */
@@ -137,10 +142,30 @@ AND {$table}.id = %d
 			sprintf( 'hook: jet-form-builder/webhook/%s', $action )
 		);
 
-		do_action( "jet-form-builder/webhook/{$action}", $row );
+		$this->verified = true;
+
+		do_action( "jet-form-builder/webhook/{$action}", $this );
 	}
 
 	public function set_logger( Logger_It $logger ) {
 		$this->logger = $logger;
+	}
+
+	/**
+	 * @return Logger_It
+	 */
+	public function get_logger(): Logger_It {
+		return $this->logger;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_verified(): bool {
+		return $this->verified;
+	}
+
+	public function get_token_id(): int {
+		return absint( $this->token_row['id'] ?? '' );
 	}
 }

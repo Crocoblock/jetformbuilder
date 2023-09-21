@@ -14,32 +14,22 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Record_By_Token_View extends View_Base {
-
-	public function table(): string {
-		return Tokens_To_Records_Model::table();
-	}
+class Token_By_Record_View extends Record_By_Token_View {
 
 	public function get_prepared_join( Query_Builder $builder ) {
 		parent::get_prepared_join( $builder );
 
 		$tokens_to_records = Tokens_To_Records_Model::table();
-		$records           = Record_Model::table();
+		$tokens            = Tokens_Model::table();
 
 		$builder->join .= "
-LEFT JOIN `{$records}` ON 1=1 
-	AND `{$records}`.`id` = `{$tokens_to_records}`.`record_id`
+LEFT JOIN `{$tokens}` ON 1=1 
+	AND `{$tokens_to_records}`.`token_id` = `{$tokens}`.`id`
 		";
 	}
 
 	public function select_columns(): array {
-		return Record_Model::schema_columns();
-	}
-
-	public function get_dependencies(): array {
-		return array(
-			new Tokens_To_Records_Model(),
-		);
+		return Tokens_Model::schema_columns();
 	}
 
 }

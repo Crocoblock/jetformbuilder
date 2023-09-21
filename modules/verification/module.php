@@ -10,11 +10,11 @@ if ( ! defined( 'WPINC' ) ) {
 
 use Jet_FB_Paypal\Utils\RecordTools;
 use Jet_Form_Builder\Actions\Manager;
+use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
-use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
@@ -24,6 +24,7 @@ use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Form_Record\Tools;
 use JFB_Modules\Verification\Actions\Verification;
 use JFB_Modules\Verification\Events;
+use JFB_Modules\Verification\Form_Record\Admin\Meta_Boxes\Verification_Box;
 use JFB_Modules\Webhook;
 
 class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_It {
@@ -54,6 +55,10 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 			'jet-form-builder/default-process-event/executors',
 			array( $this, 'add_executor_to_default_process' )
 		);
+		add_filter(
+			'jet-form-builder/page-containers/jfb-records-single',
+			array( $this, 'add_box_to_single_record' )
+		);
 	}
 
 	public function remove_hooks() {
@@ -64,6 +69,10 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		remove_filter(
 			'jet-form-builder/default-process-event/executors',
 			array( $this, 'add_executor_to_default_process' )
+		);
+		remove_filter(
+			'jet-form-builder/page-containers/jfb-records-single',
+			array( $this, 'add_box_to_single_record' )
 		);
 	}
 
@@ -100,6 +109,17 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		);
 	}
 
+	/**
+	 * @param Base_Meta_Container[] $containers
+	 *
+	 * @return array
+	 */
+	public function add_box_to_single_record( array $containers ): array {
+		$containers[1]->add_meta_box( new Verification_Box() );
+
+		return $containers;
+	}
+
 	public function on_verification( Webhook\Module $module ) {
 		try {
 			$this->do_verification( $module );
@@ -130,9 +150,11 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	 * @throws Sql_Exception
 	 */
 	public function do_verification( Webhook\Module $module ) {
-		$record = Webhook\Db\Views\Record_By_Token_View::findById(
-			$module->get_token_id()
-		);
+		$record = Webhook\Db\Views\Record_By_Token_View::findOne(
+			array(
+				'token_id' => $module->get_token_id(),
+			)
+		)->query()->query_one();
 
 		// setup actions
 		jet_fb_action_handler()->set_form_id( $record['form_id'] );

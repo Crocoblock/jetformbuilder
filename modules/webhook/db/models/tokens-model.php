@@ -12,6 +12,8 @@ use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 
 class Tokens_Model extends Base_Db_Model {
 
+	protected $gmt = 1;
+
 	public static function table_name(): string {
 		return 'tokens';
 	}
@@ -26,16 +28,9 @@ class Tokens_Model extends Base_Db_Model {
 			'exec_count'     => 'int(11) NOT NULL DEFAULT 0',
 			// How many times can be done
 			'limit_exec'     => 'int(11) NOT NULL DEFAULT 1',
-			'expire_at'      => 'TIMESTAMP',
+			'expire_at'      => 'TIMESTAMP NULL',
 			self::CREATED_AT => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 			self::UPDATED_AT => 'TIMESTAMP',
-		);
-	}
-
-	public function get_defaults(): array {
-		return array(
-			// Set current time in UTC+0
-			self::CREATED_AT => current_time( 'mysql', true ),
 		);
 	}
 

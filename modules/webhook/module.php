@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Webhook;
 
+use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Db_Queries\Query_Conditions_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use JFB_Components\Module\Base_Module_After_Install_It;
@@ -12,6 +13,7 @@ use JFB_Modules\Logger\Interfaces\Logger_It;
 use JFB_Modules\Webhook\Db\Models\Tokens_Model;
 use JFB_Modules\Webhook\Db\Views\Tokens_View;
 use JFB_Modules\Security;
+use JFB_Modules\Webhook\Form_Record\Admin\Meta_Boxes\Webhooks_Box;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -36,21 +38,19 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 	}
 
 	public function condition(): bool {
-		return (
-			// phpcs:disable WordPress.Security.NonceVerification.Recommended
-			array_key_exists( self::GET_TOKEN_ID, $_GET ) &&
-			array_key_exists( self::GET_TOKEN, $_GET ) &&
-			is_numeric( $_GET[ self::GET_TOKEN_ID ] )
-			// phpcs:enable WordPress.Security.NonceVerification.Recommended
-		);
+		return true;
 	}
 
 	public function init_hooks() {
-		add_action( 'parse_request', array( $this, 'try_to_catch' ) );
+		if ( $this->is_webhook_request() ) {
+			add_action( 'parse_request', array( $this, 'try_to_catch' ) );
+		}
 	}
 
 	public function remove_hooks() {
-		remove_action( 'parse_request', array( $this, 'try_to_catch' ) );
+		if ( $this->is_webhook_request() ) {
+			remove_action( 'parse_request', array( $this, 'try_to_catch' ) );
+		}
 	}
 
 	public function on_install() {
@@ -96,13 +96,15 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 		// phpcs:disabled WordPress.DB
 		$wpdb->query(
 			$wpdb->prepare(
-				"UPDATE {$table} 
-SET {$table}.exec_count = {$table}.exec_count + 1
+				"UPDATE {$table} SET
+{$table}.exec_count = {$table}.exec_count + 1,
+{$table}.updated_at = %s
 WHERE 1=1
 AND {$table}.exec_count < {$table}.limit_exec
 AND {$table}.id = %d
 ;
 ",
+				current_time( 'mysql', 1 ),
 				$id
 			)
 		);
@@ -165,6 +167,19 @@ AND {$table}.id = %d
 	 */
 	public function get_logger(): Logger_It {
 		return $this->logger;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_webhook_request(): bool {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		return (
+			array_key_exists( self::GET_TOKEN_ID, $_GET ) &&
+			array_key_exists( self::GET_TOKEN, $_GET ) &&
+			is_numeric( $_GET[ self::GET_TOKEN_ID ] )
+		);
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
 	/**

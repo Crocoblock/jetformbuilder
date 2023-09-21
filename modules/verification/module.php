@@ -43,6 +43,11 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	public function init_hooks() {
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
 		add_action( 'jet-form-builder/actions/register', array( $this, 'actions_register' ) );
+		/**
+		 * It runs by `webhook` module
+		 *
+		 * @see \JFB_Modules\Webhook\Module::try_to_catch
+		 */
 		add_action( 'jet-form-builder/webhook/verification', array( $this, 'on_verification' ) );
 		add_filter( 'jet-form-builder/event-types', array( $this, 'events_register' ) );
 		add_filter(
@@ -99,16 +104,20 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		try {
 			$this->do_verification( $module );
 		} catch ( Handler_Exception $exception ) {
-			$this->send_response(
-				array(
-					'status' => $exception->getMessage(),
+			$module->redirect(
+				$this->get_redirect_url(
+					array(
+						'status' => $exception->getMessage(),
+					)
 				)
 			);
 		}
 
-		$this->send_response(
-			array(
-				'status' => $module->is_verified() ? 'success' : 'failed',
+		$module->redirect(
+			$this->get_redirect_url(
+				array(
+					'status' => $module->is_verified() ? 'success' : 'failed',
+				)
 			)
 		);
 	}
@@ -147,20 +156,13 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		}
 	}
 
-	public function send_response( $args ) {
+	public function get_redirect_url( $args ): string {
 		$redirect = jet_fb_action_handler()->response_data['redirect'] ?? '';
 
 		if ( ! $redirect ) {
 			$redirect = jet_fb_handler()->get_referrer();
 		}
 
-		// make sure we don't have such parameters
-		$redirect = remove_query_arg( Webhook\Module::GET_TOKEN_ID, $redirect );
-		$redirect = remove_query_arg( Webhook\Module::GET_TOKEN, $redirect );
-
-		$redirect = add_query_arg( $args, $redirect );
-
-		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
-		wp_redirect( $redirect );
+		return add_query_arg( $args, $redirect );
 	}
 }

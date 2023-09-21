@@ -147,6 +147,15 @@ AND {$table}.id = %d
 		do_action( "jet-form-builder/webhook/{$action}", $this );
 	}
 
+	public function redirect( string $url ) {
+		// make sure we don't have such parameters
+		$url = remove_query_arg( self::GET_TOKEN_ID, $url );
+		$url = remove_query_arg( self::GET_TOKEN, $url );
+
+		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
+		wp_redirect( $url );
+	}
+
 	public function set_logger( Logger_It $logger ) {
 		$this->logger = $logger;
 	}

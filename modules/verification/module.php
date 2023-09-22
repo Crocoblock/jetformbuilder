@@ -167,6 +167,10 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 
 		$record_id = $record['id'] ?? 0;
 
+		jet_fb_context()->set_field_type( 'text-field', Verification::TOKEN );
+		jet_fb_context()->update_request( $module->get_token(), Verification::TOKEN );
+		jet_fb_context()->make_secure( Verification::TOKEN );
+
 		try {
 			jet_fb_events()->execute(
 				$module->is_verified()

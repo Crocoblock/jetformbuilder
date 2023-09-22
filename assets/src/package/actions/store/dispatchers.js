@@ -104,15 +104,15 @@ export default {
 			},
 		}
 	),
-	[ constants.addComputedField ]: ( state, action ) => (
-		{
+	[ constants.addComputedField ]: ( state, action ) => {
+		return {
 			...state,
 			computedFields: [
 				...state.computedFields,
-				action.field,
+				{ field: action.field, settings: action.settings },
 			],
-		}
-	),
+		};
+	},
 	[ constants.editAction ]: ( state, action ) => {
 		const list = state.list.map( current => {
 			return current.value !== action.actionType

@@ -13,7 +13,6 @@ use JFB_Modules\Logger\Interfaces\Logger_It;
 use JFB_Modules\Webhook\Db\Models\Tokens_Model;
 use JFB_Modules\Webhook\Db\Views\Tokens_View;
 use JFB_Modules\Security;
-use JFB_Modules\Webhook\Form_Record\Admin\Meta_Boxes\Webhooks_Box;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -32,6 +31,13 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 
 	private $verified  = false;
 	private $token_row = array();
+
+	/**
+	 * Has value while webhook is processed
+	 *
+	 * @var string
+	 */
+	private $token = '';
 
 	public function rep_item_id() {
 		return 'webhook';
@@ -64,8 +70,8 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 		global $wpdb;
 
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-		$id    = absint( $_GET[ self::GET_TOKEN_ID ] ?? '' );
-		$token = sanitize_key( $_GET[ self::GET_TOKEN ] ?? '' );
+		$id          = absint( $_GET[ self::GET_TOKEN_ID ] ?? '' );
+		$this->token = sanitize_key( $_GET[ self::GET_TOKEN ] ?? '' );
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		$conditions = array(
@@ -90,7 +96,24 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 			return;
 		}
 
-		$table = Tokens_Model::table();
+		$table  = Tokens_Model::table();
+		$action = sanitize_key( $this->token_row['action'] );
+
+		if ( ! Security\Module::get_hasher()->CheckPassword(
+			$this->token,
+			$this->token_row['hash']
+		) ) {
+			$this->logger->log(
+				sprintf(
+				/* translators: %d - primary id of token row */
+					__( 'Invalid token for %d (primary ID) row', 'jet-form-builder' ),
+					$id
+				)
+			);
+			do_action( "jet-form-builder/webhook/{$action}", $this );
+
+			return;
+		}
 
 		// custom query to prevent race-condition
 		// phpcs:disabled WordPress.DB
@@ -110,26 +133,11 @@ AND {$table}.id = %d
 		);
 		// phpcs:enabled WordPress.DB
 
-		$action = sanitize_key( $this->token_row['action'] );
-
 		if ( ! $wpdb->rows_affected ) {
 			$this->logger->log(
 				sprintf(
 				/* translators: %d - primary id of token row */
 					__( 'Failed to increment `exec_count` column in %d (primary ID) row', 'jet-form-builder' ),
-					$id
-				)
-			);
-			do_action( "jet-form-builder/webhook/{$action}", $this );
-
-			return;
-		}
-
-		if ( ! Security\Module::get_hasher()->CheckPassword( $token, $this->token_row['hash'] ) ) {
-			$this->logger->log(
-				sprintf(
-				/* translators: %d - primary id of token row */
-					__( 'Invalid token for %d (primary ID) row', 'jet-form-builder' ),
 					$id
 				)
 			);
@@ -156,6 +164,7 @@ AND {$table}.id = %d
 
 		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
 		wp_redirect( $url );
+		die;
 	}
 
 	public function set_logger( Logger_It $logger ) {
@@ -191,5 +200,12 @@ AND {$table}.id = %d
 
 	public function get_token_id(): int {
 		return absint( $this->token_row['id'] ?? '' );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_token(): string {
+		return $this->token;
 	}
 }

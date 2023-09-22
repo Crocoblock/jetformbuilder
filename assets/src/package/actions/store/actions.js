@@ -68,10 +68,11 @@ export default {
 			item,
 		};
 	},
-	addComputedField( field ) {
+	addComputedField( field, settings = {} ) {
 		return {
 			type: constants.addComputedField,
 			field,
+			settings,
 		};
 	},
 	editAction( actionType, replace ) {

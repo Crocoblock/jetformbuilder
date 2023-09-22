@@ -58,7 +58,7 @@ class Verification extends Base {
 	 * @param Action_Handler $handler
 	 *
 	 * @return void
-	 * @throws Sql_Exception|Action_Exception
+	 * @throws Sql_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
 		// saving the request is required
@@ -74,31 +74,9 @@ class Verification extends Base {
 		jet_fb_context()->make_secure( self::URL );
 		jet_fb_context()->make_secure( self::TOKEN_ID );
 
-		$timezone = new \DateTimeZone( 'UTC' );
-
-		try {
-			$current = new \DateTimeImmutable( 'now', $timezone );
-		} catch ( \Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
-			throw new Action_Exception( $exception->getMessage() );
-		}
-
 		$lifespan = $this->settings['lifespan'] ?? '';
-		// return number of minutes, by default it's 240 (4 hours)
-		$lifespan_min = $lifespan && is_numeric( $lifespan ) ? absint( $lifespan * 60 ) : 4 * 60;
-		$token        = Security\Csrf\Csrf_Tools::generate();
 
-		$id = ( new Tokens_Model() )->insert(
-			array(
-				'action'    => $this->get_id(),
-				'hash'      => Security\Module::get_hasher()->HashPassword( $token ),
-				'expire_at' => $current->modify(
-					sprintf( '+%d min', $lifespan_min )
-				)->format(
-					Base_Db_Model::DATETIME_FORMAT
-				),
-			)
-		);
+		list( $id, $token ) = Tokens_Model::create_token( $this->get_id(), $lifespan );
 
 		// generate unique token for current request, which could be used in another actions
 		jet_fb_context()->update_request( $token, self::TOKEN );

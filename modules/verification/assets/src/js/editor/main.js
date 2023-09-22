@@ -3,6 +3,7 @@ import VerificationRender from './action/VerificationRender';
 import VerificationActionItem from './action/VerificationActionItem';
 import VerificationActionWatcher from './action/VerificationActionWatcher';
 import { ACTION, FAILED_EVENT, SUCCESS_EVENT } from './constants';
+import TokenComputedField from './action/TokenComputedField';
 
 const {
 	      addFilter,
@@ -10,6 +11,7 @@ const {
 
 const {
 	      addAction,
+	      addComputedField,
       } = JetFBActions;
 
 const {
@@ -18,6 +20,7 @@ const {
       } = wp.data;
 
 addAction( ACTION, VerificationRender );
+addComputedField( TokenComputedField, { isScoped: true } );
 
 addFilter(
 	'jet.fb.register.plugin.jf-actions-panel.before',

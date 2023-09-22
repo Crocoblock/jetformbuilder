@@ -9,6 +9,9 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
+use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
+use Jet_Form_Builder\Exceptions\Action_Exception;
+use JFB_Modules\Security;
 
 class Tokens_Model extends Base_Db_Model {
 
@@ -39,5 +42,41 @@ class Tokens_Model extends Base_Db_Model {
 			'id'        => 'primary key',
 			'expire_at' => 'index',
 		);
+	}
+
+	/**
+	 * @param string $action
+	 * @param int|string $lifespan
+	 *
+	 * @return array<int, string>
+	 * @throws Sql_Exception
+	 */
+	public static function create_token( string $action, $lifespan = 0 ): array {
+		$timezone = new \DateTimeZone( 'UTC' );
+
+		try {
+			$current = new \DateTimeImmutable( 'now', $timezone );
+		} catch ( \Exception $exception ) {
+			return array( 0, '' );
+		}
+
+		// return number of minutes, by default it's 240 (4 hours)
+		$lifespan_min = $lifespan && is_numeric( $lifespan ) ? absint( $lifespan * 60 ) : 4 * 60;
+
+		$token = Security\Csrf\Csrf_Tools::generate();
+
+		$id = ( new static() )->insert(
+			array(
+				'action'    => $action,
+				'hash'      => Security\Module::get_hasher()->HashPassword( $token ),
+				'expire_at' => $current->modify(
+					sprintf( '+%d min', $lifespan_min )
+				)->format(
+					Base_Db_Model::DATETIME_FORMAT
+				),
+			)
+		);
+
+		return array( $id, $token );
 	}
 }

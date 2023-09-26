@@ -39,6 +39,7 @@ class Form extends Base {
 		$this->control_group_description_style();
 		$this->control_group_input_style();
 		$this->control_group_checkradio_style();
+		$this->control_group_calc_fields_style();
 	}
 
 	// Set builder controls
@@ -49,6 +50,7 @@ class Form extends Base {
 		$this->controls_description_style();
 		$this->controls_input_style();
 		$this->controls_checkradio_style();
+		$this->controls_calc_fields_style();
 	}
 
 	// Start form settings
@@ -761,6 +763,308 @@ class Form extends Base {
 		$this->end_jet_control_group();
 	}
 	// End checkbox & radio fields style
+
+	// Start calculated fields
+	public function control_group_calc_fields_style() {
+		$this->register_jet_control_group(
+			'section_calc_fields_style',
+			[
+				'title' => esc_html__( 'Calculated Fields', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_calc_fields_style() {
+		$this->start_jet_control_group( 'section_calc_fields_style' );
+
+		$this->register_jet_control(
+			'calc_fields_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '__calculated-field' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'calc_fields_prefix_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Prefix color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [
+					[
+						'property' => 'color',
+						'selector' => $this->css_selector( '__calculated-field-prefix' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'calc_fields_prefix_size',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Prefix size', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 10,
+				'max'   => 50,
+				'css'   => [
+					[
+						'property' => 'font-size',
+						'selector' => $this->css_selector( '__calculated-field-prefix' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'calc_fields_suffix_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Suffix color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [
+					[
+						'property' => 'color',
+						'selector' => $this->css_selector( '__calculated-field-suffix' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'calc_fields_suffix_size',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Suffix size', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 10,
+				'max'   => 50,
+				'css'   => [
+					[
+						'property' => 'font-size',
+						'selector' => $this->css_selector( '__calculated-field-suffix' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'calc_fields_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [
+					[
+						'property' => 'background-color',
+						'selector' => $this->css_selector( '__calculated-field' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'calc_fields_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '__calculated-field' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'calc_fields_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '__calculated-field' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'calc_fields_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '__calculated-field' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'calc_fields_align_main_axis',
+			[
+				'tab'      => 'style',
+				'label'    => esc_html__( 'Align main axis', 'jet-smart-filters' ),
+				'type'     => 'justify-content',
+				'css'      => [
+					[
+						'property' => 'justify-content',
+						'selector' => $this->css_selector( '__calculated-field' ),
+					],
+				],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End calculated fields
+
+	// Start Range Fields
+	public function control_group_range_fields_style() {
+		$this->register_jet_control_group(
+			'section_range_fields_style',
+			[
+				'title' => esc_html__( 'Range Fields', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_range_fields_style() {
+		$this->start_jet_control_group( 'section_range_fields_style' );
+
+		$this->register_jet_control(
+			'range_max_width',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Max Width', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 1,
+				'max'   => 1000,
+				'css'   => [
+					[
+						'property' => 'max-width',
+						'selector' => $this->css_selector( '__field-wrap.range-wrap' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'range_slider_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'Slider', 'jet-form-builder' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'track_height',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Track Height', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 1,
+				'max'   => 20,
+				'css'   => [
+					[
+						'property' => 'height',
+						'selector' => $this->css_selector( ' .range-field::-webkit-slider-runnable-track' ),
+					],
+					[
+						'property' => 'height',
+						'selector' => $this->css_selector( ' .range-field::-moz-range-track' ),
+					],
+					[
+						'property' => 'height',
+						'selector' => $this->css_selector( ' .range-field::-ms-track' ),
+					],
+					[
+						'property' => 'margin-top',
+						'selector' => $this->css_selector( ' .range-field::-webkit-slider-thumb' ),
+						'value'    => 'calc( ( 18px - %s ) / -2 )',
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'thumb_size',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Thumb Size', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 1,
+				'max'   => 20,
+				'css'   => [
+					[
+						'property' => 'min-height',
+						'selector' => $this->css_selector( '__field.range-field' ),
+					],
+					[
+						'property' => 'width',
+						'selector' => $this->css_selector( '__field.range-field::-webkit-slider-thumb' ),
+					],
+					[
+						'property' => 'height',
+						'selector' => $this->css_selector( '__field.range-field::-webkit-slider-thumb' ),
+					],
+					[
+						'property' => 'width',
+						'selector' => $this->css_selector( '__field.range-field::-moz-range-thumb' ),
+					],
+					[
+						'property' => 'height',
+						'selector' => $this->css_selector( '__field.range-field::-moz-range-thumb' ),
+					],
+					[
+						'property' => 'width',
+						'selector' => $this->css_selector( '__field.range-field::-ms-thumb' ),
+					],
+					[
+						'property' => 'height',
+						'selector' => $this->css_selector( '__field.range-field::-ms-thumb' ),
+					],
+					[
+						'property' => 'margin-top',
+						'selector' => $this->css_selector( '__field.range-field::-webkit-slider-thumb' ),
+						'value'    => 'calc( ( %s - 4px ) / -2 )',
+					],
+				],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End Range Fields
+
+
+
+
+
 
 	// Start
 	public function control_group_() {

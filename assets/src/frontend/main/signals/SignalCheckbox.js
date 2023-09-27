@@ -15,7 +15,8 @@ function SignalCheckbox() {
 
 	this.runSignal = function () {
 		this.input.calcValue = 0;
-		const { current }    = this.input.value;
+		let { current }      = this.input.value;
+		current              = JSON.parse( JSON.stringify( current ) );
 
 		for ( const node of this.input.nodes ) {
 			(

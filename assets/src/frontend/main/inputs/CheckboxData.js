@@ -61,6 +61,8 @@ function CheckboxData() {
 	};
 	this.setValue     = function () {
 		this.value.current = this.getActiveValue();
+		/*this.value.current = [ ...this.nodes ].filter(
+		 ( { checked } ) => checked ).map( ( { value } ) => value );*/
 	};
 
 	this.setNode = function ( node ) {

@@ -1,0 +1,119 @@
+// Base
+.jet-form-builder {
+  input {
+    color-scheme: var(--jfb-input-color-scheme);
+  }
+}
+
+// Row
+.jet-form-builder-row {
+  margin-top: var(--jfb-row-mt);
+  margin-bottom: var(--jfb-row-mb);
+}
+
+// Label
+.jet-form-builder__label {
+  background-color: var(--jfb-label-bgc);
+}
+
+// Description
+.jet-form-builder__desc {
+  background-color: var(--jfb-desc-bgc);
+}
+
+// Input
+.jet-form-builder__field {
+  &::placeholder {
+    color: var(--jfb-input-phc);
+  }
+
+  &:not(.checkradio-field):not(.range-field):not(.jet-form-builder-repeater):not(.wysiwyg-field) {
+    background-color: var(--jfb-input-bgc);
+  }
+
+  &.textarea-field {
+    height: var(--jfb-input-h);
+    min-height: var(--jfb-input-h);
+  }
+}
+
+// Checkbox and radio
+.jet-form-builder__field-label {
+  > span::before {
+    font-size: var(--jfb-checkradio-fz);
+    background-color: var(--jfb-checkradio-input-bgc);
+  }
+
+  &.for-checkbox,
+  &.for-radio {
+    :checked + span::before {
+      background-color: var(--jfb-checkradio-input-checked-bgc);
+    }
+  }
+}
+
+.jet-form-builder__field-wrap {
+  &.checkradio-wrap {
+    display: var(--jfb-checkradio-d);
+    margin-right: var(--jfb-checkradio-mr);
+  }
+}
+
+// Calculated
+.jet-form-builder__calculated-field {
+  gap: var(--jfb-calc-gap);
+  justify-content: var(--jfb-calc-justify-content);
+  background-color: var(--jfb-calc-bgc);
+}
+
+.jet-form-builder__calculated-field-prefix {
+  font-size: var(--jfb-calc-prefix-fz);
+  color: var(--jfb-calc-prefix-color);
+}
+
+.jet-form-builder__calculated-field-suffix {
+  font-size: var(--jfb-calc-suffix-fz);
+  color: var(--jfb-calc-suffix-color);
+}
+
+// Range
+.jet-form-builder__field-value {
+  gap: var(--jfb-range-value-gap);
+}
+
+.jet-form-builder__field-value-prefix {
+  font-size: var(--jfb-range-value-prefix-fz);
+  color: var(--jfb-range-value-prefix-color);
+}
+
+.jet-form-builder__field-value-suffix {
+  font-size: var(--jfb-range-value-suffix-fz);
+  color: var(--jfb-range-value-suffix-color);
+}
+
+
+.jet-form-builder__field-wrap {
+  &.range-wrap {
+    max-width: var(--jfb-range-mw);
+  }
+}
+
+// Context
+.layout-column {
+  .jet-form-builder__field {
+    &:not(.checkradio-field):not(.range-field):not(.jet-form-builder-repeater):not(.wysiwyg-field) {
+      width: var(--jfb-input-w, 100%);
+      max-width: var(--jfb-input-w, 100%);
+      flex-basis: var(--jfb-input-w, 100%);
+    }
+  }
+}
+
+.layout-row {
+  .jet-form-builder__field {
+    &:not(.checkradio-field):not(.range-field):not(.jet-form-builder-repeater):not(.wysiwyg-field) {
+      width: var(--jfb-input-w, 100%);
+    }
+  }
+}
+

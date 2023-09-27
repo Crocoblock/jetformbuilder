@@ -16,7 +16,7 @@ import {
 	isEmpty,
 	getOffsetTop,
 	focusOnInvalidInput,
-	isVisible,
+	isVisible, getScrollParent,
 } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
 import RestrictionError from './reporting/RestrictionError';
@@ -83,6 +83,7 @@ window.JetFormBuilderFunctions = {
 	observeMacroAttr,
 	observeComment,
 	iterateJfbComments,
+	getScrollParent,
 };
 
 jQuery( () => JetPlugins.init() );

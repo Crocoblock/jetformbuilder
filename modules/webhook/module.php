@@ -97,7 +97,7 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 		}
 
 		$table  = Tokens_Model::table();
-		$action = sanitize_key( $this->token_row['action'] );
+		$action = $this->token_row['action'];
 
 		if ( ! Security\Module::get_hasher()->CheckPassword(
 			$this->token,

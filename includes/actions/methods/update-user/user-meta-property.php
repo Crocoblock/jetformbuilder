@@ -15,6 +15,22 @@ if ( ! defined( 'WPINC' ) ) {
 
 class User_Meta_Property extends Base_Object_Property implements Object_Dynamic_Property {
 
+	private static $restricted_meta;
+
+	/**
+	 * @since 3.1.6
+	 */
+	const RESTRICT_META_KEYS = array(
+		'use_ssl',
+		'wp_capabilities',
+		'wp_user_level',
+		'dismissed_wp_pointers',
+		'session_tokens',
+		'wp_user-settings',
+		'wp_user-settings-time',
+		'wp_dashboard_quick_press_last_post_id',
+	);
+
 	protected $meta = array();
 
 	public function get_id(): string {
@@ -26,7 +42,7 @@ class User_Meta_Property extends Base_Object_Property implements Object_Dynamic_
 	}
 
 	public function is_supported( string $key, $value ): bool {
-		return true;
+		return ! in_array( $key, self::get_restricted_keys(), true );
 	}
 
 	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
@@ -43,6 +59,22 @@ class User_Meta_Property extends Base_Object_Property implements Object_Dynamic_
 		foreach ( $this->meta as $key => $value ) {
 			update_user_meta( $modifier->source_arr['ID'], $key, $value );
 		}
+	}
+
+	/**
+	 * @since 3.1.6
+	 */
+	public static function get_restricted_keys(): array {
+		if ( is_array( self::$restricted_meta ) ) {
+			return self::$restricted_meta;
+		}
+
+		self::$restricted_meta = apply_filters(
+			'jet-form-builder/user-modifier/restricted-meta-keys',
+			self::RESTRICT_META_KEYS
+		);
+
+		return self::$restricted_meta;
 	}
 
 }

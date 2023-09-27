@@ -10,14 +10,23 @@ namespace JFB_Compatibility\Bricks\Widgets;
 // If this file is called directly, abort.
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Tools;
+use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
+use JFB_Components\Compatibility\Base_Compat_Url_Trait;
+use JFB_Components\Module\Base_Module_Handle_It;
+use JFB_Components\Module\Base_Module_Url_It;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Form extends Base {
+class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 
-//	use General_Style_Functions;
+	use Base_Compat_Handle_Trait;
+	use Base_Compat_Url_Trait;
+
+	public function rep_item_id() {
+		return 'bricks';
+	}
 
 	// Element properties
 	public $category = 'jet-form-builder'; // Use predefined element category 'general'
@@ -40,6 +49,7 @@ class Form extends Base {
 		$this->control_group_input_style();
 		$this->control_group_checkradio_style();
 		$this->control_group_calc_fields_style();
+		$this->control_group_range_fields_style();
 	}
 
 	// Set builder controls
@@ -51,6 +61,7 @@ class Form extends Base {
 		$this->controls_input_style();
 		$this->controls_checkradio_style();
 		$this->controls_calc_fields_style();
+		$this->controls_range_fields_style();
 	}
 
 	// Start form settings
@@ -58,7 +69,7 @@ class Form extends Base {
 		$this->register_jet_control_group(
 			'form_settings',
 			[
-				'title' => esc_html__( 'Form Settings', 'jet-form-builder' ),
+				'title' => esc_html__( 'Form settings', 'jet-form-builder' ),
 				'tab'   => 'content',
 			]
 		);
@@ -161,12 +172,7 @@ class Form extends Base {
 				'units' => true,
 				'min'   => 1,
 				'max'   => 100,
-				'css'   => [
-					[
-						'property' => 'margin-top',
-						'selector' => $this->css_selector( '-row' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-row-mt' ] ],
 			]
 		);
 
@@ -179,12 +185,7 @@ class Form extends Base {
 				'units' => true,
 				'min'   => 1,
 				'max'   => 100,
-				'css'   => [
-					[
-						'property' => 'margin-bottom',
-						'selector' => $this->css_selector( '-row' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-row-mb' ] ],
 			]
 		);
 
@@ -227,12 +228,7 @@ class Form extends Base {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [
-					[
-						'property' => 'background-color',
-						'selector' => $this->css_selector( '__label' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-label-bgc' ] ],
 			]
 		);
 
@@ -344,12 +340,7 @@ class Form extends Base {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [
-					[
-						'property' => 'background-color',
-						'selector' => $this->css_selector( '__desc' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-desc-bgc' ] ],
 			]
 		);
 
@@ -407,7 +398,7 @@ class Form extends Base {
 		$this->register_jet_control_group(
 			'section_input_style',
 			[
-				'title' => esc_html__( 'Input Fields', 'jet-form-builder' ),
+				'title' => esc_html__( 'Input fields', 'jet-form-builder' ),
 				'tab'   => 'style',
 			]
 		);
@@ -440,12 +431,7 @@ class Form extends Base {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Placeholder color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [
-					[
-						'property' => 'color',
-						'selector' => $this->css_selector( '__field' ) . '::placeholder',
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-input-phc' ] ],
 			]
 		);
 
@@ -455,12 +441,7 @@ class Form extends Base {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [
-					[
-						'property' => 'background-color',
-						'selector' => $this->css_selector( $simple_input ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-input-bgc' ] ],
 			]
 		);
 
@@ -533,25 +514,7 @@ class Form extends Base {
 				'units' => true,
 				'min'   => 50,
 				'max'   => 1000,
-				'css'   => [
-					[
-						'property' => 'max-width',
-						'selector' => $this->css_selector( $simple_input ),
-					],
-					[
-						'property' => 'width',
-						'selector' => $this->css_selector( $simple_input ),
-					],
-					[
-						'property' => 'flex-basis',
-						'selector' => $this->css_selector( $simple_input ),
-					],
-					[
-						'property' => 'flex-shrink',
-						'selector' => $this->css_selector( $simple_input ),
-						'value'    => '1',
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-input-w' ] ],
 			]
 		);
 
@@ -564,16 +527,7 @@ class Form extends Base {
 				'units' => true,
 				'min'   => 10,
 				'max'   => 500,
-				'css'   => [
-					[
-						'property' => 'height',
-						'selector' => $this->css_selector( '__field.textarea-field' ),
-					],
-					[
-						'property' => 'min-height',
-						'selector' => $this->css_selector( '__field.textarea-field' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-input-h' ] ],
 			]
 		);
 
@@ -581,7 +535,7 @@ class Form extends Base {
 			'input_color_scheme',
 			[
 				'tab'         => 'style',
-				'label'       => esc_html__( 'Fields label HTML tag', 'jet-form-builder' ),
+				'label'       => esc_html__( 'Color scheme', 'jet-form-builder' ),
 				'type'        => 'select',
 				'options'     => [
 					'normal' => esc_html__( 'Normal', 'jet-form-builder' ),
@@ -590,6 +544,7 @@ class Form extends Base {
 				],
 				'default'     => 'normal',
 				'description' => esc_html__( 'Affects default browser UI elements like date and time icons, UI etc.', 'jet-form-builder' ),
+				'css'         => [ [ 'property' => '--jfb-input-color-scheme' ] ],
 			]
 		);
 
@@ -602,7 +557,7 @@ class Form extends Base {
 		$this->register_jet_control_group(
 			'section_checkradio_style',
 			[
-				'title' => esc_html__( 'Checkbox & Radio Fields', 'jet-form-builder' ),
+				'title' => esc_html__( 'Checkbox & Radio fields', 'jet-form-builder' ),
 				'tab'   => 'style',
 			]
 		);
@@ -614,20 +569,15 @@ class Form extends Base {
 		$this->register_jet_control(
 			'checkradio_fields_layout',
 			[
-				'tab'        => 'style',
-				'label'      => esc_html__( '', 'jet-form-builder' ),
-				'type'       => 'select',
-				'options'    => [
+				'tab'     => 'style',
+				'label'   => esc_html__( 'Layout', 'jet-form-builder' ),
+				'type'    => 'select',
+				'options' => [
 					'inline-block' => esc_html__( 'Horizontal', 'jet-form-builder' ),
 					'block'        => esc_html__( 'Vertical', 'jet-form-builder' ),
 				],
-				'default'    => 'block',
-				'css'   => [
-					[
-						'property' => 'display',
-						'selector' => $this->css_selector( '__field-wrap.checkradio-wrap' ),
-					],
-				],
+				'default' => 'block',
+				'css'     => [ [ 'property' => '--jfb-checkradio-d' ] ],
 			]
 		);
 
@@ -640,12 +590,7 @@ class Form extends Base {
 				'units' => true,
 				'min'   => 0,
 				'max'   => 50,
-				'css'   => [
-					[
-						'property' => 'margin-right',
-						'selector' => $this->css_selector( '__field-wrap.checkradio-wrap' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-checkradio-mr' ] ],
 			]
 		);
 
@@ -658,12 +603,7 @@ class Form extends Base {
 				'units' => true,
 				'min'   => 0,
 				'max'   => 50,
-				'css'   => [
-					[
-						'property' => 'font-size',
-						'selector' => $this->css_selector( '__field-wrap span::before' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-checkradio-fz' ] ],
 			]
 		);
 
@@ -676,7 +616,7 @@ class Form extends Base {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( '__field-wrap label' ),
+						'selector' => $this->css_selector( '__field-label' ),
 					],
 				],
 			]
@@ -700,7 +640,7 @@ class Form extends Base {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( '__field-wrap span::before' ),
+						'selector' => $this->css_selector( '__field-label > span::before' ),
 					],
 				],
 			]
@@ -712,12 +652,7 @@ class Form extends Base {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [
-					[
-						'property' => 'background-color',
-						'selector' => $this->css_selector( '__field-wrap label > span::before' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-checkradio-input-bgc' ] ],
 			]
 		);
 
@@ -736,12 +671,7 @@ class Form extends Base {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Background color', 'jet-smart-filters' ),
 				'type'  => 'color',
-				'css'   => [
-					[
-						'property' => 'background-color',
-						'selector' => $this->css_selector( '__field-wrap label :checked + span::before' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-checkradio-input-checked-bgc' ] ],
 			]
 		);
 
@@ -754,7 +684,7 @@ class Form extends Base {
 				'css'   => [
 					[
 						'property' => 'border-color',
-						'selector' => $this->css_selector( '__field-wrap label :checked + span::before' ),
+						'selector' => $this->css_selector( '__field-label :checked + span::before' ),
 					],
 				],
 			]
@@ -769,7 +699,7 @@ class Form extends Base {
 		$this->register_jet_control_group(
 			'section_calc_fields_style',
 			[
-				'title' => esc_html__( 'Calculated Fields', 'jet-form-builder' ),
+				'title' => esc_html__( 'Calculated fields', 'jet-form-builder' ),
 				'tab'   => 'style',
 			]
 		);
@@ -777,6 +707,19 @@ class Form extends Base {
 
 	public function controls_calc_fields_style() {
 		$this->start_jet_control_group( 'section_calc_fields_style' );
+
+		$this->register_jet_control(
+			'calc_fields_gap',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Gap', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 0,
+				'max'   => 40,
+				'css'   => [ [ 'property' => '--jfb-calc-gap' ] ],
+			]
+		);
 
 		$this->register_jet_control(
 			'calc_fields_typography',
@@ -794,21 +737,6 @@ class Form extends Base {
 		);
 
 		$this->register_jet_control(
-			'calc_fields_prefix_color',
-			[
-				'tab'   => 'style',
-				'label' => esc_html__( 'Prefix color', 'jet-form-builder' ),
-				'type'  => 'color',
-				'css'   => [
-					[
-						'property' => 'color',
-						'selector' => $this->css_selector( '__calculated-field-prefix' ),
-					],
-				],
-			]
-		);
-
-		$this->register_jet_control(
 			'calc_fields_prefix_size',
 			[
 				'tab'   => 'style',
@@ -817,27 +745,17 @@ class Form extends Base {
 				'units' => true,
 				'min'   => 10,
 				'max'   => 50,
-				'css'   => [
-					[
-						'property' => 'font-size',
-						'selector' => $this->css_selector( '__calculated-field-prefix' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-calc-prefix-fz' ] ],
 			]
 		);
 
 		$this->register_jet_control(
-			'calc_fields_suffix_color',
+			'calc_fields_prefix_color',
 			[
 				'tab'   => 'style',
-				'label' => esc_html__( 'Suffix color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Prefix color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [
-					[
-						'property' => 'color',
-						'selector' => $this->css_selector( '__calculated-field-suffix' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-calc-prefix-color' ] ],
 			]
 		);
 
@@ -850,12 +768,17 @@ class Form extends Base {
 				'units' => true,
 				'min'   => 10,
 				'max'   => 50,
-				'css'   => [
-					[
-						'property' => 'font-size',
-						'selector' => $this->css_selector( '__calculated-field-suffix' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-calc-suffix-fz' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'calc_fields_suffix_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Suffix color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-calc-suffix-color' ] ],
 			]
 		);
 
@@ -865,12 +788,7 @@ class Form extends Base {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [
-					[
-						'property' => 'background-color',
-						'selector' => $this->css_selector( '__calculated-field' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-calc-bgc' ] ],
 			]
 		);
 
@@ -922,15 +840,10 @@ class Form extends Base {
 		$this->register_jet_control(
 			'calc_fields_align_main_axis',
 			[
-				'tab'      => 'style',
-				'label'    => esc_html__( 'Align main axis', 'jet-smart-filters' ),
-				'type'     => 'justify-content',
-				'css'      => [
-					[
-						'property' => 'justify-content',
-						'selector' => $this->css_selector( '__calculated-field' ),
-					],
-				],
+				'tab'   => 'style',
+				'label' => esc_html__( 'Align main axis', 'jet-smart-filters' ),
+				'type'  => 'justify-content',
+				'css'   => [ [ 'property' => '--jfb-calc-justify-content' ] ],
 			]
 		);
 
@@ -938,12 +851,12 @@ class Form extends Base {
 	}
 	// End calculated fields
 
-	// Start Range Fields
+	// Start range fields
 	public function control_group_range_fields_style() {
 		$this->register_jet_control_group(
 			'section_range_fields_style',
 			[
-				'title' => esc_html__( 'Range Fields', 'jet-form-builder' ),
+				'title' => esc_html__( 'Range fields', 'jet-form-builder' ),
 				'tab'   => 'style',
 			]
 		);
@@ -956,17 +869,12 @@ class Form extends Base {
 			'range_max_width',
 			[
 				'tab'   => 'style',
-				'label' => esc_html__( 'Max Width', 'jet-form-builder' ),
+				'label' => esc_html__( 'Max width', 'jet-form-builder' ),
 				'type'  => 'number',
 				'units' => true,
 				'min'   => 1,
 				'max'   => 1000,
-				'css'   => [
-					[
-						'property' => 'max-width',
-						'selector' => $this->css_selector( '__field-wrap.range-wrap' ),
-					],
-				],
+				'css'   => [ [ 'property' => '--jfb-range-mw' ] ],
 			]
 		);
 
@@ -983,30 +891,12 @@ class Form extends Base {
 			'track_height',
 			[
 				'tab'   => 'style',
-				'label' => esc_html__( 'Track Height', 'jet-form-builder' ),
+				'label' => esc_html__( 'Track height', 'jet-form-builder' ),
 				'type'  => 'number',
 				'units' => true,
 				'min'   => 1,
 				'max'   => 20,
-				'css'   => [
-					[
-						'property' => 'height',
-						'selector' => $this->css_selector( ' .range-field::-webkit-slider-runnable-track' ),
-					],
-					[
-						'property' => 'height',
-						'selector' => $this->css_selector( ' .range-field::-moz-range-track' ),
-					],
-					[
-						'property' => 'height',
-						'selector' => $this->css_selector( ' .range-field::-ms-track' ),
-					],
-					[
-						'property' => 'margin-top',
-						'selector' => $this->css_selector( ' .range-field::-webkit-slider-thumb' ),
-						'value'    => 'calc( ( 18px - %s ) / -2 )',
-					],
-				],
+				'css'   => [ [ 'property' => '--jet-fb__range-field-range--height' ] ],
 			]
 		);
 
@@ -1014,55 +904,147 @@ class Form extends Base {
 			'thumb_size',
 			[
 				'tab'   => 'style',
-				'label' => esc_html__( 'Thumb Size', 'jet-form-builder' ),
+				'label' => esc_html__( 'Thumb size', 'jet-form-builder' ),
 				'type'  => 'number',
 				'units' => true,
 				'min'   => 1,
 				'max'   => 20,
+				'css'   => [ [ 'property' => '--jet-fb__range-field-slider--size' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'track_border_radius',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Track border radius', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 1,
+				'max'   => 50,
+				'css'   => [ [ 'property' => '--jet-fb__range-field-range--br' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'thumb_border_radius',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Thumb border radius', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 1,
+				'max'   => 50,
+				'css'   => [ [ 'property' => '--jet-fb__range-field-slider--br' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'track_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Track color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jet-fb__range-field-range--bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'thumb_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Thumb color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jet-fb__range-field-slider--bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'range_value_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'Value', 'jet-form-builder' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'range_value_gap',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Gap', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 0,
+				'max'   => 40,
+				'css'   => [ [ 'property' => '--jfb-range-value-gap' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'range_value_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
 				'css'   => [
 					[
-						'property' => 'min-height',
-						'selector' => $this->css_selector( '__field.range-field' ),
-					],
-					[
-						'property' => 'width',
-						'selector' => $this->css_selector( '__field.range-field::-webkit-slider-thumb' ),
-					],
-					[
-						'property' => 'height',
-						'selector' => $this->css_selector( '__field.range-field::-webkit-slider-thumb' ),
-					],
-					[
-						'property' => 'width',
-						'selector' => $this->css_selector( '__field.range-field::-moz-range-thumb' ),
-					],
-					[
-						'property' => 'height',
-						'selector' => $this->css_selector( '__field.range-field::-moz-range-thumb' ),
-					],
-					[
-						'property' => 'width',
-						'selector' => $this->css_selector( '__field.range-field::-ms-thumb' ),
-					],
-					[
-						'property' => 'height',
-						'selector' => $this->css_selector( '__field.range-field::-ms-thumb' ),
-					],
-					[
-						'property' => 'margin-top',
-						'selector' => $this->css_selector( '__field.range-field::-webkit-slider-thumb' ),
-						'value'    => 'calc( ( %s - 4px ) / -2 )',
+						'property' => 'typography',
+						'selector' => $this->css_selector( '__field-value.range-value' ),
 					],
 				],
 			]
 		);
 
+		$this->register_jet_control(
+			'range_prefix_value_size',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Prefix size', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 10,
+				'max'   => 50,
+				'css'   => [ [ 'property' => '--jfb-range-value-prefix-fz' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'range_prefix_value_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Prefix color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-range-value-prefix-color' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'range_suffix_value_size',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Suffix size', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 10,
+				'max'   => 50,
+				'css'   => [ [ 'property' => '--jfb-range-value-suffix-fz' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'range_suffix_value_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Suffix color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-range-value-suffix-color' ] ],
+			]
+		);
+
 		$this->end_jet_control_group();
 	}
-	// End Range Fields
-
-
-
+	// End range fields
 
 
 
@@ -1098,11 +1080,29 @@ class Form extends Base {
 
 	// Enqueue element styles and scripts
 	public function enqueue_scripts() {
+		wp_enqueue_style(
+			$this->get_handle( 'frontend' ),
+			$this->get_url( 'assets/css/frontend/frontend.css' ),
+			[ 'jet-form-builder-frontend' ],
+			jet_form_builder()->get_version()
+		);
 	}
 
 	// Render element HTML
 	public function render() {
-		$settings = $this->get_jet_settings();
+
+		$settings = $this->parse_jet_render_attributes( $this->get_jet_settings() );
+
+		// STEP: Form field is empty: Show placeholder text
+		if ( empty( $settings['form_id'] ) ) {
+			return $this->render_element_placeholder(
+				[
+					'title' => esc_html__( 'Please select form to show.', 'jet-form-builder' )
+				]
+			);
+		}
+
+		$this->enqueue_scripts();
 
 		echo "<div {$this->render_attributes( '_root' )}>";
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

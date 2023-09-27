@@ -8,7 +8,6 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-use Jet_FB_Paypal\Utils\RecordTools;
 use Jet_Form_Builder\Actions\Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
@@ -178,7 +177,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 					: Events\Verification_Failed\Event::class
 			);
 		} finally {
-			RecordTools::update_record( $record_id );
+			Tools::update_record( $record_id );
 		}
 	}
 

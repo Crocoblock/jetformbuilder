@@ -147,8 +147,11 @@ AND {$table}.id = %d
 		}
 
 		$this->logger->log(
-		/* translators: %d - primary id of token row */
-			__( 'Successfully verified webhook (primary ID -> %d)', 'jet-form-builder' ),
+			sprintf(
+			/* translators: %d - primary id of token row */
+				__( 'Successfully verified webhook (primary ID -> %d)', 'jet-form-builder' ),
+				$id
+			),
 			sprintf( 'hook: jet-form-builder/webhook/%s', $action )
 		);
 

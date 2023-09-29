@@ -91,6 +91,58 @@
   max-width: var(--jfb-range-mw);
 }
 
+.jet-form-builder__heading {
+  background-color: var(--jfb-heading-bgc);
+}
+
+.jet-form-builder__heading-desc {
+  background-color: var(--jfb-heading-desc-bgc);
+}
+
+.jet-form-builder-repeater__actions {
+  -webkit-box-pack: var(--jfb-repeater-add-button-justify-content);
+      -ms-flex-pack: var(--jfb-repeater-add-button-justify-content);
+          justify-content: var(--jfb-repeater-add-button-justify-content);
+}
+
+.jet-form-builder-repeater__row-remove {
+  -webkit-box-pack: var(--jfb-repeater-rem-button-justify-content);
+      -ms-flex-pack: var(--jfb-repeater-rem-button-justify-content);
+          justify-content: var(--jfb-repeater-rem-button-justify-content);
+}
+
+.jet-form-builder-repeater__new {
+  background-color: var(--jfb-repeater-add-button-bgc);
+}
+
+.jet-form-builder-repeater__remove {
+  font-size: var(--jfb-repeater-rem-button-fz);
+  line-height: var(--jfb-repeater-rem-button-fz);
+  color: var(--jfb-repeater-rem-button-color);
+  background-color: var(--jfb-repeater-rem-button-bgc);
+}
+
+.jet-form-builder__conditional {
+  background-color: var(--jfb-conditional-bgc);
+}
+
+button.jet-form-builder__submit {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.jet-form-builder__submit {
+  width: var(--jfb-submit-w);
+  background-color: var(--jfb-submit-bgc);
+}
+
+.jet-form-builder__submit-wrap {
+  -webkit-box-pack: var(--jfb-submit-justify-content);
+      -ms-flex-pack: var(--jfb-submit-justify-content);
+          justify-content: var(--jfb-submit-justify-content);
+}
+
 .layout-column .jet-form-builder__field:not(.checkradio-field):not(.range-field):not(.jet-form-builder-repeater):not(.wysiwyg-field) {
   width: var(--jfb-input-w, 100%);
   max-width: var(--jfb-input-w, 100%);

@@ -91,12 +91,62 @@
   color: var(--jfb-range-value-suffix-color);
 }
 
-
 .jet-form-builder__field-wrap {
   &.range-wrap {
     max-width: var(--jfb-range-mw);
   }
 }
+
+// Heading
+.jet-form-builder__heading {
+  background-color: var(--jfb-heading-bgc);
+}
+
+.jet-form-builder__heading-desc {
+  background-color: var(--jfb-heading-desc-bgc);
+}
+
+// Repeater
+.jet-form-builder-repeater__actions {
+  justify-content: var(--jfb-repeater-add-button-justify-content);
+}
+
+.jet-form-builder-repeater__row-remove {
+  justify-content: var(--jfb-repeater-rem-button-justify-content);
+}
+
+.jet-form-builder-repeater__new {
+  background-color: var(--jfb-repeater-add-button-bgc);
+}
+
+.jet-form-builder-repeater__remove {
+  font-size: var(--jfb-repeater-rem-button-fz);
+  line-height: var(--jfb-repeater-rem-button-fz);
+  color: var(--jfb-repeater-rem-button-color);
+  background-color: var(--jfb-repeater-rem-button-bgc);
+}
+
+// Conditional
+.jet-form-builder__conditional {
+  background-color: var(--jfb-conditional-bgc);
+}
+
+// Submit
+button.jet-form-builder__submit {
+  justify-content: center
+}
+
+.jet-form-builder__submit {
+  width: var(--jfb-submit-w);
+  background-color: var(--jfb-submit-bgc);
+}
+
+.jet-form-builder__submit-wrap {
+  justify-content: var(--jfb-submit-justify-content);
+}
+
+// Form break
+
 
 // Context
 .layout-column {

@@ -50,6 +50,10 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 		$this->control_group_checkradio_style();
 		$this->control_group_calc_fields_style();
 		$this->control_group_range_fields_style();
+		$this->control_group_heading_style();
+		$this->control_group_repeater_style();
+		$this->control_group_conditional_style();
+		$this->control_group_submit_style();
 	}
 
 	// Set builder controls
@@ -62,6 +66,10 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 		$this->controls_checkradio_style();
 		$this->controls_calc_fields_style();
 		$this->controls_range_fields_style();
+		$this->controls_heading_style();
+		$this->controls_repeater_style();
+		$this->controls_conditional_style();
+		$this->controls_submit_style();
 	}
 
 	// Start form settings
@@ -598,7 +606,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 			'checkradio_fields_control_size',
 			[
 				'tab'   => 'style',
-				'label' => esc_html__( 'Control Size', 'jet-form-builder' ),
+				'label' => esc_html__( 'Control size', 'jet-form-builder' ),
 				'type'  => 'number',
 				'units' => true,
 				'min'   => 0,
@@ -707,6 +715,16 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 
 	public function controls_calc_fields_style() {
 		$this->start_jet_control_group( 'section_calc_fields_style' );
+
+		$this->register_jet_control(
+			'calc_fields_align_main_axis',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Align main axis', 'jet-smart-filters' ),
+				'type'  => 'justify-content',
+				'css'   => [ [ 'property' => '--jfb-calc-justify-content' ] ],
+			]
+		);
 
 		$this->register_jet_control(
 			'calc_fields_gap',
@@ -834,16 +852,6 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 						'selector' => $this->css_selector( '__calculated-field' ),
 					],
 				],
-			]
-		);
-
-		$this->register_jet_control(
-			'calc_fields_align_main_axis',
-			[
-				'tab'   => 'style',
-				'label' => esc_html__( 'Align main axis', 'jet-smart-filters' ),
-				'type'  => 'justify-content',
-				'css'   => [ [ 'property' => '--jfb-calc-justify-content' ] ],
 			]
 		);
 
@@ -1046,7 +1054,668 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 	}
 	// End range fields
 
+	// Start heading style
+	public function control_group_heading_style() {
+		$this->register_jet_control_group(
+			'section_headings_style',
+			[
+				'title' => esc_html__( 'Heading', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
 
+	public function controls_heading_style() {
+		$this->start_jet_control_group( 'section_headings_style' );
+
+		$this->register_jet_control(
+			'heading_label_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'Label', 'jet-form-builder' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'heading_label_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '__heading' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'heading_label_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-heading-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'heading_label_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '__heading' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'heading_label_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '__heading' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'heading_label_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '__heading' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'heading_desc_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'Description', 'jet-form-builder' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'heading_desc_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '__heading-desc' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'heading_desc_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-heading-desc-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'heading_desc_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '__heading-desc' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'heading_desc_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '__heading-desc' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'heading_desc_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '__heading-desc' ),
+					],
+				],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End heading style
+
+	// Start repeater style
+	public function control_group_repeater_style() {
+		$this->register_jet_control_group(
+			'section_repeater_style',
+			[
+				'title' => esc_html__( 'Repeater', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_repeater_style() {
+		$this->start_jet_control_group( 'section_repeater_style' );
+
+		$this->register_jet_control(
+			'repeater_row_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'Repeater row', 'jet-form-builder' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_row_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '-repeater__row' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'repeater_add_button_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'New item button', 'jet-form-builder' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_align_main_axis',
+			[
+				'tab'     => 'style',
+				'label'   => esc_html__( 'Align main axis', 'jet-smart-filters' ),
+				'type'    => 'justify-content',
+				'exclude' => [
+					'space-between',
+					'space-around',
+					'space-evenly',
+				],
+				'css'     => [ [ 'property' => '--jfb-repeater-add-button-justify-content' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '-repeater__new' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-repeater-add-button-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '-repeater__new' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '-repeater__new' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '-repeater__new' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_box_shadow',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Box shadow', 'jet-smart-filters' ),
+				'type'  => 'box-shadow',
+				'css'   => [
+					[
+						'property' => 'box-shadow',
+						'selector' => $this->css_selector( '-repeater__new' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'repeater_rem_button_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'Remove item button', 'jet-form-builder' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_rem_align_main_axis',
+			[
+				'tab'     => 'style',
+				'label'   => esc_html__( 'Align main axis', 'jet-smart-filters' ),
+				'type'    => 'justify-content',
+				'exclude' => [
+					'space-between',
+					'space-around',
+					'space-evenly',
+				],
+				'css'     => [ [ 'property' => '--jfb-repeater-rem-button-justify-content' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_rem_size',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Icon size', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 12,
+				'max'   => 90,
+				'css'   => [ [ 'property' => '--jfb-checkradio-fz' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_rem_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-repeater-rem-button-color' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_rem_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-repeater-rem-button-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_rem_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '-repeater__remove' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_rem_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '-repeater__remove' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_rem_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '-repeater__remove' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_repeater_rem_box_shadow',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Box shadow', 'jet-smart-filters' ),
+				'type'  => 'box-shadow',
+				'css'   => [
+					[
+						'property' => 'box-shadow',
+						'selector' => $this->css_selector( '-repeater__remove' ),
+					],
+				],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End repeater style
+
+	// Start conditional style
+	public function control_group_conditional_style() {
+		$this->register_jet_control_group(
+			'section_conditional_style',
+			[
+				'title' => esc_html__( 'Conditional', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_conditional_style() {
+		$this->start_jet_control_group( 'section_conditional_style' );
+
+		$this->register_jet_control(
+			'conditional_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-conditional-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'conditional_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '__conditional' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'conditional_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '__conditional' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'conditional_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '__conditional' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'conditional_box_shadow',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Box shadow', 'jet-smart-filters' ),
+				'type'  => 'box-shadow',
+				'css'   => [
+					[
+						'property' => 'box-shadow',
+						'selector' => $this->css_selector( '__conditional' ),
+					],
+				],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End conditional style
+
+	// Start submit style
+	public function control_group_submit_style() {
+		$this->register_jet_control_group(
+			'section_submit_style',
+			[
+				'title' => esc_html__( 'Submit', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_submit_style() {
+		$this->start_jet_control_group( 'section_submit_style' );
+
+		$this->register_jet_control(
+			'booking_form_submit_align_main_axis',
+			[
+				'tab'     => 'style',
+				'label'   => esc_html__( 'Align main axis', 'jet-smart-filters' ),
+				'type'    => 'justify-content',
+				'exclude' => [
+					'space-between',
+					'space-around',
+					'space-evenly',
+				],
+				'css'     => [ [ 'property' => '--jfb-submit-justify-content' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_submit_width',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Width', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 1,
+				'max'   => 1000,
+				'css'   => [ [ 'property' => '--jfb-submit-w' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_submit_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '__submit' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_submit_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-submit-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_submit_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '__submit' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_submit_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '__submit' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_submit_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '__submit' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'booking_form_submit_box_shadow',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Box shadow', 'jet-smart-filters' ),
+				'type'  => 'box-shadow',
+				'css'   => [
+					[
+						'property' => 'box-shadow',
+						'selector' => $this->css_selector( '__submit' ),
+					],
+				],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End label style
 
 	// Start
 	public function control_group_() {

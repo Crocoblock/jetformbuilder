@@ -244,7 +244,7 @@ InputData.prototype.getName = function () {
 	return this.name;
 };
 /**
- * @returns {array|string}
+ * @returns {array|string|boolean}
  */
 InputData.prototype.getValue = function () {
 	return this.value.current;

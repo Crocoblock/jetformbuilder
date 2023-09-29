@@ -1,5 +1,10 @@
-import BaseSignal from './BaseSignal';
-import { isEmpty } from '../functions';
+const {
+	      BaseSignal,
+      } = JetFormBuilderAbstract;
+
+const {
+	      isEmpty,
+      } = JetFormBuilderFunctions;
 
 /**
  * @property input {RadioData}
@@ -13,7 +18,6 @@ function SignalRadio() {
 
 	this.runSignal = function () {
 		this.input.calcValue = 0;
-		let isCheckedCustom  = !isEmpty( this.input.value.current );
 
 		for ( const node of this.input.nodes ) {
 			if ( node.dataset.custom ) {
@@ -24,8 +28,6 @@ function SignalRadio() {
 			if ( !node.checked ) {
 				continue;
 			}
-
-			isCheckedCustom = false;
 
 			this.input.calcValue += parseFloat(
 				node.dataset?.calculate ?? node.value,
@@ -42,19 +44,17 @@ function SignalRadio() {
 		const lastNode = this.input.lastNode();
 		const input    = this.input.getCustomInput();
 
-		lastNode.checked = isCheckedCustom;
-
-		if ( input.disabled === isCheckedCustom ) {
-			input.disabled = !isCheckedCustom;
+		if ( input.disabled === lastNode.checked ) {
+			input.disabled = !lastNode.checked;
 		}
 
 		const value = this.input.value.current;
 
-		if ( !isCheckedCustom || input.value === value ) {
+		if ( !lastNode.checked || input.value === value ) {
 			return;
 		}
 
-		input.value = true === value ? '' : value;
+		input.value = value;
 	};
 }
 

@@ -1,10 +1,8 @@
 import InputData from './InputData';
 import ChangeData from './ChangeData';
-import CheckboxData from './CheckboxData';
 import MultiSelectData from './MultiSelectData';
 import RangeData from './RangeData';
 import WysiwygData from './WysiwygData';
-import RadioData from './RadioData';
 import NoListenData from './NoListenData';
 import InputMaskedData from './InputMaskedData';
 import RenderStateData from './RenderStateData';
@@ -26,8 +24,6 @@ const getDataTypes = () => applyFilters(
 		WysiwygData,
 		MultiSelectData,
 		ChangeData,
-		CheckboxData,
-		RadioData,
 		NoListenData,
 		InputMaskedData,
 		InputData,
@@ -100,8 +96,4 @@ function populateInputs( inputs ) {
 	return list;
 }
 
-function getCustomCheckboxInput( node ) {
-	return node.nextElementSibling.querySelector( 'input.text-field' );
-}
-
-export { getParsedName, createInput, populateInputs, getCustomCheckboxInput };
+export { getParsedName, createInput, populateInputs };

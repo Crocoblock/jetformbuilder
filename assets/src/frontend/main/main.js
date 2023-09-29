@@ -7,7 +7,6 @@ import LoadingReactiveVar from './reactive/LoadingReactiveVar';
 import InputData from './inputs/InputData';
 import Observable from './Observable';
 import ReportingInterface from './reporting/ReportingInterface';
-import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
 import {
 	allRejected,
@@ -53,7 +52,6 @@ window.JetFormBuilderAbstract = {
 	LoadingReactiveVar,
 	Observable,
 	ReportingInterface,
-	CheckboxData,
 	MultiSelectData,
 	Restriction,
 	RestrictionError,

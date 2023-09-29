@@ -1,23 +1,31 @@
-import InputData from './InputData';
-import ReactiveHook from '../reactive/ReactiveHook';
-import { STRICT_MODE } from '../signals/BaseSignal';
-import { getParsedName } from './functions';
+const { strict_mode = false } = window?.JetFormBuilderSettings;
+
+const STRICT_MODE = Boolean( strict_mode );
+
+const {
+	      InputData,
+	      ReactiveHook,
+      } = JetFormBuilderAbstract;
+
+const { getParsedName } = JetFormBuilderFunctions;
 
 function RadioData() {
 	InputData.call( this );
 
 	this.wrapper = null;
 
-	this.isSupported    = function ( node ) {
+	this.isSupported        = function ( node ) {
 		return (
 			node.classList.contains( 'checkradio-wrap' ) &&
 			node.querySelector( '.radio-wrap' )
 		);
 	};
-	this.addListeners   = function () {
+	this.addListeners       = function () {
 		this.enterKey = new ReactiveHook();
 
-		this.wrapper.addEventListener( 'change', () => this.setValue( true ) );
+		this.wrapper.addEventListener( 'change', ( { target } ) => {
+			target.dataset.custom ? this.toggleCustomOption() : this.setValue();
+		} );
 		this.wrapper.addEventListener(
 			'keydown',
 			this.handleEnterKey.bind( this ),
@@ -34,14 +42,23 @@ function RadioData() {
 				return;
 			}
 			this.callable.lockTrigger();
-			this.setValue( true );
+			this.setValue();
 			this.callable.unlockTrigger();
 		} );
 	};
-	this.setValue       = function ( isEvent = false ) {
-		this.value.current = this.getActiveValue( isEvent );
+	this.setValue           = function () {
+		this.value.current = this.getActiveValue();
 	};
-	this.getActiveValue = function ( isEvent = false ) {
+	this.toggleCustomOption = function () {
+		const node  = this.lastNode();
+		const input = this.getCustomInput();
+
+		if ( input.disabled === node.checked ) {
+			input.disabled = !node.checked;
+		}
+
+	};
+	this.getActiveValue     = function () {
 		for ( const node of this.nodes ) {
 			if ( node.dataset.custom ) {
 				continue;
@@ -51,11 +68,11 @@ function RadioData() {
 			}
 		}
 
-		if ( !this.hasCustom || !isEvent ) {
+		if ( !this.hasCustom ) {
 			return '';
 		}
 
-		return this.getCustomInput().value || true;
+		return this.getCustomInput().value;
 	};
 
 	this.setNode = function ( node ) {

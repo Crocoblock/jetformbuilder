@@ -1,6 +1,12 @@
-import InputData from './InputData';
-import ReactiveHook from '../reactive/ReactiveHook';
-import { getCustomCheckboxInput, getParsedName } from './functions';
+import getCustomCheckboxInput from './functions/getCustomCheckboxInput';
+import sanitizeCheckbox from './functions/sanitizeCheckbox';
+
+const {
+	      InputData,
+	      ReactiveHook,
+      } = JetFormBuilderAbstract;
+
+const { getParsedName } = JetFormBuilderFunctions;
 
 function sanitizeValue( value ) {
 	if ( Array.isArray( value ) ) {
@@ -53,16 +59,19 @@ function CheckboxData() {
 			} );
 		}
 
-		if ( !this.isArray() ) {
-			return;
-		}
+		this.isArray() && this.sanitize( sanitizeValue );
 
-		this.sanitize( sanitizeValue );
+		/**
+		 * Use Sanitizer instead of BaseSignal prototype.
+		 * We need it because of deletion "null" values
+		 */
+
+		this.callable = null;
+		this.sanitize( value => sanitizeCheckbox( value, this ) );
 	};
-	this.setValue     = function () {
+
+	this.setValue = function () {
 		this.value.current = this.getActiveValue();
-		/*this.value.current = [ ...this.nodes ].filter(
-		 ( { checked } ) => checked ).map( ( { value } ) => value );*/
 	};
 
 	this.setNode = function ( node ) {
@@ -129,10 +138,43 @@ function CheckboxData() {
 	};
 
 	this.isArray = function () {
-		return this.nodes.item( 0 )?.name?.includes?.( '[]' );
+		return (
+			Boolean( this.addNewButton ) ||
+			this.nodes.item( 0 )?.name?.includes?.( '[]' )
+		);
 	};
 }
 
 CheckboxData.prototype = Object.create( InputData.prototype );
+
+CheckboxData.prototype.addCustomOption = function () {
+	const rowWrapper = this.addNewButton.closest(
+		'.custom-option',
+	);
+
+	return this.wrapper.insertBefore(
+		this.getCustomOptionNode(),
+		rowWrapper,
+	);
+};
+
+CheckboxData.prototype.getCustomOptionNode = function () {
+	if ( !this.addNewButton ) {
+		return false;
+	}
+
+	const initial = this.addNewButton.querySelector( 'template' );
+
+	const template     = document.createElement( 'template' );
+	template.innerHTML = initial.innerHTML.trim();
+
+	return template.content.firstChild;
+};
+
+CheckboxData.prototype.getCustomNodes = function () {
+	return [ ...this.nodes ].filter(
+		node => node.dataset.custom && node.nextElementSibling,
+	);
+};
 
 export default CheckboxData;

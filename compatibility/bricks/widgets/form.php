@@ -1770,9 +1770,11 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 
 		$this->enqueue_scripts();
 
+		$blocks = jet_form_builder()->module( \Jet_Form_Builder\Blocks\Module::class );
+
 		echo "<div {$this->render_attributes( '_root' )}>";
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo jet_fb_render_form( $settings );
+		echo $blocks->get_form_class()->render_callback_field( $settings );
 		echo "</div>";
 	}
 

@@ -4,6 +4,7 @@
 namespace JFB_Compatibility\Bricks;
 
 use Bricks\Elements;
+use Jet_Form_Builder\Plugin;
 use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
 use JFB_Components\Compatibility\Base_Compat_Url_Trait;
 use JFB_Components\Compatibility\Base_Compat_Dir_Trait;
@@ -28,18 +29,17 @@ class Bricks implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_I
 	}
 
 	public function condition(): bool {
-		// todo correct check
 		return defined( 'BRICKS_VERSION' );
 	}
 
 	public function init_hooks() {
-		// todo add hooks & filters
 		add_action( 'init', [ $this, 'register_elements' ], 10 );
-		add_action( 'wp_enqueue_scripts', [ $this, 'editor_styles' ], 10 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'editor_styles' ] );
 	}
 
 	public function remove_hooks() {
-		// todo remove hooks & filters
+		remove_action( 'init', [ $this, 'register_elements' ] );
+		remove_action( 'wp_enqueue_scripts', [ $this, 'editor_styles' ] );
 	}
 
 	public function register_elements() {
@@ -54,9 +54,9 @@ class Bricks implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_I
 		if ( bricks_is_builder() ) {
 			wp_enqueue_style(
 				$this->get_handle( 'icons' ),
-				$this->get_url( 'assets/build/css/icons.css' ),
-				array(),
-				jet_form_builder()->get_version()
+				$this->get_url( 'assets/build/css/editor/icons.css' ),
+				[],
+				Plugin::instance()->get_version(),
 			);
 		}
 	}

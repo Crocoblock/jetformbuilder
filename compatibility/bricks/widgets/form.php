@@ -1,19 +1,16 @@
 <?php
 
+
 namespace JFB_Compatibility\Bricks\Widgets;
 
-//use Bricks\Element;
-//use Jet_Form_Builder\Blocks\Modules\General_Style_Functions;
-//use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
-//use Jet_Form_Builder\Classes\Tools;
-
 // If this file is called directly, abort.
-use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
+use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Classes\Tools;
-use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
+use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use JFB_Components\Compatibility\Base_Compat_Url_Trait;
-use JFB_Components\Module\Base_Module_Handle_It;
+use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
 use JFB_Components\Module\Base_Module_Url_It;
+use JFB_Components\Module\Base_Module_Handle_It;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -1751,9 +1748,9 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 	public function enqueue_scripts() {
 		wp_enqueue_style(
 			$this->get_handle( 'frontend' ),
-			$this->get_url( 'assets/css/frontend/frontend.css' ),
+			$this->get_url( 'assets/build/css/frontend/frontend.css' ),
 			[ 'jet-form-builder-frontend' ],
-			jet_form_builder()->get_version()
+			Plugin::instance()->get_version(),
 		);
 	}
 

@@ -24,7 +24,7 @@ class Calculated_Field_Render extends Base {
 	}
 
 	/**
-	 * Get calulation formula for calculated field
+	 * Get calculation formula for calculated field
 	 *
 	 * @return [type] [description]
 	 */

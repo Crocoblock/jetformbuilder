@@ -51,6 +51,12 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 		$this->control_group_repeater_style();
 		$this->control_group_conditional_style();
 		$this->control_group_submit_style();
+		$this->control_group_form_break_style();
+		$this->control_group_form_break_buttons_style();
+		$this->control_group_form_break_message_style();
+		$this->control_group_form_progress_wrap_style();
+		$this->control_group_form_progress_pages_style();
+		$this->control_group_message_style();
 	}
 
 	// Set builder controls
@@ -67,6 +73,12 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 		$this->controls_repeater_style();
 		$this->controls_conditional_style();
 		$this->controls_submit_style();
+		$this->controls_form_break_style();
+		$this->controls_form_break_buttons_style();
+		$this->controls_form_break_message_style();
+		$this->controls_form_progress_wrap_style();
+		$this->controls_form_progress_pages_style();
+		$this->controls_message_style();
 	}
 
 	// Start form settings
@@ -446,7 +458,12 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [ [ 'property' => '--jfb-input-bgc' ] ],
+				'css'   => [
+					[
+						'property' => 'background-color',
+						'selector' => $this->css_selector( $simple_input ),
+					]
+				],
 			]
 		);
 
@@ -1310,7 +1327,12 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [ [ 'property' => '--jfb-repeater-add-button-bgc' ] ],
+				'css'   => [
+					[
+						'property' => 'background-color',
+						'selector' => $this->css_selector( '-repeater__new' ),
+					]
+				],
 			]
 		);
 
@@ -1646,7 +1668,12 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [ [ 'property' => '--jfb-submit-bgc' ] ],
+				'css'   => [
+					[
+						'property' => 'background-color',
+						'selector' => $this->css_selector( '__submit' ),
+					]
+				],
 			]
 		);
 
@@ -1714,34 +1741,771 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 	}
 	// End label style
 
-	// Start
-	public function control_group_() {
+	// Start form break style
+	public function control_group_form_break_style() {
 		$this->register_jet_control_group(
-			'',
+			'section_form_break_style',
 			[
-				'title' => esc_html__( '', 'jet-form-builder' ),
-				'tab'   => '',
+				'title' => esc_html__( 'Form Break Row', 'jet-form-builder' ),
+				'tab'   => 'style',
 			]
 		);
 	}
 
-	public function controls_() {
-		$this->start_jet_control_group( '' );
+	public function controls_form_break_style() {
+		$this->start_jet_control_group( 'section_form_break_style' );
 
 		$this->register_jet_control(
-			'',
+			'form_break_alignment',
 			[
-				'tab'        => 'style',
-				'label'      => esc_html__( '', 'jet-form-builder' ),
-				'type'       => 'select',
-				'options'    => [],
-				'searchable' => true,
+				'tab'   => 'style',
+				'label' => esc_html__( 'Text align', 'jet-form-builder' ),
+				'type'  => 'text-align',
+				'css'   => [ [ 'property' => '--jfb-break-text-align' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'form_break_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '__next-page-wrap' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'form_break_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '__next-page-wrap' ),
+					],
+				],
 			]
 		);
 
 		$this->end_jet_control_group();
 	}
-	// End
+	// End form break style
+
+	// Start form break buttons style
+	public function control_group_form_break_buttons_style() {
+		$this->register_jet_control_group(
+			'section_form_break_next_style',
+			[
+				'title' => esc_html__( 'Form Break Buttons', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_form_break_buttons_style() {
+		$this->start_jet_control_group( 'section_form_break_next_style' );
+
+		$this->register_jet_control(
+			'form_break_button_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '__prev-page' ),
+					],
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '__next-page' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'form_break_button_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [
+					[
+						'property' => 'background-color',
+						'selector' => $this->css_selector( '__prev-page' ),
+					],
+					[
+						'property' => 'background-color',
+						'selector' => $this->css_selector( '__next-page' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'form_break_button_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '__prev-page' ),
+					],
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '__next-page' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'form_break_button_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '__prev-page' ),
+					],
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '__next-page' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'form_break_button_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '__prev-page' ),
+					],
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '__next-page' ),
+					],
+				],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End form break buttons style
+
+	// Start form break disabled message style
+	public function control_group_form_break_message_style() {
+		$this->register_jet_control_group(
+			'section_form_break_message_style',
+			[
+				'title' => esc_html__( 'Form Break Disabled Message', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_form_break_message_style() {
+		$this->start_jet_control_group( 'section_form_break_message_style' );
+
+		$this->register_jet_control(
+			'form_break_message_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '__next-page-msg' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'form_break_message_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-break-message-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'form_break_message_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '__next-page-msg' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'form_break_message_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '__next-page-msg' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'form_break_message_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '__next-page-msg' ),
+					],
+				],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End form break disabled message style
+
+	// Start progress wrap
+	public function control_group_form_progress_wrap_style() {
+		$this->register_jet_control_group(
+			'jet_fb_progress_wrapper_section',
+			[
+				'title' => esc_html__( 'Form Progress - Wrapper', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_form_progress_wrap_style() {
+		$this->start_jet_control_group( 'jet_fb_progress_wrapper_section' );
+
+		$this->register_jet_control(
+			'jet_fb_progress_wrapper_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-progress-wrapper-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_wrapper_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '-progress-pages' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_wrapper_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '-progress-pages' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_wrapper_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '-progress-pages' ),
+					],
+				],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End progress wrap
+
+	// Start progress pages
+	public function control_group_form_progress_pages_style() {
+		$this->register_jet_control_group(
+			'jet_fb_progress_pages_section',
+			[
+				'title' => esc_html__( 'Form Progress - Pages', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_form_progress_pages_style() {
+		$this->start_jet_control_group( 'jet_fb_progress_pages_section' );
+
+		$this->register_jet_control(
+			'jet_fb_progress_wrapper_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '-progress-pages__item--wrapper' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_pages_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-progress-passed-page-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_pages_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '-progress-pages__item' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_pages_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '-progress-pages__item' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_pages_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '-progress-pages__item' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_separator_height',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Separator height', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 1,
+				'max'   => 100,
+				'css'   => [ [ 'property' => '--jfb-progress-default-page-separator-h' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_separator_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Separator color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-progress-default-page-separator-color' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_circle_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Circle border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '-progress-pages__item--circle' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_passed_page_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'Passed page', 'jet-form-builder' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_passed_page_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [
+					[
+						'property' => 'color',
+						'selector' => $this->css_selector( '-progress-pages__item--wrapper.passed-page' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_passed_page_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-progress-passed-page-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_passed_page_border_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-progress-passed-page-border-color' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_passed_page_separator_height',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Separator height', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 1,
+				'max'   => 100,
+				'css'   => [ [ 'property' => '--jfb-progress-passed-page-separator-h' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_passed_page_separator_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Separator color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-progress-passed-page-separator-color' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_passed_page_circle_border_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Circle border color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-progress-passed-page-circle-border-color' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_active_page_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'Active page', 'jet-form-builder' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_active_page_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [
+					[
+						'property' => 'color',
+						'selector' => $this->css_selector( '-progress-pages__item--wrapper.active-page' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_active_page_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-progress-active-page-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_active_page_border_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-progress-active-page-border-color' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_active_page_separator_height',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Separator height', 'jet-form-builder' ),
+				'type'  => 'number',
+				'units' => true,
+				'min'   => 1,
+				'max'   => 100,
+				'css'   => [ [ 'property' => '--jfb-progress-active-page-separator-h' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_active_page_separator_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Separator color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-progress-active-page-separator-color' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'jet_fb_progress_active_page_circle_border_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Circle border color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-progress-active-page-circle-border-color' ] ],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End progress pages
+
+	// Start message style
+	public function control_group_message_style() {
+		$this->register_jet_control_group(
+			'section_message_style',
+			[
+				'title' => esc_html__( 'Messages', 'jet-form-builder' ),
+				'tab'   => 'style',
+			]
+		);
+	}
+
+	public function controls_message_style() {
+		$this->start_jet_control_group( 'section_message_style' );
+
+		$this->register_jet_control(
+			'message_margin',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Margin', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '-message--success' ),
+					],
+					[
+						'property' => 'margin',
+						'selector' => $this->css_selector( '-message--error' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'message_padding',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Padding', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'css'   => [
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '-message--success' ),
+					],
+					[
+						'property' => 'padding',
+						'selector' => $this->css_selector( '-message--error' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'message_success_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'Success message', 'jet-form-builder' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'message_success_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '-message--success' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'message_success_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-message-success-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'message_success_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '-message--success' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'message_error_heading',
+			[
+				'tab'   => 'style',
+				'type'  => 'separator',
+				'label' => esc_html__( 'Error message', 'jet-form-builder' ),
+			]
+		);
+
+		$this->register_jet_control(
+			'message_error_typography',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Typography', 'jet-form-builder' ),
+				'type'  => 'typography',
+				'css'   => [
+					[
+						'property' => 'typography',
+						'selector' => $this->css_selector( '-message--error' ),
+					],
+				],
+			]
+		);
+
+		$this->register_jet_control(
+			'message_error_bg_color',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'type'  => 'color',
+				'css'   => [ [ 'property' => '--jfb-message-error-bgc' ] ],
+			]
+		);
+
+		$this->register_jet_control(
+			'message_error_border',
+			[
+				'tab'   => 'style',
+				'label' => esc_html__( 'Border', 'jet-form-builder' ),
+				'type'  => 'border',
+				'css'   => [
+					[
+						'property' => 'border',
+						'selector' => $this->css_selector( '-message--error' ),
+					],
+				],
+			]
+		);
+
+		$this->end_jet_control_group();
+	}
+	// End message style
 
 
 	// Enqueue element styles and scripts

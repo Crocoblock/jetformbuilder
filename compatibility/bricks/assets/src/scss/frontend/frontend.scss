@@ -27,10 +27,6 @@
     color: var(--jfb-input-phc);
   }
 
-  &:not(.checkradio-field):not(.range-field):not(.jet-form-builder-repeater):not(.wysiwyg-field) {
-    background-color: var(--jfb-input-bgc);
-  }
-
   &.textarea-field {
     height: var(--jfb-input-h);
     min-height: var(--jfb-input-h);
@@ -115,13 +111,9 @@
   justify-content: var(--jfb-repeater-rem-button-justify-content);
 }
 
-.jet-form-builder-repeater__new {
-  background-color: var(--jfb-repeater-add-button-bgc);
-}
-
 .jet-form-builder-repeater__remove {
   font-size: var(--jfb-repeater-rem-button-fz);
-  line-height: var(--jfb-repeater-rem-button-fz);
+  line-height: 1;
   color: var(--jfb-repeater-rem-button-color);
   background-color: var(--jfb-repeater-rem-button-bgc);
 }
@@ -138,7 +130,6 @@ button.jet-form-builder__submit {
 
 .jet-form-builder__submit {
   width: var(--jfb-submit-w);
-  background-color: var(--jfb-submit-bgc);
 }
 
 .jet-form-builder__submit-wrap {
@@ -146,7 +137,73 @@ button.jet-form-builder__submit {
 }
 
 // Form break
+.jet-form-builder__next-page-wrap {
+  text-align: var(--jfb-break-text-align);
+}
 
+.jet-form-builder__next-page-msg {
+  background-color: var(--jfb-break-message-bgc);
+}
+
+// Progress wrapper
+.jet-form-builder-progress-pages {
+  background-color: var(--jfb-progress-wrapper-bgc);
+}
+
+// Progress pages
+.jet-form-builder-progress-pages__item {
+  background-color: var(--jfb-progress-default-page-bgc);
+}
+
+.jfb-progress-type--default {
+  .jet-form-builder-progress-pages__separator {
+    height: var(--jfb-progress-default-page-separator-h, 1px);
+    background-color: var(--jfb-progress-default-page-separator-color, gray);
+  }
+
+  .jet-form-builder-progress-pages__item--wrapper {
+    &.passed-page {
+      .jet-form-builder-progress-pages__item {
+        background-color: var(--jfb-progress-passed-page-bgc);
+        border-color: var(--jfb-progress-passed-page-border-color);
+
+        + .jet-form-builder-progress-pages__separator {
+          height: var(--jfb-progress-passed-page-separator-h, 3px);
+          background-color: var(--jfb-progress-passed-page-separator-color);
+        }
+      }
+
+      .jet-form-builder-progress-pages__item--circle {
+        border-color: var(--jfb-progress-passed-page-circle-border-color);
+      }
+    }
+
+    &.active-page {
+      .jet-form-builder-progress-pages__item {
+        background-color: var(--jfb-progress-active-page-bgc);
+        border-color: var(--jfb-progress-active-page-border-color);
+
+        + .jet-form-builder-progress-pages__separator {
+          height: var(--jfb-progress-active-page-separator-h, 3px);
+          background-color: var(--jfb-progress-active-page-separator-color);
+        }
+      }
+
+      .jet-form-builder-progress-pages__item--circle {
+        border-color: var(--jfb-progress-active-page-circle-border-color);
+      }
+    }
+  }
+}
+
+// Message
+.jet-form-builder-message--success {
+  background-color: var(--jfb-message-success-bgc);
+}
+
+.jet-form-builder-message--error {
+  background-color: var(--jfb-message-error-bgc);
+}
 
 // Context
 .layout-column {

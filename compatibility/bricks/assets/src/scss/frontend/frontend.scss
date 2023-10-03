@@ -43,7 +43,7 @@
   &.for-checkbox,
   &.for-radio {
     :checked + span::before {
-      background-color: var(--jfb-checkradio-input-checked-bgc);
+      background-color: var(--jfb-checkradio-input-checked-bgc, #0b76ef);
     }
   }
 }
@@ -107,10 +107,6 @@
   justify-content: var(--jfb-repeater-add-button-justify-content);
 }
 
-.jet-form-builder-repeater__row-remove {
-  justify-content: var(--jfb-repeater-rem-button-justify-content);
-}
-
 .jet-form-builder-repeater__remove {
   font-size: var(--jfb-repeater-rem-button-fz);
   line-height: 1;
@@ -165,32 +161,22 @@ button.jet-form-builder__submit {
     &.passed-page {
       .jet-form-builder-progress-pages__item {
         background-color: var(--jfb-progress-passed-page-bgc);
-        border-color: var(--jfb-progress-passed-page-border-color);
 
         + .jet-form-builder-progress-pages__separator {
           height: var(--jfb-progress-passed-page-separator-h, 3px);
           background-color: var(--jfb-progress-passed-page-separator-color);
         }
       }
-
-      .jet-form-builder-progress-pages__item--circle {
-        border-color: var(--jfb-progress-passed-page-circle-border-color);
-      }
     }
 
     &.active-page {
       .jet-form-builder-progress-pages__item {
         background-color: var(--jfb-progress-active-page-bgc);
-        border-color: var(--jfb-progress-active-page-border-color);
 
         + .jet-form-builder-progress-pages__separator {
           height: var(--jfb-progress-active-page-separator-h, 3px);
           background-color: var(--jfb-progress-active-page-separator-color);
         }
-      }
-
-      .jet-form-builder-progress-pages__item--circle {
-        border-color: var(--jfb-progress-active-page-circle-border-color);
       }
     }
   }

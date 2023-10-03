@@ -1406,21 +1406,6 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 		);
 
 		$this->register_jet_control(
-			'booking_form_repeater_rem_align_main_axis',
-			[
-				'tab'     => 'style',
-				'label'   => esc_html__( 'Align main axis', 'jet-smart-filters' ),
-				'type'    => 'justify-content',
-				'exclude' => [
-					'space-between',
-					'space-around',
-					'space-evenly',
-				],
-				'css'     => [ [ 'property' => '--jfb-repeater-rem-button-justify-content' ] ],
-			]
-		);
-
-		$this->register_jet_control(
 			'booking_form_repeater_rem_size',
 			[
 				'tab'   => 'style',
@@ -1429,7 +1414,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'units' => true,
 				'min'   => 12,
 				'max'   => 90,
-				'css'   => [ [ 'property' => '--jfb-checkradio-fz' ] ],
+				'css'   => [ [ 'property' => '--jfb-repeater-rem-button-fz' ] ],
 			]
 		);
 
@@ -2108,7 +2093,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [ [ 'property' => '--jfb-progress-passed-page-bgc' ] ],
+				'css'   => [ [ 'property' => '--jfb-progress-default-page-bgc' ] ],
 			]
 		);
 
@@ -2235,7 +2220,12 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Border color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [ [ 'property' => '--jfb-progress-passed-page-border-color' ] ],
+				'css'   => [
+					[
+						'property' => 'border-color',
+						'selector' => '.passed-page ' . $this->css_selector( '-progress-pages__item' ),
+					],
+				],
 			]
 		);
 
@@ -2268,7 +2258,12 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Circle border color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [ [ 'property' => '--jfb-progress-passed-page-circle-border-color' ] ],
+				'css'   => [
+					[
+						'property' => 'border-color',
+						'selector' => '.passed-page ' . $this->css_selector( '-progress-pages__item--circle' ),
+					],
+				],
 			]
 		);
 
@@ -2312,7 +2307,12 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Border color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [ [ 'property' => '--jfb-progress-active-page-border-color' ] ],
+				'css'   => [
+					[
+						'property' => 'border-color',
+						'selector' => '.active-page ' . $this->css_selector( '-progress-pages__item' ),
+					],
+				],
 			]
 		);
 
@@ -2345,7 +2345,12 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'tab'   => 'style',
 				'label' => esc_html__( 'Circle border color', 'jet-form-builder' ),
 				'type'  => 'color',
-				'css'   => [ [ 'property' => '--jfb-progress-active-page-circle-border-color' ] ],
+				'css'   => [
+					[
+						'property' => 'border-color',
+						'selector' => '.active-page ' . $this->css_selector( '-progress-pages__item--circle' ),
+					],
+				],
 			]
 		);
 

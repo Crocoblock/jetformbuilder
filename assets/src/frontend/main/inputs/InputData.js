@@ -4,7 +4,7 @@ import ReactiveHook from '../reactive/ReactiveHook';
 import { getSignal } from '../signals/functions';
 import { createReport } from '../reporting/functions';
 import { getParsedName } from './functions';
-import { getOffsetTop, setAttrs, isVisible } from '../functions';
+import { getOffsetTop, isVisible } from '../functions';
 import { STRICT_MODE } from '../signals/BaseSignal';
 
 const { doAction } = JetPlugins.hooks;

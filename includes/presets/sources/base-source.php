@@ -81,7 +81,7 @@ abstract class Base_Source {
 			return $this;
 		}
 
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		throw new Preset_Exception( 'Empty `prop` in ' . get_class( $this ), $this->field_data );
 	}
 
@@ -93,12 +93,12 @@ abstract class Base_Source {
 		if ( $this->has_field_in_map() ) {
 			return $this->fields_map[ $this->field ];
 		}
-		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		throw new Preset_Exception(
 			"Empty `fields_map['{$this->field}']` in " . get_class( $this ),
 			$this->fields_map
 		);
-		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:enable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 	}
 
 	public function has_field_in_map() {
@@ -278,7 +278,7 @@ abstract class Base_Source {
 		$block = jet_form_builder()->blocks->get_field_by_name( $type );
 
 		if ( ! $block ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Preset_Exception( 'Undefined block_type: ' . $type, $this->field_args );
 		}
 

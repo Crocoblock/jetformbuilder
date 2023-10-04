@@ -26,15 +26,22 @@ class Request_Tools {
 		$response = array();
 
 		foreach ( $initial as $fields_name => $files ) {
-			$is_repeater = isset( $files['name'][0] ) && is_array( $files['name'][0] );
+			$is_collection = isset( $files['name'] ) && is_array( $files['name'] );
+			$is_repeater   = false;
+
+			if ( $is_collection ) {
+				// check the first item
+				foreach ( $files['name'] as $key => $first_item ) {
+					$is_repeater = is_numeric( $key ) && is_array( $first_item );
+					break;
+				}
+			}
 
 			if ( $is_repeater ) {
 				$response[ $fields_name ] = static::get_repeater_files( $files );
 
 				continue;
 			}
-
-			$is_collection = is_array( $files['name'] );
 
 			if ( ! $is_collection ) {
 				try {
@@ -68,14 +75,27 @@ class Request_Tools {
 
 	public static function get_request(): array {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		return Tools::sanitize_recursive( wp_unslash( $_POST ) );
+		$request = Tools::sanitize_recursive( wp_unslash( $_POST ) );
+
+		/**
+		 * We need to be sure, that repeater rows starts from 0 index
+		 * and they have correct incrementing with order
+		 */
+		foreach ( $request as &$value ) {
+			if ( ! wp_is_numeric_array( $value ) ) {
+				continue;
+			}
+			$value = array_values( $value );
+		}
+
+		return $request;
 	}
 
 	public static function get_repeater_files( array $files ): array {
-		$rows     = count( $files['name'] );
+		$indexes  = array_keys( $files['name'] );
 		$repeater = array();
 
-		for ( $current = 0; $current < $rows; $current++ ) {
+		foreach ( $indexes as $current ) {
 			$row = array();
 
 			foreach ( self::FILE_PROPERTIES as $property ) {
@@ -114,7 +134,7 @@ class Request_Tools {
 				}
 			}
 
-			$repeater[ $current ] = $row;
+			$repeater[] = $row;
 		}
 
 		return $repeater;

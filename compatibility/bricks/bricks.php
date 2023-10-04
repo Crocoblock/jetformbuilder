@@ -33,13 +33,13 @@ class Bricks implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_I
 	}
 
 	public function init_hooks() {
-		add_action( 'init', [ $this, 'register_elements' ], 10 );
-		add_action( 'wp_enqueue_scripts', [ $this, 'editor_styles' ] );
+		add_action( 'init', array( $this, 'register_elements' ), 10 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'editor_styles' ) );
 	}
 
 	public function remove_hooks() {
-		remove_action( 'init', [ $this, 'register_elements' ] );
-		remove_action( 'wp_enqueue_scripts', [ $this, 'editor_styles' ] );
+		remove_action( 'init', array( $this, 'register_elements' ) );
+		remove_action( 'wp_enqueue_scripts', array( $this, 'editor_styles' ) );
 	}
 
 	public function register_elements() {
@@ -55,7 +55,7 @@ class Bricks implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_I
 			wp_enqueue_style(
 				$this->get_handle( 'icons' ),
 				$this->get_url( 'assets/build/css/editor/icons.css' ),
-				[],
+				array(),
 				Plugin::instance()->get_version(),
 			);
 		}

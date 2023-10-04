@@ -6,6 +6,7 @@ use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Events\Bad_Request\Bad_Request_Event;
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
 use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
+use Jet_Form_Builder\Actions\Methods\Update_User\User_Meta_Property;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
@@ -213,6 +214,12 @@ class Register_User extends Base {
 
 		if ( ! empty( $metafields_map ) ) {
 			foreach ( $metafields_map as $form_field => $meta_field ) {
+				/**
+				 * @since 3.1.6
+				 */
+				if ( in_array( $meta_field, User_Meta_Property::get_restricted_keys(), true ) ) {
+					continue;
+				}
 				if ( ! empty( $request[ $form_field ] ) ) {
 					$metadata[ $meta_field ] = $request[ $form_field ];
 				}
@@ -284,7 +291,7 @@ class Register_User extends Base {
 				jet_fb_context()->update_request( $user_id, 'user_id' );
 			}
 		} else {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Action_Exception( 'failed', $userarr );
 		}
 	}

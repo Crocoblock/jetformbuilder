@@ -3,28 +3,17 @@
 
 namespace JFB_Compatibility\Bricks\Widgets;
 
-// If this file is called directly, abort.
+use Jet_Form_Builder\Blocks;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
-use JFB_Components\Compatibility\Base_Compat_Url_Trait;
-use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
-use JFB_Components\Module\Base_Module_Url_It;
-use JFB_Components\Module\Base_Module_Handle_It;
 
+// If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
-
-	use Base_Compat_Handle_Trait;
-	use Base_Compat_Url_Trait;
-
-	public function rep_item_id() {
-		return 'bricks';
-	}
-
+class Form extends Base {
 	// Element properties
 	public $category = 'jet-form-builder'; // Use predefined element category 'general'
 	public $name = 'jet-form-builder-form'; // Make sure to prefix your elements
@@ -2543,17 +2532,25 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 	// End message style
 
 
-	// Enqueue element styles and scripts
+	/**
+	 * Enqueue element styles and scripts
+	 * @noinspection PhpUnhandledExceptionInspection
+	 */
 	public function enqueue_scripts() {
+		$module = jet_form_builder()->compat( 'bricks' );
+
 		wp_enqueue_style(
-			$this->get_handle( 'frontend' ),
-			$this->get_url( 'assets/build/css/frontend/frontend.css' ),
+			$module->get_handle( 'frontend' ),
+			$module->get_url( 'assets/build/css/frontend/frontend.css' ),
 			[ 'jet-form-builder-frontend' ],
 			Plugin::instance()->get_version(),
 		);
 	}
 
-	// Render element HTML
+	/**
+	 * Render element HTML
+	 * @noinspection PhpUnhandledExceptionInspection
+	 */
 	public function render() {
 
 		$settings = $this->parse_jet_render_attributes( $this->get_jet_settings() );
@@ -2569,6 +2566,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 
 		$this->enqueue_scripts();
 
+		/** @var Blocks\Module $blocks */
 		$blocks = jet_form_builder()->module( \Jet_Form_Builder\Blocks\Module::class );
 
 		echo "<div {$this->render_attributes( '_root' )}>";

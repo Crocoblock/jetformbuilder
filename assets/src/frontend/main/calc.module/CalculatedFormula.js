@@ -107,6 +107,8 @@ CalculatedFormula.prototype = {
 		let match;
 		let prevIndex = 0;
 
+		value += '';
+
 		while ( (
 			match = this.regexp.exec( value )
 		) !== null ) {

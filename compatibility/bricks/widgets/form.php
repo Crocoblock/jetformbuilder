@@ -224,7 +224,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 	public function controls_label_style() {
 		$this->start_jet_control_group( 'section_label_style' );
 
-		$selector_part = '__label';
+		$css_selector = $this->css_selector( '__label' );
 
 		$this->register_jet_control(
 			'label_typography',
@@ -235,7 +235,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -260,7 +260,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -275,7 +275,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -290,7 +290,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -338,7 +338,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 	public function controls_description_style() {
 		$this->start_jet_control_group( 'section_description_style' );
 
-		$selector_part = '__desc';
+		$css_selector = $this->css_selector( '__desc' );
 
 		$this->register_jet_control(
 			'description_typography',
@@ -349,7 +349,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -374,7 +374,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -389,7 +389,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -404,7 +404,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -427,7 +427,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 
 	public function controls_input_style() {
 		$repeater_class = $this->css_selector( '-repeater' );
-		$simple_input   = "__field:not(.checkradio-field):not(.range-field):not($repeater_class):not(.wysiwyg-field)";
+		$css_selector   = $this->css_selector( "__field:not(.checkradio-field):not(.range-field):not($repeater_class):not(.wysiwyg-field)" );
 
 		$this->start_jet_control_group( 'section_input_style' );
 
@@ -440,7 +440,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( $simple_input ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -465,7 +465,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'background-color',
-						'selector' => $this->css_selector( $simple_input ),
+						'selector' => $css_selector,
 					]
 				],
 			]
@@ -480,7 +480,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( $simple_input ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -495,7 +495,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( $simple_input ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -510,7 +510,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( $simple_input ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -525,7 +525,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'box-shadow',
-						'selector' => $this->css_selector( $simple_input ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -757,7 +757,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 			]
 		);
 
-		$selector_part = '__calculated-field';
+		$css_selector = $this->css_selector( '__calculated-field' );
 
 		$this->register_jet_control(
 			'calc_fields_typography',
@@ -768,7 +768,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -839,7 +839,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -854,7 +854,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -869,7 +869,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1097,7 +1097,10 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 			]
 		);
 
-		$selector_part = '__heading';
+		$css_selectors = [
+			'label' => $this->css_selector( '__heading' ),
+			'desc'  => $this->css_selector( '__heading-desc' ),
+		];
 
 		$this->register_jet_control(
 			'heading_label_typography',
@@ -1108,7 +1111,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selectors['label'],
 					],
 				],
 			]
@@ -1133,7 +1136,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selectors['label'],
 					],
 				],
 			]
@@ -1148,7 +1151,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selectors['label'],
 					],
 				],
 			]
@@ -1163,7 +1166,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selectors['label'],
 					],
 				],
 			]
@@ -1178,8 +1181,6 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 			]
 		);
 
-		$selector_part = '__heading-desc';
-
 		$this->register_jet_control(
 			'heading_desc_typography',
 			[
@@ -1189,7 +1190,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selectors['desc'],
 					],
 				],
 			]
@@ -1214,7 +1215,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selectors['desc'],
 					],
 				],
 			]
@@ -1229,7 +1230,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selectors['desc'],
 					],
 				],
 			]
@@ -1244,7 +1245,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( $selector_part ),
+						'selector' => $css_selectors['desc'],
 					],
 				],
 			]
@@ -1277,10 +1278,10 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 			]
 		);
 
-		$selector_parts = [
-			'row'    => '-repeater__row',
-			'new'    => '-repeater__new',
-			'remove' => '-repeater__remove',
+		$css_selectors = [
+			'row'    => $this->css_selector( '-repeater__row' ),
+			'new'    => $this->css_selector( '-repeater__new' ),
+			'remove' => $this->css_selector( '-repeater__remove' ),
 		];
 
 		$this->register_jet_control(
@@ -1292,7 +1293,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( $selector_parts['row'] ),
+						'selector' => $css_selectors['row'],
 					],
 				],
 			]
@@ -1331,7 +1332,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( $selector_parts['new'] ),
+						'selector' => $css_selectors['new'],
 					],
 				],
 			]
@@ -1346,7 +1347,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'background-color',
-						'selector' => $this->css_selector( $selector_parts['new'] ),
+						'selector' => $css_selectors['new'],
 					]
 				],
 			]
@@ -1361,7 +1362,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( $selector_parts['new'] ),
+						'selector' => $css_selectors['new'],
 					],
 				],
 			]
@@ -1376,7 +1377,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( $selector_parts['new'] ),
+						'selector' => $css_selectors['new'],
 					],
 				],
 			]
@@ -1391,7 +1392,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( $selector_parts['new'] ),
+						'selector' => $css_selectors['new'],
 					],
 				],
 			]
@@ -1406,7 +1407,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'box-shadow',
-						'selector' => $this->css_selector( $selector_parts['new'] ),
+						'selector' => $css_selectors['new'],
 					],
 				],
 			]
@@ -1463,7 +1464,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( $selector_parts['remove'] ),
+						'selector' => $css_selectors['remove'],
 					],
 				],
 			]
@@ -1478,7 +1479,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( $selector_parts['remove'] ),
+						'selector' => $css_selectors['remove'],
 					],
 				],
 			]
@@ -1493,7 +1494,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( $selector_parts['remove'] ),
+						'selector' => $css_selectors['remove'],
 					],
 				],
 			]
@@ -1508,7 +1509,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'box-shadow',
-						'selector' => $this->css_selector( $selector_parts['remove'] ),
+						'selector' => $css_selectors['remove'],
 					],
 				],
 			]
@@ -1542,6 +1543,8 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 			]
 		);
 
+		$css_selector = $this->css_selector( '__conditional' );
+
 		$this->register_jet_control(
 			'conditional_margin',
 			[
@@ -1551,7 +1554,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( '__conditional' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1566,7 +1569,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( '__conditional' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1581,7 +1584,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( '__conditional' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1596,7 +1599,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'box-shadow',
-						'selector' => $this->css_selector( '__conditional' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1648,6 +1651,8 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 			]
 		);
 
+		$css_selector = $this->css_selector( '__submit' );
+
 		$this->register_jet_control(
 			'booking_form_submit_typography',
 			[
@@ -1657,7 +1662,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( '__submit' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1672,7 +1677,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'background-color',
-						'selector' => $this->css_selector( '__submit' ),
+						'selector' => $css_selector,
 					]
 				],
 			]
@@ -1687,7 +1692,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( '__submit' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1702,7 +1707,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( '__submit' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1717,7 +1722,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( '__submit' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1732,7 +1737,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'box-shadow',
-						'selector' => $this->css_selector( '__submit' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1766,6 +1771,8 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 			]
 		);
 
+		$css_selector = $this->css_selector( '__next-page-wrap' );
+
 		$this->register_jet_control(
 			'form_break_padding',
 			[
@@ -1775,7 +1782,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( '__next-page-wrap' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1790,7 +1797,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( '__next-page-wrap' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1814,6 +1821,11 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 	public function controls_form_break_buttons_style() {
 		$this->start_jet_control_group( 'section_form_break_next_style' );
 
+		$css_selectors = [
+			'prev' => $this->css_selector( '__prev-page' ),
+			'next' => $this->css_selector( '__next-page' ),
+		];
+
 		$this->register_jet_control(
 			'form_break_button_typography',
 			[
@@ -1823,11 +1835,11 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( '__prev-page' ),
+						'selector' => $css_selectors['prev'],
 					],
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( '__next-page' ),
+						'selector' => $css_selectors['next'],
 					],
 				],
 			]
@@ -1842,11 +1854,11 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'background-color',
-						'selector' => $this->css_selector( '__prev-page' ),
+						'selector' => $css_selectors['prev'],
 					],
 					[
 						'property' => 'background-color',
-						'selector' => $this->css_selector( '__next-page' ),
+						'selector' => $css_selectors['next'],
 					],
 				],
 			]
@@ -1861,11 +1873,11 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( '__prev-page' ),
+						'selector' => $css_selectors['prev'],
 					],
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( '__next-page' ),
+						'selector' => $css_selectors['next'],
 					],
 				],
 			]
@@ -1880,11 +1892,11 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( '__prev-page' ),
+						'selector' => $css_selectors['prev'],
 					],
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( '__next-page' ),
+						'selector' => $css_selectors['next'],
 					],
 				],
 			]
@@ -1899,11 +1911,11 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( '__prev-page' ),
+						'selector' => $css_selectors['prev'],
 					],
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( '__next-page' ),
+						'selector' => $css_selectors['next'],
 					],
 				],
 			]
@@ -1927,6 +1939,8 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 	public function controls_form_break_message_style() {
 		$this->start_jet_control_group( 'section_form_break_message_style' );
 
+		$css_selector = $this->css_selector( '__next-page-msg' );
+
 		$this->register_jet_control(
 			'form_break_message_typography',
 			[
@@ -1936,7 +1950,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( '__next-page-msg' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1961,7 +1975,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( '__next-page-msg' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1976,7 +1990,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( '__next-page-msg' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -1991,7 +2005,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( '__next-page-msg' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -2025,6 +2039,8 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 			]
 		);
 
+		$css_selector = $this->css_selector( '-progress-pages' );
+
 		$this->register_jet_control(
 			'jet_fb_progress_wrapper_margin',
 			[
@@ -2034,7 +2050,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( '-progress-pages' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -2049,7 +2065,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( '-progress-pages' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -2064,7 +2080,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( '-progress-pages' ),
+						'selector' => $css_selector,
 					],
 				],
 			]
@@ -2088,6 +2104,14 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 	public function controls_form_progress_pages_style() {
 		$this->start_jet_control_group( 'jet_fb_progress_pages_section' );
 
+		$css_selectors = [
+			'wrapper'     => $this->css_selector( '-progress-pages__item--wrapper' ),
+			'item'        => $this->css_selector( '-progress-pages__item' ),
+			'circle'      => $this->css_selector( '-progress-pages__item--circle' ),
+			'passed-page' => $this->css_selector( '-progress-pages__item--wrapper.passed-page' ),
+			'active-page' => $this->css_selector( '-progress-pages__item--wrapper.active-page' ),
+		];
+
 		$this->register_jet_control(
 			'jet_fb_progress_wrapper_typography',
 			[
@@ -2097,7 +2121,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( '-progress-pages__item--wrapper' ),
+						'selector' => $css_selectors['wrapper'],
 					],
 				],
 			]
@@ -2122,7 +2146,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( '-progress-pages__item' ),
+						'selector' => $css_selectors['item'],
 					],
 				],
 			]
@@ -2137,7 +2161,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( '-progress-pages__item' ),
+						'selector' => $css_selectors['item'],
 					],
 				],
 			]
@@ -2152,7 +2176,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( '-progress-pages__item' ),
+						'selector' => $css_selectors['item'],
 					],
 				],
 			]
@@ -2190,7 +2214,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( '-progress-pages__item--circle' ),
+						'selector' => $css_selectors['circle'],
 					],
 				],
 			]
@@ -2214,7 +2238,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'color',
-						'selector' => $this->css_selector( '-progress-pages__item--wrapper.passed-page' ),
+						'selector' => $css_selectors['passed-page'],
 					],
 				],
 			]
@@ -2239,7 +2263,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border-color',
-						'selector' => '.passed-page ' . $this->css_selector( '-progress-pages__item' ),
+						'selector' => '.passed-page ' . $css_selectors['item'],
 					],
 				],
 			]
@@ -2277,7 +2301,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border-color',
-						'selector' => '.passed-page ' . $this->css_selector( '-progress-pages__item--circle' ),
+						'selector' => '.passed-page ' . $css_selectors['circle'],
 					],
 				],
 			]
@@ -2301,7 +2325,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'color',
-						'selector' => $this->css_selector( '-progress-pages__item--wrapper.active-page' ),
+						'selector' => $css_selectors['active-page'],
 					],
 				],
 			]
@@ -2326,7 +2350,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border-color',
-						'selector' => '.active-page ' . $this->css_selector( '-progress-pages__item' ),
+						'selector' => '.active-page ' . $css_selectors['item'],
 					],
 				],
 			]
@@ -2364,7 +2388,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border-color',
-						'selector' => '.active-page ' . $this->css_selector( '-progress-pages__item--circle' ),
+						'selector' => '.active-page ' . $css_selectors['circle'],
 					],
 				],
 			]
@@ -2388,6 +2412,11 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 	public function controls_message_style() {
 		$this->start_jet_control_group( 'section_message_style' );
 
+		$css_selectors = [
+			'success' => $this->css_selector( '-message--success' ),
+			'error'   => $this->css_selector( '-message--error' ),
+		];
+
 		$this->register_jet_control(
 			'message_margin',
 			[
@@ -2397,11 +2426,11 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( '-message--success' ),
+						'selector' => $css_selectors['success'],
 					],
 					[
 						'property' => 'margin',
-						'selector' => $this->css_selector( '-message--error' ),
+						'selector' => $css_selectors['error'],
 					],
 				],
 			]
@@ -2416,11 +2445,11 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( '-message--success' ),
+						'selector' => $css_selectors['success'],
 					],
 					[
 						'property' => 'padding',
-						'selector' => $this->css_selector( '-message--error' ),
+						'selector' => $css_selectors['error'],
 					],
 				],
 			]
@@ -2444,7 +2473,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( '-message--success' ),
+						'selector' => $css_selectors['success'],
 					],
 				],
 			]
@@ -2469,7 +2498,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( '-message--success' ),
+						'selector' => $css_selectors['success'],
 					],
 				],
 			]
@@ -2493,7 +2522,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'typography',
-						'selector' => $this->css_selector( '-message--error' ),
+						'selector' => $css_selectors['error'],
 					],
 				],
 			]
@@ -2518,7 +2547,7 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 				'css'   => [
 					[
 						'property' => 'border',
-						'selector' => $this->css_selector( '-message--error' ),
+						'selector' => $css_selectors['error'],
 					],
 				],
 			]

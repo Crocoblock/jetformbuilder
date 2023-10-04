@@ -51,7 +51,7 @@ class Record_To_Payment_Box extends Form_Record_Values_Box {
 		} catch ( Query_Builder_Exception $exception ) {
 			throw new Empty_Box_Exception(
 				esc_html( $exception->getMessage() ),
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				...$exception->get_additional()
 			);
 		}

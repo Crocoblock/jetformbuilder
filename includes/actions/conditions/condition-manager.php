@@ -129,7 +129,7 @@ class Condition_Manager {
 					default:
 						throw new Condition_Exception(
 							esc_html( $exception->getMessage() ),
-							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 							...$exception->get_additional()
 						);
 				}
@@ -172,18 +172,18 @@ class Condition_Manager {
 			case 'or':
 				if ( $is_success ) {
 					throw new Condition_Silence_Exception(
-						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 						self::THROW_IF_ONE_MATCH,
-						...$additional // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						...$additional // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 					);
 				}
 				break;
 			case 'and':
 				if ( ! $is_success ) {
 					throw new Condition_Silence_Exception(
-						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 						self::THROW_IF_ONE_WRONG,
-						...$additional // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						...$additional // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 					);
 				}
 				break;

@@ -36,8 +36,8 @@ class Friendly_Captcha extends Base_Captcha_From_Options implements
 		} catch ( Gateway_Exception $exception ) {
 			throw new Spam_Exception(
 				'captcha_failed',
-				$exception->getMessage(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				...$exception->get_additional() // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$exception->getMessage(), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+				...$exception->get_additional() // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			);
 		}
 	}

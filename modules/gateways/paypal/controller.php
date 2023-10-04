@@ -177,7 +177,7 @@ class Controller extends \Jet_Form_Builder\Gateways\Base_Scenario_Gateway {
 		$response = $request->send_request();
 
 		if ( empty( $response['access_token'] ) ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Gateway_Exception( esc_html( $response['error_description'] ), $response, $request->get_request_args() );
 		}
 

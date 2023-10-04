@@ -9,7 +9,7 @@
 		"dev:js": "node ./.helpers/buildDevJs.js",
 		":install": "node ./.helpers/installModules.js",
 		"build:js": "node ./.helpers/buildProdJs.js",
-		"css": "sass scss\\editor\\main.scss:css\\editor.css scss\\frontend\\main.scss:css\\frontend.css scss\\admin\\single.scss:css\\admin\\single.css scss\\admin\\static.scss:css\\admin\\static.css -s compressed --no-source-map",
+		"css": "sass scss/editor/main.scss:css/editor.css scss/frontend/main.scss:css/frontend.css scss/admin/single.scss:css/admin/single.css scss/admin/static.scss:css/admin/static.css -s compressed --no-source-map",
 		"hidden:dev:js": "webpack --config .config/dev.webpack.config.js --progress",
 		"hidden:dev:js:w": "webpack --config .config/dev.webpack.config.js --progress -w",
 		"hidden:build:js": "webpack --config .config/prod.webpack.config.js --progress"

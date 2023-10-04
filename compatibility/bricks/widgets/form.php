@@ -17,7 +17,7 @@ class Form extends Base {
 	// Element properties
 	public $category = 'jet-form-builder'; // Use predefined element category 'general'
 	public $name = 'jet-form-builder-form'; // Make sure to prefix your elements
-	public $icon = 'jet-form-builder-icon--form'; // Themify icon font class
+	public $icon = 'jet-form-builder-icon-forms'; // Themify icon font class
 	public $css_selector = ''; // Default CSS selector
 	public $scripts = []; // Script(s) run when element is rendered on frontend or updated in builder
 

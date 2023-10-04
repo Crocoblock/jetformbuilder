@@ -31,7 +31,14 @@ function RadioData() {
 			this.handleEnterKey.bind( this ),
 		);
 		this.wrapper.addEventListener( 'focusout', event => {
-			if ( [ ...this.nodes ].includes( event?.relatedTarget ) ) {
+			if (
+				// just simple radio
+				[ ...this.nodes ].includes( event?.relatedTarget ) ||
+				// input from custom radio
+				event?.relatedTarget?.closest?.(
+					'.jet-form-builder__field-wrap.custom-option',
+				)
+			) {
 				return;
 			}
 			this.reportOnBlur();
@@ -55,6 +62,10 @@ function RadioData() {
 
 		if ( input.disabled === node.checked ) {
 			input.disabled = !node.checked;
+		}
+
+		if ( node.checked ) {
+			input.focus();
 		}
 
 	};

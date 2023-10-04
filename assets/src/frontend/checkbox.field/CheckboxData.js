@@ -42,7 +42,14 @@ function CheckboxData() {
 		);
 
 		this.wrapper.addEventListener( 'focusout', event => {
-			if ( [ ...this.nodes ].includes( event?.relatedTarget ) ) {
+			if (
+				// just simple checkbox
+				[ ...this.nodes ].includes( event?.relatedTarget ) ||
+				// input from custom checkbox
+				event?.relatedTarget?.closest?.(
+					'.jet-form-builder__field-wrap.custom-option',
+				)
+			) {
 				return;
 			}
 			this.reportOnBlur();
@@ -55,7 +62,14 @@ function CheckboxData() {
 				) {
 					return;
 				}
-				this.value.current = [ ...this.value.current, true ];
+				this.silenceSet( [ ...this.value.current, true ] );
+				const lastNode = this.getCustomNodes().at( -1 );
+
+				const input = lastNode.closest(
+					'.jet-form-builder__field-wrap',
+				).querySelector( 'span input.jet-form-builder__field' );
+
+				input.focus();
 			} );
 		}
 

@@ -1590,21 +1590,6 @@ class Form extends Base implements Base_Module_Handle_It, Base_Module_Url_It {
 			]
 		);
 
-		$this->register_jet_control(
-			'conditional_box_shadow',
-			[
-				'tab'   => 'style',
-				'label' => esc_html__( 'Box shadow', 'jet-smart-filters' ),
-				'type'  => 'box-shadow',
-				'css'   => [
-					[
-						'property' => 'box-shadow',
-						'selector' => $css_selector,
-					],
-				],
-			]
-		);
-
 		$this->end_jet_control_group();
 	}
 	// End conditional style

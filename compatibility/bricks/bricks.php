@@ -5,6 +5,7 @@ namespace JFB_Compatibility\Bricks;
 
 use Bricks\Elements;
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Classes\Tools;
 use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
 use JFB_Components\Compatibility\Base_Compat_Url_Trait;
 use JFB_Components\Compatibility\Base_Compat_Dir_Trait;
@@ -51,7 +52,7 @@ class Bricks implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_I
 
 	public function editor_styles() {
 		// Enqueue your files on the canvas & frontend, not the builder panel. Otherwise custom CSS might affect builder)
-		if ( bricks_is_builder() ) {
+		if ( Tools::is_editor() ) {
 			wp_enqueue_style(
 				$this->get_handle( 'icons' ),
 				$this->get_url( 'assets/build/css/editor/icons.css' ),

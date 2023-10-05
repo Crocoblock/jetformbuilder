@@ -4,6 +4,7 @@ import VerificationActionItem from './action/VerificationActionItem';
 import VerificationActionWatcher from './action/VerificationActionWatcher';
 import { ACTION, FAILED_EVENT, SUCCESS_EVENT } from './constants';
 import TokenComputedField from './action/TokenComputedField';
+import GeneratedTokenComputedField from './action/GeneratedTokenComputedField';
 
 const {
 	      addFilter,
@@ -20,7 +21,10 @@ const {
       } = wp.data;
 
 addAction( ACTION, VerificationRender );
+// Secure token field in Register User action
 addComputedField( TokenComputedField, { isScoped: true } );
+// Generate for other actions the previous field, if it used in Register User
+addComputedField( GeneratedTokenComputedField );
 
 addFilter(
 	'jet.fb.register.plugin.jf-actions-panel.before',

@@ -1,4 +1,4 @@
-import { SUCCESS_EVENT } from '../constants';
+import { SUCCESS_EVENT, TOKEN_FIELD } from '../constants';
 
 const {
 	      BaseComputedField,
@@ -17,7 +17,7 @@ function TokenComputedField() {
 	};
 
 	this.getName = function () {
-		return '_jfb_verification_token';
+		return TOKEN_FIELD;
 	};
 
 	this.getLabel = function () {

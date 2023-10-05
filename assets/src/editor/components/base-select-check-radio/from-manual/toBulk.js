@@ -17,7 +17,7 @@ function toBulk( source ) {
 	}
 
 	if ( ![ '[', '{' ].includes( source[ 0 ] ) ) {
-		return source.trim();
+		return source;
 	}
 
 	let jsonBulk;
@@ -26,7 +26,7 @@ function toBulk( source ) {
 		jsonBulk = JSON.parse( source );
 	}
 	catch ( error ) {
-		return source.trim();
+		return source;
 	}
 
 	return arrayToBulk( jsonBulk );

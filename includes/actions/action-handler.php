@@ -30,8 +30,8 @@ class Action_Handler {
 	/**
 	 * @var Base[]
 	 */
-	public $form_actions     = array();
-	public $is_ajax          = false;
+	public  $form_actions    = array();
+	public  $is_ajax         = false;
 	private $form_conditions = array();
 	private $form_events     = array();
 
@@ -212,6 +212,11 @@ class Action_Handler {
 
 			return;
 		}
+
+		/**
+		 * @since 3.2.0
+		 */
+		do_action( "jet-form-builder/before-do-action/{$action->get_id()}", $action );
 
 		/**
 		 * Process single action
@@ -561,7 +566,7 @@ class Action_Handler {
 			return $start_from;
 		}
 
-		return $this->get_unique_action_id( ++$start_from );
+		return $this->get_unique_action_id( ++ $start_from );
 	}
 
 }

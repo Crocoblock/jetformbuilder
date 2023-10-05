@@ -9,6 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 use Jet_Form_Builder\Actions\Manager;
+use Jet_Form_Builder\Actions\Types\Register_User;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -21,6 +22,7 @@ use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Form_Record\Tools;
+use JFB_Modules\Security\Csrf\Csrf_Tools;
 use JFB_Modules\Verification\Actions\Verification;
 use JFB_Modules\Verification\Events;
 use JFB_Modules\Verification\Form_Record\Admin\Meta_Boxes\Verification_Box;
@@ -49,6 +51,8 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		 * @see \JFB_Modules\Webhook\Module::try_to_catch
 		 */
 		add_action( 'jet-form-builder/webhook/verification', array( $this, 'on_verification' ) );
+		add_action( 'jet-form-builder/before-do-action/register_user', array( $this, 'register_user_before' ), 10, 2 );
+
 		add_filter( 'jet-form-builder/event-types', array( $this, 'events_register' ) );
 		add_filter(
 			'jet-form-builder/default-process-event/executors',
@@ -64,6 +68,10 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
 		remove_action( 'jet-form-builder/actions/register', array( $this, 'actions_register' ) );
 		remove_action( 'jet-form-builder/webhook/verification', array( $this, 'on_verification' ) );
+		remove_action(
+			'jet-form-builder/before-do-action/register_user',
+			array( $this, 'register_user_before' )
+		);
 		remove_filter( 'jet-form-builder/event-types', array( $this, 'events_register' ) );
 		remove_filter(
 			'jet-form-builder/default-process-event/executors',
@@ -117,6 +125,26 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		$containers[1]->add_meta_box( new Verification_Box() );
 
 		return $containers;
+	}
+
+	/**
+	 * Generate unique token, if it used
+	 *
+	 * @param Register_User $action
+	 */
+	public function register_user_before( Register_User $action ) {
+		$fields_map = array_values( $action->settings['fields_map'] ?? array() );
+
+		if (
+			! in_array( Verification::TOKEN, $fields_map, true ) ||
+			jet_fb_context()->has_field( Verification::TOKEN )
+		) {
+			return;
+		}
+
+		jet_fb_context()->set_field_type( 'text-field', Verification::TOKEN );
+		jet_fb_context()->update_request( Csrf_Tools::generate(), Verification::TOKEN );
+		jet_fb_context()->make_secure( Verification::TOKEN );
 	}
 
 	public function on_verification( Webhook\Module $module ) {

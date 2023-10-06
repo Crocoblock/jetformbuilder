@@ -5,6 +5,7 @@ namespace JFB_Modules\Form_Record\Models;
 
 use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Migrations\Versions\Version_2_1_7;
+use Jet_Form_Builder\Migrations\Versions\Version_3_1_7;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -31,7 +32,7 @@ class Record_Model extends Base_Db_Model {
 			'from_content_type' => 'varchar(20) NOT NULL',
 			'status'            => 'varchar(255)',
 			'ip_address'        => 'varchar(255)',
-			'user_agent'        => 'varchar(255)',
+			'user_agent'        => 'text',
 			'referrer'          => 'text',
 			'submit_type'       => 'varchar(20)',
 			'is_viewed'         => 'tinyint(1)',
@@ -51,6 +52,7 @@ class Record_Model extends Base_Db_Model {
 	public function related_migrations(): array {
 		return array(
 			new Version_2_1_7(),
+			new Version_3_1_7(),
 		);
 	}
 

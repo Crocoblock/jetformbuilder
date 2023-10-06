@@ -104,7 +104,7 @@ class Redirect_To_Page extends Base {
 			$redirect_args[ $arg ] = ! empty( $value ) ? $value : 0;
 		}
 
-		return add_query_arg( $redirect_args, $url );
+		return add_query_arg( urlencode_deep( $redirect_args ), $url );
 	}
 
 	public function get_completed_redirect_url( $url = '' ) {

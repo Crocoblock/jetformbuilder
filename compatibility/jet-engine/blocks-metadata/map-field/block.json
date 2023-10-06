@@ -33,7 +33,7 @@
 			"default": 14,
 			"jfb": {
 				"shortcode": true,
-				"dynamic": true
+				"preset": true
 			}
 		},
 		"height": {

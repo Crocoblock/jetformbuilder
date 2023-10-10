@@ -79,11 +79,28 @@ class Map_Field extends Base {
 		if ( empty( $this->block_attrs['default'] ) ||
 			! is_string( $this->block_attrs['default'] )
 		) {
+			$this->apply_plain_preset();
+
 			return;
 		}
 
-		$self  = $this->block_attrs['default'];
-		$parts = array_map( 'trim', explode( ',', $self ) );
+		$this->try_to_split_coords( $this->block_attrs['default'] );
+	}
+
+	private function apply_plain_preset() {
+		if ( empty( $this->block_attrs['default']['self'] ) ||
+			! is_string( $this->block_attrs['default']['self'] ) ||
+			! empty( $this->block_attrs['default']['lat'] ) ||
+			! empty( $this->block_attrs['default']['lng'] )
+		) {
+			return;
+		}
+
+		$this->try_to_split_coords( $this->block_attrs['default']['self'] );
+	}
+
+	private function try_to_split_coords( string $plain_coords ) {
+		$parts = array_map( 'trim', explode( ',', $plain_coords ) );
 
 		if ( 2 !== count( $parts ) ) {
 			return;
@@ -96,7 +113,7 @@ class Map_Field extends Base {
 		}
 
 		$this->block_attrs['default'] = array(
-			'self' => $self,
+			'self' => $plain_coords,
 			'lat'  => $parts[0],
 			'lng'  => $parts[1],
 		);

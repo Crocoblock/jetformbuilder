@@ -2,7 +2,7 @@
 /**
  * Vue.js based Interface Builder module
  *
- * Version: 1.1.1
+ * Version: 1.4.10
  */
 
 // If this file is called directly, abort.
@@ -38,15 +38,23 @@ if ( ! class_exists( 'CX_Vue_UI' ) ) {
 		protected $url;
 
 		/**
+		 * Current instance templates path.
+		 *
+		 * @since 1.4.3
+		 * @access protected
+		 * @var srting.
+		 */
+		public static $templates_path;
+
+		/**
 		 * Module version
 		 *
 		 * @var string
 		 */
-		protected $version = '1.1.1';
+		protected $version = '1.4.10';
 
 		/**
 		 * [$assets_enqueued description]
-		 *
 		 * @var boolean
 		 */
 		protected $assets_enqueued = false;
@@ -71,6 +79,7 @@ if ( ! class_exists( 'CX_Vue_UI' ) ) {
 			}
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+
 		}
 
 		/**
@@ -96,14 +105,22 @@ if ( ! class_exists( 'CX_Vue_UI' ) ) {
 				'cx-vue',
 				$this->url . 'assets/js/vue' . $suffix . '.js',
 				array(),
-				'2.6.10',
+				'2.6.11',
+				true
+			);
+
+			wp_register_script(
+				'cx-vue-components',
+				$this->url . 'assets/js/cx-vue-ui-components.js',
+				array(),
+				$this->version,
 				true
 			);
 
 			wp_enqueue_script(
 				'cx-vue-ui',
 				$this->url . 'assets/js/cx-vue-ui.js',
-				array( 'cx-vue' ),
+				array( 'cx-vue', 'cx-vue-components' ),
 				$this->version,
 				true
 			);
@@ -111,6 +128,40 @@ if ( ! class_exists( 'CX_Vue_UI' ) ) {
 			add_action( 'admin_footer', array( $this, 'print_templates' ), 0 );
 
 			$this->assets_enqueued = true;
+
+		}
+
+		/**
+		 * Enqueue builder assets
+		 *
+		 * @return void
+		 */
+		public function enqueue_assets_components() {
+
+			if ( $this->assets_enqueued ) {
+				return;
+			}
+
+			wp_enqueue_media();
+
+			$suffix = '.min';
+
+			if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+				$suffix = '';
+			}
+
+			wp_enqueue_script(
+				'cx-vue-ui-components',
+				$this->url . 'assets/js/cx-vue-ui-components.js',
+				array(),
+				$this->version,
+				true
+			);
+
+			add_action( 'admin_footer', array( $this, 'print_templates' ), 0 );
+
+			$this->assets_enqueued = true;
+
 		}
 
 		/**
@@ -119,41 +170,38 @@ if ( ! class_exists( 'CX_Vue_UI' ) ) {
 		 * @return array
 		 */
 		public function components_list() {
-			return apply_filters(
-				'cx-vue-ui/components-list',
-				array(
+			return apply_filters( 'cx-vue-ui/components-list', array(
 
-					// Layout elements
-					'title',
-					'collapse',
-					'component-wrapper',
-					'button',
-					'repeater',
-					'repeater-item',
-					'popup',
-					'list-table',
-					'list-table-heading',
-					'list-table-item',
-					'tabs',
-					'tabs-panel',
-					'pagination',
-					'notice',
+				// Layout elements
+				'title',
+				'collapse',
+				'component-wrapper',
+				'button',
+				'repeater',
+				'repeater-item',
+				'popup',
+				'list-table',
+				'list-table-heading',
+				'list-table-item',
+				'tabs',
+				'tabs-panel',
+				'pagination',
+				'notice',
 
-					// Form elements
-					'input',
-					'time',
-					'textarea',
-					'switcher',
-					'iconpicker',
-					'select',
-					'f-select',
-					'checkbox',
-					'radio',
-					'colorpicker',
-					'wp-media',
-					'dimensions',
-				)
-			);
+				// Form elements
+				'input',
+				'time',
+				'textarea',
+				'switcher',
+				'iconpicker',
+				'select',
+				'f-select',
+				'checkbox',
+				'radio',
+				'colorpicker',
+				'wp-media',
+				'dimensions',
+			) );
 		}
 
 		/**
@@ -175,7 +223,13 @@ if ( ! class_exists( 'CX_Vue_UI' ) ) {
 				}
 
 				ob_start();
-				include $file;
+				
+				if ( self::$templates_path && file_exists( self::$templates_path . basename( $file ) ) ) {
+					include self::$templates_path . basename( $file );
+				} else {
+					include $file;
+				}
+				
 				$template = ob_get_clean();
 
 				printf(
@@ -185,6 +239,7 @@ if ( ! class_exists( 'CX_Vue_UI' ) ) {
 				);
 
 			}
+
 		}
 
 	}

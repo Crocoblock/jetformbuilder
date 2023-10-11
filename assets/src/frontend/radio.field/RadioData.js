@@ -45,7 +45,10 @@ function RadioData() {
 		} );
 
 		!STRICT_MODE && jQuery( this.wrapper ).on( 'change', event => {
-			if ( this.value.current == event.target.value ) {
+			if (
+				this.value.current == event.target.value ||
+				event.target?.dataset?.custom
+			) {
 				return;
 			}
 			this.callable.lockTrigger();

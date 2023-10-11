@@ -11,6 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 use Jet_Form_Builder\Classes\Arguments\Default_Form_Arguments;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Compatibility;
+use Jet_Form_Builder\Classes\Tools;
 use JFB_Modules\Post_Type\Actions_Repository;
 use Jet_Form_Builder\Shortcodes\Manager;
 use JFB_Components\Module\Base_Module_After_Install_It;
@@ -387,6 +388,27 @@ class Module implements
 	 */
 	public function slug(): string {
 		return self::SLUG;
+	}
+
+	/**
+	 * @param $meta_key
+	 * @param int|false $form_id
+	 *
+	 * @return array|mixed
+	 * @deprecated since 3.0.0
+	 */
+	public function get_form_meta( $meta_key, $form_id = false ) {
+		if ( false === $form_id ) {
+			$form_id = jet_fb_live()->form_id;
+		}
+
+		return Tools::decode_json(
+			get_post_meta(
+				$form_id,
+				$meta_key,
+				true
+			)
+		);
 	}
 
 }

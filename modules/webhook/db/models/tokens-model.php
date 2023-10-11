@@ -60,22 +60,26 @@ class Tokens_Model extends Base_Db_Model {
 			return array( 0, '' );
 		}
 
-		// return number of minutes, by default it's 240 (4 hours)
-		$lifespan_min = $lifespan && is_numeric( $lifespan ) ? absint( $lifespan * 60 ) : 4 * 60;
+		$lifespan_min = $lifespan && is_numeric( $lifespan )
+			? absint( $lifespan * 60 ) // return number of minutes
+			: 0; // always be available
 
 		$token = Security\Csrf\Csrf_Tools::generate();
 
-		$id = ( new static() )->insert(
-			array(
-				'action'    => $action,
-				'hash'      => Security\Module::get_hasher()->HashPassword( $token ),
-				'expire_at' => $current->modify(
-					sprintf( '+%d min', $lifespan_min )
-				)->format(
-					Base_Db_Model::DATETIME_FORMAT
-				),
-			)
+		$row = array(
+			'action' => $action,
+			'hash'   => Security\Module::get_hasher()->HashPassword( $token ),
 		);
+
+		if ( $lifespan_min ) {
+			$row['expire_at'] = $current->modify(
+				sprintf( '+%d min', $lifespan_min )
+			)->format(
+				Base_Db_Model::DATETIME_FORMAT
+			);
+		}
+
+		$id = ( new static() )->insert( $row );
 
 		return array( $id, $token );
 	}

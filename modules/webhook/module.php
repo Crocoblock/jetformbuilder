@@ -69,24 +69,38 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 	public function try_to_catch() {
 		global $wpdb;
 
+		$view = new Tokens_View();
+
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		$id          = absint( $_GET[ self::GET_TOKEN_ID ] ?? '' );
 		$this->token = sanitize_key( $_GET[ self::GET_TOKEN ] ?? '' );
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		$expire_conditions = new Query_Conditions_Builder();
+		$expire_conditions->set_relation_or();
+		$expire_conditions->set_condition(
+			array(
+				'type'   => Query_Conditions_Builder::TYPE_MORE_STATIC,
+				'values' => array( 'expire_at', current_time( 'mysql', true ) ),
+			)
+		);
+		$expire_conditions->set_condition(
+			array(
+				'type'   => Query_Conditions_Builder::TYPE_IS_NULL,
+				'values' => array( 'expire_at' ),
+			)
+		);
 
 		$conditions = array(
 			array(
 				'type'   => Query_Conditions_Builder::TYPE_EQUAL,
 				'values' => array( 'id', $id ),
 			),
-			array(
-				'type'   => Query_Conditions_Builder::TYPE_MORE_STATIC,
-				'values' => array( 'expire_at', current_time( 'mysql', true ) ),
-			),
+			$expire_conditions,
 		);
 
 		try {
-			$this->token_row = Tokens_View::findOne( $conditions )->query()->query_one();
+			$this->token_row = $view::findOne( $conditions )->query()->query_one();
 		} catch ( Query_Builder_Exception $exception ) {
 			$this->logger->log(
 				$exception->getMessage(),

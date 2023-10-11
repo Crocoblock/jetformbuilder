@@ -5,6 +5,9 @@ function GeneratedTokenComputedField() {
 	TokenComputedField.call( this );
 
 	this.isSupported = function ( action ) {
+		if ( 'verification' === action.type ) {
+			return true;
+		}
 		if ( 'register_user' !== action.type ) {
 			return false;
 		}
@@ -15,6 +18,7 @@ function GeneratedTokenComputedField() {
 	};
 }
 
-GeneratedTokenComputedField.prototype = Object.create( TokenComputedField.prototype );
+GeneratedTokenComputedField.prototype = Object.create(
+	TokenComputedField.prototype );
 
 export default GeneratedTokenComputedField;

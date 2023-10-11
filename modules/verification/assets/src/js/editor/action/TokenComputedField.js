@@ -1,4 +1,4 @@
-import { SUCCESS_EVENT, TOKEN_FIELD } from '../constants';
+import { TOKEN_FIELD } from '../constants';
 
 const {
 	      BaseComputedField,
@@ -25,12 +25,9 @@ function TokenComputedField() {
 	};
 
 	this.getHelp = function () {
-		return sprintf(
-			__(
-				'A computed field on <code>%s</code> event.',
-				'jet-form-builder',
-			),
-			SUCCESS_EVENT,
+		return __(
+			'A computed field. Usually used to save it in the password fields',
+			'jet-form-builder',
 		);
 	};
 }

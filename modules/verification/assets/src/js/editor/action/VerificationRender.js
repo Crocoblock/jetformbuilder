@@ -98,7 +98,6 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 
 	const fields            = useFields( { withInner: false }, [] );
 	const { currentAction } = useCurrentAction();
-	const updateAction      = useUpdateCurrentActionMeta();
 
 	const emailField = useMemo(
 		() => fields.find( field => 'email' === field?.attributes?.field_type ),
@@ -151,7 +150,10 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 		}
 
 		setActions( [
-			...actions,
+			...actions.map( actionItem => (
+				// save settings before open Send Email action
+				currentAction.id !== actionItem.id ? actionItem : currentAction
+			) ),
 			redirect,
 		] );
 
@@ -167,7 +169,10 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 		};
 
 		setActions( [
-			...actions,
+			...actions.map( actionItem => (
+				// save settings before open Send Email action
+				currentAction.id !== actionItem.id ? actionItem : currentAction
+			) ),
 			{ ...sendEmail },
 		] );
 
@@ -227,7 +232,9 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 				/>
 				<BaseHelp style={ { marginTop: '-4px' } }>
 					{ __(
-						`How long verification link will be active and available to check`,
+						`How long verification link will be active and 
+available to check. If you leave this field blank or enter 0, 
+then verification can be completed at any time.`,
 						'jet-form-builder',
 					) }
 				</BaseHelp>
@@ -293,9 +300,6 @@ a separate Send Email action`,
 					onClick={ () => {
 						const actionSendEmail = addSendEmailAction();
 
-						// save settings before open Send Email action
-						updateAction( currentAction );
-
 						openActionSettings( {
 							index: actions.length,
 							item: actionSendEmail,
@@ -340,22 +344,6 @@ Redirect to Page action with event:`,
 						  >
 							  { __(
 								  'Edit success Redirect to Page',
-								  'jet-form-builder',
-							  ) }
-						  </Button>
-						  <Button
-							  isDestructive
-							  style={ { boxShadow: 'unset' } }
-							  icon={ <svg xmlns="http://www.w3.org/2000/svg"
-							              viewBox="0 0 24 24" width="24"
-							              height="24" aria-hidden="true"
-							              focusable="false">
-								  <path
-									  d="M20 5h-5.7c0-1.3-1-2.3-2.3-2.3S9.7 3.7 9.7 5H4v2h1.5v.3l1.7 11.1c.1 1 1 1.7 2 1.7h5.7c1 0 1.8-.7 2-1.7l1.7-11.1V7H20V5zm-3.2 2l-1.7 11.1c0 .1-.1.2-.3.2H9.1c-.1 0-.3-.1-.3-.2L7.2 7h9.6z"/>
-							  </svg> }
-						  >
-							  { __(
-								  'Or delete that',
 								  'jet-form-builder',
 							  ) }
 						  </Button>
@@ -434,22 +422,6 @@ Redirect to Page action with event:`,
 						  >
 							  { __(
 								  'Edit failed Redirect to Page',
-								  'jet-form-builder',
-							  ) }
-						  </Button>
-						  <Button
-							  isDestructive
-							  style={ { boxShadow: 'unset' } }
-							  icon={ <svg xmlns="http://www.w3.org/2000/svg"
-							              viewBox="0 0 24 24" width="24"
-							              height="24" aria-hidden="true"
-							              focusable="false">
-								  <path
-									  d="M20 5h-5.7c0-1.3-1-2.3-2.3-2.3S9.7 3.7 9.7 5H4v2h1.5v.3l1.7 11.1c.1 1 1 1.7 2 1.7h5.7c1 0 1.8-.7 2-1.7l1.7-11.1V7H20V5zm-3.2 2l-1.7 11.1c0 .1-.1.2-.3.2H9.1c-.1 0-.3-.1-.3-.2L7.2 7h9.6z"/>
-							  </svg> }
-						  >
-							  { __(
-								  'Or delete that',
 								  'jet-form-builder',
 							  ) }
 						  </Button>

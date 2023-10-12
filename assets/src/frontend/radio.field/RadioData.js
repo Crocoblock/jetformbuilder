@@ -43,11 +43,6 @@ function RadioData() {
 			this.reportOnBlur();
 		} );
 
-		input.addEventListener( 'input', event => {
-			this.value.silence();
-			this.setValue();
-			this.value.silence();
-		} );
 		input.addEventListener( 'blur', event => {
 			this.setValue();
 		} );

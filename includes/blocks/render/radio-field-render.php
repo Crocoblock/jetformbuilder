@@ -134,6 +134,7 @@ class Radio_Field_Render extends Base_Select_Radio_Check {
 						array( 'data-field-name', esc_attr( $this->args['name'] ) ),
 						array( 'class', 'jet-form-builder__field text-field' ),
 						array( 'disabled', 'disabled' ),
+						array( 'required', $this->block_type->get_required_val() ),
 					)
 				)
 			)

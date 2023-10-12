@@ -30,18 +30,26 @@ function RadioData() {
 			'keydown',
 			this.handleEnterKey.bind( this ),
 		);
+
+		const input = this.getCustomInput();
+
 		this.wrapper.addEventListener( 'focusout', event => {
 			if (
-				// just simple radio
 				[ ...this.nodes ].includes( event?.relatedTarget ) ||
-				// input from custom radio
-				event?.relatedTarget?.closest?.(
-					'.jet-form-builder__field-wrap.custom-option',
-				)
+				[ event.relatedTarget, event.target ].includes( input )
 			) {
 				return;
 			}
 			this.reportOnBlur();
+		} );
+
+		input.addEventListener( 'input', event => {
+			this.value.silence();
+			this.setValue();
+			this.value.silence();
+		} );
+		input.addEventListener( 'blur', event => {
+			this.setValue();
 		} );
 
 		!STRICT_MODE && jQuery( this.wrapper ).on( 'change', event => {

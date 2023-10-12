@@ -185,13 +185,11 @@ class Query_Conditions_Builder {
 			return sprintf( "(\r\n%s\r\n)", $condition->prepare_conditions() );
 		}
 
-		$type = $this->get_condition_type();
-
-		list ( $first, $second ) = $this->get_condition_values();
-
+		$type     = $this->get_condition_type();
+		$values   = $this->get_condition_values();
 		$callback = $this->get_types()[ $type ]['callback'];
 
-		return call_user_func( $callback, $first, $second );
+		return call_user_func( $callback, $values[0], $values[1] ?? false );
 	}
 
 	/**
@@ -518,11 +516,11 @@ class Query_Conditions_Builder {
 	}
 
 	/**
-	 * @since 3.2.0
-	 *
 	 * @param $column_name
 	 *
 	 * @return string
+	 * @since 3.2.0
+	 *
 	 */
 	public function build_is_null( $column_name ): string {
 		$column_name = Db_Tools::sanitize_column( $column_name );

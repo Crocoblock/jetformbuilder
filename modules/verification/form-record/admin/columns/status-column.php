@@ -54,7 +54,7 @@ class Status_Column extends Column_Advanced_Base {
 
 		$current_time = current_time( 'mysql', true );
 
-		if ( $current_time > $record['expire_at'] ) {
+		if ( ! is_null( $record['expire_at'] ) && $current_time > $record['expire_at'] ) {
 			return self::EXPIRED;
 		}
 

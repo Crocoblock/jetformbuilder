@@ -36,6 +36,10 @@ class Expire_At_Column extends Column_Advanced_Base {
 				: $record['expire_at']
 		);
 
+		if ( ! $time && is_null( $record['expire_at'] ) ) {
+			return __( 'Never', 'jet-form-builder' );
+		}
+
 		return wp_date( Base_Db_Model::DATETIME_FORMAT, $time );
 	}
 

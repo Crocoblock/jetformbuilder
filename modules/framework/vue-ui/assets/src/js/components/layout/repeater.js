@@ -41,6 +41,7 @@ const Repeater = {
 	data() {
 		return {
 			inFocus: false,
+			isMac: 'MacIntel' === navigator.platform,
 		}
 	},
 	methods: {

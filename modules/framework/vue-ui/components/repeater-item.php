@@ -39,6 +39,7 @@
 			<div class="cx-vui-repeater-item__subtitle" v-html="subtitle"></div>
 		</div>
 		<div class="cx-vui-repeater-item__heading-end">
+			<slot name="before-actions"></slot>
 			<div
 				class="cx-vui-repeater-item__copy"
 				@click="handleCopy"
@@ -67,6 +68,7 @@
 					>No</span>
 				</div>
 			</div>
+			<slot name="after-actions"></slot>
 		</div>
 	</div>
 	<div

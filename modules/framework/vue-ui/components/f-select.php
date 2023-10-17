@@ -92,4 +92,5 @@
 			></option>
 		</select>
 	</div>
+	<slot></slot>
 </cx-vui-component-wrapper>

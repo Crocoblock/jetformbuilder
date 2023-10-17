@@ -1,4 +1,4 @@
-import { SUPPORT_NAME, ATTRIBUTE_NAME } from './constants';
+import { ATTRIBUTE_NAME, SUPPORT_NAME } from './constants';
 
 const {
 	      getSupport,
@@ -12,8 +12,8 @@ function registerAttribute( settings, name ) {
 	settings.attributes = {
 		...settings.attributes,
 		[ ATTRIBUTE_NAME ]: {
-			type: 'boolean',
-			default: false,
+			type: 'array',
+			default: [],
 		},
 	};
 

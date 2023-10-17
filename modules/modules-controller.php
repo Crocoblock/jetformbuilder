@@ -45,6 +45,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Gateway_Manager(),
 			new Active_Campaign\Module(),
 			new Verification\Module(),
+			new Sanitize_Value\Module(),
 		);
 	}
 

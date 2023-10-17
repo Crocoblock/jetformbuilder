@@ -44,7 +44,15 @@ function RadioData() {
 		} );
 
 		input?.addEventListener?.( 'blur', event => {
+			const prevValue = this.value.current;
+
+			// update this.value.current
 			this.setValue();
+
+			// trigger signals & reporting
+			if ( prevValue === this.value.current ) {
+				this.onChange( prevValue );
+			}
 		} );
 
 		!STRICT_MODE && jQuery( this.wrapper ).on( 'change', event => {

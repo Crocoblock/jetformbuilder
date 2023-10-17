@@ -49,6 +49,7 @@ with a multi-optional field. Allow to pick as many variants as the visitor needs
 					'jet-forms/text-field',
 				],
 				transform: ( attributes ) => {
+					attributes.custom_option = !!attributes.custom_option?.allow;
 					return createBlock( name, { ...attributes } );
 				},
 				priority: 0,

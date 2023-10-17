@@ -24,8 +24,16 @@ const {
 	      InspectorControls,
 	      useBlockProps,
       } = wp.blockEditor;
+
+const {
+	      SVG,
+	      Path,
+      } = wp.primitives;
+
 const {
 	      PanelBody,
+	      TextControl,
+	      ToolbarButton,
       } = wp.components;
 
 const localized = window.JetFormCheckboxFieldData;
@@ -39,6 +47,7 @@ export default function CheckboxEdit( props ) {
 		      isSelected,
 		      editProps: { uniqKey },
 		      attributes,
+		      setAttributes,
 	      } = props;
 
 	if ( attributes.isPreview ) {
@@ -52,10 +61,33 @@ export default function CheckboxEdit( props ) {
 	}
 
 	return [
-		<ToolBarFields
-			key={ uniqKey( 'JetForm-toolbar' ) }
-			{ ...props }
-		/>,
+		<ToolBarFields>
+			<ToolbarButton
+				icon={ <SVG xmlns="http://www.w3.org/2000/svg"
+				            viewBox="0 0 24 24" width="24" height="24"
+				            aria-hidden="true" focusable="false">
+					<Path
+						d="M4 20h9v-1.5H4V20zm0-5.5V16h16v-1.5H4zm.8-4l.7.7 2-2V12h1V9.2l2 2 .7-.7-2-2H12v-1H9.2l2-2-.7-.7-2 2V4h-1v2.8l-2-2-.7.7 2 2H4v1h2.8l-2 2z"/>
+				</SVG> }
+				title={ attributes.custom_option.allow
+				        ? __(
+						'Click to not show option for custom value',
+						'jet-form-builder',
+					)
+				        : __(
+						'Click to allow custom value option',
+						'jet-form-builder',
+					)
+				}
+				onClick={ () => setAttributes( {
+					custom_option: {
+						...attributes.custom_option,
+						allow: !attributes.custom_option.allow,
+					},
+				} ) }
+				isActive={ attributes.custom_option.allow }
+			/>
+		</ToolBarFields>,
 		isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }
 		>
@@ -66,6 +98,20 @@ export default function CheckboxEdit( props ) {
 			</PanelBody>
 			<PanelBody title={ __( 'Value', 'jet-form-builder' ) }>
 				<BlockAdvancedValue/>
+				{ attributes.custom_option.allow && <>
+					<hr/>
+					<TextControl
+						label={ __( 'Button label', 'jet-form-builder' ) }
+						onChange={ label => setAttributes( {
+							custom_option: {
+								...attributes.custom_option,
+								label,
+							},
+						} ) }
+						help={ __( 'For custom option', 'jet-form-builder' ) }
+						value={ attributes.custom_option.label }
+					/>
+				</> }
 			</PanelBody>
 			<AdvancedFields/>
 		</InspectorControls>,

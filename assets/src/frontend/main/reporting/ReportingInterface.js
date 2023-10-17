@@ -245,17 +245,18 @@ ReportingInterface.prototype = {
 	 * you can overwrite a particular restriction
 	 * if the "type" property is defined in it
 	 */
-	filterRestrictions: function() {
+	filterRestrictions: function () {
 		const map = {};
 
-		for ( let [ index, restriction ] of Object.entries( this.restrictions ) ) {
+		for ( let [ index, restriction ] of Object.entries(
+			this.restrictions ) ) {
 			index = restriction.getType() ? restriction.getType() : index;
 
 			map[ index ] = restriction;
 		}
 
 		this.restrictions = Object.values( map );
-	}
+	},
 };
 
 export default ReportingInterface;

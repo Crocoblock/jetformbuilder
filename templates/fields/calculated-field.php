@@ -20,6 +20,7 @@ if ( empty( $formula ) ) {
 }
 
 $name          = $this->block_type->get_field_name( $args['name'] );
+$id_attr       = $this->block_type->get_field_id();
 $default_value = ! empty( $args['default'] ) ? $args['default'] : '';
 $prefix        = ! empty( $args['calc_prefix'] ) ? $args['calc_prefix'] : false;
 $suffix        = ! empty( $args['calc_suffix'] ) ? $args['calc_suffix'] : false;
@@ -45,6 +46,7 @@ $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field-
 	<?php endif; ?>
 	<input type="hidden"
 			name="<?php echo esc_attr( $name ); ?>"
+			id="<?php echo esc_attr( $id_attr ); ?>"
 			value="<?php echo esc_attr( $default_value ); ?>"
 			class="jet-form-builder__calculated-field-input jet-form-builder__field"
 			data-field-name="<?php echo esc_attr( $args['name'] ); ?>"

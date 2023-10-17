@@ -167,6 +167,19 @@ class Hidden_Field extends Base {
 		}
 	}
 
+	/**
+	 * @param array $params
+	 *
+	 * @return false|string|\WP_Error|null
+	 */
+	private function post_type( $params = array() ) {
+		if ( ! $this->current_post() ) {
+			return null;
+		} else {
+			return get_post_type( $this->current_post()->ID );
+		}
+	}
+
 	private function term_url( $params = array() ) {
 		/** @var \WP_Term $term */
 		$term = get_queried_object();
@@ -365,6 +378,10 @@ class Hidden_Field extends Base {
 							array(
 								'value' => 'post_url',
 								'label' => __( 'Current Post/Page URL', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'post_type',
+								'label' => __( 'Current Post Type', 'jet-form-builder' ),
 							),
 							array(
 								'value' => 'post_meta',

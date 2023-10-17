@@ -1,6 +1,10 @@
 import getCustomCheckboxInput from './getCustomCheckboxInput';
 import processOption from './processOption';
 
+const {
+	      isEmpty,
+      } = JetFormBuilderFunctions;
+
 /**
  * @param value {Array}
  * @param input {CheckboxData}
@@ -55,10 +59,17 @@ function sanitizeCheckbox( value, input ) {
 			currentNode = input.nodes[ input.nodes.length - 1 ];
 		}
 
-		input.calcValue += 1;
-
 		const inputNode    = getCustomCheckboxInput( currentNode );
 		inputNode.disabled = false === currentValue;
+
+		// add 1 if custom option not deselected, not with empty value
+		// and hasn't just added
+		if ( !inputNode.disabled &&
+			!isEmpty( currentValue ) &&
+			true !== currentValue
+		) {
+			input.calcValue += 1;
+		}
 
 		if ( inputNode.value === currentValue ||
 			'boolean' === typeof currentValue

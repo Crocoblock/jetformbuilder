@@ -43,7 +43,7 @@ function RadioData() {
 			this.reportOnBlur();
 		} );
 
-		input.addEventListener( 'blur', event => {
+		input?.addEventListener?.( 'blur', event => {
 			this.setValue();
 		} );
 
@@ -124,7 +124,7 @@ RadioData.prototype.lastNode = function () {
 RadioData.prototype.getCustomInput = function () {
 	const lastWrapper = this.lastNode().closest( '.custom-option' );
 
-	return lastWrapper.querySelector( 'input.text-field' );
+	return lastWrapper?.querySelector?.( 'input.text-field' );
 };
 
 export default RadioData;

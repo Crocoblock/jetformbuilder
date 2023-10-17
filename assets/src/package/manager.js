@@ -208,6 +208,7 @@ import useScopedAttributesContext
 	from './blocks/hooks/useScopedAttributesContext';
 import ScopedAttributesProvider
 	from './blocks/components/ScopedAttributesProvider';
+import getSupport from './blocks/helpers/getSupport';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -354,6 +355,7 @@ window.JetFBActions = {
 	assetUrl,
 	set,
 	isEmpty,
+	getSupport,
 };
 
 // JFBHooks

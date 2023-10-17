@@ -33,7 +33,6 @@ class Modules_Controller implements Module_Controller_It {
 			new Rest_Api\Module(),
 			new Blocks\Module(),
 			new Security\Module(),
-			new Block_Sanitizer\Module(),
 			// additional
 			new Wp_Experiments\Module(),
 			new Deprecated\Module(),

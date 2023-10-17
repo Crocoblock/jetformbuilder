@@ -75,6 +75,16 @@ function InputData() {
 
 	this.loading = new LoadingReactiveVar( false );
 	this.loading.make();
+
+	/**
+	 * In CheckboxData case we have just main sanitizer, without callable.
+	 * So we set .calcValue inside callable.runSignal()
+	 *
+	 * And to prevent resetting .calcValue by onChange
+	 * set this property to FALSE.
+	 * @type {boolean}
+	 */
+	this.isResetCalcValue = true;
 }
 
 InputData.prototype.attrs = {};
@@ -127,7 +137,9 @@ InputData.prototype.makeReactive = function () {
 	doAction( 'jet.fb.input.makeReactive', this );
 };
 InputData.prototype.onChange     = function ( prevValue ) {
-	this.calcValue = this.value.current;
+	if ( this.isResetCalcValue ) {
+		this.calcValue = this.value.current;
+	}
 
 	// apply changes in DOM
 	this?.callable?.run( prevValue );
@@ -278,7 +290,7 @@ InputData.prototype.getSubmit = function () {
  * @returns {Observable}
  */
 InputData.prototype.getRoot = function () {
-	if ( ! this.root?.parent ) {
+	if ( !this.root?.parent ) {
 		return this.root;
 	}
 	return this.root.parent.getRoot();

@@ -24,7 +24,8 @@ function sanitizeValue( value ) {
 function CheckboxData() {
 	InputData.call( this );
 
-	this.wrapper = null;
+	this.wrapper          = null;
+	this.isResetCalcValue = false;
 
 	this.isSupported  = function ( node ) {
 		return (

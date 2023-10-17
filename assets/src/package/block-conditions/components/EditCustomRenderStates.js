@@ -1,4 +1,6 @@
 import ActionModal from '../../action-modal/components/ActionModal';
+import ActionModalFooterSlotFill
+	from '../../action-modal/components/ActionModalFooterSlotFill';
 
 const {
 	      Button,
@@ -23,14 +25,7 @@ const {
 	      rest_delete_state,
       } = window.jetFormBlockConditions;
 
-const NoticeInfo = ( { ...props } ) => {
-	return <div className="jet-fb-notice" { ...props }>
-		<a href="#" target="_blank">
-			<span className="dashicons"/>
-			{ __( 'What is it?', 'jet-form-builder' ) }
-		</a>
-	</div>;
-};
+const { Fill: ModalFooterFill } = ActionModalFooterSlotFill;
 
 const EditCustomRenderStates = ( {
 	setShowModal,
@@ -105,9 +100,8 @@ const EditCustomRenderStates = ( {
 	};
 
 	return <ActionModal
-		title={ __( 'Register custom render state' ) }
+		title={ __( 'Register custom render state', 'jet-form-builder' ) }
 		onRequestClose={ () => setShowModal( false ) }
-		isUseActions={ false }
 		classNames={ [ 'width-45' ] }
 	>
 		{/*<NoticeInfo style={ { marginBottom: '1em' } }/>*/ }
@@ -149,6 +143,9 @@ const EditCustomRenderStates = ( {
 				</Button> ) }
 			</div>
 		</> }
+		<ModalFooterFill>
+			<span/>
+		</ModalFooterFill>
 	</ActionModal>;
 };
 

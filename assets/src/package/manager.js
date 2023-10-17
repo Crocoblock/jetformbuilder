@@ -202,6 +202,12 @@ import ActionButtonBlockEditSlotFills
 	from './action-buttons/components/ActionButtonBlockEditSlotFills';
 import ActionButtonPlaceholder
 	from './action-buttons/components/ActionButtonPlaceholder';
+import ActionModalFooterSlotFill
+	from './action-modal/components/ActionModalFooterSlotFill';
+import useScopedAttributesContext
+	from './blocks/hooks/useScopedAttributesContext';
+import ScopedAttributesProvider
+	from './blocks/components/ScopedAttributesProvider';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -307,6 +313,8 @@ window.JetFBComponents = {
 	ActionModalHeaderSlotFill,
 	ActionButtonBlockEditSlotFills,
 	ActionButtonPlaceholder,
+	ActionModalFooterSlotFill,
+	ScopedAttributesProvider,
 };
 
 // JFBFunctions
@@ -382,5 +390,6 @@ window.JetFBHooks = {
 	useFields: useFields,
 	useSupport,
 	useLoopedAction,
+	useScopedAttributesContext,
 };
 

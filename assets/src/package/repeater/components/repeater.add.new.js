@@ -8,6 +8,11 @@ const {
 	      useContext,
       } = wp.element;
 
+/**
+ * @param props {{ item, onSetState, functions, children }}
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function RepeaterAddNew( props ) {
 	const {
 		      item,

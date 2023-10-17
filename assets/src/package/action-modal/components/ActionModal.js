@@ -1,14 +1,23 @@
 import ActionModalContext from '../context/ActionModalContext';
+import ActionModalFooterSlotFill from './ActionModalFooterSlotFill';
 
 const {
-	Button,
-	ButtonGroup,
-	Modal,
-} = wp.components;
+	      Button,
+	      ButtonGroup,
+	      Modal,
+      } = wp.components;
 
 const {
-	useState,
-} = wp.element;
+	      useState,
+      } = wp.element;
+
+const {
+	      __,
+      } = wp.i18n;
+
+const {
+	      Slot: FooterSlot,
+      } = ActionModalFooterSlotFill;
 
 function ActionModal( {
 	onRequestClose,
@@ -22,7 +31,6 @@ function ActionModal( {
 	cancelBtnProps = {},
 	cancelBtnLabel = 'Cancel',
 	fixedHeight = '',
-	isUseActions = true
 } ) {
 
 	const modalClasses = [ 'jet-form-edit-modal', ...classNames ];
@@ -54,37 +62,44 @@ function ActionModal( {
 		title={ title }
 		style={ style }
 	>
-		{ ! children && <div
+		{ !children && <div
 			className="jet-form-edit-modal__content"
 		>
-			{ 'Action callback is not found.' }
+			{ __( 'Action callback is not found.', 'jet-form-builder' ) }
 		</div> }
 		{ children && <>
-			<div className='jet-form-edit-modal__wrapper'>
-				<ActionModalContext.Provider value={ { actionClick, onRequestClose } }>
+			<div className="jet-form-edit-modal__wrapper">
+				<ActionModalContext.Provider
+					value={ { actionClick, onRequestClose } }>
 					<div className="jet-form-edit-modal__content">
-						{ 'function' === typeof children && children( { actionClick, onRequestClose } ) }
+						{ 'function' === typeof children &&
+						children( { actionClick, onRequestClose } ) }
 						{ 'function' !== typeof children && children }
 					</div>
 				</ActionModalContext.Provider>
 			</div>
-			{ isUseActions && <ButtonGroup
-				className="jet-form-edit-modal__actions"
-			>
-				<Button
-					isPrimary
-					onClick={ updateClick }
-					{ ...updateBtnProps }
-				>{ updateBtnLabel }</Button>
-				<Button
-					isSecondary
-					style={ {
-						margin: '0 0 0 10px',
-					} }
-					onClick={ cancelClick }
-					{ ...cancelBtnProps }
-				>{ cancelBtnLabel }</Button>
-			</ButtonGroup> }
+			<FooterSlot fillProps={ { updateClick, cancelClick } }>
+				{ ( fills ) => (
+					Boolean( fills?.length )
+					? fills : <ButtonGroup
+						className="jet-form-edit-modal__actions"
+					>
+						<Button
+							isPrimary
+							onClick={ updateClick }
+							{ ...updateBtnProps }
+						>{ updateBtnLabel }</Button>
+						<Button
+							isSecondary
+							style={ {
+								margin: '0 0 0 10px',
+							} }
+							onClick={ cancelClick }
+							{ ...cancelBtnProps }
+						>{ cancelBtnLabel }</Button>
+					</ButtonGroup>
+				) }
+			</FooterSlot>
 		</> }
 	</Modal>;
 }

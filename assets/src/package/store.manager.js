@@ -2,7 +2,6 @@ import actions from './actions/store';
 import gateways from './gateways/store';
 import events from './events/store';
 import blockConditions from './block-conditions/store';
-import actionButtons from './action-buttons/store';
 import macros from './macros.button/store';
 import validation from './validation/store';
 import fields from './blocks/store';
@@ -20,7 +19,6 @@ const stores = [
 	gateways,
 	events,
 	actions,
-	actionButtons,
 	blockConditions,
 	macros,
 	validation,

@@ -14,14 +14,6 @@ class Button_Submit extends Button_Type_Base {
 		return 'submit';
 	}
 
-	public function label(): string {
-		return __( 'Submit Form', 'jet-form-builder' );
-	}
-
-	public function preset_label(): string {
-		return __( 'Submit', 'jet-form-builder' );
-	}
-
 	public function html_attrs(): array {
 		$button   = array( "jet-form-builder__{$this->slug()}" );
 		$type     = jet_fb_live_args()->get_submit_type();

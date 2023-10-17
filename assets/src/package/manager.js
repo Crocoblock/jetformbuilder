@@ -53,7 +53,6 @@ import useBlockConditions from './block-conditions/hooks/useBlockConditions';
 import useUniqKey from './blocks/hooks/useUniqKey';
 import useIsAdvancedValidation from './blocks/hooks/useIsAdvancedValidation';
 import useBlockAttributes from './blocks/hooks/useBlockAttributes';
-import useActionButtonEdit from './action-buttons/hooks/useActionButtonEdit';
 import useIsHasAttribute from './hooks/useIsHasAttribute';
 import globalTab from './actions/helpers/globalTab';
 
@@ -199,6 +198,10 @@ import useLoopedAction from './actions/hooks/useLoopedAction';
 import SelectActionsControl from './actions/components/SelectActionsControl';
 import ActionModalHeaderSlotFill
 	from './actions/components/ActionModalHeaderSlotFill';
+import ActionButtonBlockEditSlotFills
+	from './action-buttons/components/ActionButtonBlockEditSlotFills';
+import ActionButtonPlaceholder
+	from './action-buttons/components/ActionButtonPlaceholder';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -302,6 +305,8 @@ window.JetFBComponents = {
 	ActionItemMoreButton,
 	SelectActionsControl,
 	ActionModalHeaderSlotFill,
+	ActionButtonBlockEditSlotFills,
+	ActionButtonPlaceholder,
 };
 
 // JFBFunctions
@@ -356,7 +361,6 @@ window.JetFBHooks = {
 	useUniqKey,
 	useBlockAttributes,
 	useIsAdvancedValidation,
-	useActionButtonEdit,
 	useGroupedValidationMessages,
 	useSanitizeFieldsMap,
 	withRequestFields,

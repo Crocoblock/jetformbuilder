@@ -31,11 +31,9 @@ trait Action_Buttons_Manager {
 	public function get_button_types_for_js() {
 		$prepared = array();
 
-		/** @var Button_Type_Base $type */
 		foreach ( $this->get_button_types() as $type ) {
 			$prepared[] = array(
 				'value'         => $type->slug(),
-				'label'         => $type->label(),
 				'button_class'  => $type->get_class( 'button' ),
 				'wrapper_class' => $type->get_class( 'wrapper' ),
 			);

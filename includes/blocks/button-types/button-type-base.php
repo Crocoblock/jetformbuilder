@@ -16,12 +16,6 @@ abstract class Button_Type_Base {
 
 	abstract public function slug(): string;
 
-	abstract public function label(): string;
-
-	public function preset_label(): string {
-		return $this->label();
-	}
-
 	public function html_attrs(): array {
 		return array(
 			'type'  => 'button',

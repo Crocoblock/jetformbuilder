@@ -18,14 +18,6 @@ class Button_Next extends Button_Type_Base {
 		return 'next';
 	}
 
-	public function label(): string {
-		return __( 'Go to Next Page', 'jet-form-builder' );
-	}
-
-	public function preset_label(): string {
-		return __( 'Next Page', 'jet-form-builder' );
-	}
-
 	public function before_render( Base $render, array $args ) {
 		self::add_next_disable( $render );
 	}

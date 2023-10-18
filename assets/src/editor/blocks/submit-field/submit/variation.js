@@ -5,7 +5,7 @@ const {
 const variation = {
 	name: 'submit',
 	isDefault: true,
-	title: __( 'Submit Form', 'jet-form-builder' ),
+	title: __( 'Action Button', 'jet-form-builder' ),
 	isActive: [ 'action_type' ],
 	description: __(
 		`Add the button by clicking which users can submit the form`,

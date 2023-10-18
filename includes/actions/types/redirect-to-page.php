@@ -145,8 +145,8 @@ class Redirect_To_Page extends Base {
 			'redirect_type' => __( 'Redirect to:', 'jet-form-builder' ),
 			'redirect_page' => __( 'Select page:', 'jet-form-builder' ),
 			'redirect_url'  => __( 'Redirect URL:', 'jet-form-builder' ),
-			'redirect_args' => __( 'Add query arguments to the redirect URL:', 'jet-form-builder' ),
-			'redirect_hash' => __( 'Add hash to the redirect URL:', 'jet-form-builder' ),
+			'redirect_args' => __( 'Add query arguments to redirect URL:', 'jet-form-builder' ),
+			'redirect_hash' => __( 'Add hash to redirect URL:', 'jet-form-builder' ),
 		);
 	}
 
@@ -169,7 +169,7 @@ class Redirect_To_Page extends Base {
 		return array(
 			array(
 				'value' => '',
-				'label' => __( 'Select redirect to...', 'jet-form-builder' ),
+				'label' => __( 'Set a redirect to...', 'jet-form-builder' ),
 			),
 			array(
 				'value' => 'static_page',

@@ -232,9 +232,9 @@ function VerificationRender( { onChangeSettingObj, settings } ) {
 				/>
 				<BaseHelp style={ { marginTop: '-4px' } }>
 					{ __(
-						`How long verification link will be active and 
-available to check. If you leave this field blank or enter 0, 
-then verification can be completed at any time.`,
+						`Indicates for how many hours a verification link 
+will be active. If you leave this field empty or enter "0", it means 
+verification can be completed at any given time.`,
 						'jet-form-builder',
 					) }
 				</BaseHelp>
@@ -255,7 +255,8 @@ then verification can be completed at any time.`,
 				/>
 				<BaseHelp>
 					{ __(
-						`Send verification link to email address from this field.`,
+						`Send a verification link to the email address 
+provided in this field.`,
 						'jet-form-builder',
 					) }
 				</BaseHelp>
@@ -284,9 +285,9 @@ then verification can be completed at any time.`,
 			checked={ Boolean( settings.custom_email ) }
 			onChange={ custom_email => onChangeSettingObj( { custom_email } ) }
 			help={ __(
-				`If disabled - standard verification email will be sent. 
-If enabled - you can create your own verification email with 
-a separate Send Email action`,
+				`If disabled, a standard verification email will be sent. 
+If enabled, you can create a custom verification email 
+with a separate Send Email action.`,
 				'jet-form-builder',
 			) }
 		>
@@ -319,8 +320,8 @@ a separate Send Email action`,
 				  ? <>
 					  <BaseHelp>
 						  { __(
-							  `You have already configured 
-Redirect to Page action with event:`,
+							  `You have already configured the 
+Redirect to Page action with the event:`,
 							  'jet-form-builder',
 						  ) }
 						  <code>{ SUCCESS_EVENT }</code>
@@ -361,7 +362,7 @@ Redirect to Page action with event:`,
 					  <BaseHelp style={ { marginTop: '-1em' } }>
 						  { __(
 							  `Select a page for the redirect after successful 
-verification. By default, you will be redirected to the form page. Or`,
+verification. By default, the user is redirected to the form page. Or`,
 							  'jet-form-builder',
 						  ) }
 						  &nbsp;
@@ -397,8 +398,8 @@ verification. By default, you will be redirected to the form page. Or`,
 				  ? <>
 					  <BaseHelp>
 						  { __(
-							  `You have already configured 
-Redirect to Page action with event:`,
+							  `You have already configured the
+Redirect to Page action with the event:`,
 							  'jet-form-builder',
 						  ) }
 						  <code>{ FAILED_EVENT }</code>
@@ -439,8 +440,8 @@ Redirect to Page action with event:`,
 					  />
 					  <BaseHelp style={ { marginTop: '-1em' } }>
 						  { __(
-							  `Select a page for the redirect after a failed 
-redirect attempt. By default, you will be redirected to the form page. Or`,
+							  `Select a page for the redirect after verification 
+failure. By default, the user is redirected to the form page. Or`,
 							  'jet-form-builder',
 						  ) }
 						  &nbsp;

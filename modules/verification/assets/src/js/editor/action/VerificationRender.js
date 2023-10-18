@@ -344,7 +344,7 @@ Redirect to Page action with the event:`,
 							  } }
 						  >
 							  { __(
-								  'Edit success Redirect to Page',
+								  'Edit verification success redirect',
 								  'jet-form-builder',
 							  ) }
 						  </Button>
@@ -422,7 +422,7 @@ Redirect to Page action with the event:`,
 							  } }
 						  >
 							  { __(
-								  'Edit failed Redirect to Page',
+								  'Edit verification failed redirect',
 								  'jet-form-builder',
 							  ) }
 						  </Button>

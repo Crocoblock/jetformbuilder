@@ -106,7 +106,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		return $value;
 	}
 
-	protected function check_response() {
+	public function check_response() {
 		if (
 			$this->is_inside_conditional() ||
 			( Tools::is_empty( $this->value ) && ! $this->is_required ) ||

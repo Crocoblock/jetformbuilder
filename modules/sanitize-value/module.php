@@ -78,7 +78,7 @@ final class Module implements
 		 *
 		 * @see \JFB_Modules\Block_Parsers\Module::init_hooks
 		 */
-		add_action( 'jet-form-builder/request', array( $this, 'sanitize_request' ), 1 );
+		add_action( 'jet-form-builder/validate-field', array( $this, 'sanitize_field' ) );
 	}
 
 	public function remove_hooks() {
@@ -87,7 +87,7 @@ final class Module implements
 			array( $this, 'register_editor_scripts' ),
 			0
 		);
-		remove_action( 'jet-form-builder/request', array( $this, 'init_request' ), 1 );
+		remove_action( 'jet-form-builder/validate-field', array( $this, 'sanitize_field' ) );
 	}
 
 	public function register_support( \WP_Block_Type $block_type ) {
@@ -97,7 +97,7 @@ final class Module implements
 		}
 
 		if ( block_has_support( $block_type, array( self::SUPPORT_NAME ) ) &&
-			! array_key_exists( self::ATTRIBUTE_NAME, $block_type->attributes )
+		     ! array_key_exists( self::ATTRIBUTE_NAME, $block_type->attributes )
 		) {
 			$block_type->attributes[ self::ATTRIBUTE_NAME ] = array(
 				'type'    => 'array',
@@ -124,26 +124,24 @@ final class Module implements
 		);
 	}
 
-	public function sanitize_request() {
-		/** @var Field_Data_Parser $parser */
-		foreach ( jet_fb_context()->iterate_parsers_list() as $parser ) {
-			if ( $parser->is_in_template() ) {
-				continue;
-			}
-			/** @var Value_Sanitizer_It $sanitizer */
-			foreach ( $this->iterate_sanitizers( $parser ) as $sanitizer ) {
-				$sanitizer->do_sanitize( $parser );
-			}
-		}
-	}
-
-	private function iterate_sanitizers( Field_Data_Parser $parser ): \Generator {
+	public function sanitize_field( Field_Data_Parser $parser ) {
 		$sanitizers = $parser->get_setting( self::ATTRIBUTE_NAME );
 
-		if ( ! is_array( $sanitizers ) ) {
+		// skip sanitize, if we don't have applied sanitizers or already have the errors
+		if ( ! is_array( $sanitizers ) || count( $parser->get_errors() ) ) {
 			return;
 		}
 
+		/** @var Value_Sanitizer_It $sanitizer */
+		foreach ( $this->iterate_sanitizers( $sanitizers ) as $sanitizer ) {
+			$sanitizer->do_sanitize( $parser );
+		}
+
+		// value has changed, so we need to re-run validation
+		$parser->check_response();
+	}
+
+	private function iterate_sanitizers( array $sanitizers ): \Generator {
 		foreach ( $sanitizers as $sanitizer ) {
 			$type = is_array( $sanitizer ) ? ( $sanitizer['value'] ?? '' ) : $sanitizer;
 

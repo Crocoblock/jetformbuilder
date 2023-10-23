@@ -11,7 +11,6 @@ const base = {
 
 const settings = {
 	render: PluginActions,
-	icon: 'admin-plugins',
 };
 
 export default {

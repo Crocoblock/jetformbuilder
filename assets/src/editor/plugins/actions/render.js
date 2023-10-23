@@ -64,7 +64,6 @@ function PluginActions() {
 
 	return <PluginDocumentSettingPanel
 		title={ __( 'Post Submit Actions', 'jet-form-builder' ) }
-		icon="admin-plugins"
 		className="jfb-actions-panel"
 	>
 		{ Children.map(

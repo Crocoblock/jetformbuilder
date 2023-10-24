@@ -57,20 +57,11 @@ function BulkOptions( { setModalContent } ) {
 	);
 
 	return <>
-		<BaseControl className="jet-fb clear-control">
-			<SelectControl
-				value={ bulkSelect }
-				onChange={ setBulkSelect }
-				options={ window.JetFBBulkOptions.list }
-			/>
-		</BaseControl>
-		<hr style={ { marginBottom: '1.5em', marginTop: '1.5em' } }/>
-		<BaseHelp>
-			{ __(
-				'In this field we have to insert an array of objects in JSON format.',
-				'jet-form-builder',
-			) }
-		</BaseHelp>
+		<SelectControl
+			value={ bulkSelect }
+			onChange={ setBulkSelect }
+			options={ window.JetFBBulkOptions.list }
+		/>
 		<TextareaControl
 			className="jet-control-clear"
 			value={ bulk }

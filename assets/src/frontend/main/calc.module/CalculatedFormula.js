@@ -13,6 +13,11 @@ const {
 	      addFilter,
       } = JetPlugins.hooks;
 
+const {
+	      __,
+	      sprintf,
+      } = wp.i18n;
+
 addFilter(
 	'jet.fb.custom.formula.macro',
 	'jet-form-builder',
@@ -55,7 +60,7 @@ CalculatedFormula.prototype = {
 	 */
 	input: null,
 	/**
-	 * @type {Observable}
+	 * @type {Observable|ObservableRow}
 	 */
 	root: null,
 	/**
@@ -101,6 +106,8 @@ CalculatedFormula.prototype = {
 	observeItem( value ) {
 		let match;
 		let prevIndex = 0;
+
+		value += '';
 
 		while ( (
 			match = this.regexp.exec( value )
@@ -264,9 +271,16 @@ CalculatedFormula.prototype = {
 		}
 		const formula = this.calculateString();
 
-		return (
-			new Function( 'return ' + formula )
-		)();
+		try {
+			return (
+				new Function( 'return ' + formula )
+			)();
+		}
+		catch ( error ) {
+			//console.error( error );
+			this.showError( formula );
+		}
+
 	},
 	clearWatchers() {
 		this.watchers.forEach(
@@ -275,6 +289,59 @@ CalculatedFormula.prototype = {
 		this.watchers     = [];
 		this.relatedAttrs = [];
 		this.related      = [];
+	},
+	showError( formula ) {
+		console.group(
+			__(
+				'JetFormBuilder: You have invalid calculated formula',
+				'jet-form-builder',
+			),
+		);
+
+		this.showErrorDetails( formula );
+
+		console.groupEnd();
+	},
+	showErrorDetails( formula ) {
+		console.error(
+			sprintf(
+				__( 'Initial: %s', 'jet-form-builder' ),
+				this.formula,
+			),
+		);
+		console.error(
+			sprintf(
+				__( 'Computed: %s', 'jet-form-builder' ),
+				formula,
+			),
+		);
+
+		if ( !this.input && !this.root?.parent ) {
+			return;
+		}
+
+		if ( this.input ) {
+			console.error(
+				sprintf(
+					__( 'Field: %s', 'jet-form-builder' ),
+					this.input.path.join( '.' ),
+				),
+			);
+
+			return;
+		}
+
+		const index = this.root.parent.findIndex( this.root );
+
+		console.error(
+			sprintf(
+				__( 'Scope: %s', 'jet-form-builder' ),
+				[
+					...this.root.parent.path,
+					-1 === index ? '' : index,
+				].filter( Boolean ).join( '.' ),
+			),
+		);
 	},
 };
 

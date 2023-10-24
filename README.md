@@ -4,6 +4,19 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.1.6
+* FIX: Minor vulnerability in Update User action
+* FIX: Invalid deletion of first element of repeater field
+* FIX: Form doesn't go to top of each step in some cases
+* FIX: Ignore the value 0 in the Select/Radio/Checkbox Fields
+* FIX: Minor compatibility with language plugins
+
+## 3.1.5
+* ADD: Friendly notice in browser console about error in Calculated formula
+* FIX: Conditional Block with required field always throws Validation error
+* FIX: Displays html in the value of the fields on the single record page
+* FIX: Application of shortcodes inside the form when it is displayed by the shortcode
+
 ## 3.1.4
 * ADD: User Display Name in dynamic preset
 * FIX: Uncaught Exception: upload_mime_types

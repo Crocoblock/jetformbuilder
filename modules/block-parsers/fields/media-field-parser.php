@@ -37,7 +37,13 @@ class Media_Field_Parser extends Field_Data_Parser {
 				$this->get_file()->has_error()
 			)
 		) {
-			return false;
+			/**
+			 * We should leave here $this->value for case, while this field exporting
+			 * with values from Form Record
+			 *
+			 * @see https://github.com/Crocoblock/issues-tracker/issues/4422
+			 */
+			return $this->value;
 		}
 		do_action( 'jet-form-builder/media-field/before-upload', $this );
 

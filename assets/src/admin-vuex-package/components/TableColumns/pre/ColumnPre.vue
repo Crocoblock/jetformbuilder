@@ -1,6 +1,6 @@
 <template>
 	<span>
-		<pre v-html="parsedValue" v-if="isShowOverflow"></pre>
+		<pre v-if="isShowOverflow">{{ parsedValue }}</pre>
 		<span v-else>{{ value }}</span>
 	</span>
 </template>

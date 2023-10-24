@@ -24,9 +24,12 @@ abstract class Base_Db_Model {
 	const CREATED_AT = 'created_at';
 	const UPDATED_AT = 'updated_at';
 
+	const DATETIME_FORMAT = 'Y-m-d H:i:s';
+
 	protected static $prefix = self::DB_TABLE_PREFIX;
 
 	protected $silence = false;
+	protected $gmt     = 0;
 
 	/**
 	 * Returns table name
@@ -218,7 +221,7 @@ abstract class Base_Db_Model {
 		$schema_keys = array_keys( static::schema() );
 
 		if ( in_array( self::CREATED_AT, $schema_keys, true ) ) {
-			$defaults[ self::CREATED_AT ] = current_time( 'mysql' );
+			$defaults[ self::CREATED_AT ] = current_time( 'mysql', $this->gmt );
 		}
 
 		return $defaults;
@@ -275,7 +278,7 @@ abstract class Base_Db_Model {
 		if ( in_array( self::UPDATED_AT, $schema_keys, true ) &&
 			! array_key_exists( self::UPDATED_AT, $columns )
 		) {
-			$columns[ self::UPDATED_AT ] = current_time( 'mysql' );
+			$columns[ self::UPDATED_AT ] = current_time( 'mysql', $this->gmt );
 		}
 
 		return $columns;

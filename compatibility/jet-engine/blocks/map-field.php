@@ -18,7 +18,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Map_Field extends Base {
 
-	const HANDLE = 'jet-fb-map-field';
+	const HANDLE       = 'jet-fb-map-field';
+	const DEFAULT_ZOOM = 14;
 
 	/**
 	 * @return string
@@ -39,6 +40,7 @@ class Map_Field extends Base {
 			'height'       => $this->block_attrs['height'] ?? 300,
 			'format'       => $this->block_attrs['format'] ?? Map_Tools::STRING,
 			'field_prefix' => $this->block_attrs['name'] ?? '',
+			'zoom'         => $this->block_attrs['zoom'] ?? 14,
 		);
 	}
 
@@ -56,6 +58,79 @@ class Map_Field extends Base {
 			'lat'  => '%key|md5%_lat',
 			'lng'  => '%key|md5%_lng',
 		);
+	}
+
+	public function set_preset() {
+		parent::set_preset();
+
+		$this->apply_plain_coords();
+		$this->sanitize_zoom();
+	}
+
+	/**
+	 * Allows you to specify default coordinates in the following format:
+	 * 50.4496017860376, 30.52537590265274.
+	 *
+	 * Where the first number is lat (Latitude), and the second is lng (Longitude)
+	 *
+	 * @since 3.2.0
+	 */
+	private function apply_plain_coords() {
+		if ( empty( $this->block_attrs['default'] ) ||
+			! is_string( $this->block_attrs['default'] )
+		) {
+			$this->apply_plain_preset();
+
+			return;
+		}
+
+		$this->try_to_split_coords( $this->block_attrs['default'] );
+	}
+
+	private function apply_plain_preset() {
+		if ( empty( $this->block_attrs['default']['self'] ) ||
+			! is_string( $this->block_attrs['default']['self'] ) ||
+			! empty( $this->block_attrs['default']['lat'] ) ||
+			! empty( $this->block_attrs['default']['lng'] )
+		) {
+			return;
+		}
+
+		$this->try_to_split_coords( $this->block_attrs['default']['self'] );
+	}
+
+	private function try_to_split_coords( string $plain_coords ) {
+		$parts = array_map( 'trim', explode( ',', $plain_coords ) );
+
+		if ( 2 !== count( $parts ) ) {
+			return;
+		}
+
+		foreach ( $parts as $coordinate ) {
+			if ( ! is_numeric( $coordinate ) ) {
+				return;
+			}
+		}
+
+		$this->block_attrs['default'] = array(
+			'self' => $plain_coords,
+			'lat'  => $parts[0],
+			'lng'  => $parts[1],
+		);
+	}
+
+	private function sanitize_zoom() {
+		if ( ! array_key_exists( 'zoom', $this->block_attrs ) ) {
+			return;
+		}
+
+		$zoom = &$this->block_attrs['zoom'];
+
+		if ( ! is_numeric( $zoom ) ||
+			$zoom < 1 || 18 < $zoom
+		) {
+			$zoom = self::DEFAULT_ZOOM;
+		}
 	}
 
 	public function expected_preset_type(): array {

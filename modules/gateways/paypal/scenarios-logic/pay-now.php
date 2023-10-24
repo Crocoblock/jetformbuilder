@@ -99,7 +99,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		$payment = $action->send_request();
 
 		if ( empty( $payment['id'] ) ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Gateway_Exception( esc_html( $payment['message'] ), $payment );
 		}
 
@@ -235,7 +235,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 		} catch ( Sql_Exception $exception ) {
 			return;
 		} finally {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Gateway_Exception( 'Payment was voided', $payment );
 		}
 	}

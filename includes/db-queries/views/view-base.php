@@ -213,7 +213,7 @@ abstract class View_Base implements Model_Dependencies_Interface {
 		if ( empty( $prepared ) ) {
 			throw new Query_Builder_Exception(
 				esc_html( $this->empty_message() ),
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				$row
 			);
 		}
@@ -233,7 +233,7 @@ abstract class View_Base implements Model_Dependencies_Interface {
 		if ( empty( $prepared ) ) {
 			throw new Query_Builder_Exception(
 				esc_html( $this->empty_message() ),
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				$values
 			);
 		}
@@ -300,8 +300,7 @@ abstract class View_Base implements Model_Dependencies_Interface {
 	 * @throws Query_Builder_Exception
 	 */
 	public static function findById( $primary_id ): array {
-		return static::find( array( 'id' => $primary_id ) )
-					->set_limit( array( 1 ) )
+		return static::findOne( array( 'id' => $primary_id ) )
 					->query()
 					->query_one();
 	}

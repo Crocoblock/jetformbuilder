@@ -91,9 +91,9 @@ function getGeneratorAdditionalFields( genFunction, props ) {
 					key='from_generator__value_from_meta'
 					label='Value from meta field'
 					help={ attrHelp( 'value_from_meta' ) }
-					value={ attributes.from_generator__value_from_meta }
-					onChange={ ( newValue ) => {
-						setAttributes( { from_generator__value_from_meta: newValue } );
+					value={ attributes.value_from_key }
+					onChange={ value_from_key => {
+						setAttributes( { value_from_key } );
 					} }
 				/>
 				<TextControl

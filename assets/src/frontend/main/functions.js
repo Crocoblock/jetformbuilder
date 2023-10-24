@@ -104,6 +104,10 @@ function toHTML( text ) {
 }
 
 function isEmpty( value ) {
+	if ( 'boolean' === typeof value ) {
+		return !value;
+	}
+
 	if ( null === value || undefined === value ) {
 		return true;
 	}
@@ -134,7 +138,34 @@ function isVisible( node ) {
 function getOffsetTop( node ) {
 	const rect = node.getBoundingClientRect();
 
-	return rect?.top + window.scrollY;
+	const maybeWindow = getScrollParent( node );
+
+	return rect?.top + (
+		maybeWindow?.scrollY ?? 0
+	);
+}
+
+const getNode = current => (
+	current.scrollHeight > current.clientHeight ? current : false
+);
+
+function getScrollParent( node ) {
+
+	// jet-popup compatibility
+	let container = node.closest( '.jet-popup__container-inner' );
+
+	if ( container ) {
+		return getNode( container );
+	}
+
+	// elementor-pro popup compatibility
+	container = node.closest( '.elementor-popup-modal .dialog-message' );
+
+	if ( container ) {
+		return getNode( container );
+	}
+
+	return window;
 }
 
 /**
@@ -159,4 +190,5 @@ export {
 	getOffsetTop,
 	focusOnInvalidInput,
 	isVisible,
+	getScrollParent,
 };

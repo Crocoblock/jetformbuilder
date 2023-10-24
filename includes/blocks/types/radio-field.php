@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
+use Jet_Form_Builder\Blocks\Module;
 use Jet_Form_Builder\Blocks\Native_Block_Wrapper_Attributes;
 use Jet_Form_Builder\Blocks\Render\Radio_Field_Render;
 
@@ -17,6 +18,7 @@ class Radio_Field extends Base implements Native_Block_Wrapper_Attributes {
 
 	use Base_Select_Radio_Check;
 
+	const HANDLE = 'jet-fb-radio-field';
 
 	/**
 	 * Returns block name
@@ -25,6 +27,25 @@ class Radio_Field extends Base implements Native_Block_Wrapper_Attributes {
 	 */
 	public function get_name() {
 		return 'radio-field';
+	}
+
+	public function register_block_type() {
+		parent::register_block_type();
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
+		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_scripts' ) );
+	}
+
+	public function register_scripts() {
+		wp_register_script(
+			self::HANDLE,
+			jet_form_builder()->plugin_url( 'assets/js/frontend/radio.field.js' ),
+			array(
+				Module::MAIN_SCRIPT_HANDLE,
+			),
+			jet_form_builder()->get_version(),
+			true
+		);
 	}
 
 	public function get_css_scheme() {
@@ -204,9 +225,9 @@ class Radio_Field extends Base implements Native_Block_Wrapper_Attributes {
 
 		$this->controls_manager->add_control(
 			array(
-				'id'           => 'item_normal_background_color',
-				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'id'    => 'item_normal_background_color',
+				'type'  => 'color-picker',
+				'label' => __( 'Background Color', 'jet-form-builder' ),
 
 				'css_selector' => array(
 					// editor
@@ -379,6 +400,12 @@ class Radio_Field extends Base implements Native_Block_Wrapper_Attributes {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
+		wp_enqueue_script( self::HANDLE );
+
+		if ( ! empty( $this->block_attrs['custom_option'] ) ) {
+			wp_enqueue_script( Checkbox_Field::HANDLE_CUSTOM );
+		}
+
 		return ( new Radio_Field_Render( $this ) )->render();
 	}
 

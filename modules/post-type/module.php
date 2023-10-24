@@ -11,6 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 use Jet_Form_Builder\Classes\Arguments\Default_Form_Arguments;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Compatibility;
+use Jet_Form_Builder\Classes\Tools;
 use JFB_Modules\Post_Type\Actions_Repository;
 use Jet_Form_Builder\Shortcodes\Manager;
 use JFB_Components\Module\Base_Module_After_Install_It;
@@ -50,7 +51,7 @@ class Module implements
 	private $meta;
 
 	/** @var Actions_Repository */
-	private $actions;
+	private $post_actions;
 
 	const CAPABILITIES = array(
 		'edit_jet_fb_form',
@@ -74,19 +75,19 @@ class Module implements
 	}
 
 	public function on_install() {
-		$this->meta    = new Meta_Repository();
-		$this->actions = new Actions_Repository();
+		$this->meta         = new Meta_Repository();
+		$this->post_actions = new Actions_Repository();
 
 		$this->get_meta()->rep_install();
 
 		if ( is_admin() ) {
-			$this->actions->rep_install();
+			$this->post_actions->rep_install();
 		}
 	}
 
 	public function on_uninstall() {
 		$this->get_meta()->rep_clear();
-		$this->get_actions()->rep_clear();
+		$this->get_post_actions()->rep_clear();
 	}
 
 	public function init_hooks() {
@@ -107,7 +108,7 @@ class Module implements
 		// watch on this methods performance because it executed multiple times on each page load
 		add_filter( 'user_has_cap', array( $this, 'add_admin_capabilities' ) );
 
-		add_filter( 'post_row_actions', array( $this->get_actions(), 'base_add_action_links' ), 10, 2 );
+		add_filter( 'post_row_actions', array( $this->get_post_actions(), 'base_add_action_links' ), 10, 2 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'import_form_js' ) );
 	}
 
@@ -129,7 +130,7 @@ class Module implements
 		// watch on this methods performance because it executed multiple times on each page load
 		remove_filter( 'user_has_cap', array( $this, 'add_admin_capabilities' ) );
 
-		remove_filter( 'post_row_actions', array( $this->get_actions(), 'base_add_action_links' ) );
+		remove_filter( 'post_row_actions', array( $this->get_post_actions(), 'base_add_action_links' ) );
 		remove_action( 'admin_enqueue_scripts', array( $this, 'import_form_js' ) );
 	}
 
@@ -265,7 +266,7 @@ class Module implements
 			return;
 		}
 
-		$action = $this->get_actions()->get( 'jet_fb_import' );
+		$action = $this->get_post_actions()->get( 'jet_fb_import' );
 
 		$import_button = __( 'Start Import', 'jet-form-builder' );
 
@@ -365,6 +366,10 @@ class Module implements
 		return $this->get_meta()->get_validation( $form_id );
 	}
 
+	public function get_actions( $form_id = false ): array {
+		return $this->get_meta()->get_actions( $form_id );
+	}
+
 	public function get_meta(): Meta_Repository {
 		return $this->meta;
 	}
@@ -372,8 +377,8 @@ class Module implements
 	/**
 	 * @return Actions_Repository
 	 */
-	public function get_actions(): Actions_Repository {
-		return $this->actions;
+	public function get_post_actions(): Actions_Repository {
+		return $this->post_actions;
 	}
 
 	/**
@@ -383,6 +388,23 @@ class Module implements
 	 */
 	public function slug(): string {
 		return self::SLUG;
+	}
+
+	/**
+	 * @return Actions_Repository
+	 */
+	public function get_form_meta( $meta_key, $form_id = false ) {
+		if ( false === $form_id ) {
+			$form_id = jet_fb_live()->form_id;
+		}
+
+		return Tools::decode_json(
+			get_post_meta(
+				$form_id,
+				$meta_key,
+				true
+			)
+		);
 	}
 
 }

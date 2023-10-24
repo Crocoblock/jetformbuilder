@@ -39,7 +39,7 @@ class Verify_Token_Action extends Base_Gateway_Action implements
 			return $response;
 		}
 
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		throw new Gateway_Exception( 'captcha_failed', $response, $this->get_request_args() );
 	}
 

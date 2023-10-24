@@ -5,6 +5,9 @@ const {
 	      useEffect,
       } = wp.element;
 
+/**
+ * @param callback {Function}
+ */
 function useOnUpdateModal( callback ) {
 	const { actionClick, onRequestClose } = useContext( ActionModalContext );
 

@@ -106,9 +106,9 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		return $value;
 	}
 
-	protected function check_response() {
+	public function check_response() {
 		if (
-			$this->context->is_inside_conditional() ||
+			$this->is_inside_conditional() ||
 			( Tools::is_empty( $this->value ) && ! $this->is_required ) ||
 			! Tools::is_empty( $this->value )
 		) {
@@ -392,6 +392,22 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		$this->set_inner_template( $context );
 	}
 
+	/**
+	 * This applies to the case where the parser is inside a repeater string template.
+	 * The difference between the template and the actual context is that the template
+	 * cannot contain fields with values, so there is nothing to sanitize there
+	 *
+	 * @return bool
+	 * @since 3.2.0
+	 */
+	public function is_in_template(): bool {
+		if ( ! $this->get_context()->get_parent_field() ) {
+			return false;
+		}
+
+		return '' === $this->get_context()->get_index_in_parent();
+	}
+
 	public function get_scoped_name(): string {
 		return trim( $this->get_context()->get_parent_name() . '.' . $this->get_name(), '.' );
 	}
@@ -436,6 +452,14 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 
 	public function get_errors(): array {
 		return $this->errors;
+	}
+
+	public function set_inside_conditional( bool $is_inside ) {
+		$this->set_setting( '_inside_conditional', $is_inside );
+	}
+
+	public function is_inside_conditional(): bool {
+		return (bool) $this->get_setting( '_inside_conditional' );
 	}
 
 	/**

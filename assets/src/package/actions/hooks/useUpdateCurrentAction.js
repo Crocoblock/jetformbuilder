@@ -12,11 +12,12 @@ const {
  */
 export const useUpdateCurrentAction = () => {
 	const { currentAction } = useCurrentAction();
+
 	const {
 		      setCurrentAction,
 		      clearCurrent,
 		      updateCurrentConditions,
-	      }                 = useDispatch( 'jet-forms/actions', [] );
+	      } = useDispatch( 'jet-forms/actions', [] );
 
 	const setTypeSettings = settings => {
 		setCurrentAction( {

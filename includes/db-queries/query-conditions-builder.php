@@ -36,6 +36,10 @@ class Query_Conditions_Builder {
 	const TYPE_NOT_EQUAL    = 'not_equal_column';
 	const TYPE_LIKE_END     = 'like_end';
 	const TYPE_NOT_LIKE_END = 'not_like_end';
+	/**
+	 * @since 3.2.0
+	 */
+	const TYPE_IS_NULL = 'is_null';
 
 	/**
 	 * @since 3.1.0
@@ -101,6 +105,12 @@ class Query_Conditions_Builder {
 			),
 			self::TYPE_MORE_OR_EQUAL_STATIC => array(
 				'callback' => array( $this, 'build_more_or_equal_static' ),
+			),
+			/**
+			 * @since 3.2.0
+			 */
+			self::TYPE_IS_NULL              => array(
+				'callback' => array( $this, 'build_is_null' ),
 			),
 		);
 	}
@@ -175,13 +185,11 @@ class Query_Conditions_Builder {
 			return sprintf( "(\r\n%s\r\n)", $condition->prepare_conditions() );
 		}
 
-		$type = $this->get_condition_type();
-
-		list ( $first, $second ) = $this->get_condition_values();
-
+		$type     = $this->get_condition_type();
+		$values   = $this->get_condition_values();
 		$callback = $this->get_types()[ $type ]['callback'];
 
-		return call_user_func( $callback, $first, $second );
+		return call_user_func( $callback, $values[0], $values[1] ?? false );
 	}
 
 	/**
@@ -415,8 +423,8 @@ class Query_Conditions_Builder {
 
 	/**
 	 * .wrap > *:not(h1, #poststuff) {
-	display: none;
-	}
+	 * display: none;
+	 * }
 	 */
 	/**
 	 * @param $column_name
@@ -505,6 +513,27 @@ class Query_Conditions_Builder {
 		}
 
 		return "{$column_name} IN ({$right_part})";
+	}
+
+	/**
+	 * @param $column_name
+	 *
+	 * @return string
+	 * @since 3.2.0
+	 *
+	 */
+	public function build_is_null( $column_name ): string {
+		$column_name = Db_Tools::sanitize_column( $column_name );
+
+		try {
+			$column_name = $this->view()->column( $column_name );
+		} catch ( Query_Builder_Exception $exception ) {
+			// silence
+		}
+
+		// phpcs:disable WordPress.DB
+		return sprintf( '%s IS NULL', $column_name );
+		// phpcs:enable WordPress.DB
 	}
 
 	/**

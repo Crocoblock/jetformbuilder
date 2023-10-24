@@ -141,7 +141,7 @@ class Getresponse extends Integration_Base_Action {
 		if ( isset( $response['httpStatus'] ) && isset( $response['code'] ) ) {
 			throw new Action_Exception(
 				esc_html( "derror|{$response['message']}" ),
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				$response
 			);
 		}

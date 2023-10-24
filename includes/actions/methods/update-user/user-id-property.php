@@ -55,7 +55,7 @@ class User_Id_Property extends Base_Object_Property {
 		$this->user = get_user_by( 'ID', $this->value );
 
 		if ( ! is_a( $this->user, \WP_User::class ) ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Action_Exception( 'internal_error', $this->user, $this->value );
 		}
 	}

@@ -124,7 +124,7 @@ class File_Uploader {
 	protected function sanitize_permissions() {
 		$cap = ! empty( $this->settings['allowed_user_cap'] ) ? $this->settings['allowed_user_cap'] : 'upload_files';
 
-		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		if ( 'any_user' !== $cap && ! is_user_logged_in() ) {
 			throw new Upload_Permission_Exception(
 				__( 'You are not allowed to upload files', 'jet-form-builder' )
@@ -136,7 +136,7 @@ class File_Uploader {
 				__( 'You are not allowed to upload files', 'jet-form-builder' )
 			);
 		}
-		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:enable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 	}
 
 	/**

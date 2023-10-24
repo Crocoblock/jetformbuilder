@@ -9,4 +9,11 @@ export default {
 		Functions.getLoadingItem(),
 	],
 	computedFields: [],
+	list: window.jetFormActionTypes.map( function ( action ) {
+		return {
+			value: action.id,
+			label: action.name,
+			disabled: !!action.disabled,
+		};
+	} ),
 };

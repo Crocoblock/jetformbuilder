@@ -18,14 +18,23 @@ const {
 const {
 	      __,
       } = wp.i18n;
+
 const {
 	      InspectorControls,
 	      useBlockProps,
+	      BlockSettingsMenuControls,
       } = wp.blockEditor;
+
 const {
-	      ToggleControl,
 	      PanelBody,
+	      ToolbarButton,
+	      MenuItem,
       } = wp.components;
+
+const {
+	      SVG,
+	      Path,
+      } = wp.primitives;
 
 const {
 	      useUniqueNameOnDuplicate,
@@ -37,6 +46,7 @@ export default function RadioEdit( props ) {
 		      isSelected,
 		      attributes,
 		      editProps: { uniqKey },
+		      setAttributes,
 	      } = props;
 
 	const blockProps = useBlockProps();
@@ -53,10 +63,33 @@ export default function RadioEdit( props ) {
 	}
 
 	return <>
-		<ToolBarFields
-			key={ uniqKey( 'ToolBarFields' ) }
-			{ ...props }
-		/>
+		{ isSelected && <BlockSettingsMenuControls>
+			<MenuItem
+				onClick={ () => setAttributes( {
+					custom_option: !attributes.custom_option,
+				} ) }
+				icon={ attributes.custom_option
+				       ? <svg xmlns="http://www.w3.org/2000/svg"
+				              viewBox="0 0 24 24" width="36" height="36"
+				              aria-hidden="true" focusable="false">
+					       <path
+						       d="M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"/>
+				       </svg>
+				       : <svg xmlns="http://www.w3.org/2000/svg"
+				              viewBox="0 0 24 24" width="36" height="36"
+				              aria-hidden="true" focusable="false">
+					       <path
+						       d="M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z"/>
+				       </svg>
+				}
+			>
+				{ attributes.custom_option
+				  ? __( 'Disable custom option', 'jet-form-builder' )
+				  : __( 'Enable custom option', 'jet-form-builder' )
+				}
+			</MenuItem>
+		</BlockSettingsMenuControls> }
+		<ToolBarFields/>
 		<SwitchPageOnChangeControls/>
 		{ isSelected && <InspectorControls
 			key={ uniqKey( 'InspectorControls' ) }

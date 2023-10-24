@@ -53,7 +53,7 @@ class Tags_Contact_Property extends Base_Object_Property {
 		try {
 			$api_tags->check_response_code()->response_body_as_array();
 		} catch ( Gateway_Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Action_Exception( 'internal_error', $api_tags->get_request_args() );
 		}
 
@@ -93,11 +93,15 @@ class Tags_Contact_Property extends Base_Object_Property {
 		$api->set_tag( $tag );
 
 		try {
-			$response = $api->send_request();
+			$api->send_request();
+			$api->check_response_code();
+
 		} catch ( Gateway_Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Action_Exception( 'internal_error', $api->get_request_args() );
 		}
+
+		$response = $api->get_response_body();
 
 		return (int) ( $response['tag']['id'] ?? 0 );
 	}
@@ -117,7 +121,7 @@ class Tags_Contact_Property extends Base_Object_Property {
 		try {
 			$api->request()->check_response_code();
 		} catch ( Gateway_Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Action_Exception( 'internal_error', $api->get_request_args() );
 		}
 	}

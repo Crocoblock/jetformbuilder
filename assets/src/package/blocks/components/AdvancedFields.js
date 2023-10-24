@@ -5,24 +5,21 @@ import BlockVisibility from './BlockVisibility';
 import BlockClassName from './BlockClassName';
 
 const {
-	      PanelBody,
-      } = wp.components;
-const {
 	      __,
       } = wp.i18n;
 
+const {
+	      InspectorControls,
+      } = wp.blockEditor;
+
 function AdvancedFields() {
-	return <PanelBody
-		title={ __( 'Advanced', 'jet-form-builder' ) }
-		key={ 'jet-form-advanced-fields' }
-		initialOpen={ false }
-	>
+	return <InspectorControls group="advanced">
 		<BlockPlaceholder/>
 		<BlockAddPrevButton/>
 		<BlockPrevButtonLabel/>
 		<BlockVisibility/>
 		<BlockClassName/>
-	</PanelBody>;
+	</InspectorControls>;
 }
 
 export default AdvancedFields;

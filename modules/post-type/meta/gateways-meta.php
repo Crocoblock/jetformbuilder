@@ -25,4 +25,15 @@ class Gateways_Meta extends Base_Meta_Type {
 	public function is_supported(): bool {
 		return jet_form_builder()->allow_gateways;
 	}
+
+	/**
+	 * @param $form_id
+	 *
+	 * @return array
+	 */
+	public function query( $form_id ) {
+		$response = parent::query( $form_id );
+
+		return is_array( $response ) ? $response : array();
+	}
 }

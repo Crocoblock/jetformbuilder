@@ -55,13 +55,6 @@ class Parser_Context {
 	 */
 	public $parsers = array();
 
-	/**
-	 * Available only while rendering form. Used for
-	 *
-	 * @var Field_Data_Parser
-	 */
-	private $current_parser;
-
 	public function apply( $fields = null ) {
 		if ( is_array( $fields ) ) {
 			$this->set_parsers( $fields );
@@ -69,8 +62,10 @@ class Parser_Context {
 
 		/** @var Field_Data_Parser $parser */
 		foreach ( $this->iterate_parsers() as $parser ) {
+			$this->name = $parser->get_name();
 			$this->parser_update_request( $parser );
 		}
+		$this->name = '';
 
 		$this->clear_all();
 	}
@@ -97,6 +92,14 @@ class Parser_Context {
 				if ( ! $parser->get_name() ) {
 					continue;
 				}
+				/**
+				 * We have to set this position directly in each object,
+				 * because the generation of parsers occurs
+				 *
+				 * @see https://github.com/Crocoblock/jetformbuilder/issues/339
+				 */
+				$parser->set_inside_conditional( $this->is_inside_conditional() );
+
 				$this->parsers[ $parser->get_name() ] = $parser;
 			}
 		}
@@ -164,7 +167,7 @@ class Parser_Context {
 	 * @throws Parse_Exception
 	 */
 	public function validate_field( array $field ) {
-		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		if ( empty( $field['blockName'] ) ) {
 			throw new Parse_Exception( Module::EMPTY_BLOCK_ERROR );
 		}
@@ -179,7 +182,7 @@ class Parser_Context {
 		if ( ! Module::instance()->isset_parser( $field['blockName'] ) ) {
 			throw new Parse_Exception( Module::NOT_FIELD_HAS_INNER, $field['innerBlocks'] );
 		}
-		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:enable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 	}
 
 	/**
@@ -821,7 +824,7 @@ class Parser_Context {
 		}
 
 		if ( ! array_key_exists( $path[0], $this->parsers ) ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Repository_Exception( 'undefined_parser', $path );
 		}
 		if ( ! ( $this->parsers[ $path[0] ] instanceof Field_Data_Parser ) ) {
@@ -932,6 +935,9 @@ class Parser_Context {
 		return $this->get_parent_field() ? $this->get_parent_field()->get_scoped_label() : '';
 	}
 
+	/**
+	 * @return Field_Data_Parser|null
+	 */
 	public function get_parent_field() {
 		return $this->parent_field;
 	}

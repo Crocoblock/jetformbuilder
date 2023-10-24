@@ -27,10 +27,11 @@ function MapFieldData() {
 			container.querySelector( '[data-map-field="lng"]' ),
 		);
 
-		this.fieldSettings = {
+		this.fieldSettings      = {
 			...this.fieldSettings,
 			...JSON.parse( node.dataset.settings ),
 		};
+		this.fieldSettings.zoom = +this.fieldSettings.zoom;
 
 		this.inputType = 'map';
 	};
@@ -42,23 +43,27 @@ function MapFieldData() {
 			return;
 		}
 
+		const getCoordsFromString = value => {
+			const valueParts = value.split( ',' ),
+			      latNum     = Number( valueParts[ 0 ] ),
+			      lngNum     = Number( valueParts[ 1 ] );
+
+			if ( 2 !== valueParts.length ||
+				Number.isNaN( latNum ) ||
+				Number.isNaN( lngNum )
+			) {
+				return {};
+			}
+
+			return {
+				lat: latNum,
+				lng: lngNum,
+			};
+		};
+
 		switch ( this.fieldSettings.format ) {
 			case 'location_string':
-				const valueParts = node.value.split( ',' ),
-				      latNum     = Number( valueParts[ 0 ] ),
-				      lngNum     = Number( valueParts[ 1 ] );
-
-				if ( 2 !== valueParts.length ||
-					Number.isNaN( latNum ) ||
-					Number.isNaN( lngNum )
-				) {
-					return;
-				}
-
-				this.value.current = {
-					lat: latNum,
-					lng: lngNum,
-				};
+				this.value.current = getCoordsFromString( node.value );
 				break;
 			case 'location_address':
 				const [ main, hash, lat, lng ] = this.nodes;
@@ -73,7 +78,13 @@ function MapFieldData() {
 				};
 				break;
 			case 'location_array':
-				this.value.current = JSON.parse( node.value );
+				try {
+					this.value.current = JSON.parse( node.value );
+				}
+				catch ( error ) {
+					// for case, when we used inline preset
+					this.value.current = getCoordsFromString( node.value );
+				}
 				break;
 		}
 	};

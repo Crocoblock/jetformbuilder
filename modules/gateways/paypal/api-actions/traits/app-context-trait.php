@@ -18,12 +18,14 @@ trait App_Context_Trait {
 	private $app_context = array();
 
 	public function set_app_context( array $context ) {
+		$blog_name = get_option( 'blogname' );
+
 		$this->app_context = array_merge(
 			$this->app_context,
 			array(
 				'landing_page' => 'BILLING',
 				'user_action'  => $this->action_slug(),
-				'brand_name'   => get_option( 'blogname' ),
+				'brand_name'   => $blog_name ?: __( 'Site name', 'jet-form-builder' ),
 			),
 			$context
 		);

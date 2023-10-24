@@ -18,6 +18,12 @@ class List_All_Tags extends Base_Action implements Arrayable {
 		return 'tags';
 	}
 
+	public function action_query_args(): array {
+		return array(
+			'limit' => - 1,
+		);
+	}
+
 	public function to_array(): array {
 		$response = array();
 		$tags     = $this->response_body['tags'] ?? array();

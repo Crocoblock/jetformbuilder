@@ -50,7 +50,7 @@ class List_Contact_Property extends Base_Object_Property {
 		try {
 			$api->send_request();
 		} catch ( Gateway_Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Action_Exception( 'internal_error', $api->get_request_args() );
 		}
 	}

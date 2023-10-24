@@ -104,7 +104,7 @@ class Redirect_To_Page extends Base {
 			$redirect_args[ $arg ] = ! empty( $value ) ? $value : 0;
 		}
 
-		return add_query_arg( $redirect_args, $url );
+		return add_query_arg( urlencode_deep( $redirect_args ), $url );
 	}
 
 	public function get_completed_redirect_url( $url = '' ) {
@@ -127,7 +127,7 @@ class Redirect_To_Page extends Base {
 		$to_url = $this->get_redirect_url();
 
 		if ( ! $to_url ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Action_Exception( 'failed', $this->settings );
 		}
 
@@ -145,8 +145,8 @@ class Redirect_To_Page extends Base {
 			'redirect_type' => __( 'Redirect to:', 'jet-form-builder' ),
 			'redirect_page' => __( 'Select page:', 'jet-form-builder' ),
 			'redirect_url'  => __( 'Redirect URL:', 'jet-form-builder' ),
-			'redirect_args' => __( 'Add query arguments to the redirect URL:', 'jet-form-builder' ),
-			'redirect_hash' => __( 'Add hash to the redirect URL:', 'jet-form-builder' ),
+			'redirect_args' => __( 'Add query arguments to redirect URL:', 'jet-form-builder' ),
+			'redirect_hash' => __( 'Add hash to redirect URL:', 'jet-form-builder' ),
 		);
 	}
 
@@ -169,7 +169,7 @@ class Redirect_To_Page extends Base {
 		return array(
 			array(
 				'value' => '',
-				'label' => __( 'Select redirect to...', 'jet-form-builder' ),
+				'label' => __( 'Set a redirect to...', 'jet-form-builder' ),
 			),
 			array(
 				'value' => 'static_page',

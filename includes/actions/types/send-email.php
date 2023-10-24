@@ -3,10 +3,11 @@
 namespace Jet_Form_Builder\Actions\Types;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Dev_Mode;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Request\Request_Tools;
+use JFB_Modules\Dev;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -231,7 +232,7 @@ To prevent this, enable this option.',
 		 */
 		do_action( 'jet-form-builder/send-email/send-before', $this );
 
-		if ( Dev_Mode\Manager::instance()->active() ) {
+		if ( jet_form_builder()->has_module( 'dev' ) ) {
 			add_action(
 				'wp_mail_failed',
 				function ( \WP_Error $wp_error ) {
@@ -254,10 +255,12 @@ To prevent this, enable this option.',
 			throw new Action_Exception(
 				'failed',
 				array(
-					'to'      => $this->get_mail_to(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					'subject' => $this->get_subject(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					'message' => $message, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					'headers' => $this->get_headers(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					// phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped
+					'to'      => $this->get_mail_to(),
+					'subject' => $this->get_subject(),
+					'message' => $message,
+					'headers' => $this->get_headers(),
+					// phpcs:enable
 				)
 			);
 		}
@@ -275,6 +278,7 @@ To prevent this, enable this option.',
 	 */
 	protected function validate() {
 		$this->validate_mail_to();
+		$this->validate_reply_to();
 	}
 
 	/**
@@ -286,6 +290,24 @@ To prevent this, enable this option.',
 				throw new Action_Exception( 'invalid_email' );
 			}
 		}
+	}
+
+	protected function validate_reply_to() {
+		$emails = explode( ',', $this->get_reply_to() );
+
+		foreach ( $emails as &$value ) {
+			$value = trim( $value );
+		}
+
+		$emails = array_filter( $emails, 'is_email' );
+
+		if ( count( $emails ) ) {
+			$this->set_reply_to( $emails );
+
+			return;
+		}
+
+		$this->set_reply_to( 'noreply@' . Http_Tools::get_site_host() );
 	}
 
 	public function get_default_mail_to() {
@@ -323,7 +345,7 @@ To prevent this, enable this option.',
 	public function get_default_subject(): string {
 		return empty( $this->settings['subject'] )
 			? sprintf(
-				/* translators: %s - site url */
+			/* translators: %s - site url */
 				__( 'Form on %s Submitted', 'jet-form-builder' ),
 				home_url( '' )
 			)
@@ -405,11 +427,11 @@ To prevent this, enable this option.',
 	}
 
 	public function set_reply_to( $email ) {
-		if ( ! is_string( $email ) ) {
+		if ( ! is_string( $email ) && ! is_array( $email ) ) {
 			return;
 		}
 
-		$this->reply_to = $email;
+		$this->reply_to = Tools::to_string( $email );
 	}
 
 	public function set_content( $content ) {

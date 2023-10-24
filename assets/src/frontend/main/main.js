@@ -7,7 +7,6 @@ import LoadingReactiveVar from './reactive/LoadingReactiveVar';
 import InputData from './inputs/InputData';
 import Observable from './Observable';
 import ReportingInterface from './reporting/ReportingInterface';
-import CheckboxData from './inputs/CheckboxData';
 import MultiSelectData from './inputs/MultiSelectData';
 import {
 	allRejected,
@@ -16,7 +15,7 @@ import {
 	isEmpty,
 	getOffsetTop,
 	focusOnInvalidInput,
-	isVisible,
+	isVisible, getScrollParent,
 } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
 import RestrictionError from './reporting/RestrictionError';
@@ -53,7 +52,6 @@ window.JetFormBuilderAbstract = {
 	LoadingReactiveVar,
 	Observable,
 	ReportingInterface,
-	CheckboxData,
 	MultiSelectData,
 	Restriction,
 	RestrictionError,
@@ -83,6 +81,7 @@ window.JetFormBuilderFunctions = {
 	observeMacroAttr,
 	observeComment,
 	iterateJfbComments,
+	getScrollParent,
 };
 
 jQuery( () => JetPlugins.init() );

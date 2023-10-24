@@ -70,7 +70,7 @@ class Dynamic_Preset extends Base_Preset {
 				? Preset_Manager::instance()->prepare_result( $args['type'], $source )
 				: $source;
 
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Plain_Default_Exception( $result );
 		}
 

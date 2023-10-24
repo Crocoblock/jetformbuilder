@@ -12,7 +12,9 @@ function BrowserReporting() {
 	this.reportRaw   = function ( validationErrors ) {
 	};
 	this.reportFirst = function ( validationErrors ) {
-		this.getNode().reportValidity();
+		const node = this.getNode();
+
+		node.reportValidity();
 	};
 
 	this.setRestrictions  = function () {

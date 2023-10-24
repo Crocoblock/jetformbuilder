@@ -320,10 +320,10 @@ abstract class Base_Gateway_Action {
 
 		throw new Gateway_Exception(
 			esc_html( $this->response_message( 'Invalid HTTP code.' ) ),
-			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			$this->get_response_body(),
 			$this->get_body()
-			// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:enable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		);
 	}
 
@@ -347,7 +347,7 @@ abstract class Base_Gateway_Action {
 
 			throw new Gateway_Exception(
 				esc_html( $this->response_message( 'Internal error.' ) ),
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				$response->get_error_message(
 					$response->get_error_code()
 				)
@@ -359,11 +359,11 @@ abstract class Base_Gateway_Action {
 		if ( is_null( $parsed_response ) ) {
 			throw new Gateway_Exception(
 				esc_html( $this->response_message( 'Invalid JSON.' ) ),
-				// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				$this->get_response_body(),
 				$this->get_request_args(),
 				$this->get_url()
-				// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:enable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			);
 		}
 

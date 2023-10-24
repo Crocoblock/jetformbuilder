@@ -123,7 +123,7 @@ class Preset_Source_Post extends Base_Source {
 		if ( empty( $this->field_data['key'] ) ) {
 			throw new Preset_Exception(
 				'Undefined `key` in `field_data`',
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				$this->field_data
 			);
 		}

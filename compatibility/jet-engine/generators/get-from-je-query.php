@@ -64,7 +64,7 @@ class Get_From_Je_Query extends Base {
 		}
 
 		$query->setup_query();
-		$objects = $query->_get_items();
+		$objects = $query->get_items();
 
 		$handler = $this->get_handler( $objects[0] ?? array() );
 		$handler->set_fields( $args );
@@ -90,7 +90,7 @@ class Get_From_Je_Query extends Base {
 
 		wp_die(
 			sprintf(
-				/* translators: %s - class name  */
+			/* translators: %s - class name  */
 				esc_html__( '%s::is_supported must return TRUE', 'jet-form-builder' ),
 				esc_attr( Base_Object_Handler::class )
 			)

@@ -97,7 +97,10 @@ class Controller extends \Jet_Form_Builder\Gateways\Base_Scenario_Gateway {
 		}
 		$credits = Module::instance()->get_form_gateways_by_id( $form_id )[ self::ID ] ?? array();
 
-		if ( ! empty( $credits['client_id'] ) && ! empty( $credits['secret'] ) ) {
+		if ( ! empty( $credits['client_id'] ) &&
+			! empty( $credits['secret'] ) &&
+			empty( $credits['use_global'] )
+		) {
 			return $credits;
 		}
 

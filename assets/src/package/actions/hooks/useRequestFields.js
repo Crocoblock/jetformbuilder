@@ -9,9 +9,7 @@ const {
 	      useContext,
       } = wp.element;
 
-const getRequestFields = actions => {
-	const requestFields = [];
-
+const getRequestFields = ( { actions, fields } ) => {
 	for ( const action of actions ) {
 		const {
 			      [ action.type ]: current = {},
@@ -22,14 +20,15 @@ const getRequestFields = actions => {
 		}
 
 		for ( const requestField of current.requestFields ) {
-			const index = requestFields.findIndex(
-				field => field.value === requestField.name );
+			const index = fields.findIndex(
+				field => field.value === requestField.name,
+			);
 
 			if ( -1 !== index ) {
 				continue;
 			}
 
-			requestFields.push( {
+			fields.push( {
 				from: action.type,
 				id: action.id,
 				label: requestField.name,
@@ -39,70 +38,78 @@ const getRequestFields = actions => {
 			} );
 		}
 	}
-
-	return requestFields;
 };
 
-function getComputedFields( fields, actions, computed ) {
+const processComputedField = ( { computed, action, fields, nameSet } ) => {
+	if ( !computed.isSupported( action ) ) {
+		return;
+	}
+	computed.setAction( action );
+	computed.hasInList = false;
+
+	const label = computed.getLabel();
+	let name    = computed.getName();
+
+	if ( nameSet.has( name ) ) {
+		computed.hasInList = true;
+
+		name = computed.getName();
+	}
+
+	if ( fields.some( ( { value } ) => value === name ) ) {
+		return;
+	}
+
+	nameSet.add( name );
+
+	fields.push( {
+		from: action.type,
+		id: action.id,
+		label: label || name,
+		value: name,
+		name: name,
+		help: computed.getHelp(),
+	} );
+};
+
+function getComputedFields( { fields, actions, computed, nameSet } ) {
 	/**
 	 * @type {BaseAction[]}
 	 */
 	actions = actions.map( item => new BaseAction( item ) );
-	const nameSet = new Set();
 
-	for ( const baseComputedField of computed ) {
+	for ( const { field: computedField, settings } of computed ) {
+		if ( settings?.isScoped ) {
+			continue;
+		}
+
 		/**
 		 * @type {BaseComputedField}
 		 */
-		const current = new baseComputedField();
+		const computed = new computedField();
 
 		for ( let action of actions ) {
-			if ( !current.isSupported( action ) ) {
-				continue;
-			}
-			current.setAction( action );
-			current.hasInList = false;
-
-			const label = current.getLabel();
-			let name    = current.getName();
-
-			if ( nameSet.has( name ) ) {
-				current.hasInList = true;
-
-				name = current.getName();
-			}
-
-			if ( fields.some( ( { value } ) => value === name ) ) {
-				continue;
-			}
-
-			nameSet.add( name );
-
-			fields.push( {
-				from: action.type,
-				id: action.id,
-				label: label || name,
-				value: name,
-				name: name,
-				help: current.getHelp(),
+			processComputedField( {
+				computed,
+				action,
+				nameSet,
+				fields,
 			} );
 		}
 
-		if ( current.action || !current.isSupportedGlobal() ) {
+		if ( computed.action || !computed.isSupportedGlobal() ) {
 			continue;
 		}
-		const label = current.getLabel();
-		const name  = current.getName();
+		const label = computed.getLabel();
+		const name  = computed.getName();
 
 		fields.push( {
 			label: label || name,
 			value: name,
 			name: name,
-			help: current.getHelp(),
+			help: computed.getHelp(),
 		} );
 	}
-
-	return fields;
 }
 
 function useRequestFields( { returnOnEmptyCurrentAction = true } = {} ) {
@@ -133,14 +140,42 @@ function useRequestFields( { returnOnEmptyCurrentAction = true } = {} ) {
 		actions.splice( currentAction.index );
 	}
 
+	const nameSet = new Set();
+	const fields  = [];
+
+	for ( const { field: computedField, settings } of computed ) {
+		if ( !settings?.isScoped ) {
+			continue;
+		}
+
+		/**
+		 * @type {BaseComputedField}
+		 */
+		const current = new computedField();
+
+		processComputedField( {
+			computed: current,
+			action: currentAction,
+			nameSet,
+			fields,
+		} );
+	}
+
 	/**
 	 * Should be deprecated
 	 *
 	 * @type {*[]}
 	 */
-	const fields = getRequestFields( actions );
+	getRequestFields( { actions, fields } );
 
-	return getComputedFields( fields, actions, computed );
+	getComputedFields( {
+		fields,
+		actions,
+		computed,
+		nameSet,
+	} );
+
+	return fields;
 }
 
 export { getRequestFields, getComputedFields };

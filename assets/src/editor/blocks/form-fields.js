@@ -68,19 +68,27 @@ const registerFormField = block => {
 	/**
 	 * @since 3.0.0
 	 */
-	if ( !settings.hasOwnProperty( 'jfbGetFields' ) ) {
-		settings.jfbGetFields = function ( context = 'default' ) {
+	if ( !settings.hasOwnProperty( 'jfbResolveBlock' ) ) {
+		settings.jfbResolveBlock = function ( context = 'default' ) {
+			const base = {
+				clientId: this.clientId,
+				name: this.name,
+			};
+
 			if ( !this.attributes?.name ) {
-				return [];
+				return base;
 			}
 
-			return [
-				{
-					name: this.attributes.name,
-					label: this.attributes.label || this.attributes.name,
-					value: this.attributes.name,
-				},
-			];
+			return {
+				...base,
+				fields: [
+					{
+						name: this.attributes.name,
+						label: this.attributes.label || this.attributes.name,
+						value: this.attributes.name,
+					},
+				],
+			};
 		};
 	}
 

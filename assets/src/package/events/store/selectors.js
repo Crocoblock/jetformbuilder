@@ -56,7 +56,8 @@ const selectors = {
 	},
 	filterList( state, actionId, eventList ) {
 		return eventList.filter(
-			current => selectors.isValid( state, actionId, current ) );
+			current => selectors.isValid( state, actionId, current ),
+		);
 	},
 	getHelpMap( state ) {
 		const map = {};

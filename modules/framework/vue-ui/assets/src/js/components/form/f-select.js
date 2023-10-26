@@ -1,13 +1,15 @@
 import { oneOf, arraysEqual } from '../../utils/assist';
+import { clickOutsideDirective as clickOutside } from '../../utils/v-click-outside';
 import { checkConditions } from '../../mixins/check-conditions';
-import { directive as clickOutside } from 'v-click-outside-x';
 
 const FilterableSelect = {
 
 	name: 'cx-vui-f-select',
 	template: '#cx-vui-f-select',
 	mixins: [ checkConditions ],
-	directives: { clickOutside },
+	directives: {
+		clickOutside
+	},
 	props: {
 		value: {
 			type: [String, Number, Array],
@@ -46,9 +48,7 @@ const FilterableSelect = {
 			type: String
 		},
 		autocomplete: {
-			validator (value) {
-				return oneOf( value, ['on', 'off'] );
-			},
+			type: String,
 			default: 'off'
 		},
 		conditions: {
@@ -119,13 +119,11 @@ const FilterableSelect = {
 				if ( arraysEqual( newValue, oldValue ) ) {
 					return;
 				}
-
 			} else {
 
 				if ( newValue === oldValue ) {
 					return;
 				}
-
 			}
 
 			this.storeValues( newValue );
@@ -174,7 +172,10 @@ const FilterableSelect = {
 					if ( this.remote ) {
 						return true;
 					} else {
-						return option.label.includes( this.query ) || option.value.includes( this.query );
+						let optionValue = '' + option.value,
+						    optionLabel = option.label;
+
+						return optionLabel.includes( this.query ) || optionValue.includes( this.query );
 					}
 				});
 			}
@@ -206,6 +207,8 @@ const FilterableSelect = {
 						this.selectedOptions = options;
 						this.loaded          = true;
 						this.loading         = false;
+
+						this.$emit( 'on-change-remote-options', options );
 					}
 				} );
 			}
@@ -292,6 +295,8 @@ const FilterableSelect = {
 							this.options = options;
 							this.loaded  = true;
 							this.loading = false;
+
+							this.$emit( 'on-change-remote-options', options );
 						}
 					} );
 				}
@@ -321,6 +326,7 @@ const FilterableSelect = {
 			}
 
 			this.$emit( 'input', this.currentValues );
+			this.$emit( 'on-input', this.currentValues );
 			this.$emit( 'on-change', this.currentValues );
 
 			this.inFocus       = false;
@@ -335,6 +341,8 @@ const FilterableSelect = {
 		resetRemoteOptions() {
 			this.options = [];
 			this.loaded  = false;
+
+			this.$emit( 'on-reset-remote-options', [] );
 		},
 		removeValue( value ) {
 			this.currentValues.splice( this.currentValues.indexOf( value ), 1 );
@@ -370,12 +378,17 @@ const FilterableSelect = {
 
 					if ( '[object Array]' === Object.prototype.toString.call( value ) ) {
 
-						value.forEach( singleVal => {
-							if ( ! oneOf( singleVal, this.currentValues ) ) {
-								this.currentValues.push( singleVal );
-								this.pushToSelected( singleVal );
-							}
-						} );
+						if ( value.length ) {
+							value.forEach( singleVal => {
+								if ( ! oneOf( singleVal, this.currentValues ) ) {
+									this.currentValues.push( singleVal );
+									this.pushToSelected( singleVal );
+								}
+							} );
+						} else {
+							this.selectedOptions = [];
+							this.currentValues   = [];
+						}
 
 					} else {
 

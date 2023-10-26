@@ -3,13 +3,13 @@ const {
 	      ActionMessages,
       } = JetFBComponents;
 const {
-	      addAction,
-	      getFormFieldsBlocks,
 	      Tools: { withPlaceholder },
 	      convertListToFieldsMap,
       } = JetFBActions;
 
-const { withRequestFields } = JetFBHooks;
+const {
+	      useFields,
+      } = JetFBHooks;
 
 /**
  * Internal dependencies
@@ -43,14 +43,14 @@ function RegisterUserRender( props ) {
 		      requestFields,
 	      } = props;
 
-	const [ fields, setFields ]                       = useState( [] );
+	const fields = useFields( { withInner: false } );
+
 	const [ fieldsWithRequest, setFieldsWithRequest ] = useState( [] );
 
 	useEffect( () => {
-		const _fields = getFormFieldsBlocks();
-		setFields( [ ..._fields, ...requestFields ] );
 		setFieldsWithRequest(
-			convertListToFieldsMap( _fields, requestFields ) );
+			convertListToFieldsMap( fields, requestFields ),
+		);
 
 		if ( settings.add_user_id ) {
 			onChangeSettingObj(
@@ -174,4 +174,4 @@ function RegisterUserRender( props ) {
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-export default withSelect( withRequestFields )( RegisterUserRender );
+export default RegisterUserRender;

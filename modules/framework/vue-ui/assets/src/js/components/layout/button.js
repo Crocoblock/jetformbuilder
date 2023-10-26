@@ -114,6 +114,7 @@ const Button = {
 			}
 
 			this.$emit( 'click', event );
+			this.$emit( 'on-click', event );
 		}
 	},
 };

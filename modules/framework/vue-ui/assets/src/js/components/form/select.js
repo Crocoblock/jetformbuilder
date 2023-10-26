@@ -27,6 +27,12 @@ const SelectPlain = {
 				return [];
 			}
 		},
+		groupsList: {
+			type: Array,
+			default: function() {
+				return [];
+			}
+		},
 		disabled: {
 			type: Boolean,
 			default: false
@@ -81,6 +87,7 @@ const SelectPlain = {
 			options: this.optionsList,
 			currentValue: this.value,
 			currentId: this.elementId,
+			groups: this.groupsList,
 		};
 	},
 	watch: {
@@ -143,6 +150,7 @@ const SelectPlain = {
 		},
 		handleInput() {
 			this.$emit( 'input', this.currentValue );
+			this.$emit( 'on-input', this.currentValue );
 			this.$emit( 'on-change', event );
 		},
 		storeCurrentValue( value ) {

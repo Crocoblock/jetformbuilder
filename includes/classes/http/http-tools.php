@@ -49,7 +49,7 @@ class Http_Tools {
 		$patterns = array();
 
 		foreach ( $path_args as $key => $value ) {
-			$patterns[ "#\(\?P<$key\>\S+\)#" ] = function () use ( $value ) {
+			$patterns["#\(\?P<$key\>\S+\)#"] = function () use ( $value ) {
 				return (string) $value;
 			};
 		}
@@ -100,7 +100,7 @@ class Http_Tools {
 
 		global $wp;
 
-		$refer = home_url( $wp->request );
+		$refer = user_trailingslashit( home_url( $wp->request ) );
 
 		if ( ! empty( $_SERVER['QUERY_STRING'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput

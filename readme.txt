@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 6.0
-Tested up to: 6.3.1
+Tested up to: 6.3.2
 Requires PHP: 7.0
-Stable tag: 3.1.6
+Stable tag: 3.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,16 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.1.7**
+- ADD: Added "Post Type" to Hidden Field Sources
+- FIX: Active Campaign. Cannot add a contact with an existing tag if there are many
+- FIX: Encoding Error in Color Picker Field
+- FIX: Changed the user_agent column type from varchar (255) to text in the table `jet_fb_records`
+- FIX: Media field is empty in form records export file
+- FIX: Visually confusing the "Generate dynamically" -> "Value from meta" options setting
+- FIX: Advanced Choices Field Block styled text can't be clicked
+- FIX: REST-API security. Now only administrators can view one or more forms using standard WP REST routes
 
 **3.1.6**
  - FIX: Minor vulnerability in Update User action

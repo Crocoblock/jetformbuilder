@@ -4,6 +4,18 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.1.7
+* ADD: Support multiple emails in Reply-To (Send Email)
+* ADD: Added "Post Type" to Hidden Field Sources
+* FIX: Active Campaign. Cannot add a contact with an existing tag if there are many
+* FIX: Encoding Error in Color Picker Field
+* FIX: Changed the user_agent column type from varchar (255) to text in the table `jet_fb_records`
+* FIX: Media field is empty in form records export file
+* FIX: Visually confusing the "Generate dynamically" -> "Value from meta" options setting
+* FIX: Advanced Choices Field Block styled text can't be clicked
+* FIX: Compatibility with JetFormBuilder PayPal Subscriptions
+* FIX: REST-API security. Now only administrators can view one or more forms using standard WP REST routes
+
 ## 3.1.6
 * FIX: Minor vulnerability in Update User action
 * FIX: Invalid deletion of first element of repeater field

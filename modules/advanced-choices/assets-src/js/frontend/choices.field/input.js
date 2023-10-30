@@ -109,7 +109,16 @@ function ChoicesData() {
 	};
 
 	this.toggleChoice = function ( node, event ) {
-		if ( 'LABEL' === event?.target?.nodeName ) {
+		/**
+		 * We should skip event, if it triggered via element,
+		 * which inside <label> element.
+		 *
+		 * Because click on <label> triggers another event with connected
+		 * input as target.
+		 */
+		if ( event.target.closest(
+			'.jet-form-builder-choice--item-control label',
+		) ) {
 			return;
 		}
 		if ( this.isArray() ) {

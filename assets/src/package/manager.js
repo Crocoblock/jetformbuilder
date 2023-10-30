@@ -198,8 +198,6 @@ import useLoopedAction from './actions/hooks/useLoopedAction';
 import SelectActionsControl from './actions/components/SelectActionsControl';
 import ActionModalHeaderSlotFill
 	from './actions/components/ActionModalHeaderSlotFill';
-import ActionButtonBlockEditSlotFills
-	from './action-buttons/components/ActionButtonBlockEditSlotFills';
 import ActionButtonPlaceholder
 	from './action-buttons/components/ActionButtonPlaceholder';
 import ActionModalFooterSlotFill
@@ -312,7 +310,6 @@ window.JetFBComponents = {
 	ActionItemMoreButton,
 	SelectActionsControl,
 	ActionModalHeaderSlotFill,
-	ActionButtonBlockEditSlotFills,
 	ActionButtonPlaceholder,
 	ActionModalFooterSlotFill,
 	ScopedAttributesProvider,

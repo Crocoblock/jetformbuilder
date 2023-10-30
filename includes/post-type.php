@@ -19,9 +19,9 @@ use Jet_Form_Builder\Post_Meta\Recaptcha_Meta;
 use Jet_Form_Builder\Post_Meta\Validation_Meta;
 use Jet_Form_Builder\Shortcodes\Manager;
 use JFB_Modules\Gateways\Paypal\Controller;
+use JFB_Modules\Rest_Api\Forms_Controller;
 
 // If this file is called directly, abort.
-
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -174,7 +174,7 @@ class Post_Type {
 	public function register_post_type() {
 
 		$args = array(
-			'labels'              => array(
+			'labels'                => array(
 				'name'               => __( 'Forms', 'jet-form-builder' ),
 				'all_items'          => __( 'Forms', 'jet-form-builder' ),
 				'add_new'            => __( 'Add New', 'jet-form-builder' ),
@@ -188,22 +188,23 @@ class Post_Type {
 				'singular_name'      => __( 'JetForm', 'jet-form-builder' ),
 				'menu_name'          => __( 'JetFormBuilder', 'jet-form-builder' ),
 			),
-			'public'              => true,
-			'show_ui'             => true,
-			'show_in_admin_bar'   => true,
-			'show_in_menu'        => true,
-			'show_in_nav_menus'   => false,
-			'show_in_rest'        => true,
-			'publicly_queryable'  => false,
-			'exclude_from_search' => true,
-			'has_archive'         => false,
-			'query_var'           => false,
-			'can_export'          => true,
-			'rewrite'             => false,
-			'capability_type'     => 'jet_fb_form',
-			'menu_icon'           => $this->get_post_type_icon(),
-			'menu_position'       => 120,
-			'supports'            => array( 'title', 'editor', 'custom-fields' ),
+			'public'                => true,
+			'show_ui'               => true,
+			'show_in_admin_bar'     => true,
+			'show_in_menu'          => true,
+			'show_in_nav_menus'     => false,
+			'show_in_rest'          => true,
+			'rest_controller_class' => Forms_Controller::class,
+			'publicly_queryable'    => false,
+			'exclude_from_search'   => true,
+			'has_archive'           => false,
+			'query_var'             => false,
+			'can_export'            => true,
+			'rewrite'               => false,
+			'capability_type'       => 'jet_fb_form',
+			'menu_icon'             => $this->get_post_type_icon(),
+			'menu_position'         => 120,
+			'supports'              => array( 'title', 'editor', 'custom-fields' ),
 		);
 
 		$post_type = register_post_type(

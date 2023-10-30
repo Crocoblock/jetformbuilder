@@ -43,10 +43,6 @@ class Send_Email_Hooks {
 			jet_fb_parse_macro( $email->get_reply_to() )
 		);
 
-		if ( ! is_email( $email->get_reply_to() ) ) {
-			$email->set_reply_to( 'noreply@' . Http_Tools::get_site_host() );
-		}
-
 		if ( ! is_email( $email->get_from_address() ) ) {
 			$email->set_from_address( get_option( 'admin_email' ) );
 		}

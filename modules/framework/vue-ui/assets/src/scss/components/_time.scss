@@ -1,5 +1,18 @@
 @import '~vue2-timepicker/dist/VueTimepicker.css';
 
+//FIX: Dropdown select scroll in firefox
+.e--ua-firefox.wp-admin .cx-vui-time{
+	.dropdown{
+		.select-list{
+			ul{
+				li{
+					width: 60px;
+				}
+			}
+		}
+	}
+}
+
 .wp-admin .cx-vui-time {
 	height: auto;
 	-webkit-appearance:none;
@@ -9,6 +22,64 @@
 		border: 1px solid #7e8993;
 		background-color: #fff;
 		color: #32373c;
+		&:focus{
+			border-radius: 4px 4px 0 0;
+		}
+	}
+	.dropdown{
+		width: unset;
+		left: 2px;
+		border-radius: 0 0 4px 4px;
+		overflow: hidden;
+		.select-list{
+			justify-content: flex-start;
+			width: unset;
+			ul{
+				background-color: #fff;
+				color: #7B7E81;
+				flex: 0 1 58px;
+				li{
+					background-color: transparent;
+					padding: 3px 0;
+					margin-bottom: 1px;
+					width: 36px;
+					&:hover, &.active{
+						background-color: #007CBA;
+						color: #fff;
+					}
+					&.hint{
+						text-transform: uppercase;
+						&:hover{
+							background-color: #fff;
+							color: #7B7E81;
+						}
+					}
+				}
+
+				&::-webkit-scrollbar{
+					width: 6px;
+				}
+				&::-webkit-scrollbar-thumb, &::-webkit-scrollbar-trac{
+					background: #B7B9BB;
+					border-radius: 4px;
+				}
+				&::-webkit-scrollbar-track-piece{
+					background: #F8F8F8;
+					opacity:0.5;
+					&:hover{
+						opacity:1;
+					}
+				}
+				/*&::-webkit-scrollbar-button{
+					width: 50px;
+				}*/
+
+				/* Buttons */
+				&::-webkit-scrollbar-button:single-button {
+					display: none;
+				}
+			}
+		}
 	}
 	&--size {
 		&-default {

@@ -9,7 +9,7 @@ const Input = {
 	props: {
 		type: {
 			validator ( value ) {
-				return oneOf(value, ['text', 'textarea', 'password', 'url', 'email', 'date', 'number', 'range', 'tel']);
+				return oneOf(value, ['text', 'textarea', 'password', 'url', 'email', 'date', 'time',  'number', 'range', 'tel']);
 			},
 			default: 'text'
 		},

@@ -1,0 +1,14 @@
+{
+	"apiVersion": 2,
+	"name": "jet-forms/welcome",
+	"title": "Welcome",
+	"category": "jet-form-builder-elements",
+	"icon": "",
+	"keywords": [
+		"jetformbuilder",
+		"start",
+		"welcome"
+	],
+	"description": "",
+	"textdomain": "jet-form-builder"
+}

@@ -356,8 +356,8 @@ InputData.prototype.getWrapperNode = function () {
 };
 
 InputData.prototype.handleEnterKey = function ( event ) {
-	// not enter
-	if ( event.key !== 'Enter' ) {
+	// not enter or handling enter key is disabled
+	if ( event.key !== 'Enter' || ! this.enterKey ) {
 		return;
 	}
 

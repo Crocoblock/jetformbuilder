@@ -2,11 +2,11 @@ const base = require( './base.webpack.config' );
 
 module.exports = {
 	...base,
-	name: 'dev:jfb-advanced-choices',
+	name: 'dev:jfb-onboarding',
 	mode: 'development',
 	output: {
 		...base.output,
-		devtoolNamespace: 'jfb-advanced-choices',
+		devtoolNamespace: 'jfb-onboarding',
 	},
 	devtool: 'eval-source-map',
 };

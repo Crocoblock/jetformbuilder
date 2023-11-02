@@ -15,7 +15,7 @@ module.exports = {
 			'node_modules',
 		],
 		extensions: [ '.js' ],
-		aliases: {
+		alias: {
 			'@patterns': path.resolve( __dirname, '../patterns' ),
 		},
 	},

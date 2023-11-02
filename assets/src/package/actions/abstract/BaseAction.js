@@ -36,6 +36,37 @@ BaseAction.prototype.initData = function ( props ) {
 	} );
 };
 
+/**
+ * Used in case, when we create BaseAction instance
+ * with such structure:
+ * {
+ *     type: 'action_slug',
+ *     settings: {
+ *         setting_1: 'value_1',
+ *         setting_2: 'value_2'
+ *     }
+ * }
+ *
+ * But JetFormBuilder store action's data in different way.
+ * So to transform settings into this structure:
+ * {
+ *     type: 'action_slug',
+ *     settings: {
+ *         action_slug: {
+ *              setting_1: 'value_1',
+ *              setting_2: 'value_2'
+ *         }
+ *     }
+ * }
+ * we use this method.
+ */
+BaseAction.prototype.refactorSettings = function () {
+	const settings = this.settings;
+	this.settings  = {};
+
+	this.selfSettings = settings;
+};
+
 BaseAction.prototype.resetID = function () {
 	this.id = Tools.getRandomID();
 };

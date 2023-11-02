@@ -25,7 +25,7 @@ function MacrosButtonTemplate( {
 			variant="tertiary"
 			isSmall
 			className={ 'jet-fb-is-thick' }
-			onClick={ () => setShowPopover( true ) }
+			onClick={ () => setShowPopover( prev => !prev ) }
 			{ ...props }
 		/>
 		{ showPopover && (
@@ -34,6 +34,15 @@ function MacrosButtonTemplate( {
 				position={ 'top-start' }
 				noArrow={ false }
 				isAlternate
+				onFocusOutside={ event => {
+					/**
+					 * We should skip handling if focused node it's not equals
+					 * the button which triggers popover
+					 */
+					if ( event.relatedTarget !== buttonRef.current ) {
+						setShowPopover( false );
+					}
+				} }
 				onClose={ () => setShowPopover( false ) }
 			>
 				{ children }

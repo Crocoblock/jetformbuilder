@@ -11,17 +11,12 @@ const {
       } = wp.i18n;
 
 const settings = {
-	//icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
 		``,
 		'jet-form-builder',
 	),
 	edit: WelcomeBlockEdit,
-	example: {
-		attributes: {
-			isPreview: true,
-		},
-	},
 };
 
 export {

@@ -1,55 +1,67 @@
 import insertPostPattern from '@patterns/insert.post.json';
 import registerUserPattern from '@patterns/register.user.json';
-
-let {
-	    __experimentalBlockVariationPicker,
-	    BlockVariationPicker,
-	    useBlockEditContext,
-    } = wp.blockEditor;
-
-BlockVariationPicker = (
-	BlockVariationPicker || __experimentalBlockVariationPicker
-);
+import defaultPattern from '@patterns/default.json';
+import PatternInserterButton from './PatternInserterButton';
 
 const {
 	      __,
       } = wp.i18n;
 
 const {
-	      createBlocksFromInnerBlocksTemplate,
-      } = wp.blocks;
+	      Placeholder,
+      } = wp.components;
 
 function WelcomeBlockEdit( props ) {
-	const { clientId } = useBlockEditContext();
-
-	const variations = [
+	const patterns = [
 		insertPostPattern,
 		registerUserPattern,
-	].map( current => {
-		current.icon = (
-			<span dangerouslySetInnerHTML={ { __html: current.icon } }/>
-		);
+	];
 
-		return current;
-	} );
-
-	// rewrite via the <Placeholder> component to make it more flexible
-	return <BlockVariationPicker
-		allowSkip
+	return <Placeholder
+		icon={ 'admin-tools' }
 		label={ __( 'Select form pattern', 'jet-form-builder' ) }
 		instructions={ __(
 			'You can select one of predefined layout, or build custom',
 			'jet-form-builder',
 		) }
-		variations={ variations }
-		onSelect={ ( nextVariation ) => {
-			// Replace current blocks with blocks from pattern.
-			//
-			// select all blocks, if there were some of them -
-			// we should ask, before delete all of them and insert pattern
-			// blocks.
-		} }
-	/>;
+	>
+		{ /*
+		 * Disable reason: The `list` ARIA role is redundant but
+		 * Safari+VoiceOver won't announce the list otherwise.
+		 */
+			/* eslint-disable jsx-a11y/no-redundant-roles */ }
+		<ul
+			className="block-editor-block-variation-picker__variations jet-fb"
+			role="list"
+			aria-label={ __( 'Form patterns', 'jet-form-builder' ) }
+		>
+			{ patterns.map( ( pattern ) => (
+				<li key={ pattern.name }>
+					<PatternInserterButton
+						key={ pattern.name }
+						variant="secondary"
+						pattern={ pattern }
+						withPatternIcon
+						iconSize={ 48 }
+						className="block-editor-block-variation-picker__variation"
+					/>
+					<span
+						className="block-editor-block-variation-picker__variation-label">
+							{ pattern.title }
+						</span>
+				</li>
+			) ) }
+		</ul>
+		{ /* eslint-enable jsx-a11y/no-redundant-roles */ }
+		<div className="block-editor-block-variation-picker__skip">
+			<PatternInserterButton
+				pattern={ defaultPattern }
+				variant="link"
+			>
+				{ __( 'Start from scratch', 'jet-form-builder' ) }
+			</PatternInserterButton>
+		</div>
+	</Placeholder>;
 
 }
 

@@ -17,9 +17,6 @@
 			}
 		}
 	],
-	"meta": {
-		"_jf_args": "{\"submit_type\":\"reload\"}"
-	},
 	"blocks": [
 		[
 			"jet-forms/text-field",
@@ -55,5 +52,8 @@
 		[
 			"jet-forms/submit-field"
 		]
-	]
+	],
+	"meta": {
+		"_jf_args": "{\"submit_type\":\"reload\"}"
+	}
 }

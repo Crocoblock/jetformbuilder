@@ -1,9 +1,7 @@
-import { defaultActions } from './options';
 import EditSettingsModal from './edit.settings.modal';
 import EditConditionsModal from './edit.conditions.modal';
 
 const {
-	      useEffect,
 	      Children,
 	      cloneElement,
       } = wp.element;
@@ -25,34 +23,17 @@ const {
 const {
 	      useActionsEdit,
       } = JetFBHooks;
-const {
-	      useSelect,
-      } = wp.data;
 
 const {
 	      PluginDocumentSettingPanel,
       } = wp.editPost;
-
-let isSetDefault = false;
 
 const ListActionItemFiltered = withFilters( 'jet.fb.action.item' )(
 	ListActionItem,
 );
 
 function PluginActions() {
-	const { actions, setActions } = useActionsEdit();
-
-	const isNewPost = useSelect(
-		select => select( 'core/editor' ).isEditedPostNew(),
-		[],
-	);
-
-	useEffect( () => {
-		if ( 0 === actions.length && isNewPost && !isSetDefault ) {
-			setActions( defaultActions );
-			isSetDefault = true;
-		}
-	}, [] );
+	const { actions } = useActionsEdit();
 
 	const elements = actions.map(
 		( action, index ) => <ActionListItemContext.Provider

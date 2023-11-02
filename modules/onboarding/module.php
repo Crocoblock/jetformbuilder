@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Onboarding;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
@@ -31,11 +32,27 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 	}
 
 	public function init_hooks() {
-		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'editor_assets_before' ) );
+		add_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'editor_assets_before' )
+		);
+		add_filter(
+			'jet-form-builder/post-type/args',
+			array( $this, 'add_default_fields_to_form' ),
+			99
+		);
 	}
 
 	public function remove_hooks() {
-		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'editor_assets_before' ) );
+		remove_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'editor_assets_before' )
+		);
+		remove_filter(
+			'jet-form-builder/post-type/args',
+			array( $this, 'add_default_fields_to_form' ),
+			99
+		);
 	}
 
 	public function editor_assets_before() {
@@ -47,5 +64,12 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 			true
 		);
 	}
-}
 
+	public function add_default_fields_to_form( $arguments ) {
+		$arguments['template'] = array(
+			array( Block_Helper::pref( 'welcome' ) ),
+		);
+
+		return $arguments;
+	}
+}

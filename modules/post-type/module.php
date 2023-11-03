@@ -1,6 +1,5 @@
 <?php
 
-
 namespace JFB_Modules\Post_Type;
 
 // If this file is called directly, abort.
@@ -11,17 +10,21 @@ if ( ! defined( 'WPINC' ) ) {
 use Jet_Form_Builder\Classes\Arguments\Default_Form_Arguments;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Compatibility;
+use Jet_Form_Builder\Classes\Get_Icon_Trait;
+use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
-use JFB_Modules\Post_Type\Actions_Repository;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Post_Meta\Actions_Meta;
+use Jet_Form_Builder\Post_Meta\Base_Meta_Type;
+use Jet_Form_Builder\Post_Meta\Args_Meta;
+use Jet_Form_Builder\Post_Meta\Preset_Meta;
+use Jet_Form_Builder\Post_Meta\Gateways_Meta;
+use Jet_Form_Builder\Post_Meta\Messages_Meta;
+use Jet_Form_Builder\Post_Meta\Recaptcha_Meta;
+use Jet_Form_Builder\Post_Meta\Validation_Meta;
 use Jet_Form_Builder\Shortcodes\Manager;
-use JFB_Components\Module\Base_Module_After_Install_It;
-use JFB_Components\Module\Base_Module_Dir_It;
-use JFB_Components\Module\Base_Module_Dir_Trait;
-use JFB_Components\Module\Base_Module_Handle_It;
-use JFB_Components\Module\Base_Module_Handle_Trait;
-use JFB_Components\Module\Base_Module_It;
-use JFB_Components\Module\Base_Module_Url_It;
-use JFB_Components\Module\Base_Module_Url_Trait;
+use JFB_Modules\Gateways\Paypal\Controller;
+use JFB_Modules\Rest_Api\Forms_Controller;
 
 /**
  * @since 3.2.0
@@ -206,7 +209,7 @@ class Module implements
 	public function register_post_type() {
 
 		$args = array(
-			'labels'              => array(
+			'labels'                => array(
 				'name'               => __( 'Forms', 'jet-form-builder' ),
 				'all_items'          => __( 'Forms', 'jet-form-builder' ),
 				'add_new'            => __( 'Add New', 'jet-form-builder' ),
@@ -220,22 +223,23 @@ class Module implements
 				'singular_name'      => __( 'JetForm', 'jet-form-builder' ),
 				'menu_name'          => __( 'JetFormBuilder', 'jet-form-builder' ),
 			),
-			'public'              => true,
-			'show_ui'             => true,
-			'show_in_admin_bar'   => true,
-			'show_in_menu'        => true,
-			'show_in_nav_menus'   => false,
-			'show_in_rest'        => true,
-			'publicly_queryable'  => false,
-			'exclude_from_search' => true,
-			'has_archive'         => false,
-			'query_var'           => false,
-			'can_export'          => true,
-			'rewrite'             => false,
-			'capability_type'     => 'jet_fb_form',
-			'menu_icon'           => $this->get_post_type_icon(),
-			'menu_position'       => 120,
-			'supports'            => array( 'title', 'editor', 'custom-fields' ),
+			'public'                => true,
+			'show_ui'               => true,
+			'show_in_admin_bar'     => true,
+			'show_in_menu'          => true,
+			'show_in_nav_menus'     => false,
+			'show_in_rest'          => true,
+			'rest_controller_class' => Forms_Controller::class,
+			'publicly_queryable'    => false,
+			'exclude_from_search'   => true,
+			'has_archive'           => false,
+			'query_var'             => false,
+			'can_export'            => true,
+			'rewrite'               => false,
+			'capability_type'       => 'jet_fb_form',
+			'menu_icon'             => $this->get_post_type_icon(),
+			'menu_position'         => 120,
+			'supports'              => array( 'title', 'editor', 'custom-fields' ),
 		);
 
 		register_post_type(

@@ -98,6 +98,15 @@ class Map_Field extends Base {
 			public function get_name() {
 				return 'map-field';
 			}
+
+			/**
+			 * @see \Jet_Form_Builder\Blocks\Render\Calculated_Field_Render::get_fields_label_tag
+			 *
+			 * @return string
+			 */
+			protected function get_fields_label_tag(): string {
+				return 'div';
+			}
 		} )->render();
 	}
 

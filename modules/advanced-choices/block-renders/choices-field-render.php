@@ -90,4 +90,13 @@ class Choices_Field_Render extends Base {
 		return parent::render( null, $html );
 	}
 
+	/**
+	 * @see \Jet_Form_Builder\Blocks\Render\Calculated_Field_Render::get_fields_label_tag
+	 *
+	 * @return string
+	 */
+	protected function get_fields_label_tag(): string {
+		return 'div';
+	}
+
 }

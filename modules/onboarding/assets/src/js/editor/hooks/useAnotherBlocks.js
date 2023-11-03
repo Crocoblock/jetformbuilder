@@ -16,10 +16,6 @@ function useAnotherBlocks() {
 
 	return useSelect(
 		select => {
-			if ( !context.isSelected ) {
-				return [];
-			}
-
 			return select( 'core/block-editor' ).getBlocks().filter(
 				block => block.clientId !== context.clientId,
 			);

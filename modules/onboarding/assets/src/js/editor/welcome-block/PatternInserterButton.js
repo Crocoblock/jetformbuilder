@@ -45,7 +45,7 @@ function PatternInserterButton( {
 	const { clientId } = useBlockEditContext();
 	const blocks       = useAnotherBlocks();
 
-	const [ , setActions ] = useActions();
+	const [ actions, setActions ] = useActions();
 
 	const { editPost } = useDispatch( 'core/editor' );
 
@@ -55,6 +55,28 @@ function PatternInserterButton( {
 	      } = useDispatch( 'core/block-editor' );
 
 	function insertPattern() {
+		applyPattern();
+
+		removeBlocks(
+			blocks.map( ( { clientId: id } ) => id ),
+		);
+
+		// inserting actions
+		const { list } = convertFlow( pattern?.actions ?? [] );
+
+		setActions( list );
+	}
+
+	function appendPattern() {
+		applyPattern();
+
+		// inserting actions
+		const { list } = convertFlow( pattern?.actions ?? [] );
+
+		setActions( [ ...actions, ...list ] );
+	}
+
+	function applyPattern() {
 		doAction( 'jet.fb.insert.pattern', pattern );
 
 		// inserting blocks
@@ -65,17 +87,8 @@ function PatternInserterButton( {
 			0,
 		);
 
-		removeBlocks(
-			blocks.map( ( { clientId: id } ) => id ),
-		);
-
-		// inserting actions
-		const { list } = convertFlow( pattern?.actions ?? [] );
-
-		setActions( list );
-
 		const {
-			      actions,
+			      actions: patternActions,
 			      blocks: patternBlocks,
 			      name,
 			      icon,
@@ -124,25 +137,27 @@ function PatternInserterButton( {
 						width: 'max-content',
 					} }
 				>
-					<span>{ __(
-						'Are you sure to replace all blocks and actions?',
-						'jet-form-builder',
-					) }</span>
+					<span>{ __( 'I want to', 'jet-form-builder' ) }</span>
 					&nbsp;
 					<Button
 						isLink
+						isDestructive
 						onClick={ insertPattern }
 					>
-						{ __( 'Yes', 'jet-form-builder' ) }
+						{ __( 'replace', 'jet-form-builder' ) }
 					</Button>
 					{ ' / ' }
 					<Button
 						isLink
-						isDestructive
-						onClick={ () => setShowPopover( false ) }
+						onClick={ appendPattern }
 					>
-						{ __( 'No', 'jet-form-builder' ) }
+						{ __( 'append', 'jet-form-builder' ) }
 					</Button>
+					&nbsp;
+					<span>{ __(
+						'form settings and blocks',
+						'jet-form-builder',
+					) }</span>
 				</div>
 			</Popover>
 		) }

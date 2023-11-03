@@ -11,7 +11,7 @@
 					"excerpt": "post_excerpt",
 					"content": "post_content"
 				},
-				"post_type": "posts"
+				"post_type": "post"
 			}
 		}
 	],

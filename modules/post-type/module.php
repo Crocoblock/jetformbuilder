@@ -10,20 +10,16 @@ if ( ! defined( 'WPINC' ) ) {
 use Jet_Form_Builder\Classes\Arguments\Default_Form_Arguments;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Compatibility;
-use Jet_Form_Builder\Classes\Get_Icon_Trait;
-use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Post_Meta\Actions_Meta;
-use Jet_Form_Builder\Post_Meta\Base_Meta_Type;
-use Jet_Form_Builder\Post_Meta\Args_Meta;
-use Jet_Form_Builder\Post_Meta\Preset_Meta;
-use Jet_Form_Builder\Post_Meta\Gateways_Meta;
-use Jet_Form_Builder\Post_Meta\Messages_Meta;
-use Jet_Form_Builder\Post_Meta\Recaptcha_Meta;
-use Jet_Form_Builder\Post_Meta\Validation_Meta;
 use Jet_Form_Builder\Shortcodes\Manager;
-use JFB_Modules\Gateways\Paypal\Controller;
+use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
+use JFB_Components\Module\Base_Module_Handle_It;
+use JFB_Components\Module\Base_Module_Handle_Trait;
+use JFB_Components\Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_Url_It;
+use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Rest_Api\Forms_Controller;
 
 /**

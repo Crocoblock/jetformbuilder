@@ -22,7 +22,7 @@ function* textAreaParser( textarea ) {
 		attributes.minlength = textarea.minLength;
 	}
 
-	yield [ 'jet-forms/textarea', attributes ];
+	yield [ 'jet-forms/textarea-field', attributes ];
 }
 
 export default textAreaParser;

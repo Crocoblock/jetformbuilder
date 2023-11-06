@@ -35,9 +35,11 @@ abstract class Base_Gateway_Action {
 	protected $path_parts = array();
 	protected $custom_url = '';
 
-	abstract public function action_endpoint();
-
 	abstract public function base_url(): string;
+
+	public function action_endpoint() {
+		return '';
+	}
 
 	public function action_headers() {
 		return array();

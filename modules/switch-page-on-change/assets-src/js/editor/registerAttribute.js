@@ -1,8 +1,11 @@
-import getSupport from './getSupport';
-import { ATTRIBUTE_NAME } from './constants';
+import { SUPPORT_NAME, ATTRIBUTE_NAME } from './constants';
+
+const {
+	      getSupport,
+      } = JetFBActions;
 
 function registerAttribute( settings, name ) {
-	if ( !getSupport( settings ) ) {
+	if ( !getSupport( settings, SUPPORT_NAME ) ) {
 		return settings;
 	}
 

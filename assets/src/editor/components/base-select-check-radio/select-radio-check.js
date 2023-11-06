@@ -1,41 +1,38 @@
-import { listFrom } from "../../blocks/select-radio-chekc-options";
-import FromManualFields from "./from-manual-fields";
-import FromPostTermsFields from "./from-post-terms-fields";
-import FromGeneratorsFields from "./from-generators-fields";
+import { listFrom } from '../../blocks/select-radio-chekc-options';
+import FromManualFields from './from-manual/from-manual-fields';
+import FromPostTermsFields from './from-post-terms-fields';
+import FromGeneratorsFields from './from-generators-fields';
 
 const {
-		  TextControl,
-		  SelectControl,
-	  } = wp.components;
+	      TextControl,
+	      SelectControl,
+      } = wp.components;
 
 const { jetEngineVersion } = window.JetFormEditorData;
-const { versionCompare } = JetFBActions;
-const { applyFilters } = wp.hooks;
+const { versionCompare }   = JetFBActions;
+const { applyFilters }     = wp.hooks;
 
-const canRenderGlossaries = "" !== jetEngineVersion;
+const canRenderGlossaries = '' !== jetEngineVersion;
 
 function getFieldOptionsForm( optionsFrom, props ) {
 	const {
-			  attributes,
-			  setAttributes,
-		  } = props;
+		      attributes,
+		      setAttributes,
+	      } = props;
 
 	switch ( optionsFrom ) {
 		case 'manual_input':
-			return <FromManualFields
-				key='from_manual'
-				{ ...props }
-			/>;
+			return <FromManualFields key="from_manual"/>;
 		case 'posts':
 		case 'terms':
 			return <FromPostTermsFields
-				key='form_posts_terms'
+				key="form_posts_terms"
 				{ ...props }
 			/>;
 		case 'meta_field':
 			return <TextControl
-				key='field_options_key'
-				label='Meta field to get value from'
+				key="field_options_key"
+				label="Meta field to get value from"
 				value={ attributes.field_options_key }
 				onChange={ ( newValue ) => {
 					setAttributes( { field_options_key: newValue } );
@@ -43,14 +40,14 @@ function getFieldOptionsForm( optionsFrom, props ) {
 			/>;
 		case 'generate':
 			return <FromGeneratorsFields
-				key='form_generators'
+				key="form_generators"
 				{ ...props }
 			/>;
 		case 'glossary':
 			return canRenderGlossaries && <SelectControl
-				key='select_glossary'
-				label='Select Glossary'
-				labelPosition='top'
+				key="select_glossary"
+				label="Select Glossary"
+				labelPosition="top"
 				value={ attributes.glossary_id }
 				onChange={ glossary_id => setAttributes( { glossary_id } ) }
 				options={ [
@@ -59,7 +56,8 @@ function getFieldOptionsForm( optionsFrom, props ) {
 				] }
 			/>;
 		default:
-			return applyFilters( 'jet.fb.select.radio.check.controls', null, optionsFrom, props );
+			return applyFilters( 'jet.fb.select.radio.check.controls', null,
+				optionsFrom, props );
 
 	}
 }
@@ -67,19 +65,19 @@ function getFieldOptionsForm( optionsFrom, props ) {
 function SelectRadioCheck( props ) {
 
 	const {
-			  attributes,
-			  setAttributes,
-			  isSelected,
-			  children = [],
-		  } = props;
+		      attributes,
+		      setAttributes,
+		      isSelected,
+		      children = [],
+	      } = props;
 
 	const { field_options_from } = attributes;
 
-	return isSelected && <div className='inside-block-options'>
+	return isSelected && <div className="inside-block-options">
 		<SelectControl
-			key='field_options_from'
-			label='Fill Options From'
-			labelPosition='top'
+			key="field_options_from"
+			label="Fill Options From"
+			labelPosition="top"
 			value={ field_options_from }
 			onChange={ ( newValue ) => {
 				setAttributes( { field_options_from: newValue } );

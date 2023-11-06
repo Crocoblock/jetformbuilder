@@ -16,7 +16,7 @@ class Text_Field_Parser extends Field_Data_Parser {
 		return 'text-field';
 	}
 
-	protected function check_response() {
+	public function check_response() {
 		parent::check_response();
 
 		$type = $this->settings['field_type'] ?? 'text';

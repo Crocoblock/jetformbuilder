@@ -24,6 +24,10 @@
 			"type": "object",
 			"default": {}
 		},
+		"custom_option": {
+			"type": "boolean",
+			"default": false
+		},
 		"custom_item_template": {
 			"type": "boolean",
 			"default": false

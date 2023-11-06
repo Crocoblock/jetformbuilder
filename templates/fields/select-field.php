@@ -56,8 +56,8 @@ $this->add_attribute( 'data-default-val', $default );
 				$calc     = '';
 
 				if ( is_array( $option ) ) {
-					$val   = $option['value'] ?? $value;
-					$label = $option['label'] ?? $val;
+					$val   = $option['value'];
+					$label = $option['label'];
 				} else {
 					$val   = $value;
 					$label = $option;

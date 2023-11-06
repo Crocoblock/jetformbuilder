@@ -1,5 +1,5 @@
-import RadioEdit from "./edit";
-import metadata from "@blocks/radio-field/block.json";
+import RadioEdit from './edit';
+import metadata from '@blocks/radio-field/block.json';
 
 const { __ } = wp.i18n;
 
@@ -19,7 +19,7 @@ const settings = {
 	description: __(
 		`Create a list of available options from which the user can 
 choose only a single variant. Build the lists of various lengths.`,
-		'jet-form-builder'
+		'jet-form-builder',
 	),
 	edit: RadioEdit,
 	useEditProps: [ 'uniqKey', 'attrHelp', 'blockName' ],
@@ -34,7 +34,8 @@ choose only a single variant. Build the lists of various lengths.`,
 				type: 'block',
 				blocks: [ 'jet-forms/text-field' ],
 				transform: ( attributes ) => {
-					return createBlock( 'jet-forms/text-field', { ...attributes } );
+					return createBlock( 'jet-forms/text-field',
+						{ ...attributes } );
 				},
 				priority: 0,
 			},
@@ -43,11 +44,24 @@ choose only a single variant. Build the lists of various lengths.`,
 			{
 				type: 'block',
 				blocks: [
-					'jet-forms/checkbox-field',
 					'jet-forms/select-field',
 					'jet-forms/text-field',
 				],
 				transform: ( attributes ) => {
+					return createBlock( name, { ...attributes } );
+				},
+				priority: 0,
+			},
+			{
+				type: 'block',
+				blocks: [
+					'jet-forms/checkbox-field',
+				],
+				transform: ( attributes ) => {
+					attributes.custom_option = {
+						allow: !!attributes.custom_option,
+						label: '+ Add New',
+					};
 					return createBlock( name, { ...attributes } );
 				},
 				priority: 0,
@@ -59,5 +73,5 @@ choose only a single variant. Build the lists of various lengths.`,
 export {
 	metadata,
 	name,
-	settings
+	settings,
 };

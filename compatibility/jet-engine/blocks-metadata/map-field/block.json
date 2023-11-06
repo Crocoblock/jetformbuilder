@@ -25,6 +25,17 @@
 			"type": "string",
 			"default": "location_string"
 		},
+		"zoom": {
+			"type": [
+				"string",
+				"number"
+			],
+			"default": 14,
+			"jfb": {
+				"shortcode": true,
+				"preset": true
+			}
+		},
 		"height": {
 			"type": "number",
 			"default": 300

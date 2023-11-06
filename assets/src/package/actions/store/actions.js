@@ -1,5 +1,9 @@
 import constants from './constants';
 
+const {
+	      dispatch,
+      } = wp.data;
+
 export default {
 	setCurrentAction( item = {} ) {
 		return {
@@ -64,10 +68,32 @@ export default {
 			item,
 		};
 	},
-	addComputedField( field ) {
+	addComputedField( field, settings = {} ) {
 		return {
 			type: constants.addComputedField,
 			field,
+			settings,
+		};
+	},
+	editAction( actionType, replace ) {
+		return {
+			type: constants.editAction,
+			actionType,
+			replace,
+		};
+	},
+	openActionSettings( { item, index } ) {
+		dispatch( 'jet-forms/actions' ).setCurrentAction( {
+			...item,
+			index,
+		} );
+
+		return {
+			type: constants.setMeta,
+			item: {
+				index,
+				modalType: 'settings',
+			},
 		};
 	},
 };

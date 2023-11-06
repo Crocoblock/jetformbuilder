@@ -18,7 +18,6 @@ import TooLateTimestamp from './restrictions/TooLateTimestamp';
 
 const {
 	      applyFilters,
-	      addFilter,
       } = JetPlugins.hooks;
 
 const {

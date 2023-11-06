@@ -9,9 +9,7 @@ use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Regexp_Tools;
-use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Form_Actions\Form_Actions_Manager;
 use Jet_Form_Builder\Form_Messages;
 use Jet_Form_Builder\Form_Patterns\Manager as PatternsManager;
 use Jet_Form_Builder\Addons\Manager as AddonsManager;
@@ -30,7 +28,6 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * @property Post_Type $post_type
  * @property ActionsManager $actions
  * @property Form_Manager $form
  * @property Form_Handler $form_handler
@@ -44,7 +41,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Plugin {
 
-	public $post_type;
 	public $actions;
 	public $form;
 	public $form_handler;
@@ -80,7 +76,6 @@ class Plugin {
 		$this->get_compat()->init_hooks();
 
 		$this->msg_router     = new Form_Messages\Msg_Router();
-		$this->post_type      = new Post_Type();
 		$this->actions        = new Actions\Manager();
 		$this->form           = new Form_Manager();
 		$this->form_handler   = new Form_Handler();
@@ -107,7 +102,6 @@ class Plugin {
 			$this->editor = new Admin\Editor();
 			Pages_Manager::instance()->set_up();
 
-			new Form_Actions_Manager();
 			new PatternsManager();
 		} else {
 			$this->form_handler->call_form();
@@ -242,6 +236,12 @@ class Plugin {
 				}
 			case 'allow_gateways':
 				return jet_form_builder()->has_module( 'gateways' );
+			case 'post_type':
+				try {
+					return jet_form_builder()->module( 'post-type' );
+				} catch ( Repository_Exception $exception ) {
+					return null;
+				}
 		}
 
 		return null;

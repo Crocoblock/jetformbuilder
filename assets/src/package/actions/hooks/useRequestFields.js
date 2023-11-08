@@ -86,28 +86,28 @@ function getComputedFields( { fields, actions, computed, nameSet } ) {
 		/**
 		 * @type {BaseComputedField}
 		 */
-		const computed = new computedField();
+		const current = new computedField();
 
 		for ( let action of actions ) {
 			processComputedField( {
-				computed,
+				computed: current,
 				action,
 				nameSet,
 				fields,
 			} );
 		}
 
-		if ( computed.action || !computed.isSupportedGlobal() ) {
+		if ( current.action || !current.isSupportedGlobal() ) {
 			continue;
 		}
-		const label = computed.getLabel();
-		const name  = computed.getName();
+		const label = current.getLabel();
+		const name  = current.getName();
 
 		fields.push( {
 			label: label || name,
 			value: name,
 			name: name,
-			help: computed.getHelp(),
+			help: current.getHelp(),
 		} );
 	}
 }
@@ -119,11 +119,11 @@ function useRequestFields( { returnOnEmptyCurrentAction = true } = {} ) {
 
 	const actionProps = useContext( CurrentActionEditContext );
 
-	const { currentAction, computed } = useSelect(
+	const { currentAction, computedList } = useSelect(
 		select => (
 			{
 				currentAction: select( 'jet-forms/actions' ).getCurrentAction(),
-				computed: select( 'jet-forms/actions' ).getComputedFields(),
+				computedList: select( 'jet-forms/actions' ).getComputedFields(),
 			}
 		),
 		[],
@@ -143,7 +143,7 @@ function useRequestFields( { returnOnEmptyCurrentAction = true } = {} ) {
 	const nameSet = new Set();
 	const fields  = [];
 
-	for ( const { field: computedField, settings } of computed ) {
+	for ( const { field: computedField, settings } of computedList ) {
 		if ( !settings?.isScoped ) {
 			continue;
 		}
@@ -171,7 +171,7 @@ function useRequestFields( { returnOnEmptyCurrentAction = true } = {} ) {
 	getComputedFields( {
 		fields,
 		actions,
-		computed,
+		computed: computedList,
 		nameSet,
 	} );
 

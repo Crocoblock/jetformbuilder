@@ -101,10 +101,9 @@ class Form extends Base {
 			'fields_layout',
 			array(
 				'tab'     => 'content',
-				'label'   => esc_html__( 'Choose Form', 'jet-form-builder' ),
+				'label'   => esc_html__( 'Fields Layout', 'jet-form-builder' ),
 				'type'    => 'select',
 				'options' => $options['fields_layout'],
-				'default' => 'column',
 			)
 		);
 
@@ -126,7 +125,6 @@ class Form extends Base {
 				'label'   => esc_html__( 'Fields label HTML tag', 'jet-form-builder' ),
 				'type'    => 'select',
 				'options' => $options['fields_label_tag'],
-				'default' => 'div',
 			)
 		);
 
@@ -137,7 +135,6 @@ class Form extends Base {
 				'label'   => esc_html__( 'Submit Type', 'jet-form-builder' ),
 				'type'    => 'select',
 				'options' => $options['submit_type'],
-				'default' => 'reload',
 			)
 		);
 

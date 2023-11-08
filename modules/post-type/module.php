@@ -20,7 +20,7 @@ use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
-use JFB_Modules\Rest_Api\Forms_Controller;
+use JFB_Modules\Post_Type\Rest_Api\Forms_Post_Type_Controller;
 
 /**
  * @since 3.2.0
@@ -225,7 +225,7 @@ class Module implements
 			'show_in_menu'          => true,
 			'show_in_nav_menus'     => false,
 			'show_in_rest'          => true,
-			'rest_controller_class' => Forms_Controller::class,
+			'rest_controller_class' => Forms_Post_Type_Controller::class,
 			'publicly_queryable'    => false,
 			'exclude_from_search'   => true,
 			'has_archive'           => false,

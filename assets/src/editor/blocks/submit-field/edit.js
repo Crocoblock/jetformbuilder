@@ -3,10 +3,8 @@ import preview from './preview';
 const {
 	      GeneralFields,
 	      AdvancedFields,
-	      ActionButtonBlockEditSlotFills,
 	      ActionButtonPlaceholder,
       } = JetFBComponents;
-
 
 const {
 	      __,
@@ -14,15 +12,27 @@ const {
 
 const {
 	      InspectorControls,
-	      useBlockProps,
       } = wp.blockEditor;
 
-const { useState, useEffect } = wp.element;
+const {
+	      useState,
+	      useEffect,
+      } = wp.element;
+
+const {
+	      withFilters,
+      } = wp.components;
 
 const defaultClasses        = [ 'jet-form-builder__action-button' ];
 const defaultWrapperClasses = [
 	'jet-form-builder__action-button-wrapper',
 ];
+
+const ActionButtonPlaceholderFiltered = withFilters(
+	'jet.fb.block.action-button.edit',
+)(
+	ActionButtonPlaceholder,
+);
 
 const ButtonEdit = ( props ) => {
 
@@ -82,24 +92,14 @@ const ButtonEdit = ( props ) => {
 		setAttributes( { buttons } );
 	};
 
-	const fillProps = {
-		attributes,
-		setAttributes,
-		setActionAttributes,
-		actionAttributes: attributes.buttons[ attributes.action_type ] ?? {},
-		buttonClasses,
-		wrapperClasses,
-	};
-
-	return <ActionButtonBlockEditSlotFills.Slot fillProps={ fillProps }>
-		{ ( fills ) => {
-			return (
-				Boolean( fills?.length ) ? fills : <ActionButtonPlaceholder
-					{ ...fillProps }
-				/>
-			);
-		} }
-	</ActionButtonBlockEditSlotFills.Slot>;
+	return <ActionButtonPlaceholderFiltered
+		attributes={ attributes }
+		setAttributes={ setAttributes }
+		setActionAttributes={ setActionAttributes }
+		actionAttributes={ attributes.buttons[ attributes.action_type ] ?? {} }
+		buttonClasses={ buttonClasses }
+		wrapperClasses={ wrapperClasses }
+	/>;
 };
 
 export default function ActionButtonEdit( props ) {

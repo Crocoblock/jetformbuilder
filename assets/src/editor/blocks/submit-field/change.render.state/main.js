@@ -6,22 +6,17 @@ const {
       } = wp.blocks;
 
 const {
-	      registerPlugin,
-      } = wp.plugins;
-
-const {
-	      ActionButtonBlockEditSlotFills,
-      } = JetFBComponents;
+	      addFilter,
+      } = wp.hooks;
 
 registerBlockVariation( 'jet-forms/submit-field', variation );
 
-registerPlugin(
-	'jf-action-button-change-state',
-	{
-		render: () => <ActionButtonBlockEditSlotFills
-			action_type="switch-state"
-		>
-			{ ( props ) => <SwitcherRenderStateControls { ...props }/> }
-		</ActionButtonBlockEditSlotFills>,
+addFilter(
+	'jet.fb.block.action-button.edit',
+	'jet-form-builder/switch-state-variation',
+	( DefaultEdit ) => props => {
+		return 'switch-state' !== props.attributes?.action_type
+		       ? <DefaultEdit { ...props } />
+		       : <SwitcherRenderStateControls { ...props }/>;
 	},
 );

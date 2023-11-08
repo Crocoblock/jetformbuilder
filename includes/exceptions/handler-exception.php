@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Exceptions;
 
 use Jet_Form_Builder\Form_Messages\Manager;
+use Jet_Form_Builder\Form_Messages\Status_Info;
 use JFB_Modules\Dev;
 use JFB_Modules\Logger;
 
@@ -23,6 +24,7 @@ abstract class Handler_Exception extends \Exception {
 
 		$this->additional_data = $additional_data;
 
+		$this->check_message_length();
 		$this->log();
 	}
 
@@ -86,6 +88,25 @@ abstract class Handler_Exception extends \Exception {
 		}
 
 		return is_string( $this->message ) && 0 === strpos( $this->message, Manager::DYNAMIC_SUCCESS_PREF );
+	}
+
+	/**
+	 * We need to check the status length for cases when it's too long.
+	 * If it's long - we store it in `*_jet_fb_records_errors` table
+	 *
+	 * @since 3.1.8
+	 *
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/4994
+	 */
+	protected function check_message_length() {
+		if ( 255 > strlen( $this->message ) ) {
+			return;
+		}
+
+		$status        = new Status_Info( $this->message );
+		$this->message = $status->is_success() ? 'success' : 'failed';
+
+		array_unshift( $this->additional_data, $status->get_raw_message() );
 	}
 
 }

@@ -212,19 +212,16 @@ final class Module implements Base_Module_It {
 		}
 		$this->_registered_scripts = true;
 
-		wp_register_script(
-			'jet-plugins',
-			Plugin::instance()->plugin_url( 'assets/js/frontend/lib/jet.plugins.js' ),
-			array( 'jquery' ),
-			'1.0.0',
-			true
-		);
+		/** @var \JFB_Modules\Jet_Plugins\Module $jet_plugins */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$jet_plugins = jet_form_builder()->module( 'jet-plugins' );
+		$jet_plugins->register_scripts();
 
 		wp_register_script(
 			self::MAIN_SCRIPT_HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/main.js' ),
 			array(
-				'jet-plugins',
+				$jet_plugins::HANDLE,
 				'wp-i18n',
 				'wp-api-fetch',
 			),

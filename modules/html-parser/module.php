@@ -28,18 +28,23 @@ class Module implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_I
 	}
 
 	public function init_hooks() {
-		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'register_scripts' ) );
 	}
 
 	public function remove_hooks() {
-		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'register_scripts' ) );
 	}
 
 	public function register_scripts() {
-		wp_enqueue_script(
+		/** @var \JFB_Modules\Jet_Plugins\Module $jet_plugins */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$jet_plugins = jet_form_builder()->module( 'jet-plugins' );
+		$jet_plugins->register_scripts();
+
+		wp_register_script(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/js/parser.js' ),
-			array( 'jet-plugins' ),
+			array(
+				$jet_plugins::HANDLE,
+			),
 			jet_form_builder()->get_version(),
 			true
 		);

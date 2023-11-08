@@ -1,6 +1,6 @@
 {
-	"name": "jet-form-builder-ai",
-	"description": "AI module for JetFormBuilder Plugin",
+	"name": "jet-form-builder-jet-plugins-lib",
+	"description": "Jet Plugins module for JetFormBuilder Plugin",
 	"version": "3.3.0",
 	"author": "hug.reed <sanko200065@gmail.com>",
 	"license": "MIT",
@@ -12,13 +12,11 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.14.3",
-		"@babel/plugin-proposal-class-properties": "^7.13.0",
-		"@babel/plugin-transform-react-jsx": "^7.14.3",
-		"@babel/preset-env": "^7.14.2",
-		"@babel/preset-react": "^7.13.13",
 		"babel-loader": "^8.2.2",
 		"webpack": "^5.37.1",
-		"webpack-cli": "^4.7.0",
-		"sass": "^1.60.0"
+		"webpack-cli": "^4.7.0"
+	},
+	"dependencies": {
+		"@wordpress/hooks": "^3.23.0"
 	}
 }

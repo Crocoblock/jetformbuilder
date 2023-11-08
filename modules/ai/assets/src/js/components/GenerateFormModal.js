@@ -18,26 +18,19 @@ const {
       } = wp;
 
 const {
-	      BlockPreview,
-      } = wp.blockEditor;
-
-const {
 	      parseHTMLtoBlocks,
+	      getFormInnerFields,
       } = JetFormBuilderParser;
-
-const {
-	      createBlocksFromInnerBlocksTemplate,
-      } = wp.blocks;
 
 const promptsExamples = [
 	'Registration form with minimum inputs',
 	'Opt-in form with gender selector like radio',
-
+	'Quiz form with 5 questions with choices about math',
 ];
 
 function GenerateFormModal( { setShowModal } ) {
 	const [ prompt, setPrompt ]       = useState( '' );
-	const [ blocks, setBlocks ]       = useState( [] );
+	const [ formHTML, setFormHTML ]   = useState( '' );
 	const [ isLoading, setIsLoading ] = useState( false );
 
 	const generateForm = () => {
@@ -47,11 +40,15 @@ function GenerateFormModal( { setShowModal } ) {
 			method: 'POST',
 			data: { prompt },
 		} ).then( response => {
-			setBlocks(
-				createBlocksFromInnerBlocksTemplate(
-					parseHTMLtoBlocks( response.form ),
-				),
-			);
+
+			setFormHTML( getFormInnerFields( response.form ) );
+			console.group( __(
+				'JFB: Parsed blocks from generated HTML',
+				'jet-form-builder',
+			) );
+			console.log( parseHTMLtoBlocks( response.form ) );
+			console.groupEnd();
+
 		} ).catch( response => {
 			console.error( response );
 		} ).finally( () => {
@@ -70,9 +67,14 @@ function GenerateFormModal( { setShowModal } ) {
 		onRequestClose={ () => setShowModal( false ) }
 		title={ __( 'Generate Form with AI', 'jet-form-builder' ) }
 	>
-		{ Boolean( blocks.length ) ? <>
-			<BlockPreview
-				blocks={ blocks }
+		{ Boolean( formHTML.length ) ? <>
+			<div
+				dangerouslySetInnerHTML={ { __html: formHTML } }
+				style={ {
+					padding: '2em 1em',
+					backgroundColor: '#f6f7f7',
+					marginBottom: '1em',
+				} }
 			/>
 			<Flex justify="flex-start">
 				<Button
@@ -83,7 +85,7 @@ function GenerateFormModal( { setShowModal } ) {
 				</Button>
 				<Button
 					variant="secondary"
-					onClick={ () => setBlocks( [] ) }
+					onClick={ () => setFormHTML( '' ) }
 				>
 					{ __( 'Change generation prompt', 'jet-form-builder' ) }
 				</Button>
@@ -135,21 +137,12 @@ the prompt - AI understand it better than other`,
 				  listStyle: 'disc',
 				  paddingInlineStart: '1em',
 			  } }>
-				  <li>
+				  { promptsExamples.map( textPrompt => <li key={ textPrompt }>
 					  <Button
-						  onClick={ () => setPrompt() }
-					  >{ __( '' ) }</Button>
-				  </li>
-				  <li>{ __(
-					  `If you need some specific fields - describe 
-them also in prompt.`,
-					  'jet-form-builder',
-				  ) }</li>
-				  <li>{ __(
-					  `Better to use English language for 
-the prompt - AI understand it better than other`,
-					  'jet-form-builder',
-				  ) }</li>
+						  onClick={ () => setPrompt( textPrompt ) }
+						  variant="link"
+					  >{ textPrompt }</Button>
+				  </li> ) }
 			  </ul>
 		  </> }
 	</Modal>;

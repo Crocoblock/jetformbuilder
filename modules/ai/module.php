@@ -56,21 +56,39 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	}
 
 	public function admin_enqueue_assets() {
+		/** @var \JFB_Modules\Html_Parser\Module $parser_module */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$parser_module = jet_form_builder()->module( 'html-parser' );
+
+		$parser_module->register_scripts();
 		wp_enqueue_style( 'wp-components' );
 		wp_enqueue_script(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/js/admin/forms.js' ),
-			array( 'wp-dom-ready', 'wp-components', 'wp-i18n' ),
+			array(
+				$parser_module->get_handle(),
+				'wp-api-fetch',
+				'wp-dom-ready',
+				'wp-components',
+				'wp-i18n',
+			),
 			jet_form_builder()->get_version(),
 			true
 		);
 	}
 
 	public function editor_enqueue_assets() {
+		/** @var \JFB_Modules\Html_Parser\Module $parser_module */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$parser_module = jet_form_builder()->module( 'html-parser' );
+
+		$parser_module->register_scripts();
 		wp_enqueue_script(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/js/editor.js' ),
-			array( 'wp-dom-ready', 'wp-components', 'wp-i18n' ),
+			array(
+				$parser_module->get_handle(),
+			),
 			jet_form_builder()->get_version(),
 			true
 		);

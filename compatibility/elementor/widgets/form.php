@@ -3498,15 +3498,6 @@ class Form extends Widget_Base implements Widget_Base_It {
 				$this->selector( '-message--success' )
 			);
 
-			$this->add_control(
-				'form_messages__error_heading',
-				array(
-					'label'     => __( 'Success Message', 'jet-form-builder' ),
-					'type'      => Controls_Manager::HEADING,
-					'separator' => 'before',
-				)
-			);
-
 			$this->end_controls_tab();
 
 			$this->start_controls_tab(

@@ -5,6 +5,7 @@ module.exports = {
 	context: path.resolve( __dirname, '../assets/src/js' ),
 	entry: {
 		'editor': './editor/index.js',
+		'editor.package': './editor-package/index.js',
 	},
 	output: {
 		path: path.resolve( __dirname, '../assets/build/js' ),

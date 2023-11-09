@@ -1,9 +1,6 @@
-import defaultPattern from '@patterns/default.json';
+import usePattern from '../hooks/usePattern';
 import useAnotherBlocks from '../hooks/useAnotherBlocks';
 
-const {
-	      useBlockEditContext,
-      } = wp.blockEditor;
 const {
 	      useState,
 	      useRef,
@@ -14,91 +11,20 @@ const {
       } = wp.components;
 
 const {
-	      createBlocksFromInnerBlocksTemplate,
-      } = wp.blocks;
-const {
 	      __,
       } = wp.i18n;
-const {
-	      useDispatch,
-      } = wp.data;
-
-const {
-	      doAction,
-      } = wp.hooks;
-
-const {
-	      convertFlow,
-      } = JetFBActions;
-const {
-	      useActions,
-      } = JetFBHooks;
 
 function PatternInserterButton( {
-	pattern,
+	patternName,
 	withPatternIcon = false,
 	...props
 } ) {
 	const [ showPopover, setShowPopover ] = useState( false );
 
-	const buttonRef    = useRef();
-	const { clientId } = useBlockEditContext();
-	const blocks       = useAnotherBlocks();
+	const buttonRef = useRef();
+	const blocks    = useAnotherBlocks();
 
-	const [ actions, setActions ] = useActions();
-
-	const { editPost } = useDispatch( 'core/editor' );
-
-	const {
-		      removeBlocks,
-		      replaceBlocks,
-	      } = useDispatch( 'core/block-editor' );
-
-	function insertPattern() {
-		applyPattern();
-
-		removeBlocks(
-			blocks.map( ( { clientId: id } ) => id ),
-		);
-
-		// inserting actions
-		const { list } = convertFlow( pattern?.actions ?? [] );
-
-		setActions( list );
-	}
-
-	function appendPattern() {
-		applyPattern();
-
-		// inserting actions
-		const { list } = convertFlow( pattern?.actions ?? [] );
-
-		setActions( [ ...actions, ...list ] );
-	}
-
-	function applyPattern() {
-		doAction( 'jet.fb.insert.pattern', pattern );
-
-		// inserting blocks
-		replaceBlocks(
-			[ clientId ],
-			createBlocksFromInnerBlocksTemplate(
-				pattern?.blocks ?? [] ),
-			0,
-		);
-
-		const {
-			      actions: patternActions,
-			      blocks: patternBlocks,
-			      name,
-			      icon,
-			      title,
-			      description,
-			      ...rawFormData
-		      } = pattern;
-
-		editPost( rawFormData );
-	}
+	const { pattern, insert, append } = usePattern( patternName );
 
 	return <>
 		<Button
@@ -109,7 +35,7 @@ function PatternInserterButton( {
 			onClick={ () => {
 				blocks.length
 				? setShowPopover( prev => !prev )
-				: insertPattern();
+				: insert();
 			} }
 			label={ pattern.description || pattern.title }
 			{ ...props }
@@ -142,14 +68,14 @@ function PatternInserterButton( {
 					<Button
 						isLink
 						isDestructive
-						onClick={ insertPattern }
+						onClick={ insert }
 					>
 						{ __( 'replace', 'jet-form-builder' ) }
 					</Button>
 					{ ' / ' }
 					<Button
 						isLink
-						onClick={ appendPattern }
+						onClick={ append }
 					>
 						{ __( 'append', 'jet-form-builder' ) }
 					</Button>

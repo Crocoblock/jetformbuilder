@@ -36,6 +36,10 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 			'jet-form-builder/editor-assets/before',
 			array( $this, 'editor_assets_before' )
 		);
+		add_action(
+			'jet-form-builder/editor-package/before',
+			array( $this, 'editor_assets_package_before' )
+		);
 		add_filter(
 			'jet-form-builder/post-type/args',
 			array( $this, 'add_default_fields_to_form' ),
@@ -48,6 +52,10 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 			'jet-form-builder/editor-assets/before',
 			array( $this, 'editor_assets_before' )
 		);
+		remove_action(
+			'jet-form-builder/editor-package/before',
+			array( $this, 'editor_assets_package_before' )
+		);
 		remove_filter(
 			'jet-form-builder/post-type/args',
 			array( $this, 'add_default_fields_to_form' ),
@@ -59,6 +67,16 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 		wp_enqueue_script(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/js/editor.js' ),
+			array(),
+			jet_form_builder()->get_version(),
+			true
+		);
+	}
+
+	public function editor_assets_package_before() {
+		wp_enqueue_script(
+			$this->get_handle( 'package' ),
+			$this->get_url( 'assets/build/js/editor.package.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true

@@ -34,11 +34,13 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 	public function init_hooks() {
 		add_action(
 			'jet-form-builder/editor-assets/before',
-			array( $this, 'editor_assets_before' )
+			array( $this, 'editor_assets_before' ),
+			20
 		);
 		add_action(
-			'jet-form-builder/editor-package/before',
-			array( $this, 'editor_assets_package_before' )
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'editor_assets_package_before' ),
+			0
 		);
 		add_filter(
 			'jet-form-builder/post-type/args',

@@ -16,7 +16,7 @@ let prevBlockCount;
 let prevBlockAttrs;
 
 subscribe( () => {
-	const { debounce }  = lodash;
+	const { debounce }  = window._;
 	const { setBlocks } = dispatch( storeName );
 
 	const resetBlocks = debounce( () => {

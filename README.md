@@ -4,6 +4,12 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.1.8
+* FIX: Error in form fields in editor after release of WP 6.4. Inability to edit them
+* FIX: Prevent saving too long status in `*_jet_fb_records` table
+* FIX: Remove useless control in Elementor widget - JetForm
+* FIX: Save form progress (addon) not working for repeater fields
+
 ## 3.1.7
 * ADD: Support multiple emails in Reply-To (Send Email)
 * ADD: Added "Post Type" to Hidden Field Sources

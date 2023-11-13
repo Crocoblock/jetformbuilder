@@ -41,6 +41,7 @@ class Constants_Manager {
 			'jet-form-builder/content-constants',
 			array(
 				new Site_Name_Constant(),
+				new Site_Url_Constant(),
 			)
 		);
 	}

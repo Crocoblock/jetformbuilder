@@ -30,10 +30,9 @@ const {
 function usePattern( name ) {
 	const { clientId } = useBlockEditContext();
 	const blocks       = useAnotherBlocks();
+	const { editPost } = useDispatch( 'core/editor' );
 
 	const [ actions, setActions ] = useActions();
-
-	const { editPost } = useDispatch( 'core/editor' );
 
 	const {
 		      removeBlocks,
@@ -67,14 +66,16 @@ function usePattern( name ) {
 		setActions( [ ...actions, ...list ] );
 	}
 
+	/**
+	 * @returns {boolean}
+	 */
 	function applyPattern() {
-		doAction( 'jet.fb.insert.pattern', pattern );
-
 		// inserting blocks
 		replaceBlocks(
 			[ clientId ],
 			createBlocksFromInnerBlocksTemplate(
-				pattern?.blocks ?? [] ),
+				pattern?.blocks ?? [],
+			),
 			0,
 		);
 

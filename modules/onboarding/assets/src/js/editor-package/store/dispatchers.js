@@ -1,5 +1,6 @@
 import constants from './constants';
 import selectors from './selectors';
+import SinglePattern from '../components/SinglePattern';
 
 export default {
 	[ constants.register ]( state, action ) {
@@ -15,8 +16,12 @@ export default {
 
 			const issetIndex = selectors.getTypeIndex( state, item.name );
 
-			// is new event type
+			// is new pattern type
 			if ( -1 === issetIndex ) {
+				if ( !item.hasOwnProperty( 'view' ) ) {
+					item.view = SinglePattern;
+				}
+
 				state.types.push( { ...item } );
 			}
 			else {

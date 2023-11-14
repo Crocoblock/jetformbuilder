@@ -2,10 +2,6 @@ import usePattern from '../hooks/usePattern';
 import useAnotherBlocks from '../hooks/useAnotherBlocks';
 
 const {
-	      useState,
-	      useRef,
-      } = wp.element;
-const {
 	      Button,
 	      Popover,
       } = wp.components;
@@ -14,48 +10,58 @@ const {
 	      __,
       } = wp.i18n;
 
+const {
+	      useTriggerPopover,
+      } = JetFBHooks;
+
 function PatternInserterButton( {
 	patternName,
 	withPatternIcon = false,
+	onClick = false,
 	...props
 } ) {
-	const [ showPopover, setShowPopover ] = useState( false );
+	const {
+		      ref,
+		      showPopover,
+		      setShowPopover,
+		      popoverProps,
+	      } = useTriggerPopover();
 
-	const buttonRef = useRef();
-	const blocks    = useAnotherBlocks();
+	const blocks = useAnotherBlocks();
 
-	const { pattern, insert, append } = usePattern( patternName );
+	const {
+		      pattern,
+		      insert,
+		      append,
+	      } = usePattern( patternName );
 
 	return <>
 		<Button
-			ref={ buttonRef }
+			ref={ ref }
 			icon={ withPatternIcon && <span
 				dangerouslySetInnerHTML={ { __html: pattern.icon } }
 			/> }
 			onClick={ () => {
-				blocks.length
-				? setShowPopover( prev => !prev )
-				: insert();
+				if ( 'function' === typeof onClick ) {
+					onClick();
+					return;
+				}
+				if ( blocks.length ) {
+					setShowPopover( prev => !prev );
+				}
+				else {
+					insert();
+				}
 			} }
 			label={ pattern.description || pattern.title }
 			{ ...props }
 		/>
 		{ showPopover && (
 			<Popover
-				anchorRef={ buttonRef.current }
 				position={ 'top-start' }
 				noArrow={ false }
 				isAlternate
-				onFocusOutside={ event => {
-					/**
-					 * We should skip handling if focused node it's not equals
-					 * the button which triggers popover
-					 */
-					if ( event.relatedTarget !== buttonRef.current ) {
-						setShowPopover( false );
-					}
-				} }
-				onClose={ () => setShowPopover( false ) }
+				{ ...popoverProps }
 			>
 				<div
 					style={ {

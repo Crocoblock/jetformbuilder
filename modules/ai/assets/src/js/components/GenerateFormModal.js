@@ -1,3 +1,5 @@
+import GenerateFormModalFooterSlotFill from './GenerateFormModalFooterSlotFill';
+
 const {
 	      Modal,
 	      TextareaControl,
@@ -21,6 +23,10 @@ const {
 	      parseHTMLtoBlocks,
 	      getFormInnerFields,
       } = JetFormBuilderParser;
+
+const {
+	      Slot: FooterSlot,
+      } = GenerateFormModalFooterSlotFill;
 
 const promptsExamples = [
 	'Registration form with minimum inputs',
@@ -56,10 +62,6 @@ function GenerateFormModal( { setShowModal } ) {
 		} );
 	};
 
-	const useGeneratedForm = () => {
-
-	};
-
 	return <Modal
 		style={ {
 			width: '60vw',
@@ -76,20 +78,7 @@ function GenerateFormModal( { setShowModal } ) {
 					marginBottom: '1em',
 				} }
 			/>
-			<Flex justify="flex-start">
-				<Button
-					variant="primary"
-					onClick={ useGeneratedForm }
-				>
-					{ __( 'Use this form', 'jet-form-builder' ) }
-				</Button>
-				<Button
-					variant="secondary"
-					onClick={ () => setFormHTML( '' ) }
-				>
-					{ __( 'Change generation prompt', 'jet-form-builder' ) }
-				</Button>
-			</Flex>
+			<FooterSlot fillProps={ { clearHTML: () => setFormHTML( '' ) } }/>
 		</> : <>
 			  <TextareaControl
 				  label={ __( 'Describe the form you want',

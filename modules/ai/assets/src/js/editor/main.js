@@ -1,4 +1,6 @@
 import GenerateFormButton from './GenerateFormButton';
+import AiFormPatternButton from './AiFormPatternButton';
+import AiPattern from './ai.pattern.json';
 
 const {
 	      createRoot,
@@ -6,6 +8,7 @@ const {
 
 const {
 	      subscribe,
+	      dispatch,
       } = wp.data;
 
 const buttonDiv = document.createElement( 'div' );
@@ -34,4 +37,9 @@ wp.domReady( () => {
 	subscribe( () => {
 		setTimeout( appendButton, 0 );
 	} );
+} );
+
+dispatch( 'jet-forms/patterns' ).register( {
+	...AiPattern,
+	view: AiFormPatternButton,
 } );

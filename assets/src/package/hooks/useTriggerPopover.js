@@ -3,13 +3,16 @@ const {
 	      useRef,
       } = wp.element;
 
+/**
+ * @returns {{ref, setShowPopover: *, showPop<>over: *, popoverProps: {onClose: (function(): *), onFocusOutside: popoverProps.onFocusOutside, anchorRef}}}
+ */
 function useTriggerPopover() {
 	const [ showPopover, setShowPopover ] = useState( false );
 
 	const buttonRef = useRef();
 
 	const popoverProps = {
-		anchorRef: buttonRef.current,
+		anchor: buttonRef.current,
 		onFocusOutside: event => {
 			/**
 			 * We should skip handling if focused node it's not equals

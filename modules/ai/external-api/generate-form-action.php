@@ -54,4 +54,11 @@ class Generate_Form_Action extends Base_Gateway_Action {
 		$this->prompt = $prompt;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function get_prompt(): string {
+		return $this->prompt;
+	}
+
 }

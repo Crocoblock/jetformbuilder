@@ -5,6 +5,7 @@ import registerUserPattern from '@patterns/register.user.json';
 import defaultPattern from '@patterns/default.json';
 import usePattern from './hooks/usePattern';
 import PatternInserterButton from './components/PatternInserterButton';
+import useAnotherBlocks from './hooks/useAnotherBlocks';
 
 const {
 	      register,

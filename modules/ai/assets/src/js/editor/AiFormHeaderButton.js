@@ -1,10 +1,8 @@
 import GenerateFormModal from '../components/GenerateFormModal';
-import GenerateFormModalFooterSlotFill
-	from '../components/GenerateFormModalFooterSlotFill';
+import AiEditorFooterFill from './AiEditorFooterFill';
 
 const {
 	      Button,
-	      Flex,
       } = wp.components;
 
 const {
@@ -15,14 +13,8 @@ const {
 	      __,
       } = wp.i18n;
 
-const { Fill: FooterFill } = GenerateFormModalFooterSlotFill;
-
-function GenerateFormButton() {
+function AiFormHeaderButton() {
 	const [ showModal, setShowModal ] = useState( false );
-
-	function useGeneratedForm() {
-
-	}
 
 	return <>
 		<Button
@@ -36,24 +28,13 @@ function GenerateFormButton() {
 		>
 			{ __( 'Generate Form with AI', 'jet-form-builder' ) }
 		</Button>
-		{ showModal && <GenerateFormModal setShowModal={ setShowModal }/> }
-		<FooterFill>
-			{ ( { clearHTML } ) => <Flex justify="flex-start">
-				<Button
-					variant="primary"
-					onClick={ useGeneratedForm }
-				>
-					{ __( 'Use this form', 'jet-form-builder' ) }
-				</Button>
-				<Button
-					variant="secondary"
-					onClick={ clearHTML }
-				>
-					{ __( 'Change generation prompt', 'jet-form-builder' ) }
-				</Button>
-			</Flex> }
-		</FooterFill>
+		{ showModal && <>
+			<GenerateFormModal
+				setShowModal={ setShowModal }
+				footer={ AiEditorFooterFill }
+			/>
+		</> }
 	</>;
 }
 
-export default GenerateFormButton;
+export default AiFormHeaderButton;

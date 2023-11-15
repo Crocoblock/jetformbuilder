@@ -32,6 +32,30 @@ class Generate_Form_Endpoint extends Rest_Api_Endpoint_Base {
 			md5( Http_Tools::get_server_ip_address() )
 		);
 
+		/**
+		 * @TODO remove this before 3.3.0 release
+		 *
+		 * Use this only for tests
+		 */
+		if ( '#fake-ai' === $action->get_prompt() ) {
+			return new \WP_REST_Response(
+				array(
+					'form' => '<form>
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required=""><br><br>
+  
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required=""><br><br>
+  
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required=""><br><br>
+  
+  <input type="submit" value="Register">
+</form>',
+				)
+			);
+		}
+
 		try {
 			$response = $action->send_request();
 		} catch ( Gateway_Exception $exception ) {

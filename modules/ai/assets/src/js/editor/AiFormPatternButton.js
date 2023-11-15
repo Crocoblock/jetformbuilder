@@ -1,42 +1,16 @@
 import GenerateFormModal from '../components/GenerateFormModal';
-import GenerateFormModalFooterSlotFill
-	from '../components/GenerateFormModalFooterSlotFill';
-
-const {
-	      __,
-      } = wp.i18n;
+import AiEditorFooterFill from './AiEditorFooterFill';
 
 const {
 	      PatternInserterButton,
       } = JetFBComponents;
 
 const {
-	      useDispatch,
-      } = wp.data;
-const {
-	      useEffect,
 	      useState,
       } = wp.element;
 
-const {
-	      Fill: FooterFill,
-      } = GenerateFormModalFooterSlotFill;
-
-const {
-	      Button,
-	      Flex,
-      } = wp.components;
-
 function AiFormPatternButton( { pattern } ) {
 	const [ showModal, setShowModal ] = useState( false );
-
-	function appendGeneratedForm() {
-
-	}
-
-	function replaceWithGeneratedForm() {
-
-	}
 
 	return <>
 		<li>
@@ -54,23 +28,12 @@ function AiFormPatternButton( { pattern } ) {
 			{ pattern.title }
 		</span>
 		</li>
-		{ showModal && <GenerateFormModal setShowModal={ setShowModal }/> }
-		<FooterFill>
-			{ ( { clearHTML } ) => <Flex justify="flex-start">
-				<Button
-					variant="primary"
-					onClick={ () => { /* show tooltip */ } }
-				>
-					{ __( 'Use this form', 'jet-form-builder' ) }
-				</Button>
-				<Button
-					variant="secondary"
-					onClick={ clearHTML }
-				>
-					{ __( 'Change generation prompt', 'jet-form-builder' ) }
-				</Button>
-			</Flex> }
-		</FooterFill>
+		{ showModal && <>
+			<GenerateFormModal
+				setShowModal={ setShowModal }
+				footer={ AiEditorFooterFill }
+			/>
+		</> }
 	</>;
 }
 

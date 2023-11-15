@@ -37,6 +37,7 @@ function usePattern( name ) {
 	const {
 		      removeBlocks,
 		      replaceBlocks,
+		      insertBlocks,
 	      } = useDispatch( 'core/block-editor' );
 
 	const pattern = useSelect(
@@ -44,24 +45,34 @@ function usePattern( name ) {
 		[],
 	);
 
-	function insert() {
-		applyPattern();
+	function insert( editedPattern = {} ) {
+		applyPattern( editedPattern );
+
+		editedPattern = {
+			...pattern,
+			...editedPattern,
+		};
 
 		removeBlocks(
 			blocks.map( ( { clientId: id } ) => id ),
 		);
 
 		// inserting actions
-		const { list } = convertFlow( pattern?.actions ?? [] );
+		const { list } = convertFlow( editedPattern?.actions ?? [] );
 
 		setActions( list );
 	}
 
-	function append() {
-		applyPattern();
+	function append( editedPattern = {} ) {
+		applyPattern( editedPattern );
+
+		editedPattern = {
+			...pattern,
+			...editedPattern,
+		};
 
 		// inserting actions
-		const { list } = convertFlow( pattern?.actions ?? [] );
+		const { list } = convertFlow( editedPattern?.actions ?? [] );
 
 		setActions( [ ...actions, ...list ] );
 	}
@@ -69,14 +80,24 @@ function usePattern( name ) {
 	/**
 	 * @returns {boolean}
 	 */
-	function applyPattern() {
+	function applyPattern( editedPattern = {} ) {
+		editedPattern = {
+			...pattern,
+			...editedPattern,
+		};
+
 		// inserting blocks
-		replaceBlocks(
+		// clientId may be empty if we use this hook outside block-edit function
+		clientId ? replaceBlocks(
 			[ clientId ],
 			createBlocksFromInnerBlocksTemplate(
-				pattern?.blocks ?? [],
+				editedPattern?.blocks ?? [],
 			),
 			0,
+		) : insertBlocks(
+			createBlocksFromInnerBlocksTemplate(
+				editedPattern?.blocks ?? [],
+			)
 		);
 
 		const {
@@ -87,12 +108,12 @@ function usePattern( name ) {
 			      title,
 			      description,
 			      ...rawFormData
-		      } = pattern;
+		      } = editedPattern;
 
 		editPost( rawFormData );
 	}
 
-	return { pattern, insert, append };
+	return { pattern, insert, append, blocks };
 }
 
 export default usePattern;

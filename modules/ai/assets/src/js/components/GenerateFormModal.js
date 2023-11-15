@@ -24,17 +24,17 @@ const {
 	      getFormInnerFields,
       } = JetFormBuilderParser;
 
-const {
-	      Slot: FooterSlot,
-      } = GenerateFormModalFooterSlotFill;
-
 const promptsExamples = [
+	'#fake-ai',
 	'Registration form with minimum inputs',
 	'Opt-in form with gender selector like radio',
 	'Quiz form with 5 questions with choices about math',
 ];
 
-function GenerateFormModal( { setShowModal } ) {
+function GenerateFormModal( {
+	setShowModal,
+	footer: Footer = () => 'Here may be buttons'
+} ) {
 	const [ prompt, setPrompt ]       = useState( '' );
 	const [ formHTML, setFormHTML ]   = useState( '' );
 	const [ isLoading, setIsLoading ] = useState( false );
@@ -78,7 +78,10 @@ function GenerateFormModal( { setShowModal } ) {
 					marginBottom: '1em',
 				} }
 			/>
-			<FooterSlot fillProps={ { clearHTML: () => setFormHTML( '' ) } }/>
+			<Footer
+				clearHTML={ () => setFormHTML( '' ) }
+				formHTML={ formHTML }
+			/>
 		</> : <>
 			  <TextareaControl
 				  label={ __( 'Describe the form you want',

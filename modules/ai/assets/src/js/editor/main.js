@@ -1,4 +1,4 @@
-import GenerateFormButton from './GenerateFormButton';
+import AiFormHeaderButton from './AiFormHeaderButton';
 import AiFormPatternButton from './AiFormPatternButton';
 import AiPattern from './ai.pattern.json';
 
@@ -15,7 +15,7 @@ const buttonDiv = document.createElement( 'div' );
 buttonDiv.classList.add( 'jfb-generate-form-ai-wrapper' );
 
 // Render our button.
-createRoot( buttonDiv ).render( <GenerateFormButton/> );
+createRoot( buttonDiv ).render( <AiFormHeaderButton/> );
 
 const appendButton = function () {
 	const header = document.querySelector(

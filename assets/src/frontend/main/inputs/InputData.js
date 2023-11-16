@@ -278,7 +278,7 @@ InputData.prototype.getSubmit = function () {
  * @returns {Observable}
  */
 InputData.prototype.getRoot = function () {
-	if ( ! this.root?.parent ) {
+	if ( !this.root?.parent ) {
 		return this.root;
 	}
 	return this.root.parent.getRoot();
@@ -344,8 +344,11 @@ InputData.prototype.getWrapperNode = function () {
 };
 
 InputData.prototype.handleEnterKey = function ( event ) {
-	// not enter or handling enter key is disabled
-	if ( event.key !== 'Enter' || ! this.enterKey ) {
+	if ( event.key !== 'Enter' || // not enter key
+		!this.enterKey || // handling enter key is disabled
+		event.shiftKey || // the shift key was pressed
+		event.isComposing // if the event is fired within a composition session
+	) {
 		return;
 	}
 

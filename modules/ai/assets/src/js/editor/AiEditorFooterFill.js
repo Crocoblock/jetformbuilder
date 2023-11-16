@@ -1,6 +1,3 @@
-import GenerateFormModalFooterSlotFill
-	from '../components/GenerateFormModalFooterSlotFill';
-
 const {
 	      __,
       } = wp.i18n;
@@ -8,10 +5,6 @@ const {
 const {
 	      parseHTMLtoBlocks,
       } = JetFormBuilderParser;
-
-const {
-	      Fill: FooterFill,
-      } = GenerateFormModalFooterSlotFill;
 
 const {
 	      Button,

@@ -23,14 +23,18 @@ function* selectParser( select ) {
 			label: option.label,
 		} );
 
-		if ( ! option.selected ) {
+		if ( !option.selected ) {
 			continue;
 		}
 
 		attributes.default = option.value;
 	}
 
-	yield [ 'jet-forms/select-field', attributes ];
+	yield {
+		name: 'jet-forms/select-field',
+		attributes,
+		innerBlocks: [],
+	};
 }
 
 export default selectParser;

@@ -15,6 +15,7 @@ use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Ai\Rest_Api\Endpoints\Generate_Form_Endpoint;
+use JFB_Modules\Post_Type;
 
 class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_It, Base_Module_After_Install_It {
 
@@ -74,6 +75,19 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 			),
 			jet_form_builder()->get_version(),
 			true
+		);
+
+		wp_localize_script(
+			$this->get_handle(),
+			'JetFormBuilderAdmin',
+			array(
+				'edit_url' => esc_url(
+					add_query_arg(
+						array( 'action' => 'edit' ),
+						admin_url( 'post.php' )
+					)
+				),
+			)
 		);
 	}
 

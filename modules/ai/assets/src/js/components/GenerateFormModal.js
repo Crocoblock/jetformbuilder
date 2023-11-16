@@ -1,10 +1,7 @@
-import GenerateFormModalFooterSlotFill from './GenerateFormModalFooterSlotFill';
-
 const {
 	      Modal,
 	      TextareaControl,
 	      Button,
-	      Flex,
       } = wp.components;
 
 const {
@@ -81,6 +78,7 @@ function GenerateFormModal( {
 			<Footer
 				clearHTML={ () => setFormHTML( '' ) }
 				formHTML={ formHTML }
+				prompt={ prompt }
 			/>
 		</> : <>
 			  <TextareaControl

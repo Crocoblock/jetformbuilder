@@ -57,7 +57,11 @@ function* textParser( input ) {
 		attributes.minlength = input.minLength;
 	}
 
-	yield [ 'jet-forms/text-field', attributes ];
+	yield {
+		name: 'jet-forms/text-field',
+		attributes,
+		innerBlocks: [],
+	};
 }
 
 /**
@@ -73,7 +77,11 @@ function* colorPickerParser( input ) {
 		required: input.required,
 	};
 
-	yield [ 'jet-forms/color-picker-field', attributes ];
+	yield {
+		name: 'jet-forms/color-picker-field',
+		attributes,
+		innerBlocks: [],
+	};
 }
 
 /**
@@ -117,7 +125,11 @@ function* radioParser( input ) {
 		}
 	}
 
-	yield [ 'jet-forms/radio-field', attributes ];
+	yield {
+		name: 'jet-forms/radio-field',
+		attributes,
+		innerBlocks: [],
+	};
 }
 
 /**
@@ -157,30 +169,47 @@ function* checkboxParser( input ) {
 		} );
 	}
 
-	yield [ 'jet-forms/checkbox-field', attributes ];
+	yield {
+		name: 'jet-forms/checkbox-field',
+		attributes,
+		innerBlocks: [],
+	};
 }
 
 function* dateParser( input ) {
-	yield [ 'jet-forms/date-field', getInputNumberAttrs( input ) ];
+	yield {
+		name: 'jet-forms/date-field',
+		attributes: getInputNumberAttrs( input ),
+		innerBlocks: [],
+	};
 }
 
 function* dateTimeParser( input ) {
-	yield [ 'jet-forms/datetime-field', getInputNumberAttrs( input ) ];
+	yield {
+		name: 'jet-forms/datetime-field',
+		attributes: getInputNumberAttrs( input ),
+		innerBlocks: [],
+	};
 }
 
 function* timeParser( input ) {
-	yield [ 'jet-forms/time-field', getInputNumberAttrs( input ) ];
+	yield {
+		name: 'jet-forms/time-field',
+		attributes: getInputNumberAttrs( input ),
+		innerBlocks: [],
+	};
 }
 
 function* hiddenParser( input ) {
-	yield [
-		'jet-forms/hidden-field',
-		{
+	yield {
+		name: 'jet-forms/hidden-field',
+		attributes: {
 			name: input.name,
 			class_name: input.className,
 			default: input.value,
 		},
-	];
+		innerBlocks: [],
+	};
 }
 
 function* mediaParser( input ) {
@@ -196,7 +225,11 @@ function* mediaParser( input ) {
 		part => part.trim(),
 	);
 
-	yield [ 'jet-forms/media-field', attributes ];
+	yield {
+		name: 'jet-forms/media-field',
+		attributes,
+		innerBlocks: [],
+	};
 }
 
 function* numberParser( input ) {
@@ -207,12 +240,15 @@ function* numberParser( input ) {
 		attributes.step = input.step;
 	}
 
-	yield [ 'jet-forms/number-field', getInputNumberAttrs( input ) ];
+	yield {
+		name: 'jet-forms/number-field',
+		attributes,
+		innerBlocks: [],
+	};
 }
 
 /**
  * @param input {HTMLInputElement}
- * @returns {Generator<string[], void, *>}
  */
 function* rangeParser( input ) {
 	const attributes = getInputNumberAttrs( input );
@@ -221,17 +257,22 @@ function* rangeParser( input ) {
 		attributes.step = input.step;
 	}
 
-	yield [ 'jet-forms/range-field' ];
+	yield {
+		name: 'jet-forms/range-field',
+		attributes,
+		innerBlocks: [],
+	};
 }
 
 function* submitParser( input ) {
-	yield [
-		'jet-forms/submit-field',
-		{
+	yield {
+		name: 'jet-forms/submit-field',
+		attributes: {
 			label: input.value || 'Submit',
 			class_name: input.className,
 		},
-	];
+		innerBlocks: [],
+	};
 }
 
 export default inputParser;

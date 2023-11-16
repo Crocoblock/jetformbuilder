@@ -1,4 +1,4 @@
-import GenerateFormButton from './GenerateFormButton';
+import AiFormButton from './AiFormButton';
 
 const {
 	      createRoot,
@@ -15,7 +15,7 @@ const mountGenerateFormAIButton = () => {
 
 	title.after( buttonDiv );
 
-	createRoot( buttonDiv ).render( <GenerateFormButton/> );
+	createRoot( buttonDiv ).render( <AiFormButton/> );
 };
 
 wp.domReady( mountGenerateFormAIButton );

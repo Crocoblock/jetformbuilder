@@ -2,8 +2,6 @@ import resolveLabel from '../resolveLabel';
 
 /**
  * @param textarea {HTMLTextAreaElement}
- * @returns {Generator<(string|{name, label: (string|*), placeholder,
- *     class_name, required})[], void, *>}
  */
 function* textAreaParser( textarea ) {
 	const attributes = {
@@ -22,7 +20,11 @@ function* textAreaParser( textarea ) {
 		attributes.minlength = textarea.minLength;
 	}
 
-	yield [ 'jet-forms/textarea-field', attributes ];
+	yield {
+		name: 'jet-forms/textarea-field',
+		attributes,
+		innerBlocks: [],
+	};
 }
 
 export default textAreaParser;

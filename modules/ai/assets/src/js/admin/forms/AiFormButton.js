@@ -1,4 +1,5 @@
 import GenerateFormModal from '../../components/GenerateFormModal';
+import AiModalFooter from './AiModalFooter';
 
 const {
 	      useState,
@@ -8,7 +9,7 @@ const {
 	      __,
       } = wp.i18n;
 
-function GenerateFormButton() {
+function AiFormButton() {
 	const [ showModal, setShowModal ] = useState( false );
 
 	return <>
@@ -23,8 +24,11 @@ function GenerateFormButton() {
 		>
 			{ __( 'Generate with AI', 'jet-form-builder' ) }
 		</a>
-		{ showModal && <GenerateFormModal setShowModal={ setShowModal }/> }
+		{ showModal && <GenerateFormModal
+			setShowModal={ setShowModal }
+			footer={ AiModalFooter }
+		/> }
 	</>;
 }
 
-export default GenerateFormButton;
+export default AiFormButton;

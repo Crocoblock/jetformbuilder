@@ -44,7 +44,7 @@ export default {
 			const params     = this.getUtmParamsString( {
 				utm_source: this.utmSource,
 				utm_medium: `${ license }/${ this.authorSlug }`,
-				utm_campaign: 'sale-black-friday-2023_formbuilder',
+				utm_campaign: 'black-friday-2023',
 			} );
 			return `${ pricingUrl }?${ params }`;
 		},

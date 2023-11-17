@@ -49,6 +49,12 @@
 		}
 	}
 
+	&.label-reset-margin {
+		.components-base-control__label {
+			margin-right: unset;
+		}
+	}
+
 	&.show {
 		opacity: 1;
 	}
@@ -112,6 +118,8 @@
 		.components-base-control__field {
 			padding-top: unset;
 			border-top: unset;
+			margin: unset;
+			padding-bottom: unset;
 		}
 	}
 

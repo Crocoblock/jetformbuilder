@@ -53,7 +53,6 @@ import useBlockConditions from './block-conditions/hooks/useBlockConditions';
 import useUniqKey from './blocks/hooks/useUniqKey';
 import useIsAdvancedValidation from './blocks/hooks/useIsAdvancedValidation';
 import useBlockAttributes from './blocks/hooks/useBlockAttributes';
-import useActionButtonEdit from './action-buttons/hooks/useActionButtonEdit';
 import useIsHasAttribute from './hooks/useIsHasAttribute';
 import globalTab from './actions/helpers/globalTab';
 
@@ -89,7 +88,7 @@ import './store.manager';
 import ActionModalContext from './action-modal/context/ActionModalContext';
 import SafeDeleteContext from './repeater/context/safe.delete';
 import RepeaterItemContext from './repeater/context/repeater.item';
-import ActionListItemContext from './context/action.list.item';
+import ActionListItemContext from './actions/context/ActionListItemContext';
 import RepeaterBodyContext from './repeater/context/repeater.custom.item.body';
 import RepeaterHeadContext from './repeater/context/repeater.custom.item.head';
 import RepeaterButtonsContext
@@ -179,6 +178,35 @@ import useSupport from './blocks/hooks/useSupport';
 import AttributeHelp from './blocks/components/AttributeHelp';
 import ActionMessagesSlotFills
 	from './actions/components/ActionMessagesSlotFills';
+import ListActionItem from './actions/components/ListActionItem';
+import ActionItemWrapper from './actions/components/ActionItemWrapper';
+import ActionItemHeader from './actions/components/ActionItemHeader';
+import ActionItemFooter from './actions/components/ActionItemFooter';
+import EditActionSettingsButton
+	from './actions/components/EditActionSettingsButton';
+import AllProActionsLink from './actions/components/AllProActionsLink';
+import AddActionButton from './actions/components/AddActionButton';
+import ActionsAfterNewButtonSlotFill
+	from './actions/components/ActionsAfterNewButtonSlotFill';
+import EditActionConditionsButton
+	from './actions/components/EditActionConditionsButton';
+import ActionItemDetails from './actions/components/ActionItemDetails';
+import ActionItemDetailsSlotFill
+	from './actions/components/ActionItemDetailsSlotFill';
+import ActionItemMoreButton from './actions/components/ActionItemMoreButton';
+import useLoopedAction from './actions/hooks/useLoopedAction';
+import SelectActionsControl from './actions/components/SelectActionsControl';
+import ActionModalHeaderSlotFill
+	from './actions/components/ActionModalHeaderSlotFill';
+import ActionButtonPlaceholder
+	from './action-buttons/components/ActionButtonPlaceholder';
+import ActionModalFooterSlotFill
+	from './action-modal/components/ActionModalFooterSlotFill';
+import useScopedAttributesContext
+	from './blocks/hooks/useScopedAttributesContext';
+import ScopedAttributesProvider
+	from './blocks/components/ScopedAttributesProvider';
+import getSupport from './blocks/helpers/getSupport';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -268,6 +296,23 @@ window.JetFBComponents = {
 	ToggleGroupVariations,
 	AttributeHelp,
 	ActionMessagesSlotFills,
+	ActionsAfterNewButtonSlotFill,
+	ListActionItem,
+	ActionItemWrapper,
+	ActionItemHeader,
+	ActionItemFooter,
+	EditActionSettingsButton,
+	AllProActionsLink,
+	AddActionButton,
+	EditActionConditionsButton,
+	ActionItemDetails,
+	ActionItemDetailsSlotFill,
+	ActionItemMoreButton,
+	SelectActionsControl,
+	ActionModalHeaderSlotFill,
+	ActionButtonPlaceholder,
+	ActionModalFooterSlotFill,
+	ScopedAttributesProvider,
 };
 
 // JFBFunctions
@@ -307,6 +352,7 @@ window.JetFBActions = {
 	assetUrl,
 	set,
 	isEmpty,
+	getSupport,
 };
 
 // JFBHooks
@@ -322,7 +368,6 @@ window.JetFBHooks = {
 	useUniqKey,
 	useBlockAttributes,
 	useIsAdvancedValidation,
-	useActionButtonEdit,
 	useGroupedValidationMessages,
 	useSanitizeFieldsMap,
 	withRequestFields,
@@ -343,5 +388,7 @@ window.JetFBHooks = {
 	useUniqueNameOnDuplicate,
 	useFields: useFields,
 	useSupport,
+	useLoopedAction,
+	useScopedAttributesContext,
 };
 

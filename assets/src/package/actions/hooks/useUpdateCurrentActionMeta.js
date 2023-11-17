@@ -7,7 +7,12 @@ import useActionsEdit from './useActionsEdit';
  */
 export const useUpdateCurrentActionMeta = () => {
 	const { currentAction }   = useCurrentAction();
-	const { updateActionObj } = useActionsEdit();
+	const { updateActionObj, addActionProps } = useActionsEdit();
+
+	// need to add action & save props
+	if ( 0 > currentAction.id ) {
+		return newProps => addActionProps( newProps );
+	}
 
 	return newProps => {
 		updateActionObj( currentAction.id, newProps );

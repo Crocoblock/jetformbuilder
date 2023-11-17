@@ -1,10 +1,6 @@
 import dispatchers from './dispatchers';
 
 const DEFAULT_STATE = {
-	propsToSave: [
-		'clientId',
-		'name',
-	],
 	blocks: [],
 	blockMap: {},
 	executed: false,

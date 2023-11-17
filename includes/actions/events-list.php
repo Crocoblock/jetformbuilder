@@ -30,9 +30,9 @@ class Events_List extends Collection {
 		}
 
 		try {
-			$item = Events_Manager::instance()->rep_clone_item( $event );
+			$item = jet_fb_events()->rep_clone_item( $event );
 		} catch ( Repository_Exception $exception ) {
-			return $this->add( Events_Manager::instance()->get_never_event() );
+			return $this->add( jet_fb_events()->get_never_event() );
 		}
 
 		return $this->add( $item );

@@ -3,7 +3,10 @@
 
 :root {
 	--jet-fb__range-field-slider--size: 18px;
+	--jet-fb__range-field-slider--br: 50%;
+	--jet-fb__range-field-slider--bgc: #ccc;
 	--jet-fb__range-field-range--height: 4px;
+	--jet-fb__range-field-range--bgc: #e3ddd8;
 }
 
 .jet-form-builder.is-loading {
@@ -311,7 +314,7 @@ button.jet-form-builder__submit {
 input[type="range"].jet-form-builder__field.range-field {
 	margin-right: 10px;
 	-webkit-appearance: none;
-	min-height: 18px;
+	min-height: var(--jet-fb__range-field-slider--size, 18px);
 	width: 100%;
 }
 
@@ -321,87 +324,73 @@ input[type="range"].jet-form-builder__field.range-field {
 	width: 100%;
 }
 
-input[type="range"].jet-form-builder__field.range-field, input[type="range"].jet-form-builder__field.range-field:focus {
-	padding: 0;
-	background: transparent;
-	border: none;
-	border-radius: 0;
-	-webkit-box-shadow: none;
-	box-shadow: none;
-	outline: none
-}
+input[type="range"] {
+	&.jet-form-builder__field.range-field {
+		&,
+		&:focus {
+			padding: 0;
+			background: transparent;
+			border: none;
+			border-radius: 0;
+			box-shadow: none;
+			outline: none
+		}
 
-input[type="range"].jet-form-builder__field.range-field::-webkit-slider-runnable-track {
-	width: 100%;
-	height: var(--jet-fb__range-field-range--height, 4px);
-	cursor: pointer;
-	/**
-	test
-	*/
-	background: #e3ddd8;
-	-webkit-box-shadow: none;
-	box-shadow: none;
-	border: none
-}
+		// Track
+		&::-webkit-slider-runnable-track {
+			width: 100%;
+			height: var(--jet-fb__range-field-range--height, 4px);
+			background: var(--jet-fb__range-field-range--bgc, #e3ddd8);
+			border-radius: var(--jet-fb__range-field-range--br, 0);
+			cursor: pointer;
+			box-shadow: none;
+			border: none;
+		}
 
-input[type="range"].jet-form-builder__field.range-field::-moz-range-track {
-	width: 100%;
-	height: var(--jet-fb__range-field-range--height, 4px);
-	cursor: pointer;
-	background: #e3ddd8;
-	box-shadow: none;
-	border: none
-}
+		&::-moz-range-track,
+		&::-ms-track {
+			width: 100%;
+			height: var(--jet-fb__range-field-range--height, 4px);
+			background: var(--jet-fb__range-field-range--bgc, #e3ddd8);
+			border-radius: var(--jet-fb__range-field-range--br, 0);
+			cursor: pointer;
+			box-shadow: none;
+			border: none;
+		}
 
-input[type="range"].jet-form-builder__field.range-field::-ms-track {
-	width: 100%;
-	height: var(--jet-fb__range-field-range--height, 4px);
-	cursor: pointer;
-	background: #e3ddd8;
-	box-shadow: none;
-	border: none;
-	color: transparent
-}
+		&::-ms-track {
+			color: transparent
+		}
 
-input[type="range"].jet-form-builder__field.range-field::-ms-fill-lower {
-	background: transparent
-}
+		// Thumb
+		&::-webkit-slider-thumb {
+			width: var(--jet-fb__range-field-slider--size, 18px);
+			height: var(--jet-fb__range-field-slider--size, 18px);
+			background: var(--jet-fb__range-field-slider--bgc, #ccc);
+			border-radius: var(--jet-fb__range-field-slider--br, 50%);
+			cursor: pointer;
+			box-shadow: none;
+			border: none;
+			margin-top: calc((var(--jet-fb__range-field-slider--size, 18px) - var(--jet-fb__range-field-range--height, 4px)) / -2);
+			-webkit-appearance: none
+		}
 
-input[type="range"].jet-form-builder__field.range-field::-ms-fill-upper {
-	background: transparent
-}
+		&::-moz-range-thumb,
+		&::-ms-thumb {
+			width: var(--jet-fb__range-field-slider--size, 18px);
+			height: var(--jet-fb__range-field-slider--size, 18px);
+			background: var(--jet-fb__range-field-slider--bgc, #ccc);
+			border-radius: var(--jet-fb__range-field-slider--br, 50%);
+			cursor: pointer;
+			box-shadow: none;
+			border: none;
+		}
 
-input[type="range"].jet-form-builder__field.range-field::-webkit-slider-thumb {
-	width: var(--jet-fb__range-field-slider--size, 18px);
-	height: var(--jet-fb__range-field-slider--size, 18px);
-	background: #ccc;
-	border-radius: 50%;
-	cursor: pointer;
-	-webkit-box-shadow: none;
-	box-shadow: none;
-	border: none;
-	margin-top: calc((var(--jet-fb__range-field-slider--size, 18px) - var(--jet-fb__range-field-range--height, 4px)) / -2);
-	-webkit-appearance: none
-}
-
-input[type="range"].jet-form-builder__field.range-field::-moz-range-thumb {
-	width: var(--jet-fb__range-field-slider--size, 18px);
-	height: var(--jet-fb__range-field-slider--size, 18px);
-	background: #ccc;
-	border-radius: 50%;
-	cursor: pointer;
-	box-shadow: none;
-	border: none
-}
-
-input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
-	width: var(--jet-fb__range-field-slider--size, 18px);
-	height: var(--jet-fb__range-field-slider--size, 18px);
-	background: #ccc;
-	border-radius: 50%;
-	cursor: pointer;
-	box-shadow: none;
-	border: none
+		&::-ms-fill-upper,
+		&::-ms-fill-lower {
+			background: transparent
+		}
+	}
 }
 
 .jet-form-builder-message {
@@ -574,98 +563,104 @@ input[type="range"].jet-form-builder__field.range-field::-ms-thumb {
 	user-select: none;
 }
 
-.jet-form-builder__field-label > span::before {
-	content: '';
-	display: inline-block;
-	width: 1.2em;
-	height: 1.2em;
-	flex-shrink: 0;
-	flex-grow: 0;
-	border: 1px solid #adb5bd;
-	margin-right: 0.5em;
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-size: 50% 50%;
+//.jet-form-builder__field-wrap.checkradio-wrap.custom-option,
+.jet-form-builder__field-label {
+	& > span::before {
+		content: '';
+		display: inline-block;
+		width: 1.2em;
+		height: 1.2em;
+		flex-shrink: 0;
+		flex-grow: 0;
+		border: 1px solid #adb5bd;
+		margin-right: 0.5em;
+		background-repeat: no-repeat;
+		background-position: center center;
+		background-size: 50% 50%;
+	}
 }
 
-.jet-form-builder__field-label.for-checkbox > span::before {
-	border-radius: 10%;
+//.jet-form-builder__field-wrap.radio-wrap.custom-option,
+.jet-form-builder__field-label.for-radio {
+
+	& > span::before {
+		border-radius: 50%;
+	}
+
+	/* стили при наведении курсора на радио */
+	:not(:disabled):not(:checked):hover + span::before {
+		border-color: #b3d7ff;
+	}
+
+	/* стили для активной радиокнопки (при нажатии на неё) */
+	:not(:disabled):active + span::before {
+		background-color: #b3d7ff;
+		border-color: #b3d7ff;
+	}
+
+	/* стили для радиокнопки, находящейся в фокусе и не находящейся в состоянии checked */
+	:focus:not(:checked) + span::before {
+		border-color: #80bdff;
+	}
+
+	/* стили для радиокнопки, находящейся в состоянии checked */
+	:checked + span::before {
+		border-color: #0b76ef;
+		background-color: #0b76ef;
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+	}
+
+	/* стили для радиокнопки, находящейся в состоянии disabled */
+	:disabled + span::before {
+		background-color: #e9ecef;
+	}
 }
 
-.jet-form-builder__field-label.for-radio > span::before {
-	border-radius: 50%;
+
+//.jet-form-builder__field-wrap.checkboxes-wrap.custom-option,
+.jet-form-builder__field-label.for-checkbox {
+
+	& > span::before {
+		border-radius: 10%;
+	}
+
+	/* стили для чекбокса, находящегося в состоянии checked */
+	:checked + span::before {
+		border-color: #0b76ef;
+		background-color: #0b76ef;
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+	}
+
+	/* стили для чекбокса, находящегося в фокусе и не находящегося в состоянии checked */
+	:focus:not(:checked) + span::before {
+		border-color: #80bdff;
+	}
+
+	/* стили для активного чекбокса (при нажатии на него) */
+	:not(:disabled):active + span::before {
+		background-color: #b3d7ff;
+		border-color: #b3d7ff;
+	}
+
+	/* стили при наведении курсора на checkbox */
+	:not(:disabled):not(:checked):hover + span::before {
+		border-color: #b3d7ff;
+	}
+
+	/* стили для чекбокса, находящегося в состоянии disabled */
+	:disabled + span::before {
+		background-color: #e9ecef;
+	}
 }
 
-/* стили при наведении курсора на радио */
-.jet-form-builder__field-label.for-radio :not(:disabled).jet-form-builder__field-label.for-radio :not(:checked):hover + span::before {
-	border-color: #b3d7ff;
-}
+.jet-form-builder__field-wrap.checkradio-wrap {
+	margin-bottom: 0.7em;
 
-/* стили для активной радиокнопки (при нажатии на неё) */
-.jet-form-builder__field-label.for-radio :not(:disabled):active + span::before {
-	background-color: #b3d7ff;
-	border-color: #b3d7ff;
-}
-
-/*!* стили для радиокнопки, находящейся в фокусе *!*/
-/*.jet-form-builder__field-label.for-radio :focus+span::before {*/
-/*    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);*/
-/*}*/
-
-/* стили для радиокнопки, находящейся в фокусе и не находящейся в состоянии checked */
-.jet-form-builder__field-label.for-radio :focus:not(:checked) + span::before {
-	border-color: #80bdff;
-}
-
-/* стили для радиокнопки, находящейся в состоянии checked */
-.jet-form-builder__field-label.for-radio :checked + span::before {
-	border-color: #0b76ef;
-	background-color: #0b76ef;
-	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
-}
-
-/* стили для радиокнопки, находящейся в состоянии disabled */
-.jet-form-builder__field-label.for-radio :disabled + span::before {
-	background-color: #e9ecef;
-}
-
-/* стили при наведении курсора на checkbox */
-.jet-form-builder__field-label.for-checkbox :not(:disabled):not(:checked):hover + span::before {
-	border-color: #b3d7ff;
-}
-
-/* стили для активного чекбокса (при нажатии на него) */
-.jet-form-builder__field-label.for-checkbox :not(:disabled):active + span::before {
-	background-color: #b3d7ff;
-	border-color: #b3d7ff;
-}
-
-/*!* стили для чекбокса, находящегося в фокусе *!*/
-/*.jet-form-builder__field-label.for-checkbox :focus+span::before {*/
-/*    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);*/
-/*}*/
-
-/* стили для чекбокса, находящегося в фокусе и не находящегося в состоянии checked */
-.jet-form-builder__field-label.for-checkbox :focus:not(:checked) + span::before {
-	border-color: #80bdff;
-}
-
-/* стили для чекбокса, находящегося в состоянии checked */
-.jet-form-builder__field-label.for-checkbox :checked + span::before {
-	border-color: #0b76ef;
-	background-color: #0b76ef;
-	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
-}
-
-/* стили для чекбокса, находящегося в состоянии disabled */
-.jet-form-builder__field-label.for-checkbox :disabled + span::before {
-	background-color: #e9ecef;
-}
-
-.jet-form-builder__field-wrap.checkradio-wrap span {
-	/*display: contents;*/
-	display: flex;
-	align-items: center;
+	span {
+		/*display: contents;*/
+		display: flex;
+		align-items: center;
+	}
 }
 
 .rtl .jet-form-builder-row,

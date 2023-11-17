@@ -13,16 +13,13 @@ use Jet_Form_Builder\Actions\Events\Gateway_Failed\Gateway_Failed_Event;
 use Jet_Form_Builder\Actions\Events\Gateway_Success\Gateway_Success_Event;
 use Jet_Form_Builder\Actions\Events\Never\Never_Event;
 use Jet_Form_Builder\Actions\Events\On_Dynamic_State\On_Dynamic_State_Event;
-use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use JFB_Components\Repository\Repository_Dynamic_Items_It;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Action_Exception;
-use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use MailPoet\Automation\Engine\Validation\WorkflowRules\ValidStepArgsRule;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -140,8 +137,12 @@ class Events_Manager implements Arrayable, Repository_Dynamic_Items_It {
 		);
 	}
 
+	/**
+	 * @return Never_Event
+	 * @throws Repository_Exception
+	 */
 	public function get_never_event(): Never_Event {
-		return self::instance()->rep_get_item( Never_Event::class );
+		return $this->rep_get_item( Never_Event::class );
 	}
 
 	public function is_current( string $event_id ): bool {

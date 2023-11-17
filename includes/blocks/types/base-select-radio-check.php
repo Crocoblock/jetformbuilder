@@ -82,12 +82,12 @@ trait Base_Select_Radio_Check {
 
 			if ( ! empty( $args['field_options'] ) ) {
 
-				foreach ( $args['field_options'] as $option ) {
-
+				foreach ( $args['field_options'] as $index => $option ) {
 					$item = array(
-						'value' => $option['value'],
-						'label' => $option['label'],
+						'value' => $option['value'] ?? $index,
 					);
+
+					$item['label'] = $option['label'] ?? $item['value'];
 
 					if ( isset( $option['calculate'] ) && '' !== $option['calculate'] ) {
 						$item['calculate'] = $option['calculate'];
@@ -246,8 +246,8 @@ trait Base_Select_Radio_Check {
 			}
 		} elseif ( 'glossary' === $options_from ) {
 			if ( ! empty( $args['glossary_id'] )
-				&& false !== Tools::get_jet_engine_version()
-				&& isset( jet_engine()->glossaries )
+			     && false !== Tools::get_jet_engine_version()
+			     && isset( jet_engine()->glossaries )
 			) {
 				$glossary = jet_engine()->glossaries->data->get_item_for_edit( absint( $args['glossary_id'] ) );
 

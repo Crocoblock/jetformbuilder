@@ -14,7 +14,7 @@ class Tools {
 	const EMPTY_DEEP_VALUE = self::class;
 
 	public static function is_editor() {
-		return self::is_block_editor() || self::is_elementor_editor();
+		return self::is_block_editor() || self::is_elementor_editor() || self::is_bricks_editor();
 	}
 
 	public static function is_block_editor() {
@@ -37,6 +37,14 @@ class Tools {
 		}
 
 		return ( \Elementor\Plugin::instance()->editor->is_edit_mode() );
+	}
+
+	public static function is_bricks_editor() {
+		if ( ! defined( 'BRICKS_VERSION' ) ) {
+			return false;
+		}
+
+		return ( bricks_is_builder() );
 	}
 
 	/**

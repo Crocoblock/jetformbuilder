@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'JetEngine-widgets';
+    src:  url('fonts/JetEngine-widgets.eot?j2l6ev');
+    src:  url('fonts/JetEngine-widgets.eot?j2l6ev#iefix') format('embedded-opentype'),
+    url('fonts/JetEngine-widgets.ttf?j2l6ev') format('truetype'),
+    url('fonts/JetEngine-widgets.woff?j2l6ev') format('woff'),
+    url('fonts/JetEngine-widgets.svg?j2l6ev#JetEngine-widgets') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+[class*="jet-form-builder-icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'JetEngine-widgets' !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.jet-form-builder-icon-forms:before {
+    content: "\e90c";
+}

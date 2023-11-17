@@ -48,10 +48,6 @@
 			"type": "string",
 			"default": ""
 		},
-		"switch_on_change": {
-			"type": "boolean",
-			"default": false
-		},
 		"is_disabled_placeholder": {
 			"type": "boolean",
 			"default": false

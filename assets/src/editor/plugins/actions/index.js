@@ -6,12 +6,11 @@ const {
 
 const base = {
 	name: 'jf-actions-panel',
-	title: __( 'Post Submit Actions', 'jet-form-builder' ),
+	jfbApiVersion: 2,
 };
 
 const settings = {
 	render: PluginActions,
-	icon: 'admin-plugins',
 };
 
 export default {

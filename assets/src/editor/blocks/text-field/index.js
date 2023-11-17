@@ -19,9 +19,32 @@ const settings = {
 	description: __(
 		`Add a single narrow text bar to the form and gather short text 
 information like names, emails, titles, etc.`,
-		'jet-form-builder'
+		'jet-form-builder',
 	),
 	edit: TextEdit,
+	jfbResolveBlock: function () {
+		const base = {
+			clientId: this.clientId,
+			name: this.name,
+		};
+
+		if ( !this.attributes.name ) {
+			return base;
+		}
+		return {
+			...base,
+			fields: [
+				{
+					value: this.attributes.name,
+					name: this.attributes.name,
+					label: this.attributes.label || this.attributes.name,
+					attributes: {
+						field_type: this.attributes.field_type,
+					},
+				},
+			],
+		};
+	},
 	useEditProps: [ 'uniqKey', 'attrHelp' ],
 	example: {
 		attributes: {

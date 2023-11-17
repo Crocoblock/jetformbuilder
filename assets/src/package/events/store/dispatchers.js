@@ -3,6 +3,8 @@ import selectors from './selectors';
 
 export default {
 	[ constants.register ]( state, action ) {
+		const { types } = state;
+
 		for ( const item of action.items ) {
 			item.title = item.label;
 
@@ -10,14 +12,17 @@ export default {
 
 			// is new event type
 			if ( -1 === issetIndex ) {
-				state.types.push( { ...item } );
+				types.push( { ...item } );
 			}
 			else {
-				state.types[ issetIndex ] = { ...item };
+				types[ issetIndex ] = { ...item };
 			}
 		}
 
-		return state;
+		return {
+			...state,
+			types,
+		};
 	},
 	[ constants.lockActions ]( state, action ) {
 		for ( const { id, self: actionSelf } of window.jetFormActionTypes ) {

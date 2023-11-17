@@ -1,22 +1,30 @@
 import useSelectPostMeta from '../../hooks/useSelectPostMeta';
 
-function useEventsFromActions( { index } ) {
-	const actions = useSelectPostMeta( '_jf_actions' );
+const {
+	      useSelect,
+      } = wp.data;
 
-	actions.splice( index, 1 );
+function useEventsFromActions( { index } ) {
+	const actionsMeta = useSelectPostMeta( '_jf_actions' );
+	const actionsMap  = useSelect(
+		select => select( 'jet-forms/actions' ).getActionsMap(),
+		[],
+	);
+
+	actionsMeta.splice( index, 1 );
 
 	const events = [];
 
-	for ( const action of actions ) {
-		const {
-			      [ action.type ]: current = {},
-		      } = action.settings;
+	for ( const action of actionsMeta ) {
+		const callback = actionsMap?.[ action.type ]?.provideEvents;
 
-		if ( !current.provideEvents?.length ) {
+		if ( 'function' !== typeof callback ) {
 			continue;
 		}
 
-		events.push( ...current.provideEvents );
+		const { [ action.type ]: current = {} } = action.settings;
+
+		events.push( ...callback( current ) );
 	}
 
 	return [ ...new Set( events ) ];

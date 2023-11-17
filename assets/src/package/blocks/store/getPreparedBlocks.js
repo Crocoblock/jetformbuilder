@@ -6,25 +6,21 @@ const {
       } = wp.data;
 
 function getPreparedBlocks() {
-	const blocks      = [];
-	const blockMap       = {};
-	const propsToSave = select( storeName ).getPropsToSave();
+	const blocks   = [];
+	const blockMap = {};
 
 	blocksRecursiveIterator( ( block, parent ) => {
 		if ( !block?.name?.includes( 'jet-forms/' ) ) {
 			return;
 		}
-		const current = {};
-
-		for ( const propName of propsToSave ) {
-			if ( !block.hasOwnProperty( propName ) ) {
-				continue;
-			}
-			current[ propName ] = block[ propName ];
-		}
 
 		const blockType = select( 'core/blocks' ).getBlockType( block.name );
-		current.fields  = blockType?.jfbGetFields?.call( block ) ?? [];
+		const current   = blockType.jfbResolveBlock.call( block );
+
+		// deprecated since 3.2.0
+		if ( blockType.hasOwnProperty( 'jfbGetFields' ) ) {
+			current.fields  = blockType.jfbGetFields.call( block );
+		}
 
 		if ( !parent?.name ) {
 			blocks.push( current );
@@ -38,7 +34,7 @@ function getPreparedBlocks() {
 		 */
 		const parentField = blockMap[ parent?.clientId ] ?? false;
 
-		if ( ! parentField ) {
+		if ( !parentField ) {
 			return;
 		}
 

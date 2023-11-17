@@ -100,7 +100,7 @@ class Http_Tools {
 
 		global $wp;
 
-		$refer = home_url( $wp->request );
+		$refer = user_trailingslashit( home_url( $wp->request ) );
 
 		if ( ! empty( $_SERVER['QUERY_STRING'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput

@@ -1,5 +1,10 @@
 import useActions from './useActions';
 
+/**
+ * @returns {{moveAction: moveAction, updateActionObj: updateActionObj,
+ *     setActions: (function(*=): void), toggleExecute: toggleExecute, actions:
+ *     *, deleteAction: deleteAction, addActionProps: addActionProps}}
+ */
 export const useActionsEdit = () => {
 	const [ actions, setActions ] = useActions();
 
@@ -34,6 +39,16 @@ export const useActionsEdit = () => {
 		setActions( [ ...newActions ] );
 	};
 
+	const addActionProps = ( props ) => {
+		const actionProps = JSON.parse( JSON.stringify( props ) );
+
+		actionProps.id = 0 > actionProps.id
+		                 ? actionProps.id * -1
+		                 : actionProps.id;
+
+		setActions( [ ...actions, { ...actionProps } ] );
+	};
+
 	const toggleExecute = ( action ) => {
 		updateActionObj( action.id, {
 			is_execute: !(
@@ -49,6 +64,7 @@ export const useActionsEdit = () => {
 		deleteAction,
 		updateActionObj,
 		toggleExecute,
+		addActionProps,
 	};
 };
 

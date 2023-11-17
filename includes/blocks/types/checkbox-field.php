@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Render\Checkbox_Field_Render;
+use Jet_Form_Builder\Blocks\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -16,6 +17,8 @@ class Checkbox_Field extends Base {
 
 	use Base_Select_Radio_Check;
 
+	const HANDLE        = 'jet-fb-checkbox-field';
+	const HANDLE_CUSTOM = 'jet-fb-field-custom-option-restrictions';
 
 	/**
 	 * Returns block name
@@ -24,6 +27,35 @@ class Checkbox_Field extends Base {
 	 */
 	public function get_name() {
 		return 'checkbox-field';
+	}
+
+	public function register_block_type() {
+		parent::register_block_type();
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
+		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_scripts' ) );
+	}
+
+	public function register_scripts() {
+		wp_register_script(
+			self::HANDLE,
+			jet_form_builder()->plugin_url( 'assets/js/frontend/checkbox.field.js' ),
+			array(
+				Module::MAIN_SCRIPT_HANDLE,
+			),
+			jet_form_builder()->get_version(),
+			true
+		);
+
+		wp_register_script(
+			self::HANDLE_CUSTOM,
+			jet_form_builder()->plugin_url( 'assets/js/frontend/custom.options.restrictions.js' ),
+			array(
+				Module::MAIN_SCRIPT_HANDLE,
+			),
+			jet_form_builder()->get_version(),
+			true
+		);
 	}
 
 	public function get_css_scheme() {
@@ -358,6 +390,12 @@ class Checkbox_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
+		wp_enqueue_script( self::HANDLE );
+
+		if ( ! empty( $this->block_attrs['custom_option']['allow'] ) ) {
+			wp_enqueue_script( self::HANDLE_CUSTOM );
+		}
+
 		return ( new Checkbox_Field_Render( $this ) )->render();
 	}
 

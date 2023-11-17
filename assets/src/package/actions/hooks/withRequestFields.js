@@ -9,9 +9,13 @@ function withRequestFields( select ) {
 
 	actions.splice( currentAction.index );
 
-	const fields = getRequestFields( actions );
+	const fields  = [];
+	const nameSet = new Set();
 
-	return { requestFields: getComputedFields( fields, actions, computed ) };
+	getRequestFields( { actions, fields } );
+	getComputedFields( { fields, actions, computed, nameSet } );
+
+	return { requestFields: fields };
 }
 
 export default withRequestFields;

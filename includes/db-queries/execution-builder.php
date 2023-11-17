@@ -89,7 +89,7 @@ class Execution_Builder {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$wpdb->insert( $model::table(), $insert_columns, $format );
 
-		if ( ! $wpdb->insert_id ) {
+		if ( ! $wpdb->rows_affected ) {
 			throw new Sql_Exception(
 				esc_html( "Something went wrong on insert into: {$model::table()}" ),
 				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped

@@ -1,11 +1,10 @@
 import { createInput, populateInputs } from './inputs/functions';
 import FormSubmit from './submit/FormSubmit';
-import {
-	iterateJfbComments,
-	observeComment,
-	observeMacroAttr,
-	queryByAttrValue,
-} from './html.macro/functions';
+import queryByAttrValue from './html.macro/queryByAttrValue';
+import iterateJfbComments from './html.macro/iterateJfbComments';
+import observeComment from './html.macro/observeComment';
+import observeMacroAttr from './html.macro/observeMacroAttr';
+import observeNode from './html.macro/observeNode';
 import { validateInputsAll } from './reporting/functions';
 import ReportingContext from './reporting/ReportingContext';
 
@@ -96,20 +95,32 @@ Observable.prototype = {
 	},
 
 	initMacros: function () {
+		// macros as html-comments
 		for (
 			const comment of iterateJfbComments( this.rootNode )
 			) {
 			observeComment( comment, this );
 		}
 
-		const nodes = queryByAttrValue( this.rootNode, 'JFB_FIELD::' );
+		// macros in default attributes
+		const nodesWithAttrs = queryByAttrValue( this.rootNode, 'JFB_FIELD::' );
 
 		const { replaceAttrs = [] } = window.JetFormBuilderSettings;
 
-		for ( const node of nodes ) {
+		for ( const nodeWithAttr of nodesWithAttrs ) {
 			for ( const replaceAttr of replaceAttrs ) {
-				observeMacroAttr( node, replaceAttr, this );
+				observeMacroAttr( nodeWithAttr, replaceAttr, this );
 			}
+		}
+
+		// macros in data-jfb-macro attribute
+		// result will placed inside relative node
+		const nodes = this.rootNode.querySelectorAll(
+			'[data-jfb-macro]:not([data-jfb-observed])',
+		);
+
+		for ( const node of nodes ) {
+			observeNode( node, this );
 		}
 	},
 

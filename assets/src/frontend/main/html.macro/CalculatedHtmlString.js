@@ -4,10 +4,15 @@ const {
 	      applyFilters,
       } = JetPlugins.hooks;
 
-function CalculatedHtmlString( root, options ) {
+function CalculatedHtmlString(
+	root,
+	{ withPrefix = true, ...options } = {},
+) {
 	CalculatedFormula.call( this, root, options );
 
-	this.regexp = /JFB_FIELD::(.+)/gi;
+	if ( withPrefix ) {
+		this.regexp = /JFB_FIELD::(.+)/gi;
+	}
 
 	this.relatedCallback = function ( input ) {
 		let fieldValue = applyFilters(

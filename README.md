@@ -4,6 +4,14 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.2.0
+* ADD: Email Verification
+* ADD: Widget "JetForm" for Bricks editor
+* ADD: Register User with random password (use "Secure unique token" in the Fields Map)
+* ADD: Ability to allow custom options in Radio/Checkbox fields
+* ADD: Option to sanitize values in Text and Textarea fields
+* UPD: The Action Button block is divided into 4 separate variations (to improve UX in the editor)
+
 ## 3.1.9
 * FIX: ActiveCampaign integration error when using custom fields
 * FIX: In Send Email action if there is a percentage symbol in the body of the letter

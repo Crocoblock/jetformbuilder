@@ -46,6 +46,7 @@ $options_condition = "option_name LIKE '" . implode( "%' OR option_name LIKE '",
 
 $tables = array(
 	// secondary tables
+	'tokens_to_records',
 	'records_actions',
 	'records_errors',
 	'records_fields',
@@ -57,6 +58,7 @@ $tables = array(
 	'payments_to_records',
 	'payers_shipping',
 	// primary tables
+	'tokens',
 	'csrf_tokens',
 	'recurring_cycles',
 	'subscriptions',

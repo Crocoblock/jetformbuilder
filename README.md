@@ -4,6 +4,12 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.1.9
+* FIX: ActiveCampaign integration error when using custom fields
+* FIX: In Send Email action if there is a percentage symbol in the body of the letter
+* FIX: Elementor widget JetForm - fields width issue (props [@stijnvanouplines](https://github.com/stijnvanouplines))
+* FIX: Incorrect recognition of regular expression in advanced validation
+
 ## 3.1.8
 * FIX: Error in form fields in editor after release of WP 6.4. Inability to edit them
 * FIX: Prevent saving too long status in `*_jet_fb_records` table

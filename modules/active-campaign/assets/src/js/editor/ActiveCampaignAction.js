@@ -81,6 +81,34 @@ function ActiveCampaignAction( props ) {
 		onChangeSettingObj( { fields_map } );
 	}, [] );
 
+	/**
+	 * We should to remove old custom fields, which may be removed
+	 * @since 3.1.9
+	 *
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/5102
+	 */
+	useEffect( () => {
+		if ( !loadingState.success ) {
+			return;
+		}
+
+		const fieldsKeys = new Set(
+			loadingState.response.fields.map( field => field.value ),
+		);
+
+		const fields_map = {};
+
+		for ( const [ key, value ] of Object.entries( settings.fields_map ) ) {
+			if ( !fieldsKeys.has( key ) ) {
+				continue;
+			}
+			fields_map[ key ] = value;
+		}
+
+		onChangeSettingObj( { fields_map } );
+
+	}, [ loadingState.success ] );
+
 	const getAPI = prop => settings.use_global
 	                       ? currentTab[ prop ]
 	                       : (

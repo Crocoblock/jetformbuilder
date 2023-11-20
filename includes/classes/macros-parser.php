@@ -58,7 +58,7 @@ class Macros_Parser {
 		Constants_Manager::instance();
 
 		$content = preg_replace_callback(
-			'/%(.+?)%/',
+			'/%([\w\-].*?\S?)%/',
 			function ( $replace_match ) {
 				$filters = explode( '|', $replace_match[1] );
 				$name    = $filters[0];

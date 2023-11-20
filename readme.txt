@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 6.0
-Tested up to: 6.3.2
+Tested up to: 6.4.1
 Requires PHP: 7.0
-Stable tag: 3.1.7
+Stable tag: 3.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,12 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.1.8**
+- FIX: Error in form fields in editor after release of WP 6.4. Inability to edit them
+- FIX: Prevent saving too long status in `*_jet_fb_records` table
+- FIX: Remove useless control in Elementor widget - JetForm
+- FIX: Save form progress (addon) not working for repeater fields
 
 **3.1.7**
 - ADD: Support multiple emails in Reply-To (Send Email)

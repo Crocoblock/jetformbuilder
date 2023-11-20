@@ -1,0 +1,14 @@
+{
+	"name": "jet-form-builder-bricks",
+	"description": "Bricks compatibility with JetFormBuilder Plugin",
+	"version": "1.0.0",
+	"author": "ragnar <denisshclyar@gmail.com>",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"css": "node-sass --output-style compressed src/scss/frontend/frontend.scss build/css/frontend/frontend.css"
+	},
+	"devDependencies": {
+		"node-sass": "^9.0.0"
+	}
+}

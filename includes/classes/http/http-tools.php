@@ -49,7 +49,7 @@ class Http_Tools {
 		$patterns = array();
 
 		foreach ( $path_args as $key => $value ) {
-			$patterns["#\(\?P<$key\>\S+\)#"] = function () use ( $value ) {
+			$patterns[ "#\(\?P<$key\>\S+\)#" ] = function () use ( $value ) {
 				return (string) $value;
 			};
 		}

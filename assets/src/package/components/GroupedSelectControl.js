@@ -1,4 +1,4 @@
-const { isEmpty } = window.lodash;
+import { isEmpty } from '../tools';
 
 /**
  * WordPress dependencies

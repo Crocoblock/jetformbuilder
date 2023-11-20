@@ -12,7 +12,7 @@ function GeneratedTokenComputedField() {
 			return false;
 		}
 
-		const fields = Object.values( action.selfSettings.fields_map );
+		const fields = Object.values( action.selfSettings.fields_map ?? {} );
 
 		return fields.includes( TOKEN_FIELD );
 	};

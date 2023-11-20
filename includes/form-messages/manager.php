@@ -43,13 +43,14 @@ class Manager {
 
 	public function get_action_types_messages() {
 		$messages = array();
+		$actions  = array();
 
 		/** @var Base $action */
 		foreach ( jet_form_builder()->msg_router->get_actions() as $action ) {
-			$messages = array_merge( $messages, Action_Messages_Manager::instance()->get_messages_values( $action ) );
+			$actions[] = Action_Messages_Manager::instance()->get_messages_values( $action );
 		}
 
-		return $messages;
+		return array_merge( $messages, ...$actions );
 	}
 
 	public function isset_message_type( $type ) {
@@ -108,19 +109,19 @@ class Manager {
 	}
 
 	/**
-	 * @since 3.1.0
-	 *
 	 * @param string $message
+	 *
+	 * @since 3.1.0
 	 */
 	public function set_success( string $message ) {
 		$this->set_message( 'success', $message );
 	}
 
 	/**
-	 * @since 3.1.0
-	 *
 	 * @param string $type
 	 * @param string $message
+	 *
+	 * @since 3.1.0
 	 */
 	public function set_message( string $type, string $message ) {
 		$this->_types[ $type ] = $message;

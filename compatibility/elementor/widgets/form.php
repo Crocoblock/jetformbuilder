@@ -1695,7 +1695,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( $simple_input ) => 'max-width: {{SIZE}}{{UNIT}};width: {{SIZE}}{{UNIT}};flex: 0 1 {{SIZE}}{{UNIT}};',
+						$this->selector( $simple_input ) => 'max-width: {{SIZE}}{{UNIT}};flex: 0 1 {{SIZE}}{{UNIT}};',
 					),
 				)
 			);
@@ -3496,15 +3496,6 @@ class Form extends Widget_Base implements Widget_Base_It {
 				$this,
 				'form_success_border',
 				$this->selector( '-message--success' )
-			);
-
-			$this->add_control(
-				'form_messages__error_heading',
-				array(
-					'label'     => __( 'Success Message', 'jet-form-builder' ),
-					'type'      => Controls_Manager::HEADING,
-					'separator' => 'before',
-				)
 			);
 
 			$this->end_controls_tab();

@@ -170,7 +170,7 @@ RepeaterData.prototype.addNew = function ( count = 1 ) {
 };
 
 RepeaterData.prototype.findIndex = function ( observableRow ) {
-	if ( !this.value.current.hasOwnProperty( 'findIndex' ) ) {
+	if ( !Array.isArray( this.value.current ) ) {
 		return -1;
 	}
 	return this.value.current.findIndex(

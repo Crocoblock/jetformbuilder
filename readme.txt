@@ -17,7 +17,7 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 A functional yet easy-to-use Form Builder plugin lets you create, edit, and style advanced form types in the block editor (Gutenberg). No more supplementary drag-and-drop form builders. You can now use a one-stop interface to develop fully operative custom forms.
 
 = SUPPORT =
-Please use our Github repo for the any issues/bugs/problems - <a href="https://github.com/Crocoblock/jetformbuilder/issues/" target="_blank">https://github.com/Crocoblock/jetformbuilder/issues/</a>
+Please use our Github repo for the any issues/bugs/problems - <a href="https://github.com/Crocoblock/jetformbuilder/issues/" target="_blank">https://github.com/Crocoblock/jetformbuilder/issues/</a>.
 
 https://www.youtube.com/watch?v=WB0B3QLhZK0&feature=youtu.be
 

@@ -836,6 +836,29 @@ class Parser_Context {
 		return empty( $path ) ? $this->parsers[ $name ] : $this->parsers[ $name ]->resolve( $path );
 	}
 
+	/**
+	 * @param $path string[]|string
+	 *
+	 * @return Parser_Context|Field_Data_Parser
+	 * @throws Plain_Value_Exception
+	 * @throws Repository_Exception
+	 */
+	public function resolve_to_up( $path ) {
+		if ( ! is_array( $path ) ) {
+			$path = Array_Tools::path( $path );
+		}
+
+		if ( ! $this->get_parent_field() ) {
+			return $this->resolve( $path );
+		}
+
+		$name = array_shift( $path );
+
+		return empty( $path )
+			? $this->parsers[ $name ]
+			: $this->get_parent_field()->get_context()->resolve_to_up( $path );
+	}
+
 	protected function insert_parser( string $name, string $field_type ): Field_Data_Parser {
 		if ( array_key_exists( $name, $this->parsers ) &&
 			$this->parsers[ $name ] instanceof Field_Data_Parser

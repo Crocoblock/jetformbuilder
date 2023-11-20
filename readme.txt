@@ -278,6 +278,7 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 - ADD: Register User with random password (use "Secure unique token" in the Fields Map)
 - ADD: Ability to allow custom options in Radio/Checkbox fields
 - ADD: Option to sanitize values in Text and Textarea fields
+- ADD: Bulk add the Select/Radio/Checkbox options
 - UPD: The Action Button block is divided into 4 separate variations (to improve UX in the editor)
 
 **3.1.9**

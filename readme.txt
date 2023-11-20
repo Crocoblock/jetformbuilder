@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.0
 Tested up to: 6.4.1
 Requires PHP: 7.0
-Stable tag: 3.1.8
+Stable tag: 3.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 A functional yet easy-to-use Form Builder plugin lets you create, edit, and style advanced form types in the block editor (Gutenberg). No more supplementary drag-and-drop form builders. You can now use a one-stop interface to develop fully operative custom forms.
 
 = SUPPORT =
-Please use our Github repo for the any issues/bugs/problems - <a href="https://github.com/Crocoblock/jetformbuilder/issues/" target="_blank">https://github.com/Crocoblock/jetformbuilder/issues/</a>.
+Please use our Github repo for the any issues/bugs/problems - <a href="https://github.com/Crocoblock/jetformbuilder/issues/" target="_blank">https://github.com/Crocoblock/jetformbuilder/issues/</a>
 
 https://www.youtube.com/watch?v=WB0B3QLhZK0&feature=youtu.be
 
@@ -271,6 +271,12 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.1.9**
+- FIX: ActiveCampaign integration error when using custom fields
+- FIX: In Send Email action if there is a percentage symbol in the body of the letter
+- FIX: Elementor widget JetForm - fields width issue (props [@stijnvanouplines](https://github.com/stijnvanouplines))
+- FIX: Incorrect recognition of regular expression in advanced validation
 
 **3.1.8**
 - FIX: Error in form fields in editor after release of WP 6.4. Inability to edit them

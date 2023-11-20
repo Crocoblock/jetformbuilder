@@ -465,7 +465,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	}
 
 	public function get_errors(): array {
-		return $this->wp_error->get_error_codes();
+		return is_wp_error( $this->wp_error ) ? $this->wp_error->get_error_codes() : array();
 	}
 
 	public function set_inside_conditional( bool $is_inside ) {

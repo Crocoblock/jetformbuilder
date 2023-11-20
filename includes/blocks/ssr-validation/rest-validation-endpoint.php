@@ -52,7 +52,7 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 			array( 'rules', $body[ self::RULE_INDEX_KEY ] )
 		);
 
-		if ( ! $parser->get_value() || empty( $ssr_rule['value'] ) ) {
+		if ( ! $parser->get_value() || empty( $ssr_attrs['value'] ) ) {
 			return new \WP_REST_Response(
 				array(
 					'message' => __( 'Field value or callback is empty', 'jet-form-builder' ),

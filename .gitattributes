@@ -7,7 +7,6 @@ codeception.dist.yml    export-ignore
 composer.json           export-ignore
 phpcs.xml               export-ignore
 README.md               export-ignore
-readme.txt              export-ignore
 wp-cli.local.yml        export-ignore
 
 assets/src              export-ignore

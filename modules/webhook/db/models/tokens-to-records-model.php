@@ -19,6 +19,7 @@ class Tokens_To_Records_Model extends Base_Db_Model {
 
 	public static function schema(): array {
 		return array(
+			'id'        => 'bigint(20) NOT NULL AUTO_INCREMENT',
 			'token_id'  => 'bigint(20) NOT NULL',
 			'record_id' => 'bigint(20) NOT NULL',
 		);
@@ -26,6 +27,7 @@ class Tokens_To_Records_Model extends Base_Db_Model {
 
 	public static function schema_keys(): array {
 		return array(
+			'id'        => 'primary key',
 			'token_id'  => 'index',
 			'record_id' => 'index',
 		);

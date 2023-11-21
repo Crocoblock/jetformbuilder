@@ -280,6 +280,7 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 - ADD: Option to sanitize values in Text and Textarea fields
 - ADD: Bulk add the Select/Radio/Checkbox options
 - UPD: The Action Button block is divided into 4 separate variations (to improve UX in the editor)
+- FIX: Issue with default value if there was static text or macro
 
 **3.1.9**
 - FIX: ActiveCampaign integration error when using custom fields

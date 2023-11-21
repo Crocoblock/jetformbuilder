@@ -246,8 +246,8 @@ trait Base_Select_Radio_Check {
 			}
 		} elseif ( 'glossary' === $options_from ) {
 			if ( ! empty( $args['glossary_id'] )
-			     && false !== Tools::get_jet_engine_version()
-			     && isset( jet_engine()->glossaries )
+				 && false !== Tools::get_jet_engine_version()
+				 && isset( jet_engine()->glossaries )
 			) {
 				$glossary = jet_engine()->glossaries->data->get_item_for_edit( absint( $args['glossary_id'] ) );
 

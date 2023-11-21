@@ -12,12 +12,36 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Base extends Element {
 
-	// Element properties
-	public $category     = 'general'; // Use predefined element category 'general'
-	public $name         = ''; // Make sure to prefix your elements
-	public $icon         = 'ti-bolt-alt'; // Themify icon font class
-	public $css_selector = ''; // Default CSS selector
-	public $scripts      = array(); // Script(s) run when element is rendered on frontend or updated in builder
+	/**
+	 * Use predefined element category 'general'
+	 *
+	 * @var string
+	 */
+	public $category = 'general';
+	/**
+	 * Make sure to prefix your elements
+	 *
+	 * @var string
+	 */
+	public $name = '';
+	/**
+	 * Themify icon font class
+	 *
+	 * @var string
+	 */
+	public $icon = 'ti-bolt-alt';
+	/**
+	 * Default CSS selector
+	 *
+	 * @var string
+	 */
+	public $css_selector = '';
+	/**
+	 * Script(s) run when element is rendered on frontend or updated in builder
+	 *
+	 * @var array
+	 */
+	public $scripts = array();
 
 	public $current_jet_group = null;
 	public $current_jet_tab   = null;
@@ -49,7 +73,7 @@ class Base extends Element {
 	 * @return [type]        [description]
 	 */
 	public function start_jet_control_group( $group ) {
-		$data = isset( $this->control_groups[ $group ] ) ? $this->control_groups[ $group ] : array();
+		$data                  = isset( $this->control_groups[ $group ] ) ? $this->control_groups[ $group ] : array();
 		$this->current_jet_tab = isset( $data['tab'] ) ? $data['tab'] : 'content';
 
 		$this->current_jet_group = $group;
@@ -83,7 +107,7 @@ class Base extends Element {
 		$this->controls[ $name ] = $data;
 	}
 
-	public function get_jet_settings( $setting = null, $default = false ) {
+	public function get_jet_settings( $setting = null, $default_value = false ) {
 
 		if ( ! $setting ) {
 			return $this->settings;
@@ -94,7 +118,7 @@ class Base extends Element {
 		if ( isset( $this->settings[ $setting ] ) ) {
 			$value = $this->settings[ $setting ];
 		} else {
-			$value = isset( $this->controls[ $setting ] ) && isset( $this->controls[ $setting ]['default'] ) ? $this->controls[ $setting ]['default'] : $default;
+			$value = isset( $this->controls[ $setting ] ) && isset( $this->controls[ $setting ]['default'] ) ? $this->controls[ $setting ]['default'] : $default_value;
 		}
 
 		return $value;

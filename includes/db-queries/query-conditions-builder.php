@@ -520,7 +520,6 @@ class Query_Conditions_Builder {
 	 *
 	 * @return string
 	 * @since 3.2.0
-	 *
 	 */
 	public function build_is_null( $column_name ): string {
 		$column_name = Db_Tools::sanitize_column( $column_name );

@@ -30,8 +30,8 @@ class Action_Handler {
 	/**
 	 * @var Base[]
 	 */
-	public  $form_actions    = array();
-	public  $is_ajax         = false;
+	public $form_actions    = array();
+	public $is_ajax         = false;
 	private $form_conditions = array();
 	private $form_events     = array();
 
@@ -566,7 +566,7 @@ class Action_Handler {
 			return $start_from;
 		}
 
-		return $this->get_unique_action_id( ++ $start_from );
+		return $this->get_unique_action_id( ++$start_from );
 	}
 
 }

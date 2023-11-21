@@ -14,12 +14,37 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 class Form extends Base {
-	// Element properties
-	public $category = 'jet-form-builder'; // Use predefined element category 'general'
-	public $name = 'jet-form-builder-form'; // Make sure to prefix your elements
-	public $icon = 'jet-form-builder-icon-forms'; // Themify icon font class
-	public $css_selector = ''; // Default CSS selector
-	public $scripts = array(); // Script(s) run when element is rendered on frontend or updated in builder
+
+	/**
+	 * Use predefined element category 'general'
+	 *
+	 * @var string
+	 */
+	public $category = 'jet-form-builder';
+	/**
+	 * Make sure to prefix your elements
+	 *
+	 * @var string
+	 */
+	public $name = 'jet-form-builder-form';
+	/**
+	 * Themify icon font class
+	 *
+	 * @var string
+	 */
+	public $icon = 'jet-form-builder-icon-forms';
+	/**
+	 * Default CSS selector
+	 *
+	 * @var string
+	 */
+	public $css_selector = '';
+	/**
+	 * Script(s) run when element is rendered on frontend or updated in builder
+	 *
+	 * @var array
+	 */
+	public $scripts = array();
 
 	// Return localised element label
 	public function get_label() {
@@ -506,7 +531,7 @@ class Form extends Base {
 			'input_box_shadow',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Box shadow', 'jet-smart-filters' ),
+				'label' => esc_html__( 'Box shadow', 'jet-form-builder' ),
 				'type'  => 'box-shadow',
 				'css'   => array(
 					array(
@@ -673,7 +698,7 @@ class Form extends Base {
 			array(
 				'tab'   => 'style',
 				'type'  => 'separator',
-				'label' => esc_html__( 'Checked state', 'jet-smart-filters' ),
+				'label' => esc_html__( 'Checked state', 'jet-form-builder' ),
 			)
 		);
 
@@ -681,7 +706,7 @@ class Form extends Base {
 			'checkradio_fields_box_checked_bg',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-smart-filters' ),
+				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-checkradio-input-checked-bgc' ) ),
 			)
@@ -691,7 +716,7 @@ class Form extends Base {
 			'checkradio_fields_box_checked_border_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Border color', 'jet-smart-filters' ),
+				'label' => esc_html__( 'Border color', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array(
 					array(
@@ -724,7 +749,7 @@ class Form extends Base {
 			'calc_fields_align_main_axis',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Align main axis', 'jet-smart-filters' ),
+				'label' => esc_html__( 'Align main axis', 'jet-form-builder' ),
 				'type'  => 'justify-content',
 				'css'   => array( array( 'property' => '--jfb-calc-justify-content' ) ),
 			)
@@ -1298,7 +1323,7 @@ class Form extends Base {
 			'booking_form_repeater_align_main_axis',
 			array(
 				'tab'     => 'style',
-				'label'   => esc_html__( 'Align main axis', 'jet-smart-filters' ),
+				'label'   => esc_html__( 'Align main axis', 'jet-form-builder' ),
 				'type'    => 'justify-content',
 				'exclude' => array(
 					'space-between',
@@ -1388,7 +1413,7 @@ class Form extends Base {
 			'booking_form_repeater_box_shadow',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Box shadow', 'jet-smart-filters' ),
+				'label' => esc_html__( 'Box shadow', 'jet-form-builder' ),
 				'type'  => 'box-shadow',
 				'css'   => array(
 					array(
@@ -1490,7 +1515,7 @@ class Form extends Base {
 			'booking_form_repeater_rem_box_shadow',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Box shadow', 'jet-smart-filters' ),
+				'label' => esc_html__( 'Box shadow', 'jet-form-builder' ),
 				'type'  => 'box-shadow',
 				'css'   => array(
 					array(
@@ -1598,7 +1623,7 @@ class Form extends Base {
 			'booking_form_submit_align_main_axis',
 			array(
 				'tab'     => 'style',
-				'label'   => esc_html__( 'Align main axis', 'jet-smart-filters' ),
+				'label'   => esc_html__( 'Align main axis', 'jet-form-builder' ),
 				'type'    => 'justify-content',
 				'exclude' => array(
 					'space-between',
@@ -1703,7 +1728,7 @@ class Form extends Base {
 			'booking_form_submit_box_shadow',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Box shadow', 'jet-smart-filters' ),
+				'label' => esc_html__( 'Box shadow', 'jet-form-builder' ),
 				'type'  => 'box-shadow',
 				'css'   => array(
 					array(
@@ -2541,7 +2566,7 @@ class Form extends Base {
 			$module->get_handle( 'frontend' ),
 			$module->get_url( 'assets/build/css/frontend/frontend.css' ),
 			array( 'jet-form-builder-frontend' ),
-			Plugin::instance()->get_version(),
+			Plugin::instance()->get_version()
 		);
 	}
 
@@ -2568,6 +2593,7 @@ class Form extends Base {
 		/** @var Blocks\Module $blocks */
 		$blocks = jet_form_builder()->module( \Jet_Form_Builder\Blocks\Module::class );
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo "<div {$this->render_attributes( '_root' )}>";
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $blocks->get_form_class()->render_callback_field( $settings );

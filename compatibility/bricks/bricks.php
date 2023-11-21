@@ -57,7 +57,7 @@ class Bricks implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_I
 				$this->get_handle( 'icons' ),
 				$this->get_url( 'assets/build/css/editor/icons.css' ),
 				array(),
-				Plugin::instance()->get_version(),
+				Plugin::instance()->get_version()
 			);
 		}
 	}

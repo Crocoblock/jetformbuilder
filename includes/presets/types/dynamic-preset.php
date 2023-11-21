@@ -64,18 +64,6 @@ class Dynamic_Preset extends Base_Preset {
 	 * @throws Plain_Default_Exception
 	 */
 	public function is_active_preset_json( $source ) {
-		if (
-			is_string( $source ) &&
-			(
-				0 !== strpos( $source, '{' ) ||
-				false === strpos( $source, 'jet_preset' )
-			) &&
-			! empty( $source )
-		) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
-			throw new Plain_Default_Exception( $source );
-		}
-
 		$dynamic_preset = json_decode( $source, true );
 
 		if ( empty( $dynamic_preset['jet_preset'] ) && strlen( $source ) ) {

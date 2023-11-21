@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Presets\Types;
 
+use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Plain_Default_Exception;
 use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Presets\Preset_Manager;
@@ -63,12 +64,6 @@ class Dynamic_Preset extends Base_Preset {
 	 * @throws Plain_Default_Exception
 	 */
 	public function is_active_preset_json( $source ) {
-		if ( 0 !== strpos( $source, '{' ) ||
-			false === strpos( $source, 'jet_preset' )
-		) {
-			return false;
-		}
-
 		$dynamic_preset = json_decode( $source, true );
 
 		if ( empty( $dynamic_preset['jet_preset'] ) && strlen( $source ) ) {

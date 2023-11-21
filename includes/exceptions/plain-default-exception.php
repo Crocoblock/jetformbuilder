@@ -10,4 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Plain_Default_Exception extends Silence_Exception {
 
+	protected function check_message_length() {
+	}
+
 }

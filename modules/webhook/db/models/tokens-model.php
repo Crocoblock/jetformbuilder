@@ -45,6 +45,13 @@ class Tokens_Model extends Base_Db_Model {
 	}
 
 	/**
+	 * Prevent check capability to delete rows
+	 */
+	public function before_delete() {
+		// silence is golden
+	}
+
+	/**
 	 * @param string $action
 	 * @param int|string $lifespan
 	 *

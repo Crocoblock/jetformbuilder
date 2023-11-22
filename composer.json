@@ -15,7 +15,8 @@
 			"./vendor/bin/phpcbf -p -n --colors --standard=./phpcs.xml ."
 		],
 		"cs": "./vendor/bin/phpcs -p -s -n --colors --standard=./phpcs.xml .",
-		"test:wpunit": "./vendor/bin/codecept run wpunit"
+		"test:wpunit": "./vendor/bin/codecept run wpunit",
+		"post-install-cmd": "npm install"
 	},
 	"minimum-stability": "stable",
 	"require-dev": {

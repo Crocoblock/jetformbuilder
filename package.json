@@ -1,0 +1,30 @@
+{
+	"name": "jetformbuilder",
+	"version": "3.2.0",
+	"description": "wordpress-plugin",
+	"directories": {
+		"test": "tests"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Crocoblock/jetformbuilder.git"
+	},
+	"keywords": [
+		"plugin",
+		"wordpress",
+		"form",
+		"builder"
+	],
+	"author": "Oleksandr Ivanenko <sanko200065@gmail.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Crocoblock/jetformbuilder/issues"
+	},
+	"homepage": "https://github.com/Crocoblock/jetformbuilder#readme",
+	"devDependencies": {
+		"husky": "^8.0.3"
+	},
+	"scripts": {
+		"postinstall": "npx husky install"
+	}
+}

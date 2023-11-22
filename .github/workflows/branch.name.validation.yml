@@ -1,0 +1,20 @@
+name: Branch Name Validation
+
+on:
+    create:
+        branches:
+            - '*'
+
+jobs:
+    branch_name_validation:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Check Branch Name
+              id: check_branch
+              run: |
+                  branch_name="${GITHUB_REF#refs/heads/}"
+                  if ! [[ "$branch_name" =~ ^(main|(release/[0-9]+\.[0-9]+\.[0-9]+)|(issue/[0-9]+)|(suggestion/[0-9]+)|(feature/[a-z0-9\-]+)|(dev/[a-z0-9\-]+))$ ]]; then
+                    echo "Invalid branch name: $branch_name"
+                    exit 1
+                  fi

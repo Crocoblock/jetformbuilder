@@ -1,10 +1,12 @@
 * text=auto
 
 .wordpress-org          export-ignore
+.husky                  export-ignore
 codeception.yml         export-ignore
 codeception.dist.yml    export-ignore
 .env.example            export-ignore
 composer.json           export-ignore
+package.json            export-ignore
 phpcs.xml               export-ignore
 README.md               export-ignore
 wp-cli.local.yml        export-ignore

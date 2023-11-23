@@ -3,14 +3,8 @@ import SanitizeValueButton from '../../components/SanitizeValueButton';
 
 const {
 	      TextControl,
-	      Flex,
-	      Tooltip,
 	      Button,
       } = wp.components;
-
-const {
-	      isEmpty,
-      } = JetFBActions;
 
 const {
 	      useSuccessNotice,

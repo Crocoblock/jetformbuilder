@@ -10,6 +10,13 @@ const selectors = {
 
 		return state.types[ index ];
 	},
+	getAllowedToMergeTypes( state ) {
+		return state.types.filter(
+			( { allowMerge = false } ) => allowMerge,
+		).map(
+			( { value } ) => value,
+		);
+	},
 };
 
 export default {

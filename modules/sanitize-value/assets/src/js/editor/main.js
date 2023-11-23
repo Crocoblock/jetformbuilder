@@ -10,6 +10,10 @@ import TextareaSanitizer from './sanitizers/textarea/main';
 import TitleSanitizer from './sanitizers/title/main';
 import UrlSanitizer from './sanitizers/url/main';
 import UserSanitizer from './sanitizers/user/main';
+import IntegerSanitizer from './sanitizers/integer/main';
+import NumberSanitizer from './sanitizers/number/main';
+import PositiveIntegerSanitizer from './sanitizers/positive.integer/main';
+import PositiveNumberSanitizer from './sanitizers/positive.number/main';
 
 const {
 	      register,
@@ -54,6 +58,10 @@ dispatch( constants.store ).register( [
 	TitleSanitizer,
 	UrlSanitizer,
 	UserSanitizer,
+	IntegerSanitizer,
+	NumberSanitizer,
+	PositiveIntegerSanitizer,
+	PositiveNumberSanitizer,
 	CustomSanitizer,
 ] );
 

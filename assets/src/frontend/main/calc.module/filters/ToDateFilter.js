@@ -8,6 +8,10 @@ function ToDateFilter() {
 		return 'toDate';
 	};
 	this.apply   = function ( value ) {
+		if ( typeof value !== 'number' ) {
+			value = parseInt( value );
+		}
+
 		return toDate( new Date( value ) );
 	};
 }

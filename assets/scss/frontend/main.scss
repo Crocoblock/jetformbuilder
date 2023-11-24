@@ -1,5 +1,6 @@
 @import "../components/progress-bar";
 @import "../components/action-buttons";
+@import "wysiwyg";
 
 :root {
 	--jet-fb__range-field-slider--size: 18px;
@@ -539,13 +540,6 @@ input[type="range"] {
 		width: auto !important
 	}
 }
-
-.field-type-wysiwyg .jet-form-builder__field {
-	padding: 0 !important;
-	border: none !important;
-	border-radius: 0 !important
-}
-
 
 .jet-form-builder__field-wrap:not(.checkradio-wrap) {
 	width: 100%;

@@ -88,7 +88,7 @@ abstract class Base {
 		}
 
 		$label_text->add_attribute( 'class', 'jet-form-builder__label-text' );
-		$label_text_tag = esc_attr( jet_fb_live_args()->fields_label_tag );
+		$label_text_tag = esc_attr( $this->get_fields_label_tag() );
 
 		if ( 'label' === $label_text_tag ) {
 			$label_text->add_attribute( 'for', $this->block_type->get_field_id( $args, 'label' ) );
@@ -99,6 +99,15 @@ abstract class Base {
 		include $this->block_type->get_common_template( 'field-label.php' );
 
 		return ob_get_clean();
+	}
+
+	/**
+	 * @since 3.1.8
+	 *
+	 * @return string
+	 */
+	protected function get_fields_label_tag(): string {
+		return jet_fb_live_args()->fields_label_tag;
 	}
 
 	/**

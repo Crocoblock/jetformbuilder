@@ -1,5 +1,6 @@
 @import "../components/progress-bar";
 @import "../components/action-buttons";
+@import "./compatibility/safari";
 
 :root {
 	--jet-fb__range-field-slider--size: 18px;

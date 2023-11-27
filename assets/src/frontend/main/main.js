@@ -15,7 +15,7 @@ import {
 	isEmpty,
 	getOffsetTop,
 	focusOnInvalidInput,
-	isVisible, getScrollParent,
+	isVisible, getScrollParent, applyUserAgents, isUA,
 } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
 import RestrictionError from './reporting/RestrictionError';
@@ -82,7 +82,10 @@ window.JetFormBuilderFunctions = {
 	observeComment,
 	iterateJfbComments,
 	getScrollParent,
+	isUA,
 };
+
+document.addEventListener( 'DOMContentLoaded', applyUserAgents );
 
 jQuery( () => JetPlugins.init() );
 

@@ -3,6 +3,7 @@ import MaxFilesHtmlAttr from './attrs/MaxFilesHtmlAttr';
 import MaxFileSizeHtmlAttr from './attrs/MaxFileSizeHtmlAttr';
 import RemainingCalcAttr from './attrs/RemainingCalcAttr';
 import FileExtensionHtmlAttr from './attrs/FileExtensionHtmlAttr';
+import environment from './environment';
 
 const { applyFilters } = JetPlugins.hooks;
 
@@ -181,6 +182,19 @@ function focusOnInvalidInput( inputs ) {
 	}
 }
 
+function applyUserAgents() {
+	for ( const [ name, isActive ] of Object.entries( environment ) ) {
+		if ( !isActive ) {
+			continue;
+		}
+		document.body.classList.add( `jet--ua-${ name }` );
+	}
+}
+
+function isUA( browser ) {
+	return environment?.[ browser ];
+}
+
 export {
 	allRejected,
 	getLanguage,
@@ -191,4 +205,6 @@ export {
 	focusOnInvalidInput,
 	isVisible,
 	getScrollParent,
+	isUA,
+	applyUserAgents,
 };

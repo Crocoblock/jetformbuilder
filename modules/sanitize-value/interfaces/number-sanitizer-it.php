@@ -3,9 +3,9 @@
 
 namespace JFB_Modules\Sanitize_Value\Interfaces;
 
-// If this file is called directly, abort.
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
 
+// If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }

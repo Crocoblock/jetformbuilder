@@ -8,6 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Handle_It;
@@ -101,7 +102,7 @@ final class Module implements
 		}
 
 		if ( block_has_support( $block_type, array( self::SUPPORT_NAME ) ) &&
-			 ! array_key_exists( self::ATTRIBUTE_NAME, $block_type->attributes )
+			! array_key_exists( self::ATTRIBUTE_NAME, $block_type->attributes )
 		) {
 			$block_type->attributes[ self::ATTRIBUTE_NAME ] = array(
 				'type'    => 'array',
@@ -136,9 +137,31 @@ final class Module implements
 			return;
 		}
 
+		$value = $parser->get_value();
+
 		/** @var Value_Sanitizer_It $sanitizer */
 		foreach ( $this->iterate_sanitizers( $sanitizers ) as $sanitizer ) {
-			$sanitizer->do_sanitize( $parser );
+			if ( ! is_array( $value ) || ! $value ) {
+				$sanitizer->do_sanitize( $parser );
+
+				continue;
+			}
+
+			// save sanitized value in $value
+			foreach ( $value as &$value_item ) {
+				// set temp value
+				$parser->set_value( $value_item );
+
+				$sanitizer->do_sanitize( $parser );
+
+				// save sanitized value from list
+				$value_item = $parser->get_value();
+			}
+		}
+
+		// update value if we go in inner foreach
+		if ( is_array( $value ) && $value ) {
+			$parser->set_value( $value );
 		}
 
 		// value has changed, so we need to re-run validation

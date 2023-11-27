@@ -1,6 +1,7 @@
 import { ATTRIBUTE_NAME } from '../constants';
 import lifeSaverIcon from './lifeSaverIcon';
 import useSanitizers from '../hooks/useSanitizers';
+import useSanitizersAllowedToMerge from '../hooks/useSanitizersAllowedToMerge';
 import SanitizerContext from './SanitizerContext';
 import SanitizeValueButton from './SanitizeValueButton';
 
@@ -59,10 +60,22 @@ const ControlButton = function ( {
 	</SanitizerContext.Provider>;
 };
 
+const transformControl = control => {
+	control.icon = control.icon || lifeSaverIcon;
+
+	return control;
+};
+
 const SanitizeValueItems = function () {
 	const [ attributes, setAttributes ] = useBlockAttributes();
 
-	const current = attributes[ ATTRIBUTE_NAME ];
+	const sanitizers = useSanitizers().map( transformControl );
+	const current    = attributes[ ATTRIBUTE_NAME ];
+
+	const sanitizersAllowedToMerge = useSanitizersAllowedToMerge();
+	const isAllowedToMerge         = item => (
+		sanitizersAllowedToMerge.includes( item?.value ?? item )
+	);
 
 	const getControlIndex = controlSlug => (
 		current?.length
@@ -87,8 +100,8 @@ const SanitizeValueItems = function () {
 		}
 	) );
 
-	const add = controlSlug => setAttributes( prev => (
-		{
+	const add = controlSlug => setAttributes( prev => {
+		return isAllowedToMerge( controlSlug ) ? {
 			...prev,
 			[ ATTRIBUTE_NAME ]: [
 				...(
@@ -96,8 +109,16 @@ const SanitizeValueItems = function () {
 				),
 				controlSlug,
 			],
-		}
-	) );
+		} : {
+			...prev,
+			[ ATTRIBUTE_NAME ]: [
+				...(
+					prev[ ATTRIBUTE_NAME ] || []
+				).filter( isAllowedToMerge ),
+				controlSlug,
+			],
+		};
+	} );
 
 	const edit = ( controlSlug, editProps ) => setAttributes( prev => {
 		const allSanitizers = JSON.parse(
@@ -126,14 +147,6 @@ const SanitizeValueItems = function () {
 			[ ATTRIBUTE_NAME ]: [ ...allSanitizers ],
 		};
 	} );
-
-	const transformControl = control => {
-		control.icon = control.icon || lifeSaverIcon;
-
-		return control;
-	};
-
-	const sanitizers = useSanitizers().map( transformControl );
 
 	return <ToolbarDropdownMenu
 		icon={ lifeSaverIcon }

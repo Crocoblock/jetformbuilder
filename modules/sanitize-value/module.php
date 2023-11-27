@@ -50,6 +50,10 @@ final class Module implements
 			new Title_Sanitizer(),
 			new Url_Sanitizer(),
 			new User_Sanitizer(),
+			new Integer_Sanitizer(),
+			new Number_Sanitizer(),
+			new Abs_Integer_Sanitizer(),
+			new Abs_Number_Sanitizer(),
 			new Custom_Sanitizer(),
 		);
 	}

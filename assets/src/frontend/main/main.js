@@ -32,13 +32,11 @@ import {
 } from './inputs/functions';
 import initForm from './init/initForm';
 import BaseHtmlAttr from './attrs/BaseHtmlAttr';
-import {
-	queryByAttrValue,
-	iterateComments,
-	observeMacroAttr,
-	observeComment,
-	iterateJfbComments,
-} from './html.macro/functions';
+import queryByAttrValue from './html.macro/queryByAttrValue';
+import iterateComments from './html.macro/iterateComments';
+import iterateJfbComments from './html.macro/iterateJfbComments';
+import observeComment from './html.macro/observeComment';
+import observeMacroAttr from './html.macro/observeMacroAttr';
 import RequiredRestriction from './reporting/restrictions/RequiredRestriction';
 
 window.JetFormBuilderAbstract = {

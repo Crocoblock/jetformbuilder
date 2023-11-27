@@ -1,6 +1,5 @@
 const {
 	      useLoopedAction,
-	      useActionsEdit,
       } = JetFBHooks;
 
 const {

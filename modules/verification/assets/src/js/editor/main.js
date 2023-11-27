@@ -8,6 +8,7 @@ import GeneratedTokenComputedField from './action/GeneratedTokenComputedField';
 import TokenIDComputedField from './action/TokenIDComputedField';
 import VerificationURLComputedField
 	from './action/VerificationURLComputedField';
+import ActionItemFooterModifier from './ActionItemFooterModifier';
 
 const {
 	      addFilter,
@@ -46,6 +47,12 @@ addFilter(
 	'jet-form-builder/verification-action',
 	VerificationActionItem,
 );
+
+addFilter(
+	'jet.fb.action.item',
+	'jet-form-builder/footer-notice-for-no-events',
+	ActionItemFooterModifier
+)
 
 subscribe( VerificationActionWatcher );
 

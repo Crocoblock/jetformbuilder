@@ -24,7 +24,18 @@ class Calculated_Field_Render extends Base {
 	}
 
 	/**
-	 * Get calculation formula for calculated field
+	 * We do not need a <label> tag in any case,
+	 * because there is no visual field in this field
+	 * that can be referenced through the "for" attribute.
+	 *
+	 * @see https://github.com/Crocoblock/jetformbuilder/issues/356
+	 */
+	protected function get_fields_label_tag(): string {
+		return 'div';
+	}
+
+	/**
+	 * Get calulation formula for calculated field
 	 *
 	 * @return [type] [description]
 	 */

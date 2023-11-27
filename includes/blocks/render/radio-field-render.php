@@ -154,4 +154,13 @@ class Radio_Field_Render extends Base_Select_Radio_Check {
 		return $html;
 	}
 
+	/**
+	 * @see \Jet_Form_Builder\Blocks\Render\Calculated_Field_Render::get_fields_label_tag
+	 *
+	 * @return string
+	 */
+	protected function get_fields_label_tag(): string {
+		return 'div';
+	}
+
 }

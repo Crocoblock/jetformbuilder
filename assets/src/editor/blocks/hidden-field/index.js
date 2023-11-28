@@ -1,11 +1,20 @@
 import HeadingEdit from './edit';
 import metadata from '@blocks/hidden-field/block.json';
 
-const { __ } = wp.i18n;
+import './random.string';
 
-const { createBlock } = wp.blocks;
+const {
+	      __,
+      } = wp.i18n;
 
-const { name, icon = '' } = metadata;
+const {
+	      createBlock,
+      } = wp.blocks;
+
+const {
+	      name,
+	      icon = '',
+      } = metadata;
 
 /**
  * Available items for `useEditProps`:
@@ -19,7 +28,7 @@ const settings = {
 	description: __(
 		`Insert Hidden field invisible on the frontend with 
 the assigned value to use it in calculations or for other purposes.`,
-		'jet-form-builder'
+		'jet-form-builder',
 	),
 	edit: HeadingEdit,
 	useEditProps: [ 'uniqKey', 'blockName' ],

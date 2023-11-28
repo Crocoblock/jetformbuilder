@@ -63,6 +63,16 @@
 		"isPreview": {
 			"type": "boolean",
 			"default": false
+		},
+		"random": {
+			"type": "object",
+			"default": {
+				"length": 10,
+				"upper": true,
+				"lower": true,
+				"numbers": true,
+				"symbols": true
+			}
 		}
 	},
 	"usesContext": [

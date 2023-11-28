@@ -3,7 +3,6 @@
 
 # Check if there are modified or newly created .php files
 if git status --porcelain | grep -e '^M' -e '^A' | grep '\.php$' &>/dev/null; then
-	composer cbf
 	composer cs
 else
 	exit 0

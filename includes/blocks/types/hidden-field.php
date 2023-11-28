@@ -18,7 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Hidden_Field extends Base {
 
 	public $use_style_manager = false;
-	private $rendering        = true;
+	private $rendering         = true;
 
 	private function current_post() {
 		return Live_Form::instance()->post;
@@ -354,6 +354,50 @@ class Hidden_Field extends Base {
 		return wp_get_raw_referer();
 	}
 
+	protected function random_string(): string {
+		$options = $this->block_attrs['random'] ?? array();
+		$length  = empty( $options['length'] ) ? 10 : $options['length'];
+
+		unset( $options['length'] );
+
+		if ( empty( $options ) ) {
+			$options['upper'] = true;
+		}
+
+		$uppercase_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$lowercase_chars = 'abcdefghijklmnopqrstuvwxyz';
+		$digits          = '0123456789';
+		$symbols         = '!@#$%^&*()-_=+[]{}|;:,.<>?';
+
+		$characters = '';
+
+		// Build the character set based on parameters
+		if ( ! empty( $options['upper'] ) ) {
+			$characters .= $uppercase_chars;
+		}
+		if ( ! empty( $options['lower'] ) ) {
+			$characters .= $lowercase_chars;
+		}
+		if ( ! empty( $options['numbers'] ) ) {
+			$characters .= $digits;
+		}
+		if ( ! empty( $options['symbols'] ) ) {
+			$characters .= $symbols;
+		}
+
+		$characters_length = strlen( $characters );
+		$random_string     = '';
+
+		do {
+			// Generate the random string
+			$random_string .= $characters[ wp_rand( 0, $characters_length - 1 ) ];
+
+			--$length;
+		} while ( $length );
+
+		return $random_string;
+	}
+
 	private function is_empty( $value ) {
 		return ( '' === $value || is_null( $value ) || false === $value );
 	}
@@ -430,6 +474,10 @@ class Hidden_Field extends Base {
 							array(
 								'value' => 'current_date',
 								'label' => __( 'Current Date', 'jet-form-builder' ),
+							),
+							array(
+								'value' => 'random_string',
+								'label' => __( 'Random string', 'jet-form-builder' ),
 							),
 							array(
 								'value' => 'manual_input',

@@ -8,7 +8,6 @@ const {
 	      SelectControl,
       } = wp.components;
 
-
 function FieldSettings() {
 	const [ attributes, setAttributes ] = useBlockAttributes();
 
@@ -23,7 +22,10 @@ function FieldSettings() {
 	};
 
 	return <>
-		<HeaderControls/>
+		<HeaderControls
+			attributes={ attributes }
+			setAttributes={ setAttributes }
+		/>
 		<SelectControl
 			key="field_value"
 			label="Field Value"

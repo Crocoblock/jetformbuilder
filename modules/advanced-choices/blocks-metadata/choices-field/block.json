@@ -64,6 +64,7 @@
 	"supports": {
 		"html": false,
 		"jetFBSwitchPageOnChange": true,
+		"jetFBSanitizeValue": true,
 		"jetStyle": {
 			"--jfb-choice-text": [
 				".jet-form-builder-choice--item",

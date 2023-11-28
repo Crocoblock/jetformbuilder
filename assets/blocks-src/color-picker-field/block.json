@@ -14,7 +14,10 @@
 	"textdomain": "jet-form-builder",
 	"supports": {
 		"customClassName": false,
-		"html": false
+		"html": false,
+		"jetFBSanitizeValue": [
+			"custom"
+		]
 	},
 	"attributes": {
 		"value": {

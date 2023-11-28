@@ -3,7 +3,7 @@
 		/* Additional styles */
 		-webkit-appearance: none; /* Remove default arrow in Safari */
 		background-image: url('data:image/svg+xml,\
-        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" height="12" width="12"><path d="M19 9l-7 7-7-7"></path></svg>'); /* Custom arrow */
+        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" height="12" width="12"><path d="M19 9l-7 7-7-7" fill="currentColor"></path></svg>'); /* Custom arrow */
 		background-repeat: no-repeat;
 		background-position: right 8px center;
 	}

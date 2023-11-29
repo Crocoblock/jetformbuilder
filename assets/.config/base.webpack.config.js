@@ -24,7 +24,6 @@ module.exports = {
 		'editor/package': './package/manager.js',
 		'admin/package': './admin-package/manager.js',
 		'admin/vuex.package': './admin-vuex-package/manager.js',
-		'frontend/lib/jet.plugins': './frontend/lib/jet.plugins/main.js',
 		...getAdminPagesEntries(),
 	},
 	output: {

@@ -41,6 +41,16 @@ class Http_Tools {
 		return '';
 	}
 
+	public static function get_server_ip_address(): string {
+		if ( empty( $_SERVER['SERVER_ADDR'] ) && empty( $_SERVER['LOCAL_ADDR'] ) ) {
+			return '';
+		}
+
+		return sanitize_text_field(
+			wp_unslash( ! empty( $_SERVER['SERVER_ADDR'] ) ? $_SERVER['SERVER_ADDR'] : $_SERVER['LOCAL_ADDR'] )
+		);
+	}
+
 	public static function get_user_agent(): string {
 		return sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) );
 	}

@@ -23,6 +23,7 @@ class Modules_Controller implements Module_Controller_It {
 
 		return array(
 			// core required modules
+			new Jet_Plugins\Module(),
 			new Logger\Module(),
 			new Dev\Module(),
 			new Admin\Module(),
@@ -45,6 +46,9 @@ class Modules_Controller implements Module_Controller_It {
 			new Active_Campaign\Module(),
 			new Verification\Module(),
 			new Sanitize_Value\Module(),
+			new Onboarding\Module(),
+			new Html_Parser\Module(),
+			new Ai\Module(),
 		);
 	}
 

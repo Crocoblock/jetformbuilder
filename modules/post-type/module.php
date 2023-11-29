@@ -1,6 +1,5 @@
 <?php
 
-
 namespace JFB_Modules\Post_Type;
 
 // If this file is called directly, abort.
@@ -392,11 +391,7 @@ class Module implements
 	}
 
 	/**
-	 * @param $meta_key
-	 * @param int|false $form_id
-	 *
-	 * @return array|mixed
-	 * @deprecated since 3.0.0
+	 * @return Actions_Repository
 	 */
 	public function get_form_meta( $meta_key, $form_id = false ) {
 		if ( false === $form_id ) {

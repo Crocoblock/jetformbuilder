@@ -38,4 +38,11 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It {
 	public function remove_hooks() {
 		remove_action( 'rest_api_init', array( $this->controller, 'register_routes' ) );
 	}
+
+	/**
+	 * @return Controller
+	 */
+	public function get_controller(): Controller {
+		return $this->controller;
+	}
 }

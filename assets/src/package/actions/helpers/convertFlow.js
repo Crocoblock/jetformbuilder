@@ -10,11 +10,7 @@ function convertFlow( flow = [] ) {
 
 	for ( const flowAction of flow ) {
 		const current = new BaseAction( flowAction );
-
-		const settings   = current.settings;
-		current.settings = {};
-
-		current.selfSettings = settings;
+		current.refactorSettings();
 
 		actions.push( current );
 	}

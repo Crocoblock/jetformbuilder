@@ -58,12 +58,6 @@ final class Module implements Base_Module_It {
 			2
 		);
 
-		add_filter(
-			'jet-form-builder/post-type/args',
-			array( $this, 'add_default_fields_to_form' ),
-			99
-		);
-
 		if ( class_exists( 'WP_Block_Editor_Context' ) ) {
 			add_filter( 'block_categories_all', array( $this, 'add_categories' ), 999, 2 );
 		} else {
@@ -92,12 +86,6 @@ final class Module implements Base_Module_It {
 		remove_action(
 			'jet-form-builder/other-editor-assets/after',
 			array( $this, 'register_block_types_for_others' )
-		);
-
-		remove_filter(
-			'jet-form-builder/post-type/args',
-			array( $this, 'add_default_fields_to_form' ),
-			99
 		);
 
 		if ( class_exists( 'WP_Block_Editor_Context' ) ) {
@@ -170,35 +158,6 @@ final class Module implements Base_Module_It {
 		);
 	}
 
-	public function add_default_fields_to_form( $arguments ) {
-		$hidden_post_id = jet_form_builder()->form::NAMESPACE_FIELDS . 'hidden-field';
-		$submit_post_id = jet_form_builder()->form::NAMESPACE_FIELDS . 'submit-field';
-		$text_field     = jet_form_builder()->form::NAMESPACE_FIELDS . 'text-field';
-
-		$arguments['template'] = array(
-			array(
-				$hidden_post_id,
-				array(
-					'name'        => 'post_id',
-					'field_value' => 'post_id',
-				),
-			),
-			array(
-				$text_field,
-				array(
-					'name'  => 'text_field',
-					'label' => 'Text',
-				),
-			),
-			array(
-				$submit_post_id,
-				array( 'label' => __( 'Submit', 'jet-form-builder' ) ),
-			),
-		);
-
-		return $arguments;
-	}
-
 	/**
 	 * Register block types for editor
 	 *
@@ -253,19 +212,16 @@ final class Module implements Base_Module_It {
 		}
 		$this->_registered_scripts = true;
 
-		wp_register_script(
-			'jet-plugins',
-			Plugin::instance()->plugin_url( 'assets/js/frontend/lib/jet.plugins.js' ),
-			array( 'jquery' ),
-			'1.0.0',
-			true
-		);
+		/** @var \JFB_Modules\Jet_Plugins\Module $jet_plugins */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$jet_plugins = jet_form_builder()->module( 'jet-plugins' );
+		$jet_plugins->register_scripts();
 
 		wp_register_script(
 			self::MAIN_SCRIPT_HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/main.js' ),
 			array(
-				'jet-plugins',
+				$jet_plugins::HANDLE,
 				'wp-i18n',
 				'wp-api-fetch',
 			),

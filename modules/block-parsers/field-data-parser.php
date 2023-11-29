@@ -79,7 +79,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	/**
 	 * @throws Exclude_Field_Exception|Parse_Exception
 	 */
-	final public function update_request() {
+	public function update_request() {
 		$this->errors = array();
 
 		$this->is_field_visible();

@@ -15,13 +15,7 @@
 	"supports": {
 		"customClassName": false,
 		"html": false,
-		"jetFBSanitizeValue": [
-			"int",
-			"absint",
-			"number",
-			"absnumber",
-			"custom"
-		]
+		"jetFBSanitizeValue": true
 	},
 	"attributes": {
 		"value": {

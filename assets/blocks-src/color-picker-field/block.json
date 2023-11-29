@@ -15,9 +15,7 @@
 	"supports": {
 		"customClassName": false,
 		"html": false,
-		"jetFBSanitizeValue": [
-			"custom"
-		]
+		"jetFBSanitizeValue": true
 	},
 	"attributes": {
 		"value": {

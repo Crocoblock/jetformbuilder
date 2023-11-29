@@ -10,8 +10,18 @@ if ( ! defined( 'WPINC' ) ) {
 
 trait Datetime_Trait {
 
-	public function get_response() {
-		return empty( $this->settings['is_timestamp'] ) ? $this->value : strtotime( $this->value );
+	public function update_request() {
+		parent::update_request();
+
+		if ( $this->get_errors() ||
+			! $this->get_value() ||
+			! $this->get_setting( 'is_timestamp' )
+		) {
+			return;
+		}
+
+		$this->set_value( strtotime( $this->value ) );
 	}
+
 
 }

@@ -235,7 +235,8 @@ class Form extends Base {
 	public function controls_label_style() {
 		$this->start_jet_control_group( 'section_label_style' );
 
-		$css_selector = $this->css_selector( '__label' );
+		$css_selector         = $this->css_selector( '__label' );
+		$label_inner_selector = $this->css_selector( '__label-text' );
 
 		$this->register_jet_control(
 			'label_typography',
@@ -246,7 +247,7 @@ class Form extends Base {
 				'css'   => array(
 					array(
 						'property' => 'typography',
-						'selector' => $css_selector,
+						'selector' => $label_inner_selector,
 					),
 				),
 			)

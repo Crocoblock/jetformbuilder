@@ -55,7 +55,6 @@ function AiEditorFooterFill( { clearHTML, formHTML } ) {
 		{ showPopover && <Popover
 			position={ 'top-start' }
 			noArrow={ false }
-			isAlternate
 			{ ...popoverProps }
 		>
 			<div

@@ -169,7 +169,7 @@ class Media_Field extends Base {
 
 		wp_enqueue_script( self::HANDLE );
 
-		if ( Validation::instance()->is_advanced( $this ) ) {
+		if ( Validation::instance()->is_advanced( $this->block_attrs ) ) {
 			wp_enqueue_script( self::RESTRICTIONS );
 		}
 

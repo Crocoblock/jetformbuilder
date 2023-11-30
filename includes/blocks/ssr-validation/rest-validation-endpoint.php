@@ -10,7 +10,6 @@ use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 use Jet_Form_Builder\Request\Exceptions\Plain_Value_Exception;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
-use JFB_Modules\Block_Parsers\Parser_Context;
 use Jet_Form_Builder\Request\Request_Tools;
 use JFB_Components\Rest_Api;
 
@@ -48,13 +47,12 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 		}
 
 		$validation = $parser->get_setting( 'validation' );
-
-		$callback = Array_Tools::get(
+		$ssr_attrs  = Array_Tools::get(
 			$validation,
-			array( 'rules', $body[ self::RULE_INDEX_KEY ], 'value' )
+			array( 'rules', $body[ self::RULE_INDEX_KEY ] )
 		);
 
-		if ( ! $parser->get_value() || ! $callback ) {
+		if ( ! $parser->get_value() || empty( $ssr_attrs['value'] ) ) {
 			return new \WP_REST_Response(
 				array(
 					'message' => __( 'Field value or callback is empty', 'jet-form-builder' ),
@@ -63,11 +61,14 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 			);
 		}
 
-		$result = Validation::instance()->callbacks->validate( $parser, $callback );
+		$ssr_rule = Validation::instance()->get_rules()->get_ssr();
+		$ssr_rule->set_settings( $ssr_attrs );
+
+		$ssr_rule->validate_field( $parser );
 
 		return new \WP_REST_Response(
 			array(
-				'result' => $result,
+				'result' => empty( $parser->get_errors() ),
 			),
 			200
 		);

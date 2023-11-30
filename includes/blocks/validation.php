@@ -3,13 +3,7 @@
 
 namespace Jet_Form_Builder\Blocks;
 
-use Jet_Form_Builder\Blocks\Advanced_Rules\Match_Not_Regexp_Rule;
-use Jet_Form_Builder\Blocks\Advanced_Rules\Match_Regexp_Rule;
-use Jet_Form_Builder\Blocks\Advanced_Rules\Must_Contain_Characters_Rule;
-use Jet_Form_Builder\Blocks\Advanced_Rules\Must_Equal_Rule;
-use Jet_Form_Builder\Blocks\Advanced_Rules\Must_Not_Contain_Characters_Rule;
-use Jet_Form_Builder\Blocks\Advanced_Rules\Server_Side_Rule;
-use Jet_Form_Builder\Blocks\Ssr_Validation\Validation_Callbacks;
+use Jet_Form_Builder\Blocks\Advanced_Rules\Rules_Controller;
 use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Blocks\Validation_Messages\Base_Message;
 use Jet_Form_Builder\Blocks\Validation_Messages\Is_Char_Max;
@@ -30,6 +24,7 @@ use Jet_Form_Builder\Classes\Arrayable\Arrayable;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Plugin;
+use JFB_Modules\Block_Parsers\Field_Data_Parser;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -54,7 +49,7 @@ class Validation implements Arrayable {
 	 * @var Base_Message[]
 	 */
 	private $messages;
-	public $callbacks;
+	private $rules;
 	private $settings        = array();
 	private $inline_messages = array();
 
@@ -64,7 +59,7 @@ class Validation implements Arrayable {
 			$this->get_messages()
 		);
 
-		$this->callbacks = new Validation_Callbacks();
+		$this->rules = new Rules_Controller();
 
 		add_filter(
 			'jet-form-builder/before-start-form',
@@ -86,6 +81,7 @@ class Validation implements Arrayable {
 			'jet_plugins/frontend/register_scripts',
 			array( $this, 'register_scripts' )
 		);
+		add_action( 'jet-form-builder/validate-field', array( $this, 'validate_block' ) );
 	}
 
 	/**
@@ -166,14 +162,14 @@ class Validation implements Arrayable {
 		 * If in post meta enable Advanced validation
 		 * or right in block settings
 		 */
-		if ( ! $this->is_advanced( $block ) ) {
+		if ( ! $this->is_advanced( $block->block_attrs ) ) {
 			return;
 		}
 		wp_enqueue_script( self::HANDLE );
 
 		$this->add_validation_messages_global( '', true );
 
-		$type  = $this->get_block_type( $block );
+		$type  = $block->block_attrs['validation']['type'] ?? '';
 		$rules = $block->block_attrs['validation']['rules'] ?? array();
 
 		$block->add_attribute( 'data-validation-type', $type ?: 'inherit' );
@@ -218,8 +214,8 @@ class Validation implements Arrayable {
 		return $response;
 	}
 
-	public function is_advanced( Base $block ): bool {
-		$type = $this->get_block_type( $block );
+	public function is_advanced( array $block_attrs ): bool {
+		$type = $block_attrs['validation']['type'] ?? '';
 
 		return $type
 			? self::FORMAT_ADVANCED === $type
@@ -228,10 +224,6 @@ class Validation implements Arrayable {
 
 	public function is_advanced_form(): bool {
 		return self::FORMAT_ADVANCED === ( $this->settings['type'] ?? '' );
-	}
-
-	protected function get_block_type( Base $block ): string {
-		return $block->block_attrs['validation']['type'] ?? '';
 	}
 
 	public function formats(): array {
@@ -249,32 +241,34 @@ class Validation implements Arrayable {
 		);
 	}
 
-	public function rule_types(): array {
-		return Array_Tools::to_array(
-			array(
-				new Must_Equal_Rule(),
-				new Must_Contain_Characters_Rule(),
-				new Must_Not_Contain_Characters_Rule(),
-				new Match_Regexp_Rule(),
-				new Match_Not_Regexp_Rule(),
-				new Server_Side_Rule(),
-			)
-		);
-	}
-
 	public function to_array(): array {
 		return array(
 			'messages'      => Array_Tools::to_array( $this->messages ),
-			'ssr_callbacks' => Array_Tools::to_array( $this->callbacks->get_items() ),
+			'ssr_callbacks' => Array_Tools::to_array( $this->rules->get_ssr()->get_callbacks() ),
 			'formats'       => $this->formats(),
-			'rule_types'    => $this->rule_types(),
+			'rule_types'    => Array_Tools::to_array( $this->rules->rep_get_values() ),
 		);
+	}
+
+	public function validate_block( Field_Data_Parser $parser ) {
+		if ( ! $this->is_advanced( $parser->get_settings() ) ) {
+			return;
+		}
+
+		$this->get_rules()->validate_block( $parser );
 	}
 
 	public function prepare_rules( array &$rules ) {
 		foreach ( $rules as &$rule ) {
 			$rule['value'] = jet_fb_parse_dynamic( $rule['value'] ?? '' );
 		}
+	}
+
+	/**
+	 * @return Rules_Controller
+	 */
+	public function get_rules(): Rules_Controller {
+		return $this->rules;
 	}
 
 }

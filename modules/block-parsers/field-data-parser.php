@@ -59,9 +59,9 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	protected $with_inner = true;
 
 	/**
-	 * @var string[]
+	 * @var \WP_Error
 	 */
-	protected $errors = array();
+	protected $wp_error;
 
 	abstract public function type();
 
@@ -329,7 +329,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	 */
 	public function remove_context( $index ) {
 		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
+		     ! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
 		) {
 			return;
 		}
@@ -439,19 +439,33 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		}
 	}
 
-	public function collect_error( $error ) {
-		if ( ! is_string( $error ) ) {
-			return;
+	/**
+	 * @param string|\WP_Error $error
+	 */
+	public function collect_error( $error, $message = '', $data = '' ) {
+		if ( ! is_wp_error( $this->wp_error ) ) {
+			$this->wp_error = new \WP_Error();
 		}
-		$this->errors[] = $error;
+
+		if ( is_string( $error ) ) {
+			$this->wp_error->add( $error, $message, $data );
+		}
+		if ( is_wp_error( $error ) ) {
+			$this->wp_error->merge_from( $error );
+		}
 	}
 
-	public function is_collected_error( string $error_name ): bool {
-		return in_array( $error_name, $this->errors, true );
+	public function is_collected_error( string $error_code ): bool {
+		if ( ! is_wp_error( $this->wp_error ) ) {
+			return false;
+		}
+		$codes = $this->wp_error->get_error_codes();
+
+		return in_array( $error_code, $codes, true );
 	}
 
 	public function get_errors(): array {
-		return $this->errors;
+		return is_wp_error( $this->wp_error ) ? $this->wp_error->get_error_codes() : array();
 	}
 
 	public function set_inside_conditional( bool $is_inside ) {
@@ -476,7 +490,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		$index = array_shift( $path );
 
 		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
+		     ! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
 		) {
 			throw new Repository_Exception();
 		}
@@ -484,6 +498,22 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		return empty( $path )
 			? $this->inner_contexts[ $index ]
 			: $this->inner_contexts[ $index ]->resolve( $path );
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return Field_Data_Parser
+	 * @throws Plain_Value_Exception|Repository_Exception
+	 */
+	public function resolve_to_up( string $name ): Field_Data_Parser {
+		$parser = $this->get_context()->resolve_to_up( $name );
+
+		if ( ! ( $parser instanceof Field_Data_Parser ) ) {
+			throw new Repository_Exception();
+		}
+
+		return $parser;
 	}
 
 	public function __clone() {

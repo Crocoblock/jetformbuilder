@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Admin;
 use Jet_Form_Builder\Actions\Conditions\Condition_Manager as Action_Condition_Manager;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
-use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Tools;
@@ -333,12 +332,6 @@ class Editor {
 			self::EDITOR_PACKAGE_HANDLE,
 			'jetFormEvents',
 			jet_fb_events()->to_array()
-		);
-
-		wp_localize_script(
-			self::EDITOR_PACKAGE_HANDLE,
-			'jetFormValidation',
-			Validation::instance()->to_array()
 		);
 
 		wp_localize_script(

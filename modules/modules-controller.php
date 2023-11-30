@@ -49,6 +49,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Onboarding\Module(),
 			new Html_Parser\Module(),
 			new Ai\Module(),
+			new Validation\Module(),
 		);
 	}
 

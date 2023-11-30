@@ -8,13 +8,11 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-use Jet_Form_Builder\Blocks\Manager;
-use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use JFB_Modules\Captcha\Abstract_Captcha\Base_Captcha_From_Options;
-use Jet_Form_Builder\Integrations\Forms_Captcha;
 use JFB_Modules\Captcha\Abstract_Captcha\Captcha_Separate_Editor_Script;
 use JFB_Modules\Captcha\Abstract_Captcha\Captcha_Separate_Frontend_Script;
+use JFB_Modules\Captcha\Module;
 use JFB_Modules\Security\Exceptions\Spam_Exception;
 
 class Turnstile extends Base_Captcha_From_Options implements
@@ -53,7 +51,7 @@ class Turnstile extends Base_Captcha_From_Options implements
 			'jet-form-builder/turnstile/options',
 			array(
 				'sitekey' => $this->options['key'] ?? '',
-				'action'  => Forms_Captcha::PREFIX . jet_fb_live()->form_id,
+				'action'  => Module::PREFIX . jet_fb_live()->form_id,
 			)
 		);
 
@@ -120,7 +118,9 @@ class Turnstile extends Base_Captcha_From_Options implements
 		wp_register_script(
 			$handle,
 			$this->module()->get_url( 'assets-build/js/turnstile/frontend.js' ),
-			array( Manager::MAIN_SCRIPT_HANDLE ),
+			array(
+				\Jet_Form_Builder\Blocks\Module::MAIN_SCRIPT_HANDLE,
+			),
 			jet_form_builder()->get_version(),
 			true
 		);

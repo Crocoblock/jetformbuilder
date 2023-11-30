@@ -362,12 +362,19 @@ class Module implements
 		return $this->get_meta()->get_gateways( $form_id );
 	}
 
-	public function get_validation( $form_id = false ) {
-		return $this->get_meta()->get_validation( $form_id );
-	}
-
 	public function get_actions( $form_id = false ): array {
 		return $this->get_meta()->get_actions( $form_id );
+	}
+
+	/**
+	 * @param string $name
+	 * @param false|bool $form_id
+	 *
+	 * @return array|mixed
+	 * @since 3.3.0
+	 */
+	public function query_meta( string $name, $form_id = false ) {
+		return $this->get_meta()->get_meta( $name )->query( $form_id );
 	}
 
 	public function get_meta(): Meta_Repository {

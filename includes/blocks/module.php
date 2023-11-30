@@ -3,9 +3,7 @@
 
 namespace Jet_Form_Builder\Blocks;
 
-// If this file is called directly, abort.
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
-use Jet_Form_Builder\Blocks\Ssr_Validation\Rest_Validation_Endpoint;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -13,6 +11,7 @@ use Jet_Form_Builder\Plugin;
 use JET_SM\Gutenberg\Block_Manager;
 use JFB_Components\Module\Base_Module_It;
 
+// If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -30,6 +29,7 @@ final class Module implements Base_Module_It {
 
 	private $_builder_blocks_repository;
 	private $_default_blocks_repository;
+
 	// phpcs:enable PSR2.Classes.PropertyDeclaration.Underscore
 
 	public function rep_item_id() {
@@ -238,12 +238,11 @@ final class Module implements Base_Module_It {
 				'jet-form-builder/frontend-settings',
 				array_merge(
 					array(
-						'ajaxurl'             => Http_Tools::get_form_action_url(
+						'ajaxurl'      => Http_Tools::get_form_action_url(
 							array( 'method' => 'ajax' )
 						),
-						'devmode'             => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
-						'validation_endpoint' => Rest_Validation_Endpoint::get_endpoint(),
-						'replaceAttrs'        => array(
+						'devmode'      => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
+						'replaceAttrs' => array(
 							'href',
 							'src',
 							'alt',

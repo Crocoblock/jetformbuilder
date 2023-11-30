@@ -7,7 +7,6 @@ use Jet_Form_Builder\Actions\Manager as ActionsManager;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Blocks\Dynamic_Value;
-use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Regexp_Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Messages;
@@ -19,7 +18,6 @@ use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
-use JFB_Modules\Gateways\Paypal\Controller;
 use JFB_Modules\Modules_Controller;
 use Jet_Form_Builder\Presets\Preset_Manager;
 
@@ -39,7 +37,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Class Plugin
  * @package Jet_Form_Builder
  */
-class Plugin {
+final class Plugin {
 
 	public $actions;
 	public $form;
@@ -86,7 +84,6 @@ class Plugin {
 		 * Modules & components
 		 */
 		File_Upload::instance();
-		Validation::instance();
 		Render_State::instance();
 		new Dynamic_Value();
 
@@ -94,7 +91,6 @@ class Plugin {
 		 * REST API
 		 */
 		( new Blocks\Conditional_Block\Rest_Api\Rest_Api_Controller() )->rest_api_init();
-		( new Blocks\Ssr_Validation\Rest_Controller() )->rest_api_init();
 
 		if ( is_admin() ) {
 			Preset_Manager::instance();

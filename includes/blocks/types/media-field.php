@@ -2,9 +2,8 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
-use Jet_Form_Builder\Blocks\Manager;
+use Jet_Form_Builder\Blocks\Module;
 use Jet_Form_Builder\Blocks\Render\Media_Field_Render;
-use Jet_Form_Builder\Blocks\Validation;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Plugin;
 
@@ -135,7 +134,7 @@ class Media_Field extends Base {
 			self::HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field.js' ),
 			array(
-				Manager::MAIN_SCRIPT_HANDLE,
+				Module::MAIN_SCRIPT_HANDLE,
 				'jet-form-builder-sortable',
 			),
 			Plugin::instance()->get_version(),
@@ -145,8 +144,7 @@ class Media_Field extends Base {
 			self::RESTRICTIONS,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field.restrictions.js' ),
 			array(
-				Validation::HANDLE,
-				Manager::MAIN_SCRIPT_HANDLE,
+				\JFB_Modules\Validation\Module::HANDLE,
 			),
 			Plugin::instance()->get_version(),
 			true
@@ -169,7 +167,11 @@ class Media_Field extends Base {
 
 		wp_enqueue_script( self::HANDLE );
 
-		if ( Validation::instance()->is_advanced( $this->block_attrs ) ) {
+		/** @var \JFB_Modules\Validation\Module $module */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$module = jet_form_builder()->module( 'validation' );
+
+		if ( $module->is_advanced( $this->block_attrs ) ) {
 			wp_enqueue_script( self::RESTRICTIONS );
 		}
 

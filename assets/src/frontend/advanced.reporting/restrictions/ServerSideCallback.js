@@ -3,8 +3,7 @@ import CustomBaseRestriction from './CustomBaseRestriction';
 function ServerSideCallback() {
 	CustomBaseRestriction.call( this );
 
-	const { apiFetch }            = wp;
-	const { validation_endpoint } = JetFormBuilderSettings;
+	const { apiFetch } = wp;
 
 	this.getSlug         = function () {
 		return 'ssr';
@@ -22,7 +21,8 @@ function ServerSideCallback() {
 		const body = this.getFormData();
 
 		const response = await apiFetch( {
-			...validation_endpoint,
+			path: '/jet-form-builder/v1/validate-field',
+			method: 'POST',
 			body,
 		} );
 

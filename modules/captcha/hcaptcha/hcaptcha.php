@@ -3,16 +3,11 @@
 
 namespace JFB_Modules\Captcha\Hcaptcha;
 
-use Jet_Form_Builder\Blocks\Validation;
-use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
-use JFB_Modules\Captcha\Abstract_Captcha\Base_Captcha;
 use JFB_Modules\Captcha\Abstract_Captcha\Base_Captcha_From_Options;
 use JFB_Modules\Captcha\Abstract_Captcha\Captcha_Frontend_Style_It;
 use JFB_Modules\Captcha\Abstract_Captcha\Captcha_Separate_Editor_Script;
 use JFB_Modules\Captcha\Abstract_Captcha\Captcha_Separate_Frontend_Script;
-use JFB_Modules\Captcha\Module;
 use JFB_Modules\Security\Exceptions\Spam_Exception;
 
 class Hcaptcha extends Base_Captcha_From_Options implements

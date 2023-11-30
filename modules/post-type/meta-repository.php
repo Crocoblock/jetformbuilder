@@ -25,7 +25,6 @@ class Meta_Repository {
 			new Meta\Recaptcha_Meta(),
 			new Meta\Actions_Meta(),
 			new Meta\Gateways_Meta(),
-			new Meta\Validation_Meta(),
 		);
 	}
 
@@ -106,10 +105,6 @@ class Meta_Repository {
 		} catch ( Repository_Exception $exception ) {
 			return array();
 		}
-	}
-
-	public function get_validation( $form_id = false ) {
-		return $this->get_meta( Meta\Validation_Meta::class )->query( $form_id );
 	}
 
 	/**

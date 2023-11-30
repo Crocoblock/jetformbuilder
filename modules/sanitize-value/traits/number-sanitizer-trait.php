@@ -19,7 +19,7 @@ trait Number_Sanitizer_Trait {
 			return;
 		}
 
-		$this->do_sanitize( $parser );
+		$this->do_number_sanitize( $parser );
 	}
 
 }

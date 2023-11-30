@@ -11,13 +11,7 @@
 	"supports": {
 		"customClassName": false,
 		"html": false,
-		"jetFBSanitizeValue": [
-			"int",
-			"absint",
-			"number",
-			"absnumber",
-			"custom"
-		]
+		"jetFBSanitizeValue": true
 	},
 	"title": "Range Field",
 	"icon": "<svg width=\"64\" height=\"64\" viewBox=\"0 0 64 64\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M28 38C30.973 38 33.441 35.8377 33.917 33L58 33C58.5522 33 59 32.5523 59 32C59 31.4477 58.5522 31 58 31H33.917C33.441 28.1623 30.973 26 28 26C25.7792 26 23.8401 27.2066 22.8027 29H7C5.89543 29 5 29.8954 5 31V33C5 34.1046 5.89543 35 7 35H22.8027C23.8401 36.7934 25.7792 38 28 38ZM28 36C30.2091 36 32 34.2091 32 32C32 29.7909 30.2091 28 28 28C25.7909 28 24 29.7909 24 32C24 34.2091 25.7909 36 28 36ZM7 31H22.083C22.0284 31.3252 22 31.6593 22 32C22 32.3407 22.0284 32.6748 22.083 33H7L7 31Z\" fill=\"currentColor\"/>\n<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M4 18C1.79086 18 0 19.7909 0 22V42C0 44.2091 1.79086 46 4 46H60C62.2091 46 64 44.2091 64 42V22C64 19.7909 62.2091 18 60 18H4ZM60 20H4C2.89543 20 2 20.8954 2 22V42C2 43.1046 2.89543 44 4 44H60C61.1046 44 62 43.1046 62 42V22C62 20.8954 61.1046 20 60 20Z\" fill=\"currentColor\"/>\n</svg>",

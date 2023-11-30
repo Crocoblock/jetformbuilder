@@ -61,7 +61,7 @@ class Server_Side_Rule extends Rule {
 			return;
 		}
 
-		$parser->collect_error( "ssr:{$function_name}", $this->get_setting( 'message' ) );
+		$parser->collect_error( 'rule:ssr:' . $function_name, $this->get_setting( 'message' ) );
 	}
 
 	/**

@@ -3,7 +3,9 @@
 
 namespace JFB_Modules\Validation\Advanced_Rules;
 
+use JFB_Modules\Validation\Advanced_Rules\Interfaces\Rule_Collect_Error_It;
 use JFB_Modules\Validation\Advanced_Rules\Interfaces\Rule_Field_Dependence_It;
+use JFB_Modules\Validation\Advanced_Rules\Traits\Rule_Collect_Error_Trait;
 use JFB_Modules\Validation\Advanced_Rules\Traits\Rule_Field_Dependence_Trait;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
 
@@ -12,9 +14,10 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Must_Equal_Rule extends Rule implements Rule_Field_Dependence_It {
+class Must_Equal_Rule extends Rule implements Rule_Field_Dependence_It, Rule_Collect_Error_It {
 
 	use Rule_Field_Dependence_Trait;
+	use Rule_Collect_Error_Trait;
 
 	public function get_id(): string {
 		return 'equal';
@@ -31,7 +34,7 @@ class Must_Equal_Rule extends Rule implements Rule_Field_Dependence_It {
 			return;
 		}
 
-		$parser->collect_error( 'not_equal', $this->get_setting( 'message' ) );
+		$this->collect_error( $parser );
 	}
 
 }

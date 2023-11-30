@@ -41,7 +41,7 @@ final class Module implements
 	 * @var Rules_Controller
 	 */
 	private $rules;
-	private $settings        = array();
+	private $settings;
 	private $inline_messages = array();
 
 	public function rep_item_id() {
@@ -286,6 +286,10 @@ final class Module implements
 	}
 
 	public function is_advanced_form(): bool {
+		if ( is_null( $this->settings ) ) {
+			$this->settings = $this->get_settings();
+		}
+
 		return self::FORMAT_ADVANCED === ( $this->settings['type'] ?? '' );
 	}
 

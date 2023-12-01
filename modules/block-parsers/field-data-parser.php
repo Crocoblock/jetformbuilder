@@ -63,6 +63,12 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	 */
 	protected $wp_error;
 
+	/**
+	 * @since 3.3.0
+	 * @var bool
+	 */
+	private $complete_apply = false;
+
 	abstract public function type();
 
 	/**
@@ -76,15 +82,38 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		return $this->value;
 	}
 
-	/**
-	 * @throws Exclude_Field_Exception|Parse_Exception
-	 */
 	public function update_request() {
-		$this->errors = array();
+		if ( $this->is_complete_apply() ) {
+			return;
+		}
 
-		$this->is_field_visible();
-		$this->set_request();
+		$this->wp_error = new \WP_Error();
+
+		try {
+			$this->is_field_visible();
+			$this->set_request();
+		} catch ( Exclude_Field_Exception $exception ) {
+			$this->get_context()->remove( $this->get_name() );
+
+			return;
+		} catch ( Parse_Exception $exception ) {
+			$this->get_context()->remove( $this->get_name() );
+
+			foreach ( $exception->get_inner() as $key => $value ) {
+				$this->get_context()->update_request( $value, $key );
+			}
+
+			return;
+		}
+
 		$this->check_response();
+
+		/**
+		 * To prevent repeatable execution of this method
+		 *
+		 * @since 3.3.0
+		 */
+		$this->set_complete_apply( true );
 
 		do_action( 'jet-form-builder/validate-field', $this );
 	}
@@ -329,7 +358,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	 */
 	public function remove_context( $index ) {
 		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			 ! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
+			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
 		) {
 			return;
 		}
@@ -490,7 +519,7 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		$index = array_shift( $path );
 
 		if ( ! array_key_exists( $index, $this->inner_contexts ) ||
-			 ! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
+			! ( $this->inner_contexts[ $index ] instanceof Parser_Context )
 		) {
 			throw new Repository_Exception();
 		}
@@ -516,19 +545,39 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		return $parser;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function is_complete_apply(): bool {
+		return $this->complete_apply;
+	}
+
+	/**
+	 * @param bool $complete_apply
+	 */
+	public function set_complete_apply( bool $complete_apply ) {
+		$this->complete_apply = $complete_apply;
+	}
+
 	public function __clone() {
-		if ( ! is_array( $this->inner_contexts ) ) {
+		if ( is_array( $this->inner_contexts ) ) {
+			foreach ( $this->inner_contexts as $key => $context ) {
+				$this->inner_contexts[ $key ] = clone $context;
+			}
+		}
+
+		if ( ! is_wp_error( $this->wp_error ) ) {
 			return;
 		}
-		foreach ( $this->inner_contexts as $key => $context ) {
-			$this->inner_contexts[ $key ] = clone $context;
-		}
+
+		$this->wp_error = clone $this->wp_error;
 	}
 
 	public function __debugInfo(): array {
 		$current = clone $this;
 
 		unset( $current->context );
+		$current->wp_error = $current->get_errors();
 
 		return get_object_vars( $current );
 	}

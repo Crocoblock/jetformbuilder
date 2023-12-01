@@ -63,26 +63,11 @@ class Parser_Context {
 		/** @var Field_Data_Parser $parser */
 		foreach ( $this->iterate_parsers() as $parser ) {
 			$this->name = $parser->get_name();
-			$this->parser_update_request( $parser );
+			$parser->update_request();
 		}
 		$this->name = '';
 
 		$this->clear_all();
-	}
-
-	protected function parser_update_request( Field_Data_Parser $parser ) {
-		try {
-			$parser->update_request();
-
-		} catch ( Exclude_Field_Exception $exception ) {
-			unset( $this->parsers[ $parser->get_name() ] );
-		} catch ( Parse_Exception $exception ) {
-			unset( $this->parsers[ $parser->get_name() ] );
-
-			foreach ( $exception->get_inner() as $key => $value ) {
-				$this->update_request( $value, $key );
-			}
-		}
 	}
 
 	public function set_parsers( $fields ) {
@@ -711,7 +696,7 @@ class Parser_Context {
 
 	public function iterate_errors_list(): \Generator {
 		/** @var Field_Data_Parser $parser */
-		foreach ( $this->iterate_parsers_list() as $name => $parser ) {
+		foreach ( $this->iterate_parsers_list( false ) as $name => $parser ) {
 			$errors = $parser->get_errors();
 
 			if ( ! $errors ) {
@@ -844,19 +829,11 @@ class Parser_Context {
 	 * @throws Repository_Exception
 	 */
 	public function resolve_to_up( $path ) {
-		if ( ! is_array( $path ) ) {
-			$path = Array_Tools::path( $path );
-		}
-
-		if ( ! $this->get_parent_field() ) {
+		try {
 			return $this->resolve( $path );
+		} catch ( Silence_Exception $exception ) {
+			return $this->get_parent_field()->get_context()->resolve_to_up( $path );
 		}
-
-		$name = array_shift( $path );
-
-		return empty( $path )
-			? $this->parsers[ $name ]
-			: $this->get_parent_field()->get_context()->resolve_to_up( $path );
 	}
 
 	protected function insert_parser( string $name, string $field_type ): Field_Data_Parser {

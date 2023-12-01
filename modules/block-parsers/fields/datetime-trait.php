@@ -11,6 +11,10 @@ if ( ! defined( 'WPINC' ) ) {
 trait Datetime_Trait {
 
 	public function update_request() {
+		if ( $this->is_complete_apply() ) {
+			return;
+		}
+
 		parent::update_request();
 
 		if ( $this->get_errors() ||

@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Validation\Advanced_Rules\Traits;
 
+use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
 
@@ -23,6 +24,12 @@ trait Rule_Field_Dependence_Trait {
 		} catch ( Silence_Exception $exception ) {
 			return false;
 		}
+
+		/**
+		 * We need to make sure, that value for dependent field was applied.
+		 * It is required, when depended field comes after current field-parser
+		 */
+		$another_parser->update_request();
 
 		return $another_parser->get_value();
 	}

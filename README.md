@@ -4,6 +4,18 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.2.1
+* ADD: Number-related sanitizers for fields
+* ADD: Now you can write `<div data-jfb-macro="field_name"></div>` instead of `<!--JFB_FIELD::field_name-->`
+* ADD: Random String option in Field Value for Hidden Field
+* FIX: Prevent appearance of the select field in Safari browser
+* FIX: Style controls for JetForm element in Bricks Builder
+* FIX: Minor accessibility errors
+* FIX: Prevent style WYSIWYG editor by the theme or global styles
+* FIX: Issue with Enter key when entering Japanese IME
+* FIX: Advanced choices don't work with the Radio Field
+* FIX: Input mask saves the unmasked value on blur (lost focus)
+
 ## 3.2.0
 * ADD: Email Verification
 * ADD: Widget "JetForm" for Bricks editor

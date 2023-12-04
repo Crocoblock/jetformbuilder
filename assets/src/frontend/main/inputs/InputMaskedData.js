@@ -17,8 +17,12 @@ function InputMaskedData() {
 		const [ node ] = this.nodes;
 
 		node.addEventListener( 'blur', () => {
+			const { value } = node;
+
 			this.value.current = node.inputmask.unmaskedvalue();
 			this.reporting.validateOnBlur();
+
+			this.silenceSet( value );
 		} );
 
 		this.enterKey = new ReactiveHook();

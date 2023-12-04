@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.0
 Tested up to: 6.4.1
 Requires PHP: 7.0
-Stable tag: 3.2.0
+Stable tag: 3.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,18 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.2.1**
+- ADD: Number-related sanitizers for fields
+- ADD: Now you can write `<div data-jfb-macro="field_name"></div>` instead of `<!--JFB_FIELD::field_name-->`
+- ADD: Random String option in Field Value for Hidden Field
+- FIX: Prevent appearance of the select field in Safari browser
+- FIX: Style controls for JetForm element in Bricks Builder
+- FIX: Minor accessibility errors
+- FIX: Prevent style WYSIWYG editor by the theme or global styles
+- FIX: Issue with Enter key when entering Japanese IME
+- FIX: Advanced choices don't work with the Radio Field
+- FIX: Input mask saves the unmasked value on blur (lost focus)
 
 **3.2.0**
 - ADD: Email Verification

@@ -21,4 +21,8 @@ addFilter(
 
 		return signals;
 	},
+	/**
+	 * @since 3.2.0 (for radio-field compatibility)
+	 */
+	20
 );

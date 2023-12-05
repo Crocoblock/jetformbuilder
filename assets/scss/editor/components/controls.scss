@@ -169,7 +169,9 @@
 		}
 	}
 
-	&.has-value {
-
+	&.gap-unset {
+		.components-base-control__field {
+			gap: unset;
+		}
 	}
 }

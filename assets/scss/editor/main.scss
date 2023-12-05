@@ -628,6 +628,10 @@ select.components-select-control__input.components-select-control__input.compone
 
 .components-base-control__label .jet-form-builder__label {
 	width: 100%;
+	text-transform: initial;
+	font-size: initial;
+	font-weight: initial;
+	line-height: initial;
 
 	& > div, & > span {
 		display: inline-block;

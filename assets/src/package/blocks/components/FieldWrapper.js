@@ -11,6 +11,7 @@ const {
 
 const {
 	      RichText,
+	      useBlockProps,
       } = wp.blockEditor;
 let {
 	    __experimentalUseFocusOutside,
@@ -51,7 +52,7 @@ function FieldWrapper( props ) {
 
 	const ref = useFocusOutside( onBlurLabel );
 
-	function renderLabel() {
+	function RenderLabel() {
 		return <BaseControl.VisualLabel>
 			{ RichDescription( __( 'input label:', 'jet-form-builder' ) ) }
 			<div
@@ -60,13 +61,11 @@ function FieldWrapper( props ) {
 				<RichText
 					key={ uniqKey( 'rich-label' ) }
 					placeholder="Label..."
-					allowedFormats={ [] }
 					value={ attributes.label
 					        ? attributes.label
 					        : valueIfEmptyLabel }
 					onChange={ newLabel => setAttributes(
 						{ label: newLabel } ) }
-					isSelected={ false }
 					{ ...ref }
 				/>
 				{ attributes.required &&
@@ -77,7 +76,7 @@ function FieldWrapper( props ) {
 		</BaseControl.VisualLabel>;
 	}
 
-	function renderDescription() {
+	function RenderDescription() {
 		return <div className="jet-form-builder__desc--wrapper">
 			{ RichDescription(
 				__( 'input description:', 'jet-form-builder' ) ) }
@@ -88,7 +87,6 @@ function FieldWrapper( props ) {
 						key={ uniqKey( 'rich-description' ) }
 						tagName="small"
 						placeholder="Description..."
-						allowedFormats={ [] }
 						value={ attributes.desc }
 						onChange={ desc => setAttributes( { desc } ) }
 						style={ { marginTop: '0px' } }
@@ -113,15 +111,15 @@ function FieldWrapper( props ) {
 		>
 			{ 'row' !== _jf_args.fields_layout && <>
 				{ 'top' === childrenPosition && children }
-				{ renderLabel() }
+				<RenderLabel/>
 				{ 'between' === childrenPosition && children }
-				{ renderDescription() }
+				<RenderDescription/>
 				{ 'bottom' === childrenPosition && children }
 			</> }
 			{ 'row' === _jf_args.fields_layout && <>
 				<div className="jet-form-builder-row__flex--label">
-					{ renderLabel() }
-					{ renderDescription() }
+					<RenderLabel/>
+					<RenderDescription/>
 				</div>
 				<div
 					className="jet-form-builder-row__flex--content">{ children }</div>

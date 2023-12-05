@@ -62,6 +62,6 @@ class Choices_Field extends Base {
 	}
 
 	public function is_allowed_multiple(): bool {
-		return ! ! ( $this->block_attrs['allow_multiple'] ?? false );
+		return (bool) ( $this->block_attrs['allow_multiple'] ?? false );
 	}
 }

@@ -71,12 +71,22 @@ class Status_Info {
 			$this->is_success = in_array( $message[0], array( 'success' ), true );
 		}
 
+		do_action( 'jet-form-builder/response-status/init', $this );
+
 		return $this;
 	}
 
 
 	public function get_css_class(): string {
 		return $this->is_success() ? 'success' : 'error';
+	}
+
+	/**
+	 * @since 3.2.2
+	 * @param bool $is_success
+	 */
+	public function set_is_success( bool $is_success ) {
+		$this->is_success = $is_success;
 	}
 
 }

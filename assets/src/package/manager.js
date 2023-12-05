@@ -207,6 +207,7 @@ import useScopedAttributesContext
 import ScopedAttributesProvider
 	from './blocks/components/ScopedAttributesProvider';
 import getSupport from './blocks/helpers/getSupport';
+import useEvents from './events/hooks/useEvents';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -363,6 +364,7 @@ window.JetFBHooks = {
 	useStateValidClasses,
 	useStateLoadingClasses,
 	useSuccessNotice,
+	useEvents,
 	useRequestEvents,
 	useBlockConditions,
 	useUniqKey,

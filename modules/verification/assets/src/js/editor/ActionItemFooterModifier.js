@@ -2,6 +2,7 @@ const {
 	      useLoopedAction,
 	      useActionsEdit,
 	      useActions,
+	      useEvents,
       } = JetFBHooks;
 
 const {
@@ -28,6 +29,7 @@ const ActionItemFooterModifier = ( DefaultItem ) => () => {
 	const { action }          = useLoopedAction();
 	const { updateActionObj } = useActionsEdit();
 	const [ actions ]         = useActions();
+	const events              = useEvents( action );
 
 	const hasVerification = actions.some(
 		current => current.type === 'verification',
@@ -35,7 +37,8 @@ const ActionItemFooterModifier = ( DefaultItem ) => () => {
 
 	if ( action?.events?.length ||
 		'verification' === action.type ||
-		!hasVerification
+		!hasVerification ||
+		1 >= events.length
 	) {
 		return <DefaultItem/>;
 	}

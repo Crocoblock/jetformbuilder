@@ -4,7 +4,6 @@
 namespace JFB_Modules\Form_Record\Admin\View_Columns;
 
 use JFB_Modules\Form_Record\Admin\View_Actions\Delete_Record_Action;
-use JFB_Modules\Form_Record\Admin\View_Actions\Export_Action;
 use JFB_Modules\Form_Record\Admin\View_Actions\Mark_Not_Viewed_Action;
 use JFB_Modules\Form_Record\Admin\View_Actions\Mark_Viewed_Action;
 use JFB_Modules\Form_Record\Admin\View_Actions\View_Action;

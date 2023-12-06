@@ -15,6 +15,7 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
@@ -26,13 +27,23 @@ use JFB_Modules\Security\Csrf\Csrf_Tools;
 use JFB_Modules\Verification\Actions\Verification;
 use JFB_Modules\Verification\Events;
 use JFB_Modules\Verification\Form_Record\Admin\Meta_Boxes\Verification_Box;
+use JFB_Modules\Verification\Form_Record\Inner_Module;
 use JFB_Modules\Webhook;
 
-class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_It {
+class Module implements
+	Base_Module_It,
+	Base_Module_Url_It,
+	Base_Module_Handle_It,
+	Base_Module_After_Install_It {
 
 	use Base_Module_Dir_Trait;
 	use Base_Module_Handle_Trait;
 	use Base_Module_Url_Trait;
+
+	/**
+	 * @var Inner_Module
+	 */
+	private $record;
 
 	public function rep_item_id() {
 		return 'verification';
@@ -40,6 +51,14 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 
 	public function condition(): bool {
 		return true;
+	}
+
+	public function on_install() {
+		$this->record = new Inner_Module();
+	}
+
+	public function on_uninstall() {
+		unset( $this->record );
 	}
 
 	public function init_hooks() {
@@ -58,10 +77,8 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 			'jet-form-builder/default-process-event/executors',
 			array( $this, 'add_executor_to_default_process' )
 		);
-		add_filter(
-			'jet-form-builder/page-containers/jfb-records-single',
-			array( $this, 'add_box_to_single_record' )
-		);
+
+		$this->record->init_hooks();
 	}
 
 	public function remove_hooks() {
@@ -77,10 +94,8 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 			'jet-form-builder/default-process-event/executors',
 			array( $this, 'add_executor_to_default_process' )
 		);
-		remove_filter(
-			'jet-form-builder/page-containers/jfb-records-single',
-			array( $this, 'add_box_to_single_record' )
-		);
+
+		$this->record->remove_hooks();
 	}
 
 	public function enqueue_editor_assets() {
@@ -114,17 +129,6 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 			),
 			$executors
 		);
-	}
-
-	/**
-	 * @param Base_Meta_Container[] $containers
-	 *
-	 * @return array
-	 */
-	public function add_box_to_single_record( array $containers ): array {
-		$containers[1]->add_meta_box( new Verification_Box() );
-
-		return $containers;
 	}
 
 	/**

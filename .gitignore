@@ -1,6 +1,12 @@
-/vendor/
 composer.lock
 .DS_Store
 node_modules
 package-lock.json
 *.LICENSE.txt
+
+/vendor/woocommerce/action-scheduler/changelog.txt
+/vendor/woocommerce/action-scheduler/readme.txt
+/vendor/woocommerce/action-scheduler/README.md
+
+/vendor/bin
+/vendor/composer/installed.json

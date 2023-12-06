@@ -1,9 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-# Check if there are modified or newly created .php files
-if git status --porcelain | grep -e '^M' -e '^A' | grep '\.php$' &>/dev/null; then
-	composer cs
-else
-	exit 0
-fi

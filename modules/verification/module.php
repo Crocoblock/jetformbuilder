@@ -15,6 +15,7 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
@@ -28,6 +29,7 @@ use JFB_Modules\Verification\Actions\Verification;
 use JFB_Modules\Verification\Events;
 use JFB_Modules\Verification\Form_Record\Admin\Meta_Boxes\Verification_Box;
 use JFB_Modules\Verification\Form_Record\Inner_Module;
+use JFB_Modules\Verification\Jobs\Verify_Manually;
 use JFB_Modules\Webhook;
 
 class Module implements
@@ -53,12 +55,26 @@ class Module implements
 		return true;
 	}
 
+	/**
+	 * @throws Repository_Exception
+	 */
 	public function on_install() {
 		$this->record = new Inner_Module();
+
+		/** @var \JFB_Modules\Jobs\Module $jobs */
+		$jobs = jet_form_builder()->module( 'jobs' );
+		$jobs->install( new Verify_Manually() );
 	}
 
+	/**
+	 * @throws Repository_Exception
+	 */
 	public function on_uninstall() {
 		unset( $this->record );
+
+		/** @var \JFB_Modules\Jobs\Module $jobs */
+		$jobs = jet_form_builder()->module( 'jobs' );
+		$jobs->uninstall( new Verify_Manually() );
 	}
 
 	public function init_hooks() {

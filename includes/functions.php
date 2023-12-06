@@ -5,6 +5,22 @@ if ( ! defined( 'WPINC' ) ) {
 	die();
 }
 
+function jet_form_builder_init() {
+	require JET_FORM_BUILDER_PATH . 'includes/plugin.php';
+
+	jet_form_builder()->register_autoloader();
+	jet_form_builder()->init_lang();
+
+	add_action(
+		'after_setup_theme',
+		array( jet_form_builder(), 'init_plugin' ),
+		0
+	);
+
+	jet_form_builder()->get_modules()->install( new JFB_Modules\Cli\Module() );
+	jet_form_builder()->get_modules()->install( new JFB_Modules\Framework\Module() );
+}
+
 function jet_form_builder() {
 	return Jet_Form_Builder\Plugin::instance();
 }

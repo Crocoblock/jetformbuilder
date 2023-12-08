@@ -57,6 +57,12 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	}
 
 	public function admin_enqueue_assets() {
+		global $post_type;
+
+		if ( Post_Type\Module::SLUG !== $post_type ) {
+			return;
+		}
+
 		/** @var \JFB_Modules\Html_Parser\Module $parser_module */
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$parser_module = jet_form_builder()->module( 'html-parser' );

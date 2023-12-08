@@ -20,14 +20,26 @@ class Verify_Manually extends Async_Job implements Self_Execution_Job_It {
 		$this->set_hook( 'verification/verify' );
 	}
 
-	public function execute() {
-		// phpcs:ignore WordPress.PHP.DevelopmentFunctions
-		error_log(
-			sprintf(
-				'%s is executed! Record ID: %s',
-				static::class,
-				$this->get_arg( 'record_id' )
-			)
-		);
+	/**
+	 * To secure this job we should modify query args on `as_async_request_queue_runner_query_args` hook
+	 * and add our unique token, which stored hashed value in `jet_fb_tokens` sql-table.
+	 *
+	 * In this method we should validate this token
+	 *
+	 * @param $record_id
+	 */
+	public function execute( $record_id ) {
+		// clear all duplicating
+		$this->set_args( array( $record_id ) );
+
+		define( 'JET_FB_REST_WEBHOOK', true );
+	}
+
+	public function init_hooks() {
+		add_action( $this->get_hook(), array( $this, 'execute' ) );
+	}
+
+	public function remove_hooks() {
+		remove_action( $this->get_hook(), array( $this, 'execute' ) );
 	}
 }

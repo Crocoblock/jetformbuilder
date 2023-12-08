@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JFB_Modules\Verification\Rest_Api;
+namespace JFB_Modules\Verification\Rest_Api\Endpoints;
 
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Components\Rest_Api\Rest_Api_Endpoint_Base;
@@ -40,7 +40,15 @@ class Verify_Manually extends Rest_Api_Endpoint_Base {
 		$job  = $jobs->get( \JFB_Modules\Verification\Jobs\Verify_Manually::class );
 
 		foreach ( $ids as $id ) {
-			$job->set_arg( 'record_id', $id );
+			$job->set_args( array( $id ) );
+			// clear possible duplicates of the current job
+			$job->unschedule();
+
+			// check is exist running jobs
+			if ( $job->is_scheduled() ) {
+				continue;
+			}
+			// add new job to queue
 			$job->schedule();
 		}
 

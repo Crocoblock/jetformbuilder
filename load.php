@@ -7,7 +7,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 	require_once __DIR__ . '/includes/functions.php';
+	require_once __DIR__ . '/includes/plugin.php';
 	require_once __DIR__ . '/vendor/woocommerce/action-scheduler/action-scheduler.php';
+
+	jet_form_builder()->register_autoloader();
 
 	add_action( 'plugins_loaded', 'jet_form_builder_init' );
 

@@ -10,6 +10,13 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	die;
 }
 
+require_once 'jet-form-builder.php';
+
+// Disable Action Schedule Queue Runner.
+if ( class_exists( 'ActionScheduler_QueueRunner' ) ) {
+	ActionScheduler_QueueRunner::instance()->unhook_dispatch_async_request();
+}
+
 $options = get_option( 'jet_form_builder_settings__options-tab' );
 
 if ( ! $options ) {
@@ -103,3 +110,5 @@ $uploads_directory = wp_upload_dir();
 if ( empty( $uploads_directory['error'] ) ) {
 	$wp_filesystem->rmdir( $uploads_directory['basedir'] . '/jet-form-builder/', true );
 }
+
+( new JFB_Modules\Jobs\Module() )->unschedule_all();

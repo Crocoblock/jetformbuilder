@@ -49,4 +49,16 @@ trait Job_Trait {
 		as_unschedule_action( $this->get_hook(), $this->get_args(), Module::SLUG );
 	}
 
+	public function is_scheduled(): bool {
+		if ( ! function_exists( 'as_has_scheduled_action' ) ) {
+			return false;
+		}
+
+		$args = $this->get_args();
+		// null will matches any args
+		$args = $args ?: null;
+
+		return as_has_scheduled_action( $this->get_hook(), $args, Module::SLUG );
+	}
+
 }

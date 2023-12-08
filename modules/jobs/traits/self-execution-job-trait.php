@@ -14,10 +14,4 @@ trait Self_Execution_Job_Trait {
 		return $this->get_hook();
 	}
 
-	public function execute_raw( $args ) {
-		$this->set_args( $args );
-
-		$this->execute();
-	}
-
 }

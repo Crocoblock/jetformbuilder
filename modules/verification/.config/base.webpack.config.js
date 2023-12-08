@@ -5,6 +5,7 @@ module.exports = {
 	context: path.resolve( __dirname, '../assets/src/js' ),
 	entry: {
 		'editor': './editor/main.js',
+		'admin/form-records': './admin/form-records-page/main.js'
 	},
 	output: {
 		path: path.resolve( __dirname, '../assets/build/js' ),

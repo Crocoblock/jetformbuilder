@@ -10,7 +10,6 @@ if ( ! defined( 'WPINC' ) ) {
 
 use Jet_Form_Builder\Actions\Manager;
 use Jet_Form_Builder\Actions\Types\Register_User;
-use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
@@ -27,10 +26,10 @@ use JFB_Modules\Form_Record\Tools;
 use JFB_Modules\Security\Csrf\Csrf_Tools;
 use JFB_Modules\Verification\Actions\Verification;
 use JFB_Modules\Verification\Events;
-use JFB_Modules\Verification\Form_Record\Admin\Meta_Boxes\Verification_Box;
 use JFB_Modules\Verification\Form_Record\Inner_Module;
-use JFB_Modules\Verification\Jobs\Verify_Manually;
+use JFB_Modules\Verification\Jobs;
 use JFB_Modules\Webhook;
+use JFB_Modules\Verification\Rest_Api\Endpoints;
 
 class Module implements
 	Base_Module_It,
@@ -63,7 +62,11 @@ class Module implements
 
 		/** @var \JFB_Modules\Jobs\Module $jobs */
 		$jobs = jet_form_builder()->module( 'jobs' );
-		$jobs->install( new Verify_Manually() );
+		$jobs->install( new Jobs\Verify_Manually() );
+
+		/** @var \JFB_Modules\Rest_Api\Module $rest_api */
+		$rest_api = jet_form_builder()->module( 'rest-api' );
+		$rest_api->get_controller()->install( new Endpoints\Verify_Manually() );
 	}
 
 	/**
@@ -74,7 +77,11 @@ class Module implements
 
 		/** @var \JFB_Modules\Jobs\Module $jobs */
 		$jobs = jet_form_builder()->module( 'jobs' );
-		$jobs->uninstall( new Verify_Manually() );
+		$jobs->uninstall( new Jobs\Verify_Manually() );
+
+		/** @var \JFB_Modules\Rest_Api\Module $rest_api */
+		$rest_api = jet_form_builder()->module( 'rest-api' );
+		$rest_api->get_controller()->uninstall( new Endpoints\Verify_Manually() );
 	}
 
 	public function init_hooks() {

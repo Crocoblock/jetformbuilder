@@ -26,4 +26,6 @@ interface Job_It {
 
 	public function unschedule();
 
+	public function is_scheduled(): bool;
+
 }

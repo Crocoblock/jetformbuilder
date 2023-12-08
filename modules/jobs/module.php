@@ -9,6 +9,7 @@ use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Repository\Interfaces\Repository_Pattern_Interface;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use JFB_Modules\Jobs\Interfaces\Self_Execution_Job_It;
+use JFB_Modules\Post_Type;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -41,19 +42,27 @@ final class Module implements
 	public function init_hooks() {
 		/** @var Self_Execution_Job_It $job */
 		foreach ( $this->rep_generate_items() as $job ) {
-			add_action( $job->get_hook(), array( $job, 'execute_raw' ) );
+			$job->init_hooks();
 		}
 	}
 
 	public function remove_hooks() {
 		/** @var Self_Execution_Job_It $job */
 		foreach ( $this->rep_generate_items() as $job ) {
-			remove_action( $job->get_hook(), array( $job, 'execute_raw' ) );
+			$job->remove_hooks();
 		}
 	}
 
 	public function rep_instances(): array {
 		return array();
+	}
+
+	public function unschedule_all() {
+		if ( ! class_exists( '\ActionScheduler_DBStore' ) ) {
+			return;
+		}
+
+		\ActionScheduler_DBStore::instance()->cancel_actions_by_group( Post_Type\Module::SLUG );
 	}
 
 	public function install( Self_Execution_Job_It $job ) {

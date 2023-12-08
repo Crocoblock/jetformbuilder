@@ -12,8 +12,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 interface Self_Execution_Job_It extends Job_It, Repository_Item_Instance_Trait {
 
-	public function execute_raw( $args );
+	public function init_hooks();
 
-	public function execute();
+	public function remove_hooks();
 
 }

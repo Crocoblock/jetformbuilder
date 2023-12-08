@@ -1,12 +1,16 @@
-import InputData from './InputData';
-import { isWysiwyg } from '../supports';
-import { getParsedName } from './functions';
+const {
+	      InputData,
+      } = JetFormBuilderAbstract;
+
+const {
+	      getParsedName,
+      } = JetFormBuilderFunctions;
 
 function WysiwygData() {
 	InputData.call( this );
 
 	this.isSupported = function ( node ) {
-		return isWysiwyg( node );
+		return node.classList.contains( 'wysiwyg-field' );
 	};
 	this.setNode     = function ( node ) {
 		InputData.prototype.setNode.call( this, node );

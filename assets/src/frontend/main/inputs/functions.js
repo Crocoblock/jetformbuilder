@@ -2,7 +2,6 @@ import InputData from './InputData';
 import ChangeData from './ChangeData';
 import MultiSelectData from './MultiSelectData';
 import RangeData from './RangeData';
-import WysiwygData from './WysiwygData';
 import NoListenData from './NoListenData';
 import InputMaskedData from './InputMaskedData';
 import RenderStateData from './RenderStateData';
@@ -21,7 +20,6 @@ const getDataTypes = () => applyFilters(
 	[
 		RenderStateData,
 		RangeData,
-		WysiwygData,
 		MultiSelectData,
 		ChangeData,
 		NoListenData,

@@ -5,7 +5,6 @@
  */
 
 use Jet_Form_Builder\Blocks\Render\Base;
-use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -43,15 +42,6 @@ $this->add_attribute( 'class', 'jet-form-builder__field wysiwyg-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'data-editor', htmlspecialchars( wp_json_encode( $editor ) ) );
 $this->add_attribute( 'data-required', $this->block_type->get_required_val() );
-$this->add_attribute( 'data-report-type', 'html_message' );
-$this->add_attribute(
-	'data-jfb-messages',
-	Tools::encode_json(
-		array(
-			'required' => 'This field is required',
-		)
-	)
-);
 $this->add_attribute( 'data-jfb-sync' );
 
 if ( is_rtl() ) {
@@ -59,11 +49,11 @@ if ( is_rtl() ) {
 	$editor['tinymce']['toolbar1'] = $editor['tinymce']['toolbar1'] . ',ltr';
 }
 ?>
-<div class="jet-form-builder__field-wrap">
-	<div <?php $this->render_attributes_string(); ?>>
-		<?php
-		wp_editor( $args['default'], $editor_id, $editor );
-		?>
+	<div class="jet-form-builder__field-wrap">
+		<div <?php $this->render_attributes_string(); ?>>
+			<?php
+			wp_editor( $args['default'], $editor_id, $editor );
+			?>
+		</div>
 	</div>
-</div>
 <?php

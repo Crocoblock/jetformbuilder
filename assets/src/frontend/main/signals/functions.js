@@ -1,7 +1,6 @@
 import SignalSelect from './SignalSelect';
 import SignalHiddenArray from './SignalHiddenArray';
 import SignalRange from './SignalRange';
-import SignalWysiwyg from './SignalWysiwyg';
 import SignalText from './SignalText';
 import SignalRenderState from './SignalRenderState';
 
@@ -13,7 +12,6 @@ const getSignalTypes = () => applyFilters(
 	'jet.fb.signals',
 	[
 		SignalRange,
-		SignalWysiwyg,
 		SignalSelect,
 		SignalRenderState,
 		SignalHiddenArray,

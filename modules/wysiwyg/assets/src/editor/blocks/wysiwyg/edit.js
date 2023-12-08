@@ -1,4 +1,5 @@
 import preview from './preview';
+import CustomWysiwyg from './CustomWysiwyg';
 
 const {
 	      ToolBarFields,
@@ -22,7 +23,6 @@ const {
       } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-	      TextareaControl,
 	      PanelBody,
       } = wp.components;
 
@@ -49,12 +49,12 @@ export default function WysiwygEdit( props ) {
 		</div>;
 	}
 
-	return [
-		<ToolBarFields
-			key={ uniqKey( 'ToolBarFields' ) }
-			{ ...props }
-		/>,
-		isSelected && (
+	return <>
+		{ isSelected && <>
+			<ToolBarFields
+				key={ uniqKey( 'ToolBarFields' ) }
+				{ ...props }
+			/>
 			<InspectorControls
 				key={ uniqKey( 'InspectorControls' ) }
 			>
@@ -72,19 +72,26 @@ export default function WysiwygEdit( props ) {
 					{ ...props }
 				/>
 			</InspectorControls>
-		),
-		<div key={ uniqKey( 'viewBlock' ) } { ...blockProps }>
+		</> }
+		<div { ...blockProps }>
 			<FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
 				{ ...props }
 			>
-				<TextareaControl
-					key={ uniqKey( 'place_holder_block' ) }
-					onChange={ () => {
-					} }
-				/>
+				<CustomWysiwyg/>
 			</FieldWrapper>
-		</div>,
-	];
+		</div>
+	</>;
 
 }
+
+/**
+ * <textarea
+							className="wp-editor-area"
+							rows="8"
+							autoComplete="off"
+							cols="40"
+							style="display: none;"
+							aria-hidden="true"
+						></textarea>
+ */

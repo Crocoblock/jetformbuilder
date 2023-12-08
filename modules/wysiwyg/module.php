@@ -66,9 +66,18 @@ final class Module implements
 		);
 
 		wp_enqueue_style(
+			$this->get_handle( 'lightgray-skin' ),
+			includes_url( 'js/tinymce/skins/lightgray/skin.min.css' ),
+			array(),
+			jet_form_builder()->get_version()
+		);
+
+		wp_enqueue_style(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/wysiwyg.css' ),
-			array(),
+			array(
+				'editor-buttons',
+			),
 			jet_form_builder()->get_version()
 		);
 	}

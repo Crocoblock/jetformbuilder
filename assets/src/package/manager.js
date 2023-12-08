@@ -208,6 +208,7 @@ import ScopedAttributesProvider
 	from './blocks/components/ScopedAttributesProvider';
 import getSupport from './blocks/helpers/getSupport';
 import useEvents from './events/hooks/useEvents';
+import useTriggerPopover from './hooks/useTriggerPopover';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -392,5 +393,6 @@ window.JetFBHooks = {
 	useSupport,
 	useLoopedAction,
 	useScopedAttributesContext,
+	useTriggerPopover,
 };
 

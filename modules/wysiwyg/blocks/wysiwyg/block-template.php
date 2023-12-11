@@ -15,22 +15,24 @@ if ( empty( $args['default'] ) ) {
 	$args['default'] = '';
 }
 
+$keep_format = $this->args['keep_format'] ?? false;
+
 $editor_id = 'wp_editor_' . $this->block_type->get_field_id( $args['name'] );
 $editor    = apply_filters(
 	'jet-form-builder/fields/wysiwyg-field/config',
 	array(
 		'textarea_name' => $this->block_type->get_field_name( $args['name'] ),
 		'media_buttons' => false,
-		'textarea_rows' => 8,
-		'quicktags'     => false,
+		'textarea_rows' => $this->args['rows'] ?? 8,
+		'quicktags'     => $this->args['quick_tags'] ?? false,
 		'tinymce'       => array(
 			'plugins'                       => 'lists,paste,tabfocus,wplink,wordpress',
-			'paste_as_text'                 => true,
-			'paste_auto_cleanup_on_paste'   => true,
-			'paste_remove_spans'            => true,
-			'paste_remove_styles'           => true,
-			'paste_remove_styles_if_webkit' => true,
-			'paste_strip_class_attributes'  => true,
+			'paste_as_text'                 => ! $keep_format,
+			'paste_auto_cleanup_on_paste'   => ! $keep_format,
+			'paste_remove_spans'            => ! $keep_format,
+			'paste_remove_styles'           => ! $keep_format,
+			'paste_remove_styles_if_webkit' => ! $keep_format,
+			'paste_strip_class_attributes'  => ! $keep_format,
 			'toolbar1'                      => 'formatselect,|,bold,italic,strikethrough,blockquote,|,bullist,numlist,|,alignleft,aligncenter,alignright,|,link,unlink,|,undo,redo',
 			'toolbar2'                      => '',
 			'toolbar3'                      => '',

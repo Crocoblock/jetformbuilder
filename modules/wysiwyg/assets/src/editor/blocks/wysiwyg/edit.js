@@ -24,6 +24,8 @@ const {
 
 const {
 	      PanelBody,
+	      RangeControl,
+	      ToggleControl,
       } = wp.components;
 
 export default function WysiwygEdit( props ) {
@@ -32,6 +34,7 @@ export default function WysiwygEdit( props ) {
 		      editProps: { uniqKey },
 		      isSelected,
 		      attributes,
+		      setAttributes,
 	      } = props;
 
 	const blockProps           = useBlockProps();
@@ -60,6 +63,45 @@ export default function WysiwygEdit( props ) {
 			>
 				<GeneralFields hasMacro={ false }/>
 				<PanelBody
+					title={ __( 'Editor', 'jet-form-builder' ) }
+				>
+					<RangeControl
+						label={ __( 'Rows', 'jet-form-builder' ) }
+						value={ attributes.rows }
+						onChange={ rows => setAttributes( { rows } ) }
+						allowReset
+						resetFallbackValue={ 8 }
+						min={ 4 }
+						max={ 25 }
+					/>
+					<ToggleControl
+						label={ __( 'Quick tags', 'jet-form-builder' ) }
+						help={ __(
+							`To switch from Visual editor to Text editor`,
+							'jet-form-builder',
+						) }
+						checked={ attributes.quick_tags }
+						onChange={ quick_tags => setAttributes( {
+							quick_tags,
+						} ) }
+					/>
+					<ToggleControl
+						label={ __(
+							'Save text styles when pasting',
+							'jet-form-builder',
+						) }
+						help={ __(
+							`Preserves text formatting when copying 
+from other text editors.`,
+							'jet-form-builder',
+						) }
+						checked={ attributes.keep_format }
+						onChange={ keep_format => setAttributes( {
+							keep_format,
+						} ) }
+					/>
+				</PanelBody>
+				<PanelBody
 					title={ __( 'Validation', 'jet-form-builder' ) }
 				>
 					<ValidationToggleGroup/>
@@ -78,20 +120,12 @@ export default function WysiwygEdit( props ) {
 				key={ uniqKey( 'FieldWrapper' ) }
 				{ ...props }
 			>
-				<CustomWysiwyg/>
+				<CustomWysiwyg
+					rows={ attributes.rows }
+					quickTags={ attributes.quick_tags }
+				/>
 			</FieldWrapper>
 		</div>
 	</>;
 
 }
-
-/**
- * <textarea
-							className="wp-editor-area"
-							rows="8"
-							autoComplete="off"
-							cols="40"
-							style="display: none;"
-							aria-hidden="true"
-						></textarea>
- */

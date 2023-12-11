@@ -1,10 +1,31 @@
 // 22px - 1 row
 
 function CustomWysiwyg( {
-	rows,
-	onChangeRows = () => {},
+	rows = 8,
+	quickTags = false,
 } ) {
+
+	let fieldHeight = rows * 22;
+
+	// min-height: 100
+	fieldHeight = 100 > fieldHeight ? 100 : fieldHeight;
+
 	return <div className="wp-core-ui wp-editor-wrap tmce-active">
+		{ quickTags && <div
+			className="wp-editor-tools hide-if-no-js"
+			style={ {
+				boxSizing: 'initial',
+			} }
+		>
+			<div className="wp-editor-tabs">
+				<button type="button" id="wp_editor_fuck_you-tmce"
+				        className="wp-switch-editor switch-tmce">Visual
+				</button>
+				<button type="button" id="wp_editor_fuck_you-html"
+				        className="wp-switch-editor switch-html">Text
+				</button>
+			</div>
+		</div> }
 		<div className="wp-editor-container">
 			<div
 				className="mce-tinymce mce-container mce-panel"
@@ -291,7 +312,7 @@ function CustomWysiwyg( {
 					>
 						<div
 							style={ {
-								height: '176px',
+								height: fieldHeight + 'px',
 							} }
 						/>
 					</div>
@@ -313,7 +334,8 @@ function CustomWysiwyg( {
 								</div>
 							</div>
 							<div
-								className="mce-flow-layout-item mce-last mce-resizehandle">
+								className="mce-flow-layout-item mce-last mce-resizehandle"
+							>
 								<i className="mce-ico mce-i-resize"/>
 							</div>
 						</div>

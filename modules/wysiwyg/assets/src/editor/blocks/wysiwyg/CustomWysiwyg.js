@@ -2,7 +2,7 @@
 
 function CustomWysiwyg( {
 	rows = 8,
-	quickTags = false,
+	...props
 } ) {
 
 	let fieldHeight = rows * 22;
@@ -10,22 +10,7 @@ function CustomWysiwyg( {
 	// min-height: 100
 	fieldHeight = 100 > fieldHeight ? 100 : fieldHeight;
 
-	return <div className="wp-core-ui wp-editor-wrap tmce-active">
-		{ quickTags && <div
-			className="wp-editor-tools hide-if-no-js"
-			style={ {
-				boxSizing: 'initial',
-			} }
-		>
-			<div className="wp-editor-tabs">
-				<button type="button" id="wp_editor_fuck_you-tmce"
-				        className="wp-switch-editor switch-tmce">Visual
-				</button>
-				<button type="button" id="wp_editor_fuck_you-html"
-				        className="wp-switch-editor switch-html">Text
-				</button>
-			</div>
-		</div> }
+	return <div { ...props }>
 		<div className="wp-editor-container">
 			<div
 				className="mce-tinymce mce-container mce-panel"
@@ -308,13 +293,23 @@ function CustomWysiwyg( {
 						role="group"
 						style={ {
 							borderWidth: '1px 0px 0px',
+							height: fieldHeight + 'px',
 						} }
 					>
 						<div
 							style={ {
-								height: fieldHeight + 'px',
+								padding: '9px 10px',
 							} }
-						/>
+						>
+							<p
+								style={ {
+									fontSize: '16px',
+									lineHeight: 1.5,
+									fontFamily: 'Georgia, "Times New Roman", "Bitstream Charter", Times, serif',
+								} }
+							>Hello world!
+							</p>
+						</div>
 					</div>
 					<div
 						className="mce-statusbar mce-container mce-panel mce-stack-layout-item mce-last"
@@ -342,7 +337,6 @@ function CustomWysiwyg( {
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>;
 }

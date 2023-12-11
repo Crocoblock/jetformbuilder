@@ -2,6 +2,7 @@
 
 namespace JFB_Modules\Wysiwyg\Blocks\Wysiwyg;
 
+use Jet_Form_Builder\Blocks\Native_Block_Wrapper_Attributes;
 use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Wysiwyg\Module;
@@ -14,7 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Text field block class
  */
-class Block_Type extends Base {
+class Block_Type extends Base implements Native_Block_Wrapper_Attributes {
 
 	/**
 	 * Returns block name

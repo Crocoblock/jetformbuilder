@@ -9,6 +9,17 @@ import StyleColorItemsWrapper
 import StyleBorderItem from './components/StyleBorderItem';
 import StyleBorderRadiusItem
 	from './components/StyleBorderRadiusItem';
+import registerAttribute from './helpers/registerAttribute';
+
+const {
+	      addFilter,
+      } = wp.hooks;
+
+addFilter(
+	'blocks.registerBlockType',
+	'jet-form-builder/jet-style-support',
+	registerAttribute,
+);
 
 window.JetFBComponents = {
 	...window.JetFBComponents,

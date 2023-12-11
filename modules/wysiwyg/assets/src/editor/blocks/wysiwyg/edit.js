@@ -8,11 +8,17 @@ const {
 	      FieldWrapper,
 	      ValidationToggleGroup,
 	      ValidationBlockMessage,
+	      StylePanel,
+	      StyleColorItem,
+	      StyleColorItemsWrapper,
+	      StyleBorderItem,
+	      StyleBorderRadiusItem,
       } = JetFBComponents;
 
 const {
 	      useIsAdvancedValidation,
 	      useUniqueNameOnDuplicate,
+	      useJetStyle,
       } = JetFBHooks;
 
 const { __ } = wp.i18n;
@@ -20,7 +26,7 @@ const { __ } = wp.i18n;
 const {
 	      InspectorControls,
 	      useBlockProps,
-      } = wp.blockEditor ? wp.blockEditor : wp.editor;
+      } = wp.blockEditor;
 
 const {
 	      PanelBody,
@@ -37,6 +43,9 @@ export default function WysiwygEdit( props ) {
 		      setAttributes,
 	      } = props;
 
+	const jetStyle             = useJetStyle( {
+		className: 'wp-core-ui wp-editor-wrap tmce-active',
+	} );
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
 
@@ -75,17 +84,6 @@ export default function WysiwygEdit( props ) {
 						max={ 25 }
 					/>
 					<ToggleControl
-						label={ __( 'Quick tags', 'jet-form-builder' ) }
-						help={ __(
-							`To switch from Visual editor to Text editor`,
-							'jet-form-builder',
-						) }
-						checked={ attributes.quick_tags }
-						onChange={ quick_tags => setAttributes( {
-							quick_tags,
-						} ) }
-					/>
-					<ToggleControl
 						label={ __(
 							'Save text styles when pasting',
 							'jet-form-builder',
@@ -114,16 +112,126 @@ from other text editors.`,
 					{ ...props }
 				/>
 			</InspectorControls>
+			<InspectorControls group="styles">
+				<StylePanel
+					label={ __( 'Editor container', 'jet-form-builder' ) }
+				>
+					<StyleColorItemsWrapper>
+						<StyleColorItem
+							cssVar="--jfb-wysiwyg-container-text"
+							label={ __( 'Text color', 'jet-form-builder' ) }
+						/>
+						<StyleColorItem
+							cssVar="--jfb-wysiwyg-container-bg"
+							label={ __( 'Background', 'jet-form-builder' ) }
+						/>
+					</StyleColorItemsWrapper>
+				</StylePanel>
+				<StylePanel
+					label={ __( 'Toolbar', 'jet-form-builder' ) }
+				>
+					<StyleColorItemsWrapper>
+						<StyleColorItem
+							cssVar="--jfb-wysiwyg-toolbar-bg"
+							label={ __( 'Background', 'jet-form-builder' ) }
+						/>
+					</StyleColorItemsWrapper>
+				</StylePanel>
+				<StylePanel
+					label={ __( 'Toolbar buttons', 'jet-form-builder' ) }
+				>
+					<StyleColorItemsWrapper>
+						<StyleColorItem
+							cssVar="--jfb-wysiwyg-buttons-text"
+							label={ __( 'Text color', 'jet-form-builder' ) }
+						/>
+						<StyleColorItem
+							cssVar="--jfb-wysiwyg-buttons-bg"
+							label={ __( 'Background', 'jet-form-builder' ) }
+						/>
+					</StyleColorItemsWrapper>
+					<StyleBorderItem
+						cssVar="--jfb-wysiwyg-buttons-border"
+						label={ __( 'Checked border', 'jet-form-builder' ) }
+						enableAlpha
+						labelForControl
+					/>
+					<StyleBorderRadiusItem
+						cssVar="--jfb-wysiwyg-buttons-border-radius"
+						label={ __( 'Checked Radius', 'jet-form-builder' ) }
+					/>
+				</StylePanel>
+				<StylePanel
+					label={ __( 'Hover toolbar buttons', 'jet-form-builder' ) }
+				>
+					<StyleColorItemsWrapper>
+						<StyleColorItem
+							cssVar="--jfb-wysiwyg-buttons-hover-text"
+							label={ __( 'Text color', 'jet-form-builder' ) }
+						/>
+						<StyleColorItem
+							cssVar="--jfb-wysiwyg-buttons-hover-bg"
+							label={ __( 'Background', 'jet-form-builder' ) }
+						/>
+					</StyleColorItemsWrapper>
+					<StyleBorderItem
+						cssVar="--jfb-wysiwyg-buttons-hover-border"
+						label={ __( 'Border', 'jet-form-builder' ) }
+						enableAlpha
+						labelForControl
+					/>
+					<StyleBorderRadiusItem
+						cssVar="--jfb-wysiwyg-buttons-hover-border-radius"
+						label={ __( 'Radius', 'jet-form-builder' ) }
+					/>
+				</StylePanel>
+				<StylePanel
+					label={ __( 'Checked toolbar buttons', 'jet-form-builder' ) }
+				>
+					<StyleColorItemsWrapper>
+						<StyleColorItem
+							cssVar="--jfb-wysiwyg-buttons-checked-text"
+							label={ __( 'Text color', 'jet-form-builder' ) }
+						/>
+						<StyleColorItem
+							cssVar="--jfb-wysiwyg-buttons-checked-bg"
+							label={ __( 'Background', 'jet-form-builder' ) }
+						/>
+					</StyleColorItemsWrapper>
+					<StyleBorderItem
+						cssVar="--jfb-wysiwyg-buttons-checked-border"
+						label={ __( 'Border', 'jet-form-builder' ) }
+						enableAlpha
+						labelForControl
+					/>
+					<StyleBorderRadiusItem
+						cssVar="--jfb-wysiwyg-buttons-checked-radius"
+						label={ __( 'Radius', 'jet-form-builder' ) }
+					/>
+				</StylePanel>
+				<StylePanel
+					label={ __( 'Status bar', 'jet-form-builder' ) }
+				>
+					<StyleColorItemsWrapper>
+						<StyleColorItem
+							cssVar="--jfb-wysiwyg-statusbar-bg"
+							label={ __( 'Background', 'jet-form-builder' ) }
+						/>
+					</StyleColorItemsWrapper>
+				</StylePanel>
+			</InspectorControls>
 		</> }
 		<div { ...blockProps }>
 			<FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
 				{ ...props }
 			>
-				<CustomWysiwyg
-					rows={ attributes.rows }
-					quickTags={ attributes.quick_tags }
-				/>
+				<div className="field-type-wysiwyg-field">
+					<CustomWysiwyg
+						rows={ attributes.rows }
+						{ ...jetStyle }
+					/>
+				</div>
 			</FieldWrapper>
 		</div>
 	</>;

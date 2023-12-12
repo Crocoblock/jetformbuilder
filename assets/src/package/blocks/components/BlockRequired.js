@@ -27,7 +27,7 @@ function BlockRequired() {
 
 	return <BlockControls group="block">
 		<ToolbarButton
-			icon={ <SVG xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none">
+			icon={ <SVG xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none">
 				<Path d="M12 4L12 20" stroke="currentcolor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
 				<Path d="M17.3137 6.00024L6.00001 17.314" stroke="currentcolor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
 				<Path d="M20 12L4 12" stroke="currentcolor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

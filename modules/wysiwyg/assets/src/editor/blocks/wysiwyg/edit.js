@@ -43,7 +43,7 @@ export default function WysiwygEdit( props ) {
 		      setAttributes,
 	      } = props;
 
-	const jetStyle = useJetStyle( {
+	const jetStyle = useJetStyle?.( {
 		className: [
 			'jet-form-builder-row',
 			'field-type-wysiwyg-field',
@@ -52,7 +52,7 @@ export default function WysiwygEdit( props ) {
 			'wp-editor-wrap',
 			'tmce-active',
 		].join( ' ' ),
-	} );
+	} ) ?? {};
 
 	const blockProps           = useBlockProps( jetStyle );
 	const isAdvancedValidation = useIsAdvancedValidation();
@@ -120,7 +120,7 @@ from other text editors.`,
 					{ ...props }
 				/>
 			</InspectorControls>
-			<InspectorControls group="styles">
+			{ Boolean( StylePanel ) && <InspectorControls group="styles">
 				<StylePanel
 					label={ __( 'Editor container', 'jet-form-builder' ) }
 				>
@@ -228,7 +228,7 @@ from other text editors.`,
 						/>
 					</StyleColorItemsWrapper>
 				</StylePanel>
-			</InspectorControls>
+			</InspectorControls> }
 		</> }
 		<div { ...blockProps }>
 			<FieldWrapper

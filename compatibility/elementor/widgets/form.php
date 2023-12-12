@@ -3636,6 +3636,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 	 * @access protected
 	 */
 	protected function render() {
+		wp_print_styles( 'wp-block-library' );
 		$settings = $this->get_settings_for_display();
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

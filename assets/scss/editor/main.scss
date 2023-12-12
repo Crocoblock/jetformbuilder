@@ -504,7 +504,7 @@ select.components-select-control__input.components-select-control__input.compone
 	flex-direction: column;
 }
 
-.edit-post-sidebar .components-input-control.components-number-control:not(.components-range-control__number) {
+.edit-post-sidebar .components-input-control.components-number-control:not(.components-range-control__number, .components-unit-control) {
 	margin-bottom: 2em;
 }
 

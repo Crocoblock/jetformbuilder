@@ -43,10 +43,18 @@ export default function WysiwygEdit( props ) {
 		      setAttributes,
 	      } = props;
 
-	const jetStyle             = useJetStyle( {
-		className: 'wp-core-ui wp-editor-wrap tmce-active',
+	const jetStyle = useJetStyle( {
+		className: [
+			'jet-form-builder-row',
+			'field-type-wysiwyg-field',
+			'wp-block-jet-forms-wysiwyg-field',
+			'wp-core-ui',
+			'wp-editor-wrap',
+			'tmce-active',
+		].join( ' ' ),
 	} );
-	const blockProps           = useBlockProps();
+
+	const blockProps           = useBlockProps( jetStyle );
 	const isAdvancedValidation = useIsAdvancedValidation();
 
 	useUniqueNameOnDuplicate();
@@ -186,7 +194,8 @@ from other text editors.`,
 					/>
 				</StylePanel>
 				<StylePanel
-					label={ __( 'Checked toolbar buttons', 'jet-form-builder' ) }
+					label={ __( 'Checked toolbar buttons',
+						'jet-form-builder' ) }
 				>
 					<StyleColorItemsWrapper>
 						<StyleColorItem
@@ -226,12 +235,10 @@ from other text editors.`,
 				key={ uniqKey( 'FieldWrapper' ) }
 				{ ...props }
 			>
-				<div className="field-type-wysiwyg-field">
-					<CustomWysiwyg
-						rows={ attributes.rows }
-						{ ...jetStyle }
-					/>
-				</div>
+				<CustomWysiwyg
+					rows={ attributes.rows }
+					{ ...jetStyle }
+				/>
 			</FieldWrapper>
 		</div>
 	</>;

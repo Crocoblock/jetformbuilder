@@ -17,7 +17,6 @@ import * as submit from './submit-field';
 import * as text from './text-field';
 import * as textarea from './textarea-field';
 import * as time from './time-field';
-import * as wysiwyg from './wysiwyg-field';
 import * as colorPicker from './color-picker-field';
 import * as progressBar from './progress-bar';
 import * as formBreakStart from './form-break-start';
@@ -51,7 +50,6 @@ const fields = applyFilters( 'jet.fb.register.fields', [
 	text,
 	textarea,
 	time,
-	wysiwyg,
 	colorPicker,
 	progressBar,
 	formBreakStart,

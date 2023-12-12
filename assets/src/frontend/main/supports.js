@@ -45,16 +45,7 @@ function isRange( node ) {
 	return 'range' === node.type;
 }
 
-/**
- * @param node {HTMLElement}
- * @returns {boolean}
- */
-function isWysiwyg( node ) {
-	return node.classList.contains( 'wysiwyg-field' );
-}
-
 export {
-	isWysiwyg,
 	isHidden,
 	isRange,
 	isSelect,

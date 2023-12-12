@@ -1,12 +1,16 @@
-import InputData from './InputData';
-import { isWysiwyg } from '../supports';
-import { getParsedName } from './functions';
+const {
+	      InputData,
+      } = JetFormBuilderAbstract;
+
+const {
+	      getParsedName,
+      } = JetFormBuilderFunctions;
 
 function WysiwygData() {
 	InputData.call( this );
 
 	this.isSupported = function ( node ) {
-		return isWysiwyg( node );
+		return node.classList.contains( 'wysiwyg-field' );
 	};
 	this.setNode     = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
@@ -29,7 +33,7 @@ function WysiwygData() {
 
 		window.wp.editor.initialize( this.textArea.id, editorConfig );
 
-		this.editor = editor();
+		this.editor    = editor();
 		this.getEditor = editor;
 	};
 
@@ -43,6 +47,7 @@ function WysiwygData() {
 
 	this.setValue = function () {
 		this.getEditor()?.on?.( 'init', () => {
+			this.transferStylesToIframe();
 			this.callable.lock.current = false;
 			this.silenceSet( this.editor.getContent() );
 		} );
@@ -58,6 +63,28 @@ function WysiwygData() {
 
 	this.hasAutoScroll = function () {
 		return false;
+	};
+
+	this.transferStylesToIframe = function () {
+		const node       = this.getWrapperNode();
+		const iframeBody = this.editor.iframeElement.contentDocument.body;
+
+		const cssDeclarations = node.style.cssText.split( ';' ).
+			filter( Boolean );
+
+		for ( const cssDeclaration of cssDeclarations ) {
+			const [ varName, value ] = cssDeclaration.split( ':' );
+
+			switch ( varName.trim() ) {
+				case '--jfb-wysiwyg-container-bg':
+					iframeBody.style.backgroundColor = value;
+					break;
+				case '--jfb-wysiwyg-container-text':
+					iframeBody.style.color = value;
+					break;
+
+			}
+		}
 	};
 }
 

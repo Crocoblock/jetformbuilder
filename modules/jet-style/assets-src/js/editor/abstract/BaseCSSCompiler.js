@@ -39,11 +39,7 @@ BaseCSSCompiler.prototype = {
 		classNames.push( 'has-hover-' + withoutFirst.join( '-' ) );
 	},
 	hasHoverPath() {
-		const parts = this.path[ 0 ].split( ':' );
-
-		return (
-			parts?.[ 1 ] && 'hover' === parts[ 1 ]
-		);
+		return this.path[ 0 ].includes( ':hover' );
 	},
 	/**
 	 * @param cssVar {String}

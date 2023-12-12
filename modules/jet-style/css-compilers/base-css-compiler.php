@@ -58,9 +58,7 @@ class Base_Css_Compiler {
 	}
 
 	protected function has_hover_path(): bool {
-		$parts = explode( ':', $this->path[0] );
-
-		return ( ! empty( $parts[1] ) && 'hover' === $parts[1] );
+		return false !== strpos( $this->path[0], ':hover' );
 	}
 
 	public function set_css_var( string $name ): Base_Css_Compiler {

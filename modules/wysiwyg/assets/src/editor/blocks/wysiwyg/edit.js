@@ -160,13 +160,13 @@ from other text editors.`,
 					</StyleColorItemsWrapper>
 					<StyleBorderItem
 						cssVar="--jfb-wysiwyg-buttons-border"
-						label={ __( 'Checked border', 'jet-form-builder' ) }
+						label={ __( 'Border', 'jet-form-builder' ) }
 						enableAlpha
 						labelForControl
 					/>
 					<StyleBorderRadiusItem
 						cssVar="--jfb-wysiwyg-buttons-border-radius"
-						label={ __( 'Checked Radius', 'jet-form-builder' ) }
+						label={ __( 'Radius', 'jet-form-builder' ) }
 					/>
 				</StylePanel>
 				<StylePanel
@@ -214,7 +214,7 @@ from other text editors.`,
 						labelForControl
 					/>
 					<StyleBorderRadiusItem
-						cssVar="--jfb-wysiwyg-buttons-checked-radius"
+						cssVar="--jfb-wysiwyg-buttons-checked-border-radius"
 						label={ __( 'Radius', 'jet-form-builder' ) }
 					/>
 				</StylePanel>

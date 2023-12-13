@@ -25,6 +25,8 @@ trait Datetime_Trait {
 
 	public function iterate_row_value(): \Generator {
 		if ( ! $this->get_value() || ! $this->get_setting( 'is_timestamp' ) ) {
+			yield from parent::iterate_row_value();
+
 			return;
 		}
 

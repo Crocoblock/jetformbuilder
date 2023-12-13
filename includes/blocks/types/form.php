@@ -22,6 +22,8 @@ class Form extends Base {
 
 	use Form_Break_Field_Style;
 
+	public $use_style_manager = false;
+
 	public function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'handle_header_assets' ) );
 	}
@@ -46,18 +48,6 @@ class Form extends Base {
 
 	public function get_placeholder(): string {
 		return __( 'Please select form to show', 'jet-form-builder' );
-	}
-
-	public function get_label_selector() {
-		return '__label';
-	}
-
-	public function get_required_selector() {
-		return '__label-text .%1$s__required';
-	}
-
-	public function get_description_selector() {
-		return '__desc';
 	}
 
 	public function get_name() {

@@ -35,18 +35,12 @@ trait Style_Block_Trait {
 		$this->manager = $manager;
 	}
 
-	public function selector( $selector = '', $prefix_base = '' ): string {
-		$base = '';
-
-		if ( $this->get_namespace() ) {
-			$base = $prefix_base . ".{$this->get_namespace()}";
-		}
-
+	public function selector( $selector = '' ): string {
 		if ( $selector && $this->has_css_selector( $selector ) ) {
 			$selector = $this->get_css_selector( $selector );
 		}
 
-		return "{{WRAPPER}} $base" . sprintf( $selector, $this->namespace );
+		return "{{WRAPPER}} {$this->get_namespace()}" . sprintf( $selector, $this->namespace );
 	}
 
 	public function has_css_selector( string $name ): bool {
@@ -81,6 +75,13 @@ trait Style_Block_Trait {
 	 */
 	public function get_namespace(): string {
 		return $this->namespace;
+	}
+
+	/**
+	 * @param string $namespace_selector
+	 */
+	public function set_namespace( string $namespace_selector ) {
+		$this->namespace = $namespace_selector;
 	}
 
 }

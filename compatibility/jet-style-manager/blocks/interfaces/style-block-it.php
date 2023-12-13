@@ -19,7 +19,7 @@ interface Style_Block_It extends Repository_Item_Instance_Trait {
 
 	public function process_controls();
 
-	public function selector( $selector = '', $prefix_base = '' ): string;
+	public function selector( $selector = '' ): string;
 
 	public function has_css_selector( string $name ): bool;
 
@@ -41,5 +41,7 @@ interface Style_Block_It extends Repository_Item_Instance_Trait {
 	 * @return string
 	 */
 	public function get_namespace(): string;
+
+	public function set_namespace( string $namespace_selector );
 
 }

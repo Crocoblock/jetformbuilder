@@ -33,15 +33,15 @@ class Form_Break implements Style_Block_It {
 				'active-separator' => "$wrapper.active-page .%s-progress-pages__separator",
 				'active-circle'    => "$wrapper.active-page .%s$item--circle",
 
-				'next-wrapper'   => "$wrapper:not(.passed-page):not(.active-page)",
-				'next-item'      => "$wrapper:not(.passed-page):not(.active-page) .%s$item",
-				'next-separator' => "$wrapper:not(.passed-page):not(.active-page) .%s-progress-pages__separator",
-				'next-circle'    => "$wrapper:not(.passed-page):not(.active-page) .%s$item--circle",
+				'next-wrapper'     => "$wrapper:not(.passed-page):not(.active-page)",
+				'next-item'        => "$wrapper:not(.passed-page):not(.active-page) .%s$item",
+				'next-separator'   => "$wrapper:not(.passed-page):not(.active-page) .%s-progress-pages__separator",
+				'next-circle'      => "$wrapper:not(.passed-page):not(.active-page) .%s$item--circle",
 
-				'prev-wrapper'   => "$wrapper.passed-page",
-				'prev-item'      => "$wrapper.passed-page .%s$item",
-				'prev-separator' => "$wrapper.passed-page .%s-progress-pages__separator",
-				'prev-circle'    => "$wrapper.passed-page .%s$item--circle",
+				'prev-wrapper'     => "$wrapper.passed-page",
+				'prev-item'        => "$wrapper.passed-page .%s$item",
+				'prev-separator'   => "$wrapper.passed-page .%s-progress-pages__separator",
+				'prev-circle'      => "$wrapper.passed-page .%s$item--circle",
 			)
 		);
 	}
@@ -72,7 +72,7 @@ class Form_Break implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			$module->create_padding(
-				$this->selector( 'break-wrap', 'div' ),
+				$this->selector( 'break-wrap' ),
 				array(
 					'id'        => 'break_buttons_padding',
 					'separator' => 'after',
@@ -101,7 +101,7 @@ class Form_Break implements Style_Block_It {
 					),
 				),
 				'css_selector' => array(
-					$this->selector( 'break-wrap', 'div' ) => 'text-align: {{VALUE}};',
+					$this->selector( 'break-wrap' ) => 'text-align: {{VALUE}};',
 				),
 				'attributes'   => array(
 					'default' => array(
@@ -117,7 +117,7 @@ class Form_Break implements Style_Block_It {
 				'type'         => 'border',
 				'label'        => __( 'Border', 'jet-form-builder' ),
 				'css_selector' => array(
-					$this->selector( 'break-wrap', 'div' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					$this->selector( 'break-wrap' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				),
 			)
 		);
@@ -135,14 +135,14 @@ class Form_Break implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			$module->create_margin(
-				$this->selector( 'next-button', 'button' ),
+				$this->selector( 'next-button' ),
 				'next_button_margin'
 			)
 		);
 
 		$this->get_manager()->add_control(
 			$module->create_padding(
-				$this->selector( 'next-button', 'button' ),
+				$this->selector( 'next-button' ),
 				'next_button_margin'
 			)
 		);
@@ -153,7 +153,7 @@ class Form_Break implements Style_Block_It {
 				'type'         => 'typography',
 				'separator'    => 'after',
 				'css_selector' => array(
-					$this->selector( 'next-button', 'button' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+					$this->selector( 'next-button' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 				),
 			)
 		);
@@ -164,7 +164,7 @@ class Form_Break implements Style_Block_It {
 				'separator'    => 'after',
 				'label'        => __( 'Border', 'jet-form-builder' ),
 				'css_selector' => array(
-					$this->selector( 'next-button', 'button' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					$this->selector( 'next-button' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				),
 			)
 		);
@@ -191,7 +191,7 @@ class Form_Break implements Style_Block_It {
 				'label'        => __( 'Text Color', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'css_selector' => array(
-					$this->selector( 'next-button', 'button' ) => 'color: {{VALUE}}',
+					$this->selector( 'next-button' ) => 'color: {{VALUE}}',
 				),
 			)
 		);
@@ -201,7 +201,7 @@ class Form_Break implements Style_Block_It {
 				'type'         => 'color-picker',
 				'label'        => __( 'Background Color', 'jet-form-builder' ),
 				'css_selector' => array(
-					$this->selector( 'next-button', 'button' ) => 'background-color: {{VALUE}}',
+					$this->selector( 'next-button' ) => 'background-color: {{VALUE}}',
 				),
 			)
 		);
@@ -223,7 +223,7 @@ class Form_Break implements Style_Block_It {
 				'label'        => __( 'Text Color', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'css_selector' => array(
-					$this->selector( 'next-button', 'button' ) . ':hover:not(:disabled)' => 'color: {{VALUE}}',
+					$this->selector( 'next-button' ) . ':hover:not(:disabled)' => 'color: {{VALUE}}',
 				),
 			)
 		);
@@ -234,7 +234,7 @@ class Form_Break implements Style_Block_It {
 				'type'         => 'color-picker',
 				'label'        => __( 'Background Color', 'jet-form-builder' ),
 				'css_selector' => array(
-					$this->selector( 'next-button', 'button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+					$this->selector( 'next-button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),
 			)
 		);
@@ -256,7 +256,7 @@ class Form_Break implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			$module->create_margin(
-				$this->selector( 'prev-button', 'button' ),
+				$this->selector( 'prev-button' ),
 				'prev_button_margin'
 			)
 		);
@@ -274,7 +274,7 @@ class Form_Break implements Style_Block_It {
 				'type'         => 'typography',
 				'separator'    => 'after',
 				'css_selector' => array(
-					$this->selector( 'prev-button', 'button' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+					$this->selector( 'prev-button' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 				),
 			)
 		);
@@ -286,7 +286,7 @@ class Form_Break implements Style_Block_It {
 				'separator'    => 'after',
 				'label'        => __( 'Border', 'jet-form-builder' ),
 				'css_selector' => array(
-					$this->selector( 'prev-button', 'button' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					$this->selector( 'prev-button' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				),
 			)
 		);
@@ -313,7 +313,7 @@ class Form_Break implements Style_Block_It {
 				'label'        => __( 'Text Color', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'css_selector' => array(
-					$this->selector( 'prev-button', 'button' ) => 'color: {{VALUE}}',
+					$this->selector( 'prev-button' ) => 'color: {{VALUE}}',
 				),
 			)
 		);
@@ -323,7 +323,7 @@ class Form_Break implements Style_Block_It {
 				'type'         => 'color-picker',
 				'label'        => __( 'Background Color', 'jet-form-builder' ),
 				'css_selector' => array(
-					$this->selector( 'prev-button', 'button' ) => 'background-color: {{VALUE}}',
+					$this->selector( 'prev-button' ) => 'background-color: {{VALUE}}',
 				),
 			)
 		);
@@ -345,7 +345,7 @@ class Form_Break implements Style_Block_It {
 				'label'        => __( 'Text Color', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'css_selector' => array(
-					$this->selector( 'prev-button', 'button' ) . ':hover:not(:disabled)' => 'color: {{VALUE}}',
+					$this->selector( 'prev-button' ) . ':hover:not(:disabled)' => 'color: {{VALUE}}',
 				),
 			)
 		);
@@ -356,7 +356,7 @@ class Form_Break implements Style_Block_It {
 				'type'         => 'color-picker',
 				'label'        => __( 'Background Color', 'jet-form-builder' ),
 				'css_selector' => array(
-					$this->selector( 'prev-button', 'button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+					$this->selector( 'prev-button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),
 			)
 		);
@@ -378,14 +378,14 @@ class Form_Break implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			$module->create_margin(
-				$this->selector( 'disabled-message', 'div' ),
+				$this->selector( 'disabled-message' ),
 				'disabled_message_margin'
 			)
 		);
 
 		$this->get_manager()->add_control(
 			$module->create_padding(
-				$this->selector( 'disabled-message', 'div' ),
+				$this->selector( 'disabled-message' ),
 				'disabled_message_padding'
 			)
 		);
@@ -396,7 +396,7 @@ class Form_Break implements Style_Block_It {
 				'type'         => 'typography',
 				'separator'    => 'after',
 				'css_selector' => array(
-					$this->selector( 'disabled-message', 'div' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+					$this->selector( 'disabled-message' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 				),
 			)
 		);
@@ -406,7 +406,7 @@ class Form_Break implements Style_Block_It {
 				'type'         => 'border',
 				'label'        => __( 'Border', 'jet-form-builder' ),
 				'css_selector' => array(
-					$this->selector( 'disabled-message', 'div' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					$this->selector( 'disabled-message' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				),
 			)
 		);
@@ -423,14 +423,14 @@ class Form_Break implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			$module->create_margin(
-				$this->selector( '-progress-pages', 'div' ),
+				$this->selector( '-progress-pages' ),
 				'field_margin'
 			)
 		);
 
 		$this->get_manager()->add_control(
 			$module->create_padding(
-				$this->selector( '-progress-pages', 'div' ),
+				$this->selector( '-progress-pages' ),
 				'field_padding'
 			)
 		);

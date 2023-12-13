@@ -33,7 +33,7 @@ $buttons-radius-bottom-left: var(--jfb-wysiwyg-buttons-border-radius-bottom-left
 
 .jet-form-builder-row.field-type-wysiwyg-field.wp-block-jet-forms-wysiwyg-field {
 	.mce-toolbar-grp {
-		background-color: var(--jfb-wysiwyg-toolbar-bg, #f6f7f7);
+		background-color: var(--jfb-wysiwyg-toolbar-bg, #fff);
 	}
 
 	.mce-toolbar {
@@ -90,10 +90,10 @@ $buttons-radius-bottom-left: var(--jfb-wysiwyg-buttons-border-radius-bottom-left
 				$current-radius-bottom-left: var(--jfb-wysiwyg-buttons-checked-border-radius-bottom-left, $buttons-radius-bottom-left);
 
 				border-radius: $current-radius-top-left $current-radius-top-right $current-radius-bottom-right $current-radius-bottom-left;
-				background-color: var(--jfb-wysiwyg-buttons-checked-bg, var(--jfb-wysiwyg-buttons-bg, transparent));
+				background-color: var(--jfb-wysiwyg-buttons-checked-bg, var(--jfb-wysiwyg-buttons-bg, #555c66));
 
 				.mce-ico, .mce-txt {
-					color: var(--jfb-wysiwyg-buttons-checked-text, var(--jfb-wysiwyg-buttons-text, inherit));
+					color: var(--jfb-wysiwyg-buttons-checked-text, var(--jfb-wysiwyg-buttons-text, #fff));
 				}
 			}
 		}

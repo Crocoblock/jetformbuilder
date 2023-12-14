@@ -579,7 +579,7 @@ class Tools {
 	}
 
 	public static function esc_attr( $value ) {
-		if ( ! is_scalar( $value ) && $value ) {
+		if ( ! is_scalar( $value ) ) {
 			return esc_attr( self::encode_json( $value ) );
 		}
 

@@ -44,7 +44,7 @@ class Form implements Style_Block_It {
 
 		$form_break->process_controls();
 
-		$this->process_submit_button();
+		$this->process_action_button();
 		$this->process_message_success();
 		$this->process_message_error();
 	}
@@ -1154,21 +1154,21 @@ class Form implements Style_Block_It {
 		$this->get_manager()->end_section();
 	}
 
-	private function process_submit_button() {
-		$this->set_css_selector( 'main', '__submit' );
-		$this->set_css_selector( 'wrap', '__submit-wrap' );
+	private function process_action_button() {
+		$this->set_css_selector( 'main', '__action-button' );
+		$this->set_css_selector( 'wrap', '__action-button-wrapper' );
 
 		$this->get_manager()->start_section(
 			'style_controls',
 			array(
-				'id'    => 'submit_style',
-				'title' => __( 'Submit button', 'jet-form-builder' ),
+				'id'    => 'action_button_style',
+				'title' => __( 'Action button', 'jet-form-builder' ),
 			)
 		);
 
 		$this->get_manager()->add_responsive_control(
 			array(
-				'id'           => 'submit_button_alignment',
+				'id'           => 'action_button_alignment',
 				'type'         => 'choose',
 				'separator'    => 'after',
 				'label'        => __( 'Alignment', 'jet-form-builder' ),
@@ -1194,7 +1194,7 @@ class Form implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'submit_button_typography',
+				'id'           => 'action_button_typography',
 				'type'         => 'typography',
 				'separator'    => 'after',
 				'css_selector' => array(
@@ -1205,7 +1205,7 @@ class Form implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'submit_button_padding',
+				'id'           => 'action_button_padding',
 				'type'         => 'dimensions',
 				'separator'    => 'after',
 				'label'        => __( 'Padding', 'jet-form-builder' ),
@@ -1218,7 +1218,7 @@ class Form implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'submit_button_border',
+				'id'           => 'action_button_border',
 				'type'         => 'border',
 				'label'        => __( 'Border', 'jet-form-builder' ),
 				'separator'    => 'after',
@@ -1231,21 +1231,21 @@ class Form implements Style_Block_It {
 		$this->get_manager()->start_tabs(
 			'style_controls',
 			array(
-				'id' => 'submit_button_style_tabs',
+				'id' => 'action_button_style_tabs',
 			)
 		);
 
 		$this->get_manager()->start_tab(
 			'style_controls',
 			array(
-				'id'    => 'submit_button_normal_styles',
+				'id'    => 'action_button_normal_styles',
 				'title' => __( 'Normal', 'jet-form-builder' ),
 			)
 		);
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'submit_button_typography_color',
+				'id'           => 'action_button_typography_color',
 				'type'         => 'color-picker',
 				'label'        => __( 'Text Color', 'jet-form-builder' ),
 				'separator'    => 'after',
@@ -1257,7 +1257,7 @@ class Form implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'submit_button_background_color',
+				'id'           => 'action_button_background_color',
 				'type'         => 'color-picker',
 				'label'        => __( 'Background Color', 'jet-form-builder' ),
 				'css_selector' => array(
@@ -1271,14 +1271,14 @@ class Form implements Style_Block_It {
 		$this->get_manager()->start_tab(
 			'style_controls',
 			array(
-				'id'    => 'submit_button_hover_styles',
+				'id'    => 'action_button_hover_styles',
 				'title' => __( 'Hover', 'jet-form-builder' ),
 			)
 		);
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'submit_button_hover_typography_color',
+				'id'           => 'action_button_hover_typography_color',
 				'type'         => 'color-picker',
 				'label'        => __( 'Text Color', 'jet-form-builder' ),
 				'separator'    => 'after',
@@ -1290,7 +1290,7 @@ class Form implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'submit_button_hover_background_color',
+				'id'           => 'action_button_hover_background_color',
 				'type'         => 'color-picker',
 				'label'        => __( 'Background Color', 'jet-form-builder' ),
 				'css_selector' => array(

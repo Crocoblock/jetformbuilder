@@ -44,6 +44,7 @@ class Form implements Style_Block_It {
 
 		$form_break->process_controls();
 
+		$this->process_submit_button();
 		$this->process_message_success();
 		$this->process_message_error();
 	}
@@ -1144,6 +1145,156 @@ class Form implements Style_Block_It {
 				'label'        => __( 'Background Color', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'remove-button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->get_manager()->end_tab();
+		$this->get_manager()->end_tabs();
+		$this->get_manager()->end_section();
+	}
+
+	private function process_submit_button() {
+		$this->set_css_selector( 'main', '__submit' );
+		$this->set_css_selector( 'wrap', '__submit-wrap' );
+
+		$this->get_manager()->start_section(
+			'style_controls',
+			array(
+				'id'    => 'submit_style',
+				'title' => __( 'Submit button', 'jet-form-builder' ),
+			)
+		);
+
+		$this->get_manager()->add_responsive_control(
+			array(
+				'id'           => 'submit_button_alignment',
+				'type'         => 'choose',
+				'separator'    => 'after',
+				'label'        => __( 'Alignment', 'jet-form-builder' ),
+				'options'      => array(
+					'flex-start' => array(
+						'shortcut' => __( 'Left', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignleft',
+					),
+					'center'     => array(
+						'shortcut' => __( 'Center', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-aligncenter',
+					),
+					'flex-end'   => array(
+						'shortcut' => __( 'Right', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignright',
+					),
+				),
+				'css_selector' => array(
+					$this->selector( 'wrap' ) => 'justify-content: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'submit_button_typography',
+				'type'         => 'typography',
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector() => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'submit_button_padding',
+				'type'         => 'dimensions',
+				'separator'    => 'after',
+				'label'        => __( 'Padding', 'jet-form-builder' ),
+				'units'        => array( 'px', '%' ),
+				'css_selector' => array(
+					$this->selector() => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}}; height: unset;',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'submit_button_border',
+				'type'         => 'border',
+				'label'        => __( 'Border', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector() => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
+
+		$this->get_manager()->start_tabs(
+			'style_controls',
+			array(
+				'id' => 'submit_button_style_tabs',
+			)
+		);
+
+		$this->get_manager()->start_tab(
+			'style_controls',
+			array(
+				'id'    => 'submit_button_normal_styles',
+				'title' => __( 'Normal', 'jet-form-builder' ),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'submit_button_typography_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Text Color', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector() => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'submit_button_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector() => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->get_manager()->end_tab();
+
+		$this->get_manager()->start_tab(
+			'style_controls',
+			array(
+				'id'    => 'submit_button_hover_styles',
+				'title' => __( 'Hover', 'jet-form-builder' ),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'submit_button_hover_typography_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Text Color', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector() . ':hover:not(:disabled)' => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'submit_button_hover_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector() . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),
 			)
 		);

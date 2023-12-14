@@ -35,7 +35,7 @@ trait Style_Block_Trait {
 		$this->manager = $manager;
 	}
 
-	public function selector( $selector = '' ): string {
+	public function selector( $selector = 'main' ): string {
 		if ( $selector && $this->has_css_selector( $selector ) ) {
 			$selector = $this->get_css_selector( $selector );
 		}

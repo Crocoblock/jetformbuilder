@@ -35,8 +35,7 @@ class Form implements Style_Block_It {
 		$this->process_text_field();
 		$this->process_textarea_field();
 		$this->process_select_field();
-		$this->process_radio_field();
-		$this->process_checkbox_field();
+		$this->process_checkradio_field();
 		$this->process_repeater_field();
 
 		$form_break = new Form_Break();
@@ -656,37 +655,34 @@ class Form implements Style_Block_It {
 		$this->get_manager()->end_section();
 	}
 
-	private function process_radio_field() {
+	private function process_checkradio_field() {
 		$this->set_css_selector( 'front-label', '__field-wrap label' );
 		$this->set_css_selector( 'front-wrap', '__field-wrap.checkradio-wrap' );
 		$this->set_css_selector( 'list-wrapper', '__fields-group' );
-
-		$old_namespace = $this->get_namespace();
-		$this->set_namespace( ".field-type-radio-field {$this->get_namespace()}" );
+		$this->set_css_selector( 'control', '__field-wrap span::before' );
 
 		$this->get_manager()->start_section(
 			'style_controls',
 			array(
-				'id'          => 'radio_items_style',
-				'initialOpen' => true,
-				'title'       => __( 'Items', 'jet-form-builder' ),
+				'title' => __( 'Checkbox & Radio Fields', 'jet-form-builder' ),
+				'id'    => 'checkradio_items_style',
 			)
 		);
 
-		$this->get_manager()->add_control(
+		$this->get_manager()->add_responsive_control(
 			array(
-				'id'           => 'radio_position',
+				'id'           => 'checkradio_fields_layout',
 				'type'         => 'choose',
-				'label'        => __( 'Radio options position', 'jet-form-builder' ),
+				'label'        => __( 'Layout', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'options'      => array(
-					'inline-block' => array(
-						'shortcut' => __( 'Line', 'jet-form-builder' ),
-						'icon'     => 'dashicons-ellipsis',
-					),
 					'block'        => array(
-						'shortcut' => __( 'Column', 'jet-form-builder' ),
-						'icon'     => 'dashicons-menu-alt',
+						'title' => __( 'Vertical', 'jet-form-builder' ),
+						'icon'  => 'dashicons-arrow-down-alt',
+					),
+					'inline-block' => array(
+						'title' => __( 'Horizontal', 'jet-form-builder' ),
+						'icon'  => 'dashicons-arrow-right-alt',
 					),
 				),
 				'css_selector' => array(
@@ -702,35 +698,20 @@ class Form implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'radio_alignment',
-				'type'         => 'choose',
-				'label'        => __( 'Alignment', 'jet-form-builder' ),
+				'id'           => 'checkradio_fields_typography',
+				'type'         => 'typography',
 				'separator'    => 'after',
-				'options'      => array(
-					'left'   => array(
-						'shortcut' => __( 'Left', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-alignleft',
-					),
-					'center' => array(
-						'shortcut' => __( 'Center', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-aligncenter',
-					),
-					'right'  => array(
-						'shortcut' => __( 'Right', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-alignright',
-					),
-				),
 				'css_selector' => array(
-					$this->selector( 'list-wrapper' ) => 'text-align: {{VALUE}};',
+					$this->selector( 'front-label' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 				),
 			)
 		);
 
-		$this->get_manager()->add_control(
+		$this->get_manager()->add_responsive_control(
 			array(
-				'id'           => 'radio_space_between',
+				'id'           => 'checkradio_space_between',
 				'type'         => 'range',
-				'label'        => __( 'Space Between', 'jet-form-builder' ),
+				'label'        => __( 'Gap between control and label', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'units'        => array(
 					array(
@@ -743,69 +724,41 @@ class Form implements Style_Block_It {
 					),
 				),
 				'css_selector' => array(
-					$this->selector( 'front-wrap' ) . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
-					$this->selector( 'front-wrap' ) . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
+					$this->selector( 'front-wrap' ) . ' span' => 'gap: {{VALUE}}px;',
 				),
 				'attributes'   => array(
 					'default' => array(
-						'value' => 10,
+						'value' => 8,
 					),
 				),
 			)
 		);
 
-		$this->get_manager()->add_control(
+		$this->get_manager()->add_responsive_control(
 			array(
-				'id'           => 'radio_horisontal_layout_description',
+				'id'           => 'checkradio_fields_control_size',
 				'type'         => 'range',
-				'label'        => __( 'Horizontal Offset', 'jet-form-builder' ),
-				'help'         => __( 'Horizontal Offset control works only with Line Filters Position', 'jet-form-builder' ),
-				'separator'    => 'none',
+				'label'        => __( 'Control Size', 'jet-form-builder' ),
+				'separator'    => 'after',
 				'units'        => array(
 					array(
 						'value'     => 'px',
 						'intervals' => array(
 							'step' => 1,
 							'min'  => 0,
-							'max'  => 40,
+							'max'  => 50,
 						),
 					),
 				),
 				'css_selector' => array(
-					$this->selector( 'front-wrap' ) => 'margin-right: {{VALUE}}{{UNIT}}',
-				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => 0,
-					),
-				),
-			)
-		);
-
-		$this->get_manager()->end_section();
-
-		$this->get_manager()->start_section(
-			'style_controls',
-			array(
-				'id'    => 'radio_item_style',
-				'title' => __( 'Item', 'jet-form-builder' ),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'radio_typography',
-				'type'         => 'typography',
-				'separator'    => 'after',
-				'css_selector' => array(
-					$this->selector( 'front-label' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+					$this->selector( 'control' ) => 'font-size: {{VALUE}}{{UNIT}};',
 				),
 			)
 		);
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'item_normal_color',
+				'id'           => 'checkradio_fields_color',
 				'type'         => 'color-picker',
 				'separator'    => 'after',
 				'label'        => __( 'Text Color', 'jet-form-builder' ),
@@ -817,67 +770,11 @@ class Form implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'radio_normal_background_color',
+				'id'           => 'checkradio_fields_background_color',
 				'type'         => 'color-picker',
 				'label'        => __( 'Background Color', 'jet-form-builder' ),
 				'css_selector' => array(
-					// front
-					$this->selector( 'front-label' ) . ' > span' => 'background-color: {{VALUE}}',
-
-				),
-			)
-		);
-
-		$this->get_manager()->end_section();
-
-		$this->get_manager()->start_section(
-			'style_controls',
-			array(
-				'id'    => 'radio_style',
-				'title' => __( 'Radio', 'jet-form-builder' ),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'show_radio_decorator',
-				'type'         => 'toggle',
-				'separator'    => 'after',
-				'label'        => __( 'Show Radio', 'jet-form-builder' ),
-				'attributes'   => array(
-					'default' => array(
-						'value' => true,
-					),
-				),
-				'unit'         => 'px',
-				'return_value' => array(
-					'true'  => 'inline-block',
-					'false' => 'none',
-				),
-				'css_selector' => array(
-					$this->selector( 'front-wrap' ) . ' span::before' => 'display: {{VALUE}};',
-				),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'item_size_decorator',
-				'type'         => 'range',
-				'label'        => __( 'Size Radio', 'jet-form-builder' ),
-				'separator'    => 'after',
-				'units'        => array(
-					array(
-						'value'     => 'px',
-						'intervals' => array(
-							'step' => 1,
-							'min'  => 0,
-							'max'  => 50,
-						),
-					),
-				),
-				'css_selector' => array(
-					$this->selector( 'front-wrap' ) . ' span::before' => 'font-size: {{VALUE}}{{UNIT}};',
+					$this->selector( 'front-label' ) => 'background-color: {{VALUE}}',
 				),
 			)
 		);
@@ -885,43 +782,37 @@ class Form implements Style_Block_It {
 		$this->get_manager()->start_tabs(
 			'style_controls',
 			array(
-				'id' => 'radio_style_tabs',
+				'id' => 'checkradio_style_tabs',
 			)
 		);
 
 		$this->get_manager()->start_tab(
 			'style_controls',
 			array(
-				'id'    => 'radio_normal_styles',
+				'id'    => 'checkradio_normal_styles',
 				'title' => __( 'Normal', 'jet-form-builder' ),
 			)
 		);
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'radio_normal_border',
+				'id'           => 'checkradio_control_border__normal',
 				'type'         => 'border',
 				'label'        => __( 'Border', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'css_selector' => array(
-					$this->selector( 'front-label' ) . ' > span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					$this->selector( 'control' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				),
 			)
 		);
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'radio_normal_background_color',
+				'id'           => 'checkradio_control_bg_color__normal',
 				'type'         => 'color-picker',
 				'label'        => __( 'Background Color', 'jet-form-builder' ),
-				'attributes'   => array(
-					'default' => array(
-						'value' => '#FFFFFF',
-					),
-				),
 				'css_selector' => array(
-					// front
-					$this->selector( 'front-label' ) . ' > span::before' => 'background-color: {{VALUE}}',
+					$this->selector( 'front-label' ) . ' > span::before' => 'background-color: {{VALUE}};',
 				),
 			)
 		);
@@ -931,14 +822,14 @@ class Form implements Style_Block_It {
 		$this->get_manager()->start_tab(
 			'style_controls',
 			array(
-				'id'    => 'radio_item_checked_styles',
+				'id'    => 'checkradio_styles__checked',
 				'title' => __( 'Checked', 'jet-form-builder' ),
 			)
 		);
 
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'radio_checked_border',
+				'id'           => 'checkradio_control_border__checked',
 				'type'         => 'border',
 				'label'        => __( 'Border', 'jet-form-builder' ),
 				'separator'    => 'after',
@@ -947,20 +838,13 @@ class Form implements Style_Block_It {
 				),
 			)
 		);
-
 		$this->get_manager()->add_control(
 			array(
-				'id'           => 'radio_checked_background_color',
+				'id'           => 'checkradio_control_bg_color__checked',
 				'type'         => 'color-picker',
 				'label'        => __( 'Background Color', 'jet-form-builder' ),
-				'attributes'   => array(
-					'default' => array(
-						'value' => '#398ffc',
-					),
-				),
 				'css_selector' => array(
-					// front
-					$this->selector( 'front-label' ) . ' :checked + span::before' => 'background-color: {{VALUE}}',
+					$this->selector( 'front-label' ) . ' :checked + span::before' => 'background-color: {{VALUE}};',
 				),
 			)
 		);
@@ -968,319 +852,6 @@ class Form implements Style_Block_It {
 		$this->get_manager()->end_tab();
 		$this->get_manager()->end_tabs();
 		$this->get_manager()->end_section();
-
-		$this->set_namespace( $old_namespace );
-	}
-
-	public function process_checkbox_field() {
-		$this->set_css_selector( 'item', '__field-wrap.checkboxes-wrap' );
-		$this->set_css_selector( 'option-label', '__field-wrap label' );
-		$this->set_css_selector( 'checkbox-front', '__field-wrap span::before' );
-		$this->set_css_selector( 'wrapper', '__fields-group' );
-
-		$old_namespace = $this->get_namespace();
-		$this->set_namespace( ".field-type-checkbox-field {$this->get_namespace()}" );
-
-		$this->get_manager()->start_section(
-			'style_controls',
-			array(
-				'id'          => 'checkbox_items_style',
-				'initialOpen' => true,
-				'title'       => __( 'Items', 'jet-form-builder' ),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkbox_position',
-				'type'         => 'choose',
-				'label'        => __( 'Checkbox Position', 'jet-form-builder' ),
-				'separator'    => 'after',
-				'options'      => array(
-					'inline-block' => array(
-						'shortcut' => __( 'Line', 'jet-form-builder' ),
-						'icon'     => 'dashicons-ellipsis',
-					),
-					'block'        => array(
-						'shortcut' => __( 'Column', 'jet-form-builder' ),
-						'icon'     => 'dashicons-menu-alt',
-					),
-				),
-				'css_selector' => array(
-					$this->selector( 'item' ) => 'display: {{VALUE}};',
-				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => 'block',
-					),
-				),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkbox_alignment',
-				'type'         => 'choose',
-				'label'        => __( 'Alignment', 'jet-form-builder' ),
-				'separator'    => 'after',
-				'options'      => array(
-					'left'   => array(
-						'shortcut' => __( 'Left', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-alignleft',
-					),
-					'center' => array(
-						'shortcut' => __( 'Center', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-aligncenter',
-					),
-					'right'  => array(
-						'shortcut' => __( 'Right', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-alignright',
-					),
-				),
-				'css_selector' => array(
-					$this->selector( 'wrapper' ) => 'text-align: {{VALUE}};',
-				),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkbox_space_between',
-				'type'         => 'range',
-				'label'        => __( 'Space Between', 'jet-form-builder' ),
-				'separator'    => 'after',
-				'units'        => array(
-					array(
-						'value'     => 'px',
-						'intervals' => array(
-							'step' => 1,
-							'min'  => 0,
-							'max'  => 50,
-						),
-					),
-				),
-				'css_selector' => array(
-					$this->selector( 'item' ) . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
-					$this->selector( 'item' ) . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
-				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => 10,
-					),
-				),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkbox_horisontal_layout_description',
-				'type'         => 'range',
-				'label'        => __( 'Horizontal Offset', 'jet-form-builder' ),
-				'help'         => __( 'Horizontal Offset control works only with Line Filters Position', 'jet-form-builder' ),
-				'units'        => array(
-					array(
-						'value'     => 'px',
-						'intervals' => array(
-							'step' => 1,
-							'min'  => 0,
-							'max'  => 40,
-						),
-					),
-				),
-				'css_selector' => array(
-					$this->selector( 'item' ) => 'margin-right: {{VALUE}}{{UNIT}};',
-				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => 0,
-					),
-				),
-			)
-		);
-
-		$this->get_manager()->end_section();
-
-		$this->get_manager()->start_section(
-			'style_controls',
-			array(
-				'id'    => 'checkbox_item_checkbox_style',
-				'title' => __( 'Item', 'jet-form-builder' ),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkbox_item_typography',
-				'type'         => 'typography',
-				'separator'    => 'after',
-				'css_selector' => array(
-					$this->selector( 'option-label' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
-				),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkbox_item_normal_color',
-				'type'         => 'color-picker',
-				'separator'    => 'after',
-				'label'        => __( 'Text Color', 'jet-form-builder' ),
-				'css_selector' => array(
-					$this->selector( 'option-label' ) => 'color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkbox_item_normal_background_color',
-				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
-				'css_selector' => array(
-					$this->selector( 'option-label' ) => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->get_manager()->end_section();
-
-		$this->get_manager()->start_section(
-			'style_controls',
-			array(
-				'id'    => 'checkbox_style',
-				'title' => __( 'Checkbox', 'jet-form-builder' ),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'show_checkbox_decorator',
-				'type'         => 'toggle',
-				'separator'    => 'after',
-				'label'        => __( 'Show Checkbox', 'jet-form-builder' ),
-				'attributes'   => array(
-					'default' => array(
-						'value' => true,
-					),
-				),
-				'return_value' => array(
-					'true'  => 'inline-block',
-					'false' => 'none',
-				),
-				'css_selector' => array(
-					$this->selector( 'checkbox-front' ) => 'display: {{VALUE}};',
-				),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkbox_size_decorator',
-				'type'         => 'range',
-				'label'        => __( 'Size Checkbox', 'jet-form-builder' ),
-				'separator'    => 'after',
-				'units'        => array(
-					array(
-						'value'     => 'px',
-						'intervals' => array(
-							'step' => 1,
-							'min'  => 0,
-							'max'  => 50,
-						),
-					),
-				),
-				'css_selector' => array(
-					$this->selector( 'checkbox-front' ) => 'font-size: {{VALUE}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->get_manager()->start_tabs(
-			'style_controls',
-			array(
-				'id' => 'checkbox_style_tabs',
-			)
-		);
-
-		$this->get_manager()->start_tab(
-			'style_controls',
-			array(
-				'id'    => 'checkbox_normal_styles',
-				'title' => __( 'Normal', 'jet-form-builder' ),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkbox_border',
-				'type'         => 'border',
-				'label'        => __( 'Border', 'jet-form-builder' ),
-				'separator'    => 'after',
-				'css_selector' => array(
-					$this->selector( 'checkbox-front' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-				),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkbox_normal_background_color',
-				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
-				'attributes'   => array(
-					'default' => array(
-						'value' => '#FFFFFF',
-					),
-				),
-				'css_selector' => array(
-					$this->selector( 'option-label' ) . ' > span::before' => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->get_manager()->end_tab();
-
-		$this->get_manager()->start_tab(
-			'style_controls',
-			array(
-				'id'    => 'checkbox_item_checked_styles',
-				'title' => __( 'Checked', 'jet-form-builder' ),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkbox_checked_border',
-				'type'         => 'border',
-				'label'        => __( 'Border', 'jet-form-builder' ),
-				'separator'    => 'after',
-				'css_selector' => array(
-					$this->selector( 'option-label' ) . ' :checked + span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-				),
-			)
-		);
-
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkbox_checked_background_color',
-				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
-				'attributes'   => array(
-					'default' => array(
-						'value' => '#398ffc',
-					),
-				),
-				'css_selector' => array(
-					$this->selector( 'option-label' ) . ' :checked + span::before' => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->get_manager()->end_tab();
-		$this->get_manager()->end_tabs();
-		$this->get_manager()->end_section();
-
-		$this->set_namespace( $old_namespace );
 	}
 
 	private function process_repeater_field() {
@@ -1315,7 +886,7 @@ class Form implements Style_Block_It {
 			'style_controls',
 			array(
 				'id'    => 'repeater_new_button_style',
-				'title' => __( 'New Item Button', 'jet-form-builder' ),
+				'title' => __( 'Repeater new button', 'jet-form-builder' ),
 			)
 		);
 
@@ -1465,7 +1036,7 @@ class Form implements Style_Block_It {
 			'style_controls',
 			array(
 				'id'    => 'repeater_remove_button_style',
-				'title' => __( 'Remove Item Button', 'jet-form-builder' ),
+				'title' => __( 'Repeater remove item button', 'jet-form-builder' ),
 			)
 		);
 

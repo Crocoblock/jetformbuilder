@@ -1,6 +1,8 @@
 <?php
 
-namespace Jet_Form_Builder\Blocks\Render;
+namespace JFB_Modules\Wysiwyg\Blocks\Wysiwyg;
+
+use Jet_Form_Builder\Blocks\Render\Base;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -10,7 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define text field renderer class
  */
-class Wysiwyg_Field_Render extends Base {
+class Block_Render extends Base {
 
 	public function get_name() {
 		return 'wysiwyg-field';

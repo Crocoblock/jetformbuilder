@@ -1,5 +1,6 @@
-import BaseSignal from './BaseSignal';
-import { isWysiwyg } from '../supports';
+const {
+	      BaseSignal,
+      } = JetFormBuilderAbstract;
 
 /**
  * @property {WysiwygData} input
@@ -10,7 +11,7 @@ function SignalWysiwyg() {
 	this.lock.current = true;
 
 	this.isSupported = function ( node, inputData ) {
-		return isWysiwyg( node );
+		return node.classList.contains( 'wysiwyg-field' );
 	};
 	this.runSignal   = function () {
 		if ( this.input.value.current === this.input.editor.getContent() ) {

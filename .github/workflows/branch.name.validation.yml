@@ -2,7 +2,10 @@ name: Branch Name Validation
 
 on:
     create:
+        # Trigger this workflow only when a branch or tag is created
         branches:
+            - '*'
+        tags:
             - '*'
 
 jobs:
@@ -10,11 +13,17 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Check Branch Name
-              id: check_branch
-              run: |
-                  branch_name="${GITHUB_REF#refs/heads/}"
-                  if ! [[ "$branch_name" =~ ^(main|(release/[0-9]+\.[0-9]+\.[0-9]+)|(issue/[0-9]+)|(suggestion/[0-9]+)|(feature/[a-z0-9\-]+)|(dev/[a-z0-9\-]+))$ ]]; then
-                    echo "Invalid branch name: $branch_name"
-                    exit 1
-                  fi
+            -   name: Check Branch Name
+                id: check_branch
+                run: |
+                    ref="${GITHUB_REF}"
+                    if [[ "$ref" =~ ^refs/heads/ ]]; then
+                        branch_name="${ref#refs/heads/}"
+                        if ! [[ "$branch_name" =~ ^(main|(release/[0-9]+\.[0-9]+\.[0-9]+)|(issue/[0-9]+)|(suggestion/[0-9]+)|(feature/[a-z0-9\-]+)|(dev/[a-z0-9\-]+))$ ]]; then
+                            echo "Invalid branch name: $branch_name"
+                            echo "Allowed patterns: main, release/x.y.z, issue/123, suggestion/123, feature/feature-name, dev/branch-name"
+                            exit 1
+                        fi
+                    else
+                        echo "Skipping tag event: $ref"
+                    fi

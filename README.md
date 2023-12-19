@@ -4,6 +4,13 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.2.2
+* ADD: Style-controls & options for the WYSIWYG field
+* UPD: UI/UX bulk options
+* FIX: Style controls for the Checkbox field in JetForm widget (Elementor)
+* FIX: Date fields not exported from form records to csv
+* FIX: Columns are not displayed correctly with elementor containers
+
 ## 3.2.1
 * ADD: Number-related sanitizers for fields
 * ADD: Now you can write `<div data-jfb-macro="field_name"></div>` instead of `<!--JFB_FIELD::field_name-->`

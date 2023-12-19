@@ -1,0 +1,188 @@
+$buttons-border-width: 0;
+$buttons-border-style: solid;
+$buttons-border-color: transparent;
+$buttons-border-radius: initial;
+
+/* border width */
+$buttons-border-top-width: var(--jfb-wysiwyg-buttons-border-top-width, $buttons-border-width);
+$buttons-border-right-width: var(--jfb-wysiwyg-buttons-border-right-width, $buttons-border-width);
+$buttons-border-bottom-width: var(--jfb-wysiwyg-buttons-border-bottom-width, $buttons-border-width);
+$buttons-border-left-width: var(--jfb-wysiwyg-buttons-border-left-width, $buttons-border-width);
+
+/* border style */
+$buttons-border-top-style: var(--jfb-wysiwyg-buttons-border-top-style, $buttons-border-style);
+$buttons-border-right-style: var(--jfb-wysiwyg-buttons-border-right-style, $buttons-border-style);
+$buttons-border-bottom-style: var(--jfb-wysiwyg-buttons-border-bottom-style, $buttons-border-style);
+$buttons-border-left-style: var(--jfb-wysiwyg-buttons-border-left-style, $buttons-border-style);
+
+/* border color */
+$buttons-border-top-color: var(--jfb-wysiwyg-buttons-border-top-color, $buttons-border-color);
+$buttons-border-right-color: var(--jfb-wysiwyg-buttons-border-right-color, $buttons-border-color);
+$buttons-border-bottom-color: var(--jfb-wysiwyg-buttons-border-bottom-color, $buttons-border-color);
+$buttons-border-left-color: var(--jfb-wysiwyg-buttons-border-left-color, $buttons-border-color);
+
+/* border radius */
+$buttons-radius-top-left: var(--jfb-wysiwyg-buttons-border-radius-top-left, $buttons-border-radius);
+$buttons-radius-top-right: var(--jfb-wysiwyg-buttons-border-radius-top-right, $buttons-border-radius);
+$buttons-radius-bottom-right: var(--jfb-wysiwyg-buttons-border-radius-bottom-right, $buttons-border-radius);
+$buttons-radius-bottom-left: var(--jfb-wysiwyg-buttons-border-radius-bottom-left, $buttons-border-radius);
+
+.jet-form-builder-row {
+	border: 0;
+}
+
+.jet-form-builder-row.field-type-wysiwyg-field.wp-block-jet-forms-wysiwyg-field {
+	.mce-toolbar-grp {
+		background-color: var(--jfb-wysiwyg-toolbar-bg, #fff);
+	}
+
+	.mce-toolbar {
+		.mce-btn, .mce-listbox {
+			background-color: var(--jfb-wysiwyg-buttons-bg, initial);
+
+			border-width: $buttons-border-top-width $buttons-border-right-width $buttons-border-bottom-width $buttons-border-left-width;
+			border-style: $buttons-border-top-style $buttons-border-right-style $buttons-border-bottom-style $buttons-border-left-style;
+			border-color: $buttons-border-top-color $buttons-border-right-color $buttons-border-bottom-color $buttons-border-left-color;
+			border-radius: $buttons-radius-top-left $buttons-radius-top-right $buttons-radius-bottom-right $buttons-radius-bottom-left;
+
+			button {
+				background-color: initial;
+				text-transform: inherit;
+				letter-spacing: normal;
+				text-decoration: none;
+				color: inherit;
+				background-image: initial;
+			}
+
+			.mce-ico, .mce-txt {
+				color: var(--jfb-wysiwyg-buttons-text, #50575e);
+			}
+
+			&.mce-active {
+				/* border width */
+				$buttons-checked-border-top-width: var(--jfb-wysiwyg-buttons-checked-border-top-width, $buttons-border-top-width);
+				$buttons-checked-border-right-width: var(--jfb-wysiwyg-buttons-checked-border-right-width, $buttons-border-right-width);
+				$buttons-checked-border-bottom-width: var(--jfb-wysiwyg-buttons-checked-border-bottom-width, $buttons-border-bottom-width);
+				$buttons-checked-border-left-width: var(--jfb-wysiwyg-buttons-checked-border-left-width, $buttons-border-left-width);
+
+				border-width: $buttons-checked-border-top-width $buttons-checked-border-right-width $buttons-checked-border-bottom-width $buttons-checked-border-left-width;
+
+				/* border style */
+				$buttons-checked-border-top-style: var(--jfb-wysiwyg-buttons-checked-border-top-style, $buttons-border-top-style);
+				$buttons-checked-border-right-style: var(--jfb-wysiwyg-buttons-checked-border-right-style, $buttons-border-right-style);
+				$buttons-checked-border-bottom-style: var(--jfb-wysiwyg-buttons-checked-border-bottom-style, $buttons-border-bottom-style);
+				$buttons-checked-border-left-style: var(--jfb-wysiwyg-buttons-checked-border-left-style, $buttons-border-left-style);
+
+				border-style: $buttons-checked-border-top-style $buttons-checked-border-right-style $buttons-checked-border-bottom-style $buttons-checked-border-left-style;
+
+				/* border color */
+				$buttons-checked-border-top-color: var(--jfb-wysiwyg-buttons-checked-border-top-color, $buttons-border-top-color);
+				$buttons-checked-border-right-color: var(--jfb-wysiwyg-buttons-checked-border-right-color, $buttons-border-right-color);
+				$buttons-checked-border-bottom-color: var(--jfb-wysiwyg-buttons-checked-border-bottom-color, $buttons-border-bottom-color);
+				$buttons-checked-border-left-color: var(--jfb-wysiwyg-buttons-checked-border-left-color, $buttons-border-left-color);
+
+				border-color: $buttons-checked-border-top-color $buttons-checked-border-right-color $buttons-checked-border-bottom-color $buttons-checked-border-left-color;
+
+				/* border radius */
+				$current-radius-top-left: var(--jfb-wysiwyg-buttons-checked-border-radius-top-left, $buttons-radius-top-left);
+				$current-radius-top-right: var(--jfb-wysiwyg-buttons-checked-border-radius-top-right, $buttons-radius-top-right);
+				$current-radius-bottom-right: var(--jfb-wysiwyg-buttons-checked-border-radius-bottom-right, $buttons-radius-bottom-right);
+				$current-radius-bottom-left: var(--jfb-wysiwyg-buttons-checked-border-radius-bottom-left, $buttons-radius-bottom-left);
+
+				border-radius: $current-radius-top-left $current-radius-top-right $current-radius-bottom-right $current-radius-bottom-left;
+				background-color: var(--jfb-wysiwyg-buttons-checked-bg, var(--jfb-wysiwyg-buttons-bg, #555c66));
+
+				.mce-ico, .mce-txt {
+					color: var(--jfb-wysiwyg-buttons-checked-text, var(--jfb-wysiwyg-buttons-text, #fff));
+				}
+			}
+		}
+	}
+
+
+	.mce-statusbar {
+		background-color: var(--jfb-wysiwyg-statusbar-bg, #fff);
+		color: var(--jfb-wysiwyg-statusbar-text, inherit);
+	}
+
+	.mce-edit-area {
+		background-color: var(--jfb-wysiwyg-container-bg, #fff);
+		color: var(--jfb-wysiwyg-container-text, #333);
+
+		* {
+			color: inherit;
+		}
+	}
+
+	&.has-hover-color-text {
+		.mce-toolbar {
+			.mce-listbox:hover .mce-txt, .mce-btn:hover .mce-ico {
+				color: var(--jfb-wysiwyg-buttons-hover-text, var(--jfb-wysiwyg-buttons-text, inherit));
+			}
+		}
+	}
+
+	&.has-hover-color-background {
+		.mce-toolbar {
+			.mce-listbox:hover, .mce-btn:hover {
+				background-color: var(--jfb-wysiwyg-buttons-hover-bg, var(--jfb-wysiwyg-buttons-bg, transparent));
+			}
+		}
+	}
+
+	&.has-hover-border-width {
+		.mce-toolbar {
+			.mce-listbox:hover, .mce-btn:hover {
+				/* border width */
+				$hover-border-top-width: var(--jfb-wysiwyg-buttons-hover-border-top-width, $buttons-border-top-width);
+				$hover-border-right-width: var(--jfb-wysiwyg-buttons-hover-border-right-width, $buttons-border-right-width);
+				$hover-border-bottom-width: var(--jfb-wysiwyg-buttons-hover-border-bottom-width, $buttons-border-bottom-width);
+				$hover-border-left-width: var(--jfb-wysiwyg-buttons-hover-border-left-width, $buttons-border-left-width);
+
+				border-width: $hover-border-top-width $hover-border-right-width $hover-border-bottom-width $hover-border-left-width;
+			}
+		}
+	}
+
+	&.has-hover-border-style {
+		.mce-toolbar {
+			.mce-listbox:hover, .mce-btn:hover {
+				/* border style */
+				$hover-border-top-style: var(--jfb-wysiwyg-buttons-hover-border-top-style, $buttons-border-top-style);
+				$hover-border-right-style: var(--jfb-wysiwyg-buttons-hover-border-right-style, $buttons-border-right-style);
+				$hover-border-bottom-style: var(--jfb-wysiwyg-buttons-hover-border-bottom-style, $buttons-border-bottom-style);
+				$hover-border-left-style: var(--jfb-wysiwyg-buttons-hover-border-left-style, $buttons-border-left-style);
+
+				border-style: $hover-border-top-style $hover-border-right-style $hover-border-bottom-style $hover-border-left-style;
+			}
+		}
+	}
+
+	&.has-hover-border-color {
+		.mce-toolbar {
+			.mce-listbox:hover, .mce-btn:hover {
+				/* border color */
+				$hover-border-top-color: var(--jfb-wysiwyg-buttons-hover-border-top-color, $buttons-border-top-color);
+				$hover-border-right-color: var(--jfb-wysiwyg-buttons-hover-border-right-color, $buttons-border-right-color);
+				$hover-border-bottom-color: var(--jfb-wysiwyg-buttons-hover-border-bottom-color, $buttons-border-bottom-color);
+				$hover-border-left-color: var(--jfb-wysiwyg-buttons-hover-border-left-color, $buttons-border-left-color);
+
+				border-color: $hover-border-top-color $hover-border-right-color $hover-border-bottom-color $hover-border-left-color;
+			}
+		}
+	}
+
+	&.has-hover-border-radius {
+		.mce-toolbar {
+			.mce-listbox:hover, .mce-btn:hover {
+				/* border radius */
+				$current-radius-top-left: var(--jfb-wysiwyg-buttons-hover-border-radius-top-left, $buttons-radius-top-left);
+				$current-radius-top-right: var(--jfb-wysiwyg-buttons-hover-border-radius-top-right, $buttons-radius-top-right);
+				$current-radius-bottom-right: var(--jfb-wysiwyg-buttons-hover-border-radius-bottom-right, $buttons-radius-bottom-right);
+				$current-radius-bottom-left: var(--jfb-wysiwyg-buttons-hover-border-radius-bottom-left, $buttons-radius-bottom-left);
+
+				border-radius: $current-radius-top-left $current-radius-top-right $current-radius-bottom-right $current-radius-bottom-left;
+			}
+		}
+	}
+}

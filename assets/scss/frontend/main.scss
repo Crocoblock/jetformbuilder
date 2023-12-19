@@ -1,6 +1,5 @@
 @import "../components/progress-bar";
 @import "../components/action-buttons";
-@import "wysiwyg";
 @import "./compatibility/safari";
 
 :root {
@@ -568,7 +567,6 @@ input[type="range"] {
 		flex-shrink: 0;
 		flex-grow: 0;
 		border: 1px solid #adb5bd;
-		margin-right: 0.5em;
 		background-repeat: no-repeat;
 		background-position: center center;
 		background-size: 50% 50%;
@@ -655,6 +653,7 @@ input[type="range"] {
 		/*display: contents;*/
 		display: flex;
 		align-items: center;
+		gap: 8px;
 	}
 }
 

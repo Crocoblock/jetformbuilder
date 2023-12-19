@@ -1,11 +1,16 @@
 import WysiwygEdit from './edit';
-import metadata from '@blocks/wysiwyg-field/block.json';
+import metadata from '@root/blocks/wysiwyg/block.json';
 
 const { __ } = wp.i18n;
 
 const { createBlock } = wp.blocks;
 
 const { name, icon = '' } = metadata;
+
+metadata.attributes.isPreview = {
+	'type': 'boolean',
+	'default': false,
+};
 
 /**
  * Available items for `useEditProps`:

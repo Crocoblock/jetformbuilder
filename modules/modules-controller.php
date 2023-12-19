@@ -51,6 +51,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Html_Parser\Module(),
 			new Ai\Module(),
 			new Validation\Module(),
+			new Wysiwyg\Module(),
 		);
 	}
 

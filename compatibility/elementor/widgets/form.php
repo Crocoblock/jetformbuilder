@@ -1449,6 +1449,9 @@ class Form extends Widget_Base implements Widget_Base_It {
 					'label'      => __( 'Gap between control and label', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
 					'size_units' => array( 'px' ),
+					'default' => array(
+						'size' => 8,
+					),
 					'range'      => array(
 						'px' => array(
 							'min' => 0,
@@ -1456,8 +1459,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 						),
 					),
 					'selectors'  => array(
-						'body:not(.rtl) ' . $this->selector( '__field-wrap.checkradio-wrap' ) => 'margin-right: {{SIZE}}px;',
-						'body.rtl ' . $this->selector( '__field-wrap.checkradio-wrap' )       => 'margin-left: {{SIZE}}px;',
+						$this->selector( '__field-wrap.checkradio-wrap span' ) => 'gap: {{SIZE}}px;',
 					),
 				)
 			);
@@ -3634,6 +3636,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 	 * @access protected
 	 */
 	protected function render() {
+		wp_print_styles( 'wp-block-library' );
 		$settings = $this->get_settings_for_display();
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

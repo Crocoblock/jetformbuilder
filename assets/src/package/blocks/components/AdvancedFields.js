@@ -9,17 +9,17 @@ const {
       } = wp.i18n;
 
 const {
-	      InspectorControls,
+	      InspectorAdvancedControls,
       } = wp.blockEditor;
 
 function AdvancedFields() {
-	return <InspectorControls group="advanced">
+	return <InspectorAdvancedControls>
 		<BlockPlaceholder/>
 		<BlockAddPrevButton/>
 		<BlockPrevButtonLabel/>
 		<BlockVisibility/>
 		<BlockClassName/>
-	</InspectorControls>;
+	</InspectorAdvancedControls>;
 }
 
 export default AdvancedFields;

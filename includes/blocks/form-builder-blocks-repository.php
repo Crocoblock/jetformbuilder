@@ -24,7 +24,6 @@ class Form_Builder_Blocks_Repository extends Blocks_Repository_Base {
 				new Types\Time_Field(),
 				new Types\Calculated_Field(),
 				new Types\Media_Field(),
-				new Types\Wysiwyg_Field(),
 				new Types\Range_Field(),
 				new Types\Heading_Field(),
 				new Types\Textarea_Field(),

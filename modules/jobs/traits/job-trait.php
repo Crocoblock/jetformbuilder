@@ -23,11 +23,11 @@ trait Job_Trait {
 		return $this->hook;
 	}
 
-	public function set_arg( string $name, $value ) {
+	public function set_arg( $name, $value ) {
 		$this->args[ $name ] = $value;
 	}
 
-	public function get_arg( string $name ) {
+	public function get_arg( $name ) {
 		return $this->args[ $name ] ?? false;
 	}
 

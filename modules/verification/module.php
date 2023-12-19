@@ -90,7 +90,7 @@ class Module implements
 		/**
 		 * It runs by `webhook` module
 		 *
-		 * @see \JFB_Modules\Webhook\Module::try_to_catch
+		 * @see \JFB_Modules\Webhook\Module::confirm
 		 */
 		add_action( 'jet-form-builder/webhook/verification', array( $this, 'on_verification' ) );
 		add_action( 'jet-form-builder/before-do-action/register_user', array( $this, 'register_user_before' ), 10, 2 );

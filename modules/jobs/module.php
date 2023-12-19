@@ -23,6 +23,8 @@ final class Module implements
 
 	use Repository_Pattern_Trait;
 
+	private $action_id = 0;
+
 	public function rep_item_id() {
 		return 'jobs';
 	}
@@ -44,6 +46,10 @@ final class Module implements
 		foreach ( $this->rep_generate_items() as $job ) {
 			$job->init_hooks();
 		}
+		add_action(
+			'action_scheduler_begin_execute',
+			array( $this, 'set_action_id' )
+		);
 	}
 
 	public function remove_hooks() {
@@ -51,6 +57,10 @@ final class Module implements
 		foreach ( $this->rep_generate_items() as $job ) {
 			$job->remove_hooks();
 		}
+		remove_action(
+			'action_scheduler_begin_execute',
+			array( $this, 'set_action_id' )
+		);
 	}
 
 	public function rep_instances(): array {
@@ -63,6 +73,17 @@ final class Module implements
 		}
 
 		\ActionScheduler_DBStore::instance()->cancel_actions_by_group( Post_Type\Module::SLUG );
+	}
+
+	public function set_action_id( $action_id ) {
+		$this->action_id = absint( $action_id );
+	}
+
+	/**
+	 * @return int
+	 */
+	public function get_action_id(): int {
+		return $this->action_id;
 	}
 
 	public function install( Self_Execution_Job_It $job ) {

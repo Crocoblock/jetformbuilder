@@ -20,9 +20,9 @@ interface Job_It {
 
 	public function get_args(): array;
 
-	public function set_arg( string $name, $value );
+	public function set_arg( $name, $value );
 
-	public function get_arg( string $name );
+	public function get_arg( $name );
 
 	public function unschedule();
 

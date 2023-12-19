@@ -30,14 +30,15 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 	private $logger;
 
 	private $verified  = false;
-	private $token_row = array();
 
 	/**
 	 * Has value while webhook is processed
 	 *
 	 * @var string
 	 */
-	private $token = '';
+	private $token      = '';
+	private $token_id   = 0;
+	private $check_hash = true;
 
 	public function rep_item_id() {
 		return 'webhook';
@@ -67,14 +68,21 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 	}
 
 	public function try_to_catch() {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		$this->set_token_id( absint( $_GET[ self::GET_TOKEN_ID ] ?? '' ) );
+		$this->set_token( sanitize_key( $_GET[ self::GET_TOKEN ] ?? '' ) );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		$this->confirm();
+	}
+
+	public function confirm() {
 		global $wpdb;
 
-		$view = new Tokens_View();
+		// reset for case, where multiple webhooks could be triggered
+		$this->verified = false;
 
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-		$id          = absint( $_GET[ self::GET_TOKEN_ID ] ?? '' );
-		$this->token = sanitize_key( $_GET[ self::GET_TOKEN ] ?? '' );
-		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+		$view = new Tokens_View();
 
 		$expire_conditions = new Query_Conditions_Builder();
 		$expire_conditions->set_relation_or();
@@ -94,13 +102,13 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 		$conditions = array(
 			array(
 				'type'   => Query_Conditions_Builder::TYPE_EQUAL,
-				'values' => array( 'id', $id ),
+				'values' => array( 'id', $this->get_token_id() ),
 			),
 			$expire_conditions,
 		);
 
 		try {
-			$this->token_row = $view::findOne( $conditions )->query()->query_one();
+			$token_row = $view::findOne( $conditions )->query()->query_one();
 		} catch ( Query_Builder_Exception $exception ) {
 			$this->logger->log(
 				$exception->getMessage(),
@@ -111,17 +119,19 @@ class Module implements Base_Module_It, Base_Module_After_Install_It {
 		}
 
 		$table  = Tokens_Model::table();
-		$action = $this->token_row['action'];
+		$action = $token_row['action'];
 
-		if ( ! Security\Module::get_hasher()->CheckPassword(
-			$this->token,
-			$this->token_row['hash']
-		) ) {
+		if ( $this->is_check_hash() &&
+			! Security\Module::get_hasher()->CheckPassword(
+				$this->token,
+				$token_row['hash']
+			)
+		) {
 			$this->logger->log(
 				sprintf(
 				/* translators: %d - primary id of token row */
 					__( 'Invalid token for %d (primary ID) row', 'jet-form-builder' ),
-					$id
+					$this->get_token_id()
 				)
 			);
 			do_action( "jet-form-builder/webhook/{$action}", $this );
@@ -142,7 +152,7 @@ AND {$table}.id = %d
 ;
 ",
 				current_time( 'mysql', 1 ),
-				$id
+				$this->get_token_id()
 			)
 		);
 		// phpcs:enabled WordPress.DB
@@ -152,7 +162,7 @@ AND {$table}.id = %d
 				sprintf(
 				/* translators: %d - primary id of token row */
 					__( 'Failed to increment `exec_count` column in %d (primary ID) row', 'jet-form-builder' ),
-					$id
+					$this->get_token_id()
 				)
 			);
 			do_action( "jet-form-builder/webhook/{$action}", $this );
@@ -164,7 +174,7 @@ AND {$table}.id = %d
 			sprintf(
 			/* translators: %d - primary id of token row */
 				__( 'Successfully verified webhook (primary ID -> %d)', 'jet-form-builder' ),
-				$id
+				$this->get_token_id()
 			),
 			sprintf( 'hook: jet-form-builder/webhook/%s', $action )
 		);
@@ -215,8 +225,18 @@ AND {$table}.id = %d
 		return $this->verified;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function get_token_id(): int {
-		return absint( $this->token_row['id'] ?? '' );
+		return $this->token_id;
+	}
+
+	/**
+	 * @param int $token_id
+	 */
+	public function set_token_id( int $token_id ) {
+		$this->token_id = $token_id;
 	}
 
 	/**
@@ -224,5 +244,26 @@ AND {$table}.id = %d
 	 */
 	public function get_token(): string {
 		return $this->token;
+	}
+
+	/**
+	 * @param string $token
+	 */
+	public function set_token( string $token ) {
+		$this->token = $token;
+	}
+
+	/**
+	 * @param bool $check_hash
+	 */
+	public function set_check_hash( bool $check_hash ) {
+		$this->check_hash = $check_hash;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_check_hash(): bool {
+		return $this->check_hash;
 	}
 }

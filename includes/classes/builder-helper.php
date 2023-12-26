@@ -46,6 +46,8 @@ class Builder_Helper {
 			$object = get_post( $object_id );
 		}
 
+		$object = apply_filters( 'jet-form-builder/custom-template-object', $object, $object_id, $args );
+
 		if ( ! is_object( $object ) ) {
 			return '';
 		}
@@ -155,11 +157,11 @@ class Builder_Helper {
 	}
 
 	/**
-	 * @since 3.1.0
-	 *
 	 * @param array<array<string, string>> $attributes
 	 *
 	 * @return string
+	 * @since 3.1.0
+	 *
 	 */
 	public static function attrs( array $attributes ): string {
 		return implode(
@@ -169,7 +171,7 @@ class Builder_Helper {
 	}
 
 	/**
-	 * @param  array<array<string, string>> $attributes
+	 * @param array<array<string, string>> $attributes
 	 *
 	 * @return array
 	 */

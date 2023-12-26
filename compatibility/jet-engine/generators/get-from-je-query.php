@@ -2,6 +2,7 @@
 
 namespace JFB_Compatibility\Jet_Engine\Generators;
 
+use Jet_Engine\Query_Builder\Queries\Base_Query;
 use JFB_Compatibility\Jet_Engine\Generators\Je_Query_Object_Handlers\Base_Object_Handler;
 use JFB_Compatibility\Jet_Engine\Generators\Je_Query_Object_Handlers\User_Object_Handler;
 use Jet_Form_Builder\Generators\Base;
@@ -55,7 +56,8 @@ class Get_From_Je_Query extends Base {
 
 		$field = $args['generator_field'] ?? $args;
 
-		$args   = explode( '|', $field );
+		$args = explode( '|', $field );
+		/** @var Base_Query $query */
 		$query  = Query_Manager::instance()->get_query_by_id( $args[0] );
 		$result = array();
 
@@ -64,6 +66,8 @@ class Get_From_Je_Query extends Base {
 		}
 
 		$query->setup_query();
+		$this->get_block()->block_attrs['je_generator_query_type'] = $query->query_type;
+
 		$objects = $query->get_items();
 
 		$handler = $this->get_handler( $objects[0] ?? array() );

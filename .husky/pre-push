@@ -2,13 +2,16 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 while read local_ref local_sha remote_ref remote_sha; do
-    # Extracting the branch name
-    branch_name=$(echo "$local_ref" | cut -d '/' -f 3-)
+    # Extracting the branch name more reliably using sed
+    branch_name=$(echo "$local_ref" | sed 's|refs/heads/||')
 
-    # Check if the branch name matches any of the specified patterns
-    # shellcheck disable=SC2039
-    if ! [[ "$branch_name" =~ ^(main|(release/[0-9]+\.[0-9]+\.[0-9]+)|(issue/[0-9]+)|(suggestion/[0-9]+)|(feature/[a-z0-9\-]+)|(dev/[a-z0-9\-]+))$ ]]; then
+    # Regex pattern for allowed branch names
+    allowed_pattern="^(main|(release/[0-9]+\.[0-9]+\.[0-9]+)|(issue/[0-9]+)|(suggestion/[0-9]+)|(feature/[a-z0-9\-]+)|(dev/[a-z0-9\-]+))$"
+
+    # Check if the branch name matches the allowed pattern
+    if ! [[ "$branch_name" =~ $allowed_pattern ]]; then
         echo "Error: Branch name \"$branch_name\" is not allowed."
+        echo "Allowed patterns: main, release/x.y.z, issue/123, suggestion/123, feature/feature-name, dev/branch-name"
         exit 1
     fi
 done

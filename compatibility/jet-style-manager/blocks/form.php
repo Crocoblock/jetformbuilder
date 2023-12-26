@@ -8,6 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+use Jet_Form_Builder\Blocks\Types\Range_Field;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Manager;
 use JFB_Compatibility\Jet_Style_Manager\Blocks\Interfaces\Style_Block_It;
@@ -31,11 +32,15 @@ class Form implements Style_Block_It {
 		$this->process_field_label();
 		$this->process_field_required_mark();
 		$this->process_field_description();
+		$this->process_heading_field();
 
 		$this->process_text_field();
 		$this->process_textarea_field();
 		$this->process_select_field();
 		$this->process_checkradio_field();
+		$this->process_range_field();
+		$this->process_calculated_field();
+		$this->process_conditional_block();
 		$this->process_repeater_field();
 
 		$form_break = new Form_Break();
@@ -217,7 +222,7 @@ class Form implements Style_Block_It {
 	}
 
 	private function process_field_required_mark() {
-		$this->set_css_selector( 'required', '__label-text .%1$s__required' );
+		$this->set_css_selector( 'required', '__label-text %1$s__required' );
 
 		$this->get_manager()->start_section(
 			'style_controls',
@@ -287,13 +292,13 @@ class Form implements Style_Block_It {
 
 		$this->get_manager()->add_control(
 			$module->create_margin(
-				$this->selector( '__label' ),
+				$this->selector( '__desc' ),
 				'description_margin'
 			)
 		);
 		$this->get_manager()->add_control(
 			$module->create_padding(
-				$this->selector( '__label' ),
+				$this->selector( '__desc' ),
 				'description_padding'
 			)
 		);
@@ -379,7 +384,7 @@ class Form implements Style_Block_It {
 	private function process_text_field() {
 		/** @var Jet_Style_Manager $module */
 		$module = jet_form_builder()->compat( 'jet-style-manager' );
-		$this->set_css_selector( 'field', '__field-wrap input' );
+		$this->set_css_selector( 'field', '-row input' );
 
 		$this->get_manager()->start_section(
 			'style_controls',
@@ -557,7 +562,6 @@ class Form implements Style_Block_It {
 
 	private function process_select_field() {
 		$this->set_css_selector( 'select', '__field-wrap select' );
-		$this->set_css_selector( 'select-wrapper', '__field-wrap' );
 
 		$this->get_manager()->start_section(
 			'style_controls',
@@ -584,12 +588,9 @@ class Form implements Style_Block_It {
 					),
 				),
 				'css_selector' => array(
-					$this->selector( 'select-wrapper' ) => 'max-width: {{VALUE}}%',
-				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => 50,
-					),
+					$this->selector(
+						'-row.field-type-select-field %1$s__field-wrap'
+					) => 'max-width: {{VALUE}}%',
 				),
 			)
 		);
@@ -735,6 +736,34 @@ class Form implements Style_Block_It {
 			)
 		);
 
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'checkradio_items_space_between',
+				'type'         => 'range',
+				'label'        => __( 'Gap between options', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'units'        => array(
+					array(
+						'value'     => 'px',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 0,
+							'max'  => 50,
+						),
+					),
+				),
+				'css_selector' => array(
+					$this->selector( 'front-wrap' ) . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
+					$this->selector( 'front-wrap' ) . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
+				),
+				'attributes'   => array(
+					'default' => array(
+						'value' => 10,
+					),
+				),
+			)
+		);
+
 		$this->get_manager()->add_responsive_control(
 			array(
 				'id'           => 'checkradio_fields_control_size',
@@ -852,6 +881,521 @@ class Form implements Style_Block_It {
 
 		$this->get_manager()->end_tab();
 		$this->get_manager()->end_tabs();
+		$this->get_manager()->end_section();
+	}
+
+	private function process_range_field() {
+		$range = new \JFB_Compatibility\Jet_Style_Manager\Blocks\Range_Field();
+		$range->set_namespace( $this->get_namespace() );
+
+		$this->get_manager()->start_section(
+			'style_controls',
+			array(
+				'id'          => 'section_range_style',
+				'initialOpen' => false,
+				'title'       => __( 'Range', 'jet-form-builder' ),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'range_width',
+				'type'         => 'range',
+				'label'        => __( 'Max width', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'units'        => array(
+					array(
+						'value'     => '%',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 1,
+							'max'  => 100,
+						),
+					),
+					array(
+						'value'     => 'px',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 0,
+							'max'  => 1000,
+						),
+					),
+					array(
+						'value'     => 'em',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 0,
+							'max'  => 50,
+						),
+					),
+				),
+				'css_selector' => array(
+					$this->selector( '__field-wrap' ) => 'max-width: {{VALUE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'range_height',
+				'type'         => 'range',
+				'label'        => __( 'Range height', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'units'        => array(
+					array(
+						'value'     => 'px',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 1,
+							'max'  => 20,
+						),
+					),
+				),
+				'css_selector' => array(
+					'{{WRAPPER}}' => Range_Field::CSS_VAR_RANGE_HEIGHT . ': {{VALUE}}{{UNIT}}',
+				),
+				'attributes'   => array(
+					'default' => array(
+						'value' => 5,
+					),
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'range_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Range color', 'jet-form-builder' ),
+				'css_selector' => $range->style_range( 'background-color: {{VALUE}}' ),
+				'attributes'   => array(
+					'default' => array(
+						'value' => '#e3ddd8',
+					),
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'range_slider_size',
+				'type'         => 'range',
+				'label'        => __( 'Slider size', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'units'        => array(
+					array(
+						'value'     => 'px',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 1,
+							'max'  => 100,
+						),
+					),
+				),
+				'css_selector' => array(
+					'{{WRAPPER}}' => Range_Field::CSS_VAR_SLIDER_SIZE . ': {{VALUE}}{{UNIT}}',
+				),
+				'attributes'   => array(
+					'default' => array(
+						'value' => 18,
+					),
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'range_slider_background_color',
+				'type'         => 'color-picker',
+				'separator'    => 'after',
+				'label'        => __( 'Slider color', 'jet-form-builder' ),
+				'css_selector' => $range->style_slider( 'background-color: {{VALUE}}' ),
+				'attributes'   => array(
+					'default' => array(
+						'value' => '#ccc',
+					),
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'slider_border',
+				'type'         => 'border',
+				'label'        => __( 'Slider border', 'jet-form-builder' ),
+				'css_selector' => $range->style_slider( 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};' ),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'values_typography',
+				'type'         => 'typography',
+				'separator'    => 'after',
+				'css_selector' => array(
+					$range->selector( 'value' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'values_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Value color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$range->selector( 'value' ) => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->get_manager()->end_section();
+	}
+
+	private function process_calculated_field() {
+		$this->get_manager()->start_section(
+			'style_controls',
+			array(
+				'id'          => 'section_calc_style',
+				'initialOpen' => false,
+				'title'       => __( 'Calculated', 'jet-form-builder' ),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'calc_fields_typography',
+				'type'         => 'typography',
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( '__calculated-field' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'calc_fields_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( '__calculated-field' ) => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'calc_fields_prefix_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Prefix text color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( '__calculated-field-prefix' ) => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->get_manager()->add_responsive_control(
+			array(
+				'id'           => 'calc_fields_prefix_size',
+				'type'         => 'range',
+				'label'        => __( 'Prefix size', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'units'        => array(
+					array(
+						'value'     => 'px',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 0,
+							'max'  => 100,
+						),
+					),
+					array(
+						'value'     => 'em',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 0,
+							'max'  => 10,
+						),
+					),
+				),
+				'css_selector' => array(
+					$this->selector( '__calculated-field-prefix' ) => 'font-size: {{VALUE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'calc_fields_suffix_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Suffix text color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( '__calculated-field-suffix' ) => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->get_manager()->add_responsive_control(
+			array(
+				'id'           => 'calc_fields_suffix_size',
+				'type'         => 'range',
+				'label'        => __( 'Suffix size', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'units'        => array(
+					array(
+						'value'     => 'px',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 0,
+							'max'  => 100,
+						),
+					),
+					array(
+						'value'     => 'em',
+						'intervals' => array(
+							'step' => 1,
+							'min'  => 0,
+							'max'  => 10,
+						),
+					),
+				),
+				'css_selector' => array(
+					$this->selector( '__calculated-field-suffix' ) => 'font-size: {{VALUE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'calc_fields_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( '__calculated-field' ) => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
+		/** @var Jet_Style_Manager $module */
+		$module = jet_form_builder()->compat( 'jet-style-manager' );
+
+		$this->get_manager()->add_responsive_control(
+			$module->create_margin(
+				$this->selector( '__calculated-field' ),
+				'calc_fields_margin'
+			)
+		);
+		$this->get_manager()->add_responsive_control(
+			$module->create_padding(
+				$this->selector( '__calculated-field' ),
+				'calc_fields_padding'
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'calc_fields_border',
+				'type'         => 'border',
+				'label'        => __( 'Border', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( '__calculated-field' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
+
+		$this->get_manager()->end_section();
+	}
+
+	private function process_heading_field() {
+		/** @var Jet_Style_Manager $module */
+		$module = jet_form_builder()->compat( 'jet-style-manager' );
+
+		$this->get_manager()->start_section(
+			'style_controls',
+			array(
+				'id'    => 'heading_style',
+				'title' => __( 'Heading', 'jet-form-builder' ),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			$module->create_margin(
+				$this->selector( '__heading' ),
+				'heading_margin'
+			)
+		);
+		$this->get_manager()->add_control(
+			$module->create_padding(
+				$this->selector( '__heading' ),
+				'heading_padding'
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'heading_alignment',
+				'type'         => 'choose',
+				'label'        => __( 'Label alignment', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'options'      => array(
+					'left'   => array(
+						'shortcut' => __( 'Left', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignleft',
+					),
+					'center' => array(
+						'shortcut' => __( 'Center', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-aligncenter',
+					),
+					'right'  => array(
+						'shortcut' => __( 'Right', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignright',
+					),
+				),
+				'css_selector' => array(
+					$this->selector( '__heading' ) => 'text-align: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'heading_typography',
+				'type'         => 'typography',
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( '__heading' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'heading_border',
+				'type'         => 'border',
+				'label'        => __( 'Label border', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( '__heading' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'heading_color',
+				'type'         => 'color-picker',
+				'separator'    => 'after',
+				'label'        => __( 'Label text Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( '__heading' ) => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'heading_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Label background color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( '__heading' ) => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			$module->create_margin(
+				$this->selector( '__heading-desc' ),
+				array(
+					'id'    => 'description_margin',
+					'label' => __( 'Description margin', 'jet-form-builder' ),
+				)
+			)
+		);
+		$this->get_manager()->add_control(
+			$module->create_padding(
+				$this->selector( '__heading-desc' ),
+				array(
+					'id'    => 'description_padding',
+					'label' => __( 'Description margin', 'jet-form-builder' ),
+				)
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'description_alignment',
+				'type'         => 'choose',
+				'label'        => __( 'Description alignment', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'options'      => array(
+					'left'   => array(
+						'shortcut' => __( 'Left', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignleft',
+					),
+					'center' => array(
+						'shortcut' => __( 'Center', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-aligncenter',
+					),
+					'right'  => array(
+						'shortcut' => __( 'Right', 'jet-form-builder' ),
+						'icon'     => 'dashicons-editor-alignright',
+					),
+				),
+				'css_selector' => array(
+					$this->selector( '__heading-desc' ) => 'text-align: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'description_border',
+				'type'         => 'border',
+				'label'        => __( 'Description border', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( '__heading-desc' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'description_typography',
+				'type'         => 'typography',
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( '__heading-desc' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'description_color',
+				'type'         => 'color-picker',
+				'separator'    => 'after',
+				'label'        => __( 'Description text color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( '__heading-desc' ) => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'description_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Description background color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( '__heading-desc' ) => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
 		$this->get_manager()->end_section();
 	}
 
@@ -1151,6 +1695,60 @@ class Form implements Style_Block_It {
 
 		$this->get_manager()->end_tab();
 		$this->get_manager()->end_tabs();
+		$this->get_manager()->end_section();
+	}
+
+	/**
+	 * @throws Repository_Exception
+	 */
+	private function process_conditional_block() {
+		$this->get_manager()->start_section(
+			'style_controls',
+			array(
+				'id'    => 'conditional_block_style',
+				'title' => __( 'Conditional block', 'jet-form-builder' ),
+			)
+		);
+
+		/** @var Jet_Style_Manager $module */
+		$module = jet_form_builder()->compat( 'jet-style-manager' );
+
+		$this->get_manager()->add_responsive_control(
+			$module->create_margin(
+				$this->selector( '__conditional' ),
+				'conditional_margin'
+			)
+		);
+		$this->get_manager()->add_responsive_control(
+			$module->create_padding(
+				$this->selector( '__conditional' ),
+				'conditional_padding'
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'conditional_border',
+				'type'         => 'border',
+				'label'        => __( 'Border', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( '__conditional' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
+
+		$this->get_manager()->add_control(
+			array(
+				'id'           => 'conditional_bg_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( '__conditional' ) => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
 		$this->get_manager()->end_section();
 	}
 

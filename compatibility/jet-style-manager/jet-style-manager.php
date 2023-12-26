@@ -89,7 +89,7 @@ class Jet_Style_Manager implements Base_Module_It, Base_Module_After_Install_It,
 		$padding = array(
 			'type'         => 'dimensions',
 			'label'        => __( 'Padding', 'jet-form-builder' ),
-			'units'        => array( 'px', '%' ),
+			'units'        => array( 'px', '%', 'em' ),
 			'separator'    => 'after',
 			'css_selector' => array(
 				$selector => 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};',

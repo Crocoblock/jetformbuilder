@@ -146,14 +146,22 @@ abstract class Base_Db_Model {
 
 	/**
 	 * @param array $columns
-	 *
 	 * @param null $format
 	 *
 	 * @return int
 	 * @throws Sql_Exception
+	 * @since 3.3.0 Added inner hooks
 	 */
 	public function insert( $columns = array(), $format = null ): int {
-		return Execution_Builder::instance()->insert( $this, $columns, $format );
+		$columns = apply_filters( 'jet-form-builder/db/before-insert', $columns, $this );
+		$columns = apply_filters( "jet-form-builder/db/{$this::table_name()}/before-insert", $columns );
+
+		$id = Execution_Builder::instance()->insert( $this, $columns, $format );
+
+		do_action( 'jet-form-builder/db/after-insert', $id, $columns, $this );
+		do_action( "jet-form-builder/db/{$this::table_name()}/after-insert", $id, $columns );
+
+		return $id;
 	}
 
 	public function insert_soft( $columns = array(), $format = null ): int {

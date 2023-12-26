@@ -41,6 +41,10 @@ class Module implements
 	use Base_Module_Handle_Trait;
 	use Base_Module_Url_Trait;
 
+	const WAITING = 'verification_pending';
+	const EXPIRED = 'verification_expired';
+	const SUCCESS = 'verified';
+
 	/**
 	 * @var Inner_Module
 	 */
@@ -204,7 +208,7 @@ class Module implements
 	 * @throws Sql_Exception
 	 */
 	public function do_verification( Webhook\Module $module ) {
-		$record = Webhook\Db\Views\Record_By_Token_View::findOne(
+		$record = Webhook\Form_Record\Db\Views\Record_By_Token_View::findOne(
 			array(
 				'token_id' => $module->get_token_id(),
 			)

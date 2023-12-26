@@ -12,7 +12,6 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use JFB_Modules\Form_Record\Tools;
 use JFB_Modules\Jobs\Async_Job;
 use JFB_Modules\Jobs\Interfaces\Self_Execution_Job_It;
 use JFB_Modules\Jobs;
@@ -21,27 +20,40 @@ use JFB_Modules\Verification;
 use JFB_Modules\Jobs\Traits\Self_Execution_Job_Trait;
 use JFB_Modules\Security;
 use JFB_Modules\Verification\Events;
-use JFB_Modules\Webhook\Db\Views\Token_By_Record_View;
+use JFB_Modules\Webhook\Form_Record\Db\Views\Token_By_Record_View;
 
 class Verify_Manually extends Async_Job implements Self_Execution_Job_It {
 
 	use Self_Execution_Job_Trait;
 
+	private $real_user_id = 0;
+
 	public function __construct() {
 		$this->set_hook( 'verification/verify' );
 	}
 
+	public function init_hooks() {
+		add_action( $this->get_hook(), array( $this, 'execute' ), 10, 2 );
+	}
+
+	public function remove_hooks() {
+		remove_action( $this->get_hook(), array( $this, 'execute' ) );
+	}
+
 	/**
 	 * @param $record_id
+	 * @param $user_id
 	 *
 	 * @throws Repository_Exception
 	 */
-	public function execute( $record_id ) {
+	public function execute( $record_id, $user_id ) {
 		$this->set_args( array( $record_id ) );
 		/** @var Jobs\Module $jobs */
 		$jobs = jet_form_builder()->module( 'jobs' );
 		/** @var Webhook\Module $webhooks */
 		$webhooks = jet_form_builder()->module( 'webhook' );
+		/** @var Verification\Module $verification */
+		$verification = jet_form_builder()->module( 'verification' );
 
 		try {
 			$token_row = Token_By_Record_View::findOne(
@@ -53,11 +65,23 @@ class Verify_Manually extends Async_Job implements Self_Execution_Job_It {
 			\ActionScheduler_Logger::instance()->log(
 				$jobs->get_action_id(),
 				/* translators: %d - id of the form record */
-				sprintf( __( 'undefined webhook by record-ID: %d', 'jet-form-builder' ), $record_id )
+				__( 'undefined webhook by record-ID', 'jet-form-builder' )
 			);
 
 			return;
 		}
+
+		/**
+		 * Triggered by $webhooks->confirm();
+		 *
+		 * @see \JFB_Modules\Webhook\Module::confirm
+		 */
+		add_action( 'jet-form-builder/webhook/verification', array( $this, 'execute_actions' ) );
+
+		// Disable base verification process
+		remove_action( 'jet-form-builder/webhook/verification', array( $verification, 'on_verification' ) );
+
+		$this->set_user( $user_id );
 
 		$webhooks->set_token_id( (int) $token_row['id'] );
 		$webhooks->set_token( Security\Csrf\Csrf_Tools::generate() );
@@ -71,7 +95,7 @@ class Verify_Manually extends Async_Job implements Self_Execution_Job_It {
 	 *
 	 * @throws Repository_Exception
 	 */
-	protected function execute_actions( Webhook\Module $webhooks ) {
+	public function execute_actions( Webhook\Module $webhooks ) {
 		global $wpdb;
 		/** @var Verification\Module $verification */
 		$verification = jet_form_builder()->module( 'verification' );
@@ -102,16 +126,25 @@ class Verify_Manually extends Async_Job implements Self_Execution_Job_It {
 				/* translators: %d - id of the form record */
 				sprintf( __( 'undefined record by webhook-ID: %d', 'jet-form-builder' ), $webhooks->get_token_id() )
 			);
+		} finally {
+			$this->reset_user();
 		}
 	}
 
-	public function init_hooks() {
-		add_action( $this->get_hook(), array( $this, 'execute' ) );
-		add_action( 'jet-form-builder/webhook/verification', array( $this, 'execute_actions' ) );
+	protected function set_user( $user_id ) {
+		$this->set_real_user_id( get_current_user_id() );
+
+		wp_set_current_user( $user_id );
 	}
 
-	public function remove_hooks() {
-		remove_action( $this->get_hook(), array( $this, 'execute' ) );
-		remove_action( 'jet-form-builder/webhook/verification', array( $this, 'execute_actions' ) );
+	protected function reset_user() {
+		wp_set_current_user( $this->real_user_id );
+	}
+
+	/**
+	 * @param int $real_user_id
+	 */
+	protected function set_real_user_id( int $real_user_id ) {
+		$this->real_user_id = $real_user_id;
 	}
 }

@@ -19,6 +19,11 @@ abstract class Handler_Exception extends \Exception {
 
 	protected $additional_data;
 
+	/**
+	 * @var Status_Info
+	 */
+	protected $status;
+
 	public function __construct( $message = '', ...$additional_data ) {
 		parent::__construct( $message, 0, null );
 
@@ -83,11 +88,7 @@ abstract class Handler_Exception extends \Exception {
 	}
 
 	public function is_success(): bool {
-		if ( 'success' === $this->message ) {
-			return true;
-		}
-
-		return is_string( $this->message ) && 0 === strpos( $this->message, Manager::DYNAMIC_SUCCESS_PREF );
+		return $this->get_status()->is_success();
 	}
 
 	/**
@@ -103,10 +104,21 @@ abstract class Handler_Exception extends \Exception {
 			return;
 		}
 
-		$status        = new Status_Info( $this->message );
-		$this->message = $status->is_success() ? 'success' : 'failed';
+		$this->message = $this->get_status()->is_success() ? 'success' : 'failed';
 
-		array_unshift( $this->additional_data, $status->get_raw_message() );
+		array_unshift( $this->additional_data, $this->get_status()->get_raw_message() );
+	}
+
+	/**
+	 * @return Status_Info
+	 */
+	protected function get_status(): Status_Info {
+		if ( $this->status ) {
+			return $this->status;
+		}
+		$this->status = new Status_Info( $this->message );
+
+		return $this->status;
 	}
 
 }

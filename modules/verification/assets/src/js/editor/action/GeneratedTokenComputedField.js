@@ -5,7 +5,7 @@ function GeneratedTokenComputedField() {
 	TokenComputedField.call( this );
 
 	this.isSupported = function ( action ) {
-		if ( 'verification' === action.type ) {
+		if ( 'verification' === action.type && !action.selfSettings.who_can ) {
 			return true;
 		}
 		if ( 'register_user' !== action.type ) {

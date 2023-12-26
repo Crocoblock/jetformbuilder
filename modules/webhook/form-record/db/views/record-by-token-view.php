@@ -1,13 +1,12 @@
 <?php
 
 
-namespace JFB_Modules\Webhook\Db\Views;
+namespace JFB_Modules\Webhook\Form_Record\Db\Views;
 
 use Jet_Form_Builder\Db_Queries\Query_Builder;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use JFB_Modules\Form_Record\Models\Record_Model;
-use JFB_Modules\Webhook\Db\Models\Tokens_Model;
-use JFB_Modules\Webhook\Db\Models\Tokens_To_Records_Model;
+use JFB_Modules\Webhook\Form_Record\Db\Models\Tokens_To_Records_Model;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

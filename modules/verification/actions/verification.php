@@ -92,18 +92,25 @@ class Verification extends Base {
 			self::URL
 		);
 
-		add_action(
-			'jet-form-builder/form-handler/after-send',
-			array( $this, 'connect_record_or_delete_token' ),
-			10,
-			2
-		);
-
 		$this->send_default_email();
+
+		if ( empty( $this->settings['who_can'] ) ) {
+			return;
+		}
+		/**
+		 * Clear parsers with verification info,
+		 * to restrict user from self-verification
+		 */
+		jet_fb_context()->remove( self::TOKEN );
+		jet_fb_context()->remove( self::URL );
 	}
 
 	public function send_default_email() {
-		if ( ! empty( $this->settings['custom_email'] ) || empty( $this->settings['mail_to'] ) ) {
+		if (
+			! empty( $this->settings['custom_email'] ) ||
+			empty( $this->settings['mail_to'] ) ||
+			'admin' === ( $this->settings['who_can'] ?? '' )
+		) {
 			return;
 		}
 
@@ -137,29 +144,5 @@ class Verification extends Base {
 		 * by `jet_fb_action_handler()->process_single_action`
 		 */
 		jet_fb_action_handler()->set_current_action( $this->_id );
-	}
-
-	/**
-	 * @param $handler
-	 * @param $is_success
-	 *
-	 * @throws Sql_Exception
-	 */
-	public function connect_record_or_delete_token( $handler, $is_success ) {
-		$record_id = jet_fb_action_handler()->get_context( Save_Record::ID, 'id' );
-		$token_id  = jet_fb_context()->get_value( self::TOKEN_ID );
-
-		if ( ! $is_success ) {
-			( new Tokens_Model() )->delete( array( 'id' => $token_id ) );
-
-			return;
-		}
-
-		( new Tokens_To_Records_Model() )->insert(
-			array(
-				'token_id'  => $token_id,
-				'record_id' => $record_id,
-			)
-		);
 	}
 }

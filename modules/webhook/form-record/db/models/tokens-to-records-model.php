@@ -1,6 +1,6 @@
 <?php
 
-namespace JFB_Modules\Webhook\Db\Models;
+namespace JFB_Modules\Webhook\Form_Record\Db\Models;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

@@ -11,8 +11,8 @@ const {
 function VerificationURLComputedField() {
 	BaseComputedField.call( this );
 
-	this.getSupportedActions = function () {
-		return [ 'verification' ];
+	this.isSupported = function ( action ) {
+		return 'verification' === action.type && !action.selfSettings.who_can;
 	};
 
 	this.getName = function () {

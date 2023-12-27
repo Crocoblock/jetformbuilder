@@ -32,6 +32,7 @@ class Form_Records extends Base_Page {
 	}
 
 	public function assets() {
+		wp_enqueue_style( Pages_Manager::STYLE_ADMIN );
 		wp_enqueue_script( Pages_Manager::SCRIPT_VUEX_PACKAGE );
 
 		parent::assets();

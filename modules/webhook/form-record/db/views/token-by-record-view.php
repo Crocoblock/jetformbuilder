@@ -27,7 +27,10 @@ LEFT JOIN `{$tokens}` ON 1=1
 	}
 
 	public function select_columns(): array {
-		return Tokens_Model::schema_columns();
+		return array_merge(
+			Tokens_Model::schema_columns(),
+			Tokens_To_Records_Model::schema_columns( 'main' )
+		);
 	}
 
 }

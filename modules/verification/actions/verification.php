@@ -74,7 +74,7 @@ class Verification extends Base {
 		jet_fb_context()->make_secure( self::URL );
 		jet_fb_context()->make_secure( self::TOKEN_ID );
 
-		$lifespan = $this->settings['lifespan'] ?? '';
+		$lifespan = $this->settings['lifespan'] ?? 4;
 
 		list( $id, $token ) = Tokens_Model::create_token( $this->get_id(), $lifespan );
 

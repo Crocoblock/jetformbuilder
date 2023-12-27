@@ -19,6 +19,10 @@ const {
 	      AlertsList,
       } = JetFBComponents;
 
+const {
+	      PromiseWrapper,
+      } = JetFBMixins;
+
 const { apiFetch } = wp;
 
 export default {
@@ -29,6 +33,9 @@ export default {
 		TablePagination,
 		FormBuilderPage,
 	},
+	mixins: [
+		PromiseWrapper,
+	],
 	created() {
 		jfbEventBus.$on( 'alert-click-update', ( { button } ) => {
 			this.installMigrations( button );

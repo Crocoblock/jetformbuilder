@@ -1,11 +1,12 @@
-const path  = require( 'path' );
+const path = require( 'path' );
 
 module.exports = {
 	name: 'prod:jfb-verification',
 	context: path.resolve( __dirname, '../assets/src/js' ),
 	entry: {
 		'editor': './editor/main.js',
-		'admin/form-records': './admin/form-records-page/main.js'
+		'admin/form-records': './admin/form-records-page/main.js',
+		'admin/form-record-single': './admin/form-records-page-single/main.js',
 	},
 	output: {
 		path: path.resolve( __dirname, '../assets/build/js' ),

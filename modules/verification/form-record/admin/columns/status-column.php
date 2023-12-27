@@ -42,8 +42,9 @@ class Status_Column extends Column_Advanced_Base {
 		$status = $this->get_token_status( $record );
 
 		return array(
-			'type' => self::STATUSES_MAP[ $status ],
-			'text' => $help_labels[ $status ] ?? '',
+			'type'   => self::STATUSES_MAP[ $status ],
+			'text'   => $help_labels[ $status ] ?? '',
+			'status' => $status,
 		);
 	}
 

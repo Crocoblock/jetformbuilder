@@ -64,8 +64,9 @@ class Single_Form_Record_Page extends Base_Single_Page {
 	}
 
 	public function assets() {
-		wp_enqueue_script( Pages_Manager::SCRIPT_VUEX_PACKAGE );
+		wp_enqueue_style( Pages_Manager::STYLE_ADMIN );
 		wp_enqueue_style( Pages_Manager::STYLE_DASHICONS );
+		wp_enqueue_script( Pages_Manager::SCRIPT_VUEX_PACKAGE );
 
 		parent::assets();
 	}

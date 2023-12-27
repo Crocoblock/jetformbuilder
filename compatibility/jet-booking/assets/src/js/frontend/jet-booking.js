@@ -1,89 +1,10 @@
-const {
-	      InputData,
-	      BaseSignal,
-      } = JetFormBuilderAbstract;
+import CheckOutInput from './CheckOutInput';
+import CheckOutSignal from './CheckOutSignal';
 
 const {
 	      addAction,
 	      addFilter,
       } = JetPlugins.hooks;
-
-function CheckOutInput() {
-	InputData.call( this );
-
-	/**
-	 * @see https://github.com/Crocoblock/jetformbuilder/issues/222
-	 * @type {string}
-	 */
-	this.value.current = '';
-
-	this.isSupported = function ( node ) {
-		return 'checkin-checkout' === node.dataset.field;
-	};
-
-	this.addListeners = function () {
-		const [ node ] = this.nodes;
-
-		jQuery( node ).on( 'change.JetFormBuilderMain', () => {
-			this.value.current = node.value;
-		} );
-
-		const inputs = node.parentElement.querySelectorAll(
-			'.jet-abaf-field__input' );
-
-		for ( const input of inputs ) {
-			input.addEventListener( 'blur', () => this.reportOnBlur() );
-		}
-	};
-
-	/**
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1562
-	 *
-	 * @returns {boolean}
-	 */
-	this.checkIsRequired = function () {
-		const [ node ] = this.nodes;
-
-		if ( node.required ) {
-			return true;
-		}
-
-		return !!node.parentElement.querySelector(
-			'.jet-abaf-field__input[required]',
-		);
-	};
-
-	this.onClear = function () {
-		this.silenceSet( '' );
-	};
-
-	this.setNode = function ( node ) {
-		InputData.prototype.setNode.call( this, node );
-
-		let fieldsWrapper = node.closest( '.jet-abaf-separate-fields' );
-
-		if ( !fieldsWrapper ) {
-			fieldsWrapper = node.closest( '.jet-abaf-field' );
-		}
-
-		this.nodes.push( fieldsWrapper );
-	};
-}
-
-function CheckOutSignal() {
-	BaseSignal.call( this );
-
-	this.isSupported = function ( node, input ) {
-		return input instanceof CheckOutInput;
-	};
-
-	this.runSignal = function () {
-
-	};
-}
-
-CheckOutInput.prototype  = Object.create( InputData.prototype );
-CheckOutSignal.prototype = Object.create( BaseSignal.prototype );
 
 addAction(
 	'jet.fb.observe.before',

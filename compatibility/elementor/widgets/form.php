@@ -1697,7 +1697,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( $simple_input ) => 'max-width: {{SIZE}}{{UNIT}};flex: 0 1 {{SIZE}}{{UNIT}};',
+						$this->selector( $simple_input ) => 'max-width: {{SIZE}}{{UNIT}};',
 					),
 				)
 			);

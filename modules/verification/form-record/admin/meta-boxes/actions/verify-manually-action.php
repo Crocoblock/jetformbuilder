@@ -33,7 +33,11 @@ class Verify_Manually_Action extends Base_Rest_Page_Action {
 	}
 
 	public function get_payload(): array {
-		return array( jet_fb_current_page()->get_id() );
+		return array(
+			'checked' => array(
+				jet_fb_current_page()->get_id()
+			),
+		);
 	}
 
 	/**

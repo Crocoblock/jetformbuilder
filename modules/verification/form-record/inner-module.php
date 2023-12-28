@@ -133,7 +133,9 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 		wp_enqueue_script(
 			$this->get_handle(),
 			$module->get_url( 'assets/build/js/admin/form-record-single.js' ),
-			array(),
+			array(
+				'wp-api-fetch',
+			),
 			jet_form_builder()->get_version(),
 			true
 		);

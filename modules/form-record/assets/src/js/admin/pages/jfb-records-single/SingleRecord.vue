@@ -69,12 +69,6 @@ export default {
 <style lang="scss">
 
 #form-fields-wrapper {
-	margin-bottom: 20px;
-
-	#form-fields {
-		margin-bottom: unset;
-	}
-
 	.jfb-pagination {
 		padding: 0.8em 0;
 	}

@@ -736,34 +736,6 @@ class Form implements Style_Block_It {
 			)
 		);
 
-		$this->get_manager()->add_control(
-			array(
-				'id'           => 'checkradio_items_space_between',
-				'type'         => 'range',
-				'label'        => __( 'Gap between options', 'jet-form-builder' ),
-				'separator'    => 'after',
-				'units'        => array(
-					array(
-						'value'     => 'px',
-						'intervals' => array(
-							'step' => 1,
-							'min'  => 0,
-							'max'  => 50,
-						),
-					),
-				),
-				'css_selector' => array(
-					$this->selector( 'front-wrap' ) . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
-					$this->selector( 'front-wrap' ) . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
-				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => 10,
-					),
-				),
-			)
-		);
-
 		$this->get_manager()->add_responsive_control(
 			array(
 				'id'           => 'checkradio_fields_control_size',
@@ -1208,6 +1180,9 @@ class Form implements Style_Block_It {
 		$this->get_manager()->end_section();
 	}
 
+	/**
+	 * @throws Repository_Exception
+	 */
 	private function process_heading_field() {
 		/** @var Jet_Style_Manager $module */
 		$module = jet_form_builder()->compat( 'jet-style-manager' );
@@ -1319,7 +1294,7 @@ class Form implements Style_Block_It {
 				$this->selector( '__heading-desc' ),
 				array(
 					'id'    => 'description_padding',
-					'label' => __( 'Description margin', 'jet-form-builder' ),
+					'label' => __( 'Description padding', 'jet-form-builder' ),
 				)
 			)
 		);

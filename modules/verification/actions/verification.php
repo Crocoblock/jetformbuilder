@@ -13,17 +13,13 @@ use Jet_Form_Builder\Actions\Actions_Tools;
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
 use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Actions\Types\Base;
-use Jet_Form_Builder\Db_Queries\Base_Db_Model;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
-use Jet_Form_Builder\Exceptions\Action_Exception;
 use JFB_Modules\Webhook\Db\Models\Tokens_Model;
-use JFB_Modules\Webhook\Db\Models\Tokens_To_Records_Model;
 use JFB_Modules\Form_Record\Action_Types\Save_Record;
 use JFB_Modules\Verification\Events\Verification_Success;
 use JFB_Modules\Verification\Events\Verification_Failed;
 use JFB_Modules\Verification\Module;
 use JFB_Modules\Webhook;
-use JFB_Modules\Security;
 
 class Verification extends Base {
 

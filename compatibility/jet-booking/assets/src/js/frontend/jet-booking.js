@@ -86,3 +86,20 @@ addFilter(
 		return macroPart;
 	},
 );
+
+addFilter(
+	'jet.fb.calculated.callback',
+	'jet-form-builder/booking-field-parser',
+	/**
+	 * @param value {mixed|Boolean}
+	 * @param input {InputData|CheckOutInput}
+	 * @param calculatedInput {CalculatedData}
+	 */
+	function ( value, input, calculatedInput ) {
+		if ( false !== value || 'checkin-checkout' !== input.inputType ) {
+			return value;
+		}
+
+		return input.parseValueForCalculated();
+	},
+);

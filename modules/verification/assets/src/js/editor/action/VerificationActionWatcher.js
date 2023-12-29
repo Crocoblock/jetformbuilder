@@ -5,7 +5,7 @@ const {
 
 let prevActions;
 
-const VerificationActionWatcher = () => {
+const watcher = () => {
 	const rawMeta = (
 		select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {}
 	);
@@ -54,5 +54,7 @@ const VerificationActionWatcher = () => {
 	);
 
 };
+
+const VerificationActionWatcher = () => setTimeout( watcher, 0 );
 
 export default VerificationActionWatcher;

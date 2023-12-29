@@ -17,6 +17,7 @@ import Tools, {
 	assetUrl,
 	set,
 	isEmpty,
+	extendPrototype,
 } from './tools';
 
 import getAvailableFields from './blocks/helpers/getAvailableFields';
@@ -355,6 +356,7 @@ window.JetFBActions = {
 	set,
 	isEmpty,
 	getSupport,
+	extendPrototype,
 };
 
 // JFBHooks

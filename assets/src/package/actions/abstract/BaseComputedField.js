@@ -8,8 +8,9 @@ function BaseComputedField() {
 
 /**
  * @param action {BaseAction}
+ * @param fields {Object[]}
  */
-BaseComputedField.prototype.isSupported = function ( action ) {
+BaseComputedField.prototype.isSupported = function ( action, fields ) {
 	return this.getSupportedActions().includes( action.type );
 };
 

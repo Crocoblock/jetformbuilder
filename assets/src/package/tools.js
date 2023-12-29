@@ -251,4 +251,17 @@ export function isEmpty( value ) {
 	return !value?.length;
 }
 
+export const extendPrototype = ( ParentFunction ) => {
+	function ChildFunctionPrototype() {
+		ParentFunction.call( this );
+	}
+
+	ChildFunctionPrototype.prototype = Object.create(
+		ParentFunction.prototype,
+	);
+
+	return ChildFunctionPrototype;
+};
+
+
 export default Tools;

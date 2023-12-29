@@ -1,7 +1,8 @@
 /**
  * @param field
  * @param settings {{
- *     isScoped: Boolean
+ *     isScoped: boolean|undefined
+ *     priority: number|undefined
  * }}
  */
 function addComputedField( field, settings = {} ) {

@@ -105,12 +105,20 @@ export default {
 		}
 	),
 	[ constants.addComputedField ]: ( state, action ) => {
+		const computedFields = [
+			...state.computedFields,
+			{ field: action.field, settings: action.settings },
+		].sort( ( { settings: current }, { settings: next } ) => {
+			return (
+				current?.priority ?? 10
+			) - (
+				next?.priority ?? 10
+			);
+		} );
+
 		return {
 			...state,
-			computedFields: [
-				...state.computedFields,
-				{ field: action.field, settings: action.settings },
-			],
+			computedFields,
 		};
 	},
 	[ constants.editAction ]: ( state, action ) => {

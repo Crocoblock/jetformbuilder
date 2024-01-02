@@ -65,10 +65,20 @@ class Module implements
 			$this->get_handle(),
 			$this->get_url( 'assets/build/editor.js' ),
 			array(),
+			jet_form_builder()->get_version(),
 			true
 		);
 
 		wp_enqueue_style(
+			$this->get_handle(),
+			$this->get_url( 'assets/build/switcher.css' ),
+			array(),
+			jet_form_builder()->get_version()
+		);
+	}
+
+	public function register_frontend_scripts() {
+		wp_register_style(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/switcher.css' ),
 			array(),

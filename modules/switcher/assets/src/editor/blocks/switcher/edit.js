@@ -5,19 +5,13 @@ const {
 	      GeneralFields,
 	      AdvancedFields,
 	      FieldWrapper,
-	      ValidationToggleGroup,
-	      ValidationBlockMessage,
-	      StylePanel,
-	      StyleColorItem,
-	      StyleColorItemsWrapper,
-	      StyleBorderItem,
-	      StyleBorderRadiusItem,
       } = JetFBComponents;
 
 const {
 	      useIsAdvancedValidation,
 	      useUniqueNameOnDuplicate,
 	      useJetStyle,
+	      useUniqKey,
       } = JetFBHooks;
 
 const { __ } = wp.i18n;
@@ -27,21 +21,15 @@ const {
 	      useBlockProps,
       } = wp.blockEditor;
 
-const {
-	      PanelBody,
-	      RangeControl,
-	      ToggleControl,
-      } = wp.components;
-
 export default function WysiwygEdit( props ) {
 
 	const {
-		      editProps: { uniqKey },
 		      isSelected,
 		      attributes,
 		      setAttributes,
 	      } = props;
 
+	const uniqKey  = useUniqKey();
 	const jetStyle = useJetStyle?.( {
 		className: [
 			'jet-form-builder-row',

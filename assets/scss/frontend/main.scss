@@ -148,7 +148,7 @@
 	box-sizing: border-box
 }
 
-.layout-column .jet-form-builder__field:not(.checkboxes-field):not(.radio-field):not(.range-field) {
+.layout-column .jet-form-builder__field {
 	max-width: 100%;
 	width: 100%;
 	-webkit-box-flex: 0;
@@ -157,7 +157,7 @@
 	margin: unset;
 }
 
-.layout-row .jet-form-builder__field:not(.checkboxes-field):not(.radio-field):not(.range-field) {
+.layout-row .jet-form-builder__field {
 	width: 100%
 }
 

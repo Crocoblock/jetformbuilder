@@ -54,6 +54,6 @@
 		"jet-forms/repeater-row--default",
 		"jet-forms/repeater-row--current-index"
 	],
-	"viewScript": "jet-fb-wysiwyg",
-	"style": "jet-fb-wysiwyg"
+	"viewScript": "jet-fb-switcher",
+	"style": "jet-fb-switcher"
 }

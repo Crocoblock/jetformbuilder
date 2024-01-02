@@ -52,6 +52,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Ai\Module(),
 			new Validation\Module(),
 			new Wysiwyg\Module(),
+			new Switcher\Module(),
 		);
 	}
 

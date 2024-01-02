@@ -16,6 +16,8 @@ function ToggleControl( {
 	onChange = () => {},
 	children = null,
 	help = null,
+	flexLabelProps = {},
+	outsideLabel = null,
 } ) {
 	const Help = help;
 
@@ -24,16 +26,22 @@ function ToggleControl( {
 
 	return <BaseControl id={ id }>
 		<Flex direction="column">
-			<Flex gap={ 3 } align="flex-start">
+			<Flex
+				gap={ 3 }
+				align="flex-start"
+				justify="flex-start"
+				{ ...flexLabelProps }
+			>
 				<FormToggle
 					id={ id }
 					checked={ checked }
 					onChange={ ( event ) => onChange( event.target.checked ) }
 					disabled={ disabled }
 				/>
-				<label htmlFor={ id } style={ { width: '100%' } }>
+				<label htmlFor={ id }>
 					{ children }
 				</label>
+				{ outsideLabel }
 			</Flex>
 			{ 'string' === typeof Help
 			  ? <BaseHelp>{ Help }</BaseHelp>

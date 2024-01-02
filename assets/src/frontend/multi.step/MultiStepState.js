@@ -34,12 +34,24 @@ function MultiStepState() {
 	 */
 	this.elements = [];
 
-	this.setScope = function ( rootOrBlock ) {
+	this.setScope    = function ( rootOrBlock ) {
 		if ( rootOrBlock instanceof ConditionalBlock ) {
 			this.block = rootOrBlock;
 		}
 		else {
 			this.root = rootOrBlock;
+		}
+	};
+	this.setProgress = function () {
+		this.index = new ReactiveVar( 1 );
+		this.index.make();
+		this.index.watch( this.onChangeIndex.bind( this ) );
+
+		for ( const child of this.getScopeNode().children ) {
+			if ( !child.matches( '.jet-form-builder-progress-pages' ) ) {
+				continue;
+			}
+			this.progress = new ProgressBar( child, this );
 		}
 	};
 	/**
@@ -57,17 +69,6 @@ function MultiStepState() {
 		);
 
 		this.elements.forEach( page => page.observe() );
-
-		this.index = new ReactiveVar( 1 );
-		this.index.make();
-		this.index.watch( this.onChangeIndex.bind( this ) );
-
-		for ( const child of this.getScopeNode().children ) {
-			if ( !child.matches( '.jet-form-builder-progress-pages' ) ) {
-				continue;
-			}
-			this.progress = new ProgressBar( child, this );
-		}
 
 		const { submitter } = this.getRoot().getSubmit();
 		// is ajax

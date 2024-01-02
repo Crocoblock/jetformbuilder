@@ -89,7 +89,7 @@ class Module implements
 	}
 
 	public function init_hooks() {
-		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
+		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ), 0 );
 		add_action( 'jet-form-builder/actions/register', array( $this, 'actions_register' ) );
 		/**
 		 * It runs by `webhook` module
@@ -109,7 +109,7 @@ class Module implements
 	}
 
 	public function remove_hooks() {
-		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ) );
+		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_editor_assets' ), 0 );
 		remove_action( 'jet-form-builder/actions/register', array( $this, 'actions_register' ) );
 		remove_action( 'jet-form-builder/webhook/verification', array( $this, 'on_verification' ) );
 		remove_action(

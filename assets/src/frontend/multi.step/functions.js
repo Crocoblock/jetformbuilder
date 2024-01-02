@@ -17,6 +17,7 @@ function createMultiStep( rootOrBlock ) {
 		return multistep;
 	}
 
+	multistep.setProgress();
 	multistep.setPages( pages );
 
 	return multistep;

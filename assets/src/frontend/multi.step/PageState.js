@@ -75,6 +75,8 @@ PageState.prototype.observe = function () {
 		this.updateStateAsync().then( () => {} ).catch( () => {} );
 	}
 
+	this.updateOffsetByProgress();
+
 	addAction(
 		'jet.fb.observe.input.manual',
 		'jet-form-builder/page-state',
@@ -165,7 +167,7 @@ PageState.prototype.observeConditionalBlocks = function () {
  * @since 3.0.5 We check the fields if this is done for the first time
  * @since 3.0.0 Introduced
  */
-PageState.prototype.onShow      = function () {
+PageState.prototype.onShow = function () {
 	this.node.classList.remove( 'jet-form-builder-page--hidden' );
 
 	if ( this.initialObserveState ) {
@@ -276,7 +278,7 @@ PageState.prototype.isLast = function () {
  */
 PageState.prototype.isFirst = function () {
 	return this.state.isFirstPage( this );
-}
+};
 
 /**
  * @param input {InputData|RepeaterData}
@@ -292,6 +294,16 @@ PageState.prototype.handleInputEnter = function ( input ) {
 
 PageState.prototype.getOffsetTop = function () {
 	return getOffsetTop( this.node ) - this.offset;
+};
+
+/**
+ * @since 3.2.3
+ */
+PageState.prototype.updateOffsetByProgress = function () {
+	if ( !this.state?.progress?.node ) {
+		return;
+	}
+	this.offset += +this.state.progress.node.clientHeight;
 };
 
 export default PageState;

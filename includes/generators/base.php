@@ -10,6 +10,11 @@ if ( ! defined( 'WPINC' ) ) {
 abstract class Base {
 
 	/**
+	 * @var \Jet_Form_Builder\Blocks\Types\Base
+	 */
+	protected $block;
+
+	/**
 	 * Returns generator ID
 	 *
 	 * @return [type] [description]
@@ -52,6 +57,24 @@ abstract class Base {
 		}
 
 		return $this->generate( $fields );
+	}
+
+	/**
+	 * @param \Jet_Form_Builder\Blocks\Types\Base $block
+	 */
+	public function set_block( \Jet_Form_Builder\Blocks\Types\Base $block ) {
+		$this->block = $block;
+	}
+
+	/**
+	 * @return \Jet_Form_Builder\Blocks\Types\Base
+	 */
+	public function get_block(): \Jet_Form_Builder\Blocks\Types\Base {
+		return $this->block;
+	}
+
+	public function clear_block() {
+		$this->block = null;
 	}
 
 }

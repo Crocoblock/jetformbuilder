@@ -41,7 +41,7 @@ const getRequestFields = ( { actions, fields } ) => {
 };
 
 const processComputedField = ( { computed, action, fields, nameSet } ) => {
-	if ( !computed.isSupported( action ) ) {
+	if ( !computed.isSupported( action, fields ) ) {
 		return;
 	}
 	computed.setAction( action );

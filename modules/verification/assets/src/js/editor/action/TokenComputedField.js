@@ -15,23 +15,23 @@ function TokenComputedField() {
 	this.getSupportedActions = function () {
 		return [ 'register_user' ];
 	};
-
-	this.getName = function () {
-		return TOKEN_FIELD;
-	};
-
-	this.getLabel = function () {
-		return __( 'Secure unique token', 'jet-form-builder' );
-	};
-
-	this.getHelp = function () {
-		return __(
-			'A computed field. Usually used to save it in the password fields',
-			'jet-form-builder',
-		);
-	};
 }
 
 TokenComputedField.prototype = Object.create( BaseComputedField.prototype );
+
+TokenComputedField.prototype.getName = function () {
+	return TOKEN_FIELD;
+};
+
+TokenComputedField.prototype.getLabel = function () {
+	return __( 'Secure unique token', 'jet-form-builder' );
+};
+
+TokenComputedField.prototype.getHelp = function () {
+	return __(
+		'A computed field. Usually used to save it in the password fields',
+		'jet-form-builder',
+	);
+};
 
 export default TokenComputedField;

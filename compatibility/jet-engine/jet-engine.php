@@ -83,6 +83,12 @@ class Jet_Engine implements
 			array( $this, 'add_generators' )
 		);
 		add_filter(
+			'jet-form-builder/custom-template-object',
+			array( $this, 'get_custom_object_for_template' ),
+			10,
+			3
+		);
+		add_filter(
 			'jet-form-builder/blocks/items',
 			array( $this, 'add_blocks' ),
 			0
@@ -127,6 +133,10 @@ class Jet_Engine implements
 		remove_filter(
 			'jet-form-builder/forms/options-generators',
 			array( $this, 'add_generators' )
+		);
+		remove_filter(
+			'jet-form-builder/custom-template-object',
+			array( $this, 'get_custom_object_for_template' )
 		);
 		remove_filter(
 			'jet-form-builder/blocks/items',
@@ -295,6 +305,19 @@ class Jet_Engine implements
 		$this->has_custom_template = null;
 
 		return $content;
+	}
+
+	public function get_custom_object_for_template( $data_object, $object_id, $args ) {
+		switch ( $args['je_generator_query_type'] ?? false ) {
+			case 'users':
+				return get_user_by( 'ID', $object_id );
+			case 'terms':
+				return get_term( $object_id );
+			case 'posts':
+				return get_post( $object_id );
+			default:
+				return $data_object;
+		}
 	}
 
 }

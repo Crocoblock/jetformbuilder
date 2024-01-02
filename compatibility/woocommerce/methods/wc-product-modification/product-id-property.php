@@ -23,14 +23,14 @@ class Product_Id_Property extends Post_Id_Property {
 	 */
 	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
 		try {
-			$this->value = new \WC_Product( $value );
+			$this->value = wc_get_product( $value );
 		} catch ( \Exception $exception ) {
 			throw new Action_Exception( esc_html( $exception->getMessage() ) );
 		}
 	}
 
 	public function get_product(): \WC_Product {
-		if ( is_a( $this->value, \WC_Product::class ) ) {
+		if ( ! is_null( $this->value ) ) {
 			return $this->value;
 		}
 		$this->value = new \WC_Product_Simple();

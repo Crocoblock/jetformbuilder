@@ -24,6 +24,13 @@ const {
 	      dispatch,
       } = wp.data;
 
+window.JetFBComponents = {
+	...window.JetFBComponents,
+	TokenComputedField,
+	TokenIDComputedField,
+	VerificationURLComputedField,
+};
+
 addAction( ACTION, VerificationRender );
 // Secure token field in Register User action
 addComputedField( TokenComputedField, { isScoped: true } );

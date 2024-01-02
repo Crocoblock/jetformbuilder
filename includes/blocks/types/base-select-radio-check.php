@@ -214,9 +214,11 @@ trait Base_Select_Radio_Check {
 				return $options;
 			}
 
+			$generator_instance->set_block( $this );
 			$generated = $generator_instance->get_values( $args );
+			$generator_instance->clear_block();
 
-			if ( ! empty( $value_from || ! empty( $calc_from ) ) ) {
+			if ( ! empty( $value_from ) || ! empty( $calc_from ) ) {
 				foreach ( $generated as $key => $data ) {
 
 					if ( is_array( $data ) ) {
@@ -246,8 +248,8 @@ trait Base_Select_Radio_Check {
 			}
 		} elseif ( 'glossary' === $options_from ) {
 			if ( ! empty( $args['glossary_id'] )
-				 && false !== Tools::get_jet_engine_version()
-				 && isset( jet_engine()->glossaries )
+				&& false !== Tools::get_jet_engine_version()
+				&& isset( jet_engine()->glossaries )
 			) {
 				$glossary = jet_engine()->glossaries->data->get_item_for_edit( absint( $args['glossary_id'] ) );
 

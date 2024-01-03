@@ -61,7 +61,9 @@ class Builder_Helper {
 			$classes[] = 'jet-form-builder__field-template--checked';
 		}
 
-		$wp_query->queried_object = $object;
+		if ( in_array( $object, array( \WP_User::class, \WP_Post::class, \WP_Term::class ), true ) ) {
+			$wp_query->queried_object = $object;
+		}
 		jet_engine()->listings->data->set_current_object( $object );
 
 		jet_engine()->frontend->set_listing( $listing_id );
@@ -80,7 +82,10 @@ class Builder_Helper {
 			join( ' ', $classes )
 		);
 
-		$wp_query->queried_object = $default_object;
+		if ( in_array( $object, array( \WP_User::class, \WP_Post::class, \WP_Term::class ), true ) ) {
+			$wp_query->queried_object = $default_object;
+		}
+
 		jet_engine()->listings->data->set_current_object( $wp_query->queried_object );
 
 		return $result;

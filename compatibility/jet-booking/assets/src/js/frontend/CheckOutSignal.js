@@ -10,10 +10,6 @@ const {
 	      field_format = FORMAT,
       } = window.JetABAFInput;
 
-const {
-	      one_day_bookings,
-      } = window.JetABAFData;
-
 function CheckOutSignal() {
 	BaseSignal.call( this );
 

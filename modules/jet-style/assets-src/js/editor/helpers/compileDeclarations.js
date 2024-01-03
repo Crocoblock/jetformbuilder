@@ -1,8 +1,10 @@
 import BaseCSSCompiler from '../abstract/BaseCSSCompiler';
 import BorderCSSCompiler from '../abstract/BorderCSSCompiler';
 import BorderRadiusCSSCompiler from '../abstract/BorderRadiusCSSCompiler';
+import BoxCSSCompiler from '../abstract/BoxCSSCompiler';
 
 const compilers = [
+	new BoxCSSCompiler(),
 	new BorderRadiusCSSCompiler(),
 	new BorderCSSCompiler(),
 	new BaseCSSCompiler(),
@@ -24,7 +26,7 @@ function compileDeclarations( styleRoot, supportConfig ) {
 			setCssVar( cssVar ).
 			setPath( path );
 
-		compiler.compileDeclarations( styleRoot, declarations, classNames )
+		compiler.compileDeclarations( styleRoot, declarations, classNames );
 		compiler.compileClassNames( classNames, styleRoot );
 	}
 

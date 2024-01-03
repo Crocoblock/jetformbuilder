@@ -23,6 +23,11 @@ const {
 	      BlockLabel,
 	      BlockDescription,
 	      AdvancedInspectorControl,
+	      StylePanel,
+	      StyleColorItem,
+	      StyleColorItemsWrapper,
+	      StyleSize,
+	      SwitchPageOnChangeControls,
       } = JetFBComponents;
 
 const {
@@ -31,7 +36,7 @@ const {
 	      useUniqKey,
       } = JetFBHooks;
 
-export default function WysiwygEdit( props ) {
+export default function SwitcherEdit( props ) {
 
 	const {
 		      isSelected,
@@ -67,6 +72,7 @@ export default function WysiwygEdit( props ) {
 				key={ uniqKey( 'ToolBarFields' ) }
 				{ ...props }
 			/>
+			<SwitchPageOnChangeControls/>
 			<InspectorControls
 				key={ uniqKey( 'InspectorControls' ) }
 			>
@@ -133,6 +139,47 @@ export default function WysiwygEdit( props ) {
 					key={ uniqKey( 'AdvancedFields' ) }
 					{ ...props }
 				/>
+			</InspectorControls>
+			<InspectorControls group="styles">
+				<StylePanel
+					label={ __( 'Track', 'jet-form-builder' ) }
+				>
+					<StyleColorItemsWrapper>
+						<StyleColorItem
+							cssVar="--track-bg-color"
+							label={ __( 'Background', 'jet-form-builder' ) }
+						/>
+						<StyleColorItem
+							cssVar="--checked-track-bg-color"
+							label={ __(
+								'Checked background',
+								'jet-form-builder',
+							) }
+						/>
+					</StyleColorItemsWrapper>
+					<StyleSize
+						cssVar="--track-size"
+						label={ __( 'Track size', 'jet-form-builder' ) }
+					/>
+					<StyleSize
+						cssVar="--track-padding"
+						label={ __( 'Track padding', 'jet-form-builder' ) }
+					/>
+				</StylePanel>
+				<StylePanel
+					label={ __( 'Track', 'jet-form-builder' ) }
+				>
+					<StyleColorItemsWrapper>
+						<StyleColorItem
+							cssVar="--thumb-bg-color"
+							label={ __( 'Background', 'jet-form-builder' ) }
+						/>
+					</StyleColorItemsWrapper>
+					<StyleSize
+						cssVar="--thumb-size"
+						label={ __( 'Thumb size', 'jet-form-builder' ) }
+					/>
+				</StylePanel>
 			</InspectorControls>
 		</> }
 		<div { ...blockProps }>

@@ -9,7 +9,9 @@ import StyleColorItemsWrapper
 import StyleBorderItem from './components/StyleBorderItem';
 import StyleBorderRadiusItem
 	from './components/StyleBorderRadiusItem';
+import StyleBox from './components/StyleBox';
 import registerAttribute from './helpers/registerAttribute';
+import StyleSize from './components/StyleSize';
 
 const {
 	      addFilter,
@@ -29,6 +31,8 @@ window.JetFBComponents = {
 	StyleColorItemsWrapper,
 	StyleBorderItem,
 	StyleBorderRadiusItem,
+	StyleBox,
+	StyleSize,
 };
 
 window.JetFBHooks = {

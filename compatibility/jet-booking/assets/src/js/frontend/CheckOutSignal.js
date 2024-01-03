@@ -60,7 +60,12 @@ function CheckOutSignal() {
 		}
 
 		startDate.value = moment( current[ 0 ], FORMAT ).format( field_format );
-		endDate.value   = moment( current[ 1 ], FORMAT ).format( field_format );
+		endDate.value   = moment(
+			current[ 1 ] ?? current[ 0 ], // for one-day bookings
+			FORMAT
+		).format(
+			field_format,
+		);
 
 		this.updateCalendar();
 	};
@@ -78,7 +83,7 @@ function CheckOutSignal() {
 
 		jQuery( wrapper ).data( 'dateRangePicker' ).setDateRange(
 			current[ 0 ],
-			current[ 1 ],
+			current[ 1 ] ?? current[ 0 ], // for one-day bookings
 			true,
 		);
 	};

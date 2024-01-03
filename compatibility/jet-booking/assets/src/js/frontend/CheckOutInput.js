@@ -35,7 +35,7 @@ function CheckOutInput() {
 		}
 		dates = dates.split( ' - ' );
 
-		if ( 2 !== dates.length ) {
+		if ( !dates.length ) {
 			return [];
 		}
 

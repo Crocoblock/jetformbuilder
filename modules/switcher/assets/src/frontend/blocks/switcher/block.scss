@@ -11,17 +11,21 @@
 
 
 	input.jet-form-builder__field {
-		appearance: none;
-		outline-offset: 5px;
 		padding: var(--track-padding);
 		inline-size: var(--track-size);
 		block-size: var(--thumb-size);
-		background: #ddd;
 		border-radius: var(--track-size);
+		background: #ddd;
+		appearance: none;
+		outline-offset: 5px;
 		transition: background-color 0.4s;
 		position: relative;
 		cursor: pointer;
 		box-sizing: content-box;
+		flex-shrink: 0;
+		display: grid;
+		align-items: center;
+		grid: [track] 1fr/[track] 1fr;
 		border: unset; // compatibility with wp-admin/css/forms.css
 		margin: unset; // compatibility with wp-admin/css/forms.css
 
@@ -35,8 +39,7 @@
 		&::before {
 			content: '';
 			position: absolute;
-			top: 2px; // This should be half the difference between switch height and thumb size
-			left: 2px;
+			grid-area: track;
 			inline-size: var(--thumb-size);
 			block-size: var(--thumb-size);
 			border-radius: 50%;
@@ -51,5 +54,11 @@
 			background: #4caf50;
 			--thumb-position: calc((var(--track-size) - 100%) * var(--isLTR));
 		}
+	}
+}
+
+.block-editor-block-list__block.field-type-switcher {
+	input.jet-form-builder__field {
+		padding: var(--track-padding) !important; // To rewrite "padding: 0 !important;" in wp-admin/css/forms.css
 	}
 }

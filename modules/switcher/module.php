@@ -8,6 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+use Jet_Form_Builder\Blocks\Module as BlocksModule;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
@@ -78,6 +79,15 @@ class Module implements
 	}
 
 	public function register_frontend_scripts() {
+		wp_register_script(
+			$this->get_handle(),
+			$this->get_url( 'assets/build/switcher.js' ),
+			array(
+				BlocksModule::MAIN_SCRIPT_HANDLE,
+			),
+			jet_form_builder()->get_version(),
+			true
+		);
 		wp_register_style(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/switcher.css' ),

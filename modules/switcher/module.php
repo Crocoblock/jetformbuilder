@@ -32,7 +32,7 @@ class Module implements
 	}
 
 	public function condition(): bool {
-		return true;
+		return jet_form_builder()->has_module( 'jet-style' );
 	}
 
 	public function on_install() {

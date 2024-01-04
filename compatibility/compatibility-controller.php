@@ -26,6 +26,7 @@ class Compatibility_Controller implements Module_Controller_It {
 			new Jet_Booking\Jet_Booking(),
 			new Polylang\Polylang(),
 			new Wpml\Wpml(),
+			new Jet_Style_Manager\Jet_Style_Manager(),
 		);
 	}
 

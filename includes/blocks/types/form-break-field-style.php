@@ -14,8 +14,6 @@ trait Form_Break_Field_Style {
 	}
 
 	public function form_break_styles() {
-
-
 	}
 
 }

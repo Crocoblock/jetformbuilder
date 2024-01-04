@@ -66,11 +66,9 @@ function CheckOutInput() {
 	};
 
 	this.setValue = function () {
-		/**
-		 * @see https://github.com/Crocoblock/jetformbuilder/issues/222
-		 * @type {string[]}
-		 */
-		this.value.current = [];
+		this.value.current = this.value.applySanitizers(
+			this.nodes[ 0 ].value,
+		);
 	};
 
 	/**

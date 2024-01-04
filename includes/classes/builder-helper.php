@@ -166,7 +166,6 @@ class Builder_Helper {
 	 *
 	 * @return string
 	 * @since 3.1.0
-	 *
 	 */
 	public static function attrs( array $attributes ): string {
 		return implode(

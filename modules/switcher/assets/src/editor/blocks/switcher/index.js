@@ -15,8 +15,8 @@ metadata.attributes.isPreview = {
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Using this window, the users can add some styled text, HTML coding, 
-or another type of content to the form seeing the results on the frontend.`,
+		`Click on any side of the horizontal switcher to toggle between 
+'on' and 'off'. Simple and intuitive, suitable for quick interactions.`,
 		'jet-form-builder',
 	),
 	edit: SwitcherEdit,

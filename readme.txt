@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.0
 Tested up to: 6.4.2
 Requires PHP: 7.0
-Stable tag: 3.2.2
+Stable tag: 3.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,14 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.2.3**
+- UPD: Improve JetForm block in Block Editor with style controls for the most fields
+- UPD: Improve compatibility with the Check-In/Check-Out field (JetBooking)
+- FIX: Style controls of the JetForm widget in Elementor editor
+- FIX: Scroll to the top on page change ignores form pages progress
+- FIX: Custom template is not attached to the checkbox (or radio) field if there is "Generate dynamically" -> "Get values list from JetEngine Query" source
+- FIX: Convert each Woocommerce product into a simple product
 
 **3.2.2**
 - ADD: Style-controls & options for the WYSIWYG field

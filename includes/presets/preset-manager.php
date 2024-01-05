@@ -40,6 +40,7 @@ class Preset_Manager {
 	// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
 	private $_preset_types = array();
 	private $_source_types;
+
 	// phpcs:enable PSR2.Classes.PropertyDeclaration.Underscore
 
 
@@ -188,6 +189,8 @@ class Preset_Manager {
 		} catch ( Preset_Exception $exception ) {
 			return '';
 		}
+
+		$manager->set_check_restriction( true );
 
 		try {
 			return $manager->get_source( $args )->result();

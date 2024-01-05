@@ -1,19 +1,24 @@
 import withPreset from './withPreset';
 import GlobalFieldPreset from './GlobalFieldPreset';
 import MapFieldPreset from './MapFieldPreset';
-import ActionModalContext from '../../action-modal/context/ActionModalContext';
+import useOnUpdateModal from '../../action-modal/hooks/useOnUpdateModal';
+import ControlPresetRestrictionContext
+	from '../context/ControlPresetRestrictionContext';
 
 const {
 	      useState,
-	      useEffect,
 	      useContext,
       } = wp.element;
 
+const {
+	      ToggleControl,
+      } = wp.components;
+
+const { __ } = wp.i18n;
+
 let DynamicPreset = function ( {
 	value,
-	isSaveAction,
 	onSavePreset,
-	onUnMount,
 	parseValue,
 	excludeOptions,
 	isCurrentFieldVisible,
@@ -25,14 +30,7 @@ let DynamicPreset = function ( {
 		() => parseValue( value ),
 	);
 
-	const { actionClick, onRequestClose } = useContext( ActionModalContext );
-
-	if ( 'undefined' === typeof isSaveAction ) {
-		isSaveAction = actionClick;
-	}
-	if ( 'undefined' === typeof onUnMount ) {
-		onUnMount = onRequestClose;
-	}
+	const restrictionContext = useContext( ControlPresetRestrictionContext );
 
 	const onChangeValue = ( newValue, name ) => {
 		setValue( prev => (
@@ -40,16 +38,9 @@ let DynamicPreset = function ( {
 		) );
 	};
 
-	useEffect( () => {
-		// update field attributes
-		if ( isSaveAction && onSavePreset ) {
-			onSavePreset( JSON.stringify( stateValue ) );
-		}
-
-		if ( null !== isSaveAction ) {
-			onUnMount();
-		}
-	}, [ isSaveAction ] );
+	useOnUpdateModal( () => {
+		onSavePreset( JSON.stringify( stateValue ) );
+	} );
 
 	return <>
 		{ window.JetFormEditorData.presetConfig.global_fields.map(
@@ -75,6 +66,27 @@ let DynamicPreset = function ( {
 				isCurrentFieldVisible={ isCurrentFieldVisible }
 				position={ position }
 			/> ) }
+		{ restrictionContext?.show && <ToggleControl
+			label={ __( 'Restrict access', 'jet-form-builder' ) }
+			help={ (
+				       stateValue.restricted ?? true
+			       ) ? __(
+				`Will set default value from preset only for users 
+who allowed to edit this value`,
+				'jet-form-builder',
+			) : __(
+				`Always set default value from preset. Make sure it 
+can't be accidentally changed from form Actions`,
+				'jet-form-builder',
+			) }
+			checked={ stateValue.restricted ?? true }
+			onChange={ restricted => setValue( prev => (
+				{
+					...prev,
+					restricted: restricted ? undefined : restricted,
+				}
+			) ) }
+		/> }
 	</>;
 };
 

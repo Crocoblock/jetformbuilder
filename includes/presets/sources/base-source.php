@@ -20,9 +20,9 @@ abstract class Base_Source {
 	protected $field_data = array();
 	protected $field_args;
 	protected $preset_data;
-	protected $field = '__condition__';
+	protected $field      = '__condition__';
 	protected $prop;
-	private $src;
+	private   $src;
 
 	protected $permission;
 
@@ -135,6 +135,17 @@ abstract class Base_Source {
 	 * @throws Preset_Exception
 	 */
 	protected function has_permission(): bool {
+		if (
+			// not enabled programmatically
+			empty( $this->preset_data['_check_restriction'] ) ||
+			// disabled in preset-editor
+			(
+				array_key_exists( 'restricted', $this->preset_data ) &&
+				! $this->preset_data['restricted']
+			)
+		) {
+			return true;
+		}
 		if ( is_null( $this->permission ) ) {
 			$this->permission = apply_filters( 'jet-form-builder/preset-sanitize', $this->can_get_preset(), $this );
 		}

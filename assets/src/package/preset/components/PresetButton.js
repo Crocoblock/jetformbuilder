@@ -11,7 +11,11 @@ const {
 	      useState,
       } = wp.element;
 
-function PresetButton( { value, onChange, title } ) {
+function PresetButton( {
+	value,
+	onChange,
+	title,
+} ) {
 
 	const [ showModal, setShowModal ] = useState( false );
 

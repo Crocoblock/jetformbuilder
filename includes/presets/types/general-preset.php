@@ -45,7 +45,14 @@ class General_Preset extends Base_Preset {
 		}
 
 		try {
-			if ( ! $this->get_source() instanceof Base_Source || ! $this->get_source()->src() ) {
+			if (
+				! $this->get_source() instanceof Base_Source ||
+				! $this->get_source()->src() ||
+				(
+					array_key_exists( 'restricted', $this->data ) &&
+					! $this->data['restricted']
+				)
+			) {
 				return true;
 			}
 			$sanitize = $this->get_source()->on_sanitize();

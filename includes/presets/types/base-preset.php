@@ -28,7 +28,7 @@ abstract class Base_Preset {
 		'query_var'  => '_post_id',
 		'fields_map' => array(),
 	);
-	public $data;
+	public $data     = array();
 
 	abstract public function get_fields_map();
 
@@ -49,7 +49,11 @@ abstract class Base_Preset {
 	abstract public function is_active_preset( $args );
 
 	public function set_init_data( $data = array() ): Base_Preset {
-		$this->data = $data;
+		if ( empty( $this->data ) ) {
+			$this->data = $data;
+		} else {
+			$this->data = array_merge( $this->data, $data );
+		}
 
 		return $this;
 	}
@@ -70,6 +74,10 @@ abstract class Base_Preset {
 			$this->data,
 			$args
 		)->maybe_query_source()->after_init();
+	}
+
+	public function set_check_restriction( bool $check ) {
+		$this->data['_check_restriction'] = $check;
 	}
 
 }

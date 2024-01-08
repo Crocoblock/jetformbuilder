@@ -24,8 +24,10 @@ const {
       } = JetFBHooks;
 
 /**
- * @param name
- * @returns {{pattern: Object, insert: Function, append: Function}}
+ *
+ * @param name {String}
+ * @returns {{blocks: Object[], pattern: Object, insert: Function, append:
+ *     Function}}
  */
 function usePattern( name ) {
 	const { clientId } = useBlockEditContext();
@@ -40,9 +42,12 @@ function usePattern( name ) {
 		      insertBlocks,
 	      } = useDispatch( 'core/block-editor' );
 
-	const pattern = useSelect(
+	const pattern    = useSelect(
 		select => select( constants.store ).getType( name ),
 		[],
+	);
+	const saveRecord = useSelect(
+		select => select( 'jet-forms/patterns' ).getSetting( 'saveRecord' ),
 	);
 
 	function insert( editedPattern = {} ) {
@@ -58,9 +63,13 @@ function usePattern( name ) {
 		);
 
 		// inserting actions
-		const { list } = convertFlow( editedPattern?.actions ?? [] );
+		const flow = convertFlow( editedPattern?.actions ?? [] );
 
-		setActions( list );
+		if ( saveRecord ) {
+			flow.add( 'save_record' );
+		}
+
+		setActions( flow.list );
 	}
 
 	function append( editedPattern = {} ) {
@@ -72,9 +81,13 @@ function usePattern( name ) {
 		};
 
 		// inserting actions
-		const { list } = convertFlow( editedPattern?.actions ?? [] );
+		const flow = convertFlow( editedPattern?.actions ?? [] );
 
-		setActions( [ ...actions, ...list ] );
+		if ( saveRecord ) {
+			flow.add( 'save_record' );
+		}
+
+		setActions( [ ...actions, ...flow.list ] );
 	}
 
 	/**
@@ -97,7 +110,7 @@ function usePattern( name ) {
 		) : insertBlocks(
 			createBlocksFromInnerBlocksTemplate(
 				editedPattern?.blocks ?? [],
-			)
+			),
 		);
 
 		const {

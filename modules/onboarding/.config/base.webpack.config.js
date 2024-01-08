@@ -2,13 +2,13 @@ const path = require( 'path' );
 
 module.exports = {
 	name: 'prod:jfb-onboarding',
-	context: path.resolve( __dirname, '../assets/src/js' ),
+	context: path.resolve( __dirname, '../assets/src' ),
 	entry: {
 		'editor': './editor/index.js',
 		'editor.package': './editor-package/index.js',
 	},
 	output: {
-		path: path.resolve( __dirname, '../assets/build/js' ),
+		path: path.resolve( __dirname, '../assets/build' ),
 		filename: '[name].js',
 	},
 	resolve: {
@@ -16,9 +16,7 @@ module.exports = {
 			'node_modules',
 		],
 		extensions: [ '.js' ],
-		alias: {
-			'@patterns': path.resolve( __dirname, '../patterns' ),
-		},
+		alias: {},
 	},
 	module: {
 		rules: [

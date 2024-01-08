@@ -43,4 +43,15 @@ export default {
 
 		return state;
 	},
+	[ constants.updateSettings ]( state, action ) {
+		const { settings } = action;
+
+		return {
+			...state,
+			settings: {
+				...state.settings,
+				...settings,
+			},
+		};
+	},
 };

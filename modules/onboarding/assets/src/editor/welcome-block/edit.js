@@ -5,10 +5,13 @@ const {
 const {
 	      cloneElement,
 	      Children,
+	      useState,
       } = wp.element;
 
 const {
 	      Placeholder,
+	      ToggleControl,
+	      Flex,
       } = wp.components;
 
 const {
@@ -17,6 +20,7 @@ const {
 
 const {
 	      useSelect,
+	      useDispatch,
       } = wp.data;
 
 const {
@@ -24,6 +28,8 @@ const {
       } = JetFBComponents;
 
 function WelcomeBlockEdit( props ) {
+	const blockProps = useBlockProps();
+
 	const elements = useSelect(
 		select => select( 'jet-forms/patterns' ).getTypes().map(
 			( { view: View, ...pattern } ) => <View pattern={ pattern }/>,
@@ -31,7 +37,11 @@ function WelcomeBlockEdit( props ) {
 		[],
 	);
 
-	const blockProps = useBlockProps();
+	const saveRecord = useSelect(
+		select => select( 'jet-forms/patterns' ).getSetting( 'saveRecord' ),
+	);
+
+	const { updateSettings } = useDispatch( 'jet-forms/patterns' );
 
 	return <div { ...blockProps } >
 		<Placeholder
@@ -42,11 +52,6 @@ function WelcomeBlockEdit( props ) {
 				'jet-form-builder',
 			) }
 		>
-			{ /*
-			 * Disable reason: The `list` ARIA role is redundant but
-			 * Safari+VoiceOver won't announce the list otherwise.
-			 */
-				/* eslint-disable jsx-a11y/no-redundant-roles */ }
 			<ul
 				className="block-editor-block-variation-picker__variations jet-fb"
 				role="list"
@@ -57,15 +62,23 @@ function WelcomeBlockEdit( props ) {
 					cloneElement,
 				) }
 			</ul>
-			{ /* eslint-enable jsx-a11y/no-redundant-roles */ }
-			<div className="block-editor-block-variation-picker__skip">
+			<Flex
+				className="block-editor-block-variation-picker__skip"
+				justify="space-between"
+			>
 				<PatternInserterButton
 					patternName={ 'default' }
 					variant="link"
 				>
 					{ __( 'Start from scratch', 'jet-form-builder' ) }
 				</PatternInserterButton>
-			</div>
+				<ToggleControl
+					label={ __( 'Add Save Form Record action',
+						'jet-form-builder' ) }
+					checked={ saveRecord }
+					onChange={ saveRecord => updateSettings( { saveRecord } ) }
+				/>
+			</Flex>
 		</Placeholder>
 	</div>;
 

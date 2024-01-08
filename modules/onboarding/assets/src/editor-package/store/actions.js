@@ -13,4 +13,10 @@ export default {
 			types,
 		};
 	},
+	updateSettings( settings ) {
+		return {
+			type: constants.updateSettings,
+			settings,
+		};
+	},
 };

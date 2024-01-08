@@ -10,6 +10,12 @@ const selectors = {
 
 		return state.types[ index ];
 	},
+	getSetting( state, name ) {
+		return state.settings[ name ];
+	},
+	getSettings( state ) {
+		return state.settings;
+	},
 };
 
 export default {

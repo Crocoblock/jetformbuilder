@@ -1,3 +1,5 @@
+import BaseAction from './BaseAction';
+
 function ActionsFlow( list = null ) {
 	/**
 	 * @type {BaseAction[]}
@@ -20,6 +22,13 @@ ActionsFlow.prototype = {
 	 */
 	hasType( type ) {
 		return this.list.some( current => current.type === type );
+	},
+	add( props ) {
+		if ( 'string' === typeof props ) {
+			props = { type: props };
+		}
+
+		this.list.push( new BaseAction( props ) );
 	},
 };
 

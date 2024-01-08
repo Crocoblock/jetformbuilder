@@ -68,7 +68,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 	public function editor_assets_before() {
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/editor.js' ),
+			$this->get_url( 'assets/build/editor.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true
@@ -78,10 +78,16 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 	public function editor_assets_package_before() {
 		wp_enqueue_script(
 			$this->get_handle( 'package' ),
-			$this->get_url( 'assets/build/js/editor.package.js' ),
+			$this->get_url( 'assets/build/editor.package.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true
+		);
+		wp_enqueue_style(
+			$this->get_handle( 'package' ),
+			$this->get_url( 'assets/build/editor.css' ),
+			array(),
+			jet_form_builder()->get_version()
 		);
 	}
 

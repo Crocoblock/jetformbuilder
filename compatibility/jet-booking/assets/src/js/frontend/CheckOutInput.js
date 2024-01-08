@@ -111,7 +111,7 @@ CheckOutInput.prototype = Object.create( InputData.prototype );
 
 CheckOutInput.prototype.parseValueForCalculated = function () {
 
-	if ( !this.getValue().length ) {
+	if ( !this.getValue()?.length ) {
 		return 0;
 	}
 

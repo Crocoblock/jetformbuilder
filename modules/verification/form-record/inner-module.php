@@ -176,8 +176,8 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 
 		foreach ( $config['list'] as &$record ) {
 			if ( empty( $record['actions']['value'] ) ||
-			     ! is_array( $record['actions']['value'] ) ||
-			     empty( $sorted_tokens[ $record['choose']['value'] ] )
+				 ! is_array( $record['actions']['value'] ) ||
+				 empty( $sorted_tokens[ $record['choose']['value'] ] )
 			) {
 				continue;
 			}

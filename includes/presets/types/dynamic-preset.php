@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Dynamic_Preset extends Base_Preset {
 
 	private $field;
-	public  $json_value_key = 'default';
+	public $json_value_key = 'default';
 
 	const SLUG = 'dynamic';
 

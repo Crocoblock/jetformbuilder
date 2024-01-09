@@ -22,7 +22,7 @@ abstract class Base_Source {
 	protected $preset_data;
 	protected $field      = '__condition__';
 	protected $prop;
-	private   $src;
+	private $src;
 
 	protected $permission;
 

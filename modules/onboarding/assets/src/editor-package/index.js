@@ -16,14 +16,48 @@ const {
 	      dispatch,
       } = wp.data;
 
+const {
+	      __,
+      } = wp.i18n;
+
 register( store );
 
 dispatch( constants.store ).register( [
-	defaultPattern,
-	feedBackPattern,
-	insertPostPattern,
-	registerUserPattern,
-	donationPattern,
+	{
+		...defaultPattern,
+		applyText: __(
+			'All blocks and actions have been removed',
+			'jet-form-builder',
+		),
+	},
+	{
+		...feedBackPattern,
+		applyText: __(
+			'4 blocks and Send Email action have been added',
+			'jet-form-builder',
+		),
+	},
+	{
+		...insertPostPattern,
+		applyText: __(
+			'4 blocks and Insert/Update Post action have been added',
+			'jet-form-builder',
+		),
+	},
+	{
+		...registerUserPattern,
+		applyText: __(
+			'3 blocks and Register User with Verification action have been added',
+			'jet-form-builder',
+		),
+	},
+	{
+		...donationPattern,
+		applyText: __(
+			'2 blocks and PayPal Gateway have been added',
+			'jet-form-builder',
+		),
+	},
 	{
 		...resetPasswordPattern,
 		view: ProSinglePattern,

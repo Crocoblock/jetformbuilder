@@ -4,24 +4,27 @@ import constants from '../store/constants';
 const {
 	      useBlockEditContext,
       } = wp.blockEditor;
+
 const {
 	      createBlocksFromInnerBlocksTemplate,
       } = wp.blocks;
+
 const {
 	      useDispatch,
 	      useSelect,
       } = wp.data;
 
 const {
-	      doAction,
-      } = wp.hooks;
-
-const {
 	      convertFlow,
       } = JetFBActions;
+
 const {
 	      useActions,
       } = JetFBHooks;
+
+const {
+	      __,
+      } = wp.i18n;
 
 /**
  * @param name {String}
@@ -30,9 +33,10 @@ const {
  *     Function}}
  */
 function usePattern( { name, onApply = () => {} } ) {
-	const { clientId } = useBlockEditContext();
-	const blocks       = useAnotherBlocks();
-	const { editPost } = useDispatch( 'core/editor' );
+	const { clientId }         = useBlockEditContext();
+	const blocks               = useAnotherBlocks();
+	const { editPost }         = useDispatch( 'core/editor' );
+	const { createInfoNotice } = useDispatch( wp.notices.store );
 
 	const [ actions, setActions ] = useActions();
 
@@ -48,6 +52,17 @@ function usePattern( { name, onApply = () => {} } ) {
 	);
 	const saveRecord = useSelect(
 		select => select( 'jet-forms/patterns' ).getSetting( 'saveRecord' ),
+	);
+
+	const displayNotice = () => createInfoNotice(
+		pattern?.applyText ??
+		__(
+			'New blocks and actions have been added',
+			'jet-form-builder',
+		),
+		{
+			type: 'snackbar',
+		},
 	);
 
 	function insert( editedPattern = {} ) {
@@ -70,6 +85,7 @@ function usePattern( { name, onApply = () => {} } ) {
 		}
 
 		setActions( flow.list );
+		displayNotice();
 		onApply();
 	}
 
@@ -89,6 +105,7 @@ function usePattern( { name, onApply = () => {} } ) {
 		}
 
 		setActions( [ ...actions, ...flow.list ] );
+		displayNotice();
 		onApply();
 	}
 

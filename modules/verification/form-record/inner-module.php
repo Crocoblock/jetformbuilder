@@ -176,8 +176,8 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 
 		foreach ( $config['list'] as &$record ) {
 			if ( empty( $record['actions']['value'] ) ||
-				 ! is_array( $record['actions']['value'] ) ||
-				 empty( $sorted_tokens[ $record['choose']['value'] ] )
+			     ! is_array( $record['actions']['value'] ) ||
+			     empty( $sorted_tokens[ $record['choose']['value'] ] )
 			) {
 				continue;
 			}
@@ -241,7 +241,12 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 	 */
 	public function connect_record_or_delete_token( $record_id, $record_columns ) {
 		$token_id = jet_fb_context()->get_value( Verification::TOKEN_ID );
-		$status   = new Status_Info( $record_columns['status'] );
+
+		if ( ! $token_id ) {
+			return;
+		}
+
+		$status = new Status_Info( $record_columns['status'] );
 
 		if ( ! $status->is_success() ) {
 			( new Tokens_Model() )->delete( array( 'id' => $token_id ) );

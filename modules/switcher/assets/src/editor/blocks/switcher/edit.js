@@ -22,6 +22,7 @@ const {
 	      BlockName,
 	      BlockLabel,
 	      BlockDescription,
+	      BlockDefaultValue,
 	      AdvancedInspectorControl,
 	      StylePanel,
 	      StyleColorItem,
@@ -86,13 +87,13 @@ export default function SwitcherEdit( props ) {
 				<PanelBody
 					title={ __( 'Value', 'jet-form-builder' ) }
 				>
-					<ToggleControl
-						label={ __(
-							'Switcher enabled by default',
+					<BlockDefaultValue
+						help={ __(
+							`If default value would be not empty 
+- switcher would be enabled`,
 							'jet-form-builder',
 						) }
-						checked={ attributes.checked }
-						onChange={ checked => setAttributes( { checked } ) }
+						hasMacro={ false }
 					/>
 					<AdvancedInspectorControl
 						value={ attributes.value_active }
@@ -167,7 +168,7 @@ export default function SwitcherEdit( props ) {
 					/>
 				</StylePanel>
 				<StylePanel
-					label={ __( 'Track', 'jet-form-builder' ) }
+					label={ __( 'Thumb', 'jet-form-builder' ) }
 				>
 					<StyleColorItemsWrapper>
 						<StyleColorItem

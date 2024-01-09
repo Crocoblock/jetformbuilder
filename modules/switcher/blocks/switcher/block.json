@@ -69,10 +69,6 @@
 				"shortcode": true
 			}
 		},
-		"checked": {
-			"type": "boolean",
-			"default": false
-		},
 		"label": {
 			"type": "string",
 			"default": "",

@@ -5,6 +5,7 @@
  */
 
 use Jet_Form_Builder\Blocks\Render\Base;
+use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -22,7 +23,7 @@ $this->add_attribute( 'role', 'switch' );
 $this->add_attribute( 'class', 'jet-form-builder__field' );
 $this->add_attribute( 'value', $active );
 $this->add_attribute( 'data-calculate', $calc_active );
-$this->add_attribute( 'checked', (string) ( $args['checked'] ?? '' ) );
+$this->add_attribute( 'checked', ! empty( ( $args['default'] ?? '' ) ) ? 'checked' : '' );
 $this->add_attribute( 'data-jfb-sync' );
 
 ?>

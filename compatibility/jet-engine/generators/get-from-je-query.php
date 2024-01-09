@@ -68,6 +68,8 @@ class Get_From_Je_Query extends Base {
 		$query->setup_query();
 		$this->get_block()->block_attrs['je_generator_query_type'] = $query->query_type;
 
+		do_action( 'jet-form-builder/generators/get_from_query/setup', $this, $query );
+
 		$objects = $query->get_items();
 
 		$handler = $this->get_handler( $objects[0] ?? array() );

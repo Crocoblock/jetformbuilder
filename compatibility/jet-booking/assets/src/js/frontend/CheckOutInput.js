@@ -35,7 +35,7 @@ function CheckOutInput() {
 		}
 		dates = dates.split( ' - ' );
 
-		if ( 2 !== dates.length ) {
+		if ( !dates.length ) {
 			return [];
 		}
 
@@ -66,11 +66,9 @@ function CheckOutInput() {
 	};
 
 	this.setValue = function () {
-		/**
-		 * @see https://github.com/Crocoblock/jetformbuilder/issues/222
-		 * @type {string[]}
-		 */
-		this.value.current = [];
+		this.value.current = this.value.applySanitizers(
+			this.nodes[ 0 ].value,
+		);
 	};
 
 	/**
@@ -113,7 +111,7 @@ CheckOutInput.prototype = Object.create( InputData.prototype );
 
 CheckOutInput.prototype.parseValueForCalculated = function () {
 
-	if ( !this.getValue().length ) {
+	if ( !this.getValue()?.length ) {
 		return 0;
 	}
 

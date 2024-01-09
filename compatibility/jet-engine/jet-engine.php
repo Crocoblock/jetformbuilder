@@ -3,6 +3,7 @@
 
 namespace JFB_Compatibility\Jet_Engine;
 
+use Jet_Engine\Query_Builder\Queries\Base_Query;
 use Jet_Form_Builder\Actions\Methods\Object_Properties_Collection;
 use Jet_Form_Builder\Blocks\Render\Checkbox_Field_Render;
 use Jet_Form_Builder\Blocks\Render\Radio_Field_Render;
@@ -25,6 +26,7 @@ use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use Jet_Form_Builder\Blocks\Module;
+use Jet_Engine\Modules\Custom_Content_Types;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -88,6 +90,12 @@ class Jet_Engine implements
 			10,
 			3
 		);
+		add_action(
+			'jet-form-builder/generators/get_from_query/setup',
+			array( $this, 'add_cct_type_arg_to_block_args' ),
+			10,
+			2
+		);
 		add_filter(
 			'jet-form-builder/blocks/items',
 			array( $this, 'add_blocks' ),
@@ -137,6 +145,10 @@ class Jet_Engine implements
 		remove_filter(
 			'jet-form-builder/custom-template-object',
 			array( $this, 'get_custom_object_for_template' )
+		);
+		remove_action(
+			'jet-form-builder/generators/get_from_query/setup',
+			array( $this, 'add_cct_type_arg_to_block_args' )
 		);
 		remove_filter(
 			'jet-form-builder/blocks/items',
@@ -307,6 +319,15 @@ class Jet_Engine implements
 		return $content;
 	}
 
+	public function add_cct_type_arg_to_block_args( Get_From_Je_Query $generator, Base_Query $query ) {
+		if ( 'custom-content-type' !== $query->query_type ) {
+			return;
+		}
+		$generator->get_block()->block_attrs['je_generator_content_type'] = (
+			$query->final_query['content_type'] ?? ''
+		);
+	}
+
 	public function get_custom_object_for_template( $data_object, $object_id, $args ) {
 		switch ( $args['je_generator_query_type'] ?? false ) {
 			case 'users':
@@ -315,6 +336,17 @@ class Jet_Engine implements
 				return get_term( $object_id );
 			case 'posts':
 				return get_post( $object_id );
+			case 'custom-content-type':
+				/** @var Custom_Content_Types\Factory $cct_factory */
+				$cct_factory = \Jet_Engine\Modules\Custom_Content_Types\Module::instance()->manager->get_content_types(
+					$args['je_generator_content_type']
+				);
+
+				if ( ! is_object( $cct_factory ) ) {
+					return false;
+				}
+
+				return (object) $cct_factory->get_db()->get_item( $object_id );
 			default:
 				return $data_object;
 		}

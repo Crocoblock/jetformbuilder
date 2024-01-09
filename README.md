@@ -4,6 +4,14 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.2.3
+* UPD: Improve JetForm block in Block Editor with style controls for the most fields
+* UPD: Improve compatibility with the Check-In/Check-Out field (JetBooking)
+* FIX: Style controls of the JetForm widget in Elementor editor
+* FIX: Scroll to the top on page change ignores form pages progress
+* FIX: Custom template is not attached to the checkbox (or radio) field if there is "Generate dynamically" -> "Get values list from JetEngine Query" source
+* FIX: Convert each Woocommerce product into a simple product
+
 ## 3.2.2
 * ADD: Style-controls & options for the WYSIWYG field
 * UPD: UI/UX bulk options

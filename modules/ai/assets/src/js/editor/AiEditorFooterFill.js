@@ -30,7 +30,7 @@ function AiEditorFooterFill( { clearHTML, formHTML } ) {
 		      insert,
 		      append,
 		      blocks, // another blocks
-	      } = usePattern( 'ai' );
+	      } = usePattern( { name: 'ai' } );
 
 	return <Flex justify="flex-start">
 		<Button

@@ -18,6 +18,7 @@ function PatternInserterButton( {
 	patternName,
 	withPatternIcon = false,
 	onClick = false,
+	onApply = () => {},
 	...props
 } ) {
 	const {
@@ -33,7 +34,10 @@ function PatternInserterButton( {
 		      pattern,
 		      insert,
 		      append,
-	      } = usePattern( patternName );
+	      } = usePattern( {
+		name: patternName,
+		onApply,
+	} );
 
 	return <>
 		<Button

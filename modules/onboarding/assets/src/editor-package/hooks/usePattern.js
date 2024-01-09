@@ -24,12 +24,12 @@ const {
       } = JetFBHooks;
 
 /**
- *
  * @param name {String}
+ * @param onApply {Function|undefined}
  * @returns {{blocks: Object[], pattern: Object, insert: Function, append:
  *     Function}}
  */
-function usePattern( name ) {
+function usePattern( { name, onApply = () => {} } ) {
 	const { clientId } = useBlockEditContext();
 	const blocks       = useAnotherBlocks();
 	const { editPost } = useDispatch( 'core/editor' );
@@ -70,6 +70,7 @@ function usePattern( name ) {
 		}
 
 		setActions( flow.list );
+		onApply();
 	}
 
 	function append( editedPattern = {} ) {
@@ -88,6 +89,7 @@ function usePattern( name ) {
 		}
 
 		setActions( [ ...actions, ...flow.list ] );
+		onApply();
 	}
 
 	/**

@@ -37,7 +37,10 @@ class Verify_Manually extends Rest_Api_Endpoint_Base {
 
 		/** @var Module $jobs */
 		$jobs = jet_form_builder()->module( 'jobs' );
-		$job  = $jobs->get( \JFB_Modules\Verification\Jobs\Verify_Manually::class );
+		/** @var \JFB_Modules\Verification\Jobs\Verify_Manually $job */
+		$job = $jobs->get( \JFB_Modules\Verification\Jobs\Verify_Manually::class );
+
+		$is_single = 1 === count( $ids );
 
 		foreach ( $ids as $id ) {
 			$job->set_args( array( $id, get_current_user_id() ) );
@@ -48,17 +51,38 @@ class Verify_Manually extends Rest_Api_Endpoint_Base {
 			if ( $job->is_scheduled() ) {
 				continue;
 			}
-			// add new job to queue
-			$job->schedule();
+
+			if ( $is_single ) {
+				$job->execute( $id, get_current_user_id() );
+				break;
+			} else {
+				// add new job to queue
+				$job->schedule();
+			}
 		}
 
-		$more_than_one = 1 < count( $ids );
+		$errors = $job->get_logs();
+
+		if ( ! empty( $errors ) ) {
+			return new \WP_REST_Response(
+				array(
+					'message' => $errors[0],
+				),
+				400
+			);
+		}
 
 		return new \WP_REST_Response(
 			array(
-				'message' => $more_than_one
-					? __( 'Checked records would be verified soon.', 'jet-form-builder' )
-					: __( 'This record would be verified soon.', 'jet-form-builder' ),
+				'message' => $is_single
+					? __(
+						'This record has been verified.',
+						'jet-form-builder'
+					)
+					: __(
+						'Checked records would be verified soon.',
+						'jet-form-builder'
+					),
 			)
 		);
 	}

@@ -4,6 +4,8 @@ const {
 
 const { apiFetch } = wp;
 
+const duration = 4000;
+
 addAction(
 	'jet.fb.render.page',
 	'jet-form-builder/verification',
@@ -26,17 +28,23 @@ addAction(
 				jfbEventBus.$CXNotice.add( {
 					message: response.message,
 					type: 'success',
-					duration: 4000,
+					duration,
 				} );
+
 			} ).catch( error => {
 				jfbEventBus.$CXNotice.add( {
 					message: error.message,
 					type: 'error',
-					duration: 4000,
+					duration,
 				} );
 			} ).finally( () => {
 				commit( 'scope-verification/actions/toggleLoading' );
 				commit( 'toggleDoingAction', null, { root: true } );
+
+				setTimeout(
+					() => document.location.reload(),
+					duration,
+				);
 			} );
 		} );
 	},

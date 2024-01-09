@@ -11,6 +11,7 @@ use Jet_Form_Builder\Request\Exceptions\Plain_Value_Exception;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
 use Jet_Form_Builder\Request\Request_Tools;
 use JFB_Components\Rest_Api;
+use JFB_Modules\Validation\Module;
 
 
 // If this file is called directly, abort.
@@ -31,6 +32,12 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 		return \WP_REST_Server::CREATABLE;
 	}
 
+	/**
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return \WP_REST_Response
+	 * @throws Repository_Exception
+	 */
 	public function run_callback( \WP_REST_Request $request ) {
 		$body = $request->get_body_params();
 
@@ -60,7 +67,10 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 			);
 		}
 
-		$ssr_rule = Validation::instance()->get_rules()->get_ssr();
+		/** @var Module $module */
+		$module   = jet_form_builder()->module( 'validation' );
+		$ssr_rule = $module->get_rules()->get_ssr();
+
 		$ssr_rule->set_settings( $ssr_attrs );
 
 		$ssr_rule->validate_field( $parser );

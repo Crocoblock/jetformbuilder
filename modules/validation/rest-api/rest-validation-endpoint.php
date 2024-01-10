@@ -41,6 +41,9 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 	public function run_callback( \WP_REST_Request $request ) {
 		$body = $request->get_body_params();
 
+		// to prevent custom and inner validation & sanitize
+		remove_all_actions( 'jet-form-builder/validate-field' );
+
 		try {
 			$parser = $this->get_parser( $request );
 		} catch ( Silence_Exception $exception ) {

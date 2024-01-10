@@ -4,6 +4,7 @@ import useAnotherBlocks from '../hooks/useAnotherBlocks';
 const {
 	      Button,
 	      Popover,
+	      Icon,
       } = wp.components;
 
 const {
@@ -42,9 +43,8 @@ function PatternInserterButton( {
 	return <>
 		<Button
 			ref={ ref }
-			icon={ withPatternIcon && <span
-				dangerouslySetInnerHTML={ { __html: pattern.icon } }
-			/> }
+			icon={ withPatternIcon && pattern.icon }
+			iconSize="48"
 			onClick={ () => {
 				if ( 'function' === typeof onClick ) {
 					onClick();

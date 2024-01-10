@@ -30,7 +30,7 @@ const promptsExamples = [
 
 function GenerateFormModal( {
 	setShowModal,
-	footer: Footer = () => 'Here may be buttons'
+	footer: Footer = () => 'Here may be buttons',
 } ) {
 	const [ prompt, setPrompt ]       = useState( '' );
 	const [ formHTML, setFormHTML ]   = useState( '' );
@@ -94,6 +94,7 @@ function GenerateFormModal( {
 			  <Button
 				  variant="primary"
 				  isBusy={ isLoading }
+				  disabled={ isLoading }
 				  onClick={ generateForm }
 			  >
 				  { __( 'Generate', 'jet-form-builder' ) }

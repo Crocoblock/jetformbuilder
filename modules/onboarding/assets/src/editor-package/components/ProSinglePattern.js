@@ -23,9 +23,7 @@ function ProSinglePattern( { pattern } ) {
 	return <li>
 		<Button
 			ref={ ref }
-			icon={ <span
-				dangerouslySetInnerHTML={ { __html: pattern.icon } }
-			/> }
+			icon={ pattern.icon }
 			onClick={ () => setShowPopover( prev => !prev ) }
 			label={ pattern.description || pattern.title }
 			variant="secondary"

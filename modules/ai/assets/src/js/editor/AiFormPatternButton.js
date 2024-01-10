@@ -18,7 +18,7 @@ function AiFormPatternButton( { pattern } ) {
 				patternName={ 'ai' }
 				variant="secondary"
 				withPatternIcon
-				iconSize={ 64 }
+				iconSize={ 48 }
 				className="block-editor-block-variation-picker__variation"
 				onClick={ () => setShowModal( true ) }
 			/>

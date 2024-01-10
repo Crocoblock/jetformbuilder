@@ -79,15 +79,6 @@ function RuleSpecificControls( {
 	}
 }
 
-function withPref( name ) {
-	if ( ! name?.length || 'jet_fb_v_' === name ) {
-		return '';
-	}
-	return 'jet_fb_v_' + (
-		name.replace( /^jet_fb_v_/, '' )
-	);
-}
-
 addFilter(
 	'jet.fb.advanced.rule.controls',
 	'jet-form-builder',
@@ -116,9 +107,7 @@ addFilter(
 				<TextControl
 					label={ __( 'Function name', 'jet-form-builder' ) }
 					value={ currentItem.value }
-					onChange={ value => changeCurrentItem( {
-						value: withPref( value )
-					} ) }
+					onChange={ value => changeCurrentItem( { value } ) }
 				/>
 				<BaseHelp>
 					{ __( 'Example of registering a function below.' ) + ' ' }

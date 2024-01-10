@@ -212,9 +212,16 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 	}
 
 	public function remove_verify_button_for_records_single_page( array $config ): array {
-		$box =& $config['containers'][1]['boxes'][2];
+		$box = false;
+		foreach ( $config['containers'][1]['boxes'] as &$current_box ) {
+			if ( 'verification' !== ( $current_box['slug'] ?? '' ) ) {
+				continue;
+			}
+			$box =& $current_box;
+		}
 
 		if (
+			! $box ||
 			Status_Column::PENDING === $box['list']['status']['value']['status'] ||
 			empty( $box['box_actions'] )
 		) {

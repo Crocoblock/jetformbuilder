@@ -25,7 +25,7 @@
 		position: relative;
 		cursor: pointer;
 		box-sizing: content-box;
-		flex-shrink: 0;
+		flex: unset; // compatibility with jetformbuilder/assets/css/frontend.css (.layout-column)
 		display: grid;
 		align-items: center;
 		grid: [track] 1fr/[track] 1fr;

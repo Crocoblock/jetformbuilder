@@ -89,8 +89,8 @@ export default function SwitcherEdit( props ) {
 				>
 					<BlockDefaultValue
 						help={ __(
-							`If default value would be not empty 
-- switcher would be enabled`,
+							`If the default value is not empty or 
+does not equal the string "false" - the switch will be turned on`,
 							'jet-form-builder',
 						) }
 						hasMacro={ false }

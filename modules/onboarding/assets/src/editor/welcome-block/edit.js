@@ -12,6 +12,7 @@ const {
 	      Placeholder,
 	      ToggleControl,
 	      Flex,
+	      ExternalLink,
       } = wp.components;
 
 const {
@@ -52,6 +53,17 @@ function WelcomeBlockEdit( props ) {
 				'jet-form-builder',
 			) }
 		>
+			<Flex direction="column" style={{ minWidth: '100%' }}>
+				<hr style={{ minWidth: '100%' }}/>
+				<ToggleControl
+					label={ __( 'Add Save Form Record action',
+						'jet-form-builder' ) }
+					checked={ saveRecord }
+					onChange={ saveRecord => updateSettings( {
+						saveRecord,
+					} ) }
+				/>
+			</Flex>
 			<ul
 				className="block-editor-block-variation-picker__variations jet-fb"
 				role="list"
@@ -68,16 +80,19 @@ function WelcomeBlockEdit( props ) {
 			>
 				<PatternInserterButton
 					patternName={ 'default' }
-					variant="link"
+					variant="tertiary"
+					style={ { margin: 'unset' } }
 				>
 					{ __( 'Start from scratch', 'jet-form-builder' ) }
 				</PatternInserterButton>
-				<ToggleControl
-					label={ __( 'Add Save Form Record action',
-						'jet-form-builder' ) }
-					checked={ saveRecord }
-					onChange={ saveRecord => updateSettings( { saveRecord } ) }
-				/>
+				<ExternalLink
+					href="https://jetformbuilder.com/features/creating-a-form/"
+				>
+					{ __(
+						'Lear more about creating forms',
+						'jet-form-builder',
+					) }
+				</ExternalLink>
 			</Flex>
 		</Placeholder>
 	</div>;

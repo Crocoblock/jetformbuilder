@@ -1,7 +1,7 @@
 import store from './store';
 import constants from './store/constants';
 import insertPostPattern from './patterns/insert.post.json';
-import defaultPattern from './patterns/default.json';
+import defaultPattern from './patterns/default.js';
 import feedBackPattern from './patterns/feedback.json';
 import registerUserPattern from './patterns/register.user.json';
 import resetPasswordPattern from './patterns/reset.password.json';
@@ -23,13 +23,7 @@ const {
 register( store );
 
 dispatch( constants.store ).register( [
-	{
-		...defaultPattern,
-		applyText: __(
-			'All blocks and actions have been removed',
-			'jet-form-builder',
-		),
-	},
+	defaultPattern,
 	{
 		...feedBackPattern,
 		applyText: __(

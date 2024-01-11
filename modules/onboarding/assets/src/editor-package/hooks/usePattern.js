@@ -109,9 +109,6 @@ function usePattern( { name, onApply = () => {} } ) {
 		onApply();
 	}
 
-	/**
-	 * @returns {boolean}
-	 */
 	function applyPattern( editedPattern = {} ) {
 		editedPattern = {
 			...pattern,
@@ -139,8 +136,14 @@ function usePattern( { name, onApply = () => {} } ) {
 			      icon,
 			      title,
 			      description,
+			      view,
+			      applyText,
 			      ...rawFormData
 		      } = editedPattern;
+
+		if ( !Object.keys( rawFormData ).length ) {
+			return;
+		}
 
 		editPost( rawFormData );
 	}

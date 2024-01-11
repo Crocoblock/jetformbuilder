@@ -78,14 +78,14 @@ function PatternInserterButton( {
 					<Button
 						isLink
 						isDestructive
-						onClick={ insert }
+						onClick={ () => insert() }
 					>
 						{ __( 'replace', 'jet-form-builder' ) }
 					</Button>
 					{ ' / ' }
 					<Button
 						isLink
-						onClick={ append }
+						onClick={ () => append() }
 					>
 						{ __( 'append', 'jet-form-builder' ) }
 					</Button>

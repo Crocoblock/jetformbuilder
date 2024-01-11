@@ -8,6 +8,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die();
 }
 
+use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
@@ -72,6 +73,7 @@ class Verify_Manually extends Async_Job implements
 		 * @see \JFB_Modules\Webhook\Module::confirm
 		 */
 		add_action( 'jet-form-builder/webhook/verification', array( $this, 'execute_actions' ) );
+		add_action( 'jet-form-builder/before-do-action/register_user', array( $this, 'modify_register_user' ) );
 
 		// Disable base verification process
 		remove_action( 'jet-form-builder/webhook/verification', array( $verification, 'on_verification' ) );
@@ -119,6 +121,12 @@ class Verify_Manually extends Async_Job implements
 		} finally {
 			$this->reset_user();
 		}
+	}
+
+	public function modify_register_user( Base $action ) {
+		$action->settings['allow_register']    = true;
+		$action->settings['role_can_register'] = wp_get_current_user()->roles[0];
+		$action->settings['log_in']            = false;
 	}
 
 	protected function set_user( $user_id ) {

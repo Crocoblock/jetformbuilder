@@ -46,6 +46,10 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 			array( $this, 'add_box_to_single_record' )
 		);
 		add_filter(
+			'jet-form-builder/form-record/list',
+			array( $this, 'modify_columns_for_records_page' )
+		);
+		add_filter(
 			'jet-form-builder/page-config/jfb-records',
 			array( $this, 'add_actions_for_records_page' )
 		);
@@ -73,6 +77,10 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 		remove_filter(
 			'jet-form-builder/page-containers/jfb-records-single',
 			array( $this, 'add_box_to_single_record' )
+		);
+		remove_filter(
+			'jet-form-builder/form-record/list',
+			array( $this, 'modify_columns_for_records_page' )
 		);
 		remove_filter(
 			'jet-form-builder/page-config/jfb-records',
@@ -141,10 +149,10 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 		);
 	}
 
-	public function add_actions_for_records_page( array $config ): array {
+	public function modify_columns_for_records_page( array $list ): array {
 		$ids = array();
 
-		foreach ( $config['list'] as &$record ) {
+		foreach ( $list as &$record ) {
 			$ids[] = (int) $record['choose']['value'];
 		}
 
@@ -158,7 +166,7 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 				)
 			)->query()->query_all();
 		} catch ( Query_Builder_Exception $exception ) {
-			return $config;
+			return $list;
 		}
 
 		$sorted_tokens = array();
@@ -168,13 +176,9 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 			$sorted_tokens[ $token_row['main']['record_id'] ] = $token_row;
 		}
 
-		$verify_manually_action = array(
-			'value'    => 'verify',
-			'label'    => __( 'Verify manually', 'jet-form-builder' ),
-			'endpoint' => ( new Rest_Endpoint( new Verify_Manually() ) )->to_array(),
-		);
+		$verify_manually_action = $this->get_verification_action();
 
-		foreach ( $config['list'] as &$record ) {
+		foreach ( $list as &$record ) {
 			if ( empty( $record['actions']['value'] ) ||
 			     ! is_array( $record['actions']['value'] ) ||
 			     empty( $sorted_tokens[ $record['choose']['value'] ] )
@@ -200,15 +204,27 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 			);
 		}
 
+		return $list;
+	}
+
+	public function add_actions_for_records_page( array $config ): array {
 		$delete_action = array_pop( $config['actions'] );
 
 		array_push(
 			$config['actions'],
-			$verify_manually_action,
+			$this->get_verification_action(),
 			$delete_action
 		);
 
 		return $config;
+	}
+
+	protected function get_verification_action(): array {
+		return array(
+			'value'    => 'verify',
+			'label'    => __( 'Verify manually', 'jet-form-builder' ),
+			'endpoint' => ( new Rest_Endpoint( new Verify_Manually() ) )->to_array(),
+		);
 	}
 
 	public function remove_verify_button_for_records_single_page( array $config ): array {

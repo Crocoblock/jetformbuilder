@@ -65,7 +65,7 @@ abstract class Mark_View_Record_Base_Endpoint extends Rest_Api_Endpoint_Base {
 		return new \WP_REST_Response(
 			array(
 				'message' => __( 'Successfully updated!', 'jet-form-builder' ),
-				'list'    => $view->prepare_list( $list ),
+				'list'    => $view->get_prepared_list( $list ),
 				'total'   => Record_View_Count::count( $args ),
 			)
 		);

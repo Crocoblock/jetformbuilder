@@ -47,7 +47,7 @@ class Fetch_Records_Page_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 
 		return new \WP_REST_Response(
 			array(
-				'list'  => $view->prepare_list( $records ),
+				'list'  => $view->get_prepared_list( $records ),
 				'total' => Record_View_Count::count( $args ),
 			)
 		);

@@ -12,6 +12,8 @@ addAction(
 			action: 'verify',
 			promise: component.promiseWrapper( ( { resolve, reject } ) => {
 				component.apiFetch().then( response => {
+					component.$store.dispatch( 'scope-default/fetchPage' );
+
 					resolve( response.message );
 				} ).catch( reject );
 			} ),

@@ -65,6 +65,13 @@ class Records_Table_View extends View_Advanced_Base {
 		}
 	}
 
+	public function get_prepared_list( array $custom_list = array() ): array {
+		return apply_filters(
+			'jet-form-builder/form-record/list',
+			$this->prepare_list( $custom_list )
+		);
+	}
+
 	public function get_global_actions(): array {
 		return ( new Header_Actions_Column() )->get_value();
 	}

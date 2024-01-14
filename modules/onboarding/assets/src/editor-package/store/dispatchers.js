@@ -18,17 +18,23 @@ export default {
 
 			// is new pattern type
 			if ( -1 === issetIndex ) {
-				if ( !item.hasOwnProperty( 'view' ) ) {
+				if ( !item?.view ) {
 					item.view = SinglePattern;
 				}
 
 				state.types.push( { ...item } );
 			}
 			else {
-				state.types[ issetIndex ] = {
+				const editedPattern = {
 					...state.types[ issetIndex ],
 					...item,
 				};
+
+				if ( !editedPattern?.view ) {
+					editedPattern.view = SinglePattern;
+				}
+
+				state.types[ issetIndex ] = editedPattern;
 			}
 		}
 

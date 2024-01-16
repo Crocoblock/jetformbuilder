@@ -9,8 +9,8 @@
 		"hidden:dev:js": "webpack --config .config/dev.webpack.config.js --progress",
 		"hidden:dev:js:w": "webpack --config .config/dev.webpack.config.js --progress -w",
 		"hidden:build:js": "webpack --config .config/prod.webpack.config.js --progress",
-		"css": "sass assets/src/admin/forms/main.scss:assets/build/admin/forms.css -s compressed --no-source-map",
-		"dev:css": "sass assets/src/admin/forms/main.scss:assets/build/admin/forms.css -s compressed --no-source-map -w"
+		"css": "sass assets/src/components/GenerateFormModal.scss:assets/build/modal.css -s compressed --no-source-map",
+		"dev:css": "sass assets/src/components/GenerateFormModal.scss:assets/build/modal.css -s compressed --no-source-map -w"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.14.3",

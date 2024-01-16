@@ -71,7 +71,7 @@ class Generate_Form_Endpoint extends Rest_Api_Endpoint_Base {
 		if ( empty( $response['success'] ) || empty( $response['data']['completion'] ) ) {
 			return new \WP_REST_Response(
 				array(
-					'message' => $response['data']['data'] ?? __( 'Something went wrong', 'jet-form-builder' ),
+					'message' => $response['data'] ?? __( 'Something went wrong', 'jet-form-builder' ),
 					'data'    => $response,
 				),
 				400

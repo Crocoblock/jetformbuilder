@@ -80,7 +80,7 @@ function GenerateFormModal( {
 				) }
 			</span>
 		</Flex> }
-		className="jet-form-edit-modal jfb-ai-modal"
+		className="jfb-ai-modal"
 	>
 		{ error && <Notice
 			status="error"
@@ -115,7 +115,6 @@ function GenerateFormModal( {
 					  'jet-form-builder' ) }
 				  value={ prompt }
 				  onChange={ setPrompt }
-				  className="jet-control-clear-full"
 				  help={ __(
 					  'Prompt example: Simple contact form',
 					  'jet-form-builder',

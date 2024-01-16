@@ -71,7 +71,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 
 		wp_enqueue_style(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/admin/forms.css' ),
+			$this->get_url( 'assets/build/modal.css' ),
 			array(
 				'wp-components',
 			),
@@ -119,6 +119,12 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 			),
 			jet_form_builder()->get_version(),
 			true
+		);
+		wp_enqueue_style(
+			$this->get_handle(),
+			$this->get_url( 'assets/build/modal.css' ),
+			array(),
+			jet_form_builder()->get_version()
 		);
 	}
 }

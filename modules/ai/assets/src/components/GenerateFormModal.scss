@@ -1,9 +1,3 @@
-.jet-form-edit-modal {
-	.components-notice {
-		margin: 0 0 2em 0;
-	}
-}
-
 .jfb-ai-modal {
 	.badge {
 		background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
@@ -11,5 +5,9 @@
 		font-size: 0.65em;
 		padding: 0.2em 0.5em;
 		border-radius: 1em;
+	}
+
+	.components-notice {
+		margin: 0 0 2em 0;
 	}
 }

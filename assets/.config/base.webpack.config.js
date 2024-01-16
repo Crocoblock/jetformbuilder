@@ -8,9 +8,6 @@ module.exports = {
 	context: path.resolve( __dirname, '..', 'src' ),
 	entry: {
 		'frontend/main': './frontend/main/main.js',
-		'frontend/custom.options.restrictions': './frontend/custom.options.restrictions/main.js',
-		'frontend/checkbox.field': './frontend/checkbox.field/main.js',
-		'frontend/radio.field': './frontend/radio.field/main.js',
 		'frontend/media.field': './frontend/media.field/main.js',
 		'frontend/media.field.restrictions': './frontend/media.field.restrictions/main.js',
 		'frontend/multi.step': './frontend/multi.step/main.js',

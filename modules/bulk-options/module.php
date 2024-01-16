@@ -13,6 +13,7 @@ use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
+use JFB_Components\Repository\Interfaces\Repository_Pattern_Interface;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use JFB_Modules\Bulk_Options\Interfaces\Source_Resolve_Interface;
 
@@ -26,7 +27,7 @@ final class Module implements
 	Base_Module_Url_It,
 	Base_Module_Handle_It,
 	Base_Module_Dir_It,
-	Base_Module_After_Install_It {
+	Repository_Pattern_Interface {
 
 	use Base_Module_Dir_Trait;
 	use Base_Module_Url_Trait;
@@ -41,13 +42,6 @@ final class Module implements
 		return true;
 	}
 
-	public function on_install() {
-		$this->rep_install();
-	}
-
-	public function on_uninstall() {
-	}
-
 	public function init_hooks() {
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_admin_assets' ) );
 	}
@@ -57,6 +51,8 @@ final class Module implements
 	}
 
 	public function enqueue_admin_assets() {
+		$this->rep_install();
+
 		wp_localize_script(
 			Editor::EDITOR_PACKAGE_HANDLE,
 			'JetFBBulkOptions',
@@ -111,6 +107,10 @@ final class Module implements
 	 * @throws Repository_Exception
 	 */
 	public function get_source( string $id ): Source_Resolve_Interface {
+		if ( ! $this->rep_isset_item( 'base' ) ) {
+			$this->rep_install();
+		}
+
 		return $this->rep_get_item( $id );
 	}
 }

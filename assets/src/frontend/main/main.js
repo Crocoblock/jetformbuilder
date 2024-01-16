@@ -7,7 +7,6 @@ import LoadingReactiveVar from './reactive/LoadingReactiveVar';
 import InputData from './inputs/InputData';
 import Observable from './Observable';
 import ReportingInterface from './reporting/ReportingInterface';
-import MultiSelectData from './inputs/MultiSelectData';
 import {
 	allRejected,
 	getLanguage,
@@ -50,7 +49,6 @@ window.JetFormBuilderAbstract = {
 	LoadingReactiveVar,
 	Observable,
 	ReportingInterface,
-	MultiSelectData,
 	Restriction,
 	RestrictionError,
 	BaseHtmlAttr,

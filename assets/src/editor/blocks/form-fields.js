@@ -1,5 +1,4 @@
 import * as calculated from './calculated-field';
-import * as checkbox from './checkbox-field';
 import * as conditional from './conditional-block';
 import * as date from './date-field';
 import * as datetime from './datetime-field';
@@ -9,10 +8,8 @@ import * as heading from './heading-field';
 import * as hidden from './hidden-field';
 import * as media from './media-field';
 import * as number from './number-field';
-import * as radio from './radio-field';
 import * as range from './range-field';
 import * as repeater from './repeater-field';
-import * as select from './select-field';
 import * as submit from './submit-field';
 import * as text from './text-field';
 import * as textarea from './textarea-field';
@@ -32,7 +29,6 @@ const {
 
 const fields = applyFilters( 'jet.fb.register.fields', [
 	calculated,
-	checkbox,
 	conditional,
 	datetime,
 	date,
@@ -42,10 +38,8 @@ const fields = applyFilters( 'jet.fb.register.fields', [
 	hidden,
 	media,
 	number,
-	radio,
 	range,
 	repeater,
-	select,
 	submit,
 	text,
 	textarea,

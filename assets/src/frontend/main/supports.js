@@ -21,18 +21,6 @@ function isInputMask( node ) {
  * @param node {HTMLElement}
  * @returns {boolean}
  */
-function isSelect( node ) {
-	return [ 'select-multiple', 'select-one' ].includes( node?.type );
-}
-
-function isMultiSelect( node ) {
-	return 'select-multiple' === node?.type;
-}
-
-/**
- * @param node {HTMLElement}
- * @returns {boolean}
- */
 function isHidden( node ) {
 	return 'hidden' === node.type;
 }
@@ -48,8 +36,6 @@ function isRange( node ) {
 export {
 	isHidden,
 	isRange,
-	isSelect,
-	isMultiSelect,
 	isChangeType,
 	isInputMask,
 };

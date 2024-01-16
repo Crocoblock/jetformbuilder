@@ -33,9 +33,11 @@ class Modules_Controller implements Module_Controller_It {
 			new Block_Parsers\Module(),
 			new Webhook\Module(),
 			new Rest_Api\Module(),
+			new Option_Query\Module(),
 			new Blocks\Module(),
 			new Security\Module(),
 			// additional
+			new Option_Field\Module(),
 			new Wp_Experiments\Module(),
 			new Deprecated\Module(),
 			new Jet_Style\Module(),

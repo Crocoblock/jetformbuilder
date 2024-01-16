@@ -71,7 +71,15 @@ function GenerateFormModal( {
 			width: '60vw',
 		} }
 		onRequestClose={ () => setShowModal( false ) }
-		title={ __( 'Generate Form with AI', 'jet-form-builder' ) }
+		title={ <Flex>
+			{ __( 'Generate Form with AI', 'jet-form-builder' ) }
+			<span className="badge">
+				{ __(
+					'Beta. Limited 5 requests per month',
+					'jet-form-builder',
+				) }
+			</span>
+		</Flex> }
 		className="jet-form-edit-modal jfb-ai-modal"
 	>
 		{ error && <Notice

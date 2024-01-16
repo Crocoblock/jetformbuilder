@@ -2,13 +2,13 @@ const path = require( 'path' );
 
 module.exports = {
 	name: 'prod:jfb-ai',
-	context: path.resolve( __dirname, '../assets/src/js' ),
+	context: path.resolve( __dirname, '../assets/src' ),
 	entry: {
 		'editor': './editor/main.js',
 		'admin/forms': './admin/forms/main.js',
 	},
 	output: {
-		path: path.resolve( __dirname, '../assets/build/js' ),
+		path: path.resolve( __dirname, '../assets/build' ),
 		filename: '[name].js',
 	},
 	resolve: {

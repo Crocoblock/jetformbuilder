@@ -68,10 +68,18 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		$parser_module = jet_form_builder()->module( 'html-parser' );
 
 		$parser_module->register_scripts();
-		wp_enqueue_style( 'wp-components' );
+
+		wp_enqueue_style(
+			$this->get_handle(),
+			$this->get_url( 'assets/build/admin/forms.css' ),
+			array(
+				'wp-components',
+			),
+			jet_form_builder()->get_version()
+		);
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/admin/forms.js' ),
+			$this->get_url( 'assets/build/admin/forms.js' ),
 			array(
 				$parser_module->get_handle(),
 				'wp-api-fetch',
@@ -105,7 +113,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		$parser_module->register_scripts();
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/editor.js' ),
+			$this->get_url( 'assets/build/editor.js' ),
 			array(
 				$parser_module->get_handle(),
 			),

@@ -2,6 +2,9 @@ const {
 	      Modal,
 	      TextareaControl,
 	      Button,
+	      Notice,
+	      ExternalLink,
+	      Flex,
       } = wp.components;
 
 const {
@@ -35,6 +38,7 @@ function GenerateFormModal( {
 	const [ prompt, setPrompt ]       = useState( '' );
 	const [ formHTML, setFormHTML ]   = useState( '' );
 	const [ isLoading, setIsLoading ] = useState( false );
+	const [ error, setError ]         = useState( '' );
 
 	const generateForm = () => {
 		setIsLoading( true );
@@ -44,6 +48,7 @@ function GenerateFormModal( {
 			data: { prompt },
 		} ).then( response => {
 
+			setError( '' );
 			setFormHTML( getFormInnerFields( response.form ) );
 			console.group( __(
 				'JFB: Parsed blocks from generated HTML',
@@ -53,7 +58,9 @@ function GenerateFormModal( {
 			console.groupEnd();
 
 		} ).catch( response => {
-			console.error( response );
+			setError( response?.message ??
+				__( 'Undefined error.', 'jet-form-builder' ),
+			);
 		} ).finally( () => {
 			setIsLoading( false );
 		} );
@@ -65,7 +72,21 @@ function GenerateFormModal( {
 		} }
 		onRequestClose={ () => setShowModal( false ) }
 		title={ __( 'Generate Form with AI', 'jet-form-builder' ) }
+		className="jet-form-edit-modal jfb-ai-modal"
 	>
+		{ error && <Notice
+			status="error"
+			onRemove={ () => setError( '' ) }
+		>
+			<Flex direction="column">
+				{ error }
+				<ExternalLink
+					href="https://support.crocoblock.com/support/home/"
+				>
+					{ __( 'Contact Crocoblock support', 'jet-form-builder' ) }
+				</ExternalLink>
+			</Flex>
+		</Notice> }
 		{ Boolean( formHTML.length ) ? <>
 			<div
 				dangerouslySetInnerHTML={ { __html: formHTML } }
@@ -86,19 +107,20 @@ function GenerateFormModal( {
 					  'jet-form-builder' ) }
 				  value={ prompt }
 				  onChange={ setPrompt }
+				  className="jet-control-clear-full"
 				  help={ __(
 					  'Prompt example: Simple contact form',
 					  'jet-form-builder',
 				  ) }
 			  />
-			  <Button
+			  { Boolean( prompt.length ) && <Button
 				  variant="primary"
 				  isBusy={ isLoading }
 				  disabled={ isLoading }
 				  onClick={ generateForm }
 			  >
 				  { __( 'Generate', 'jet-form-builder' ) }
-			  </Button>
+			  </Button> }
 			  <h4>
 				  { __( 'Tips to write good prompt:', 'jet-form-builder' ) }
 			  </h4>

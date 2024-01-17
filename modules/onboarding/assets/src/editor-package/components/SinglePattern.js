@@ -7,7 +7,7 @@ function SinglePattern( { pattern } ) {
 			variant="secondary"
 			patternName={ pattern.name }
 			withPatternIcon
-			iconSize={ 48 }
+			iconSize={ 32 }
 			className="block-editor-block-variation-picker__variation"
 		/>
 		<span

@@ -3,7 +3,7 @@ import dispatchers from './dispatchers';
 const DEFAULT_STATE = {
 	types: [],
 	settings: {
-		saveRecord: false,
+		saveRecord: true,
 	},
 };
 

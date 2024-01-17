@@ -10,9 +10,9 @@ const {
 
 const {
 	      Placeholder,
-	      ToggleControl,
 	      Flex,
 	      ExternalLink,
+	      Tooltip,
       } = wp.components;
 
 const {
@@ -26,7 +26,21 @@ const {
 
 const {
 	      PatternInserterButton,
+	      ToggleControl,
       } = JetFBComponents;
+
+const HelpIcon = <svg
+	xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+	width="24" height="24" aria-hidden="true"
+	focusable="false"
+	style={ {
+		color: 'rgb(117, 117, 117)',
+	} }
+>
+	<path
+		fill="currentColor"
+		d="M12 4.75a7.25 7.25 0 100 14.5 7.25 7.25 0 000-14.5zM3.25 12a8.75 8.75 0 1117.5 0 8.75 8.75 0 01-17.5 0zM12 8.75a1.5 1.5 0 01.167 2.99c-.465.052-.917.44-.917 1.01V14h1.5v-.845A3 3 0 109 10.25h1.5a1.5 1.5 0 011.5-1.5zM11.25 15v1.5h1.5V15h-1.5z"/>
+</svg>;
 
 function WelcomeBlockEdit( props ) {
 	const blockProps = useBlockProps();
@@ -53,17 +67,6 @@ function WelcomeBlockEdit( props ) {
 				'jet-form-builder',
 			) }
 		>
-			<Flex direction="column" style={{ minWidth: '100%' }}>
-				<hr style={{ minWidth: '100%' }}/>
-				<ToggleControl
-					label={ __( 'Add Save Form Record action',
-						'jet-form-builder' ) }
-					checked={ saveRecord }
-					onChange={ saveRecord => updateSettings( {
-						saveRecord,
-					} ) }
-				/>
-			</Flex>
 			<ul
 				className="block-editor-block-variation-picker__variations jet-fb"
 				role="list"
@@ -78,21 +81,51 @@ function WelcomeBlockEdit( props ) {
 				className="block-editor-block-variation-picker__skip"
 				justify="space-between"
 			>
-				<PatternInserterButton
-					patternName={ 'default' }
-					variant="tertiary"
-					style={ { margin: 'unset' } }
+				<Flex
+					justify="flex-start"
+					style={ {
+						width: 'auto',
+					} }
 				>
-					{ __( 'Start from scratch', 'jet-form-builder' ) }
-				</PatternInserterButton>
-				<ExternalLink
-					href="https://jetformbuilder.com/features/creating-a-form/"
+					<PatternInserterButton
+						patternName={ 'default' }
+						variant="secondary"
+						style={ { margin: 'unset' } }
+					>
+						{ __( 'Start from scratch', 'jet-form-builder' ) }
+					</PatternInserterButton>
+					<ExternalLink
+						href="https://jetformbuilder.com/features/creating-a-form/"
+					>
+						{ __(
+							'Learn more about creating forms',
+							'jet-form-builder',
+						) }
+					</ExternalLink>
+				</Flex>
+				<ToggleControl
+					checked={ saveRecord }
+					onChange={ saveRecord => updateSettings( {
+						saveRecord,
+					} ) }
+					flexLabelProps={ {
+						align: 'center',
+					} }
 				>
-					{ __(
-						'Lear more about creating forms',
-						'jet-form-builder',
-					) }
-				</ExternalLink>
+					<Flex>
+						{ __( 'Save form records', 'jet-form-builder' ) }
+						<Tooltip
+							text={ __(
+								`Adds "Save Form Record" action to store 
+all form submissions into database`,
+								'jet-form-builder',
+							) }
+							delay={ 200 }
+						>
+							{ HelpIcon }
+						</Tooltip>
+					</Flex>
+				</ToggleControl>
 			</Flex>
 		</Placeholder>
 	</div>;

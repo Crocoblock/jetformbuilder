@@ -114,11 +114,19 @@ function GenerateFormModal( {
 				formHTML={ formHTML }
 				prompt={ prompt }
 			>
-				{ sprintf(
-					__( 'Requests used: %d/%d', 'jet-form-builder' ),
-					usage,
-					limit,
-				) }
+				<span
+					style={ {
+						flex: '1',
+						textAlign: 'end',
+						color: 'rgb( 117, 117, 117 )',
+					} }
+				>
+					{ sprintf(
+						__( 'Requests used: %d/%d', 'jet-form-builder' ),
+						usage,
+						limit,
+					) }
+				</span>
 			</Footer>
 		</> : <>
 			  <TextareaControl

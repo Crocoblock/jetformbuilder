@@ -13,6 +13,7 @@ const {
 
 const {
 	      __,
+	      sprintf,
       } = wp.i18n;
 
 const {
@@ -25,7 +26,6 @@ const {
       } = JetFormBuilderParser;
 
 const promptsExamples = [
-	'#fake-ai',
 	'Registration form with minimum inputs',
 	'Opt-in form with gender selector like radio',
 	'Quiz form with 5 questions with choices about math',
@@ -39,6 +39,8 @@ function GenerateFormModal( {
 	const [ formHTML, setFormHTML ]   = useState( '' );
 	const [ isLoading, setIsLoading ] = useState( false );
 	const [ error, setError ]         = useState( '' );
+	const [ usage, setUsage ]         = useState( 0 );
+	const [ limit, setLimit ]         = useState( 0 );
 
 	const generateForm = () => {
 		setIsLoading( true );
@@ -56,6 +58,9 @@ function GenerateFormModal( {
 			) );
 			console.log( parseHTMLtoBlocks( response.form ) );
 			console.groupEnd();
+
+			setUsage( response.usage );
+			setLimit( response.limit );
 
 		} ).catch( response => {
 			setError( response?.message ??
@@ -75,7 +80,7 @@ function GenerateFormModal( {
 			{ __( 'Generate Form with AI', 'jet-form-builder' ) }
 			<span className="badge">
 				{ __(
-					'Beta. Limited 5 requests per month',
+					'Beta. Limited 10 requests per month',
 					'jet-form-builder',
 				) }
 			</span>
@@ -108,7 +113,13 @@ function GenerateFormModal( {
 				clearHTML={ () => setFormHTML( '' ) }
 				formHTML={ formHTML }
 				prompt={ prompt }
-			/>
+			>
+				{ sprintf(
+					__( 'Requests used: %d/%d', 'jet-form-builder' ),
+					usage,
+					limit,
+				) }
+			</Footer>
 		</> : <>
 			  <TextareaControl
 				  label={ __( 'Describe the form you want',

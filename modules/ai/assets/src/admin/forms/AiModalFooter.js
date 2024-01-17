@@ -24,7 +24,7 @@ const getPostEditUrl = id => {
 	return url.href;
 };
 
-function AiModalFooter( { clearHTML, formHTML, prompt } ) {
+function AiModalFooter( { clearHTML, formHTML, prompt, children = null } ) {
 
 	const createForm = () => {
 		const blocks = parseHTMLtoBlocks( formHTML );
@@ -66,6 +66,7 @@ function AiModalFooter( { clearHTML, formHTML, prompt } ) {
 		>
 			{ __( 'Change generation prompt', 'jet-form-builder' ) }
 		</Button>
+		{ children }
 	</Flex>;
 }
 

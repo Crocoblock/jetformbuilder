@@ -43,7 +43,7 @@
 			"jet-forms/textarea-field",
 			{
 				"name": "how_improve",
-				"label": "How would you suggest I improve it?"
+				"label": "How would you suggest to improve it?"
 			}
 		],
 		[

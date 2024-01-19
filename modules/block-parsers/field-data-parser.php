@@ -69,6 +69,14 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	 */
 	private $complete_apply = false;
 
+	/**
+	 * Second part in blockName (after "jet-forms/")
+	 *
+	 * Or return "default" to replace the default parser that applies
+	 * to all fields that do not have a personal parser
+	 *
+	 * @return string
+	 */
 	abstract public function type();
 
 	/**
@@ -78,6 +86,12 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 		return $this->type();
 	}
 
+	/**
+	 * Used for internal purposes. To get the true value, use the method
+	 * \JFB_Modules\Block_Parsers\Field_Data_Parser::get_value
+	 *
+	 * @return mixed
+	 */
 	public function get_response() {
 		return $this->value;
 	}

@@ -72,7 +72,7 @@ class Wc_Product_Modifier extends Abstract_Post_Modifier {
 					new Product_Cross_Sell_Ids_Property(),
 					new Product_Gallery_Property(),
 				)
-			) 
+			)
 		);
 	}
 

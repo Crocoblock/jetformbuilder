@@ -182,7 +182,9 @@ PageState.prototype.onHide      = function () {
 };
 PageState.prototype.updateState = function () {
 	for ( const input of this.getInputs() ) {
-		if ( input.reporting.validityState.current ) {
+		if ( input.reporting.validityState.current ||
+			null === input.reporting.validityState.current
+		) {
 			continue;
 		}
 		this.canSwitch.current = false;

@@ -196,11 +196,10 @@ final class Module implements
 			case 'generate':
 				/** @var Legacy_Generator_Query $generator_query */
 				$generator_query = $block->get_query();
-				$block->get_query()->set_setting( 'value_from', $value_from );
-				$block->get_query()->set_setting( 'calc_from', $calc_from );
-
 				$generator_query->set_block( $block );
 				$generator_query->set_settings( $block->block_attrs );
+				$generator_query->set_setting( 'value_from', $value_from );
+				$generator_query->set_setting( 'calc_from', $calc_from );
 				break;
 		}
 	}

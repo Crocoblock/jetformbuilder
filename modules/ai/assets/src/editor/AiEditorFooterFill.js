@@ -17,7 +17,7 @@ const {
 	      usePattern,
       } = JetFBHooks;
 
-function AiEditorFooterFill( { clearHTML, formHTML } ) {
+function AiEditorFooterFill( { clearHTML, formHTML, children = null } ) {
 
 	const {
 		      showPopover,
@@ -90,6 +90,7 @@ function AiEditorFooterFill( { clearHTML, formHTML } ) {
 				) }</span>
 			</div>
 		</Popover> }
+		{ children }
 	</Flex>;
 }
 

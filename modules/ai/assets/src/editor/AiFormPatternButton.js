@@ -9,16 +9,34 @@ const {
 	      useState,
       } = wp.element;
 
+const {
+	      FlexItem,
+	      Flex,
+      } = wp.components;
+
+const {
+	      __,
+      } = wp.i18n;
+
 function AiFormPatternButton( { pattern } ) {
 	const [ showModal, setShowModal ] = useState( false );
 
 	return <>
+		<FlexItem
+			style={ {
+				height: 'calc( 32px + 3em )',
+				margin: '0.6em',
+				alignSelf: 'center',
+			} }
+		>
+			{ __( 'or', 'jet-form-builder' ) }
+		</FlexItem>
 		<li>
 			<PatternInserterButton
 				patternName={ 'ai' }
 				variant="secondary"
 				withPatternIcon
-				iconSize={ 48 }
+				iconSize={ 32 }
 				className="block-editor-block-variation-picker__variation"
 				onClick={ () => setShowModal( true ) }
 			/>

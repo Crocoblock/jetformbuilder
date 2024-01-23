@@ -7,6 +7,8 @@ import registerUserPattern from './patterns/register.user.json';
 import resetPasswordPattern from './patterns/reset.password.json';
 import userLoginPattern from './patterns/user.login.json';
 import donationPattern from './patterns/donation.json';
+import contactPattern from './patterns/contact.json';
+import newsletterPattern from './patterns/newsletter.json';
 import usePattern from './hooks/usePattern';
 import PatternInserterButton from './components/PatternInserterButton';
 import ProSinglePattern from './components/ProSinglePattern';
@@ -25,9 +27,23 @@ register( store );
 dispatch( constants.store ).register( [
 	defaultPattern,
 	{
-		...feedBackPattern,
+		...contactPattern,
 		applyText: __(
 			'4 blocks and Send Email action have been added',
+			'jet-form-builder',
+		),
+	},
+	{
+		...feedBackPattern,
+		applyText: __(
+			'5 blocks and Send Email action have been added',
+			'jet-form-builder',
+		),
+	},
+	{
+		...newsletterPattern,
+		applyText: __(
+			'2 form fields and Mailchimp action have been added',
 			'jet-form-builder',
 		),
 	},

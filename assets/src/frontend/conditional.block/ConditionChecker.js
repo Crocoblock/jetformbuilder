@@ -23,9 +23,19 @@ ConditionChecker.prototype = {
 			) > +(
 				conditionValue[ 0 ]
 			),
+			greater_or_eq: ( current, conditionValue ) => +(
+				current
+			) >= +(
+				conditionValue[ 0 ]
+			),
 			less: ( current, conditionValue ) => +(
 				current
 			) < +(
+				conditionValue[ 0 ]
+			),
+			less_or_eq: ( current, conditionValue ) => +(
+				current
+			) <= +(
 				conditionValue[ 0 ]
 			),
 			between: ( current, conditionValue ) => {

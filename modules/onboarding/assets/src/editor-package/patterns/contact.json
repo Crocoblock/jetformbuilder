@@ -1,0 +1,43 @@
+{
+	"name": "contact",
+	"title": "Contact form",
+	"icon": "wordpress",
+	"actions": [
+		{
+			"type": "send_email",
+			"settings": {
+				"mail_to": "form",
+				"from_field": "email",
+				"subject": "%subject%",
+				"content": "%message%"
+			}
+		}
+	],
+	"blocks": [
+		[
+			"jet-forms/text-field",
+			{
+				"name": "email",
+				"label": "Email",
+				"field_type": "email"
+			}
+		],
+		[
+			"jet-forms/text-field",
+			{
+				"name": "subject",
+				"label": "Subject"
+			}
+		],
+		[
+			"jet-forms/wysiwyg-field",
+			{
+				"name": "message",
+				"label": "Message"
+			}
+		],
+		[
+			"jet-forms/submit-field"
+		]
+	]
+}

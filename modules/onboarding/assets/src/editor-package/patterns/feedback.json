@@ -8,8 +8,8 @@
 			"settings": {
 				"mail_to": "form",
 				"from_field": "email",
-				"subject": "%subject%",
-				"content": "%message%"
+				"subject": "User feedback",
+				"content": "Name: %name% - %rating%<br/>%how_improve%"
 			}
 		}
 	],
@@ -17,23 +17,33 @@
 		[
 			"jet-forms/text-field",
 			{
-				"name": "email",
-				"label": "Email",
-				"field_type": "email"
+				"name": "name",
+				"label": "Name",
+				"required": true
 			}
 		],
 		[
 			"jet-forms/text-field",
 			{
-				"name": "subject",
-				"label": "Subject"
+				"name": "email",
+				"label": "Email",
+				"field_type": "email",
+				"required": true
 			}
 		],
 		[
-			"jet-forms/wysiwyg-field",
+			"jet-forms/radio-field",
 			{
-				"name": "message",
-				"label": "Message"
+				"name": "rating",
+				"label": "Please rate our website",
+				"required": true
+			}
+		],
+		[
+			"jet-forms/textarea-field",
+			{
+				"name": "how_improve",
+				"label": "How would you suggest to improve it?"
 			}
 		],
 		[

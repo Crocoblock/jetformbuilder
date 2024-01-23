@@ -20,15 +20,15 @@ function ProSinglePattern( { pattern } ) {
 		      popoverProps,
 	      } = useTriggerPopover();
 
-	return <li>
+	return <li className="is-pro">
 		<Button
 			ref={ ref }
 			icon={ pattern.icon }
 			onClick={ () => setShowPopover( prev => !prev ) }
 			label={ pattern.description || pattern.title }
 			variant="secondary"
-			iconSize={ 48 }
-			className="block-editor-block-variation-picker__variation is-pro"
+			iconSize={ 32 }
+			className="block-editor-block-variation-picker__variation"
 		/>
 		<span
 			className="block-editor-block-variation-picker__variation-label"

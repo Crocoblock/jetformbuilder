@@ -20,7 +20,7 @@
 			"jet-forms/text-field",
 			{
 				"name": "title",
-				"label": "Post Tile"
+				"label": "Post Title"
 			}
 		],
 		[

@@ -2,6 +2,9 @@ const {
 	      Modal,
 	      TextareaControl,
 	      Button,
+	      Notice,
+	      ExternalLink,
+	      Flex,
       } = wp.components;
 
 const {
@@ -10,6 +13,7 @@ const {
 
 const {
 	      __,
+	      sprintf,
       } = wp.i18n;
 
 const {
@@ -22,7 +26,6 @@ const {
       } = JetFormBuilderParser;
 
 const promptsExamples = [
-	'#fake-ai',
 	'Registration form with minimum inputs',
 	'Opt-in form with gender selector like radio',
 	'Quiz form with 5 questions with choices about math',
@@ -35,6 +38,9 @@ function GenerateFormModal( {
 	const [ prompt, setPrompt ]       = useState( '' );
 	const [ formHTML, setFormHTML ]   = useState( '' );
 	const [ isLoading, setIsLoading ] = useState( false );
+	const [ error, setError ]         = useState( '' );
+	const [ usage, setUsage ]         = useState( 0 );
+	const [ limit, setLimit ]         = useState( 0 );
 
 	const generateForm = () => {
 		setIsLoading( true );
@@ -44,6 +50,7 @@ function GenerateFormModal( {
 			data: { prompt },
 		} ).then( response => {
 
+			setError( '' );
 			setFormHTML( getFormInnerFields( response.form ) );
 			console.group( __(
 				'JFB: Parsed blocks from generated HTML',
@@ -52,8 +59,13 @@ function GenerateFormModal( {
 			console.log( parseHTMLtoBlocks( response.form ) );
 			console.groupEnd();
 
+			setUsage( response.usage );
+			setLimit( response.limit );
+
 		} ).catch( response => {
-			console.error( response );
+			setError( response?.message ??
+				__( 'Undefined error.', 'jet-form-builder' ),
+			);
 		} ).finally( () => {
 			setIsLoading( false );
 		} );
@@ -64,8 +76,30 @@ function GenerateFormModal( {
 			width: '60vw',
 		} }
 		onRequestClose={ () => setShowModal( false ) }
-		title={ __( 'Generate Form with AI', 'jet-form-builder' ) }
+		title={ <Flex>
+			{ __( 'Generate Form with AI', 'jet-form-builder' ) }
+			<span className="badge">
+				{ __(
+					'Beta. Limited 10 requests per month',
+					'jet-form-builder',
+				) }
+			</span>
+		</Flex> }
+		className="jfb-ai-modal"
 	>
+		{ error && <Notice
+			status="error"
+			onRemove={ () => setError( '' ) }
+		>
+			<Flex direction="column">
+				{ error }
+				<ExternalLink
+					href="https://support.crocoblock.com/support/home/"
+				>
+					{ __( 'Contact Crocoblock support', 'jet-form-builder' ) }
+				</ExternalLink>
+			</Flex>
+		</Notice> }
 		{ Boolean( formHTML.length ) ? <>
 			<div
 				dangerouslySetInnerHTML={ { __html: formHTML } }
@@ -79,7 +113,21 @@ function GenerateFormModal( {
 				clearHTML={ () => setFormHTML( '' ) }
 				formHTML={ formHTML }
 				prompt={ prompt }
-			/>
+			>
+				<span
+					style={ {
+						flex: '1',
+						textAlign: 'end',
+						color: 'rgb( 117, 117, 117 )',
+					} }
+				>
+					{ sprintf(
+						__( 'Requests used: %d/%d', 'jet-form-builder' ),
+						usage,
+						limit,
+					) }
+				</span>
+			</Footer>
 		</> : <>
 			  <TextareaControl
 				  label={ __( 'Describe the form you want',
@@ -91,14 +139,14 @@ function GenerateFormModal( {
 					  'jet-form-builder',
 				  ) }
 			  />
-			  <Button
+			  { Boolean( prompt.length ) && <Button
 				  variant="primary"
 				  isBusy={ isLoading }
 				  disabled={ isLoading }
 				  onClick={ generateForm }
 			  >
 				  { __( 'Generate', 'jet-form-builder' ) }
-			  </Button>
+			  </Button> }
 			  <h4>
 				  { __( 'Tips to write good prompt:', 'jet-form-builder' ) }
 			  </h4>

@@ -151,5 +151,7 @@
 		"jet-forms/repeater-field--name",
 		"jet-forms/repeater-row--default",
 		"jet-forms/repeater-row--current-index"
-	]
+	],
+	"viewScript": "jet-fb-option-field-select",
+	"style": "jet-fb-option-field-select"
 }

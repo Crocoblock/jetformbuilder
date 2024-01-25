@@ -8,12 +8,12 @@ function ConditionChecker() {
 
 ConditionChecker.prototype = {
 	/**
-	 * @param input {InputData}
+	 * @param  input {InputData}
 	 * @return {boolean}
 	 */
 	isSupported: ( input ) => true,
 	operators: {},
-	getOperators: function () {
+	getOperators () {
 		return {
 			equal: ( current, conditionValue ) => current ===
 				conditionValue[ 0 ],
@@ -65,15 +65,15 @@ ConditionChecker.prototype = {
 	},
 	/**
 	 * @param condition {ConditionFieldItem}
-	 * @param input {InputData}
+	 * @param input     {InputData}
 	 */
-	check: function ( condition, input ) {
+	check ( condition, input ) {
 		const current        = input.value.current;
 		const conditionValue = condition.value;
 
 		return this.checkRaw( condition.operator, current, conditionValue );
 	},
-	checkRaw: function ( operator, current, conditionValue ) {
+	checkRaw ( operator, current, conditionValue ) {
 		if ( this.operators.hasOwnProperty( operator ) ) {
 			return this.operators[ operator ](
 				current,

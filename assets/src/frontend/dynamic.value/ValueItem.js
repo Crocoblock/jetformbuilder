@@ -5,7 +5,7 @@ const {
 
 /**
  * @type {Function}
- * @constructor
+ * @class
  */
 function ValueItem() {
 }
@@ -25,18 +25,22 @@ ValueItem.prototype = {
 	 */
 	formulas: [],
 	/**
-	 * @param input {InputData}
-	 * @returns {boolean}
+	 * @param  input {InputData}
+	 * @return {boolean}
 	 */
 	isSupported( input ) {
 		return true;
 	},
 	/**
+	 * @param to_set.to_set
 	 * @param to_set
 	 * @param conditions
-	 * @param set_on_empty {Boolean}
-	 * @param frequency {'once'|'always'|'on_change'}
-	 * @param input {InputData}
+	 * @param set_on_empty        {Boolean}
+	 * @param frequency           {'once'|'always'|'on_change'}
+	 * @param to_set.conditions
+	 * @param input               {InputData}
+	 * @param to_set.set_on_empty
+	 * @param to_set.frequency
 	 */
 	observe(
 		{
@@ -89,7 +93,7 @@ ValueItem.prototype = {
 		this.formulas.push( formula );
 	},
 	/**
-	 * @param list {ConditionsList|boolean}
+	 * @param list        {ConditionsList|boolean}
 	 * @param forceResult {boolean|null}
 	 */
 	applyValue( list, forceResult = null ) {

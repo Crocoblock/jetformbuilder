@@ -1,7 +1,7 @@
 import getFormFieldsBlocks from './getFormFieldsBlocks';
 
 function getAvailableFields( exclude = [], context = 'default' ) {
-	let fields   = [];
+	const fields   = [];
 	const blocks = getFormFieldsBlocks( exclude, false, false, context );
 
 	if ( blocks ) {

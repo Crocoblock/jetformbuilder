@@ -1,5 +1,6 @@
 const { __, sprintf } = wp.i18n;
 
+/* eslint-disable */
 export default {
 	methods: {
 		__( value, context ) {

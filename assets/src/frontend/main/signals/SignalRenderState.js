@@ -2,7 +2,7 @@ import SignalHiddenArray from './SignalHiddenArray';
 
 /**
  * @property {RenderStateData} input
- * @constructor
+ * @class
  */
 function SignalRenderState() {
 	SignalHiddenArray.call( this );

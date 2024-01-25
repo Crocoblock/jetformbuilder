@@ -35,7 +35,7 @@ function blocksRecursiveIterator( blockParserFunc ) {
 			 * Introduced
 			 * @since 2.1.1
 			 *
-			 * @type {{clientId: String, innerBlocks: Array}[]}
+			 * @type {{clientId: string, innerBlocks: Array}[]}
 			 */
 			let innerReusable = select( 'core/block-editor' )?.
 				__unstableGetClientIdsTree?.(

@@ -9,7 +9,7 @@ function CalculatedFieldChecker() {
 
 	/**
 	 * @param condition {ConditionFieldItem}
-	 * @param input {InputData}
+	 * @param input     {InputData}
 	 */
 	this.check = function ( condition, input ) {
 		const current        = input.calcValue;

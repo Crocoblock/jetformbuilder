@@ -6,10 +6,11 @@ const {
       } = wp.components;
 
 /**
- * @param children
- * @param props
- * @returns {boolean|JSX.Element}
- * @constructor
+ * @param  children.children
+ * @param  children
+ * @param  props
+ * @return {boolean|JSX.Element}
+ * @class
  */
 function ActionItemFooter( { children, ...props } = {} ) {
 	const { action } = useLoopedAction();

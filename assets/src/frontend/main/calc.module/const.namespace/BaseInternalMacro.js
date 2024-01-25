@@ -3,12 +3,12 @@ function BaseInternalMacro() {
 
 BaseInternalMacro.prototype = {
 	/**
-	 * @return {String}
+	 * @return {string}
 	 */
-	getId: function () {
+	getId () {
 		throw new Error( 'You need to rewrite this method' );
 	},
-	getResult: function () {
+	getResult () {
 		throw new Error( 'You need to rewrite this method' );
 	},
 };

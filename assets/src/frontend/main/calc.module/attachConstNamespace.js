@@ -25,7 +25,7 @@ const getStaticFunctions = () => wpApplyFilters(
 let staticFunctions = [];
 
 /**
- * @param slug
+ * @param  slug
  * @return {boolean|BaseInternalMacro}
  */
 function getFunction( slug ) {
@@ -46,9 +46,9 @@ function getFunction( slug ) {
 }
 
 /**
- * @param result {String}
- * @param fieldName {String}
- * @param params {String[]}
+ * @param  result    {String}
+ * @param  fieldName {String}
+ * @param  params    {String[]}
  * @return {*}
  */
 function attachConstNamespace(

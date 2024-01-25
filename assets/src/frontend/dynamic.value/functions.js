@@ -17,8 +17,8 @@ const getValues = () => applyFilters(
 let values      = [];
 
 /**
- * @param input
- * @returns {ValueItem}
+ * @param  input
+ * @return {ValueItem}
  */
 const getValue = ( input ) => {
 	if ( !values.length ) {
@@ -83,7 +83,7 @@ const reactProperties = [
 ];
 
 /**
- * @param input {InputData}
+ * @param  input {InputData}
  * @return {Generator<BaseReactiveProperty>}
  */
 function* getProperties( input ) {

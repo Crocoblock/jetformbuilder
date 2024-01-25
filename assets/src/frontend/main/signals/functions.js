@@ -23,8 +23,8 @@ const getSignalTypes = () => applyFilters(
 let signalTypes = [];
 
 /**
- * @param node {HTMLElement}
- * @param input {InputData}
+ * @param  node  {HTMLElement}
+ * @param  input {InputData}
  * @return {BaseSignal}
  */
 function getSignal( node, input ) {

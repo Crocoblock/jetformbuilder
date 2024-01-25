@@ -22,7 +22,7 @@ information like names, emails, titles, etc.`,
 		'jet-form-builder',
 	),
 	edit: TextEdit,
-	jfbResolveBlock: function () {
+	jfbResolveBlock () {
 		const base = {
 			clientId: this.clientId,
 			name: this.name,

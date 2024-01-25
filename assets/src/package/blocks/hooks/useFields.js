@@ -12,14 +12,14 @@ const {
 const { applyFilters } = wp.hooks;
 
 /**
- * @param options {{
- * withInner: Boolean|undefined,
- * excludeCurrent: Boolean|undefined
- * currentId: String|undefined
- * placeholder: String|undefined
- * }}
- * @param deps {undefined|Array}
- * @returns {Array}
+ * @param  options {{
+ *                 withInner: Boolean|undefined,
+ *                 excludeCurrent: Boolean|undefined
+ *                 currentId: String|undefined
+ *                 placeholder: String|undefined
+ *                 }}
+ * @param  deps    {undefined|Array}
+ * @return {Array}
  */
 function useFields( options = {}, deps = undefined ) {
 	const blockProps   = useBlockEditContext();

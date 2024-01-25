@@ -7,7 +7,7 @@ const {
 
 /**
  * @param comment
- * @param root {Observable}
+ * @param root    {Observable}
  */
 function observeComment( comment, root ) {
 	const formula = new CalculatedHtmlString( root );
@@ -34,7 +34,7 @@ function observeComment( comment, root ) {
 
 	const wrapper = document.createElement( 'span' );
 
-	let prevSibling = comment.parentNode.insertBefore(
+	const prevSibling = comment.parentNode.insertBefore(
 		wrapper,
 		comment,
 	);

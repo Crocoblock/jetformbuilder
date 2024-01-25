@@ -1,7 +1,7 @@
 import { getOffset } from './functions';
 
 export default {
-	setQueryState( { commit, getters, state }, newState ) {
+	setQueryState( { commit }, newState ) {
 		if ( 'currentPage' in newState ) {
 			commit( 'setCurrentPage', newState.currentPage );
 		}
@@ -12,13 +12,13 @@ export default {
 			commit( 'setLimit', newState.limit );
 		}
 	},
-	setQueriedPage( { commit, getters, state }, pageNum ) {
+	setQueriedPage( { commit, state }, pageNum ) {
 		const offset = getOffset( +pageNum, state.limit );
 
 		commit( 'setCurrentPage', pageNum );
 		commit( 'setOffset', offset );
 	},
-	updateQueryState( { commit, getters, state, dispatch }, page = false ) {
+	updateQueryState( { state, dispatch }, page = false ) {
 		dispatch( 'setQueriedPage', page || state.currentPage );
 	},
 }

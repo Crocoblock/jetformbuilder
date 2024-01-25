@@ -3,7 +3,7 @@ import ExportPaymentsModule from '../modules/ExportPaymentsModule';
 function ExportPaymentsPlugin( store ) {
 	store.registerModule( 'exportPayments', ExportPaymentsModule );
 
-	store.subscribe( ( mutation, state ) => {
+	store.subscribe( ( mutation ) => {
 		const typeParts = mutation.type.split( '/' );
 
 		switch ( typeParts.at( -1 ) ) {
@@ -13,16 +13,20 @@ function ExportPaymentsPlugin( store ) {
 				return;
 		}
 
-		if ( 'exportPayments' !== typeParts[ 0 ] ) {
-			return;
-		}
-
-		switch ( typeParts.at( -1 ) ) {
-			case 'setStatus':
-				store.dispatch( 'exportPayments/resolveCount' ).then( () => {} );
-				break;
-		}
+		maybeResolveCount( typeParts, store );
 	} );
+}
+
+function maybeResolveCount( typeParts, store ) {
+	if ( 'exportPayments' !== typeParts[ 0 ] ) {
+		return;
+	}
+
+	switch ( typeParts.at( -1 ) ) {
+		case 'setStatus':
+			store.dispatch( 'exportPayments/resolveCount' ).then( () => {} );
+			break;
+	}
 }
 
 export default ExportPaymentsPlugin;

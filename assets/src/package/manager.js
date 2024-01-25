@@ -392,7 +392,7 @@ window.JetFBHooks = {
 	useActionCallback,
 	useActionDetail,
 	useUniqueNameOnDuplicate,
-	useFields: useFields,
+	useFields,
 	useSupport,
 	useLoopedAction,
 	useScopedAttributesContext,

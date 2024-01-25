@@ -9,9 +9,11 @@ const {
       } = wp.components;
 
 /**
- * @param current {BasePopoverItem}
+ * @param current.current
+ * @param current          {BasePopoverItem}
  * @param children
- * @constructor
+ * @param current.children
+ * @class
  */
 function PopoverItemMacro( { current, children } ) {
 	const [ showHelp, setShowHelp ] = useState( false );

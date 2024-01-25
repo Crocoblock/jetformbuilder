@@ -7,7 +7,7 @@ const {
 
 /**
  * Update current meta in store (while editing it in modal)
- * @returns {{setCurrentAction, clearCurrent, setTypeSettings,
+ * @return {{setCurrentAction, clearCurrent, setTypeSettings,
  *     updateCurrentConditions}}
  */
 export const useUpdateCurrentAction = () => {

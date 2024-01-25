@@ -5,7 +5,7 @@ const {
       } = wp.element;
 
 /**
- * @returns {{
+ * @return {{
  * attributes: Object,
  * setAttributes: Function,
  * realAttributes: Object,

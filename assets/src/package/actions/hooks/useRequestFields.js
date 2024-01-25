@@ -67,7 +67,7 @@ const processComputedField = ( { computed, action, fields, nameSet } ) => {
 		id: action.id,
 		label: label || name,
 		value: name,
-		name: name,
+		name,
 		help: computed.getHelp(),
 	} );
 };
@@ -88,7 +88,7 @@ function getComputedFields( { fields, actions, computed, nameSet } ) {
 		 */
 		const current = new computedField();
 
-		for ( let action of actions ) {
+		for ( const action of actions ) {
 			processComputedField( {
 				computed: current,
 				action,
@@ -106,7 +106,7 @@ function getComputedFields( { fields, actions, computed, nameSet } ) {
 		fields.push( {
 			label: label || name,
 			value: name,
-			name: name,
+			name,
 			help: current.getHelp(),
 		} );
 	}

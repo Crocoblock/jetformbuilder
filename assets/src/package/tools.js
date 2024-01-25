@@ -18,8 +18,8 @@ class Tools {
 	/**
 	 * @deprecated 3.1.0
 	 *
-	 * @param object
-	 * @returns {boolean}
+	 * @param  object
+	 * @return {boolean}
 	 */
 	static isEmptyObject( object ) {
 		console.warn(
@@ -193,10 +193,10 @@ export function assetUrl( url = '' ) {
 /**
  * @since 3.1.0
  *
- * @param obj
- * @param path
- * @param value
- * @returns {*}
+ * @param  obj
+ * @param  path
+ * @param  value
+ * @return {*}
  */
 export function set( obj, path, value ) {
 	// Create a shallow copy of the object
@@ -232,8 +232,8 @@ export function set( obj, path, value ) {
 /**
  * @since 3.1.0
  *
- * @param value
- * @returns {boolean}
+ * @param  value
+ * @return {boolean}
  */
 export function isEmpty( value ) {
 	if ( null === value || undefined === value ) {

@@ -45,7 +45,7 @@ export default {
 			commit( 'toggleLoading', 'page' );
 		} );
 	},
-	fetchPageWithFilters( { commit, getters, dispatch, state } ) {
+	fetchPageWithFilters( { commit, getters, dispatch } ) {
 		commit( 'toggleLoading', 'page' );
 		dispatch( 'updateQueryState', 1 );
 		const url = getters.receiveEndpoint;
@@ -62,11 +62,11 @@ export default {
 					dispatch( 'updateList', { list: [], total: 0 } );
 					break;
 			}
-		} ).finally( response => {
+		} ).finally( () => {
 			commit( 'toggleLoading', 'page' );
 		} );
 	},
-	updateList( { commit, getters, dispatch, state }, response ) {
+	updateList( { commit, getters }, response ) {
 		commit( 'setList', response.list );
 
 		if ( getters.queryState ) {
@@ -79,7 +79,7 @@ export default {
 
 		commit( 'setOffset', 0 );
 	},
-	fetch( { commit, getters }, options ) {
+	fetch( store, options ) {
 		return new Promise( ( resolve, reject ) => {
 			apiFetch( options ).then( resolve ).catch( error => {
 				jfbEventBus.$CXNotice.add( {

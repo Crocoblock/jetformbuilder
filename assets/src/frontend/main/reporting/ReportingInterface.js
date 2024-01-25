@@ -18,7 +18,6 @@
  * This property is reactive, and when it changes,
  * the state of the button for submitting the form
  * and the navigation buttons between pages changes.
- *
  */
 import RestrictionError from './RestrictionError';
 import ReactiveVar from '../reactive/ReactiveVar';
@@ -30,7 +29,7 @@ function ReportingInterface() {
 	this.input = null;
 	this.isRequired = false;
 	/**
-	 * @type {array|null}
+	 * @type {Array | null}
 	 */
 	this.errors = null;
 	this.restrictions = [];
@@ -55,9 +54,9 @@ ReportingInterface.prototype = {
 	 * Runs on changing value in the field
 	 * @see InputData.onChange
 	 */
-	validateOnChange: function () {
+	validateOnChange () {
 	},
-	validateOnBlur: function () {
+	validateOnBlur () {
 	},
 	/**
 	 * Runs on trying to submit form
@@ -67,9 +66,9 @@ ReportingInterface.prototype = {
 	 * @see InputData.setPage
 	 * @see PageState.updateState
 	 *
-	 * @returns {Promise<boolean>}
+	 * @return {Promise<boolean>}
 	 */
-	validate: async function () {
+	async validate () {
 		const errors = await this.getErrors();
 
 		this.validityState.current = !Boolean( errors.length );
@@ -85,17 +84,17 @@ ReportingInterface.prototype = {
 		throw new RestrictionError( errors[ 0 ].name );
 	},
 	/**
-	 * @param promises {Function[]}
-	 * @return {Promise<array|null>}
+	 * @param  promises {Function[]}
+	 * @return {Promise<Array | null>}
 	 */
-	getErrorsRaw: async function ( promises ) {
+	async getErrorsRaw ( promises ) {
 		throw new Error( 'getError must return a Promise' );
 	},
 
 	/**
-	 * @return {Promise<array|*[]|null>}
+	 * @return {Promise<Array | *[] | null>}
 	 */
-	getErrors: async function () {
+	async getErrors () {
 		if (
 			this.input.loading.current ||
 			this.input?.callable?.lock?.current ||
@@ -124,7 +123,7 @@ ReportingInterface.prototype = {
 
 		return this.errors;
 	},
-	report: function ( validationErrors ) {
+	report ( validationErrors ) {
 		if ( this.input.getContext().reportedFirst ) {
 			this.reportRaw( validationErrors );
 
@@ -139,16 +138,16 @@ ReportingInterface.prototype = {
 	 * @param validationErrors {Restriction[]}
 	 * @return void
 	 */
-	reportRaw: function ( validationErrors ) {
+	reportRaw ( validationErrors ) {
 		throw new Error( 'report is empty' );
 	},
-	reportFirst: function ( validationErrors ) {
+	reportFirst ( validationErrors ) {
 		this.report( validationErrors );
 	},
-	clearReport: function () {
+	clearReport () {
 		throw new Error( 'clearReport is empty' );
 	},
-	getPromises: function () {
+	getPromises () {
 		const promises = [];
 
 		for ( const restriction of this.restrictions ) {
@@ -167,31 +166,31 @@ ReportingInterface.prototype = {
 		return promises;
 	},
 	/**
-	 * @param restriction {Restriction}
-	 * @return {Boolean}
+	 * @param  restriction {Restriction}
+	 * @return {boolean}
 	 */
-	canProcessRestriction: function ( restriction ) {
+	canProcessRestriction ( restriction ) {
 		return true;
 	},
 
 	/**
 	 * @param restriction {Restriction}
 	 */
-	beforeProcessRestriction: function ( restriction ) {
+	beforeProcessRestriction ( restriction ) {
 	},
 	/**
-	 * @param node
-	 * @param input
+	 * @param  node
+	 * @param  input
 	 *
 	 * @return {boolean}
 	 */
-	isSupported: function ( node, input ) {
+	isSupported ( node, input ) {
 		throw new Error( 'isSupported is empty' );
 	},
 	/**
 	 * @param input {InputData}
 	 */
-	setInput: function ( input ) {
+	setInput ( input ) {
 		this.validityState = new ReactiveVar();
 		this.validityState.make();
 
@@ -199,22 +198,22 @@ ReportingInterface.prototype = {
 		this.setRestrictions();
 		this.filterRestrictions();
 	},
-	setRestrictions: function () {
+	setRestrictions () {
 	},
 	/**
 	 * @return {HTMLInputElement|HTMLElement}
 	 */
-	getNode: function () {
+	getNode () {
 		return this.input.nodes[ 0 ];
 	},
 
-	hasChangedValue: function () {
+	hasChangedValue () {
 		return this.valuePrev !== this.input.getValue();
 	},
 	/**
-	 * @returns {Promise<*>}
+	 * @return {Promise<*>}
 	 */
-	checkValidity: function () {
+	checkValidity () {
 		const isSilence = this.input.getContext().silence;
 
 		if ( null === this.validityState.current ) {
@@ -237,7 +236,7 @@ ReportingInterface.prototype = {
 	 *
 	 * @return {boolean}
 	 */
-	hasAutoScroll: function () {
+	hasAutoScroll () {
 		return false;
 	},
 	/**
@@ -245,7 +244,7 @@ ReportingInterface.prototype = {
 	 * you can overwrite a particular restriction
 	 * if the "type" property is defined in it
 	 */
-	filterRestrictions: function () {
+	filterRestrictions () {
 		const map = {};
 
 		for ( let [ index, restriction ] of Object.entries(

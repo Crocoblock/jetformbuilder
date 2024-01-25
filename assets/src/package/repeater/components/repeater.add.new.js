@@ -9,9 +9,9 @@ const {
       } = wp.element;
 
 /**
- * @param props {{ item, onSetState, functions, children }}
- * @returns {JSX.Element}
- * @constructor
+ * @param  props {{ item, onSetState, functions, children }}
+ * @return {JSX.Element}
+ * @class
  */
 function RepeaterAddNew( props ) {
 	const {

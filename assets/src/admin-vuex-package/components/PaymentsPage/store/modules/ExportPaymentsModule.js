@@ -108,14 +108,14 @@ const ExportPaymentsModule = {
 		setStatus( state, status ) {
 			state.status = status;
 		},
-		setColumns( state, columns ) {
-			state.selectedColumns = columns;
+		setColumns( state, selectedColumns ) {
+			state.selectedColumns = selectedColumns;
 		},
-		setPayerColumns( state, columns ) {
-			state.selectedPayerColumns = columns;
+		setPayerColumns( state, selectedPayerColumns ) {
+			state.selectedPayerColumns = selectedPayerColumns;
 		},
-		setShippingColumns( state, columns ) {
-			state.selectedShippingColumns = columns;
+		setShippingColumns( state, selectedShippingColumns ) {
+			state.selectedShippingColumns = selectedShippingColumns;
 		},
 		setCount( state, count ) {
 			state.count = count;
@@ -139,20 +139,20 @@ const ExportPaymentsModule = {
 				commit( 'setStatus', status.selected );
 			}
 		},
-		selectAllColumns( { commit, getters } ) {
-			commit( 'setColumns', getters.columnsValues );
+		selectAllColumns( { commit, getters: localGetters } ) {
+			commit( 'setColumns', localGetters.columnsValues );
 		},
 		clearAllColumns( { commit } ) {
 			commit( 'setColumns', [] );
 		},
-		selectAllPayerColumns( { commit, getters } ) {
-			commit( 'setPayerColumns', getters.payerColumnsValues );
+		selectAllPayerColumns( { commit, getters: localGetters } ) {
+			commit( 'setPayerColumns', localGetters.payerColumnsValues );
 		},
 		clearAllPayerColumns( { commit } ) {
 			commit( 'setPayerColumns', [] );
 		},
-		selectAllShippingColumns( { commit, getters } ) {
-			commit( 'setShippingColumns', getters.shippingColumnsValues );
+		selectAllShippingColumns( { commit, getters: localGetters } ) {
+			commit( 'setShippingColumns', localGetters.shippingColumnsValues );
 		},
 		clearAllShippingColumns( { commit } ) {
 			commit( 'setShippingColumns', [] );
@@ -170,10 +170,10 @@ const ExportPaymentsModule = {
 
 			commit( 'setCount', response.total );
 		},
-		fetchPaymentsCount( { getters } ) {
+		fetchPaymentsCount( { getters: localGetters } ) {
 			const url = addQueryArgs(
 				{
-					filters: getters.filtersObj,
+					filters: localGetters.filtersObj,
 				},
 				counter_endpoint.url,
 			);

@@ -25,7 +25,7 @@ function ConditionalBlock( node, observable ) {
 	this.list = null;
 
 	/**
-	 * @type {String|Object}
+	 * @type {string | Object}
 	 */
 	this.function = null;
 	this.settings = null;

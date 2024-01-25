@@ -15,8 +15,8 @@ Filter.prototype.applyWithProps = function ( value ) {
 	return this.apply( value, ...this.props );
 };
 /**
- * @param value
- * @param props
+ * @param  value
+ * @param  props
  * @return {*}
  */
 Filter.prototype.apply = function ( value, ...props ) {

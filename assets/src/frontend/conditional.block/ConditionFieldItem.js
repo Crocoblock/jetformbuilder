@@ -3,9 +3,9 @@ import ConditionItem from './ConditionItem';
 const { CalculatedFormula } = JetFormBuilderAbstract;
 
 /**
- * @property  operator
+ * @property operator
  *
- * @constructor
+ * @class
  */
 function ConditionFieldItem() {
 	ConditionItem.call( this );
@@ -25,7 +25,7 @@ function ConditionFieldItem() {
 		input.watch( () => this.list.onChangeRelated() );
 	};
 	/**
-	 * @returns {InputData|boolean}
+	 * @return {InputData|boolean}
 	 */
 	this.getInput = function () {
 		return this.list.root.getInput( this.field );
@@ -85,7 +85,7 @@ ConditionFieldItem.prototype.value = null;
  */
 ConditionFieldItem.prototype.operator = null;
 /**
- * @type {Boolean}
+ * @type {boolean}
  */
 ConditionFieldItem.prototype.use_preset = null;
 

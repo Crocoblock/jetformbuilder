@@ -45,7 +45,7 @@ export default class IntegrationComponent extends BaseActionComponent {
 				'action': this.props.source.action,
 				'api_key': apiKey
 			},
-			success: function ( response ) {
+			success ( response ) {
 				if ( response.success ) {
 					self.onChangeSettingObj( {
 						isValidAPI: true,
@@ -59,7 +59,7 @@ export default class IntegrationComponent extends BaseActionComponent {
 					self.setState( { className: [ 'is-invalid' ] } );
 				}
 			},
-			error: function () {
+			error () {
 				self.onChangeSettingObj( { isValidAPI: false } );
 				self.setState( { className: [ 'is-invalid' ] } );
 			}

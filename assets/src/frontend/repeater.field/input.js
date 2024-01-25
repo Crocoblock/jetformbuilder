@@ -179,7 +179,7 @@ RepeaterData.prototype.findIndex = function ( observableRow ) {
 };
 
 /**
- * @param node {Element}
+ * @param  node {Element}
  * @return {boolean|ObservableRow}
  */
 RepeaterData.prototype.closestRow = function ( node ) {

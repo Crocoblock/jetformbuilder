@@ -15,7 +15,7 @@ function getFormFieldsBlocks(
 	context        = 'default',
 ) {
 	let formFields = [];
-	let skipFields = [
+	const skipFields = [
 		'submit',
 		'form-break',
 		'heading',

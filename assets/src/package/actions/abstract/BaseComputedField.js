@@ -19,7 +19,7 @@ BaseComputedField.prototype.isSupportedGlobal = function () {
 };
 
 /**
- * @return {String[]}
+ * @return {string[]}
  */
 BaseComputedField.prototype.getSupportedActions = function () {
 	return [];

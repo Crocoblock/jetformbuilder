@@ -3,7 +3,7 @@ const {
       } = wp.data;
 
 /**
- * @param rule
+ * @param  rule
  * @return {boolean|string}
  */
 function humanReadableRule( rule ) {

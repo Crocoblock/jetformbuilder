@@ -22,9 +22,9 @@ const {
       } = wp.i18n;
 
 /**
- * @param props {{ items, onSetState, functions, children }}
- * @returns {JSX.Element}
- * @constructor
+ * @param  props {{ items, onSetState, functions, children }}
+ * @return {JSX.Element}
+ * @class
  */
 function Repeater( props ) {
 	const {

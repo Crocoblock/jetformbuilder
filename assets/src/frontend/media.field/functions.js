@@ -4,7 +4,7 @@ function appendNodes( container, nodes ) {
 	 * If you apply the .children or .childNodes property,
 	 * they will always return the list of currently available elements.
 	 */
-	let children = container.querySelectorAll(
+	const children = container.querySelectorAll(
 		'.jet-form-builder-file-upload__file',
 	);
 
@@ -29,8 +29,8 @@ function appendNodes( container, nodes ) {
 }
 
 /**
- * @param inputFileArray
- * @returns {FileList}
+ * @param  inputFileArray
+ * @return {FileList}
  */
 function createFileList( inputFileArray ) {
 	const transfer = new DataTransfer();
@@ -47,8 +47,8 @@ function createFile( blob, fileName ) {
 }
 
 /**
- * @param node {HTMLElement}
- * @returns {boolean}
+ * @param  node {HTMLElement}
+ * @return {boolean}
  */
 function isFile( node ) {
 	return 'file' === node.type;

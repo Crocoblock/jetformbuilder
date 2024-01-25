@@ -36,9 +36,9 @@ function prepareQueryArgs( key, value ) {
 }
 
 /**
- * @param args {Object}
- * @param url {module:url.URL}
- * @returns {string}
+ * @param  args {Object}
+ * @param  url  {module:url.URL}
+ * @return {string}
  */
 export function addQueryArgs( args, url ) {
 	url = new URL( url );
@@ -60,6 +60,7 @@ export function addQueryArgs( args, url ) {
 	return url.origin + url.pathname + '?' + params;
 }
 
+/* eslint-disable-next-line */
 export function createPath( queryArgs = {}, hashes = {}, clearArgs = [] ) {
 	const params = [];
 	queryArgs    = {

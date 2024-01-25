@@ -179,7 +179,7 @@ export default function TextEdit( props ) {
 							mm/dd/yyyy<br/>
 							{ __( 'More info - ', 'jet-form-builder' ) }
 							<a href={ attrHelp( 'input_mask_datetime_link' ) }
-							   target="_blank">{ __( 'here',
+							   target="_blank" rel="noreferrer">{ __( 'here',
 								'jet-form-builder' ) }</a>
 						</BaseHelp>
 					) }

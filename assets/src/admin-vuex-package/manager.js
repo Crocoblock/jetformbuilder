@@ -33,7 +33,6 @@ import OnUpdateEditableCellPlugin
 	from './store/plugins/OnUpdateEditableCellPlugin';
 import EditCollectorPlugin from './store/plugins/EditCollectorPlugin';
 import PortalVue from 'portal-vue';
-import { PortalTarget, Portal } from 'portal-vue';
 import ActionsWithFilters from './components/ActionsWithFilters';
 
 Vue.use( Vuex );
@@ -61,8 +60,6 @@ window.JetFBComponents = {
 	SideBarBoxes,
 	FormBuilderPage,
 	ActionsWithFilters,
-	PortalTarget,
-	Portal,
 };
 
 window.JetFBMixins = {

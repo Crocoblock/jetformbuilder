@@ -1,11 +1,12 @@
 const {
 	      __,
+	      sprintf,
       } = wp.i18n;
 
 /**
- * @param restUrl {String}
- * @param props {Object}
- * @returns {String}
+ * @param  restUrl {string}
+ * @param  props   {Object}
+ * @return {string}
  *
  * @throws {Error}
  */
@@ -28,10 +29,13 @@ function resolveRestUrl( restUrl, props ) {
 
 		if ( !partRegexp.test( value ) ) {
 			throw new Error(
-				__(
-					`Invalid parameter for rest url. RegExp: ${ parts[ 1 ] }, 
-Value: ${ value }`,
-					'jet-form-builder',
+				sprintf(
+					__(
+						`Invalid parameter for rest url. RegExp: %s, Value: %s`,
+						'jet-form-builder',
+					),
+					parts[ 1 ],
+					value,
 				),
 			);
 		}

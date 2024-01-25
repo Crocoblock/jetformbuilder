@@ -72,7 +72,7 @@ function RedirectToPageRender( props ) {
 	};
 
 	const onChangeRedirectArgs = function ( value, field_name ) {
-		let redirect_args = Array.from( settings.redirect_args || [] );
+		const redirect_args = Array.from( settings.redirect_args || [] );
 
 		if ( !value ) {
 			const field_id = redirect_args.indexOf( field_name );

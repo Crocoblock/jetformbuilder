@@ -4,6 +4,7 @@ export default {
 	mixins: [ ScopeStoreMixin ],
 	computed: {
 		filter() {
+			/* eslint-disable-next-line */
 			jfbEventBus.reactiveCounter;
 
 			return this.getter( 'getFilter', this.filter_id );

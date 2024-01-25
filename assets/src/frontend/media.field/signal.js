@@ -181,7 +181,7 @@ SignalFile.prototype.removeFile = function ( { target } ) {
 };
 
 /**
- * @param fileName
+ * @param  fileName
  * @return {Element}
  */
 SignalFile.prototype.getFileNode = function ( fileName ) {

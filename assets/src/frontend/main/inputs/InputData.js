@@ -10,23 +10,23 @@ import { STRICT_MODE } from '../signals/BaseSignal';
 const { doAction } = JetPlugins.hooks;
 
 /**
- * @property {string} rawName
- * @property {string} name
- * @property {Node|boolean} comment
- * @property {HTMLInputElement|*[]} nodes
- * @property {ReactiveVar} value
- * @property {ConditionChecker|null} checker
- * @property {*} calcValue
+ * @property {string}                             rawName
+ * @property {string}                             name
+ * @property {Node|boolean}                       comment
+ * @property {HTMLInputElement|*[]}               nodes
+ * @property {ReactiveVar}                        value
+ * @property {ConditionChecker|null}              checker
+ * @property {*}                                  calcValue
  * @property {AdvancedReporting|BrowserReporting} reporting
- * @property {Observable} root
- * @property {PageState} page
- * @property {LoadingReactiveVar} loading
- * @property {Object<ReactiveVar>} attrs
- * @property {boolean} isRequired
- * @property {null|ReactiveHook} enterKey
- * @property {null|string} inputType
+ * @property {Observable}                         root
+ * @property {PageState}                          page
+ * @property {LoadingReactiveVar}                 loading
+ * @property {Object<ReactiveVar>}                attrs
+ * @property {boolean}                            isRequired
+ * @property {null|ReactiveHook}                  enterKey
+ * @property {null|string}                        inputType
  *
- * @constructor
+ * @class
  */
 function InputData() {
 	this.rawName = '';
@@ -48,7 +48,7 @@ function InputData() {
 	 *  - 'repeater_name': name of repeater, where current field is placed
 	 *  - 0: index of repeater row, where current field is placed
 	 *  - 'text_field': name of current field name
-	 * @type {Array<String|Number>}
+	 * @type {Array<string | number>}
 	 */
 	this.path = [];
 
@@ -90,8 +90,8 @@ function InputData() {
 InputData.prototype.attrs = {};
 
 /**
- * @param node {HTMLElement}
- * @returns {boolean}
+ * @param  node {HTMLElement}
+ * @return {boolean}
  */
 InputData.prototype.isSupported = function ( node ) {
 	return true;
@@ -154,8 +154,8 @@ InputData.prototype.reportOnBlur = function () {
 	this.reporting.validateOnBlur();
 };
 /**
- * @param callable
- * @returns {(function(): *|*[])|*}
+ * @param  callable
+ * @return {(function(): *|*[])|*}
  */
 InputData.prototype.watch = function ( callable ) {
 	return this.value.watch( callable );
@@ -164,8 +164,8 @@ InputData.prototype.watchValidity = function ( callable ) {
 	return this.reporting.validityState.watch( callable );
 };
 /**
- * @param callable
- * @returns {(function(): *|*[])|*}
+ * @param  callable
+ * @return {(function(): *|*[])|*}
  */
 InputData.prototype.sanitize = function ( callable ) {
 	return this.value.sanitize( callable );
@@ -250,44 +250,44 @@ InputData.prototype.setRoot = function ( observable ) {
 InputData.prototype.onRemove = function () {
 };
 /**
- * @returns {string}
+ * @return {string}
  */
 InputData.prototype.getName = function () {
 	return this.name;
 };
 /**
- * @returns {array|string|boolean}
+ * @return {Array | string | boolean}
  */
 InputData.prototype.getValue = function () {
 	return this.value.current;
 };
 /**
- * @returns {array}
+ * @return {Array}
  */
 InputData.prototype.getNode = function () {
 	return this.nodes;
 };
 /**
- * @returns {boolean}
+ * @return {boolean}
  */
 InputData.prototype.isArray = function () {
 	return this.rawName.includes( '[]' );
 };
 /**
- * @param callable {Function|mixed}
+ * @param callable     {Function|mixed}
  * @param inputContext {InputData|Boolean}
  */
 InputData.prototype.beforeSubmit = function ( callable, inputContext = false ) {
 	this.getSubmit().submitter.promise( callable, inputContext );
 };
 /**
- * @returns {FormSubmit}
+ * @return {FormSubmit}
  */
 InputData.prototype.getSubmit = function () {
 	return this.getRoot().form;
 };
 /**
- * @returns {Observable}
+ * @return {Observable}
  */
 InputData.prototype.getRoot = function () {
 	if ( !this.root?.parent ) {
@@ -349,7 +349,7 @@ InputData.prototype.hasParent = function () {
 
 /**
  * For insert errors in advanced validation mode
- * @returns {*}
+ * @return {*}
  */
 InputData.prototype.getWrapperNode = function () {
 	return this.nodes[ 0 ].closest( '.jet-form-builder-row' );
@@ -423,14 +423,14 @@ InputData.prototype.populateInner = function () {
 /**
  * Executed with default browser validation
  *
- * @returns {boolean}
+ * @return {boolean}
  */
 InputData.prototype.hasAutoScroll = function () {
 	return true;
 };
 
 /**
- * @returns {HTMLInputElement|HTMLElement}
+ * @return {HTMLInputElement|HTMLElement}
  */
 InputData.prototype.getReportingNode = function () {
 	return this.nodes[ 0 ];

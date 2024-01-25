@@ -55,7 +55,7 @@ Observable.prototype = {
 	 */
 	rootNode: null,
 	isObserved: false,
-	observe: function ( root = null ) {
+	observe ( root = null ) {
 		if ( this.isObserved ) {
 			return;
 		}
@@ -86,7 +86,7 @@ Observable.prototype = {
 		doAction( 'jet.fb.observe.after', this );
 	},
 
-	initFields: function () {
+	initFields () {
 		for ( const formElement of this.rootNode.querySelectorAll(
 			'[data-jfb-sync]',
 		) ) {
@@ -94,7 +94,7 @@ Observable.prototype = {
 		}
 	},
 
-	initMacros: function () {
+	initMacros () {
 		// macros as html-comments
 		for (
 			const comment of iterateJfbComments( this.rootNode )
@@ -124,7 +124,7 @@ Observable.prototype = {
 		}
 	},
 
-	initSubmitHandler: function () {
+	initSubmitHandler () {
 		// check is current object related for global form element
 		if ( this.parent ) {
 			return;
@@ -133,7 +133,7 @@ Observable.prototype = {
 		this.form = new FormSubmit( this );
 	},
 
-	initActionButtons: function () {
+	initActionButtons () {
 		if ( this.parent ) {
 			return;
 		}
@@ -157,7 +157,7 @@ Observable.prototype = {
 	/**
 	 * @return {Promise<Promise<never>|Promise<void>>}
 	 */
-	inputsAreValid: async function () {
+	async inputsAreValid () {
 		const invalid = await validateInputsAll(
 			populateInputs( this.getInputs() ),
 		);
@@ -167,7 +167,7 @@ Observable.prototype = {
 		       : Promise.resolve();
 	},
 
-	watch: function ( fieldName, callable ) {
+	watch ( fieldName, callable ) {
 		const input = this.getInput( fieldName );
 
 		if ( input ) {
@@ -180,10 +180,10 @@ Observable.prototype = {
 	},
 
 	/**
-	 * @param node {Element}
+	 * @param node    {Element}
 	 * @param replace {Boolean}
 	 */
-	observeInput: function ( node, replace = false ) {
+	observeInput ( node, replace = false ) {
 		const input = this.pushInput( node, replace );
 
 		input.makeReactive();
@@ -191,17 +191,17 @@ Observable.prototype = {
 		doAction( 'jet.fb.observe.input.manual', input );
 	},
 
-	makeReactiveProxy: function () {
+	makeReactiveProxy () {
 		for ( const current of this.getInputs() ) {
 			current.makeReactive();
 		}
 	},
 
 	/**
-	 * @param node {Element}
+	 * @param node    {Element}
 	 * @param replace {Boolean}
 	 */
-	pushInput: function ( node, replace = false ) {
+	pushInput ( node, replace = false ) {
 		// prevent saving inputs from preset repeater items in root object
 		// those inputs would saved in ObservableRow object
 
@@ -226,24 +226,24 @@ Observable.prototype = {
 	},
 
 	/**
-	 * @returns {array<InputData>}
+	 * @return {Array<InputData>}
 	 */
-	getInputs: function () {
+	getInputs () {
 		return Object.values( this.dataInputs );
 	},
 
 	/**
-	 * @returns {null|RenderStateData|InputData}
+	 * @return {null|RenderStateData|InputData}
 	 */
-	getState: function () {
+	getState () {
 		return this.getInput( '_jfb_current_render_states' );
 	},
 
 	/**
-	 * @param fieldName
-	 * @returns {null|InputData}
+	 * @param  fieldName
+	 * @return {null|InputData}
 	 */
-	getInput: function ( fieldName ) {
+	getInput ( fieldName ) {
 		if ( this.dataInputs.hasOwnProperty( fieldName ) ) {
 			return this.dataInputs[ fieldName ];
 		}
@@ -259,10 +259,10 @@ Observable.prototype = {
 
 		return null;
 	},
-	getSubmit: function () {
+	getSubmit () {
 		return this.form ? this.form : this.parent.root.form;
 	},
-	getContext: function () {
+	getContext () {
 		return this.context ?? this.parent.root.context;
 	},
 	/**
@@ -270,7 +270,7 @@ Observable.prototype = {
 	 *
 	 * @since 3.0.8
 	 */
-	remove: function () {
+	remove () {
 		for ( const input of this.getInputs() ) {
 			input.onRemove();
 		}

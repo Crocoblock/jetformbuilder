@@ -4,7 +4,7 @@ const {
       } = wp.element;
 
 /**
- * @returns {{ref, setShowPopover: *, showPop<>over: *, popoverProps: {onClose: (function(): *), onFocusOutside: popoverProps.onFocusOutside, anchorRef}}}
+ * @return {{ref, setShowPopover: *, showPop<>over: *, popoverProps: {onClose: (function(): *), onFocusOutside: popoverProps.onFocusOutside, anchorRef}}}
  */
 function useTriggerPopover() {
 	const [ showPopover, setShowPopover ] = useState( false );

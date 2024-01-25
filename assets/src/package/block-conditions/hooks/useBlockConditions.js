@@ -1,7 +1,7 @@
 const { useSelect } = wp.data;
 
 /**
- * @returns {{functions, operators}}
+ * @return {{functions, operators}}
  */
 function useBlockConditions() {
 	const [ operators, functions ] = useSelect( select => {

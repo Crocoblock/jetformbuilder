@@ -11,7 +11,7 @@ const {
  * This restriction used for implement file-specific
  * restrictions for each single file
  *
- * @constructor
+ * @class
  */
 function SingleFileRestriction() {
 	AdvancedRestriction.call( this );

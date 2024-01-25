@@ -11,7 +11,7 @@ const getters = {
 		return state.currentAction;
 	},
 	getActionPromise: state => {
-		let { action,  payload = [] } = state.currentProcess;
+		const { action,  payload = [] } = state.currentProcess;
 
 		if ( 'function' !== typeof state.actionsPromises[ action ] ) {
 			throw new Error( __( 'Please choose your action', 'jet-form-builder' ) );

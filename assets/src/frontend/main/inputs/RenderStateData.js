@@ -6,7 +6,7 @@ const { builtInStates } = window.JetFormBuilderSettings;
 /**
  * @property {ReactiveSet} value
  *
- * @constructor
+ * @class
  */
 function RenderStateData() {
 	NoListenData.call( this );
@@ -34,7 +34,7 @@ function RenderStateData() {
 
 	/**
 	 * @param stateName {String}
-	 * @param force {null|Boolean}
+	 * @param force     {null|Boolean}
 	 */
 	this.toggle = function ( stateName, force = null ) {
 		this.value.toggle( stateName, force );

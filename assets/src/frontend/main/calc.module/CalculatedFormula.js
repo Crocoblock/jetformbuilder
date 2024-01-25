@@ -1,7 +1,7 @@
 /**
  * @param formula
- * @param root {Observable}
- * @constructor
+ * @param root    {Observable}
+ * @class
  */
 import applyFilters from './applyFilters';
 import getFilters from './getFilters';
@@ -25,7 +25,7 @@ addFilter(
 );
 
 /**
- * @param root {InputData|Observable}
+ * @param root    {InputData|Observable}
  * @param options {{forceFunction: boolean}}
  */
 function CalculatedFormula(
@@ -76,7 +76,7 @@ CalculatedFormula.prototype = {
 	},
 	/**
 	 *
-	 * @param relatedInput {InputData}
+	 * @param  relatedInput {InputData}
 	 * @return {*}
 	 */
 	relatedCallback( relatedInput ) {
@@ -142,11 +142,11 @@ CalculatedFormula.prototype = {
 	/**
 	 * @param inputMatch {String}
 	 */
-	onMissingPart: function ( inputMatch ) {
+	onMissingPart ( inputMatch ) {
 		this.parts.push( inputMatch );
 	},
 	/**
-	 * @param current {String}
+	 * @param  current {String}
 	 * @return {(function(): *)|*}
 	 */
 	observeMacro( current ) {

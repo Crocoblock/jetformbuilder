@@ -9,10 +9,11 @@ const {
       } = wp.components;
 
 /**
- * @param children
- * @param props
- * @returns {JSX.Element|null}
- * @constructor
+ * @param  children.children
+ * @param  children
+ * @param  props
+ * @return {JSX.Element|null}
+ * @class
  */
 function ActionItemHeader( { children, ...props } = {} ) {
 	const { action } = useLoopedAction();

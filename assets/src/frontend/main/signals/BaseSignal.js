@@ -22,17 +22,17 @@ BaseSignal.prototype = {
 	 */
 	lock: null,
 	/**
-	 * @param node {HTMLElement}
-	 * @param inputData {InputData}
-	 * @returns {boolean}
+	 * @param  node      {HTMLElement}
+	 * @param  inputData {InputData}
+	 * @return {boolean}
 	 */
-	isSupported: function ( node, inputData ) {
+	isSupported ( node, inputData ) {
 		return false;
 	},
-	setInput: function ( input ) {
+	setInput ( input ) {
 		this.input = input;
 	},
-	run: function ( prevValue ) {
+	run ( prevValue ) {
 		if ( !this.lock.current ) {
 			this.runSignal( prevValue );
 			this.unlockTrigger();
@@ -51,21 +51,22 @@ BaseSignal.prototype = {
 		jQuery( node ).trigger( 'change' );
 	},
 	/**
+	 * @param prevValue
 	 * @protected
 	 */
-	runSignal: function ( prevValue ) {
+	runSignal ( prevValue ) {
 		// your code
 	},
 	/**
 	 * @since 3.0.1
 	 */
-	lockTrigger: function () {
+	lockTrigger () {
 		this.triggerjQuery = false;
 	},
 	/**
 	 * @since 3.0.1
 	 */
-	unlockTrigger: function () {
+	unlockTrigger () {
 		if ( STRICT_MODE ) {
 			return;
 		}

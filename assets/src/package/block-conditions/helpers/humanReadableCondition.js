@@ -3,7 +3,7 @@ const {
       } = wp.data;
 
 /**
- * @param condition
+ * @param  condition
  * @return {boolean|string}
  */
 function humanReadableCondition( condition ) {

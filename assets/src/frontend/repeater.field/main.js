@@ -51,7 +51,7 @@ addAction(
 	'jet.fb.multistep.page.observed.input',
 	'jet-form-builder/repeater-field',
 	/**
-	 * @param input {InputData|RepeaterData}
+	 * @param input     {InputData|RepeaterData}
 	 * @param pageState {PageState}
 	 */
 	function ( input, pageState ) {

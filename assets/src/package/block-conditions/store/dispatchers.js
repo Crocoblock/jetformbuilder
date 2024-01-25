@@ -40,7 +40,7 @@ const dispatchers = {
 		return state;
 	},
 	[ constants.deleteRenderStates ]( state, action ) {
-		let items = Array.isArray( action.items )
+		const items = Array.isArray( action.items )
 		            ? [ ...action.items ]
 		            : [ action.items ];
 

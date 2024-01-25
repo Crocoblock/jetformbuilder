@@ -13,8 +13,8 @@ const onSaveDeleting = index => {
 
 /**
  *
- * @param setItemsData
- * @returns {{
+ * @param  setItemsData
+ * @return {{
  * cloneItem: function,
  * addNewItem: function,
  * changeCurrentItem: function,

@@ -1,9 +1,9 @@
 import CalculatedHtmlString from './CalculatedHtmlString';
 
 /**
- * @param node {Node}
+ * @param node     {Node}
  * @param attrName {string}
- * @param root {Observable}
+ * @param root     {Observable}
  */
 function observeMacroAttr( node, attrName, root ) {
 	const nodeValue = node[ attrName ] ?? '';

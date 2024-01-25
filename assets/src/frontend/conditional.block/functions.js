@@ -35,8 +35,8 @@ const getCheckers = () => applyFilters(
 let checkers = [];
 
 /**
- * @param options {{}}
- * @param list {ConditionsList}
+ * @param  options {{}}
+ * @param  list    {ConditionsList}
  * @return {*}
  */
 function createConditionItem( options, list ) {
@@ -61,8 +61,8 @@ function createConditionItem( options, list ) {
 }
 
 /**
- * @param node
- * @param root
+ * @param  node
+ * @param  root
  * @return {ConditionalBlock}
  */
 function createConditionalBlock( node, root ) {

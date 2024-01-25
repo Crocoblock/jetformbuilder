@@ -8,7 +8,7 @@ import environment from './environment';
 const { applyFilters } = JetPlugins.hooks;
 
 /**
- * @param callbacks {Function[]}
+ * @param  callbacks {Function[]}
  * @return {Promise<*>}
  */
 async function allRejected( callbacks ) {
@@ -78,7 +78,7 @@ function setAttrs( input ) {
 		inputHtmlAttrs = getInputHtmlAttr();
 	}
 
-	for ( let inputHtmlAttr of inputHtmlAttrs ) {
+	for ( const inputHtmlAttr of inputHtmlAttrs ) {
 		let current;
 		if ( 'string' === typeof inputHtmlAttr ) {
 			current = getDefaultAttrByName( inputHtmlAttr );

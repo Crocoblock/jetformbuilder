@@ -17,7 +17,7 @@ export function getScopeName( box ) {
 
 export function registerNamespacedModule( store, box ) {
 	const { render_type } = box;
-	let module            = ( modules = {} ) => (
+	const module            = ( modules = {} ) => (
 		{
 			...singleView,
 			modules: {
@@ -62,7 +62,7 @@ export function setTableSeed( store, source ) {
 		      columns                   = {},
 		      total                     = 0,
 		      receive_url               = {},
-		      actions,
+		      actions: localActions,
 		      render_type               = '',
 		      empty_message             = '',
 		      is_editable_table         = false,
@@ -71,11 +71,11 @@ export function setTableSeed( store, source ) {
 		      ...options
 	      } = source;
 
-	let getName = withScope( source );
+	const getName = withScope( source );
 
 	store.commit( getName( 'setEmptyMessage' ), empty_message );
 	store.commit( getName( 'setRenderType' ), render_type );
-	store.commit( getName( 'setActionsList' ), actions );
+	store.commit( getName( 'setActionsList' ), localActions );
 	store.commit( getName( 'setColumns' ), columns );
 	store.commit( getName( 'setList' ), list );
 	store.commit( getName( 'setTotal' ), total );
@@ -87,7 +87,7 @@ export function setTableSeed( store, source ) {
 
 	store.dispatch( getName( 'setQueriedPage' ), 1 );
 
-	store.subscribe( ( mutation, state ) => {
+	store.subscribe( ( mutation ) => {
 		const typeParts = mutation.type.split( '/' );
 
 		switch ( typeParts.at( -1 ) ) {
@@ -96,7 +96,7 @@ export function setTableSeed( store, source ) {
 					return;
 				}
 				store.dispatch( getName( 'fetchPageWithFilters' ) );
-				return;
+				
 		}
 	} );
 }
@@ -114,7 +114,7 @@ export function setListSeed( store, source ) {
 		      ...options
 	      } = source;
 
-	let getName = withScope( source );
+	const getName = withScope( source );
 
 	store.commit( getName( 'setColumns' ), columns );
 	store.commit( getName( 'setList' ), list );

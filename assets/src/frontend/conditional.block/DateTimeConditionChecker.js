@@ -21,11 +21,11 @@ function DateTimeConditionChecker() {
 
 	/**
 	 * @param condition {ConditionFieldItem}
-	 * @param input {InputData}
+	 * @param input     {InputData}
 	 */
 	this.check = function ( condition, input ) {
 		const { time: current } = getTimestamp( input.value.current );
-		let conditionValue      = condition.value.map( value => {
+		const conditionValue      = condition.value.map( value => {
 			const { time, type } = getTimestamp( value );
 
 			if ( 'number' === type && condition.use_preset ) {

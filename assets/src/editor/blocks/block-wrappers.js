@@ -7,7 +7,7 @@ const {
 export function withCustomProps( block ) {
 	const { edit: EditComponent } = block.settings;
 
-	let _plugins = {};
+	const _plugins = {};
 
 	if ( 'useEditProps' in block.settings ) {
 		const { useEditProps } = block.settings;
@@ -35,6 +35,7 @@ const getHelpInstance = block => {
 		}
 	} );
 
+	/* eslint-disable */
 	return ( attribute, attributes = {} ) => {
 		if ( ! ( attribute in messages ) ) {
 			return '';
@@ -50,6 +51,7 @@ const getHelpInstance = block => {
 		}
 		return item.message;
 	}
+	/* eslint-enable */
 };
 
 const editProps = applyFilters( 'jet.fb.register.editProps', [

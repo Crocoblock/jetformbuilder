@@ -1,6 +1,6 @@
 /**
  * @param form {FormSubmit}
- * @constructor
+ * @class
  */
 function BaseSubmit( form ) {
 	this.form         = form;
@@ -15,7 +15,7 @@ BaseSubmit.prototype.getPromises = function () {
 	return this.promises.map( ( { callable } ) => new Promise( callable ) );
 };
 /**
- * @param callable {Function}
+ * @param callable     {Function}
  * @param inputContext {InputData|Boolean}
  */
 BaseSubmit.prototype.promise = function ( callable, inputContext = false ) {

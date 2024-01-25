@@ -39,7 +39,7 @@ BaseHtmlAttr.prototype = {
 	 * If you need specific check,
 	 * you can rewrite this function
 	 *
-	 * @param input {InputData}
+	 * @param  input {InputData}
 	 * @return {boolean}
 	 */
 	isSupported( input ) {
@@ -57,7 +57,7 @@ BaseHtmlAttr.prototype = {
 		return Boolean( this.initial );
 	},
 	/**
-	 * @param input {InputData}
+	 * @param  input {InputData}
 	 * @return {*|boolean}
 	 */
 	getInitial( input ) {

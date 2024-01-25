@@ -6,7 +6,7 @@ import { populateInputs } from '../inputs/functions';
 
 /**
  * @param observable {Observable}
- * @constructor
+ * @class
  */
 function FormSubmit( observable ) {
 

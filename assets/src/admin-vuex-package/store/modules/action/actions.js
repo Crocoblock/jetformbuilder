@@ -5,7 +5,7 @@ export default {
 		if ( Constants.CHOOSE_ACTION !== getters.processContext ) {
 			return;
 		}
-		const label = rootGetters['messages/label'];
+		const label = rootGetters[ 'messages/label' ];
 
 		if ( ! getters.getChecked.length ) {
 			throw new Error( label( 'empty_checked' ) );

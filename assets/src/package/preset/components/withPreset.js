@@ -89,17 +89,17 @@ function withPreset( WrappedComponent ) {
 				if ( ! currentState.fields_map || ! currentState.fields_map[ field ] ) {
 					return false;
 				}
-				else {
+				
 					return currentState.fields_map[ field ][ data.condition.field ] === data.condition.value && currentState[ data.parent_condition.field ] === data.parent_condition.value;
-				}
+				
 			}
 			else if ( ! data.parent_condition && data.condition ) {
 				if ( ! currentState.fields_map || ! currentState.fields_map[ field ] ) {
 					return false;
 				}
-				else {
+				
 					return currentState.fields_map[ field ][ data.condition.field ] === data.condition.value;
-				}
+				
 			}
 
 			return true;

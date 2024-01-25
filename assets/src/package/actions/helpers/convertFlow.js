@@ -2,8 +2,8 @@ import BaseAction from '../abstract/BaseAction';
 import ActionsFlow from '../abstract/ActionsFlow';
 
 /**
- * @param flow
- * @returns {ActionsFlow}
+ * @param  flow
+ * @return {ActionsFlow}
  */
 function convertFlow( flow = [] ) {
 	const actions = [];

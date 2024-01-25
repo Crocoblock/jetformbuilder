@@ -17,7 +17,7 @@ const withSelectFormFields = (
 ) => select => {
 
 	let formFields = [];
-	let skipFields = [
+	const skipFields = [
 		'submit',
 		'form-break',
 		'heading',

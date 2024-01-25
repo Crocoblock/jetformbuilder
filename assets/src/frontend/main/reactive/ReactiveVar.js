@@ -10,7 +10,7 @@ function ReactiveVar( value = null ) {
 }
 
 ReactiveVar.prototype = {
-	watchOnce: function ( callable ) {
+	watchOnce ( callable ) {
 		if ( 'function' !== typeof callable ) {
 			return;
 		}
@@ -19,7 +19,7 @@ ReactiveVar.prototype = {
 			callable();
 		} );
 	},
-	watch: function ( callable ) {
+	watch ( callable ) {
 		if ( 'function' !== typeof callable ) {
 			return false;
 		}
@@ -37,7 +37,7 @@ ReactiveVar.prototype = {
 
 		return () => this.signals.splice( index, 1 );
 	},
-	sanitize: function ( callable ) {
+	sanitize ( callable ) {
 		if ( 'function' !== typeof callable ) {
 			return false;
 		}
@@ -52,7 +52,7 @@ ReactiveVar.prototype = {
 
 		return () => this.sanitizers.splice( index, 1 );
 	},
-	make: function () {
+	make () {
 		if ( this.isMaked ) {
 			return;
 		}
@@ -86,11 +86,11 @@ ReactiveVar.prototype = {
 			},
 		} );
 	},
-	notify: function ( prevValue = null ) {
+	notify ( prevValue = null ) {
 		this.signals.forEach(
 			( { signal } ) => signal.call( this, prevValue ) );
 	},
-	applySanitizers: function ( value ) {
+	applySanitizers ( value ) {
 		for ( const sanitizer of this.sanitizers ) {
 			value = sanitizer.call( this, value );
 		}

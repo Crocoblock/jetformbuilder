@@ -39,7 +39,7 @@ const getGatewaysActions = () => {
 		actions = [];
 
 	try {
-		gateways = JSON.parse( formBuilderMeta[ '_jf_gateways' ] );
+		gateways = JSON.parse( formBuilderMeta._jf_gateways );
 	} catch ( error ) {
 		return [];
 	}
@@ -49,7 +49,7 @@ const getGatewaysActions = () => {
 	}
 
 	try {
-		actions = JSON.parse( formBuilderMeta[ '_jf_actions' ] );
+		actions = JSON.parse( formBuilderMeta._jf_actions );
 	} catch ( error ) {
 		return [ gateways ];
 	}
@@ -58,10 +58,10 @@ const getGatewaysActions = () => {
 };
 
 const migrate = ( gateways, actions ) => {
-	const on_success = getActiveActions( gateways[ 'notifications_success' ] ?? {} );
-	const on_failed = getActiveActions( gateways[ 'notifications_failed' ] ?? {} );
-	const on_before = getActiveActions( gateways[ 'notifications_before' ] ?? {} );
-	const use_redirect = gateways[ 'use_success_redirect' ] ?? false;
+	const on_success = getActiveActions( gateways.notifications_success ?? {} );
+	const on_failed = getActiveActions( gateways.notifications_failed ?? {} );
+	const on_before = getActiveActions( gateways.notifications_before ?? {} );
+	const use_redirect = gateways.use_success_redirect ?? false;
 
 	let has_redirect = false;
 

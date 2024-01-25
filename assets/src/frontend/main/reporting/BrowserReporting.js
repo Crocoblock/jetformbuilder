@@ -45,7 +45,7 @@ function BrowserReporting() {
 	};
 
 	/**
-	 * @returns {HTMLInputElement|HTMLElement}
+	 * @return {HTMLInputElement|HTMLElement}
 	 */
 	this.getNode = function () {
 		return this.input.getReportingNode();

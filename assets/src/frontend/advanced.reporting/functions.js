@@ -37,7 +37,7 @@ const getAdvancedRules = () => applyFilters(
 );
 
 /**
- * @type {array<CustomBaseRestriction>}
+ * @type {Array<CustomBaseRestriction>}
  */
 let advancedRules = [];
 
@@ -132,8 +132,8 @@ function getValidationMessages( node ) {
 }
 
 /**
- * @param restriction {Restriction}
- * @param slug {string}
+ * @param  restriction {Restriction}
+ * @param  slug        {string}
  * @return {string}
  */
 function getMessageBySlug( restriction, slug ) {
@@ -216,8 +216,8 @@ function setRestrictions( reporting ) {
  * because the Repeater Field validation will return
  * an error element from the internal field.
  *
- * @param wrapper {Element}
- * @returns {boolean|Element}
+ * @param  wrapper {Element}
+ * @return {boolean|Element}
  */
 function getErrorNode( wrapper ) {
 	for ( const child of wrapper.children ) {

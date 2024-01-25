@@ -4,8 +4,8 @@ function getCalculatedWrapper( node ) {
 }
 
 /**
- * @param node {HTMLElement}
- * @returns {boolean}
+ * @param  node {HTMLElement}
+ * @return {boolean}
  */
 function isCalculated( node ) {
 	return !!(

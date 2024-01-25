@@ -29,9 +29,9 @@ const getDataTypes = () => applyFilters(
 let dataTypes = [];
 
 /**
- * @param node
- * @param observable {Observable}
- * @returns {*}
+ * @param  node
+ * @param  observable {Observable}
+ * @return {*}
  */
 function createInput( node, observable ) {
 	if ( !dataTypes.length ) {

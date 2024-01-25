@@ -124,12 +124,12 @@ function useControls( {
 /**
  * @deprecated 3.0.0
  *
- * @param props
+ * @param  props
  * @return {unknown[]}
- * @constructor
+ * @class
  */
 function FieldControl( props ) {
-	let {
+	const {
 		    setAttributes,
 		    attributes,
 	    } = props;

@@ -19,7 +19,7 @@ const {
  * @property {AdvancedRestriction} restrictions
  *
  * @this {ReportingInterface}
- * @constructor
+ * @class
  */
 function AdvancedReporting() {
 	ReportingInterface.call( this );
@@ -34,7 +34,7 @@ function AdvancedReporting() {
 	 *
 	 * @see AdvancedRestriction.onReady
 	 *
-	 * @type {String[]}
+	 * @type {string[]}
 	 */
 	this.watchAttrs = [];
 
@@ -256,7 +256,7 @@ AdvancedReporting.prototype.validateOnChangeState = function () {
 };
 
 /**
- * @param restriction {AdvancedRestriction|Restriction}
+ * @param  restriction {AdvancedRestriction|Restriction}
  * @return {boolean}
  */
 AdvancedReporting.prototype.canProcessRestriction = function ( restriction ) {

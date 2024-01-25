@@ -16,9 +16,11 @@ const {
 const { addAction, doAction } = JetPlugins.hooks;
 
 /**
- * @property {InputData[]} inputs
+ * @property {InputData[]}    inputs
+ * @param                     node
+ * @param                     state
  * @property {MultiStepState} state
- * @property {Element} node
+ * @property {Element}        node
  */
 function PageState( node, state ) {
 	this.node      = node;
@@ -248,7 +250,7 @@ PageState.prototype.isNodeBelongThis    = function ( node ) {
 	return parentPage ? parentPage.isEqualNode( this.node ) : false;
 };
 /**
- * @returns {array<InputData>|*}
+ * @return {Array<InputData> | *}
  */
 PageState.prototype.getInputs = function () {
 	return populateInputs( this.inputs );
@@ -274,7 +276,7 @@ PageState.prototype.isLast = function () {
 /**
  * @since 3.0.5
  *
- * @returns {boolean}
+ * @return {boolean}
  */
 PageState.prototype.isFirst = function () {
 	return this.state.isFirstPage( this );

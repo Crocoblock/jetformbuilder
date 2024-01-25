@@ -4,20 +4,20 @@ import SignalFile from './signal';
 const { InputData } = window.JetFormBuilderAbstract;
 
 /**
- * @property {string} rawName
- * @property {string} name
- * @property {Node|boolean} comment
- * @property {Node|*[]} nodes
- * @property {ReactiveVar} value
- * @property {ConditionChecker} checker
- * @property {*} calcValue
+ * @property {string}                             rawName
+ * @property {string}                             name
+ * @property {Node|boolean}                       comment
+ * @property {Node|*[]}                           nodes
+ * @property {ReactiveVar}                        value
+ * @property {ConditionChecker}                   checker
+ * @property {*}                                  calcValue
  * @property {AdvancedReporting|BrowserReporting} reporting
- * @property {Observable} root
- * @property {PageState} page
- * @property {LoadingReactiveVar} loading
- * @property {SignalFile} callable
+ * @property {Observable}                         root
+ * @property {PageState}                          page
+ * @property {LoadingReactiveVar}                 loading
+ * @property {SignalFile}                         callable
  *
- * @constructor
+ * @class
  */
 function FileData() {
 	InputData.call( this );

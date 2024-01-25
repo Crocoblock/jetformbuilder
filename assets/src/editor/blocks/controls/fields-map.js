@@ -43,7 +43,7 @@ class JetFieldsMapControl extends wp.element.Component {
 			return;
 		}
 
-		for ( var i = 0; i < this.taxonomiesList.length; i ++ ) {
+		for ( let i = 0; i < this.taxonomiesList.length; i ++ ) {
 			this.preparedTaxes.push( {
 				value: this.taxPrefix + this.taxonomiesList[ i ].value,
 				label: this.taxonomiesList[ i ].label,
@@ -62,9 +62,9 @@ class JetFieldsMapControl extends wp.element.Component {
 		if ( this.termsProp === fieldType || this.metaProp === fieldType ) {
 			return value;
 		}
-		else {
+		
 			return '';
-		}
+		
 
 	};
 
@@ -79,7 +79,7 @@ class JetFieldsMapControl extends wp.element.Component {
 			return '';
 		}
 
-		for ( var i = 0; i < this.fieldTypes.length; i ++ ) {
+		for ( let i = 0; i < this.fieldTypes.length; i ++ ) {
 			if ( value === this.fieldTypes[ i ].value ) {
 				return value;
 			}
@@ -88,9 +88,9 @@ class JetFieldsMapControl extends wp.element.Component {
 		if ( value.includes( this.taxPrefix ) ) {
 			return this.termsProp;
 		}
-		else {
+		
 			return this.metaProp;
-		}
+		
 
 	};
 

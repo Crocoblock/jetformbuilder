@@ -1,6 +1,6 @@
 /**
- * @param initial {String}
- * @param name {String}
+ * @param initial     {String}
+ * @param name        {String}
  * @param nodeElement {HTMLInputElement}
  */
 function insertMacro( initial, name, nodeElement ) {

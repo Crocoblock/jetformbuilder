@@ -35,7 +35,7 @@ const EditCollectorModule = {
 function EditCollectorPlugin( store ) {
 	store.registerModule( 'editCollector', EditCollectorModule );
 
-	store.subscribe( ( mutation, state ) => {
+	store.subscribe( ( mutation ) => {
 		const typeParts = mutation.type.split( '/' );
 
 		if ( ! typeParts.includes( 'updateEditableCell' ) ) {

@@ -89,9 +89,10 @@ const registerFormField = block => {
 		metadata.attributes.hasOwnProperty( 'name' )
 	) {
 		/**
-		 * @param attributes
-		 * @param context {{|'accessibility'|'visual'|'list-view'}}
-		 * @returns {*}
+		 * @param  attributes
+		 * @param  context.context
+		 * @param  context         {{|'accessibility'|'visual'|'list-view'}}
+		 * @return {*}
 		 * @private
 		 */
 		settings.__experimentalLabel = ( attributes, { context } ) => {

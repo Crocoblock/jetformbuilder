@@ -8,7 +8,7 @@ function JetFieldPlaceholder( {
 
 	const subtitleStr = subtitle.join( ', ' );
 
-	var className = 'jet-field-placeholder';
+	let className = 'jet-field-placeholder';
 
 	if ( isRequired ) {
 		className += ' is-required';

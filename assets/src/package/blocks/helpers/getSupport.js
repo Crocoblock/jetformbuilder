@@ -2,7 +2,7 @@ const { get } = window._;
 
 /**
  * @param blockSettings {Object} from block.json
- * @param supportsPath {String|Array}
+ * @param supportsPath  {String|Array}
  */
 function getSupport( blockSettings, supportsPath ) {
 	if ( !Array.isArray( supportsPath ) ) {

@@ -1,3 +1,10 @@
+const callResult = ( payload, result ) => {
+	if ( payload?.length && 'object' === typeof payload ) {
+		return result( ...payload );
+	}
+	return result( payload );
+};
+
 export default {
 	props: {
 		scope: {
@@ -10,17 +17,12 @@ export default {
 			return 'scope-' + this.scope + '/' + name;
 		},
 		getter( name, payload ) {
-			if ( !this.$store ) {
-				debugger;
-			}
 			const result = this.$store.getters[ this.scopedName( name ) ];
 
-			if ( 'undefined' !== typeof payload && 'function' ===
-				typeof result ) {
-				if ( payload?.length && 'object' === typeof payload ) {
-					return result( ...payload );
-				}
-				return result( payload );
+			if ( 'undefined' !== typeof payload &&
+				'function' === typeof result
+			) {
+				return callResult( payload, result );
 			}
 
 			return result;

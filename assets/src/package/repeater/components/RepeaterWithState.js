@@ -47,12 +47,12 @@ function RepeaterWithState( {
 
 				return item;
 			} );
-		} else {
+		} 
 			return [ {
 				...newItem,
 				__visible: true,
 			} ];
-		}
+		
 	}
 
 	const [ itemsData, setItemsData ] = useState( [] );

@@ -6,7 +6,7 @@ function MaxFilesHtmlAttr() {
 	this.attrName = 'max_files';
 
 	/**
-	 * @param input {InputData}
+	 * @param  input {InputData}
 	 * @return {boolean}
 	 */
 	this.isSupported = function ( input ) {

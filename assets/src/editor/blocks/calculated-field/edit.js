@@ -4,7 +4,6 @@ const {
 	      AdvancedFields,
 	      FieldWrapper,
 	      FieldSettingsWrapper,
-	      BaseHelp,
 	      ToolBarFields,
 	      BlockName,
 	      BlockDescription,
@@ -28,8 +27,6 @@ const {
 	      TextareaControl,
 	      ToggleControl,
 	      PanelBody,
-	      Button,
-	      Popover,
 	      SelectControl,
 	      __experimentalNumberControl,
       } = wp.components;
@@ -40,6 +37,7 @@ const help = {
 	calc_hidden: __( 'Check this to hide calculated field' ),
 };
 
+/* eslint-disable-next-line max-lines-per-function, complexity */
 export default function EditCalculated( props ) {
 	const blockProps = useBlockProps();
 	useUniqueNameOnDuplicate();
@@ -97,7 +95,9 @@ export default function EditCalculated( props ) {
 					label={ __( 'Value type', 'jet-form-builder' ) }
 					labelPosition="top"
 					value={ attributes.value_type }
-					onChange={ value_type => setAttributes( { value_type } ) }
+					onChange={ valueType => setAttributes( {
+						value_type: valueType,
+					} ) }
 					options={ [
 						{
 							value: 'number',
@@ -125,15 +125,17 @@ export default function EditCalculated( props ) {
 						key="calc_separate_decimals"
 						label={ __( 'Decimals separator' ) }
 						value={ attributes.separate_decimals }
-						onChange={ separate_decimals => setAttributes(
-							{ separate_decimals } ) }
+						onChange={ separateDecimals => setAttributes( {
+							separate_decimals: separateDecimals,
+						} ) }
 					/>
 					<TextControl
 						key="calc_separate_thousands"
 						label={ __( 'Thousands separator' ) }
 						value={ attributes.separate_thousands }
-						onChange={ separate_thousands => setAttributes(
-							{ separate_thousands } ) }
+						onChange={ separateThousands => setAttributes( {
+							separate_thousands: separateThousands,
+						} ) }
 					/>
 					<TextControl
 						key="calc_prefix"

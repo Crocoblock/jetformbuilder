@@ -39,6 +39,7 @@ function hasFormBreakField( blocks ) {
 	return blocks.some( ( { name } ) => name.includes( 'form-break-field' ) );
 }
 
+/* eslint-disable-next-line max-lines-per-function, complexity */
 export default function ConditionalBlockEdit( props ) {
 
 	const blockProps = useBlockProps();
@@ -54,7 +55,7 @@ export default function ConditionalBlockEdit( props ) {
 		if ( !attributes.name ) {
 			setAttributes( { name: clientId } );
 		}
-	}, [] );
+	}, [] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const blocks     = getCurrentInnerBlocks();
 	const blockNames = blocks.reduce(
@@ -68,7 +69,7 @@ export default function ConditionalBlockEdit( props ) {
 
 	useEffect( () => {
 		setShowMultistep( hasFormBreakField( blocks ) );
-	}, [ blockNames ] );
+	}, [ blockNames ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const functionDisplay = useSelect( select => (
 		select( 'jet-forms/block-conditions' ).getFunctionDisplay(
@@ -149,9 +150,10 @@ export default function ConditionalBlockEdit( props ) {
 					value={ attributes.last_page_name }
 					help={ __(
 						'The value of this field will be set as the name of the last page with the "Progress Bar" block.',
-						'jet-form-builder' ) }
-					onChange={ last_page_name => setAttributes(
-						{ last_page_name },
+						'jet-form-builder',
+					) }
+					onChange={ lastPageName => setAttributes(
+						{ last_page_name: lastPageName },
 					) }
 				/>
 			</PanelBody> }
@@ -161,8 +163,7 @@ export default function ConditionalBlockEdit( props ) {
 				<Tip>
 					<RawHTML>
 						{ __(
-							`Add the CSS class <code>jet-form-builder--hidden</code> to make 
-this block hidden by default.`,
+							`Add the CSS class <code>jet-form-builder--hidden</code> to make this block hidden by default.`,
 							'jet-form-builder',
 						) }
 					</RawHTML>
@@ -178,8 +179,8 @@ this block hidden by default.`,
 					'jet-form-builder',
 				) }
 				value={ attributes.class_name }
-				onChange={ class_name => setAttributes(
-					{ class_name },
+				onChange={ className => setAttributes(
+					{ class_name: className },
 				) }
 			/>
 		</InspectorControls>

@@ -43,6 +43,7 @@ const getGroupsElements = conditions => {
 	);
 
 	return [
+		/* eslint-disable-next-line react/jsx-key */
 		<ConditionGroupItem
 			group={ groups[ 0 ] }
 		/>,

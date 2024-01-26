@@ -13,11 +13,8 @@ const {
       } = JetFBHooks;
 
 const {
-	      PanelBody,
 	      __experimentalInputControl,
       } = wp.components;
-
-const { __ } = wp.i18n;
 
 const {
 	      InspectorControls,

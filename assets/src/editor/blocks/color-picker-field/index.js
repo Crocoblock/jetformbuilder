@@ -18,9 +18,8 @@ const { name, icon } = metadata;
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Give your users an opportunity to design your website and pick 
-a certain color in the form with the help of the Color Picker Field.`,
-		'jet-form-builder'
+		`Give your users an opportunity to design your website and pick a certain color in the form with the help of the Color Picker Field.`,
+		'jet-form-builder',
 	),
 	edit: BlockEdit,
 	useEditProps: [ 'uniqKey', 'blockName', 'attrHelp' ],
@@ -35,7 +34,8 @@ a certain color in the form with the help of the Color Picker Field.`,
 				type: 'block',
 				blocks: [ 'jet-forms/text-field' ],
 				transform: ( attributes ) => {
-					return createBlock( 'jet-forms/text-field', { ...attributes } );
+					return createBlock( 'jet-forms/text-field',
+						{ ...attributes } );
 				},
 				priority: 0,
 			},

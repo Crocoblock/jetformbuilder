@@ -67,5 +67,7 @@ module.exports = {
 		'JetFBComponents': 'writable',
 		'JetFBActions': 'writable',
 		'JetFBStore': 'writable',
+		'JetFBHooks': 'writable',
+		'JetFormCalculatedField': 'readonly',
 	},
 };

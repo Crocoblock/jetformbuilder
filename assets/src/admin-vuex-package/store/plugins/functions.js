@@ -16,7 +16,7 @@ export function getScopeName( box ) {
 }
 
 export function registerNamespacedModule( store, box ) {
-	const { render_type } = box;
+	const { render_type: renderType } = box;
 	const module            = ( modules = {} ) => (
 		{
 			...singleView,
@@ -27,7 +27,7 @@ export function registerNamespacedModule( store, box ) {
 		}
 	);
 
-	switch ( render_type ) {
+	switch ( renderType ) {
 		case 'table':
 			store.registerModule(
 				getScopeName( box ),
@@ -67,7 +67,7 @@ export function setTableSeed( store, source ) {
 		      empty_message             = '',
 		      is_editable_table         = false,
 		      is_editable_table_control = false,
-		      stable_limit              = null,
+		      stableLimit              = null,
 		      ...options
 	      } = source;
 
@@ -80,7 +80,7 @@ export function setTableSeed( store, source ) {
 	store.commit( getName( 'setList' ), list );
 	store.commit( getName( 'setTotal' ), total );
 	store.commit( getName( 'setReceiveEndpoint' ), receive_url );
-	store.commit( getName( 'setLimit' ), stable_limit ?? list?.length );
+	store.commit( getName( 'setLimit' ), stableLimit ?? list?.length );
 	store.commit( getName( 'toggleEditTable' ), is_editable_table );
 	store.commit( getName( 'setEditableTable' ), is_editable_table_control );
 	store.commit( getName( 'options/insert' ), options );

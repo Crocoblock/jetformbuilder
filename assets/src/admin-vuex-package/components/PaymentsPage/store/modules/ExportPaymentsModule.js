@@ -43,7 +43,7 @@ const shippingColumns = [
 ];
 
 const {
-	      counter_endpoint,
+	      counter_endpoint: counterEndpoint,
       } = window.JetFBPageConfig;
 
 const {
@@ -175,10 +175,10 @@ const ExportPaymentsModule = {
 				{
 					filters: localGetters.filtersObj,
 				},
-				counter_endpoint.url,
+				counterEndpoint.url,
 			);
 
-			return wp.apiFetch( { ...counter_endpoint, url } );
+			return wp.apiFetch( { ...counterEndpoint, url } );
 		},
 	},
 };

@@ -14,7 +14,7 @@ export default function ConditionsModal( props ) {
 	return <ActionModal
 		classNames={ [ 'width-60' ] }
 		onRequestClose={ () => setShowModal( false ) }
-		title="Conditional Logic"
+		title={ __( 'Conditional Logic', 'jet-form-builder' ) }
 	>
 		<ConditionsModalContent/>
 	</ActionModal>;

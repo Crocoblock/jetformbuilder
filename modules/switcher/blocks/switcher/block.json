@@ -93,7 +93,10 @@
 		},
 		"default": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"className": {
 			"type": "string",

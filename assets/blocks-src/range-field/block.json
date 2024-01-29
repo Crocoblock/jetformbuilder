@@ -91,7 +91,10 @@
 		},
 		"default": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"add_prev": {
 			"type": "boolean",

@@ -12,7 +12,6 @@ const {
 const {
 	      PanelBody,
 	      TextControl,
-	      ToggleControl,
       } = wp.components;
 
 const {

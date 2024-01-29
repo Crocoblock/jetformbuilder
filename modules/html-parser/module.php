@@ -48,5 +48,13 @@ class Module implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_I
 			jet_form_builder()->get_version(),
 			true
 		);
+
+		wp_localize_script(
+			$this->get_handle(),
+			'JetFormBuilderParserConfig',
+			array(
+				'mimes' => get_allowed_mime_types(),
+			)
+		);
 	}
 }

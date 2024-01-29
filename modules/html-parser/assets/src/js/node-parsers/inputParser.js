@@ -2,6 +2,7 @@ import resolveLabel from '../resolveLabel';
 import resolveLegend from '../resolveLegend';
 import getInputNumberAttrs from '../getInputNumberAttrs';
 import resolveOptionLabel from '../resolveOptionLabel';
+import getMimeType from '../getMimeType';
 
 const typeMap = {
 	email: textParser,
@@ -223,7 +224,7 @@ function* mediaParser( input ) {
 	};
 
 	attributes.allowed_mimes = input.accept.split( ',' ).map(
-		part => part.trim(),
+		part => getMimeType( part.trim() ),
 	);
 
 	yield {

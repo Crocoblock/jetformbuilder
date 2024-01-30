@@ -50,6 +50,10 @@ function CheckOutInput() {
 	};
 
 	this.addListeners = function () {
+		// disable aria attributes
+		this.reporting.makeInvalid = () => {};
+		this.reporting.makeValid   = () => {};
+
 		const [ node ] = this.nodes;
 
 		/**

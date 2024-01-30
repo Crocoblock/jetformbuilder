@@ -45,7 +45,7 @@ class Choices_Field_Render extends Base {
 				? array()
 				: array(
 					array( 'role', 'radiogroup' ),
-					array( 'aria-required', $this->block_type->get_required_val() ),
+					array( 'aria-required', empty( $this->block_type->block_attrs['required'] ) ? '' : 'true' ),
 				)
 		);
 

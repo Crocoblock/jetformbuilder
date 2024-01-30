@@ -159,13 +159,11 @@ function GenerateFormModal( {
 					  'jet-form-builder',
 				  ) }</li>
 				  <li>{ __(
-					  `If you need some specific fields - describe 
-them also in prompt.`,
+					  `If you need specific fields – describe them in the prompt as well.`,
 					  'jet-form-builder',
 				  ) }</li>
 				  <li>{ __(
-					  `Better to use English language for 
-the prompt - AI understand it better than other`,
+					  `It is better to use the English language for the prompt, as AI understands it better than others.`,
 					  'jet-form-builder',
 				  ) }</li>
 			  </ul>

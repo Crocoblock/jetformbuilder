@@ -38,6 +38,10 @@ function WysiwygData() {
 	};
 
 	this.addListeners = function () {
+		// disable aria attributes
+		this.reporting.makeInvalid = () => {};
+		this.reporting.makeValid   = () => {};
+
 		const update = () => {
 			this.value.current = this.editor.getContent();
 		};

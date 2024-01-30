@@ -1,6 +1,8 @@
 import resolveLabel from '../resolveLabel';
 import resolveLegend from '../resolveLegend';
 import getInputNumberAttrs from '../getInputNumberAttrs';
+import resolveOptionLabel from '../resolveOptionLabel';
+import getMimeType from '../getMimeType';
 
 const typeMap = {
 	email: textParser,
@@ -110,14 +112,14 @@ function* radioParser( input ) {
 		name: input.name,
 		class_name: input.className,
 		field_options: [],
-		label: resolveLegend( input ),
+		label: resolveLegend( input ) || resolveLabel( input ),
 		required: input.required,
 	};
 
 	for ( const optionNode of optionNodes ) {
 		attributes.field_options.push( {
 			value: optionNode.value,
-			label: resolveLabel( optionNode ),
+			label: resolveOptionLabel( optionNode ),
 		} );
 
 		if ( optionNode.checked ) {
@@ -158,14 +160,14 @@ function* checkboxParser( input ) {
 		name: input.name,
 		class_name: input.className,
 		field_options: [],
-		label: resolveLegend( input ),
+		label: resolveLegend( input ) || resolveLabel( input ),
 		required: input.required,
 	};
 
 	for ( const optionNode of optionNodes ) {
 		attributes.field_options.push( {
 			value: optionNode.value,
-			label: resolveLabel( optionNode ),
+			label: resolveOptionLabel( optionNode ),
 		} );
 	}
 
@@ -222,7 +224,7 @@ function* mediaParser( input ) {
 	};
 
 	attributes.allowed_mimes = input.accept.split( ',' ).map(
-		part => part.trim(),
+		part => getMimeType( part.trim() ),
 	);
 
 	yield {

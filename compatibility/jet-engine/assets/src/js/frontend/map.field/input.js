@@ -92,6 +92,10 @@ function MapFieldData() {
 	this.makeReactive = function () {
 		InputData.prototype.makeReactive.call( this );
 
+		// disable aria attributes
+		this.reporting.makeInvalid = () => {};
+		this.reporting.makeValid   = () => {};
+
 		const observer = new IntersectionObserver( ( entries, observer ) => {
 
 			entries.forEach( ( entry ) => {

@@ -50,10 +50,22 @@ function CheckOutInput() {
 	};
 
 	this.addListeners = function () {
+		// disable aria attributes
+		this.reporting.makeInvalid = () => {};
+		this.reporting.makeValid   = () => {};
+
 		const [ node ] = this.nodes;
 
+		/**
+		 * This handler could run earlier,
+		 * than InputData.prototype.makeReactive could finish work
+		 *
+		 * In this case we should keep our sanitizers
+		 */
 		jQuery( node ).on( 'change.JetFormBuilderMain', () => {
-			this.value.current = node.value;
+			this.value.current = this.value.isMaked
+			                     ? node.value
+			                     : this.value.applySanitizers( node.value );
 		} );
 
 		const inputs = node.parentElement.querySelectorAll(

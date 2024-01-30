@@ -25,6 +25,10 @@ function AppointmentInput() {
 		jQuery( node ).on( 'change', () => {
 			this.value.current = node.value;
 		} );
+
+		// disable aria attributes
+		this.reporting.makeInvalid = () => {};
+		this.reporting.makeValid   = () => {};
 	};
 
 	this.onObserve = function () {

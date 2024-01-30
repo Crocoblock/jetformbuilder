@@ -79,7 +79,10 @@
 		},
 		"default": {
 			"type": "string",
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"placeholder": {
 			"type": "string",

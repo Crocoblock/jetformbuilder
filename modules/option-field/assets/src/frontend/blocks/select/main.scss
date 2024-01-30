@@ -13,3 +13,11 @@
 		background-repeat: no-repeat;
 	}
 }
+
+.rtl {
+	&.jet--ua-safari {
+		.jet-form-builder__field-wrap select.select-field {
+			background-position: calc(10% - 20px) calc(1em + 2px), calc(10% - 15px) calc(1em + 2px);
+		}
+	}
+}

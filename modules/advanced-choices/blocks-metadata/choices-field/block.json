@@ -44,7 +44,10 @@
 				"boolean",
 				"object"
 			],
-			"default": ""
+			"default": "",
+			"jfb": {
+				"shortcode": true
+			}
 		},
 		"required": {
 			"type": "boolean",

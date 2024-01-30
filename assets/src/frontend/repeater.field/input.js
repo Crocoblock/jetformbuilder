@@ -19,7 +19,9 @@ function RepeaterData() {
 		return isRepeater( node );
 	};
 	this.addListeners = function () {
-		// silence is golden
+		// disable aria attributes
+		this.reporting.makeInvalid = () => {};
+		this.reporting.makeValid   = () => {};
 	};
 
 	this.hasAutoScroll = function () {

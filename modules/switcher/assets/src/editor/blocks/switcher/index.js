@@ -15,8 +15,7 @@ metadata.attributes.isPreview = {
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Click on any side of the horizontal switcher to toggle between 
-'on' and 'off'. Simple and intuitive, suitable for quick interactions.`,
+		`Add Switcher Field to login, signup, and other forms where binary choices are favored and allow users to enable/disable certain options.`,
 		'jet-form-builder',
 	),
 	edit: SwitcherEdit,

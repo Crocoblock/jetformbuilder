@@ -91,9 +91,15 @@ AdvancedReporting.prototype.reportRaw = function ( validationErrors ) {
 		}
 	}
 
+	if ( !message ) {
+		this.clearReport();
+
+		return;
+	}
+
 	this.insertError( message );
 };
-AdvancedReporting.prototype.setInput         = function ( input ) {
+AdvancedReporting.prototype.setInput = function ( input ) {
 	this.messages = getValidationMessages( input.nodes[ 0 ] );
 
 	ReportingInterface.prototype.setInput.call( this, input );
@@ -101,7 +107,7 @@ AdvancedReporting.prototype.setInput         = function ( input ) {
 /**
  * @since 3.0.5 Introduced
  */
-AdvancedReporting.prototype.observeAttrs     = function () {
+AdvancedReporting.prototype.observeAttrs = function () {
 	for ( const watchAttr of this.watchAttrs ) {
 		if ( !this.input.attrs.hasOwnProperty( watchAttr ) ) {
 			continue;
@@ -117,51 +123,55 @@ AdvancedReporting.prototype.observeAttrs     = function () {
 		} );
 	}
 };
-AdvancedReporting.prototype.clearReport      = function () {
-	const node = getWrapper( this.getNode() );
+AdvancedReporting.prototype.clearReport = function () {
+	const inner = () => {
+		const node = getWrapper( this.getNode() );
 
-	if ( ! node ) {
-		return;
-	}
+		if ( !node ) {
+			return;
+		}
 
-	node.classList.remove( 'field-has-error' );
+		node.classList.remove( 'field-has-error' );
 
-	const error = getErrorNode( node );
+		const error = getErrorNode( node );
 
-	if ( !error ) {
-		return;
-	}
+		if ( !error ) {
+			return;
+		}
 
-	error.remove();
+		error.remove();
+	};
+	inner();
+	this.makeValid();
 };
-AdvancedReporting.prototype.insertError      = function ( message ) {
-	if ( !message ) {
-		this.clearReport();
+AdvancedReporting.prototype.insertError = function ( message ) {
+	const inner = () => {
+		const node  = getWrapper( this.getNode() );
+		const error = this.createError( node, message );
 
-		return;
-	}
-	const node  = getWrapper( this.getNode() );
-	const error = this.createError( node, message );
+		node.classList.add( 'field-has-error' );
 
-	node.classList.add( 'field-has-error' );
+		if ( error.isConnected ) {
+			return;
+		}
 
-	if ( error.isConnected ) {
-		return;
-	}
+		// it can be on fields_layout === 'row'
+		const colEnd = node.querySelector( '.jet-form-builder-col__end' );
 
-	// it can be on fields_layout === 'row'
-	const colEnd = node.querySelector( '.jet-form-builder-col__end' );
-
-	if ( colEnd ) {
-		colEnd.appendChild( error );
-	}
-	else {
-		node.appendChild( error );
-	}
+		if ( colEnd ) {
+			colEnd.appendChild( error );
+		}
+		else {
+			node.appendChild( error );
+		}
+	};
+	inner();
+	this.makeInvalid();
 };
-AdvancedReporting.prototype.createError      = function (
+AdvancedReporting.prototype.createError = function (
 	node, message ) {
-	const error = getErrorNode( node );
+	const error     = getErrorNode( node );
+	const inputNode = this.getNode();
 
 	if ( error ) {
 		error.innerHTML = message;
@@ -173,9 +183,27 @@ AdvancedReporting.prototype.createError      = function (
 
 	div.classList.add( 'error-message' );
 	div.innerHTML = message;
+	div.id        = inputNode.id + '__error';
 
 	return div;
 };
+
+AdvancedReporting.prototype.makeInvalid = function () {
+	const wrapper   = getWrapper( this.getNode() );
+	const errorNode = getErrorNode( wrapper );
+
+	this.getNode().setAttribute( 'aria-invalid', 'true' );
+	this.getNode().setAttribute(
+		'aria-describedby',
+		errorNode?.id ?? false,
+	);
+};
+
+AdvancedReporting.prototype.makeValid = function () {
+	this.getNode().removeAttribute( 'aria-invalid' );
+	this.getNode().removeAttribute( 'aria-describedby' );
+};
+
 AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 	const callback = () => {
 		this.input.getContext().setSilence( false );

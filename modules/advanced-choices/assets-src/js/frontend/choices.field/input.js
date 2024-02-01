@@ -182,7 +182,7 @@ ChoicesData.prototype.handleNextKey = function ( event, node ) {
 
 	const nextNode = this.nextNode( node );
 
-	this.switchChoice( nextNode );
+	this.switchChoice( event, nextNode );
 };
 
 /**
@@ -197,7 +197,7 @@ ChoicesData.prototype.handlePrevKey = function ( event, node ) {
 
 	const prevNode = this.prevNode( node );
 
-	this.switchChoice( prevNode );
+	this.switchChoice( event, prevNode );
 };
 
 /**
@@ -210,13 +210,13 @@ ChoicesData.prototype.handleSpaceKey = function ( event, node ) {
 	}
 	event.preventDefault();
 
-	this.toggleChoice( node );
+	this.toggleChoice( node, event );
 };
 
-ChoicesData.prototype.switchChoice = function ( node ) {
+ChoicesData.prototype.switchChoice = function ( event, node ) {
 	const wrapper = getWrapper( node );
 
-	this.toggleChoice( node );
+	this.toggleChoice( node, event );
 	wrapper.focus( { preventScroll: true } );
 };
 

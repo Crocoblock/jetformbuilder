@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 6.0
-Tested up to: 6.4.2
+Tested up to: 6.4.3
 Requires PHP: 7.0
-Stable tag: 3.2.3
+Stable tag: 3.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,16 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.3.0**
+- ADD: Switcher Field
+- ADD: Welcome block with form patterns
+- ADD: Generate forms with Open AI
+- ADD: Improved preset sanitize. Option for disable sanitize
+- ADD: Possibility to verify manually the form by admin
+- ADD: "Greater than or equal" and "Less than or equal" operators were added to the Conditional Block
+- UPD: Improved Server-Side validation
+- FIX: Compatibility with JetBooking on the frontend
 
 **3.2.3**
 - UPD: Improve JetForm block in Block Editor with style controls for the most fields

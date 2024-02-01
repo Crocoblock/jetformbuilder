@@ -44,7 +44,7 @@ function AttributeHelp( { name = false, children = null } ) {
 			settings?.shortcode && children
 		) && (
 			<span>&nbsp;{ __(
-				'You can also use short codes here.',
+				'You can also use shortcodes here.',
 				'jet-form-builder',
 			) }</span>
 		) }

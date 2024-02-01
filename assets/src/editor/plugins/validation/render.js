@@ -23,6 +23,7 @@ const {
 	      formats,
       } = window.jetFormValidation;
 
+// eslint-disable-next-line max-lines-per-function, complexity
 function ValidationPlugin() {
 	const [ validation, setValidation ] = useMetaState( '_jf_validation' );
 	const [ args, setArgs ]             = useMetaState( '_jf_args' );
@@ -34,12 +35,13 @@ function ValidationPlugin() {
 
 	useEffect( () => {
 		setArgs( prev => {
-			const load_nonce = (
-				                   !isLoadNonce
-			                   ) ? 'hide' : 'render';
+			const loadNonce = (
+				                  !isLoadNonce
+			                  ) ? 'hide' : 'render';
 
-			return { ...prev, load_nonce };
+			return { ...prev, load_nonce: loadNonce };
 		} );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ isLoadNonce ] );
 
 	return <>
@@ -58,11 +60,9 @@ function ValidationPlugin() {
 			label={ __( 'Enable csrf protection', 'jet-form-builder' ) }
 			checked={ args.use_csrf }
 			onChange={ () => {
-				setArgs( prev => {
-					const use_csrf = !Boolean( prev.use_csrf );
-
-					return { ...prev, use_csrf };
-				} );
+				setArgs( prev => (
+					{ ...prev, use_csrf: !Boolean( prev.use_csrf ) }
+				) );
 			} }
 		/>
 		<ToggleControl

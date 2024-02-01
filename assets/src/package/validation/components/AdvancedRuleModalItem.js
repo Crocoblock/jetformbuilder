@@ -110,7 +110,7 @@ addFilter(
 					onChange={ value => changeCurrentItem( { value } ) }
 				/>
 				<BaseHelp>
-					{ __( 'Example of registering a function below.' ) + ' ' }
+					{ __( 'Example of registering a function below.', 'jet-form-builder' ) + ' ' }
 					<a
 						href="javascript:void(0)"
 						onClick={ () => setShowDetails( prev => !prev ) }

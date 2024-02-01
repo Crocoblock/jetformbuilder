@@ -22,6 +22,7 @@ const {
 	      ToggleControl,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function,complexity
 export default function FormBreakEdit( props ) {
 
 	const blockProps = useBlockProps();
@@ -54,8 +55,8 @@ export default function FormBreakEdit( props ) {
 					label={ __( 'Enable "Next" Button', 'jet-form-builder' ) }
 					checked={ attributes.add_next_button }
 					help={ attrHelp( 'add_next_button' ) }
-					onChange={ add_next_button => setAttributes(
-						{ add_next_button } ) }
+					onChange={ addNextButton => setAttributes(
+						{ add_next_button: addNextButton } ) }
 				/>
 				{ attributes.add_next_button && <TextControl
 					label={ __( 'Next Button label', 'jet-form-builder' ) }
@@ -116,8 +117,8 @@ export default function FormBreakEdit( props ) {
 						placeholder="Prev..."
 						allowedFormats={ [] }
 						value={ attributes.prev_label }
-						onChange={ prev_label => setAttributes(
-							{ prev_label } ) }
+						onChange={ prevLabel => setAttributes(
+							{ prev_label: prevLabel } ) }
 					/>
 				</Button> }
 				{ (

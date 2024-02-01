@@ -2,6 +2,7 @@ function BaseInternalMacro() {
 }
 
 BaseInternalMacro.prototype = {
+	// eslint-disable-next-line jsdoc/require-returns-check
 	/**
 	 * @return {string}
 	 */

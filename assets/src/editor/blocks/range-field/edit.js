@@ -43,6 +43,7 @@ if ( typeof InputControl === 'undefined' ) {
 	InputControl = __experimentalInputControl;
 }
 
+// eslint-disable-next-line max-lines-per-function, complexity
 export default function RangeEdit( props ) {
 
 	const blockProps           = useBlockProps();
@@ -126,7 +127,7 @@ export default function RangeEdit( props ) {
 					<AttributeHelp name="step"/>
 					<TextControl
 						key="prefix"
-						label={ __( 'Value prefix' ) }
+						label={ __( 'Value prefix', 'jet-form-builder' ) }
 						value={ attributes.prefix }
 						help={ attrHelp( 'prefix_suffix' ) }
 						onChange={ ( newValue ) => {
@@ -135,7 +136,7 @@ export default function RangeEdit( props ) {
 					/>
 					<TextControl
 						key="suffix"
-						label={ __( 'Value suffix' ) }
+						label={ __( 'Value suffix', 'jet-form-builder' ) }
 						value={ attributes.suffix }
 						help={ attrHelp( 'prefix_suffix' ) }
 						onChange={ ( newValue ) => {

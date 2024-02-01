@@ -4,12 +4,11 @@ const { FieldSettingsWrapper } = JetFBComponents;
 
 const { __ } = wp.i18n;
 
-const { SelectControl, TextControl } = wp.components;
+const { SelectControl } = wp.components;
 
 const {
 		  InspectorControls,
 		  useBlockProps,
-		  RichText,
 	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const { RawHTML } = wp.element;
@@ -23,7 +22,7 @@ export default function ProgressBar( props ) {
 	const {
 			  attributes,
 			  setAttributes,
-			  editProps: { uniqKey, attrHelp },
+			  editProps: { uniqKey },
 		  } = props;
 
 	const [ progressHtml, setProgressHtml ] = useState( '' );
@@ -40,7 +39,7 @@ export default function ProgressBar( props ) {
 
 	useEffect( () => {
 		setProgressHtml( getProgressTypeHtml( attributes.progress_type ) );
-	}, [] );
+	}, [ attributes.progress_type ] );
 
 	if ( attributes.isPreview ) {
 		return <div style={ {
@@ -62,9 +61,9 @@ export default function ProgressBar( props ) {
 					key={ uniqKey( 'progress_type' ) }
 					label={ __( 'Progress Bar Type', 'jet-form-builder' ) }
 					value={ attributes.progress_type }
-					onChange={ progress_type => {
-						setAttributes( { progress_type } )
-						setProgressHtml( getProgressTypeHtml( progress_type ) );
+					onChange={ newVal => {
+						setAttributes( { progress_type: newVal } )
+						setProgressHtml( getProgressTypeHtml( newVal ) );
 					} }
 					options={ JetFormProgressBar.progress_types }
 				/> }

@@ -1,9 +1,9 @@
 import CurrentDate from './const.namespace/CurrentDate';
-import Min_In_Sec from './const.namespace/Min_In_Sec';
-import Month_In_Sec from './const.namespace/Month_In_Sec';
-import Hour_In_Sec from './const.namespace/Hour_In_Sec';
-import Day_In_Sec from './const.namespace/Day_In_Sec';
-import Year_In_Sec from './const.namespace/Year_In_Sec';
+import MinInSec from './const.namespace/MinInSec';
+import MonthInSec from './const.namespace/MonthInSec';
+import HourInSec from './const.namespace/HourInSec';
+import DayInSec from './const.namespace/DayInSec';
+import YearInSec from './const.namespace/YearInSec';
 
 const { applyFilters: wpApplyFilters } = JetPlugins.hooks;
 
@@ -11,11 +11,11 @@ const getStaticFunctions = () => wpApplyFilters(
 	'jet.fb.static.functions',
 	[
 		CurrentDate,
-		Min_In_Sec,
-		Month_In_Sec,
-		Hour_In_Sec,
-		Day_In_Sec,
-		Year_In_Sec,
+		MinInSec,
+		MonthInSec,
+		HourInSec,
+		DayInSec,
+		YearInSec,
 	],
 );
 
@@ -48,13 +48,11 @@ function getFunction( slug ) {
 /**
  * @param  result    {String}
  * @param  fieldName {String}
- * @param  params    {String[]}
  * @return {*}
  */
 function attachConstNamespace(
 	result,
 	fieldName,
-	params,
 ) {
 	if ( !fieldName.includes( 'CT::' ) ) {
 		return result;

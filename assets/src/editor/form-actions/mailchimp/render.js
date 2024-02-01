@@ -1,5 +1,4 @@
 const {
-	      addAction,
 	      globalTab,
       } = JetFBActions;
 
@@ -12,7 +11,6 @@ const {
 	      SelectControl,
 	      CheckboxControl,
 	      BaseControl,
-	      Button,
       } = wp.components;
 
 const {
@@ -36,16 +34,16 @@ const {
 
 const {
 	      withSelect,
-	      withDispatch,
       } = wp.data;
 
-const { compose } = wp.compose;
+const { compose, useInstanceId } = wp.compose;
 
 const {
 	      useState,
 	      useEffect,
       } = wp.element;
 
+// eslint-disable-next-line max-lines-per-function, complexity
 function MailChimpRender( props ) {
 
 	const {
@@ -67,7 +65,11 @@ function MailChimpRender( props ) {
 	useEffect( () => {
 		setFormFields(
 			[ ...getFormFieldsBlocks( [], '--' ), ...requestFields ] );
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
+
+	const apiKeyId = useInstanceId( MailChimpRender, 'ApiKeyControl' );
 
 	const getFields = () => {
 		const { data = {} } = loadingState.response || {};
@@ -128,14 +130,15 @@ function MailChimpRender( props ) {
 			<BaseControl
 				key={ 'mailchimp_key_inputs' }
 				label={ label( 'api_key' ) }
+				id={ apiKeyId }
 			>
 				<div className="jet-control-clear-full jet-d-flex-between">
 					<TextControl
-						key="api_key"
+						id={ apiKeyId }
 						disabled={ settings.use_global }
 						value={ getApiKey() }
-						onChange={ api_key => onChangeSettingObj(
-							{ api_key } ) }
+						onChange={ val => onChangeSettingObj(
+							{ api_key: val } ) }
 					/>
 					<ValidateButtonWithStore
 						initialLabel={ label( 'validate_api_key' ) }
@@ -153,16 +156,17 @@ function MailChimpRender( props ) {
 				href={ help( 'api_key_link' ) }>{ help(
 				'api_key_link_suffix' ) }</a>
 			</div>
-			{ loadingState.success && <React.Fragment>
+			{ loadingState.success && <>
 				<SelectControl
 					label={ label( 'list_id' ) }
 					key="list_id"
 					labelPosition="side"
 					value={ settings.list_id }
-					onChange={ list_id => onChangeSettingObj( { list_id } ) }
+					onChange={ val => onChangeSettingObj( { list_id: val } ) }
 					options={ getLists() }
 				/>
 				{ Boolean( settings.list_id ) && <>
+					{/* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */}
 					<BaseControl
 						label={ label( 'groups_ids' ) }
 					>
@@ -193,8 +197,8 @@ function MailChimpRender( props ) {
 						key={ 'double_opt_in' }
 						label={ label( 'double_opt_in' ) }
 						checked={ settings.double_opt_in }
-						onChange={ double_opt_in => onChangeSettingObj( {
-							double_opt_in: Boolean( double_opt_in ),
+						onChange={ val => onChangeSettingObj( {
+							double_opt_in: Boolean( val ),
 						} ) }
 					/>
 					<ActionFieldsMap
@@ -217,7 +221,7 @@ function MailChimpRender( props ) {
 							</WrapperRequiredControl> }
 					</ActionFieldsMap>
 				</> }
-			</React.Fragment> }
+			</> }
 		</div>
 	);
 	/* eslint-enable jsx-a11y/no-onchange */

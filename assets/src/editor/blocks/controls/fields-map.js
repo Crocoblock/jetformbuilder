@@ -1,24 +1,26 @@
-
 /**
  * Internal dependencies
  */
 const {
-	SelectControl,
-	TextControl
-} = wp.components;
-
+	      SelectControl,
+	      TextControl,
+      } = wp.components;
 
 class JetFieldsMapControl extends wp.element.Component {
 
 	constructor( props ) {
 		super( props );
 
-		this.fieldTypes = this.props.fieldTypes;
+		this.fieldTypes     = this.props.fieldTypes;
 		this.taxonomiesList = this.props.taxonomiesList;
-		this.className = this.props.className;
-		this.metaProp = this.props.metaProp ? this.props.metaProp : 'post_meta';
-		this.termsProp = this.props.termsProp ? this.props.termsProp : 'post_terms';
-		this.index = this.props.index;
+		this.className      = this.props.className;
+		this.metaProp       = this.props.metaProp
+		                      ? this.props.metaProp
+		                      : 'post_meta';
+		this.termsProp      = this.props.termsProp
+		                      ? this.props.termsProp
+		                      : 'post_terms';
+		this.index          = this.props.index;
 
 		this.init();
 		this.bindFunctions();
@@ -29,21 +31,20 @@ class JetFieldsMapControl extends wp.element.Component {
 	}
 
 	bindFunctions() {
-		this.onChangeType = this.onChangeType.bind( this );
+		this.onChangeType  = this.onChangeType.bind( this );
 		this.onChangeValue = this.onChangeValue.bind( this );
 	}
 
-
 	init() {
-		this.id = `inspector-select-control-${ this.index }`;
+		this.id            = `inspector-select-control-${ this.index }`;
 		this.preparedTaxes = [];
-		this.taxPrefix = 'jet_tax__';
+		this.taxPrefix     = 'jet_tax__';
 
-		if ( ! this.taxonomiesList ) {
+		if ( !this.taxonomiesList ) {
 			return;
 		}
 
-		for ( let i = 0; i < this.taxonomiesList.length; i ++ ) {
+		for ( let i = 0; i < this.taxonomiesList.length; i++ ) {
 			this.preparedTaxes.push( {
 				value: this.taxPrefix + this.taxonomiesList[ i ].value,
 				label: this.taxonomiesList[ i ].label,
@@ -53,7 +54,7 @@ class JetFieldsMapControl extends wp.element.Component {
 
 	getFieldName( value ) {
 
-		if ( ! value ) {
+		if ( !value ) {
 			return '';
 		}
 
@@ -62,24 +63,25 @@ class JetFieldsMapControl extends wp.element.Component {
 		if ( this.termsProp === fieldType || this.metaProp === fieldType ) {
 			return value;
 		}
-		
-			return '';
-		
+
+		return '';
 
 	};
 
 	isTermOrMeta( value ) {
-		return ( this.termsProp === value || this.metaProp === value );
+		return (
+			this.termsProp === value || this.metaProp === value
+		);
 	}
 
-
+	// eslint-disable-next-line complexity
 	getFieldType( value ) {
 
-		if ( ! value ) {
+		if ( !value ) {
 			return '';
 		}
 
-		for ( let i = 0; i < this.fieldTypes.length; i ++ ) {
+		for ( let i = 0; i < this.fieldTypes.length; i++ ) {
 			if ( value === this.fieldTypes[ i ].value ) {
 				return value;
 			}
@@ -88,26 +90,22 @@ class JetFieldsMapControl extends wp.element.Component {
 		if ( value.includes( this.taxPrefix ) ) {
 			return this.termsProp;
 		}
-		
-			return this.metaProp;
-		
 
+		return this.metaProp;
 	};
-
 
 	onChangeValue( newValue ) {
 		this.props.onChange( {
 			...this.props.fieldsMap,
-			[ this.props.fieldName ]: newValue
+			[ this.props.fieldName ]: newValue,
 		} );
 	};
-
 
 	onChangeType( newValue ) {
 		let val = this.getFieldType( newValue );
 
 		this.setState( {
-			type: val
+			type: val,
 		} );
 
 		if ( this.isTermOrMeta( val ) ) {
@@ -116,7 +114,6 @@ class JetFieldsMapControl extends wp.element.Component {
 
 		this.onChangeValue( val );
 	}
-
 
 	// Disable reason: A select with an onchange throws a warning
 
@@ -134,17 +131,21 @@ class JetFieldsMapControl extends wp.element.Component {
 					onChange={ this.onChangeType }
 					options={ this.fieldTypes }
 					style={ {
-						width: '160px'
+						width: '160px',
 					} }
 				/>
-				{ ( this.metaProp === this.state.type ) && <TextControl
+				{ (
+					this.metaProp === this.state.type
+				) && <TextControl
 					key={ 'field_name_' + this.props.fieldName + this.index }
 					value={ this.props.fieldValue }
 					onChange={ this.onChangeValue }
 					style={ { width: '200px' } }
 				/> }
-				{ ( this.termsProp === this.state.type ) && <SelectControl
-					className='jet-control-without-label'
+				{ (
+					this.termsProp === this.state.type
+				) && <SelectControl
+					className="jet-control-without-label"
 					key={ 'field_tax_' + this.props.fieldName + this.index }
 					value={ this.props.fieldValue }
 					onChange={ this.onChangeValue }

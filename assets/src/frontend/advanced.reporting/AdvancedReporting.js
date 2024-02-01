@@ -16,7 +16,7 @@ const {
       } = JetFormBuilderFunctions;
 
 /**
- * @property {AdvancedRestriction} restrictions
+ * @property {AdvancedRestriction[]} restrictions - list of restrictions
  *
  * @this {ReportingInterface}
  * @class
@@ -170,16 +170,15 @@ AdvancedReporting.prototype.insertError = function ( message ) {
 };
 AdvancedReporting.prototype.createError = function (
 	node, message ) {
-	const error     = getErrorNode( node );
-	const inputNode = this.getNode();
+	const error = getErrorNode( node );
 
 	if ( error ) {
 		error.innerHTML = message;
 
 		return error;
 	}
-
-	const div = document.createElement( 'div' );
+	const inputNode = this.getNode();
+	const div       = document.createElement( 'div' );
 
 	div.classList.add( 'error-message' );
 	div.innerHTML = message;
@@ -227,7 +226,7 @@ AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 	};
 
 	/**
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1766
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/1766
 	 */
 	if ( addToQueue && this.isProcess ) {
 		this.queue = [ callback ];
@@ -244,7 +243,7 @@ AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 
 AdvancedReporting.prototype.validateOnBlur = function () {
 	/**
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1766
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/1766
 	 */
 	if ( this.isProcess ) {
 		return;

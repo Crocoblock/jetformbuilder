@@ -4,7 +4,7 @@ const { __ } = wp.i18n;
 
 const base = {
 	name: 'jf-args-panel',
-	title: __( 'Form Settings' ),
+	title: __( 'Form Settings', 'jet-form-builder' ),
 	jfbTest: 2,
 };
 

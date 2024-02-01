@@ -11,6 +11,7 @@ const { __ } = wp.i18n;
 
 const source = window.JetFormEditorData.argumentsSource || {};
 
+// eslint-disable-next-line max-lines-per-function
 export default function PluginArgs() {
 
 	const [ args, setArgs ] = useMetaState( '_jf_args' );
@@ -73,21 +74,21 @@ export default function PluginArgs() {
 
 		<ToggleControl
 			key={ 'enable_progress' }
-			label={ __( 'Enable form pages progress', 'jet-from-builder' ) }
+			label={ __( 'Enable form pages progress', 'jet-form-builder' ) }
 			checked={ args.enable_progress }
 			help={ __( 'Displays the progress of a multi-page form',
 				'jet-form-builder' ) }
 			onChange={ () => {
 				setArgs( prev => {
-					const enable_progress = !Boolean( prev.enable_progress );
+					const val = !Boolean( prev.enable_progress );
 
-					return { ...prev, enable_progress };
+					return { ...prev, enable_progress: val };
 				} );
 			} }
 		/>
 		<ToggleControl
 			key={ 'clear_on_ajax' }
-			label={ __( 'Clear data on success submit', 'jet-from-builder' ) }
+			label={ __( 'Clear data on success submit', 'jet-form-builder' ) }
 			checked={ args.clear }
 			help={ __( 'Remove input values on successful submit',
 				'jet-form-builder' ) }

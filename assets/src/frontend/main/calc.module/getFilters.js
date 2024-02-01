@@ -55,6 +55,7 @@ const getFilterItems = () => applyFilters(
 );
 let response         = [];
 
+// eslint-disable-next-line complexity
 function pushFilter( name, props = '' ) {
 	if ( !filters.length ) {
 		filters = getFilterItems();
@@ -83,6 +84,7 @@ function pushFilter( name, props = '' ) {
 	response.push( filter );
 }
 
+// eslint-disable-next-line complexity
 function getFilters( filtersList ) {
 	if ( null === filtersList || !filtersList?.length ) {
 		return null;

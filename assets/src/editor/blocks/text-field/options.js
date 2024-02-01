@@ -3,49 +3,49 @@ const { __ } = wp.i18n;
 const fieldTypesList = [
 	{
 		value: 'text',
-		label: __( 'Text' )
+		label: __( 'Text', 'jet-form-builder' )
 	},
 	{
 		value: 'email',
-		label: __( 'Email' )
+		label: __( 'Email', 'jet-form-builder' )
 	},
 	{
 		value: 'url',
-		label: __( 'Url' )
+		label: __( 'Url', 'jet-form-builder' )
 	},
 	{
 		value: 'tel',
-		label: __( 'Tel' )
+		label: __( 'Tel', 'jet-form-builder' )
 	},
 	{
 		value: 'password',
-		label: __( 'Password' )
+		label: __( 'Password', 'jet-form-builder' )
 	},
 ];
 
 const maskTypesList = [
 	{
 		value: '',
-		label: __( 'Default' )
+		label: __( 'Default', 'jet-form-builder' )
 	},
 	{
 		value: 'datetime',
-		label: __( 'Datetime' )
+		label: __( 'Datetime', 'jet-form-builder' )
 	},
 ];
 
 const maskVisibilitiesList = [
 	{
 		value: 'always',
-		label: __( 'Always' )
+		label: __( 'Always', 'jet-form-builder' )
 	},
 	{
 		value: 'hover',
-		label: __( 'Hover' )
+		label: __( 'Hover', 'jet-form-builder' )
 	},
 	{
 		value: 'focus',
-		label: __( 'Focus' )
+		label: __( 'Focus', 'jet-form-builder' )
 	},
 ];
 

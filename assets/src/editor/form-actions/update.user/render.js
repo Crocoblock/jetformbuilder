@@ -1,7 +1,6 @@
 import UserPropertySelect from '../../components/user.property.select';
 
 const {
-	      addAction,
 	      getFormFieldsBlocks,
 	      convertListToFieldsMap,
       } = JetFBActions;
@@ -26,8 +25,6 @@ const {
 	      SelectControl,
       } = wp.components;
 
-const { __ } = wp.i18n;
-
 const {
 	      useState,
 	      useEffect,
@@ -49,16 +46,17 @@ function UpdateUserRender( props ) {
 		setFields(
 			convertListToFieldsMap( getFormFieldsBlocks(), requestFields ),
 		);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	/**
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1315
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/1315
 	 */
 	useSanitizeFieldsMap();
 
 	/* eslint-disable jsx-a11y/no-onchange */
 	return (
-		<div key="update_user">
+		<>
 			<ActionFieldsMap
 				label={ label( 'fields_map' ) }
 				key="user_fields_map"
@@ -83,7 +81,7 @@ function UpdateUserRender( props ) {
 					'user_role' ) }
 			/>
 			<ActionMessages { ...props } />
-		</div>
+		</>
 	);
 	/* eslint-enable jsx-a11y/no-onchange */
 }

@@ -1,7 +1,6 @@
 import IntegrationComponent from '../integration-component';
 
 const {
-	      addAction,
 	      globalTab,
       } = JetFBActions;
 
@@ -26,8 +25,6 @@ let { NumberControl } = wp.components;
 if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
 }
-
-const { __ } = wp.i18n;
 
 const { withRequestFields } = JetFBHooks;
 const { withSelect }        = wp.data;
@@ -55,12 +52,12 @@ class GetResponseAction extends IntegrationComponent {
 		const settings = this.props.settings;
 
 		if ( settings.data && settings.data.lists ) {
-			return this.formatEntriesArray( settings.data.lists );
+			return GetResponseAction.formatEntriesArray( settings.data.lists );
 		}
 		return [];
 	}
 
-	formatEntriesArray( entries = [], isNeedPlaceholder = true ) {
+	static formatEntriesArray( entries = [], isNeedPlaceholder = true ) {
 		const placeholder = {
 			label: '--',
 		};
@@ -75,21 +72,27 @@ class GetResponseAction extends IntegrationComponent {
 		return isNeedPlaceholder ? [ placeholder, ...options ] : options;
 	}
 
+	/* eslint-disable
+		 no-unused-expressions,
+		 @wordpress/no-base-control-with-label-without-id
+	 */
+
+	// eslint-disable-next-line max-lines-per-function, complexity
 	render() {
-		const { settings, onChange, source, label, help } = this.props;
-		const fields                                      = this.getFields();
-		const currentTab                                  = globalTab(
+		const { settings, label, help } = this.props;
+		const fields                    = this.getFields();
+		const currentTab                = globalTab(
 			{ slug: 'get-response-tab' } );
 
 		/* eslint-disable jsx-a11y/no-onchange */
 		return (
-			<React.Fragment key="getresponse">
+			<>
 				<ToggleControl
 					key={ 'use_global' }
 					label={ label( 'use_global' ) }
 					checked={ settings.use_global }
-					onChange={ use_global => {
-						this.onChangeSetting( Boolean( use_global ),
+					onChange={ useGlobal => {
+						this.onChangeSetting( Boolean( useGlobal ),
 							'use_global' );
 					} }
 				/>
@@ -114,7 +117,7 @@ class GetResponseAction extends IntegrationComponent {
 								: this.validateAPIKey();
 							} }
 							className={ this.state.className.join( ' ' ) +
-							' jet-form-validate-button' }
+								' jet-form-validate-button' }
 						>
 							<i className="dashicons"/>
 							{ label( 'validate_api_key' ) }
@@ -126,7 +129,7 @@ class GetResponseAction extends IntegrationComponent {
 					href={ help( 'api_key_link' ) }>{ help(
 					'api_key_link_suffix' ) }</a>
 				</div>
-				{ settings.isValidAPI && <React.Fragment>
+				{ settings.isValidAPI && <>
 					<BaseControl
 						label={ label( 'list_id' ) }
 					>
@@ -173,6 +176,7 @@ class GetResponseAction extends IntegrationComponent {
 								( [ fieldName, fieldData ], index ) => {
 
 									return <WrapperRequiredControl
+										key={ fieldName + index }
 										field={ [ fieldName, fieldData ] }
 									>
 										<SelectControl
@@ -188,10 +192,10 @@ class GetResponseAction extends IntegrationComponent {
 								} ) }
 						</div>
 					</BaseControl>
-				</React.Fragment> }
-			</React.Fragment>
+				</> }
+			</>
 		);
-		/* eslint-enable jsx-a11y/no-onchange */
+		/* eslint-enable */
 	}
 
 }

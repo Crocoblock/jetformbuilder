@@ -24,6 +24,7 @@ const {
 	      useFields,
       } = JetFBHooks;
 
+// eslint-disable-next-line max-lines-per-function, complexity
 function SendEmailRender( {
 	settings,
 	source,
@@ -39,6 +40,8 @@ function SendEmailRender( {
 
 	useEffect( () => {
 		setFormFieldsTokens( formFields.map( ( { value } ) => value ) );
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	/* eslint-disable jsx-a11y/no-onchange */
@@ -101,8 +104,8 @@ function SendEmailRender( {
 			<TextControl
 				value={ settings.reply_to_email }
 				help={ help( 'reply_to_email' ) }
-				onChange={ reply_to_email => onChangeSettingObj(
-					{ reply_to_email },
+				onChange={ val => onChangeSettingObj(
+					{ reply_to_email: val },
 				) }
 			/>
 		</AdvancedModalControl> }
@@ -147,8 +150,8 @@ function SendEmailRender( {
 			<TextControl
 				value={ settings.from_name }
 				help={ help( 'from_name' ) }
-				onChange={ from_name => onChangeSettingObj(
-					{ from_name },
+				onChange={ val => onChangeSettingObj(
+					{ from_name: val },
 				) }
 			/>
 		</AdvancedModalControl>
@@ -165,8 +168,8 @@ function SendEmailRender( {
 			<TextControl
 				value={ settings.from_address }
 				help={ help( 'from_address' ) }
-				onChange={ from_address => onChangeSettingObj(
-					{ from_address },
+				onChange={ val => onChangeSettingObj(
+					{ from_address: val },
 				) }
 			/>
 		</AdvancedModalControl>
@@ -188,8 +191,8 @@ function SendEmailRender( {
 			label={ label( 'disable_format' ) }
 			help={ help( 'disable_format' ) }
 			checked={ settings.disable_format }
-			onChange={ disable_format => onChangeSettingObj(
-				{ disable_format },
+			onChange={ val => onChangeSettingObj(
+				{ disable_format: val },
 			) }
 		/> }
 		<AdvancedModalControl
@@ -208,6 +211,7 @@ function SendEmailRender( {
 				onChange={ content => onChangeSettingObj( { content } ) }
 			/>
 		</AdvancedModalControl>
+		{/* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */}
 		<BaseControl
 			label={ label( 'attachments' ) }
 			className={ 'control-flex' }

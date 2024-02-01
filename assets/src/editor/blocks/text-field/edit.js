@@ -39,13 +39,9 @@ const {
 	      SelectControl,
 	      ToggleControl,
 	      PanelBody,
-	      __experimentalNumberControl,
       } = wp.components;
 
-let { NumberControl } = wp.components;
-
-NumberControl = NumberControl || __experimentalNumberControl;
-
+// eslint-disable-next-line max-lines-per-function, complexity
 export default function TextEdit( props ) {
 	const {
 		      attributes,
@@ -88,7 +84,7 @@ export default function TextEdit( props ) {
 			<FieldSettingsWrapper { ...props }>
 				<SelectControl
 					key="field_type"
-					label={ __( 'Field Type' ) }
+					label={ __( 'Field Type', 'jet-form-builder' ) }
 					labelPosition="top"
 					value={ attributes.field_type }
 					onChange={ newValue => {
@@ -129,28 +125,28 @@ export default function TextEdit( props ) {
 				<AttributeHelp name="maxlength"/>
 				<ToggleControl
 					key={ 'enable_input_mask' }
-					label={ __( 'Set Input Mask' ) }
+					label={ __( 'Set Input Mask', 'jet-form-builder' ) }
 					checked={ attributes.enable_input_mask }
 					help={ __(
-						'Check this to setup specific input format for the current field' ) }
+						'Check this to setup specific input format for the current field', 'jet-form-builder' ) }
 					onChange={ newVal => {
 						setAttributes( { enable_input_mask: newVal } );
 					} }
 				/>
-				{ attributes.enable_input_mask && <React.Fragment>
+				{ attributes.enable_input_mask && <>
 					<ToggleControl
 						label={ __(
 							'Clear mask before submit',
 							'jet-form-builder',
 						) }
 						checked={ attributes.clear_on_submit }
-						onChange={ clear_on_submit => setAttributes(
-							{ clear_on_submit },
+						onChange={ newVal => setAttributes(
+							{ clear_on_submit: newVal },
 						) }
 					/>
 					<SelectControl
 						key="mask_type"
-						label={ __( 'Mask type' ) }
+						label={ __( 'Mask type', 'jet-form-builder' ) }
 						labelPosition="top"
 						value={ attributes.mask_type }
 						onChange={ ( newValue ) => {
@@ -160,7 +156,7 @@ export default function TextEdit( props ) {
 					/>
 					<TextControl
 						key="input_mask"
-						label={ __( 'Input mask' ) }
+						label={ __( 'Input mask', 'jet-form-builder' ) }
 						value={ attributes.input_mask }
 						onChange={ ( newValue ) => {
 							setAttributes( { input_mask: newValue } );
@@ -186,7 +182,7 @@ export default function TextEdit( props ) {
 
 					<SelectControl
 						key="mask_visibility"
-						label={ __( 'Mask visibility' ) }
+						label={ __( 'Mask visibility', 'jet-form-builder' ) }
 						labelPosition="top"
 						value={ attributes.mask_visibility }
 						onChange={ ( newValue ) => {
@@ -196,7 +192,7 @@ export default function TextEdit( props ) {
 					/>
 					<SelectControl
 						key="mask_placeholder"
-						label={ __( 'Mask placeholder' ) }
+						label={ __( 'Mask placeholder', 'jet-form-builder' ) }
 						labelPosition="top"
 						value={ attributes.mask_placeholder }
 						onChange={ ( newValue ) => {
@@ -204,7 +200,7 @@ export default function TextEdit( props ) {
 						} }
 						options={ maskPlaceholdersList }
 					/>
-				</React.Fragment> }
+				</> }
 			</FieldSettingsWrapper>
 			<PanelBody
 				title={ __( 'Validation', 'jet-form-builder' ) }

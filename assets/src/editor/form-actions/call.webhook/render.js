@@ -9,6 +9,7 @@ const {
 	      TextControl,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function, complexity
 function CallWebHookRender( { settings, label, onChangeSettingObj } ) {
 
 	/* eslint-disable jsx-a11y/no-onchange */
@@ -25,8 +26,8 @@ function CallWebHookRender( { settings, label, onChangeSettingObj } ) {
 		{ ( { instanceId } ) => <TextControl
 			id={ instanceId }
 			value={ settings.webhook_url }
-			onChange={ webhook_url => onChangeSettingObj(
-				{ webhook_url },
+			onChange={ newVal => onChangeSettingObj(
+				{ webhook_url: newVal },
 			) }
 		/> }
 	</AdvancedModalControl>;

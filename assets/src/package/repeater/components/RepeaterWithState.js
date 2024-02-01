@@ -290,7 +290,7 @@ function RepeaterWithState( {
 			{ additionalControls }
 			<ToggleControl
 				className='jet-control-clear'
-				label={ __( 'Safe deleting' ) }
+				label={ __( 'Safe deleting', 'jet-form-builder' ) }
 				checked={ isSafeDeleting }
 				onChange={ setSafeDeleting }
 			/>

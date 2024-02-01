@@ -5,8 +5,8 @@ const label = {
 };
 
 const help = {
-	apiPref: __( 'How to obtain your MailChimp API Key? More info' ),
-	apiLinkLabel: __( 'here' ),
+	apiPref: __( 'How to obtain your MailChimp API Key? More info', 'jet-form-builder' ),
+	apiLinkLabel: __( 'here', 'jet-form-builder' ),
 	apiLink: 'https://mailchimp.com/help/about-api-keys/'
 };
 

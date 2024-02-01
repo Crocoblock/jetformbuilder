@@ -12,10 +12,6 @@ const {
 	      useContext,
       } = wp.element;
 
-const {
-	      __,
-      } = wp.i18n;
-
 function ValidationModal() {
 	const [ args, setArgs ] = useMetaState(
 		'_jf_validation', '{}', [],
@@ -23,9 +19,10 @@ function ValidationModal() {
 
 	const messages = useGroupedValidationMessages();
 
-	const [ current, setCurrent ]         = useState( () => (
+	const [ current, setCurrent ] = useState( () => (
 		args.messages ?? {}
 	) );
+
 	const { actionClick, onRequestClose } = useContext( ActionModalContext );
 
 	useEffect( () => {
@@ -38,6 +35,7 @@ function ValidationModal() {
 		if ( null !== actionClick ) {
 			onRequestClose();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ actionClick ] );
 
 	return <>

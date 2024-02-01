@@ -17,8 +17,7 @@ const { name, icon = '' } = metadata;
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Add a single narrow text bar to the form and gather short text 
-information like names, emails, titles, etc.`,
+		`Add a single narrow text bar to the form and gather short text information like names, emails, titles, etc.`,
 		'jet-form-builder',
 	),
 	edit: TextEdit,

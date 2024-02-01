@@ -3,7 +3,7 @@ import AdvancedRestriction from './AdvancedRestriction';
 function NotCompleteInputmask() {
 	AdvancedRestriction.call( this );
 
-	this.isSupported   = function ( node, reporting ) {
+	this.isSupported   = function ( node ) {
 		return (
 			node.classList.contains( 'jet-form-builder__masked-field' ) &&
 			jQuery.fn.inputmask

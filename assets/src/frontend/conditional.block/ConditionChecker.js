@@ -8,10 +8,11 @@ function ConditionChecker() {
 
 ConditionChecker.prototype = {
 	/**
-	 * @param  input {InputData}
+	 * @param  input {InputData} - currently checking input
 	 * @return {boolean}
 	 */
-	isSupported: ( input ) => true,
+	// eslint-disable-next-line no-unused-vars
+	isSupported: (input) => true,
 	operators: {},
 	getOperators () {
 		return {

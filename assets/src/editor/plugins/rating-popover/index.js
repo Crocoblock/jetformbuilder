@@ -12,10 +12,9 @@ const addNotice = () => {
 	container.find( '.jet-fb-rating-message' ).remove();
 
 	const message = sprintf(
+		// translators: %1$s - link to the wp.org, %2$s - link to the Crocoblock support
 		__(
-			`Liked <strong>JetFormBuilder</strong>? 
-Please <a href="%1$s" target="_blank">rate it ★★★★★</a>. 
-For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</a>.`,
+			`Liked <strong>JetFormBuilder</strong>? Please <a href="%1$s" target="_blank">rate it ★★★★★</a>. For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</a>.`,
 			'jet-form-builder',
 		),
 		'https://wordpress.org/support/plugin/jetformbuilder/reviews/?filter=5',

@@ -43,13 +43,14 @@ if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
 }
 
+// eslint-disable-next-line max-lines-per-function, complexity
 export default function TextareaEdit( props ) {
 
 	const {
 		      attributes,
 		      setAttributes,
 		      isSelected,
-		      editProps: { uniqKey, attrHelp },
+		      editProps: { uniqKey },
 	      } = props;
 
 	const blockProps           = useBlockProps();

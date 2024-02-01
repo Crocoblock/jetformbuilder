@@ -21,6 +21,7 @@ const {
 	      column,
       } = JetFBActions;
 
+// eslint-disable-next-line max-lines-per-function, complexity
 function SwitcherRenderStateControls( props ) {
 	const {
 		      actionAttributes,
@@ -47,8 +48,9 @@ function SwitcherRenderStateControls( props ) {
 					label={ __( 'Switch state', 'jet-form-builder' ) }
 					value={ actionAttributes.switch_on }
 					suggestions={ customStates }
-					onChange={ switch_on => setActionAttributes(
-						{ switch_on } ) }
+					onChange={ newVal => setActionAttributes(
+						{ switch_on: newVal },
+					) }
 					tokenizeOnSpace
 					__experimentalExpandOnFocus
 				/>

@@ -12,6 +12,7 @@ const {
 	      applyFilters: deprecatedApplyFilters = false,
       } = window?.JetFormBuilderMain?.filters ?? {};
 
+// eslint-disable-next-line max-lines-per-function
 function CalculatedData() {
 	InputData.call( this );
 
@@ -32,6 +33,7 @@ function CalculatedData() {
 		formula.setResult       = () => {
 			this.value.current = formula.calculate();
 		};
+		// eslint-disable-next-line complexity
 		formula.relatedCallback = ( input ) => {
 			const value = applyFilters(
 				'jet.fb.calculated.callback',

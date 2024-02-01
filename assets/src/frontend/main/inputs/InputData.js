@@ -10,28 +10,24 @@ import { STRICT_MODE } from '../signals/BaseSignal';
 const { doAction } = JetPlugins.hooks;
 
 /**
- * @property {string}                             rawName
- * @property {string}                             name
- * @property {Node|boolean}                       comment
- * @property {HTMLInputElement|*[]}               nodes
- * @property {ReactiveVar}                        value
- * @property {ConditionChecker|null}              checker
- * @property {*}                                  calcValue
- * @property {AdvancedReporting|BrowserReporting} reporting
- * @property {Observable}                         root
- * @property {PageState}                          page
- * @property {LoadingReactiveVar}                 loading
- * @property {Object<ReactiveVar>}                attrs
- * @property {boolean}                            isRequired
- * @property {null|ReactiveHook}                  enterKey
- * @property {null|string}                        inputType
+ * @property {string}                             rawName    Actual value from the html "name" attribute
+ * @property {string}                             name       Prepared name of the field
+ * @property {HTMLInputElement|*[]}               nodes      List of related nodes from DOM
+ * @property {ReactiveVar}                        value      Reactive object with current value
+ * @property {*}                                  calcValue  Value for the Calculated Field
+ * @property {AdvancedReporting|BrowserReporting} reporting  Object for deal with field restrictions
+ * @property {Observable}                         root       Parent root of whole form or the repeater row
+ * @property {LoadingReactiveVar}                 loading    Reactive object for change loading state
+ * @property {Object<ReactiveVar>}                attrs      Object with reactive objects, which have current settings of field attributes
+ * @property {boolean}                            isRequired Field is required or not
+ * @property {null|ReactiveHook}                  enterKey   For adding/removing handlers on enter-key pressing
+ * @property {null|string}                        inputType  Slug of the field, it's not the block-name
  *
  * @class
  */
 function InputData() {
 	this.rawName = '';
 	this.name    = '';
-	this.comment = false;
 	/**
 	 * @type {HTMLElement[]|HTMLInputElement[]}
 	 */
@@ -66,8 +62,6 @@ function InputData() {
 	 */
 	this.reporting = null;
 
-	this.checker = null;
-
 	/**
 	 * @type {Observable}
 	 */
@@ -85,6 +79,10 @@ function InputData() {
 	 * @type {boolean}
 	 */
 	this.isResetCalcValue = true;
+
+	// should be removed
+	this.comment = false;
+	this.checker = null;
 }
 
 InputData.prototype.attrs = {};
@@ -93,6 +91,7 @@ InputData.prototype.attrs = {};
  * @param  node {HTMLElement}
  * @return {boolean}
  */
+// eslint-disable-next-line no-unused-vars
 InputData.prototype.isSupported = function ( node ) {
 	return true;
 };
@@ -103,15 +102,16 @@ InputData.prototype.addListeners = function () {
 		this.value.current = event.target.value;
 	} );
 
-	node.addEventListener( 'blur', event => {
+	node.addEventListener( 'blur', () => {
 		this.reportOnBlur();
 	} );
 
 	/**
 	 * @since 3.0.1
 	 */
+	// eslint-disable-next-line no-unused-expressions
 	!STRICT_MODE && jQuery( node ).on( 'change', event => {
-		if ( this.value.current == event.target.value ) {
+		if ( String( this.value.current ) === String( event.target.value ) ) {
 			return;
 		}
 		this.callable.lockTrigger();
@@ -319,7 +319,7 @@ InputData.prototype.checkIsRequired = function () {
 InputData.prototype.silenceSet = function ( value ) {
 	/**
 	 * Related to issue
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1261#issuecomment-1293290291
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/1261#issuecomment-1293290291
 	 */
 	const tempReport = this.report.bind( this );
 
@@ -355,6 +355,7 @@ InputData.prototype.getWrapperNode = function () {
 	return this.nodes[ 0 ].closest( '.jet-form-builder-row' );
 };
 
+// eslint-disable-next-line complexity
 InputData.prototype.handleEnterKey = function ( event ) {
 	if ( event.key !== 'Enter' || // not enter key
 		!this.enterKey || // handling enter key is disabled
@@ -436,6 +437,7 @@ InputData.prototype.getReportingNode = function () {
 	return this.nodes[ 0 ];
 };
 
+// eslint-disable-next-line complexity
 InputData.prototype.getParentPath = function () {
 	if ( !this.root?.parent ) {
 		return [];

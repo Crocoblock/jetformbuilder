@@ -48,6 +48,7 @@ class JetDefaultMetaControl extends wp.element.Component {
 	}
 
 	/* eslint-disable jsx-a11y/no-onchange */
+	// eslint-disable-next-line max-lines-per-function
 	render() {
 
 		return <div
@@ -98,7 +99,7 @@ class JetDefaultMetaControl extends wp.element.Component {
 				isSecondary
 				onClick={ this.addNewOption }
 			>
-				{ __( 'Add New Option' ) }
+				{ __( 'Add New Option', 'jet-form-builder' ) }
 			</Button>
 		</div>;
 	}

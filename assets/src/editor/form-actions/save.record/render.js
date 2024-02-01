@@ -13,14 +13,14 @@ function SaveRecordRender( {
 			label={ label( 'save_user_data' ) }
 			checked={ settings.save_user_data }
 			onChange={
-				save_user_data => onChangeSettingObj( { save_user_data } )
+				val => onChangeSettingObj( { save_user_data: val } )
 			}
 		/>
 		<ToggleControl
 			label={ label( 'save_spam' ) }
 			checked={ settings.save_spam }
 			onChange={
-				save_spam => onChangeSettingObj( { save_spam } )
+				val => onChangeSettingObj( { save_spam: val } )
 			}
 		/>
 	</>;

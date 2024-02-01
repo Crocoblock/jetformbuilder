@@ -16,8 +16,11 @@ function ChangeData() {
 			this.value.current = event.target.value;
 		} );
 
+		// eslint-disable-next-line no-unused-expressions
 		!STRICT_MODE && jQuery( node ).on( 'change', event => {
-			if ( this.value.current == event.target.value ) {
+			if (
+				String( this.value.current ) === String( event.target.value )
+			) {
 				return;
 			}
 			this.callable.lockTrigger();

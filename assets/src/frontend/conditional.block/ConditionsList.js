@@ -32,6 +32,7 @@ ConditionsList.prototype = {
 			condition.observe();
 		}
 	},
+	// eslint-disable-next-line complexity
 	setConditions( conditions ) {
 		if ( 'string' === typeof conditions ) {
 			conditions = JSON.parse( conditions );

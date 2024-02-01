@@ -19,21 +19,13 @@ const { name, icon = '' } = metadata;
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Utilize the Conditional Visibility functionality allowing 
-to make fields of the form invisible to the users until some conditions are met.`,
+		`Utilize the Conditional Visibility functionality allowing to make fields of the form invisible to the users until some conditions are met.`,
 		'jet-form-builder',
 	),
 	edit: ConditionalBlockEdit,
 	save: ConditionalSave,
 	useEditProps: [ 'uniqKey' ],
 	jfbGetFields: () => [],
-	/**
-	 * @param  attributes
-	 * @param  context.context
-	 * @param  context         {{|'accessibility'|'visual'|'list-view'}}
-	 * @return {*}
-	 * @private
-	 */
 	__experimentalLabel: ( attributes, { context } ) => {
 		if ( context !== 'list-view' ) {
 			return;
@@ -50,7 +42,8 @@ to make fields of the form invisible to the users until some conditions are met.
 		) ?? 0;
 
 		return sprintf(
-			__( '%s %d condition(s)', 'jet-form-builder' ),
+			// translators: %1$s - function name, %2$d - count of conditions
+			__( '%1$s %2$d condition(s)', 'jet-form-builder' ),
 			funcLabel,
 			conditionsCount,
 		);
@@ -68,10 +61,10 @@ to make fields of the form invisible to the users until some conditions are met.
 				isMultiBlock: true,
 				__experimentalConvert: blocks => {
 					const innerBlocksTemplate = blocks.map( ( {
-						name,
+						name: blockName,
 						attributes,
 						innerBlocks,
-					} ) => [ name, { ...attributes }, innerBlocks ] );
+					} ) => [ blockName, { ...attributes }, innerBlocks ] );
 
 					return createBlock( name, {},
 						createBlocksFromInnerBlocksTemplate(

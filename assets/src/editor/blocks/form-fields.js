@@ -49,6 +49,7 @@ const fields = applyFilters( 'jet.fb.register.fields', [
 	formBreakStart,
 ] );
 
+// eslint-disable-next-line complexity
 const registerFormField = block => {
 	if ( !block ) {
 		return;
@@ -61,7 +62,7 @@ const registerFormField = block => {
 	 * @since 3.0.0
 	 */
 	if ( !settings.hasOwnProperty( 'jfbResolveBlock' ) ) {
-		settings.jfbResolveBlock = function ( context = 'default' ) {
+		settings.jfbResolveBlock = function () {
 			const base = {
 				clientId: this.clientId,
 				name: this.name,
@@ -88,13 +89,7 @@ const registerFormField = block => {
 		!settings.hasOwnProperty( '__experimentalLabel' ) &&
 		metadata.attributes.hasOwnProperty( 'name' )
 	) {
-		/**
-		 * @param  attributes
-		 * @param  context.context
-		 * @param  context         {{|'accessibility'|'visual'|'list-view'}}
-		 * @return {*}
-		 * @private
-		 */
+		// eslint-disable-next-line complexity
 		settings.__experimentalLabel = ( attributes, { context } ) => {
 			switch ( context ) {
 				case 'list-view':

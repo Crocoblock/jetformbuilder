@@ -3,9 +3,7 @@ import ConditionItem from './ConditionItem';
 const { CalculatedFormula } = JetFormBuilderAbstract;
 
 /**
- * @property operator
- *
- * @class
+ * @property operator {String} Operator slug
  */
 function ConditionFieldItem() {
 	ConditionItem.call( this );

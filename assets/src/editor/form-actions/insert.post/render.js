@@ -22,9 +22,6 @@ const {
 	      SelectControl,
       } = wp.components;
 const {
-	      __,
-      } = wp.i18n;
-const {
 	      useState,
 	      useEffect,
       } = wp.element;
@@ -37,7 +34,7 @@ const modifiers = applyFilters(
 	[
 		{
 			id: 'all',
-			isSupported: settings => true,
+			isSupported: () => true,
 		},
 	],
 );
@@ -52,6 +49,7 @@ const getActionModifierId = settings => {
 	}
 };
 
+// eslint-disable-next-line max-lines-per-function, complexity
 function InsertPostRender( props ) {
 	const {
 		      settings,
@@ -78,16 +76,19 @@ function InsertPostRender( props ) {
 		if ( settings.requestFields?.length ) {
 			onChangeSettingObj( { requestFields: null } );
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	useEffect( () => {
 		const id = getActionModifierId( settings );
 
 		setProperties( source.properties[ id ] ?? [] );
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ settings.post_type ] );
 
 	/**
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1315
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/1315
 	 */
 	useSanitizeFieldsMap();
 
@@ -103,7 +104,7 @@ function InsertPostRender( props ) {
 				options={ source.postTypes }
 				label={ label( 'post_type' ) }
 				help={ help( 'post_type' ) }
-				onChange={ post_type => onChangeSettingObj( { post_type } ) }
+				onChange={ val => onChangeSettingObj( { post_type: val } ) }
 			/>
 			<SelectControl
 				key="post_status"
@@ -113,8 +114,8 @@ function InsertPostRender( props ) {
 				options={ source.postStatuses }
 				label={ label( 'post_status' ) }
 				help={ help( 'post_status' ) }
-				onChange={ post_status => onChangeSettingObj(
-					{ post_status },
+				onChange={ val => onChangeSettingObj(
+					{ post_status: val },
 				) }
 			/>
 			<ActionFieldsMap
@@ -136,14 +137,15 @@ function InsertPostRender( props ) {
 					</DynamicPropertySelect>
 				</WrapperRequiredControl>
 			</ActionFieldsMap>
+			{/* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */}
 			<BaseControl
 				label={ label( 'default_meta' ) }
 				key="default_meta"
 			>
 				<JetDefaultMetaControl
 					defaultMeta={ settings.default_meta }
-					onChange={ default_meta => onChangeSettingObj(
-						{ default_meta },
+					onChange={ val => onChangeSettingObj(
+						{ default_meta: val },
 					) }
 				/>
 			</BaseControl>

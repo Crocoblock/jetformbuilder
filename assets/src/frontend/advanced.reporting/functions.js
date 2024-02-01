@@ -66,29 +66,36 @@ let restrictions = [];
 function getPreparedRules( rules, reporting ) {
 	const response = [];
 
+	for ( const ruleEntire of Object.entries( rules ) ) {
+		processRuleEntire( response, reporting, ruleEntire );
+	}
+
+	return response;
+}
+
+function processRuleEntire( response, reporting, ruleEntire ) {
 	if ( !advancedRules.length ) {
 		advancedRules = getAdvancedRules();
 	}
 
-	for ( const [ index, rule ] of Object.entries( rules ) ) {
-		for ( const advancedRule of advancedRules ) {
-			const current = new advancedRule();
+	const [ index, rule ] = ruleEntire;
 
-			if ( rule.type !== current.getSlug() ) {
-				continue;
-			}
-			delete rule.type;
+	for ( const advancedRule of advancedRules ) {
+		const current = new advancedRule();
 
-			current.setReporting( reporting );
-			current.setAttrs( { ...rule, index } );
-			current.onReady();
-
-			response.push( current );
-			break;
+		if ( rule.type !== current.getSlug() ) {
+			continue;
 		}
+		delete rule.type;
+
+		current.setReporting( reporting );
+		current.setAttrs( { ...rule, index } );
+		current.onReady();
+
+		response.push( current );
+		break;
 	}
 
-	return response;
 }
 
 /**
@@ -112,13 +119,13 @@ function getNodeValidationType( node ) {
  * @param input {InputData}
  */
 function getInheritValidationType( input ) {
-	const formId   = input.getSubmit().getFormId();
 	const allForms = window?.JetFormsValidation ?? false;
 
 	if ( false === allForms ) {
 		return '';
 	}
 
+	const formId        = input.getSubmit().getFormId();
 	const { type = '' } = allForms[ formId ] ?? {};
 
 	return type;
@@ -136,6 +143,7 @@ function getValidationMessages( node ) {
  * @param  slug        {string}
  * @return {string}
  */
+// eslint-disable-next-line complexity
 function getMessageBySlug( restriction, slug ) {
 	const { reporting } = restriction;
 	const message       = reporting.messages[ slug ] ?? '';
@@ -144,13 +152,13 @@ function getMessageBySlug( restriction, slug ) {
 		return message;
 	}
 
-	const form        = reporting.input.getSubmit();
 	const allMessages = window?.JetFormsValidation ?? false;
 
 	if ( false === allMessages ) {
 		return '';
 	}
 
+	const form         = reporting.input.getSubmit();
 	const { messages } = allMessages[ form.getFormId() ] ?? {};
 
 	return messages[ slug ] ?? '';

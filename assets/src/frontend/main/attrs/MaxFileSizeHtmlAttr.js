@@ -11,11 +11,11 @@ function MaxFileSizeHtmlAttr() {
 	this.setInput = function ( input ) {
 		MaxFilesHtmlAttr.prototype.setInput.call( this, input );
 
-		const { max_size = 1 } = JSON.parse(
+		const { max_size: maxSize = 1 } = JSON.parse(
 			input.previewsContainer.dataset.args,
 		);
 
-		this.initial = +max_size;
+		this.initial = +maxSize;
 	};
 }
 

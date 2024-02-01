@@ -42,6 +42,7 @@ if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
 }
 
+// eslint-disable-next-line max-lines-per-function,complexity
 export default function NumberEdit( props ) {
 	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();

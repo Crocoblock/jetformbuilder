@@ -94,6 +94,7 @@ Observable.prototype = {
 		}
 	},
 
+	// eslint-disable-next-line complexity
 	initMacros () {
 		// macros as html-comments
 		for (
@@ -201,6 +202,7 @@ Observable.prototype = {
 	 * @param node    {Element}
 	 * @param replace {Boolean}
 	 */
+	// eslint-disable-next-line complexity
 	pushInput ( node, replace = false ) {
 		// prevent saving inputs from preset repeater items in root object
 		// those inputs would saved in ObservableRow object
@@ -243,6 +245,7 @@ Observable.prototype = {
 	 * @param  fieldName
 	 * @return {null|InputData}
 	 */
+	// eslint-disable-next-line complexity
 	getInput ( fieldName ) {
 		if ( this.dataInputs.hasOwnProperty( fieldName ) ) {
 			return this.dataInputs[ fieldName ];

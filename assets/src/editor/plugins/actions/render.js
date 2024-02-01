@@ -36,6 +36,7 @@ function PluginActions() {
 	const { actions } = useActionsEdit();
 
 	const elements = actions.map(
+		// eslint-disable-next-line react/jsx-key
 		( action, index ) => <ActionListItemContext.Provider
 			value={ { index, action } }
 		>

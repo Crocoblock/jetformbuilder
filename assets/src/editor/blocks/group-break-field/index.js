@@ -17,8 +17,7 @@ const { name, icon = '' } = metadata;
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Create a break between two fields with a horizontal line. 
-Separate different form parts without dividing form on two pages.`,
+		`Create a break between two fields with a horizontal line. Separate different form parts without dividing form on two pages.`,
 		'jet-form-builder',
 	),
 	edit: GroupBreakEdit,
@@ -42,7 +41,7 @@ Separate different form parts without dividing form on two pages.`,
 			{
 				type: 'block',
 				blocks: [ 'core/separator' ],
-				transform: ( attributes ) => {
+				transform: () => {
 					return createBlock( 'core/separator', {} );
 				},
 				priority: 0,
@@ -64,7 +63,7 @@ Separate different form parts without dividing form on two pages.`,
 				blocks: [
 					'core/separator',
 				],
-				transform: ( attributes ) => {
+				transform: () => {
 					return createBlock( name, {} );
 				},
 				priority: 0,

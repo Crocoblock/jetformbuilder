@@ -34,6 +34,7 @@ const {
 	      useEffect,
       } = wp.element;
 
+// eslint-disable-next-line max-lines-per-function,complexity
 export default function HiddenEdit( props ) {
 
 	const {
@@ -54,8 +55,10 @@ export default function HiddenEdit( props ) {
 		}
 	};
 
+	/* eslint-disable react-hooks/exhaustive-deps */
 	useEffect( resetRender, [] );
 	useEffect( resetRender, [ attributes.field_value ] );
+	/* eslint-enable */
 
 	if ( attributes.isPreview ) {
 		return <div style={ {

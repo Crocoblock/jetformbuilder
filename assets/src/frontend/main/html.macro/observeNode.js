@@ -2,6 +2,7 @@ import CalculatedHtmlString from './CalculatedHtmlString';
 
 const {
 	      __,
+	      sprintf,
       } = wp.i18n;
 
 /**
@@ -12,6 +13,7 @@ function observeNode( node, root ) {
 	const formula = new CalculatedHtmlString( root, { withPrefix: false } );
 	formula.observe( `%${ node.dataset.jfbMacro }%` );
 
+	/* eslint-disable no-console */
 	if ( !formula.parts?.length ) {
 		console.group(
 			__(
@@ -21,6 +23,7 @@ function observeNode( node, root ) {
 		);
 		console.error(
 			sprintf(
+				// translators: %s - macros
 				__( 'Content: %s', 'jet-form-builder' ),
 				node.dataset.jfbMacro,
 			),
@@ -30,6 +33,7 @@ function observeNode( node, root ) {
 
 		return;
 	}
+	/* eslint-enable no-console */
 
 	node.dataset.jfbObserved = 1;
 

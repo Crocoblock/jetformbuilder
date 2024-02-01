@@ -16,11 +16,13 @@ async function allRejected( callbacks ) {
 		callbacks.map( current => new Promise( current ) ),
 	);
 
+	/* eslint-disable no-console */
 	if ( window?.JetFormBuilderSettings?.devmode ) {
 		console.group( 'allRejected' );
 		console.info( ...results );
 		console.groupEnd();
 	}
+	/* eslint-enable no-console */
 
 	const invalid = results.filter(
 		( error ) => 'rejected' === error.status,
@@ -73,6 +75,7 @@ function getDefaultAttrByName( name ) {
 /**
  * @param input {InputData}
  */
+// eslint-disable-next-line complexity
 function setAttrs( input ) {
 	if ( !inputHtmlAttrs.length ) {
 		inputHtmlAttrs = getInputHtmlAttr();
@@ -104,6 +107,7 @@ function toHTML( text ) {
 	return template.content;
 }
 
+// eslint-disable-next-line complexity
 function isEmpty( value ) {
 	if ( 'boolean' === typeof value ) {
 		return !value;
@@ -177,6 +181,7 @@ function focusOnInvalidInput( inputs ) {
 		if ( input.reporting.validityState.current ) {
 			continue;
 		}
+		// eslint-disable-next-line no-unused-expressions
 		!input.reporting.hasAutoScroll() && input.onFocus();
 		break;
 	}

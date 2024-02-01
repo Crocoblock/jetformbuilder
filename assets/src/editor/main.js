@@ -1,4 +1,3 @@
-import './blocks/form-fields';
 import './form-actions/send.email/index';
 import './form-actions/insert.post/index';
 import './form-actions/register.user/index';

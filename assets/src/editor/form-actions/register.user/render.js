@@ -23,13 +23,12 @@ const {
 
 const { __ } = wp.i18n;
 
-const { withSelect } = wp.data;
-
 const {
 	      useState,
 	      useEffect,
       } = wp.element;
 
+// eslint-disable-next-line max-lines-per-function, complexity
 function RegisterUserRender( props ) {
 
 	const {
@@ -56,19 +55,21 @@ function RegisterUserRender( props ) {
 			onChangeSettingObj(
 				{ requestFields: [ source.requestFields.user_id ] } );
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	const userFields = Object.entries( source.userFields );
 
 	/* eslint-disable jsx-a11y/no-onchange */
 	return (
-		<React.Fragment key="register_user">
+		<>
 			<ToggleControl
 				key="allow_register"
 				label={ label( 'allow_register' ) }
 				checked={ settings.allow_register }
-				onChange={ allow_register => onChangeSettingObj(
-					{ allow_register } ) }
+				onChange={ val => onChangeSettingObj(
+					{ allow_register: val },
+				) }
 			/>
 			{ settings.allow_register && <SelectControl
 				key="role_can_register"
@@ -76,9 +77,11 @@ function RegisterUserRender( props ) {
 				labelPosition="side"
 				value={ settings.role_can_register }
 				options={ source.allUserRoles }
-				onChange={ role_can_register => onChangeSettingObj(
-					{ role_can_register } ) }
+				onChange={ val => onChangeSettingObj(
+					{ role_can_register: val },
+				) }
 			/> }
+			{/* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */ }
 			<BaseControl
 				label={ label( 'fields_map' ) }
 				key="user_fields_map"
@@ -92,6 +95,7 @@ function RegisterUserRender( props ) {
 
 						return <WrapperRequiredControl
 							field={ [ value, data ] }
+							key={ `user_fields_${ value }` }
 						>
 							<SelectControl
 								className="full-width"
@@ -112,8 +116,9 @@ function RegisterUserRender( props ) {
 				labelPosition="side"
 				value={ settings.user_role }
 				options={ source.userRoles }
-				onChange={ user_role => onChangeSettingObj( { user_role } ) }
+				onChange={ val => onChangeSettingObj( { user_role: val } ) }
 			/>
+			{/* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */ }
 			<BaseControl
 				label={ label( 'user_meta' ) }
 				key="user_meta_list"
@@ -126,6 +131,7 @@ function RegisterUserRender( props ) {
 					{ fieldsWithRequest.map( ( [ name, data ] ) => {
 						return <WrapperRequiredControl
 							field={ [ name, data ] }
+							key={ `form_fields_${ name }` }
 						>
 							<TextControl
 								key={ `form_fields_${ name }` }
@@ -145,7 +151,7 @@ function RegisterUserRender( props ) {
 				key="log_in"
 				label={ label( 'log_in' ) }
 				checked={ settings.log_in }
-				onChange={ log_in => onChangeSettingObj( { log_in } ) }
+				onChange={ val => onChangeSettingObj( { log_in: val } ) }
 			/>
 			{ settings.log_in && <SelectControl
 				key="remember_me_field"
@@ -153,23 +159,24 @@ function RegisterUserRender( props ) {
 				labelPosition="side"
 				value={ settings.remember_me_field }
 				options={ withPlaceholder( fields ) }
-				onChange={ remember_me_field => onChangeSettingObj(
-					{ remember_me_field } ) }
+				onChange={ val => onChangeSettingObj(
+					{ remember_me_field: val },
+				) }
 			/> }
 			<ToggleControl
 				key="add_user_id_control"
 				label={ label( 'add_user_id' ) }
 				checked={ settings.add_user_id }
-				onChange={ add_user_id => onChangeSettingObj( {
-					add_user_id,
-					requestFields: add_user_id
+				onChange={ val => onChangeSettingObj( {
+					add_user_id: val,
+					requestFields: val
 					               ? [ source.requestFields.user_id ]
 					               : [],
 				} ) }
 				help={ help( 'add_user_id' ) }
 			/>
 			<ActionMessages { ...props } />
-		</React.Fragment>
+		</>
 	);
 	/* eslint-enable jsx-a11y/no-onchange */
 }

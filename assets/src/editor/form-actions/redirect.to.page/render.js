@@ -11,13 +11,10 @@ const {
  */
 const {
 	      TextControl,
-	      ToggleControl,
 	      SelectControl,
 	      BaseControl,
 	      CheckboxControl,
       } = wp.components;
-
-const { __ } = wp.i18n;
 
 const {
 	      useState,
@@ -25,18 +22,16 @@ const {
       } = wp.element;
 
 const { withRequestFields } = JetFBHooks;
+const { withSelect }        = wp.data;
+const { applyFilters }      = wp.hooks;
 
-const { withSelect } = wp.data;
-
-const { applyFilters } = wp.hooks;
-
+// eslint-disable-next-line max-lines-per-function, complexity
 function RedirectToPageRender( props ) {
 
 	const {
 		      source,
 		      label,
 		      settings,
-		      onChangeSetting,
 		      onChangeSettingObj,
 		      requestFields,
 	      } = props;
@@ -63,27 +58,29 @@ function RedirectToPageRender( props ) {
 		}
 
 		setFields( [ ...getFormFieldsBlocks(), ...requestFields ] );
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	const isChecked = function ( name ) {
-		const args_fields = Array.from( settings.redirect_args || [] );
+		const argsFields = Array.from( settings.redirect_args || [] );
 
-		return Boolean( args_fields.includes( name ) );
+		return Boolean( argsFields.includes( name ) );
 	};
 
-	const onChangeRedirectArgs = function ( value, field_name ) {
-		const redirect_args = Array.from( settings.redirect_args || [] );
+	const onChangeRedirectArgs = function ( value, fieldName ) {
+		const redirectArgs = Array.from( settings.redirect_args || [] );
 
 		if ( !value ) {
-			const field_id = redirect_args.indexOf( field_name );
+			const fieldId = redirectArgs.indexOf( fieldName );
 
-			redirect_args.splice( field_id, 1 );
+			redirectArgs.splice( fieldId, 1 );
 		}
 		else {
-			redirect_args.push( field_name );
+			redirectArgs.push( fieldName );
 		}
 
-		onChangeSettingObj( { redirect_args } );
+		onChangeSettingObj( { redirect_args: redirectArgs } );
 	};
 
 	/* eslint-disable jsx-a11y/no-onchange */
@@ -96,8 +93,9 @@ function RedirectToPageRender( props ) {
 				labelPosition="side"
 				value={ settings.redirect_type }
 				options={ typePages }
-				onChange={ redirect_type => onChangeSettingObj(
-					{ redirect_type } ) }
+				onChange={ val => onChangeSettingObj(
+					{ redirect_type: val },
+				) }
 			/>
 			{ 'static_page' === settings.redirect_type && <SelectControl
 				key="redirect_type_page"
@@ -106,16 +104,17 @@ function RedirectToPageRender( props ) {
 				labelPosition="side"
 				value={ settings.redirect_page }
 				options={ source.pages }
-				onChange={ redirect_page => onChangeSettingObj(
-					{ redirect_page } ) }
+				onChange={ val => onChangeSettingObj(
+					{ redirect_page: val },
+				) }
 			/> }
 
 			{ 'custom_url' === settings.redirect_type && <AdvancedModalControl
 				value={ settings.redirect_url }
 				label={ label( 'redirect_url' ) }
 				macroWithCurrent
-				onChangePreset={ redirect_url => onChangeSettingObj(
-					{ redirect_url },
+				onChangePreset={ val => onChangeSettingObj(
+					{ redirect_url: val },
 				) }
 				onChangeMacros={ name => onChangeSettingObj( {
 					redirect_url: (
@@ -126,14 +125,14 @@ function RedirectToPageRender( props ) {
 				{ ( { instanceId } ) => <TextControl
 					id={ instanceId }
 					value={ settings.redirect_url }
-					onChange={ redirect_url => onChangeSettingObj(
-						{ redirect_url },
+					onChange={ val => onChangeSettingObj(
+						{ redirect_url: val },
 					) }
 				/> }
 			</AdvancedModalControl> }
+			{/* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */}
 			<BaseControl
 				label={ label( 'redirect_args' ) }
-				key="redirect_args_control"
 			>
 				<div className="jet-user-fields-map__list">
 					{ fields.map( ( { name }, index ) => <CheckboxControl
@@ -150,8 +149,9 @@ function RedirectToPageRender( props ) {
 				key="redirect_hash_control"
 				label={ label( 'redirect_hash' ) }
 				value={ settings.redirect_hash }
-				onChange={ redirect_hash => onChangeSettingObj(
-					{ redirect_hash } ) }
+				onChange={ val => onChangeSettingObj(
+					{ redirect_hash: val },
+				) }
 			/>
 		</div>
 	);

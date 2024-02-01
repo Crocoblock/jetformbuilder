@@ -21,9 +21,7 @@ metadata.attributes.isPreview = {
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Create as many fields as they need in the form. Add this 
-field to build complex forms for booking where many elements need 
-to be inserted.`,
+		`Create as many fields as they need in the form. Add this field to build complex forms for booking where many elements need to be inserted.`,
 		'jet-form-builder',
 	),
 	edit: RepeaterEdit,

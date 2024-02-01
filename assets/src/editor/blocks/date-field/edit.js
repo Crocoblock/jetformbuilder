@@ -41,6 +41,7 @@ if ( typeof InputControl === 'undefined' ) {
 	InputControl = __experimentalInputControl;
 }
 
+// eslint-disable-next-line max-lines-per-function,complexity
 export default function DateEdit( props ) {
 	const blockProps = useBlockProps();
 
@@ -140,7 +141,7 @@ export default function DateEdit( props ) {
 			<FieldSettingsWrapper { ...props }>
 				<ToggleControl
 					key="is_timestamp"
-					label={ __( 'Is Timestamp' ) }
+					label={ __( 'Is Timestamp', 'jet-form-builder' ) }
 					checked={ attributes.is_timestamp }
 					help={ attrHelp( 'is_timestamp' ) }
 					onChange={ ( newValue ) => {

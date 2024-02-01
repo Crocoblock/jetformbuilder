@@ -28,35 +28,36 @@ ValueItem.prototype = {
 	 * @param  input {InputData}
 	 * @return {boolean}
 	 */
+	// eslint-disable-next-line no-unused-vars
 	isSupported( input ) {
 		return true;
 	},
 	/**
-	 * @param to_set.to_set
-	 * @param to_set
-	 * @param conditions
-	 * @param set_on_empty        {Boolean}
-	 * @param frequency           {'once'|'always'|'on_change'}
-	 * @param to_set.conditions
-	 * @param input               {InputData}
-	 * @param to_set.set_on_empty
-	 * @param to_set.frequency
+	 * @param item  {{
+	 *              to_set: String,
+	 *              conditions: Objet[]
+	 *              set_on_empty: Boolean
+	 *              frequency: 'once'|'always'|'on_change'
+	 *              }}
+	 * @param input {InputData}
 	 */
 	observe(
-		{
-			to_set,
-			conditions = [],
-			set_on_empty = false,
-			frequency = 'on_change',
-		},
+		item,
 		input,
 	) {
+		const {
+			      to_set: toSet,
+			      conditions = [],
+			      set_on_empty: setOnEmpty = false,
+			      frequency = 'on_change',
+		      } = item;
+		
 		this.input        = input;
 		this.frequency    = frequency;
-		this.set_on_empty = set_on_empty;
+		this.set_on_empty = setOnEmpty;
 		this.prevResult   = null;
 		this.prevValue    = null;
-		this.to_set       = to_set;
+		this.to_set       = toSet;
 		this.formulas     = [];
 
 		this.observeSetValue( conditions, input );
@@ -96,6 +97,7 @@ ValueItem.prototype = {
 	 * @param list        {ConditionsList|boolean}
 	 * @param forceResult {boolean|null}
 	 */
+	// eslint-disable-next-line complexity
 	applyValue( list, forceResult = null ) {
 		let result = false;
 

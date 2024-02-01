@@ -39,6 +39,7 @@ function toDateTime( date ) {
  * @param  timeOrDate {String|Number}
  * @return {{time: number, type: string}}
  */
+// eslint-disable-next-line complexity
 function getTimestamp( timeOrDate ) {
 	if ( !Number.isNaN( +timeOrDate ) ) {
 		return { time: +timeOrDate, type: 'number' };

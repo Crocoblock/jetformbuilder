@@ -149,11 +149,13 @@ CalculatedFormula.prototype = {
 	 * @param  current {String}
 	 * @return {(function(): *)|*}
 	 */
+	// eslint-disable-next-line max-lines-per-function,complexity
 	observeMacro( current ) {
 		if ( null === this.formula ) {
 			this.formula = current;
 		}
 
+		/* eslint-disable @wordpress/no-unused-vars-before-return */
 		const [ name, ...filters ] = current.split( '|' );
 		const parsedName           = name.match( /[\w\-:]+/g );
 
@@ -172,6 +174,8 @@ CalculatedFormula.prototype = {
 		}
 
 		const filtersList = getFilters( filters );
+
+		/* eslint-enable @wordpress/no-unused-vars-before-return */
 
 		if ( fieldName.includes( '::' ) ) {
 			const customValue = wpFilters(
@@ -290,7 +294,9 @@ CalculatedFormula.prototype = {
 		this.relatedAttrs = [];
 		this.related      = [];
 	},
+	/* eslint-disable no-console */
 	showError( formula ) {
+
 		console.group(
 			__(
 				'JetFormBuilder: You have invalid calculated formula',
@@ -302,15 +308,18 @@ CalculatedFormula.prototype = {
 
 		console.groupEnd();
 	},
+	// eslint-disable-next-line complexity
 	showErrorDetails( formula ) {
 		console.error(
 			sprintf(
+				// translators: %s - initial calculated field formula
 				__( 'Initial: %s', 'jet-form-builder' ),
 				this.formula,
 			),
 		);
 		console.error(
 			sprintf(
+				// translators: %s - computed calculated field formula
 				__( 'Computed: %s', 'jet-form-builder' ),
 				formula,
 			),
@@ -323,6 +332,7 @@ CalculatedFormula.prototype = {
 		if ( this.input ) {
 			console.error(
 				sprintf(
+					// translators: %s - field name
 					__( 'Field: %s', 'jet-form-builder' ),
 					this.input.path.join( '.' ),
 				),
@@ -335,6 +345,7 @@ CalculatedFormula.prototype = {
 
 		console.error(
 			sprintf(
+				// translators: %s - path to the input
 				__( 'Scope: %s', 'jet-form-builder' ),
 				[
 					...this.root.parent.path,
@@ -343,6 +354,7 @@ CalculatedFormula.prototype = {
 			),
 		);
 	},
+	/* eslint-enable no-console */
 };
 
 export default CalculatedFormula;

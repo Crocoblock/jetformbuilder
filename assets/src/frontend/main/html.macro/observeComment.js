@@ -13,6 +13,7 @@ function observeComment( comment, root ) {
 	const formula = new CalculatedHtmlString( root );
 	formula.observe( comment.textContent );
 
+	/* eslint-disable no-console */
 	if ( !formula.parts?.length ) {
 		console.group(
 			__(
@@ -31,6 +32,7 @@ function observeComment( comment, root ) {
 
 		return;
 	}
+	/* eslint-enable no-console */
 
 	const wrapper = document.createElement( 'span' );
 

@@ -31,8 +31,7 @@ function CalculatedHtmlString(
 		return false === fieldValue ? input.value.current : fieldValue;
 	};
 
-	this.onMissingPart = function ( inputMatch ) {
-	};
+	this.onMissingPart = () => {};
 }
 
 CalculatedHtmlString.prototype = Object.create( CalculatedFormula.prototype );

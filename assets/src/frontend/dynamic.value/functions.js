@@ -42,6 +42,7 @@ function createValues( json, input ) {
 		groups = JSON.parse( json );
 	}
 	catch ( error ) {
+		// eslint-disable-next-line no-console
 		console.error( error );
 		return;
 	}
@@ -53,6 +54,7 @@ function createValues( json, input ) {
 	}
 }
 
+// eslint-disable-next-line complexity
 function parseInput( input ) {
 	const [ node ] = input.nodes;
 	const wrapper  = node.closest( '.jet-form-builder-row' );

@@ -21,11 +21,11 @@ function MaxFilesHtmlAttr() {
 	this.setInput = function ( input ) {
 		BaseHtmlAttr.prototype.setInput.call( this, input );
 
-		const { max_files = 1 } = JSON.parse(
+		const { max_files: maxFiles = 1 } = JSON.parse(
 			input.previewsContainer.dataset.args,
 		);
 
-		this.initial = +max_files;
+		this.initial = +maxFiles;
 	};
 
 	this.addWatcherAttr = () => {};

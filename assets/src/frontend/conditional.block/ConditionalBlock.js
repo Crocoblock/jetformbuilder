@@ -137,7 +137,7 @@ ConditionalBlock.prototype = {
 	 * Compatibility with Save Progress
 	 * @since 3.0.1 https://github.com/Crocoblock/issues-tracker/issues/2480
 	 *
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1553
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/1553
 	 */
 	validateInputs() {
 		setTimeout( () => {

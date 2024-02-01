@@ -18,8 +18,7 @@ const settings = {
 	className: name.replace( '/', '-' ),
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Type in the date and time manually following the input mask or 
-choose the values from the calendar and timer.`,
+		`Type in the date and time manually following the input mask or choose the values from the calendar and timer.`,
 		'jet-form-builder'
 	),
 	edit: DateTimeEdit,

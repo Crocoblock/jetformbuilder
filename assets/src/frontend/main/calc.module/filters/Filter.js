@@ -2,6 +2,7 @@ function Filter() {
 	this.props = [];
 }
 
+// eslint-disable-next-line jsdoc/require-returns-check
 /**
  * @return {string}
  */
@@ -19,7 +20,7 @@ Filter.prototype.applyWithProps = function ( value ) {
  * @param  props
  * @return {*}
  */
-Filter.prototype.apply = function ( value, ...props ) {
+Filter.prototype.apply = function ( value, ...props ) { // eslint-disable-line no-unused-vars
 	return value;
 };
 

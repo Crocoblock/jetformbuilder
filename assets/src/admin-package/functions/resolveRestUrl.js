@@ -10,7 +10,7 @@ const {
  *
  * @throws {Error}
  */
-function resolveRestUrl( restUrl, props ) {
+function resolveRestUrl( restUrl, props ) { // eslint-disable-line complexity
 	if ( 'object' !== typeof props || !Object.keys( props )?.length ) {
 		return restUrl;
 	}
@@ -30,8 +30,9 @@ function resolveRestUrl( restUrl, props ) {
 		if ( !partRegexp.test( value ) ) {
 			throw new Error(
 				sprintf(
+					// translators: %1$s - Regexp, %2$s - Value
 					__(
-						`Invalid parameter for rest url. RegExp: %s, Value: %s`,
+						`Invalid parameter for rest url. RegExp: %1$s, Value: %2$s`,
 						'jet-form-builder',
 					),
 					parts[ 1 ],

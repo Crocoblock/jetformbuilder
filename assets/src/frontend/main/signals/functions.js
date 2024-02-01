@@ -1,4 +1,3 @@
-import SignalSelect from './SignalSelect';
 import SignalHiddenArray from './SignalHiddenArray';
 import SignalRange from './SignalRange';
 import SignalText from './SignalText';
@@ -12,7 +11,6 @@ const getSignalTypes = () => applyFilters(
 	'jet.fb.signals',
 	[
 		SignalRange,
-		SignalSelect,
 		SignalRenderState,
 		SignalHiddenArray,
 		SignalText,

@@ -14,11 +14,8 @@ class Form_Builder_Blocks_Repository extends Blocks_Repository_Base {
 		return apply_filters(
 			'jet-form-builder/blocks/items',
 			array(
-				new Types\Select_Field(),
 				new Types\Text_Field(),
 				new Types\Hidden_Field(),
-				new Types\Radio_Field(),
-				new Types\Checkbox_Field(),
 				new Types\Number_Field(),
 				new Types\Date_Field(),
 				new Types\Time_Field(),

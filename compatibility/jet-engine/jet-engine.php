@@ -14,6 +14,7 @@ use JFB_Compatibility\Jet_Engine\Blocks\Map_Tools;
 use JFB_Compatibility\Jet_Engine\Generators\Get_From_Field;
 use JFB_Compatibility\Jet_Engine\Generators\Get_From_Je_Query;
 use JFB_Compatibility\Jet_Engine\Methods\Post_Modification\Post_Je_Relation_Property;
+use JFB_Compatibility\Jet_Engine\Option_Query\Inner_Module;
 use JFB_Compatibility\Jet_Engine\Parsers\Map_Field_Parser;
 use JFB_Compatibility\Jet_Engine\Preset_Sources\Preset_Source_Options_Page;
 use JFB_Compatibility\Jet_Engine\Preset_Sources\Preset_User;
@@ -46,6 +47,11 @@ class Jet_Engine implements
 
 	private $has_custom_template;
 
+	/**
+	 * @var Inner_Module|null
+	 */
+	private $option_query;
+
 	public function rep_item_id() {
 		return 'jet-engine';
 	}
@@ -60,6 +66,8 @@ class Jet_Engine implements
 		$module = jet_form_builder()->module( 'block-parsers' );
 
 		$module->install( new Map_Field_Parser() );
+
+		$this->option_query = new Inner_Module();
 	}
 
 	public function on_uninstall() {
@@ -68,6 +76,8 @@ class Jet_Engine implements
 		$module = jet_form_builder()->module( 'block-parsers' );
 
 		$module->uninstall( new Map_Field_Parser() );
+
+		$this->option_query = null;
 	}
 
 	public function init_hooks() {
@@ -128,6 +138,8 @@ class Jet_Engine implements
 				array( $this, 'add_post_properties' )
 			);
 		}
+
+		$this->option_query->init_hooks();
 	}
 
 	public function remove_hooks() {
@@ -183,6 +195,8 @@ class Jet_Engine implements
 				array( $this, 'add_post_properties' )
 			);
 		}
+
+		$this->option_query->remove_hooks();
 	}
 
 	public function register_scripts() {

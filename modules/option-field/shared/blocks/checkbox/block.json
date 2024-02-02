@@ -96,7 +96,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"name": {
@@ -107,14 +107,14 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"default": {
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich-no-preset": true
 			}
 		},
 		"required": {
@@ -129,7 +129,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"visibility": {

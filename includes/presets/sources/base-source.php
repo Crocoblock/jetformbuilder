@@ -4,10 +4,9 @@
 namespace Jet_Form_Builder\Presets\Sources;
 
 use Jet_Form_Builder\Blocks\Types\Base;
-use Jet_Form_Builder\Classes\Macros_Parser;
-use Jet_Form_Builder\Exceptions\Parse_Exception;
 use Jet_Form_Builder\Exceptions\Preset_Exception;
 use Jet_Form_Builder\Presets\Preset_Manager;
+use JFB_Modules\Rich_Content\Macros_Parser;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Form_Messages;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Classes\Get_Template_Trait;
+use JFB_Modules\Rich_Content;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -67,7 +68,7 @@ class Builder {
 		}
 
 		$info            = new Status_Info( $status );
-		$message_content = $this->get_manager()->get_message_by_info( $info );
+		$message_content = Rich_Content\Module::rich( $this->get_manager()->get_message_by_info( $info ) );
 
 		$class  = 'jet-form-builder-message';
 		$class .= ' jet-form-builder-message--' . $info->get_css_class();
@@ -77,8 +78,6 @@ class Builder {
 
 	/**
 	 * Render message samples for editor
-	 *
-	 * @return [type] [description]
 	 */
 	public function render_messages_samples() {
 		// Render success sample

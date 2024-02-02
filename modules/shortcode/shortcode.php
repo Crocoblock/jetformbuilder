@@ -1,9 +1,8 @@
 <?php
 
 
-namespace Jet_Form_Builder\Shortcodes;
+namespace JFB_Modules\Shortcode;
 
-use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use JFB_Components\Repository\Repository_Item_Instance_Trait;
 
 // If this file is called directly, abort.

@@ -3,12 +3,12 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 // If this file is called directly, abort.
-use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use Jet_Form_Builder\Blocks\Module;
 use Jet_Form_Builder\Blocks\Modules\Base_Module;
 use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Classes\Compatibility;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Form_Break;
@@ -17,6 +17,7 @@ use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
 use JET_SM\Gutenberg\Controls_Manager;
+use JFB_Modules\Rich_Content;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -44,7 +45,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 */
 	protected $controls_manager;
 	protected $css_scheme;
-	public $style_attributes = array();
+	public    $style_attributes = array();
 
 	/**
 	 * Block attributes on render
@@ -66,7 +67,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 *
 	 * @var array
 	 */
-	public $attrs               = array();
+	public    $attrs            = array();
 	protected $provides_context = array();
 	protected $uses_context     = array();
 
@@ -281,8 +282,9 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 	protected function before_render_field( array $attrs, $content = null, $wp_block = null ): string {
 		return apply_filters(
-			"jet-form-builder/before-render/{$this->get_name()}",
+			'jet-form-builder/before-render-field',
 			'',
+			$this->get_name(),
 			$attrs,
 			$content,
 			$wp_block
@@ -293,6 +295,8 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @param $attributes
 	 * @param null $content
 	 * @param \WP_Block $wp_block
+	 *
+	 * @throws Repository_Exception
 	 */
 	public function set_block_data( $attributes, $content = null, $wp_block = null ) {
 		$this->block_content = $content;
@@ -331,16 +335,44 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @param string $name
 	 *
 	 * @return mixed
+	 * @throws Repository_Exception
 	 */
 	protected function apply_attribute( string $name ) {
-		$shortcode = $this->attrs[ $name ]['jfb']['shortcode'] ?? false;
-		$preset    = $this->attrs[ $name ]['jfb']['preset'] ?? false;
-		$value     = $this->block_attrs[ $name ];
+		$shortcode      = $this->attrs[ $name ]['jfb']['shortcode'] ?? false;
+		$rich           = $this->attrs[ $name ]['jfb']['rich'] ?? false;
+		$rich_no_preset = $this->attrs[ $name ]['jfb']['rich-no-preset'] ?? false;
+		$value          = $this->block_attrs[ $name ];
 
-		if ( $preset ) {
-			$value = jet_fb_parse_dynamic( $value );
+		if ( $rich ) {
+			// immediately return, because rich method also parsing preset and shortcodes
+			return Rich_Content\Module::rich( $value );
 		}
 
+		/**
+		 * Removes dynamic preset support in rich-content.
+		 * Because it will break preset value for several fields
+		 */
+		if ( $rich_no_preset ) {
+			/** @var Rich_Content\Module $rich */
+			$rich = jet_form_builder()->module( 'rich-content' );
+
+			remove_filter(
+				'jet-form-builder/rich-content',
+				array( $rich, 'apply_dynamic_preset' )
+			);
+
+			$value = Rich_Content\Module::rich( $value );
+
+			add_filter(
+				'jet-form-builder/rich-content',
+				array( $rich, 'apply_dynamic_preset' )
+			);
+
+			// immediately return, because rich method also parsing preset and shortcodes
+			return $value;
+		}
+
+		// backward compatibility
 		if ( $shortcode ) {
 			$value = do_shortcode( $value );
 		}
@@ -604,8 +636,6 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 *
 	 * @param  [type] $editor [description]
 	 * @param  [type] $handle [description]
-	 *
-	 * @return [type]         [description]
 	 */
 	public function block_data( $editor, $handle ) {
 	}
@@ -744,7 +774,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		$this->block_attrs[ $key ] = $value;
 
 		if ( is_array( \WP_Block_Supports::$block_to_render ) &&
-			! empty( \WP_Block_Supports::$block_to_render['attrs'] )
+		     ! empty( \WP_Block_Supports::$block_to_render['attrs'] )
 		) {
 			\WP_Block_Supports::$block_to_render['attrs'][ $key ] = $value;
 		}

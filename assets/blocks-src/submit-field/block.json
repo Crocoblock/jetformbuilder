@@ -28,7 +28,7 @@
 			"type": "string",
 			"default": "Submit",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"action_type": {
@@ -47,7 +47,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"class_name": {

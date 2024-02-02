@@ -10,7 +10,6 @@ if ( ! defined( 'WPINC' ) ) {
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Block_Helper;
-use Jet_Form_Builder\Exceptions\Handler_Exception;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -94,7 +93,7 @@ final class Module implements
 
 	public function init_hooks() {
 		add_filter( 'jet-form-builder/request-handler/request', array( $this, 'on_request' ) );
-		add_filter( 'jet-form-builder/before-render/submit-field', array( $this, 'on_render_submit' ), 10, 2 );
+		add_filter( 'jet-form-builder/before-render-field', array( $this, 'on_render_field' ), 10, 3 );
 		add_filter( 'jet-form-builder/page-config/jfb-settings', array( $this, 'on_localize_config' ) );
 		add_filter( 'jet-form-builder/editor/config', array( $this, 'on_localize_config' ) );
 		add_filter( 'jet-form-builder/setup-blocks', array( $this, 'check_is_container_exist' ) );
@@ -110,7 +109,7 @@ final class Module implements
 
 	public function remove_hooks() {
 		remove_filter( 'jet-form-builder/request-handler/request', array( $this, 'on_request' ) );
-		remove_filter( 'jet-form-builder/before-render/submit-field', array( $this, 'on_render_submit' ) );
+		remove_filter( 'jet-form-builder/before-render-field', array( $this, 'on_render_field' ) );
 		remove_filter( 'jet-form-builder/page-config/jfb-settings', array( $this, 'on_localize_config' ) );
 		remove_filter( 'jet-form-builder/editor/config', array( $this, 'on_localize_config' ) );
 		remove_filter( 'jet-form-builder/setup-blocks', array( $this, 'check_is_container_exist' ) );
@@ -146,12 +145,17 @@ final class Module implements
 	 * This is necessary because the captcha and the button can be in parallel columns.
 	 *
 	 * @param string $content
+	 * @param string $field_name
 	 * @param array $attrs
 	 *
 	 * @return string
 	 * @see Forms_Captcha::check_is_container_exist
 	 */
-	public function on_render_submit( string $content, array $attrs ): string {
+	public function on_render_field( string $content, string $field_name, array $attrs ): string {
+		if ( 'submit-field' !== $field_name ) {
+			return $content;
+		}
+
 		try {
 			$current = $this->get_current();
 		} catch ( Repository_Exception $exception ) {
@@ -337,10 +341,10 @@ final class Module implements
 
 		$current->set_exist_container(
 			! empty(
-				Block_Helper::find_by_block_name(
-					$blocks,
-					'jet-forms/captcha-container'
-				)
+			Block_Helper::find_by_block_name(
+				$blocks,
+				'jet-forms/captcha-container'
+			)
 			)
 		);
 

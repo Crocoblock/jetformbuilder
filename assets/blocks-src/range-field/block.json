@@ -31,8 +31,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"preset": true,
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"max": {
@@ -42,8 +41,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"preset": true,
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"step": {
@@ -53,29 +51,28 @@
 			],
 			"default": "",
 			"jfb": {
-				"preset": true,
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"prefix": {
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"suffix": {
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"label": {
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"name": {
@@ -86,14 +83,14 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"default": {
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich-no-preset": true
 			}
 		},
 		"add_prev": {
@@ -104,7 +101,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"visibility": {

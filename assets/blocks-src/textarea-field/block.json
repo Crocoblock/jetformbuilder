@@ -31,8 +31,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"preset": true,
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"maxlength": {
@@ -42,15 +41,14 @@
 			],
 			"default": "",
 			"jfb": {
-				"preset": true,
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"label": {
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"name": {
@@ -61,14 +59,14 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"default": {
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich-no-preset": true
 			}
 		},
 		"placeholder": {
@@ -87,7 +85,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"visibility": {

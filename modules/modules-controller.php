@@ -36,7 +36,9 @@ class Modules_Controller implements Module_Controller_It {
 			new Option_Query\Module(),
 			new Blocks\Module(),
 			new Security\Module(),
+			new Rich_Content\Module(),
 			// additional
+			new Shortcode\Module(),
 			new Option_Field\Module(),
 			new Wp_Experiments\Module(),
 			new Deprecated\Module(),

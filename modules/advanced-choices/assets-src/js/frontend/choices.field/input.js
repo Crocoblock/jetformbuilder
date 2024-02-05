@@ -133,7 +133,7 @@ function ChoicesData() {
 		}
 
 		if ( this.value.current === node.value ) {
-			this.onClear();
+			this.value.current = '';
 
 			return;
 		}

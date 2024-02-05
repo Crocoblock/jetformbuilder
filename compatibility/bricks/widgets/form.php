@@ -235,8 +235,10 @@ class Form extends Base {
 	public function controls_label_style() {
 		$this->start_jet_control_group( 'section_label_style' );
 
-		$css_selector         = $this->css_selector( '__label' );
-		$label_inner_selector = $this->css_selector( '__label-text' );
+		$css_selectors = array(
+			'label'      => $this->css_selector( '__label' ),
+			'label-text' => $this->css_selector( '__label' ) . ' ' . $this->css_selector( '__label-text' ),
+		);
 
 		$this->register_jet_control(
 			'label_typography',
@@ -247,7 +249,7 @@ class Form extends Base {
 				'css'   => array(
 					array(
 						'property' => 'typography',
-						'selector' => $label_inner_selector,
+						'selector' => $css_selectors['label-text'],
 					),
 				),
 			)
@@ -272,7 +274,7 @@ class Form extends Base {
 				'css'   => array(
 					array(
 						'property' => 'margin',
-						'selector' => $css_selector,
+						'selector' => $css_selectors['label'],
 					),
 				),
 			)
@@ -287,7 +289,7 @@ class Form extends Base {
 				'css'   => array(
 					array(
 						'property' => 'padding',
-						'selector' => $css_selector,
+						'selector' => $css_selectors['label'],
 					),
 				),
 			)
@@ -302,7 +304,7 @@ class Form extends Base {
 				'css'   => array(
 					array(
 						'property' => 'border',
-						'selector' => $css_selector,
+						'selector' => $css_selectors['label'],
 					),
 				),
 			)
@@ -1110,8 +1112,9 @@ class Form extends Base {
 		);
 
 		$css_selectors = array(
-			'label' => $this->css_selector( '__heading' ),
-			'desc'  => $this->css_selector( '__heading-desc' ),
+			'label'      => $this->css_selector( '__heading' ),
+			'label-text' => $this->css_selector( '__heading' ) . ' ' . $this->css_selector( '__label-text' ),
+			'desc'       => $this->css_selector( '__heading-desc' ),
 		);
 
 		$this->register_jet_control(
@@ -1123,7 +1126,7 @@ class Form extends Base {
 				'css'   => array(
 					array(
 						'property' => 'typography',
-						'selector' => $css_selectors['label'],
+						'selector' => $css_selectors['label-text'],
 					),
 				),
 			)

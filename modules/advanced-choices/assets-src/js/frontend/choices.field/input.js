@@ -99,6 +99,11 @@ function ChoicesData() {
 			// for space
 			this.handleSpaceKey( event, node );
 
+			// next handlers only for role="radio"
+			if ( this.isArray() ) {
+				return;
+			}
+
 			// for next or up keys
 			this.handleNextKey( event, node );
 

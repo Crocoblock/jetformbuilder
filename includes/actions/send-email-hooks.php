@@ -4,7 +4,7 @@
 namespace Jet_Form_Builder\Actions;
 
 use Jet_Form_Builder\Actions\Types\Send_Email;
-use Jet_Form_Builder\Classes\Http\Http_Tools;
+use JFB_Modules\Rich_Content;
 
 class Send_Email_Hooks {
 
@@ -25,22 +25,19 @@ class Send_Email_Hooks {
 
 	public static function basic_formatting( Send_Email $email ) {
 		$email->set_content(
-			jet_fb_parse_macro( $email->get_content() )
-		);
-		$email->set_content(
-			do_shortcode( $email->get_content() )
+			Rich_Content\Module::rich( $email->get_content() )
 		);
 		$email->set_subject(
-			jet_fb_parse_macro( $email->get_subject() )
+			Rich_Content\Module::rich( $email->get_subject() )
 		);
 		$email->set_from_name(
-			jet_fb_parse_macro( $email->get_from_name() )
+			Rich_Content\Module::rich( $email->get_from_name() )
 		);
 		$email->set_from_address(
-			jet_fb_parse_macro( $email->get_from_address() )
+			Rich_Content\Module::rich( $email->get_from_address() )
 		);
 		$email->set_reply_to(
-			jet_fb_parse_macro( $email->get_reply_to() )
+			Rich_Content\Module::rich( $email->get_reply_to() )
 		);
 
 		if ( ! is_email( $email->get_from_address() ) ) {

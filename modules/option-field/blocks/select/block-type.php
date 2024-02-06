@@ -175,12 +175,6 @@ class Block_Type extends Base implements
 		return array( self::PRESET_ARRAY );
 	}
 
-	public function prepare_option( array $option ): array {
-		return $this->is_multiple()
-			? $this->prepare_option_from_array( $option )
-			: $this->prepare_option_from_single( $option );
-	}
-
 	/**
 	 * @return string
 	 * @throws Repository_Exception

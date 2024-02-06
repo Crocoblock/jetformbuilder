@@ -3,19 +3,19 @@
 namespace Jet_Form_Builder;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
 use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
-use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Not_Router_Request;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Exceptions\Request_Exception;
-use Jet_Form_Builder\Form_Response;
-use JFB_Modules\Security\Exceptions\Spam_Exception;
 use Jet_Form_Builder\Request\Form_Request_Router;
 use Jet_Form_Builder\Request\Request_Handler;
-use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
+use JFB_Modules\Rich_Content\Macros_Parser;
+use JFB_Modules\Rich_Content\Module;
+use JFB_Modules\Security\Exceptions\Spam_Exception;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -23,6 +23,8 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
+ * @property Macros_Parser parser
+ *
  * Define Jet_Engine_Booking_Forms_Handler class
  */
 class Form_Handler {
@@ -50,9 +52,6 @@ class Form_Handler {
 	 */
 	public $request_handler;
 
-	/** @var Macros_Parser */
-	public $parser;
-
 
 	/**
 	 * Constructor for the class
@@ -60,7 +59,6 @@ class Form_Handler {
 	public function __construct() {
 		$this->action_handler  = new Action_Handler();
 		$this->request_handler = new Request_Handler();
-		$this->parser          = new Macros_Parser();
 	}
 
 	public function call_form() {
@@ -362,6 +360,26 @@ class Form_Handler {
 			$this->get_response_manager(),
 			$this->response_data
 		) )->init( $this->response_args )->send();
+	}
+
+	/**
+	 * Backward compatibility to deprecated properties
+	 *
+	 * @param $name
+	 *
+	 * @return mixed
+	 * @throws Repository_Exception
+	 */
+	public function __get( $name ) {
+		switch ( $name ) {
+			case 'parser':
+				/** @var Module $rich */
+				$rich = jet_form_builder()->module( 'rich-content' );
+
+				return $rich->get_parser();
+			default:
+				return null;
+		}
 	}
 
 }

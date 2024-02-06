@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Classes;
+namespace JFB_Modules\Rich_Content;
 
 use Jet_Form_Builder\Classes\Filters\Filters_Manager;
 use Jet_Form_Builder\Classes\Macro_Constants\Constants_Manager;

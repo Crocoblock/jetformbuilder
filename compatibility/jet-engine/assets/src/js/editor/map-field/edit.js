@@ -119,7 +119,7 @@ export default function MapEdit( props ) {
 					hasMacro={ false }
 					help={ __(
 						`Latitude and longitude can be entered by separating 
-them with a comma: 50.45, 30.53`,
+them with a comma: 50.45, 30.53.`,
 						'jet-form-builder',
 					) }
 				/>

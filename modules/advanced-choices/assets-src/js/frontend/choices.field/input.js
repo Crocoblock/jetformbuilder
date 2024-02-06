@@ -99,6 +99,11 @@ function ChoicesData() {
 			// for space
 			this.handleSpaceKey( event, node );
 
+			// next handlers only for role="radio"
+			if ( this.isArray() ) {
+				return;
+			}
+
 			// for next or up keys
 			this.handleNextKey( event, node );
 
@@ -128,7 +133,7 @@ function ChoicesData() {
 		}
 
 		if ( this.value.current === node.value ) {
-			this.onClear();
+			this.value.current = '';
 
 			return;
 		}
@@ -182,7 +187,7 @@ ChoicesData.prototype.handleNextKey = function ( event, node ) {
 
 	const nextNode = this.nextNode( node );
 
-	this.switchChoice( nextNode );
+	this.switchChoice( event, nextNode );
 };
 
 /**
@@ -197,7 +202,7 @@ ChoicesData.prototype.handlePrevKey = function ( event, node ) {
 
 	const prevNode = this.prevNode( node );
 
-	this.switchChoice( prevNode );
+	this.switchChoice( event, prevNode );
 };
 
 /**
@@ -210,13 +215,13 @@ ChoicesData.prototype.handleSpaceKey = function ( event, node ) {
 	}
 	event.preventDefault();
 
-	this.toggleChoice( node );
+	this.toggleChoice( node, event );
 };
 
-ChoicesData.prototype.switchChoice = function ( node ) {
+ChoicesData.prototype.switchChoice = function ( event, node ) {
 	const wrapper = getWrapper( node );
 
-	this.toggleChoice( node );
+	this.toggleChoice( node, event );
 	wrapper.focus( { preventScroll: true } );
 };
 

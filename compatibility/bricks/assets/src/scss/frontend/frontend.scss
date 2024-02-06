@@ -194,19 +194,15 @@ button.jet-form-builder__submit {
 // Context
 .layout-column {
   .jet-form-builder__field {
-    &:not(.checkradio-field):not(.range-field):not(.jet-form-builder-repeater):not(.wysiwyg-field) {
-      width: var(--jfb-input-w, 100%);
-      max-width: var(--jfb-input-w, 100%);
-      flex-basis: var(--jfb-input-w, 100%);
-    }
+	  width: var(--jfb-input-w, 100%);
+	  max-width: var(--jfb-input-w, 100%);
+	  flex-basis: var(--jfb-input-w, 100%);
   }
 }
 
 .layout-row {
   .jet-form-builder__field {
-    &:not(.checkradio-field):not(.range-field):not(.jet-form-builder-repeater):not(.wysiwyg-field) {
-      width: var(--jfb-input-w, 100%);
-    }
+	  width: var(--jfb-input-w, 100%);
   }
 }
 

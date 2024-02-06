@@ -7,11 +7,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-use Jet_Form_Builder\Classes\Arguments\Default_Form_Arguments;
-use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Compatibility;
 use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Shortcodes\Manager;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
@@ -93,10 +90,6 @@ class Module implements
 		add_action( 'init', array( $this, 'register_post_type' ) );
 		add_action( 'current_screen', array( $this, 'set_current_screen' ) );
 
-		$slug = self::SLUG;
-		add_filter( "manage_{$slug}_posts_columns", array( $this, 'filter_columns' ) );
-		add_action( "manage_{$slug}_posts_custom_column", array( $this, 'add_admin_column_content' ), 10, 2 );
-
 		/**
 		 * @since 3.0.1
 		 */
@@ -115,10 +108,6 @@ class Module implements
 		remove_action( 'init', array( $this, 'register_post_type' ) );
 		remove_action( 'current_screen', array( $this, 'set_current_screen' ) );
 
-		$slug = self::SLUG;
-		remove_filter( "manage_{$slug}_posts_columns", array( $this, 'filter_columns' ) );
-		remove_action( "manage_{$slug}_posts_custom_column", array( $this, 'add_admin_column_content' ) );
-
 		/**
 		 * @since 3.0.1
 		 */
@@ -131,34 +120,6 @@ class Module implements
 
 		remove_filter( 'post_row_actions', array( $this->get_post_actions(), 'base_add_action_links' ) );
 		remove_action( 'admin_enqueue_scripts', array( $this, 'import_form_js' ) );
-	}
-
-	public function filter_columns( $columns ) {
-		$after = array( 'date' => $columns['date'] );
-		unset( $columns['date'] );
-
-		$columns['jfb_shortcode'] = __( 'Shortcode', 'jet-form-builder' );
-
-		return array_merge( $columns, $after );
-	}
-
-	public function add_admin_column_content( $column, $form_id ) {
-		if ( 'jfb_shortcode' !== $column ) {
-			return;
-		}
-		$arguments = array_diff( $this->meta->get_args( $form_id ), Form_Arguments::arguments() );
-
-		$arguments = array_merge(
-			array( 'form_id' => $form_id ),
-			Default_Form_Arguments::arguments(),
-			$arguments
-		);
-
-		printf(
-			'<input readonly type="text" onclick="this.select()" value="%s" style="%s"/>',
-			esc_attr( Manager::get_shortcode( 'jet_fb_form', $arguments ) ),
-			'width: 100%'
-		);
 	}
 
 	public function set_current_screen() {

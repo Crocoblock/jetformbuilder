@@ -34,13 +34,6 @@
 	border-left: 1px solid #e2e4e7;
 }
 
-.jet-form-builder__content,
-.editor-styles-wrapper {
-	flex: 0 0 65%;
-	padding: 10px 0 35px;
-	order: 1;
-}
-
 .block-editor-block-contextual-toolbar:not([data-align="wide"]):not([data-align="full"]) .block-editor-block-mover:not(.is-horizontal).is-visible {
 	opacity: 1;
 }

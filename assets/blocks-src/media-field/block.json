@@ -44,8 +44,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"preset": true,
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"max_size": {
@@ -55,8 +54,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"preset": true,
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"allowed_mimes": {
@@ -67,7 +65,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"name": {
@@ -78,7 +76,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"required": {
@@ -93,7 +91,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"visibility": {

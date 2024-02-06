@@ -4,6 +4,16 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.3.0
+* ADD: Switcher Field
+* ADD: Welcome block with form patterns
+* ADD: Generate forms with Open AI
+* ADD: Improved preset sanitize. Option for disable sanitize
+* ADD: Possibility to verify manually the form by admin
+* ADD: "Greater than or equal" and "Less than or equal" operators were added to the Conditional Block
+* UPD: Improved Server-Side validation
+* FIX: Compatibility with JetBooking on the frontend
+
 ## 3.2.3
 * UPD: Improve JetForm block in Block Editor with style controls for the most fields
 * UPD: Improve compatibility with the Check-In/Check-Out field (JetBooking)

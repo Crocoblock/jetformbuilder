@@ -45,14 +45,14 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"calc_suffix": {
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"calc_hidden": {
@@ -63,7 +63,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"name": {
@@ -74,7 +74,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"placeholder": {
@@ -89,7 +89,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"visibility": {

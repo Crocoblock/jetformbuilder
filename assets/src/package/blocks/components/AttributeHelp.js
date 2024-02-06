@@ -31,22 +31,22 @@ function AttributeHelp( { name = false, children = null } ) {
 	}
 
 	return <BaseHelp className="jet-fb mb-24">
-		{ children }
+		{ children && <>{ children }&nbsp;</> }
 		{ (
-			settings?.shortcode && !children
+			settings?.shortcode && !settings.rich && !children
 		) && (
-			<span>&nbsp;{ __(
+			__(
 				'You can use shortcodes here.',
 				'jet-form-builder',
-			) }</span>
+			)
 		) }
 		{ (
-			settings?.shortcode && children
+			settings?.shortcode && !settings.rich && children
 		) && (
-			<span>&nbsp;{ __(
-				'You can also use short codes here.',
+			__(
+				'You can also use shortcodes here.',
 				'jet-form-builder',
-			) }</span>
+			)
 		) }
 	</BaseHelp>;
 }

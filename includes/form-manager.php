@@ -3,11 +3,10 @@
 
 namespace Jet_Form_Builder;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Generators\Get_From_DB;
 use Jet_Form_Builder\Generators\Num_Range;
 use Jet_Form_Builder\Generators\Num_Range_Manual;
-use Jet_Form_Builder\Shortcodes\Manager;
-use Jet_Form_Builder\Blocks\Block_Helper;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -15,14 +14,11 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 class Form_Manager {
+
 	public $generators = false;
 	public $builder;
 
 	const  NAMESPACE_FIELDS = 'jet-forms/';
-
-	public function __construct() {
-		Manager::instance();
-	}
 
 	/**
 	 * Returns all instances of options generators classes

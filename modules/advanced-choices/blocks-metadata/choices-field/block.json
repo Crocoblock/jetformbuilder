@@ -22,7 +22,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"name": {
@@ -33,7 +33,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"default": {
@@ -46,7 +46,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich-no-preset": true
 			}
 		},
 		"required": {

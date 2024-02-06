@@ -54,8 +54,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"preset": true,
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"value_active": {
@@ -65,15 +64,14 @@
 			],
 			"default": "",
 			"jfb": {
-				"preset": true,
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"label": {
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"name": {
@@ -84,7 +82,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich": true
 			}
 		},
 		"required": {
@@ -95,7 +93,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich-no-preset": true
 			}
 		},
 		"className": {

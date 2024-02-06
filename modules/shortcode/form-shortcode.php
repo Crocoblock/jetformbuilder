@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Jet_Form_Builder\Shortcodes;
+namespace JFB_Modules\Shortcode;
 
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 

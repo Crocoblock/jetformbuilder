@@ -56,7 +56,7 @@
 			"type": "string",
 			"default": "",
 			"jfb": {
-				"shortcode": true
+				"rich-no-preset": true
 			}
 		},
 		"class_name": {

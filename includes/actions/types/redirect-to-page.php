@@ -4,11 +4,10 @@ namespace Jet_Form_Builder\Actions\Types;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Classes\Macros_Parser;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
-use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
+use JFB_Modules\Rich_Content;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -76,11 +75,11 @@ class Redirect_To_Page extends Base {
 				return get_permalink( $context['ID'] );
 
 			default:
-				$this->settings['redirect_url'] = $this->settings['redirect_url'] ?? false;
-
-				return jet_fb_parse_macro(
-					jet_fb_parse_dynamic( $this->settings['redirect_url'] )
+				$this->settings['redirect_url'] = Tools::to_string(
+					$this->settings['redirect_url'] ?? ''
 				);
+
+				return Rich_Content\Module::rich( $this->settings['redirect_url'] );
 		}
 	}
 

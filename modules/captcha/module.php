@@ -341,10 +341,10 @@ final class Module implements
 
 		$current->set_exist_container(
 			! empty(
-			Block_Helper::find_by_block_name(
-				$blocks,
-				'jet-forms/captcha-container'
-			)
+				Block_Helper::find_by_block_name(
+					$blocks,
+					'jet-forms/captcha-container'
+				)
 			)
 		);
 

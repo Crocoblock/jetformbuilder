@@ -24,7 +24,6 @@ const {
 	      SelectControl,
 	      TextareaControl,
 	      FlexItem,
-	      Button,
 	      Flex,
 	      ToggleControl,
       } = wp.components;
@@ -33,8 +32,7 @@ const help = [
 	{
 		key: 'commas',
 		render: () => <li>{ __(
-			`If this field supports multiple values, 
-			you can separate them with commas`,
+			`If this field supports multiple values, you can separate them with commas`,
 			'jet-form-builder',
 		) }</li>,
 	},
@@ -48,8 +46,7 @@ const options = [
 			'jet-form-builder',
 		),
 		help: __(
-			`The value will be applied if condition check-ups return a result 
-different from the first check-up's cached value`,
+			`The value will be applied if condition check-ups return a result different from the first check-up's cached value`,
 			'jet-form-builder',
 		),
 	},
@@ -57,8 +54,7 @@ different from the first check-up's cached value`,
 		value: 'once',
 		label: __( 'Once', 'jet-form-builder' ),
 		help: __(
-			`The value will be applied only the first time 
-the condition is matched`,
+			`The value will be applied only the first time the condition is matched`,
 			'jet-form-builder',
 		),
 	},
@@ -82,6 +78,7 @@ const getHelp = frequency => {
 	return option.help;
 };
 
+// eslint-disable-next-line max-lines-per-function
 function DynamicItemBody() {
 	const {
 		      current: currentValue,
@@ -129,7 +126,7 @@ function DynamicItemBody() {
 					</span>
 					<PresetButton
 						value={ current.to_set }
-						onChange={ to_set => updateCurrent( { to_set } ) }
+						onChange={ val => updateCurrent( { to_set: val } ) }
 					/>
 					<ClientSideMacros withThis>
 						<MacrosFields
@@ -152,7 +149,7 @@ function DynamicItemBody() {
 					className={ 'jet-control-clear' }
 					hideLabelFromVision
 					value={ current.to_set ?? '' }
-					onChange={ to_set => updateCurrent( { to_set } ) }
+					onChange={ val => updateCurrent( { to_set: val } ) }
 				/>
 			</FlexItem>
 		</Flex>
@@ -183,8 +180,8 @@ function DynamicItemBody() {
 						'jet-form-builder',
 					) }
 					checked={ current.set_on_empty ?? false }
-					onChange={ set_on_empty => updateCurrent(
-						{ set_on_empty },
+					onChange={ val => updateCurrent(
+						{ set_on_empty: val },
 					) }
 				/>
 			</div>

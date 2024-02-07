@@ -3,7 +3,6 @@ import ConditionPageStateItem from './ConditionPageStateItem';
 const {
 	      ReactiveVar,
 	      createConditionalBlock,
-	      InputData,
       } = JetFormBuilderAbstract;
 
 const {
@@ -15,13 +14,6 @@ const {
 
 const { addAction, doAction } = JetPlugins.hooks;
 
-/**
- * @property {InputData[]}    inputs
- * @param                     node
- * @param                     state
- * @property {MultiStepState} state
- * @property {Element}        node
- */
 function PageState( node, state ) {
 	this.node      = node;
 	this.index     = +node.dataset.page;
@@ -53,7 +45,13 @@ PageState.prototype.observe = function () {
 	this.canSwitch.make();
 	this.isShow.make();
 	this.isShow.watch( () => {
-		this.isShow.current ? this.onShow() : this.onHide();
+		if ( this.isShow.current ) {
+			this.onShow();
+
+			return;
+		}
+
+		this.onHide();
 	} );
 
 	this.addButtonsListeners();

@@ -2,6 +2,7 @@ import ReportingInterface from './ReportingInterface';
 import { allRejected } from '../functions';
 import { createDefaultRestrictions } from './functions';
 
+/* eslint-disable no-unused-vars */
 function BrowserReporting() {
 	ReportingInterface.call( this );
 
@@ -51,6 +52,8 @@ function BrowserReporting() {
 		return this.input.getReportingNode();
 	};
 }
+
+/* eslint-enable no-unused-vars */
 
 BrowserReporting.prototype = Object.create( ReportingInterface.prototype );
 

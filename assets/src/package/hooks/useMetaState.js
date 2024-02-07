@@ -12,6 +12,7 @@ function useMetaState(
 		const rawMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
 
 		return JSON.parse( rawMeta[ key ] || ifEmpty );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, dependencies );
 
 	const { editPost } = useDispatch( 'core/editor' );

@@ -1,3 +1,5 @@
+
+/* eslint-disable no-unused-vars */
 function Restriction() {
 	/**
 	 * @type {ReportingInterface}
@@ -38,9 +40,6 @@ Restriction.prototype = {
 	getValue () {
 		return this.reporting.input.value.current;
 	},
-	/**
-	 * @return {boolean}
-	 */
 	validate () {
 		throw new Error( 'validate is wrong' );
 	},
@@ -64,5 +63,7 @@ Restriction.prototype = {
 	onReady() {
 	},
 };
+
+/* eslint-enable no-unused-vars */
 
 export default Restriction;

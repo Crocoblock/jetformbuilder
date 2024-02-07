@@ -10,7 +10,7 @@ function SignalFile() {
 
 	this.lock.current = true;
 
-	this.isSupported = function ( node, inputData ) {
+	this.isSupported = function ( node ) {
 		return isFile( node );
 	};
 
@@ -70,10 +70,10 @@ SignalFile.prototype.loadFiles = function () {
 			).catch( reject );
 		} )
 	) ) ).then( values => {
-		const files = values.map( ( { value } ) => value );
+		const localFiles = values.map( ( { value } ) => value );
 
 		this.lock.current = false;
-		this.input.silenceSet( createFileList( files ) );
+		this.input.silenceSet( createFileList( localFiles ) );
 	} ).catch( () => {
 		this.lock.current = false;
 	} );
@@ -88,7 +88,7 @@ SignalFile.prototype.sortable = function () {
 	} ).bind( 'sortupdate', () => this.onSortCallback() );
 };
 
-SignalFile.prototype.onSortCallback = function ( e, ui ) {
+SignalFile.prototype.onSortCallback = function () {
 	const transfer  = new DataTransfer();
 	const [ input ] = this.input.nodes;
 
@@ -100,6 +100,7 @@ SignalFile.prototype.onSortCallback = function ( e, ui ) {
 		const { fileName } = removeButton.dataset;
 
 		for ( const file of input.files ) {
+			// eslint-disable-next-line max-depth
 			if ( file.name !== fileName ) {
 				continue;
 			}

@@ -3,7 +3,6 @@ import MacrosFields from '../macros.button/components/MacrosFields';
 import BaseLabel from './BaseLabel';
 
 const {
-	      Flex,
 	      FlexItem,
       } = wp.components;
 const {

@@ -4,13 +4,12 @@ function ReactiveVar( value = null ) {
 	this.current    = value;
 	this.signals    = [];
 	this.sanitizers = [];
-	this.isDebug    = false;
 	this.isSilence  = false;
 	this.isMaked    = false;
 }
 
 ReactiveVar.prototype = {
-	watchOnce ( callable ) {
+	watchOnce( callable ) {
 		if ( 'function' !== typeof callable ) {
 			return;
 		}
@@ -19,7 +18,7 @@ ReactiveVar.prototype = {
 			callable();
 		} );
 	},
-	watch ( callable ) {
+	watch( callable ) {
 		if ( 'function' !== typeof callable ) {
 			return false;
 		}
@@ -37,7 +36,7 @@ ReactiveVar.prototype = {
 
 		return () => this.signals.splice( index, 1 );
 	},
-	sanitize ( callable ) {
+	sanitize( callable ) {
 		if ( 'function' !== typeof callable ) {
 			return false;
 		}
@@ -52,7 +51,7 @@ ReactiveVar.prototype = {
 
 		return () => this.sanitizers.splice( index, 1 );
 	},
-	make () {
+	make() {
 		if ( this.isMaked ) {
 			return;
 		}
@@ -70,14 +69,7 @@ ReactiveVar.prototype = {
 					return;
 				}
 				prevValue = current;
-				if ( self.isDebug ) {
-					console.group( 'ReactiveVar has changed' );
-					console.log( 'current:', current );
-					console.log( 'newVal:', newVal );
-					console.groupEnd();
-					debugger;
-				}
-				current = self.applySanitizers( newVal );
+				current   = self.applySanitizers( newVal );
 
 				if ( self.isSilence ) {
 					return;
@@ -86,11 +78,11 @@ ReactiveVar.prototype = {
 			},
 		} );
 	},
-	notify ( prevValue = null ) {
+	notify( prevValue = null ) {
 		this.signals.forEach(
 			( { signal } ) => signal.call( this, prevValue ) );
 	},
-	applySanitizers ( value ) {
+	applySanitizers( value ) {
 		for ( const sanitizer of this.sanitizers ) {
 			value = sanitizer.call( this, value );
 		}
@@ -103,9 +95,6 @@ ReactiveVar.prototype = {
 		}
 
 		this.current = newValue;
-	},
-	debug() {
-		this.isDebug = !this.isDebug;
 	},
 	silence() {
 		this.isSilence = !this.isSilence;

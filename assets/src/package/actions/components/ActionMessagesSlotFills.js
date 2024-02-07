@@ -4,6 +4,7 @@ const {
 
 const ActionMessagesSlotFills = {};
 
+// eslint-disable-next-line no-undef
 for ( const { self } of jetFormActionTypes ) {
 	if (
 		!window[ self ]?.hasOwnProperty?.( '__messages' ) ||

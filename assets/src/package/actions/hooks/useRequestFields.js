@@ -9,6 +9,8 @@ const {
 	      useContext,
       } = wp.element;
 
+
+
 const getRequestFields = ( { actions, fields } ) => {
 	for ( const action of actions ) {
 		const {
@@ -20,25 +22,29 @@ const getRequestFields = ( { actions, fields } ) => {
 		}
 
 		for ( const requestField of current.requestFields ) {
-			const index = fields.findIndex(
-				field => field.value === requestField.name,
-			);
-
-			if ( -1 !== index ) {
-				continue;
-			}
-
-			fields.push( {
-				from: action.type,
-				id: action.id,
-				label: requestField.name,
-				value: requestField.name,
-				name: requestField.name,
-				help: requestField.help,
-			} );
+			processSingleRequestField( fields, requestField, action );
 		}
 	}
 };
+
+const processSingleRequestField = ( fields, requestField, action ) => {
+	const index = fields.findIndex(
+		field => field.value === requestField.name,
+	);
+
+	if ( -1 !== index ) {
+		return;
+	}
+
+	fields.push( {
+		from: action.type,
+		id: action.id,
+		label: requestField.name,
+		value: requestField.name,
+		name: requestField.name,
+		help: requestField.help,
+	} );
+}
 
 const processComputedField = ( { computed, action, fields, nameSet } ) => {
 	if ( !computed.isSupported( action, fields ) ) {
@@ -47,8 +53,7 @@ const processComputedField = ( { computed, action, fields, nameSet } ) => {
 	computed.setAction( action );
 	computed.hasInList = false;
 
-	const label = computed.getLabel();
-	let name    = computed.getName();
+	let name = computed.getName();
 
 	if ( nameSet.has( name ) ) {
 		computed.hasInList = true;
@@ -60,6 +65,7 @@ const processComputedField = ( { computed, action, fields, nameSet } ) => {
 		return;
 	}
 
+	const label = computed.getLabel();
 	nameSet.add( name );
 
 	fields.push( {

@@ -2,12 +2,12 @@ import BaseSignal from './BaseSignal';
 import { isRange } from '../supports';
 
 /**
- * @property {RangeData} input
+ * @property {RangeData} input Related input
  */
 function SignalRange() {
 	BaseSignal.call( this );
 
-	this.isSupported = function ( node, inputData ) {
+	this.isSupported = function ( node ) {
 		return isRange( node );
 	};
 	this.runSignal   = function () {

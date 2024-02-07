@@ -52,7 +52,7 @@ function createInput( node, observable ) {
 		return current;
 	}
 
-	console.error( 'Something went wrong', node );
+	return false;
 }
 
 function getParsedName( name ) {
@@ -84,7 +84,9 @@ function populateInputs( inputs ) {
 	for ( const input of inputs ) {
 		const inner = input.populateInner();
 
-		inner?.length && list.push( ...inner );
+		if ( inner?.length ) {
+			list.push( ...inner );
+		}
 
 		list.push( input );
 	}

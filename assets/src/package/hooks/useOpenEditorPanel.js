@@ -9,14 +9,18 @@ function useOpenEditorPanel( panelName ) {
 
 	const isOpened = useSelect(
 		select => select( 'core/edit-post' ).isEditorPanelOpened( panelName ),
-		[],
+		[ panelName ],
 	);
 
 	return () => {
 		// switch from block to post panel
 		enableComplementaryArea( 'core/edit-post', 'edit-post/document' );
 
-		!isOpened && toggleEditorPanelOpened( panelName );
+		if ( isOpened ) {
+			return;
+		}
+
+		toggleEditorPanelOpened( panelName );
 	};
 }
 

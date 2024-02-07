@@ -5,13 +5,6 @@ const {
 	      CardFooter,
       } = wp.components;
 
-/**
- * @param  children.children
- * @param  children
- * @param  props
- * @return {boolean|JSX.Element}
- * @class
- */
 function ActionItemFooter( { children, ...props } = {} ) {
 	const { action } = useLoopedAction();
 

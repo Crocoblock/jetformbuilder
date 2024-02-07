@@ -103,6 +103,7 @@ CalculatedFormula.prototype = {
 	 * @private
 	 * @param value {String}
 	 */
+	// eslint-disable-next-line complexity
 	observeItem( value ) {
 		let match;
 		let prevIndex = 0;
@@ -241,6 +242,7 @@ CalculatedFormula.prototype = {
 			      applyFilters: deprecatedApplyFilters = false,
 		      } = window?.JetFormBuilderMain?.filters ?? {};
 
+		// eslint-disable-next-line complexity
 		return this.parts.map( current => {
 			if ( 'function' !== typeof current ) {
 				if ( !this.input?.nodes || false === deprecatedApplyFilters ) {

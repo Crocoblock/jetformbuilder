@@ -2,6 +2,7 @@ import BaseSubmit from './BaseSubmit';
 import ReactiveVar from '../reactive/ReactiveVar';
 import { isSuccessStatus } from './functions';
 
+// eslint-disable-next-line max-lines-per-function
 function AjaxSubmit( form ) {
 	BaseSubmit.call( this, form );
 
@@ -21,7 +22,7 @@ function AjaxSubmit( form ) {
 		).then(
 			callbacks => this.runSubmit( callbacks ),
 		).catch(
-			errors => this.form.toggle(),
+			() => this.form.toggle(),
 		);
 	};
 	this.runSubmit     = function ( callbacks ) {
@@ -98,6 +99,7 @@ function AjaxSubmit( form ) {
 		this.form.toggle();
 		this.status.current = false;
 
+		// eslint-disable-next-line no-console
 		console.error( jqXHR.responseText, errorThrown );
 	};
 	this.insertMessage = function ( message ) {

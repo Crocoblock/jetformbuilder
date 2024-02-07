@@ -3,7 +3,6 @@
  */
 import BrowserReporting from './BrowserReporting';
 import { allRejected } from '../functions';
-import InputData from '../inputs/InputData';
 import NativeRestriction from './restrictions/NativeRestriction';
 import RequiredRestriction from './restrictions/RequiredRestriction';
 
@@ -88,15 +87,6 @@ function getValidateCallbacks( inputs, silence = false ) {
 	inputs?.[ 0 ]?.getContext()?.reset( { silence } );
 
 	for ( const input of inputs ) {
-		if ( !(
-			input instanceof InputData
-		) ) {
-			console.group( 'Input is not instance of InputData' );
-			console.error( input );
-			console.groupEnd();
-
-			continue;
-		}
 		callbacks.push(
 			( resolve, reject ) => {
 				input.reporting.validateOnChangeState().

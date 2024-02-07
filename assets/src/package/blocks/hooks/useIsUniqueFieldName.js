@@ -56,7 +56,7 @@ function useIsUniqueFieldName() {
 	const computed = actionFields.find(
 		( { value } ) => fieldNames.includes( value ) );
 
-	if ( ! computed ) {
+	if ( !computed ) {
 		return {};
 	}
 
@@ -64,6 +64,7 @@ function useIsUniqueFieldName() {
 		error: 'not_unique_in_actions',
 		message: computed?.from
 		         ? sprintf(
+				// translators: %s - action title
 				__(
 					`The %s action already uses this field name. Please change it`,
 					'jet-form-builder',

@@ -26,6 +26,7 @@ BaseSignal.prototype = {
 	 * @param  inputData {InputData}
 	 * @return {boolean}
 	 */
+	// eslint-disable-next-line no-unused-vars
 	isSupported ( node, inputData ) {
 		return false;
 	},
@@ -54,6 +55,7 @@ BaseSignal.prototype = {
 	 * @param prevValue
 	 * @protected
 	 */
+	// eslint-disable-next-line no-unused-vars
 	runSignal ( prevValue ) {
 		// your code
 	},

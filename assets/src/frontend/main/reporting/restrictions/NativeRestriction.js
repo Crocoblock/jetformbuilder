@@ -3,6 +3,7 @@ import Restriction from './Restriction';
 function NativeRestriction() {
 	Restriction.call( this );
 
+	// eslint-disable-next-line no-unused-vars
 	this.isSupported = function ( node, reporting ) {
 		return !!node.checkValidity;
 	};

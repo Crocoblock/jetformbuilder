@@ -25,7 +25,7 @@ function BlockPrevButtonLabel( { label, help } ) {
 			}
 			value={ attributes.prev_label }
 			className="jet-fb m-unset"
-			onChange={ prev_label => setAttributes( { prev_label } ) }
+			onChange={ val => setAttributes( { prev_label: val } ) }
 		/>
 		<AttributeHelp name="prev_label">
 			{ help ?? '' }

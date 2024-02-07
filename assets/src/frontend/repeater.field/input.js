@@ -6,6 +6,7 @@ const {
 	      ReactiveVar,
       } = JetFormBuilderAbstract;
 
+// eslint-disable-next-line max-lines-per-function
 function RepeaterData() {
 	InputData.call( this );
 
@@ -72,6 +73,7 @@ function RepeaterData() {
 		const input = this.root.getInput( this.itemsField );
 
 		if ( !input ) {
+			// eslint-disable-next-line no-console
 			console.error(
 				`JetFormBuilder error: undefined input by name [${ this.itemsField }]`,
 			);
@@ -126,15 +128,10 @@ function RepeaterData() {
 		const rows   = this.value.current;
 
 		for ( const row of rows ) {
-			for ( const input of row.getInputs() ) {
-				if ( !input.reporting?.restrictions?.length ) {
-					continue;
-				}
-				inputs.push( input );
-			}
+			inputs.push( ...row.getInputs() );
 		}
 
-		return inputs;
+		return inputs.filter( input => input.reporting?.restrictions?.length );
 	};
 
 	this.onRemove = function () {

@@ -17,6 +17,7 @@ function useSupport( supportName ) {
 
 			return get( blockType, [ 'supports', supportName ], false );
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[ clientId ],
 	);
 }

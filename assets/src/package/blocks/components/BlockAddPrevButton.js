@@ -14,19 +14,18 @@ function BlockAddPrevButton( { label, help } ) {
 		      setAttributes,
 	      ] = useBlockAttributes();
 
-	if ( ! useIsHasAttribute( 'add_prev' ) ) {
+	if ( !useIsHasAttribute( 'add_prev' ) ) {
 		return null;
 	}
 
 	return <ToggleControl
 		label={ label ?? __( 'Add Prev Page Button', 'jet-form-builder' ) }
 		help={ help ?? __(
-			`It is recommended to use the "Action Button" block 
-			with the "Go to Prev Page" type`,
+			`It is recommended to use the "Action Button" block with the "Go to Prev Page" type`,
 			'jet-form-builder',
 		) }
 		checked={ attributes.add_prev }
-		onChange={ add_prev => setAttributes( { add_prev } ) }
+		onChange={ val => setAttributes( { add_prev: val } ) }
 	/>;
 }
 

@@ -15,7 +15,6 @@ const {
 	      ToolbarGroup,
 	      ToolbarItem,
 	      ToolbarButton,
-	      Button,
       } = wp.components;
 
 function ToolBarDefault( { children = null } ) {

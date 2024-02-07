@@ -25,10 +25,12 @@ const RenderStateOptions = ( { currentItem, changeCurrentItem } ) => {
 			select( 'jet-forms/block-conditions' ).getRenderStates(),
 			'value',
 		),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[ showModal ],
 	);
 	// label={  }
 	return <>
+		{/* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */ }
 		<BaseControl
 			label={ __( 'Render State', 'jet-form-builder' ) }
 			className={ 'control-flex' }
@@ -42,8 +44,9 @@ const RenderStateOptions = ( { currentItem, changeCurrentItem } ) => {
 					<FormTokenField
 						value={ currentItem.render_state }
 						suggestions={ renderStates }
-						onChange={ render_state => changeCurrentItem(
-							{ render_state } ) }
+						onChange={ val => changeCurrentItem(
+							{ render_state: val },
+						) }
 						tokenizeOnSpace
 						__experimentalExpandOnFocus
 					/>

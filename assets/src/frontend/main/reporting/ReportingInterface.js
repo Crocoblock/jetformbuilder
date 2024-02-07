@@ -54,9 +54,9 @@ ReportingInterface.prototype = {
 	 * Runs on changing value in the field
 	 * @see InputData.onChange
 	 */
-	validateOnChange () {
+	validateOnChange() {
 	},
-	validateOnBlur () {
+	validateOnBlur() {
 	},
 	/**
 	 * Runs on trying to submit form
@@ -68,7 +68,7 @@ ReportingInterface.prototype = {
 	 *
 	 * @return {Promise<boolean>}
 	 */
-	async validate () {
+	async validate() {
 		const errors = await this.getErrors();
 
 		this.validityState.current = !Boolean( errors.length );
@@ -79,7 +79,9 @@ ReportingInterface.prototype = {
 			return true;
 		}
 
-		!this.input.root.getContext().silence && this.report( errors );
+		if ( !this.input.root.getContext().silence ) {
+			this.report( errors )
+		}
 
 		throw new RestrictionError( errors[ 0 ].name );
 	},
@@ -87,14 +89,16 @@ ReportingInterface.prototype = {
 	 * @param  promises {Function[]}
 	 * @return {Promise<Array | null>}
 	 */
-	async getErrorsRaw ( promises ) {
+	// eslint-disable-next-line no-unused-vars
+	async getErrorsRaw( promises ) {
 		throw new Error( 'getError must return a Promise' );
 	},
 
 	/**
 	 * @return {Promise<Array | *[] | null>}
 	 */
-	async getErrors () {
+	// eslint-disable-next-line complexity
+	async getErrors() {
 		if (
 			this.input.loading.current ||
 			this.input?.callable?.lock?.current ||
@@ -123,7 +127,7 @@ ReportingInterface.prototype = {
 
 		return this.errors;
 	},
-	report ( validationErrors ) {
+	report( validationErrors ) {
 		if ( this.input.getContext().reportedFirst ) {
 			this.reportRaw( validationErrors );
 
@@ -136,18 +140,18 @@ ReportingInterface.prototype = {
 	},
 	/**
 	 * @param validationErrors {Restriction[]}
-	 * @return void
 	 */
-	reportRaw ( validationErrors ) {
+	// eslint-disable-next-line no-unused-vars
+	reportRaw( validationErrors ) {
 		throw new Error( 'report is empty' );
 	},
-	reportFirst ( validationErrors ) {
+	reportFirst( validationErrors ) {
 		this.report( validationErrors );
 	},
-	clearReport () {
+	clearReport() {
 		throw new Error( 'clearReport is empty' );
 	},
-	getPromises () {
+	getPromises() {
 		const promises = [];
 
 		for ( const restriction of this.restrictions ) {
@@ -169,28 +173,29 @@ ReportingInterface.prototype = {
 	 * @param  restriction {Restriction}
 	 * @return {boolean}
 	 */
-	canProcessRestriction ( restriction ) {
+	// eslint-disable-next-line no-unused-vars
+	canProcessRestriction( restriction ) {
 		return true;
 	},
 
 	/**
 	 * @param restriction {Restriction}
 	 */
-	beforeProcessRestriction ( restriction ) {
+	// eslint-disable-next-line no-unused-vars
+	beforeProcessRestriction( restriction ) {
 	},
 	/**
-	 * @param  node
-	 * @param  input
-	 *
-	 * @return {boolean}
+	 * @param node
+	 * @param input
 	 */
-	isSupported ( node, input ) {
+	// eslint-disable-next-line no-unused-vars
+	isSupported( node, input ) {
 		throw new Error( 'isSupported is empty' );
 	},
 	/**
 	 * @param input {InputData}
 	 */
-	setInput ( input ) {
+	setInput( input ) {
 		this.validityState = new ReactiveVar();
 		this.validityState.make();
 
@@ -198,22 +203,23 @@ ReportingInterface.prototype = {
 		this.setRestrictions();
 		this.filterRestrictions();
 	},
-	setRestrictions () {
+	setRestrictions() {
 	},
 	/**
 	 * @return {HTMLInputElement|HTMLElement}
 	 */
-	getNode () {
+	getNode() {
 		return this.input.nodes[ 0 ];
 	},
 
-	hasChangedValue () {
+	hasChangedValue() {
 		return this.valuePrev !== this.input.getValue();
 	},
 	/**
 	 * @return {Promise<*>}
 	 */
-	checkValidity () {
+	// eslint-disable-next-line complexity
+	checkValidity() {
 		const isSilence = this.input.getContext().silence;
 
 		if ( null === this.validityState.current ) {
@@ -227,7 +233,7 @@ ReportingInterface.prototype = {
 			return Promise.reject();
 		}
 
-		!isSilence && this.report( this.errors || [] );
+		this.report( this.errors || [] );
 
 		return Promise.reject();
 	},
@@ -236,7 +242,7 @@ ReportingInterface.prototype = {
 	 *
 	 * @return {boolean}
 	 */
-	hasAutoScroll () {
+	hasAutoScroll() {
 		return false;
 	},
 	/**
@@ -244,7 +250,7 @@ ReportingInterface.prototype = {
 	 * you can overwrite a particular restriction
 	 * if the "type" property is defined in it
 	 */
-	filterRestrictions () {
+	filterRestrictions() {
 		const map = {};
 
 		for ( let [ index, restriction ] of Object.entries(

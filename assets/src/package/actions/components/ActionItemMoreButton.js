@@ -9,6 +9,7 @@ const {
 	      DropdownMenu,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function
 function ActionItemMoreButton( { exclude = [] } ) {
 	const { action, index } = useLoopedAction();
 

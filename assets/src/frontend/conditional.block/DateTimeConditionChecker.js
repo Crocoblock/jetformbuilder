@@ -4,8 +4,8 @@ const {
 	      getTimestamp,
       } = JetFormBuilderFunctions;
 const {
-	      Min_In_Sec,
-	      Milli_In_Sec,
+	      Min_In_Sec: MinInSec,
+	      Milli_In_Sec: MilliInSec,
       } = JetFormBuilderConst;
 
 const offset = new Date().getTimezoneOffset();
@@ -25,11 +25,11 @@ function DateTimeConditionChecker() {
 	 */
 	this.check = function ( condition, input ) {
 		const { time: current } = getTimestamp( input.value.current );
-		const conditionValue      = condition.value.map( value => {
+		const conditionValue    = condition.value.map( value => {
 			const { time, type } = getTimestamp( value );
 
 			if ( 'number' === type && condition.use_preset ) {
-				return time * Milli_In_Sec + offset * Min_In_Sec;
+				return time * MilliInSec + offset * MinInSec;
 			}
 
 			return time;

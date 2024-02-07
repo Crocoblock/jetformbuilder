@@ -8,6 +8,7 @@ import { populateInputs } from '../inputs/functions';
  * @param observable {Observable}
  * @class
  */
+// eslint-disable-next-line max-lines-per-function
 function FormSubmit( observable ) {
 
 	this.observable = observable;
@@ -31,7 +32,10 @@ function FormSubmit( observable ) {
 
 			this.submitter.submit();
 		} ).catch( () => {
-			this.autoFocus && focusOnInvalidInput(
+			if ( !this.autoFocus ) {
+				return;
+			}
+			focusOnInvalidInput(
 				populateInputs( this.observable.getInputs() ),
 			);
 		} );
@@ -88,9 +92,14 @@ function FormSubmit( observable ) {
 	};
 
 	this.onEndSubmit = function ( callable ) {
-		this.submitter.hasOwnProperty( 'status' )
-		? this.submitter.status.watch( callable )
-		: this.submitter.onFailSubmit( callable );
+		// is ajax
+		if ( this.submitter.hasOwnProperty( 'status' ) ) {
+			this.submitter.status.watch( callable );
+
+			return;
+		}
+
+		this.submitter.onFailSubmit( callable );
 	};
 
 	this.observable.rootNode.addEventListener(

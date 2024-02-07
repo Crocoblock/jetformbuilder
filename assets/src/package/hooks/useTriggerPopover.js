@@ -4,7 +4,11 @@ const {
       } = wp.element;
 
 /**
- * @return {{ref, setShowPopover: *, showPop<>over: *, popoverProps: {onClose: (function(): *), onFocusOutside: popoverProps.onFocusOutside, anchorRef}}}
+ * @return {Object}
+ * @property {Object}   ref            Reference on button
+ * @property {Function} setShowPopover function for show / hide popover
+ * @property {boolean}  showPopover    Popover is visible on not
+ * @property {Object}   popoverProps   Object with props for <Popover> component
  */
 function useTriggerPopover() {
 	const [ showPopover, setShowPopover ] = useState( false );

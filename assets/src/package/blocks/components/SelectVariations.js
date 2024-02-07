@@ -24,7 +24,7 @@ function SelectVariations( { value } ) {
 
 			const items         = getBlockVariations( name, 'block' );
 			const options       = [];
-			const rawVariations = {};
+			const rawLocal = {};
 
 			for ( const item of items ) {
 				options.push( {
@@ -34,14 +34,15 @@ function SelectVariations( { value } ) {
 						{ item.title }
 					</span>,
 				} );
-				rawVariations[ item.name ] = item;
+				rawLocal[ item.name ] = item;
 			}
 
 			return {
 				variations: options,
-				rawVariations,
+				rawVariations: rawLocal,
 			};
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[],
 	);
 

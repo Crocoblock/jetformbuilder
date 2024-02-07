@@ -2,7 +2,6 @@ import blocksRecursiveIterator from './blocksRecursiveIterator';
 
 const {
 	      applyFilters,
-	      addFilter,
       } = wp.hooks;
 const {
 	      select,
@@ -43,8 +42,8 @@ function getFieldsWithoutCurrent(
 			}
 
 			formFields.push(
-				...newFields.filter( current => !formFields.some(
-					( { value } ) => value === current.value,
+				...newFields.filter( field => !formFields.some(
+					( { value } ) => value === field.value,
 				) ),
 			);
 		}

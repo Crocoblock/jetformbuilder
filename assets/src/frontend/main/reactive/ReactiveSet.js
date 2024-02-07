@@ -24,10 +24,16 @@ ReactiveSet.prototype.remove = function ( stateName ) {
 	);
 };
 
+// eslint-disable-next-line complexity
 ReactiveSet.prototype.toggle = function ( stateName, force = null ) {
-	if ( null !== force ) {
-		force ? this.add( stateName ) : this.remove( stateName );
+	if ( true === force ) {
+		this.add( stateName );
+	}
+	if ( false === force ) {
+		this.remove( stateName );
+	}
 
+	if ( null !== force ) {
 		return;
 	}
 

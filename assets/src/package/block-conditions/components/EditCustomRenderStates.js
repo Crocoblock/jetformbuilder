@@ -21,12 +21,13 @@ const {
 const { apiFetch } = wp;
 
 const {
-	      rest_add_state,
-	      rest_delete_state,
+	      rest_add_state: restAddState,
+	      rest_delete_state: restDeleteState,
       } = window.jetFormBlockConditions;
 
 const { Fill: ModalFooterFill } = ActionModalFooterSlotFill;
 
+// eslint-disable-next-line max-lines-per-function
 const EditCustomRenderStates = ( {
 	setShowModal,
 	changeCurrentItem,
@@ -48,32 +49,35 @@ const EditCustomRenderStates = ( {
 	const customStates = useSelect(
 		select => select( 'jet-forms/block-conditions' ).
 			getCustomRenderStates(),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[ isLoading, isLoadingItem ],
 	);
 
 	const addState = () => {
 		setButtonLoading( true );
-		rest_add_state.data = { value };
+		restAddState.data = { value };
 
-		apiFetch( rest_add_state ).then( response => {
+		apiFetch( restAddState ).then( response => {
 			onSuccessAdd( response.state );
 			setButtonLoading( false );
 			setShowModal( false );
 
 		} ).catch( error => {
+			// eslint-disable-next-line no-console
 			console.error( error );
 			setButtonLoading( false );
 		} );
 	};
 
 	const removeState = name => {
-		rest_delete_state.data = { list: [ name ] };
+		restDeleteState.data = { list: [ name ] };
 		setItemLoading( prev => (
 			{ ...prev, [ name ]: true }
 		) );
 
-		apiFetch( rest_delete_state ).then( () => {
+		apiFetch( restDeleteState ).then( () => {
 			onDelete( name );
+			// eslint-disable-next-line no-console
 		} ).catch( console.error ).finally( () => {
 			setItemLoading( prev => (
 				{ ...prev, [ name ]: false }

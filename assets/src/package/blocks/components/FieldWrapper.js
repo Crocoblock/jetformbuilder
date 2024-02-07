@@ -31,6 +31,7 @@ function RichDescription( content ) {
 	</small>;
 }
 
+// eslint-disable-next-line max-lines-per-function
 function FieldWrapper( props ) {
 	const {
 		      attributes,
@@ -43,7 +44,7 @@ function FieldWrapper( props ) {
 
 	const uniqKey = useUniqKey();
 
-	const _jf_args = useSelectPostMeta( '_jf_args' );
+	const jfArgs = useSelectPostMeta( '_jf_args' );
 
 	function onBlurLabel() {
 		ChangeNameByLabel( attributes, setAttributes );
@@ -71,7 +72,7 @@ function FieldWrapper( props ) {
 				/>
 				{ attributes.required &&
 				<span className={ 'jet-form-builder__required' }>
-					{ _jf_args.required_mark ? _jf_args.required_mark : '*' }
+					{ jfArgs.required_mark ? jfArgs.required_mark : '*' }
 				</span> }
 			</div>
 		</BaseControl.VisualLabel>;
@@ -98,7 +99,7 @@ function FieldWrapper( props ) {
 		</div>;
 	}
 
-	if ( 'row' === _jf_args.fields_layout ) {
+	if ( 'row' === jfArgs.fields_layout ) {
 		wrapClasses.push( 'jet-form-builder-row__flex' );
 	}
 
@@ -111,14 +112,14 @@ function FieldWrapper( props ) {
 				wrapClasses,
 			) }
 		>
-			{ 'row' !== _jf_args.fields_layout && <>
+			{ 'row' !== jfArgs.fields_layout && <>
 				{ 'top' === childrenPosition && children }
 				{ renderLabel() }
 				{ 'between' === childrenPosition && children }
 				{ renderDescription() }
 				{ 'bottom' === childrenPosition && children }
 			</> }
-			{ 'row' === _jf_args.fields_layout && <>
+			{ 'row' === jfArgs.fields_layout && <>
 				<div className="jet-form-builder-row__flex--label">
 					{ renderLabel() }
 					{ renderDescription() }

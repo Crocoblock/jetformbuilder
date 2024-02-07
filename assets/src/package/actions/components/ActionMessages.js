@@ -52,29 +52,29 @@ function ActionMessages( props ) {
 
 	useEffect( () => {
 		const oldMessages = settings.messages || {};
-		const messages    = {};
+		const localMessages    = {};
 
 		Object.entries( source.__messages ).forEach( ( [ type, data ] ) => {
 			if ( !oldMessages[ type ] ) {
-				messages[ type ] = data.value;
+				localMessages[ type ] = data.value;
 			}
 		} );
 
-		if ( messages ) {
-			onChangeSetting( { ...oldMessages, ...messages }, 'messages' );
+		if ( localMessages ) {
+			onChangeSetting( { ...oldMessages, ...localMessages }, 'messages' );
 		}
 	}, [] );
 
 	const setMessage = ( value, nameField ) => {
-		const source = 'messages';
+		const localSource = 'messages';
 
-		setMapField( { value, nameField, source } );
+		setMapField( { value, nameField, source: localSource } );
 	};
 
 	const getMessage = name => {
-		const source = 'messages';
+		const localSource = 'messages';
 
-		return getMapField( { name, source } );
+		return getMapField( { name, source: localSource } );
 	};
 
 	return <BaseControl
@@ -83,7 +83,7 @@ function ActionMessages( props ) {
 	>
 		<div className="jet-user-fields-map__list">
 			{ settings.messages && Object.entries( settings.messages ).
-				map( ( [ type, data ], id ) => <ActionMessageRow
+				map( ( [ type ], id ) => <ActionMessageRow
 						key={ 'message_' + type + id }
 						type={ type }
 						label={ messages( type ).label }

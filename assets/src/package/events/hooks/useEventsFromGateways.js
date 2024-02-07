@@ -29,7 +29,7 @@ function useEventsFromGateways() {
 
 			return [ ...new Set( events ) ];
 		},
-		[ gateways?.gateway ],
+		[ gateways.gateway, scenario?.id ],
 	);
 }
 

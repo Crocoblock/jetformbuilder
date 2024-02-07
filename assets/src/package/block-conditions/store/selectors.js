@@ -10,14 +10,14 @@ const selectors = {
 	},
 	getSwitchableRenderStates( state ) {
 		return state.renderStates.filter(
-			( { is_custom = false, can_be_switched = false } ) => (
-				is_custom || can_be_switched
+			( { is_custom: isCustom = false, can_be_switched: switched = false } ) => (
+				isCustom || switched
 			),
 		);
 	},
 	getCustomRenderStates( state ) {
 		return state.renderStates.filter(
-			( { is_custom = false } ) => is_custom,
+			( { is_custom: isCustom = false } ) => isCustom,
 		);
 	},
 	getOperator( state, operator ) {

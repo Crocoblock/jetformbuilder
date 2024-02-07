@@ -14,10 +14,10 @@ function BlockClassName( { label, help } ) {
 	      ] = useBlockAttributes();
 
 	return <TextControl
-		label={ label ?? __( "CSS Class Name", 'jet-form-builder' ) }
+		label={ label ?? __( 'CSS Class Name', 'jet-form-builder' ) }
 		value={ attributes.class_name }
 		help={ help ?? '' }
-		onChange={ class_name => setAttributes( { class_name } ) }
+		onChange={ val => setAttributes( { class_name: val } ) }
 	/>;
 }
 

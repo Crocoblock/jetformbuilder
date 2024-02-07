@@ -31,6 +31,7 @@ function useFields( options = {}, deps = undefined ) {
 
 	let fields = useSelect(
 		select => select( storeName ).getFields( options ),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		deps,
 	);
 

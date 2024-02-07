@@ -29,10 +29,10 @@ function useUniqueNameOnDuplicate( customChangeNames = null ) {
 
 			const {
 				      hasChanged,
-				      names,
+				      names: namesLocal,
 			      } = select( storeName ).getUniqueNames( clientId );
 
-			return hasChanged ? names : false;
+			return hasChanged ? namesLocal : false;
 		},
 		[ clientId ],
 	);

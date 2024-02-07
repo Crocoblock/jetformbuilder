@@ -5,6 +5,7 @@ const {
       } = wp.blockEditor;
 
 function getCurrentInnerBlocks() {
+	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const { 'data-block': dataBlock } = useBlockProps();
 
 	return getInnerBlocks( dataBlock );

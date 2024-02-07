@@ -1,16 +1,4 @@
-import SafeDeleteContext from '../repeater/context/safe.delete';
-
-const {
-	      useContext,
-      } = wp.element;
-
-const { __ } = wp.i18n;
-
-const onSaveDeleting = index => {
-	return confirm( __( `Are you sure you want to remove item ${ index + 1 }?`,
-		'jet-form-builder' ) );
-};
-
+// eslint-disable-next-line jsdoc/check-types
 /**
  *
  * @param  setItemsData
@@ -24,12 +12,11 @@ const onSaveDeleting = index => {
  * removeOption: function
  * }|null}
  */
+// eslint-disable-next-line max-lines-per-function
 function useRepeaterState( setItemsData ) {
 	if ( 'undefined' === typeof setItemsData ) {
 		return null;
 	}
-
-	const isSafeDeleting = useContext( SafeDeleteContext );
 
 	const changeCurrentItem = function ( valueToSet, index ) {
 		setItemsData( prev => {
@@ -44,10 +31,6 @@ function useRepeaterState( setItemsData ) {
 	};
 
 	const removeOption = function ( index ) {
-		if ( isSafeDeleting && !onSaveDeleting( index ) ) {
-			return;
-		}
-
 		setItemsData( prev => {
 			const prevClone = JSON.parse( JSON.stringify( prev ) );
 			prevClone.splice( index, 1 );

@@ -8,6 +8,7 @@ const {
 		  useState,
 	  } = wp.element;
 
+// eslint-disable-next-line max-lines-per-function
 function MacrosInserter( {
 							 children,
 							 fields,

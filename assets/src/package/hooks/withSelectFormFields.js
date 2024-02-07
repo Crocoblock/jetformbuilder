@@ -1,7 +1,7 @@
 const { applyFilters } = wp.hooks;
 
 const getFormFields = ( blockParserFunc, blocks ) => {
-	blocks.map( block => {
+	blocks.forEach( block => {
 		blockParserFunc( block );
 
 		if ( block.innerBlocks.length ) {

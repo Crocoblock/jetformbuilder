@@ -14,7 +14,6 @@ function GroupedSelectControl( {
 								   help,
 								   instanceId,
 								   label,
-								   multiple = false,
 								   onChange,
 								   options = [],
 								   className,

@@ -14,12 +14,6 @@ module.exports = {
 		'jsdoc/require-param-type': 'off',
 		'jsdoc/require-returns-description': 'off',
 		'jsdoc/no-undefined-types': 'off',
-		'complexity': [
-			'warn',
-			{
-				'max': 4,
-			},
-		],
 		'max-lines-per-function': [
 			'error',
 			{
@@ -82,6 +76,7 @@ module.exports = {
 		JetFormProgressBar: 'readonly',
 		JetFormActionButton: 'readonly',
 		JetFormEditorData: 'readonly',
+		JetFormBuilderSettings: 'readonly',
 		JetFormBuilderAbstract: 'writable',
 		JetFormBuilderFunctions: 'writable',
 		JetPlugins: 'writable',

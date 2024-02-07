@@ -10,6 +10,7 @@ function BaseComputedField() {
  * @param action {BaseAction}
  * @param fields {Object[]}
  */
+// eslint-disable-next-line no-unused-vars
 BaseComputedField.prototype.isSupported = function ( action, fields ) {
 	return this.getSupportedActions().includes( action.type );
 };

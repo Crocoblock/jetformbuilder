@@ -103,6 +103,7 @@ const selectors = {
 			}
 
 			for ( const sanitizer of sanitizers ) {
+				// eslint-disable-next-line max-depth
 				if ( 'function' !== typeof sanitizer ) {
 					continue;
 				}

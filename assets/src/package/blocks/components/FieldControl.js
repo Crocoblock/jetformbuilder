@@ -18,6 +18,8 @@ if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
 }
 
+/* eslint-disable */
+
 function useControls( {
 	type,
 	attributes,

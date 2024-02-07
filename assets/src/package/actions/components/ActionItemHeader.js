@@ -8,13 +8,6 @@ const {
 	      CardHeader,
       } = wp.components;
 
-/**
- * @param  children.children
- * @param  children
- * @param  props
- * @return {JSX.Element|null}
- * @class
- */
 function ActionItemHeader( { children, ...props } = {} ) {
 	const { action } = useLoopedAction();
 

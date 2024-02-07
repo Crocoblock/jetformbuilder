@@ -24,7 +24,7 @@ export default {
 			types,
 		};
 	},
-	[ constants.lockActions ]( state, action ) {
+	[ constants.lockActions ]( state ) {
 		for ( const { id, self: actionSelf } of window.jetFormActionTypes ) {
 			const current = window[ actionSelf ] ?? false;
 

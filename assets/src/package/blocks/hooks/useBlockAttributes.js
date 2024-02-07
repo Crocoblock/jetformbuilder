@@ -4,7 +4,6 @@ const {
 const {
 	      useSelect,
 	      useDispatch,
-	      select,
       } = wp.data;
 
 function useBlockAttributes( otherClientId = null ) {
@@ -28,7 +27,7 @@ function useBlockAttributes( otherClientId = null ) {
 		        ? props
 		        : props( attributes );
 
-		props = select( 'jet-forms/fields' ).getSanitizedAttributes(
+		props = wp.data.select( 'jet-forms/fields' ).getSanitizedAttributes(
 			props,
 			blockProps,
 		);

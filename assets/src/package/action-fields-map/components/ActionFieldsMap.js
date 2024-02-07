@@ -12,6 +12,7 @@ function ActionFieldsMap( {
 	customHelp = false,
 } ) {
 
+	// eslint-disable-next-line @wordpress/no-base-control-with-label-without-id
 	return <BaseControl
 		label={ label }
 		key="jet_fields_map"
@@ -25,19 +26,19 @@ function ActionFieldsMap( {
 				className={ 'description-controls' }
 			>{ plainHelp }</span> }
 
-			{ fields.map( ( [ fieldId, fieldData ], index ) => <React.Fragment
-				key={ `field_in_map_${ fieldId + index }` }
-			>
-				<ActionFieldsMapContext.Provider value={ {
-					name: fieldId,
-					data: fieldData,
-					index,
-				} }>
+			{ fields.map( ( [ fieldId, fieldData ], index ) =>
+				<ActionFieldsMapContext.Provider
+					key={ `field_in_map_${ fieldId + index }` }
+					value={ {
+						name: fieldId,
+						data: fieldData,
+						index,
+					} }
+				>
 					{ 'function' === typeof children
 					  ? children( { fieldId, fieldData, index } )
 					  : children }
-				</ActionFieldsMapContext.Provider>
-			</React.Fragment> ) }
+				</ActionFieldsMapContext.Provider> ) }
 		</div>
 	</BaseControl>;
 }

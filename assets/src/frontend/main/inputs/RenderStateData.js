@@ -4,7 +4,7 @@ import ReactiveSet from '../reactive/ReactiveSet';
 const { builtInStates } = window.JetFormBuilderSettings;
 
 /**
- * @property {ReactiveSet} value
+ * @property {ReactiveSet} value Reactive object, which has "current" property
  *
  * @class
  */

@@ -19,6 +19,7 @@ function HumanReadableConditions( { conditions, showWarning = false } ) {
 			// Exclude first item
 			( c, index ) => 0 !== index,
 		).map(
+			// eslint-disable-next-line react/jsx-key
 			condition => <span
 				data-title={ __( 'And', 'jet-form-builder' ) + ':' }
 				dangerouslySetInnerHTML={ {

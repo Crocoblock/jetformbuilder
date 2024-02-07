@@ -1,3 +1,0 @@
-function UseGlobalControl( { name } ) {
-
-}

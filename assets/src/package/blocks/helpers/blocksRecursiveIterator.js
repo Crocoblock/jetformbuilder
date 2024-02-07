@@ -1,6 +1,7 @@
 const { select } = wp.data;
 
 function blocksRecursiveIterator( blockParserFunc ) {
+	// eslint-disable-next-line no-shadow
 	const blocksRecursiveIterator = ( blocks, parent = null ) => {
 
 		blocks = blocks || select( 'core/block-editor' ).getBlocks();

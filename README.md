@@ -4,6 +4,19 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.3.1
+* ADD: Implementing rich content using the "jet-form-builder/rich-content" filter. It supports shortcodes, macros with 
+field names (usually used in action settings) and dynamic preset (JSON-style)
+* ADD: Many block attributes support rich content now. And also some settings in actions and notifications about 
+the result of the form execution.
+* UPD: Internal API for field (Select, Radio, Checkbox) options. Added `jet-form-builder/option-query/set-in-block` hook.
+* FIX: aria-required attribute in Advanced Choices Field
+* FIX: Accessibility Improvements for several fields
+* FIX: Default validation with the Repeater Field
+* FIX: "Labels" font styles replace "Heading" font styles in JetFormBuilder widget (Bricks)
+* FIX: Switcher style is broken in JetFormBuilder widget (Bricks)
+* FIX: Select field on mobile, select arrow is on the wrong side RTL
+
 ## 3.3.0
 * ADD: Switcher Field
 * ADD: Welcome block with form patterns

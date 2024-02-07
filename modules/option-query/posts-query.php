@@ -51,8 +51,8 @@ class Posts_Query implements Option_Query_It {
 			apply_filters_deprecated(
 				'jet-form-builder/render-choice/query-options/posts',
 				array( $this->get_query_params(), $this->get_settings() ),
-				'3.3.0',
-				'jet-form-builder/option-query/before-fetch'
+				'3.3.1',
+				'jet-form-builder/option-query/set-in-block'
 			)
 		);
 

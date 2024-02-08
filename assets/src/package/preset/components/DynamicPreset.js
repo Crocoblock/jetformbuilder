@@ -16,6 +16,7 @@ const {
 
 const { __ } = wp.i18n;
 
+// eslint-disable-next-line max-lines-per-function
 let DynamicPreset = function ( {
 	value,
 	onSavePreset,
@@ -71,12 +72,10 @@ let DynamicPreset = function ( {
 			help={ (
 				       stateValue.restricted ?? true
 			       ) ? __(
-				`Will set default value from preset only for users 
-who allowed to edit this value`,
+				`Will set default value from preset only for users who allowed to edit this value`,
 				'jet-form-builder',
 			) : __(
-				`Always set default value from preset. Make sure it 
-can't be accidentally changed from form Actions`,
+				`Always set default value from preset. Make sure it can't be accidentally changed from form Actions`,
 				'jet-form-builder',
 			) }
 			checked={ stateValue.restricted ?? true }

@@ -9,6 +9,7 @@ const {
       } = wp.components;
 
 function GroupItemsPopover( { title, items, children, initialOpen } ) {
+	// eslint-disable-next-line react/jsx-key
 	const elements = items.map( item => <PopoverItemMacro current={ item }/> );
 
 	return <PanelBody title={ title } initialOpen={ initialOpen }>

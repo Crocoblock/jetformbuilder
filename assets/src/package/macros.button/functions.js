@@ -9,8 +9,8 @@ function insertMacro( initial, name, nodeElement ) {
 
 	initial = initial ?? '';
 
-	let startString = initial.slice( 0, start ),
-	    endString   = initial.slice( end );
+	let startString = initial.slice( 0, start );
+	const endString = initial.slice( end );
 
 	startString = startString + name;
 

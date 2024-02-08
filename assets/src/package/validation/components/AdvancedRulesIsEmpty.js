@@ -23,7 +23,9 @@ function AdvancedRulesIsEmpty() {
 	return <div
 		className="jet-fb p-relative"
 		onMouseOver={ () => setHover( true ) }
+		onFocus={ () => setHover( true ) }
 		onMouseOut={ () => setHover( false ) }
+		onBlur={ () => setHover( false ) }
 	>
 		<HoverContainer isHover={ isHover }>
 			<Button

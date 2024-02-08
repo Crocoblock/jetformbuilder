@@ -9,6 +9,7 @@ const {
 	      CardHeader,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function
 function AvailableMapFieldPreset( {
 	fieldsMap,
 	field,
@@ -20,43 +21,54 @@ function AvailableMapFieldPreset( {
 
 	let currentVal = null;
 
-	if ( ! fieldsMap ) {
+	if ( !fieldsMap ) {
 		fieldsMap = {};
 	}
 
 	currentVal = fieldsMap[ field ];
 
-	if ( ! currentVal || 'object' !== typeof currentVal ) {
+	if ( !currentVal || 'object' !== typeof currentVal ) {
 		currentVal = {};
 	}
 
-	const AvailableFieldWrapper = ( { field, name, index, fIndex, children } ) => <Card
-		key={ field + name + index + fIndex }
+	const AvailableFieldWrapper = ( {
+		field: localField,
+		name,
+		index: localIndex,
+		fIndex,
+		children,
+	} ) => <Card
+		key={ localField + name + localIndex + fIndex }
 		size={ 'extraSmall' }
 		style={ { marginBottom: '10px' } }
 	>
 		<CardHeader>
-			<span className='jet-label-overflow'>{ field }</span>
+			<span className="jet-label-overflow">{ localField }</span>
 		</CardHeader>
 		<CardBody
-			key={ field + name + index + fIndex }
+			key={ localField + name + localIndex + fIndex }
 			className={ 'jet-form-preset__fields-map-item' }
 		>
 			{ children }
 		</CardBody>
 	</Card>;
 
-	function AvailableFieldWrapperFunc( { field, name, index, fIndex }, children ) {
+	function AvailableFieldWrapperFunc( {
+		field: localField,
+		name,
+		index: localIndex,
+		fIndex,
+	}, children ) {
 		return <Card
-			key={ field + name + index + fIndex }
+			key={ localField + name + localIndex + fIndex }
 			size={ 'extraSmall' }
 			style={ { marginBottom: '10px' } }
 		>
 			<CardHeader>
-				<span className='jet-label-overflow'>{ field }</span>
+				<span className="jet-label-overflow">{ localField }</span>
 			</CardHeader>
 			<CardBody
-				key={ field + name + index + fIndex }
+				key={ localField + name + localIndex + fIndex }
 				className={ 'jet-form-preset__fields-map-item' }
 			>
 				{ children }
@@ -64,16 +76,17 @@ function AvailableMapFieldPreset( {
 		</Card>;
 	}
 
-	return <React.Fragment key={ `map_field_preset_${ field + index }` }>
-
-		{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, fIndex ) => {
+	return window.JetFormEditorData.presetConfig.map_fields.map(
+		// eslint-disable-next-line max-lines-per-function
+		( data, fIndex ) => {
 			const props = { field, name: data.name, index, fIndex };
 
 			const uniqKey = 'control_' + field + data.name + index + fIndex;
 
 			switch ( data.type ) {
 				case 'text':
-					return ( isMapFieldVisible( value, data, field ) &&
+					return (
+						isMapFieldVisible( value, data, field ) &&
 						AvailableFieldWrapperFunc( props, <TextControl
 							key={ uniqKey + 'TextControl' }
 							placeholder={ data.label }
@@ -88,7 +101,8 @@ function AvailableMapFieldPreset( {
 						/> )
 					);
 				case 'select':
-					return ( isMapFieldVisible( value, data, field ) &&
+					return (
+						isMapFieldVisible( value, data, field ) &&
 						<AvailableFieldWrapper { ...props } key={ uniqKey }>
 							<SelectControl
 								options={ data.options }
@@ -106,7 +120,8 @@ function AvailableMapFieldPreset( {
 						</AvailableFieldWrapper>
 					);
 				case 'custom_select':
-					return ( isMapFieldVisible( value, data, field ) &&
+					return (
+						isMapFieldVisible( value, data, field ) &&
 						<AvailableFieldWrapper { ...props } key={ uniqKey }>
 							<CustomSelectControl
 								options={ data.options }
@@ -117,11 +132,15 @@ function AvailableMapFieldPreset( {
 										[ field ]: currentVal,
 									}, 'fields_map' );
 								} }
-								value={ data.options.find( option => option.key === currentVal[ data.name ] ) }
+								value={ data.options.find(
+									option => option.key ===
+										currentVal[ data.name ] ) }
 							/>
-						</AvailableFieldWrapper> );
+						</AvailableFieldWrapper>
+					);
 				case 'grouped_select':
-					return ( isMapFieldVisible( value, data, field ) &&
+					return (
+						isMapFieldVisible( value, data, field ) &&
 						<AvailableFieldWrapper { ...props } key={ uniqKey }>
 							<GroupedSelectControl
 								options={ data.options }
@@ -136,10 +155,12 @@ function AvailableMapFieldPreset( {
 									}, 'fields_map' );
 								} }
 							/>
-						</AvailableFieldWrapper> );
+						</AvailableFieldWrapper>
+					);
+				default:
+					return null;
 			}
-		} ) }
-	</React.Fragment>;
+		} );
 }
 
 export default AvailableMapFieldPreset;

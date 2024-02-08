@@ -22,7 +22,9 @@ function RepeaterAddNew( props ) {
 	      } = props;
 
 	const { addNewItem } = functions
+	// eslint-disable-next-line react-hooks/rules-of-hooks
 	?? useRepeaterState( onSetState )
+	// eslint-disable-next-line react-hooks/rules-of-hooks
 	?? useContext( RepeaterStateContext );
 
 	return <Button

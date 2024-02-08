@@ -15,6 +15,7 @@ const {
 	      Button,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function
 function AdvancedRuleItem( { rule, index = 0 } ) {
 	const { setShowModal }              = useContext( EditRulesModalContext );
 	const [ attributes, setAttributes ] = useBlockAttributes();
@@ -24,7 +25,9 @@ function AdvancedRuleItem( { rule, index = 0 } ) {
 	return <div
 		className="jet-fb p-relative"
 		onMouseOver={ () => setHover( true ) }
+		onFocus={ () => setHover( true ) }
 		onMouseOut={ () => setHover( false ) }
+		onBlur={ () => setHover( false ) }
 	>
 		<HoverContainer isHover={ isHover }>
 			<Button

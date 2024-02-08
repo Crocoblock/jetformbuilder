@@ -3,7 +3,6 @@ const semverLt  = require( 'semver/functions/lt' );
 const semverGte = require( 'semver/functions/gte' );
 const semverLte = require( 'semver/functions/lte' );
 
-const { __ }           = wp.i18n;
 const { applyFilters } = wp.hooks;
 
 class Tools {
@@ -22,10 +21,6 @@ class Tools {
 	 * @return {boolean}
 	 */
 	static isEmptyObject( object ) {
-		console.warn(
-			'Use JetFBActions.isEmpty insteadof JetFBActions.Tools.isEmptyObject',
-		);
-
 		return isEmpty( object );
 	}
 
@@ -153,6 +148,7 @@ export function classnames( ...additional ) {
 			}
 			if ( 'object' === typeof itemClass ) {
 				for ( const itemClassKey in itemClass ) {
+					// eslint-disable-next-line max-depth
 					if ( itemClass[ itemClassKey ] ) {
 						result.push( (
 							itemClassKey + ''
@@ -179,9 +175,13 @@ export function convertObjectToOptionsList( entries = [], {
 		return usePlaceholder ? [ placeholder ] : [];
 	}
 
-	const options = Object.entries( entries ).map( ( [ value, label ] ) => {
-		return { value, label };
-	} );
+	const options = Object.entries( entries ).
+		map( ( [ localValue, localLabel ] ) => (
+			{
+				value: localValue,
+				label: localLabel,
+			}
+		) );
 
 	return usePlaceholder ? [ placeholder, ...options ] : options;
 }
@@ -262,6 +262,5 @@ export const extendPrototype = ( ParentFunction ) => {
 
 	return ChildFunctionPrototype;
 };
-
 
 export default Tools;

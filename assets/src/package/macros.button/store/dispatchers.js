@@ -10,7 +10,6 @@ export default {
 			if ( macro instanceof BaseMacro ) {
 				continue;
 			}
-			console.error( macro );
 			throw new Error( '^^^ Invalid macro item ^^^' );
 		}
 

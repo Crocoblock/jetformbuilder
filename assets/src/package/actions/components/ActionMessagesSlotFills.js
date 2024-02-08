@@ -14,6 +14,7 @@ for ( const { self } of jetFormActionTypes ) {
 	}
 
 	for ( const messageKey of Object.keys( window[ self ].__messages ) ) {
+		// eslint-disable-next-line max-depth
 		if ( ActionMessagesSlotFills.hasOwnProperty( messageKey ) ) {
 			continue;
 		}

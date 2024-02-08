@@ -40,10 +40,10 @@ function ValidationMetaMessage( {
 			key={ 'validation_message_' + message.id }
 			help={ help ?? current?.help }
 			value={ value ?? current?.initial }
-			onChange={ value => update( prev => (
+			onChange={ val => update( prev => (
 				{
 					...prev,
-					[ message.id ]: value,
+					[ message.id ]: val,
 				}
 			) ) }
 		/>

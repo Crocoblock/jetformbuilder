@@ -17,12 +17,13 @@ function observeComment( comment, root ) {
 	if ( !formula.parts?.length ) {
 		console.group(
 			__(
-				'JetFormBuilder: You have invalid html macro',
+				`JetFormBuilder: You have invalid html macro`,
 				'jet-form-builder',
 			),
 		);
 		console.error(
 			sprintf(
+				// translators: %s - comment original content
 				__( 'Content: %s', 'jet-form-builder' ),
 				comment.textContent,
 			),

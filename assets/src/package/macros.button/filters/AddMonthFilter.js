@@ -12,8 +12,7 @@ function AddMonthFilter() {
 	this.isClientSide = true;
 
 	this.help = __(
-		`Adds the passed number of months via an argument 
-		to a macro that returns a date or a timestamp.`,
+		'Adds the passed number of months via an argument to a macro that returns a date or a timestamp.',
 		'jet-form-builder',
 	);
 }

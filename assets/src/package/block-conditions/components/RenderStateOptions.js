@@ -37,6 +37,7 @@ const RenderStateOptions = ( { currentItem, changeCurrentItem } ) => {
 		>
 
 			<div>
+				{/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
 				<label className={ 'jet-fb label mb-05-em' }>
 					{ __( 'Add render state', 'jet-form-builder' ) }
 				</label>

@@ -12,8 +12,7 @@ function AddDayFilter() {
 	this.isClientSide = true;
 
 	this.help = __(
-		`Adds the passed number of days via an argument 
-		to a macro that returns a date or a timestamp.`,
+		'Adds the passed number of days via an argument to a macro that returns a date or a timestamp.',
 		'jet-form-builder',
 	);
 }

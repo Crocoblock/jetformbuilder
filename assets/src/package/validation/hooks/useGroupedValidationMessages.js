@@ -18,9 +18,9 @@ function getGroupedMessages() {
 }
 
 function useGroupedValidationMessages() {
-	const [ messages ] = useState( getGroupedMessages );
+	const [ localMessages ] = useState( getGroupedMessages );
 
-	return messages;
+	return localMessages;
 }
 
 export default useGroupedValidationMessages;

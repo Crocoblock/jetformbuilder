@@ -18,6 +18,7 @@ for ( const { id, name } of window.jetFormActionTypes ) {
 	actionTypesMap[ id ] = name;
 }
 
+// eslint-disable-next-line max-lines-per-function
 function useIsUniqueFieldName() {
 	const { clientId } = useBlockEditContext();
 	const actionFields = useRequestFields(

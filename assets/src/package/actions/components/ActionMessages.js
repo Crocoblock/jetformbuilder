@@ -63,6 +63,7 @@ function ActionMessages( props ) {
 		if ( localMessages ) {
 			onChangeSetting( { ...oldMessages, ...localMessages }, 'messages' );
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	const setMessage = ( value, nameField ) => {
@@ -77,6 +78,7 @@ function ActionMessages( props ) {
 		return getMapField( { name, source: localSource } );
 	};
 
+	// eslint-disable-next-line @wordpress/no-base-control-with-label-without-id
 	return <BaseControl
 		label={ __( 'Messages Settings:', 'jet-form-builder' ) }
 		key="messages_settings_fields"

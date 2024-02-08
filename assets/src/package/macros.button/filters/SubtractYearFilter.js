@@ -12,8 +12,7 @@ function SubtractYearFilter() {
 	this.isClientSide = true;
 
 	this.help = __(
-		`Subtracts the number of years by argument
-from a macro that returns a date or timestamp.`,
+		'Subtracts the number of years by argument from a macro that returns a date or timestamp.',
 		'jet-form-builder',
 	);
 }

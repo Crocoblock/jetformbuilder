@@ -26,6 +26,7 @@ const {
  * @return {JSX.Element}
  * @class
  */
+// eslint-disable-next-line max-lines-per-function
 function Repeater( props ) {
 	const {
 		      items,
@@ -42,7 +43,9 @@ function Repeater( props ) {
 		      changeCurrentItem,
 		      removeOption,
 	      } = functions
+	// eslint-disable-next-line react-hooks/rules-of-hooks
 	?? useRepeaterState( onSetState )
+	// eslint-disable-next-line react-hooks/rules-of-hooks
 	?? useContext( RepeaterStateContext );
 
 	const {
@@ -75,6 +78,7 @@ function Repeater( props ) {
 		className={ 'jet-form-builder__repeater-component' }
 		key={ 'jet-form-builder-repeater' }
 	>
+		{/* eslint-disable-next-line max-lines-per-function */}
 		{ items.map( ( currentItem, index ) => <Card
 			size="small"
 			elevation={ 2 }

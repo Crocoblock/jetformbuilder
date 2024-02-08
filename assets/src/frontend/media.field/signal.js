@@ -3,7 +3,7 @@ import { appendNodes, createFile, createFileList, isFile } from './functions';
 const { BaseSignal } = window.JetFormBuilderAbstract;
 
 /**
- * @property {FileData} input
+ * @property {FileData} input Related input
  */
 function SignalFile() {
 	BaseSignal.call( this );

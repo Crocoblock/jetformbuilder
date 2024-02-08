@@ -1,6 +1,8 @@
 const { applyFilters } = wp.hooks;
 
+// eslint-disable-next-line max-lines-per-function
 function withPreset( WrappedComponent ) {
+	// eslint-disable-next-line max-lines-per-function
 	return function JetFormPresetEditor( props ) {
 
 		const parseValue = () => {
@@ -12,6 +14,7 @@ function withPreset( WrappedComponent ) {
 			else if ( props.value && 'string' === typeof props.value ) {
 				try {
 					val = JSON.parse( props.value );
+					// eslint-disable-next-line max-depth
 					if ( 'number' === typeof val ) {
 						throw new Error();
 					}

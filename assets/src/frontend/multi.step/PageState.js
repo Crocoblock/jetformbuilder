@@ -90,7 +90,11 @@ PageState.prototype.observeInputs = function () {
 	for ( const node of this.node.querySelectorAll( '[data-jfb-sync]' ) ) {
 		const input = this.observeInput( node );
 
-		input && doAction(
+		if ( !input ) {
+			return;
+		}
+
+		doAction(
 			'jet.fb.multistep.page.observed.input',
 			input,
 			this,
@@ -152,14 +156,16 @@ PageState.prototype.observeConditionalBlocks = function () {
 			this.state.getRoot(),
 		);
 
-		for ( const condition of block.list.getConditions() ) {
-			if ( condition instanceof ConditionPageStateItem ) {
-				block.page = this;
-				this.canSwitch.watch( () => block.list.onChangeRelated() );
+		const hasConditionPageState = block.list.getConditions().some(
+			condition => condition instanceof ConditionPageStateItem,
+		);
 
-				break;
-			}
+		if ( !hasConditionPageState ) {
+			continue;
 		}
+
+		block.page = this;
+		this.canSwitch.watch( () => block.list.onChangeRelated() );
 	}
 };
 
@@ -242,7 +248,11 @@ PageState.prototype.changePage          = async function ( isBack ) {
 		return;
 	}
 
-	this.autoFocus && focusOnInvalidInput( this.getInputs() );
+	if ( !this.autoFocus ) {
+		return;
+	}
+
+	focusOnInvalidInput( this.getInputs() );
 };
 PageState.prototype.isNodeBelongThis    = function ( node ) {
 	const parentPage = node.closest( '.jet-form-builder-page' );
@@ -286,7 +296,7 @@ PageState.prototype.isFirst = function () {
  * @param input {InputData|RepeaterData}
  */
 PageState.prototype.handleInputEnter = function ( input ) {
-	input?.enterKey?.addFilter( canSubmit => {
+	input?.enterKey?.addFilter( () => {
 		this.changePage().then( () => {} ).catch( () => {} );
 
 		// prevent submit

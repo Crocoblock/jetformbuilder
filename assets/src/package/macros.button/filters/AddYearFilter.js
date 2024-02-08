@@ -12,8 +12,7 @@ function AddYearFilter() {
 	this.isClientSide = true;
 
 	this.help = __(
-		`Adds the passed number of years through an argument 
-		to a macro that returns a date or a timestamp.`,
+		'Adds the passed number of years through an argument to a macro that returns a date or a timestamp.',
 		'jet-form-builder',
 	);
 }

@@ -1,15 +1,14 @@
 // eslint-disable-next-line jsdoc/check-types
 /**
- *
  * @param  setItemsData
  * @return {{
- * cloneItem: function,
- * addNewItem: function,
- * changeCurrentItem: function,
- * toggleVisible: function,
- * moveDown: function,
- * moveUp: function,
- * removeOption: function
+ * cloneItem: Function,
+ * addNewItem: Function,
+ * changeCurrentItem: Function,
+ * toggleVisible: Function,
+ * moveDown: Function,
+ * moveUp: Function,
+ * removeOption: Function
  * }|null}
  */
 // eslint-disable-next-line max-lines-per-function

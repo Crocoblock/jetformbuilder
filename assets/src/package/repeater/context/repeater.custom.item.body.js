@@ -1,6 +1,6 @@
 const { createContext } = wp.element;
 
 export default createContext( {
-	isSupported: item => false,
+	isSupported: () => false,
 	render: ({children}) => children,
 } );

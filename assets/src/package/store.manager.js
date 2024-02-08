@@ -37,13 +37,13 @@ addAction(
 	function ( states ) {
 		dispatch( 'jet-forms/events' ).clearDynamicEvents();
 
-		const events = states.map( ( { value } ) => {
+		const localEvents = states.map( ( { value } ) => {
 			value = 'ON.' + value;
 
 			return { value, label: value, isDynamic: true };
 		} );
 
-		dispatch( 'jet-forms/events' ).register( events );
+		dispatch( 'jet-forms/events' ).register( localEvents );
 	},
 );
 

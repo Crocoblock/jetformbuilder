@@ -25,6 +25,7 @@ function getRulesList( rules ) {
 	);
 
 	return [
+		// eslint-disable-next-line react/jsx-key
 		<AdvancedRuleItem
 			rule={ rules[ 0 ] }
 		/>,

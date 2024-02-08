@@ -6,6 +6,7 @@ const {
 	      CustomSelectControl,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function
 function MapFieldPreset( {
 	data,
 	value,
@@ -13,7 +14,6 @@ function MapFieldPreset( {
 	currentState,
 	onChangeValue,
 	isCurrentFieldVisible,
-	position = 'general',
 } ) {
 
 	switch ( data.type ) {

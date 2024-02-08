@@ -51,6 +51,7 @@ function useUniqueNameOnDuplicate( customChangeNames = null ) {
 		setAttrs( {
 			name: names.split( '|' )[ 0 ],
 		} );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ names ] );
 }
 

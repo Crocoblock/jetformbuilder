@@ -12,8 +12,7 @@ function FallbackFilter() {
 	this.isClientSide = true;
 
 	this.help = __(
-		`If the macro returns an empty value, 
-		then the filter returns the value passed in the argument`,
+		'If the macro returns an empty value, then the filter returns the value passed in the argument',
 		'jet-form-builder',
 	);
 }

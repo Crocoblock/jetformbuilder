@@ -16,7 +16,7 @@ modules:
             dsn: '%TEST_SITE_DB_DSN%'
             user: '%TEST_SITE_DB_USER%'
             password: '%TEST_SITE_DB_PASSWORD%'
-            dump: 'tests/_data/dump.sql'
+            dump: 'tests/codeception/_data/dump.sql'
             populate: true
             cleanup: true
             waitlock: 10

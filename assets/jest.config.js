@@ -5,9 +5,6 @@
 
 /** @type {import('jest').Config} */
 const config = {
-	projects: [
-		'<rootDir>/assets/src/test',
-	],
 
 	// Automatically clear mock calls, instances, contexts and results before
 	// every test
@@ -15,6 +12,10 @@ const config = {
 
 	// The test environment that will be used for testing
 	testEnvironment: 'jsdom',
+
+	setupFiles: [
+		'<rootDir>/jest.setup.js',
+	],
 };
 
 module.exports = config;

@@ -2,6 +2,7 @@ module.exports = {
 	env: {
 		browser: true,
 		es6: true,
+		'jest/globals': true,
 	},
 	extends: [
 		'plugin:@wordpress/eslint-plugin/recommended',
@@ -57,6 +58,7 @@ module.exports = {
 		'react',
 		'vue',
 		'@stylistic',
+		'jest',
 	],
 	'globals': {
 		window: 'readonly',

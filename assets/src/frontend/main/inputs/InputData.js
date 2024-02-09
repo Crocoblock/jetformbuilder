@@ -124,7 +124,7 @@ InputData.prototype.addListeners = function () {
 	}
 
 	this.enterKey = new ReactiveHook();
-	node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
+	node.addEventListener( 'keydown', event =>  this.handleEnterKey( event ) );
 };
 InputData.prototype.makeReactive = function () {
 	this.onObserve();

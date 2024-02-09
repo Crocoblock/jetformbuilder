@@ -7,6 +7,10 @@ function ReactiveSet( value ) {
 ReactiveSet.prototype = Object.create( ReactiveVar.prototype );
 
 ReactiveSet.prototype.add = function ( stateName ) {
+	if ( this.current.includes( stateName ) ) {
+		return;
+	}
+
 	// add unique value
 	this.current = [
 		...new Set( [
@@ -19,6 +23,9 @@ ReactiveSet.prototype.add = function ( stateName ) {
 };
 
 ReactiveSet.prototype.remove = function ( stateName ) {
+	if ( !this.current.includes( stateName ) ) {
+		return;
+	}
 	this.current = this.current.filter(
 		item => item !== stateName,
 	);

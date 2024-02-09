@@ -96,7 +96,7 @@ class Autoloader {
 		'Jet_Form_Builder\\Request\\Parser_Manager'        => 'JFB_Modules\\Block_Parsers\\Module',
 		'Jet_Form_Builder\\Request\\Field_Data_Parser'     => 'JFB_Modules\\Block_Parsers\\Field_Data_Parser',
 		'Jet_Form_Builder\\Blocks\\Validation'             => 'JFB_Modules\\Validation\\Module',
-		//block renderers
+		// block renderers
 		'Jet_Form_Builder\\Blocks\\Render\\Radio_Field_Render'    => 'JFB_Modules\\Option_Field\\Blocks\\Radio\\Block_Render',
 		'Jet_Form_Builder\\Blocks\\Render\\Select_Field_Render'   => 'JFB_Modules\\Option_Field\\Blocks\\Select\\Block_Render',
 		'Jet_Form_Builder\\Blocks\\Render\\Checkbox_Field_Render' => 'JFB_Modules\\Option_Field\\Blocks\\Checkbox\\Block_Render',

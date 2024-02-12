@@ -16,7 +16,6 @@ use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
-use JFB_Modules\Validation\Messages;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -56,26 +55,6 @@ final class Module implements
 	 * @throws Repository_Exception
 	 */
 	public function on_install() {
-		$this->rules    = new Rules_Controller();
-		$this->messages = apply_filters(
-			'jet-form-builder/validation-messages',
-			array(
-				new Messages\Is_Empty_Value(),
-				new Messages\Is_Number_Min(),
-				new Messages\Is_Number_Max(),
-				new Messages\Is_Char_Min(),
-				new Messages\Is_Char_Max(),
-				new Messages\Is_Not_Valid_Email(),
-				new Messages\Is_Not_Valid_Url(),
-				new Messages\Is_Not_Complete_Mask(),
-				new Messages\Is_Files_Max(),
-				new Messages\Is_File_Size(),
-				new Messages\Is_File_Ext(),
-				new Messages\Is_Date_Min(),
-				new Messages\Is_Date_Max(),
-			)
-		);
-
 		/** @var \JFB_Modules\Post_Type\Module $post_type */
 		$post_type = jet_form_builder()->module( 'post-type' );
 		$post_type->get_meta()->install( new Post_Type\Validation_Meta() );
@@ -89,7 +68,8 @@ final class Module implements
 	 * @throws Repository_Exception
 	 */
 	public function on_uninstall() {
-		unset( $this->rules, $this->messages );
+		$this->rules    = null;
+		$this->messages = array();
 
 		/** @var \JFB_Modules\Post_Type\Module $post_type */
 		$post_type = jet_form_builder()->module( 'post-type' );
@@ -268,7 +248,9 @@ final class Module implements
 			'messages' => array(),
 		);
 
-		foreach ( $this->messages as $message ) {
+		$messages = $this->get_messages();
+
+		foreach ( $messages as $message ) {
 			$response['messages'][ $message->get_id() ] = (
 				$validation['messages'][ $message->get_id() ] ?? $message->get_initial()
 			);
@@ -309,7 +291,11 @@ final class Module implements
 	}
 
 	public function validate_block( Field_Data_Parser $parser ) {
-		if ( ! $this->is_advanced( $parser->get_settings() ) ) {
+		if (
+			! $this->is_advanced( $parser->get_settings() ) ||
+			! $parser->get_value() ||
+			$parser->is_inside_conditional()
+		) {
 			return;
 		}
 
@@ -321,10 +307,10 @@ final class Module implements
 			Editor::EDITOR_PACKAGE_HANDLE,
 			'jetFormValidation',
 			array(
-				'messages'      => Array_Tools::to_array( $this->messages ),
-				'ssr_callbacks' => Array_Tools::to_array( $this->rules->get_ssr()->get_callbacks() ),
+				'messages'      => Array_Tools::to_array( $this->get_messages() ),
+				'ssr_callbacks' => Array_Tools::to_array( $this->get_rules()->get_ssr()->get_callbacks() ),
 				'formats'       => $this->formats(),
-				'rule_types'    => Array_Tools::to_array( $this->rules->rep_get_values() ),
+				'rule_types'    => Array_Tools::to_array( $this->get_rules()->rep_get_values() ),
 			)
 		);
 	}
@@ -333,7 +319,40 @@ final class Module implements
 	 * @return Rules_Controller
 	 */
 	public function get_rules(): Rules_Controller {
+		if ( ! is_null( $this->rules ) ) {
+			return $this->rules;
+		}
+
+		$this->rules = new Rules_Controller();
+
 		return $this->rules;
+	}
+
+	public function get_messages(): array {
+		if ( ! empty( $this->messages ) ) {
+			return $this->messages;
+		}
+
+		$this->messages = apply_filters(
+			'jet-form-builder/validation-messages',
+			array(
+				new Messages\Is_Empty_Value(),
+				new Messages\Is_Number_Min(),
+				new Messages\Is_Number_Max(),
+				new Messages\Is_Char_Min(),
+				new Messages\Is_Char_Max(),
+				new Messages\Is_Not_Valid_Email(),
+				new Messages\Is_Not_Valid_Url(),
+				new Messages\Is_Not_Complete_Mask(),
+				new Messages\Is_Files_Max(),
+				new Messages\Is_File_Size(),
+				new Messages\Is_File_Ext(),
+				new Messages\Is_Date_Min(),
+				new Messages\Is_Date_Max(),
+			)
+		);
+
+		return $this->messages;
 	}
 
 }

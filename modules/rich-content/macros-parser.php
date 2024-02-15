@@ -134,7 +134,7 @@ class Macros_Parser {
 					$this->maybe_parse_if_array( $value )
 				);
 			}
-			$result .= ( $counter ++ ) . ') ' . implode( ', ', $item_data ) . ';<br>';
+			$result .= ( $counter++ ) . ') ' . implode( ', ', $item_data ) . ';<br>';
 		}
 
 		return $result;

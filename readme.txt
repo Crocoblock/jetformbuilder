@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.0
 Tested up to: 6.4.3
 Requires PHP: 7.0
-Stable tag: 3.3.1
+Stable tag: 3.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,11 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.3.2**
+- FIX: Use macros in Send Email when verifying a submission or processing a gateway.
+- FIX: Apply advanced validation for optional field
+- Tweak: Support for old namespaces for Radio, Select, Checkbox classes
 
 **3.3.1**
 - ADD: Implementing rich content using the "jet-form-builder/rich-content" filter. It supports shortcodes, macros with

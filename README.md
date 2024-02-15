@@ -4,6 +4,11 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.3.2
+* FIX: Use macros in Send Email when verifying a submission or processing a gateway.
+* FIX: Apply advanced validation for optional field 
+* Tweak: Support for old namespaces for Radio, Select, Checkbox classes
+
 ## 3.3.1
 * ADD: Implementing rich content using the "jet-form-builder/rich-content" filter. It supports shortcodes, macros with 
 field names (usually used in action settings) and dynamic preset (JSON-style)

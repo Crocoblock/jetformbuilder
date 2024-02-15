@@ -66,10 +66,6 @@ class Module implements Base_Module_It {
 	}
 
 	public function apply_submit_macros( string $content ): string {
-		if ( ! did_action( 'jet-form-builder/request' ) ) {
-			return $content;
-		}
-
 		return $this->get_parser()->parse_macros( $content );
 	}
 

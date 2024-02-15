@@ -5,6 +5,7 @@ namespace JFB_Modules\Rich_Content;
 
 use Jet_Form_Builder\Classes\Filters\Filters_Manager;
 use Jet_Form_Builder\Classes\Macro_Constants\Constants_Manager;
+use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -22,10 +23,7 @@ class Macros_Parser {
 			$content = $content[0] ?? '';
 		}
 
-		if ( ! $content || ! is_string( $content ) ) {
-			return $this;
-		}
-		$this->content = $content;
+		$this->content = Tools::to_string( $content );
 
 		return $this;
 	}
@@ -136,7 +134,7 @@ class Macros_Parser {
 					$this->maybe_parse_if_array( $value )
 				);
 			}
-			$result .= ( $counter++ ) . ') ' . implode( ', ', $item_data ) . ';<br>';
+			$result .= ( $counter ++ ) . ') ' . implode( ', ', $item_data ) . ';<br>';
 		}
 
 		return $result;

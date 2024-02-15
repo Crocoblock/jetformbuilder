@@ -15,7 +15,9 @@ export default {
 	actions: [
 		{
 			'type': 'verification',
-			'mail_to': 'email',
+			settings: {
+				'mail_to': 'email',
+			},
 		},
 		{
 			'type': 'register_user',

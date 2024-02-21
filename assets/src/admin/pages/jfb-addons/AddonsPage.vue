@@ -177,7 +177,21 @@ export default {
 		},
 
 		isLicenseActivated() {
-			return 0 !== this.licenseList.length;
+			if ( 0 === this.licenseList.length ) {
+				return false;
+			}
+
+			for ( const licenseData of this.licenseList ) {
+				if ( licenseData.license === 'expired' ) {
+					continue;
+				}
+
+				if ( licenseData.license === 'valid' ) {
+					return true;
+				}
+			}
+
+			return false;
 		},
 
 		licenseActionType() {

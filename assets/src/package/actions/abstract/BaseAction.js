@@ -18,7 +18,7 @@ BaseAction.prototype.initData = function ( props ) {
 			       : {};
 		},
 		set: value => {
-			if ( this.settings.hasOwnProperty( this.type ?? '' ) ) {
+			if ( !this.settings.hasOwnProperty( this.type ?? '' ) ) {
 				this.settings[ this.type ] = {};
 			}
 

@@ -1,4 +1,4 @@
-import RenderStateOptions from './RenderStateOptions';;
+import RenderStateOptions from './RenderStateOptions';
 import useUniqKey from '../../blocks/hooks/useUniqKey';
 import ClientSideMacros from '../../macros.button/components/ClientSideMacros';
 import AdvancedModalControl from '../../components/AdvancedModalControl';

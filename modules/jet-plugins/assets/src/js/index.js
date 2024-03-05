@@ -2,12 +2,10 @@ import { createHooks } from '@wordpress/hooks';
 
 class JetPlugins {
 
-	hooks;
-	globalNamespace  = 'jet-plugins';
-	blocksConditions = {};
-
 	constructor( hooksHandler ) {
 		this.hooks = hooksHandler || createHooks();
+		this.globalNamespace = 'jet-plugins';
+		this.blocksConditions = {};
 	}
 
 	hookNameFromBlock( block ) {

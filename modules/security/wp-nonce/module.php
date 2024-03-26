@@ -63,7 +63,7 @@ class Module implements Base_Module_It {
 	}
 
 	public function get_nonce_id(): string {
-		$form_id = jet_fb_live_args()->form_id;
+		$form_id = jet_fb_live()->form_id;
 
 		return self::NONCE_ACTION_PREF . $form_id;
 	}

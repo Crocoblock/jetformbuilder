@@ -1921,7 +1921,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				)
 			);
 
-			$this->add_control(
+			$this->add_responsive_control(
 				'range_max_width',
 				array(
 					'label'      => esc_html__( 'Max Width', 'jet-form-builder' ),
@@ -1948,7 +1948,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				)
 			);
 
-			$this->add_control(
+			$this->add_responsive_control(
 				'track_height',
 				array(
 					'label'      => esc_html__( 'Track Height', 'jet-form-builder' ),
@@ -1969,7 +1969,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				)
 			);
 
-			$this->add_control(
+			$this->add_responsive_control(
 				'thumb_size',
 				array(
 					'label'      => esc_html__( 'Thumb Size', 'jet-form-builder' ),
@@ -2591,7 +2591,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				)
 			);
 
-			$this->add_control(
+			$this->add_responsive_control(
 				'booking_form_repeater_del_size',
 				array(
 					'label'      => esc_html__( 'Icon Size', 'jet-form-builder' ),

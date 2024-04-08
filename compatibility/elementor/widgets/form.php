@@ -1448,7 +1448,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Gap between control and label', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px', 'em', 'rem', 'custom' ), 
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'default' => array(
 						'size' => 8,
 					),

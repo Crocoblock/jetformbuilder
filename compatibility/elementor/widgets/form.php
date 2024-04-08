@@ -1422,11 +1422,11 @@ class Form extends Widget_Base implements Widget_Base_It {
 					'options'     => array(
 						'inline-block' => array(
 							'title' => __( 'Horizontal', 'jet-form-builder' ),
-							'icon'  => 'fa fa-ellipsis-h',
+							'icon'  => 'eicon-ellipsis-h',
 						),
 						'block'        => array(
 							'title' => __( 'Vertical', 'jet-form-builder' ),
-							'icon'  => 'fa fa-bars',
+							'icon'  => 'eicon-editor-list-ul',
 						),
 					),
 					'selectors'   => array(

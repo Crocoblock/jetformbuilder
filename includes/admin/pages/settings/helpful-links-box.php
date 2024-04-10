@@ -26,16 +26,16 @@ class Helpful_Links_Box extends Base_Vui_Panel_Box {
 	}
 
 	public function to_array(): array {
-		$utm = new Utm_Url( 'jetformbuilder-dashboard/settings-help-center' );
-		$utm->set_license( true );
+		$utm = new Utm_Url( 'plugin' );
+		$utm->set_medium( 'settings' );
+		$utm->set_campaign( 'help-center-banner/knowledge-base' );
+		$utm->set_content( $utm->get_license_and_theme( true ) );
 
 		return array_merge(
 			parent::to_array(),
 			array(
-				'link_knowledge'  => $utm->set_campaign( 'knowledge-base' )
-										->add_query( JET_FORM_BUILDER_SITE . '/features/overview/' ),
-				'link_support'    => $utm->set_campaign( 'contact-support' )
-										->add_query( 'https://support.crocoblock.com/support/home/' ),
+				'link_knowledge'  => $utm->add_query( JET_FORM_BUILDER_SITE . '/features/overview/' ),
+				'link_support'    => 'https://support.crocoblock.com/support/home/',
 				'link_community'  => 'https://www.facebook.com/groups/CrocoblockCommunity',
 				'link_git'        => 'https://github.com/Crocoblock/jetformbuilder',
 				'label_knowledge' => __( 'Knowledge base', 'jet-form-builder' ),

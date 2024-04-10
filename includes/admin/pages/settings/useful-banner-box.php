@@ -23,7 +23,7 @@ class Useful_Banner_Box extends Base_Vui_Banner_Box {
 	}
 
 	public function get_content(): string {
-		return __( '15 Addons Available', 'jet-form-builder' );
+		return __( '16 Addons Available', 'jet-form-builder' );
 	}
 
 	public function get_slug(): string {
@@ -35,8 +35,10 @@ class Useful_Banner_Box extends Base_Vui_Banner_Box {
 	}
 
 	public function get_buttons(): array {
-		$utm = new Utm_Url( 'jetformbuilder-dashboard/settings-try-more' );
-		$utm->set_campaign( 'discover-addons' );
+		$utm = new Utm_Url( 'plugin' );
+		$utm->set_medium( 'settings' );
+		$utm->set_campaign( 'try-more-banner/discover-addons-button' );
+		$utm->set_content( $utm->get_license_and_theme() );
 
 		return array(
 			( new Button( 'useful-button' ) )

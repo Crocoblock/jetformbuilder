@@ -2,6 +2,8 @@ import ProSinglePattern from '../components/ProSinglePattern';
 
 const { __ } = wp.i18n;
 
+const { resetPassPattern } = JetFormEditorData.utmLinks;
+
 export default {
 	name: 'reset_password',
 	title: __( 'Reset Password', 'jet-form-builder' ),
@@ -20,4 +22,5 @@ export default {
 	blocks: [],
 	actions: [],
 	view: ProSinglePattern,
+	link: resetPassPattern,
 };

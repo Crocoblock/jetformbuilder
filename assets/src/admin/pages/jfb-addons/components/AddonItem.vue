@@ -178,13 +178,15 @@ export default {
 		},
 
 		learnMoreUrl() {
-			const license = this.$parent.isLicenseActivated ? 'jetformbuilder-license' : 'license-not-activated';
+			const license      = this.$parent.isLicenseActivated ? 'jetformbuilder-license' : 'license-not-activated';
+			const [ campaign ] = this.addonData.slug.split( '/' );
 
 			let demoUrl   = this.addonData.demo,
 			    utmParams = this.$parent.getUtmParamsString( {
-				    utm_source: `jetformbuilder-dashboard/addons`,
-				    utm_medium: `${ license }/${ this.$parent.themeInfo.authorSlug }`,
-				    utm_campaign: 'addon-learn-more',
+				    utm_source: `plugin`,
+				    utm_medium: 'addons',
+				    utm_campaign: campaign.replace( 'jet-form-builder-', '' ),
+				    utm_content: `${ license }/${ this.$parent.themeInfo.authorSlug }`,
 			    } );
 
 			return `${ demoUrl }?${ utmParams }`;

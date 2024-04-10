@@ -2,6 +2,8 @@ import ProSinglePattern from '../components/ProSinglePattern';
 
 const { __ } = wp.i18n;
 
+const { userLoginPattern } = JetFormEditorData.utmLinks;
+
 export default {
 	name: 'user_login',
 	title: __( 'User Login', 'jet-form-builder' ),
@@ -17,4 +19,5 @@ export default {
 	blocks: [],
 	actions: [],
 	view: ProSinglePattern,
+	link: userLoginPattern,
 };

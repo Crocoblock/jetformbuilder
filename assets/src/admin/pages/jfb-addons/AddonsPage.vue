@@ -213,9 +213,10 @@ export default {
 		goProLink() {
 			let pricingPageUrl = this.miscInfo.pricingPageUrl,
 			    utmParams      = this.getUtmParamsString( {
-				    utm_source: `jetformbuilder-dashboard/addons`,
-				    utm_medium: `license-not-activated/${ this.themeInfo.authorSlug }`,
+				    utm_source: `plugin`,
+				    utm_medium: 'addons',
 				    utm_campaign: 'go-pro-button',
+				    utm_content: `license-not-activated/${ this.themeInfo.authorSlug }`,
 			    } );
 
 			return `${ pricingPageUrl }?${ utmParams }`;

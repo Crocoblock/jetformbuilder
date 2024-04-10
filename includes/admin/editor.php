@@ -376,7 +376,10 @@ class Editor {
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$post_type = jet_form_builder()->module( 'post-type' );
 
-		$utm     = new Utm_Url( 'wp-admin/editor-jet-form' );
+		$utm = new Utm_Url( 'plugin' );
+		$utm->set_medium( 'editor' );
+		$utm->set_content( $utm->get_license_and_theme() );
+
 		$addons  = JET_FORM_BUILDER_SITE . '/addons/';
 		$pricing = JET_FORM_BUILDER_SITE . '/pricing/';
 
@@ -395,9 +398,11 @@ class Editor {
 					'actionConditionSettings' => $conditions_settings,
 					'argumentsSource'         => Form_Arguments::get_options(),
 					'utmLinks'                => array(
-						'allProActions'  => $utm->set_campaign( 'pro-actions' )->add_query( $addons ),
-						'limitResponses' => $utm->set_campaign( 'responses-pricing' )->add_query( $pricing ),
-						'scheduleForm'   => $utm->set_campaign( 'schedule-pricing' )->add_query( $pricing ),
+						'allProActions'    => $utm->set_campaign( 'jetform-settings/pro-actions' )->add_query( $addons ),
+						'limitResponses'   => $utm->set_campaign( 'jetform-settings/limit-form-responses' )->add_query( $pricing ),
+						'scheduleForm'     => $utm->set_campaign( 'jetform-settings/schedule-forms' )->add_query( $pricing ),
+						'userLoginPattern' => $utm->set_campaign( 'welcome-block/user-login' )->add_query( $addons . 'user-login/' ),
+						'resetPassPattern' => $utm->set_campaign( 'welcome-block/reset-password' )->add_query( $addons . 'user-login/' ),
 					),
 					'isActivePro'             => jet_form_builder()->addons_manager->is_active(),
 					'assetsUrl'               => jet_form_builder()->plugin_url( 'assets/' ),

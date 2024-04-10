@@ -27,8 +27,10 @@ class Pro_Notice extends Base_Notice {
 	}
 
 	public function get_buttons(): array {
-		$utm = new Utm_Url( 'wp-dashboard/jetformbuilder-notification' );
-		$utm->set_campaign( 'check-pro-addons' );
+		$utm = new Utm_Url( 'plugin' );
+		$utm->set_medium( 'notification-bar' );
+		$utm->set_campaign( 'check-pro-addons-button' );
+		$utm->set_content( $utm->get_license_and_theme() );
 
 		return array(
 			( new Button( 'check' ) )

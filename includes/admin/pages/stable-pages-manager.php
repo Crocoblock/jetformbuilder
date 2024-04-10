@@ -75,8 +75,10 @@ class Stable_Pages_Manager {
 		$pages  = array();
 
 		if ( ! jet_form_builder()->addons_manager->is_active() ) {
-			$utm = new Utm_Url( 'wp-dashboard/jetformbuilder-menu' );
+			$utm = new Utm_Url( 'plugin' );
+			$utm->set_medium( 'jfb-menu' );
 			$utm->set_campaign( 'go-pro-button' );
+			$utm->set_content( $utm->get_license_and_theme() );
 
 			$pages[] = array(
 				'title'      => __( 'Go PRO', 'jet-form-builder' ),

@@ -100,8 +100,10 @@ For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</
 			jet_form_builder()->get_version()
 		);
 
-		$utm = new Utm_Url( 'wp-dashboard/jet-form-builder-plugins-page' );
+		$utm = new Utm_Url( 'plugin' );
+		$utm->set_medium( 'all_plugins' );
 		$utm->set_campaign( 'go-pro-button' );
+		$utm->set_content( $utm->get_license_and_theme() );
 
 		$url = $utm->add_query( JET_FORM_BUILDER_SITE . '/pricing/' );
 

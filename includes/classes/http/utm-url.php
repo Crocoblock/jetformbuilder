@@ -13,10 +13,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Utm_Url {
 
-	private $check_license = false;
-	private $source        = '';
-	private $medium        = '';
-	private $campaign      = '';
+	private $source   = '';
+	private $medium   = '';
+	private $campaign = '';
+	private $content  = '';
 
 	public function __construct( string $source = '' ) {
 		if ( $source ) {
@@ -24,35 +24,44 @@ class Utm_Url {
 		}
 	}
 
-	public function set_source( string $source ): Utm_Url {
-		$this->source = rawurlencode( $source );
-
-		return $this;
-	}
-
-	public function set_license( bool $check_license ): Utm_Url {
-		$this->check_license = $check_license;
-
-		return $this;
-	}
-
-	public function get_medium(): string {
-		if ( ! $this->medium ) {
-			$this->medium = $this->get_raw_medium();
-		}
-
-		return $this->medium;
-	}
-
 	public function add_query( string $url ): string {
 		return add_query_arg(
-			array(
-				'utm_source'   => $this->source,
-				'utm_medium'   => $this->get_medium(),
-				'utm_campaign' => $this->campaign,
-			),
+			iterator_to_array( $this->generate_args() ),
 			$url
 		);
+	}
+
+
+	public function get_license_and_theme( bool $check_license = false ): string {
+		$page = jet_fb_current_page();
+		if ( ! $page ) {
+			$author_slug = ( new Theme_Info() )->author_slug();
+		} else {
+			$author_slug = $page->theme()->author_slug();
+		}
+		$license = $check_license
+			? jet_form_builder()->addons_manager->get_slug()
+			: Manager::NOT_ACTIVE;
+
+		return "$license/$author_slug";
+	}
+
+	private function generate_args(): \Generator {
+		if ( $this->source ) {
+			yield 'utm_source' => rawurlencode( $this->source );
+		}
+
+		if ( $this->get_medium() ) {
+			yield 'utm_medium' => rawurlencode( $this->get_medium() );
+		}
+
+		if ( $this->campaign ) {
+			yield 'utm_campaign' => rawurlencode( $this->campaign );
+		}
+
+		if ( $this->content ) {
+			yield 'utm_content' => rawurlencode( $this->content );
+		}
 	}
 
 	public function set_campaign( string $campaign ): Utm_Url {
@@ -61,18 +70,32 @@ class Utm_Url {
 		return $this;
 	}
 
-	private function get_raw_medium(): string {
-		$page = jet_fb_current_page();
-		if ( ! $page ) {
-			$author_slug = ( new Theme_Info() )->author_slug();
-		} else {
-			$author_slug = $page->theme()->author_slug();
-		}
-		$license = $this->check_license
-			? jet_form_builder()->addons_manager->get_slug()
-			: Manager::NOT_ACTIVE;
+	public function set_source( string $source ): Utm_Url {
+		$this->source = $source;
 
-		return rawurlencode( "$license/$author_slug" );
+		return $this;
+	}
+
+	/**
+	 * @param string $content
+	 */
+	public function set_content( string $content ) {
+		$this->content = $content;
+	}
+
+	/**
+	 * @param string $medium
+	 */
+	public function set_medium( string $medium ) {
+		$this->medium = $medium;
+	}
+
+	public function get_medium(): string {
+		if ( ! $this->medium ) {
+			$this->medium = $this->get_license_and_theme();
+		}
+
+		return $this->medium;
 	}
 
 

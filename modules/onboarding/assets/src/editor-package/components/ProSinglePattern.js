@@ -54,9 +54,10 @@ function ProSinglePattern( { pattern } ) {
 					) }</span>
 					&nbsp;
 					<ExternalLink
-						href="https://jetformbuilder.com/pricing/"
+						href={ pattern.link ??
+							'https://jetformbuilder.com/pricing/' }
 					>
-						{ __( 'jetformbuilder.com', 'jet-form-builder' ) }
+						jetformbuilder.com
 					</ExternalLink>
 				</div>
 			</Popover>

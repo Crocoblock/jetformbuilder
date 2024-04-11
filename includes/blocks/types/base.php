@@ -67,7 +67,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 *
 	 * @var array
 	 */
-	public $attrs            = array();
+	public $attrs               = array();
 	protected $provides_context = array();
 	protected $uses_context     = array();
 
@@ -343,6 +343,10 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		$rich_no_preset = $this->attrs[ $name ]['jfb']['rich-no-preset'] ?? false;
 		$value          = $this->block_attrs[ $name ];
 
+		if ( is_numeric( $value ) ) {
+			return $value;
+		}
+
 		if ( $rich ) {
 			// immediately return, because rich method also parsing preset and shortcodes
 			return Rich_Content\Module::rich( $value );
@@ -446,7 +450,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			return $custom_value;
 		}
 
-		$value = ( $row[ $name ] ?? $this->get_field_value( $attributes ) ) ?: '';
+		$value = ( $row[ $name ] ?? $this->get_field_value( $attributes ) );
 
 		return Preset_Manager::instance()->prepare_result( $this->get_name(), $value );
 	}
@@ -774,7 +778,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		$this->block_attrs[ $key ] = $value;
 
 		if ( is_array( \WP_Block_Supports::$block_to_render ) &&
-			 ! empty( \WP_Block_Supports::$block_to_render['attrs'] )
+			! empty( \WP_Block_Supports::$block_to_render['attrs'] )
 		) {
 			\WP_Block_Supports::$block_to_render['attrs'][ $key ] = $value;
 		}

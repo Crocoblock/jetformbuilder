@@ -1,11 +1,13 @@
 (
 	function ( $ ) {
-		const CaptchaHandler = function (
-			formID, { key }, resolve, reject ) {
-			var script  = document.querySelector(
-				'script#jet-form-builder-recaptcha-js' ),
-			    cpField = $( 'form[data-form-id="' + formID + '"]' ).
-				    find( '.captcha-token' );
+		const CaptchaHandler = function ( formNode, { key }, resolve, reject ) {
+			let script         = document.querySelector(
+				'script#jet-form-builder-recaptcha-js',
+			);
+			const captchaField = formNode.querySelector(
+				'[name="_captcha_token"]',
+			);
+			const formID       = +formNode.dataset.formId;
 
 			function setFormToken() {
 				if ( window.grecaptcha ) {
@@ -15,7 +17,7 @@
 							action: 'jet_form_builder_captcha__' + formID,
 						},
 					).then( function ( token ) {
-						cpField.val( token );
+						captchaField.value = token;
 						resolve();
 					} );
 				}
@@ -32,9 +34,7 @@
 				script.src = 'https://www.google.com/recaptcha/api.js?render=' +
 					key;
 
-				const currentInput = cpField[ cpField.length - 1 ];
-
-				currentInput.parentNode.insertBefore( script, currentInput );
+				captchaField.parentNode.insertBefore( script, captchaField );
 
 				setFormToken();
 
@@ -44,15 +44,16 @@
 			}
 		};
 
-		const setUpCaptcha = function ( formID, resolve, reject ) {
-			const current = window.JetFormBuilderCaptchaConfig[ formID ] ||
+		const setUpCaptcha = function ( formNode, resolve, reject ) {
+			const formID  = +formNode.dataset.formId;
+			const current = window.JetFormBuilderCaptchaConfig?.[ formID ] ||
 				{};
 
 			if ( !Object.values( current )?.length ) {
 				return resolve();
 			}
 
-			window.JetFormBuilderCaptcha( formID, current, resolve, reject );
+			window.JetFormBuilderCaptcha( formNode, current, resolve, reject );
 		};
 
 		const setUpMain = function () {
@@ -75,7 +76,7 @@
 				function ( promises, $form ) {
 					promises.push( new Promise( ( resolve, reject ) => {
 						setUpCaptcha(
-							$form.data( 'form-id' ),
+							$form[ 0 ],
 							resolve,
 							reject,
 						);
@@ -89,11 +90,10 @@
 				'jet.fb.submit.reload.promises',
 				'jet-form-builder-recaptcha',
 				function ( promises, event ) {
-					const $form = $( event.target );
 
 					promises.push( new Promise( ( resolve, reject ) => {
 						setUpCaptcha(
-							$form.data( 'form-id' ),
+							event.target,
 							resolve,
 							reject,
 						);

@@ -68,7 +68,19 @@ function MultiStepState() {
 			page => new PageState( page, this ),
 		);
 
-		this.elements.forEach( page => page.observe() );
+		this.elements.forEach(
+			page => page.observe(),
+		);
+		/**
+		 * We should run this method separately, because it initializes
+		 * conditional blocks, which could remove some part of nodes from DOM
+		 *
+		 * And this breaks logic of the other modules
+		 * (switch-page-on-change for example)
+		 */
+		this.elements.forEach(
+			page => page.observeConditionalBlocks(),
+		);
 
 		const { submitter } = this.getRoot().getSubmit();
 		// is ajax

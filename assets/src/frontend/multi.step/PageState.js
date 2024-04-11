@@ -45,7 +45,6 @@ PageState.prototype.observe = function () {
 
 	if ( !this.isLast() ) {
 		this.observeInputs();
-		this.observeConditionalBlocks();
 	}
 
 	this.canSwitch.make();
@@ -141,6 +140,9 @@ PageState.prototype.observeInput = function ( node ) {
  * if all required fields are filled in the page.
  */
 PageState.prototype.observeConditionalBlocks = function () {
+	if ( this.isLast() ) {
+		return;
+	}
 	for ( const node of this.node.querySelectorAll(
 		'[data-jfb-conditional]',
 	) ) {

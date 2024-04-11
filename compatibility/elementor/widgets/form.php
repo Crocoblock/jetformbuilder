@@ -261,8 +261,8 @@ class Form extends Widget_Base implements Widget_Base_It {
 			'checkradio_fields_gap',
 			array(
 				'selectors' => array(
-					'body:not(.rtl) ' . $this->selector( '__field-wrap.checkradio-wrap span::before' ) => 'margin-right: {{SIZE}}px;',
-					'body.rtl ' . $this->selector( '__field-wrap.checkradio-wrap span::before' )       => 'margin-left: {{SIZE}}px;',
+					'body:not(.rtl) ' . $this->selector( '__field-wrap.checkradio-wrap span::before' ) => 'margin-right: {{SIZE}}{{UNIT}};',
+					'body.rtl ' . $this->selector( '__field-wrap.checkradio-wrap span::before' )       => 'margin-left: {{SIZE}}{{UNIT}};',
 				),
 			),
 			array( 'recursive' => true )

@@ -1546,16 +1546,70 @@ class Form extends Widget_Base implements Widget_Base_It {
 			$this->end_controls_tab();
 
 			$this->start_controls_tab(
+				'tab__checkradio_control_border__hover',
+				array(
+					'label' => __( 'Hover', 'jet-form-builder' ),
+				)
+			);
+
+			$this->add_border(
+				$this,
+				'tab__checkradio_control_border__hover',
+				$this->selector( '__field-wrap label :not(:disabled):not(:checked):hover + span::before' )
+			);
+
+			$this->add_control(
+				'tab__checkradio_control_bg_color__hover',
+				array(
+					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__field-wrap label :not(:disabled):not(:checked):hover + span::before' ) => 'background-color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'tab__checkradio_control_border__focus',
+				array(
+					'label' => __( 'Focus', 'jet-form-builder' ),
+				)
+			);
+
+			$this->add_border(
+				$this,
+				'tab__checkradio_control_border__focus',
+				$this->selector( '__field-wrap label :focus:not(:checked) + span::before' )
+			);
+
+			$this->add_control(
+				'tab__checkradio_control_bg_color__focus',
+				array(
+					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__field-wrap label :focus:not(:checked) + span::before' ) => 'background-color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
 				'tab__checkradio_control_border__checked',
 				array(
 					'label' => __( 'Checked', 'jet-form-builder' ),
 				)
 			);
+
 			$this->add_border(
 				$this,
 				'tab__checkradio_control_border__checked',
 				$this->selector( '__field-wrap label :checked + span::before' )
 			);
+
 			$this->add_control(
 				'tab__checkradio_control_bg_color__checked',
 				array(

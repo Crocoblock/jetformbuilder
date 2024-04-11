@@ -2877,11 +2877,6 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'name'           => 'booking_form_submit_typography',
 					'selector'       => $this->selector( '__action-button' ),
-					'fields_options' => array(
-						'typography' => array(
-							'separator' => 'after',
-						),
-					),
 				)
 			);
 
@@ -2891,6 +2886,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
+					'separator'   => 'before',
 					'selectors'  => array(
 						$this->selector( '__action-button' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),

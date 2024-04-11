@@ -2868,6 +2868,23 @@ class Form extends Widget_Base implements Widget_Base_It {
 				)
 			);
 
+			$this->add_responsive_control(
+				'booking_form_submit_hover_transition',
+				array(
+
+					'type'       => Controls_Manager::SLIDER,
+					'label'      => __( 'Transition Duration', 'jet-form-builder' ),
+					'size_units' => array( 's', 'ms', 'custom' ),
+					'default'    => array(
+						'unit' => 's',
+						'size' => 0.3,
+					),
+					'selectors'  => array(
+						$this->selector( '__action-button' ) => 'transition: all {{SIZE}}{{UNIT}};',
+					),
+				)
+			);
+
 			$this->end_controls_tab();
 
 			$this->end_controls_tabs();

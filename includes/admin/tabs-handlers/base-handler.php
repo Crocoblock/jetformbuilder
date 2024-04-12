@@ -40,9 +40,8 @@ abstract class Base_Handler implements Repository_Item_Instance_Trait {
 	}
 
 	/**
-	 * @since 3.1.0
-	 *
 	 * @return array
+	 * @since 3.1.0
 	 */
 	public function on_editor_load(): array {
 		return $this->get_options();
@@ -76,14 +75,20 @@ abstract class Base_Handler implements Repository_Item_Instance_Trait {
 	}
 
 	public function update_options( $options ) {
-		$options    = wp_json_encode( $options );
-		$prev_value = get_option( $this->option_name(), false );
+		$json_options = wp_json_encode( $options );
+		$prev_value   = get_option( $this->option_name(), false );
 
-		if ( $prev_value === $options ) {
+		if ( $prev_value === $json_options ) {
 			return true;
 		}
 
-		return update_option( $this->option_name(), $options );
+		$prev_options = json_decode( $prev_value, true ) ?: array();
+
+		return update_option(
+			$this->option_name(),
+			wp_json_encode( array_merge( $prev_options, $options ) ),
+			false
+		);
 	}
 
 	public function before_assets() {

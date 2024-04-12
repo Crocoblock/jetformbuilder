@@ -10,6 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 use Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception;
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Options_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Tools;
@@ -57,6 +58,38 @@ class Module implements
 		remove_filter(
 			'plugin_action_links_' . JET_FORM_BUILDER_PLUGIN_BASE,
 			array( $this, 'modify_plugin_action_links' )
+		);
+	}
+
+	/**
+	 * Called by `register_activation_hook`
+	 * inside `jetformbuilder/load.php`
+	 *
+	 * @return void
+	 */
+	public function on_plugin_activate() {
+		/** @var Options_Handler $options */
+		$options_tab = Tab_Handler_Manager::instance()->tab( 'options-tab' );
+
+		$options     = $options_tab->get_options();
+		$new_options = array();
+
+		if ( ! isset( $options['disable_next_button'] ) ) {
+			$new_options['disable_next_button'] = false;
+		}
+		if ( ! isset( $options['scroll_on_next'] ) ) {
+			$new_options['scroll_on_next'] = true;
+		}
+		if ( ! isset( $options['auto_focus'] ) ) {
+			$new_options['auto_focus'] = true;
+		}
+
+		if ( ! $new_options ) {
+			return;
+		}
+
+		$options_tab->update_options(
+			array_merge( $options, $new_options )
 		);
 	}
 

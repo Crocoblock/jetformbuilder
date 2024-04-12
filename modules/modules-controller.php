@@ -27,7 +27,6 @@ class Modules_Controller implements Module_Controller_It {
 			new Jet_Plugins\Module(),
 			new Logger\Module(),
 			new Dev\Module(),
-			new Admin\Module(),
 			new Post_Type\Module(),
 			new Bulk_Options\Module(),
 			new Block_Parsers\Module(),

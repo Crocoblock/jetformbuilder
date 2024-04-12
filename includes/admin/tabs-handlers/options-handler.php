@@ -25,20 +25,25 @@ class Options_Handler extends Base_Handler {
 	public function on_get_request() {
 		$options = array();
 
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		foreach ( self::OPTIONS as $name => $default ) {
-			// phpcs:disable WordPress.Security.NonceVerification.Missing
-			$options[ $name ] = array_key_exists( $name, $_POST )
-				? 'true' === sanitize_key( $_POST[ $name ] )
-				: $default;
-			// phpcs:enable WordPress.Security.NonceVerification.Missing
+			if ( ! array_key_exists( $name, $_POST ) ) {
+				continue;
+			}
+
+			$options[ $name ] = filter_var(
+				sanitize_key( $_POST[ $name ] ),
+				FILTER_VALIDATE_BOOL
+			);
+
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		$result = $this->update_options( $options );
-
 		$this->send_response( $result );
 	}
 
 	public function on_load() {
-		return $this->get_options( self::OPTIONS );
+		return $this->get_options();
 	}
 }

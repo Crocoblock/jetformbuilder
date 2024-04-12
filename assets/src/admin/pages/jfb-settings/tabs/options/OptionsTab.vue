@@ -5,7 +5,7 @@
 			:wrapper-css="[ 'equalwidth' ]"
 			:label="loading.enable_dev_mode ? `${label.enable_dev_mode} (loading...)` : label.enable_dev_mode"
 			:description="help.enable_dev_mode"
-			:value="storage.enable_dev_mode"
+			:value="storage.hasOwnProperty( 'enable_dev_mode' ) ? storage.enable_dev_mode : false"
 			:disabled="isLoading"
 			@input="changeVal( 'enable_dev_mode', $event )"
 		></cx-vui-switcher>
@@ -14,7 +14,7 @@
 			:wrapper-css="[ 'equalwidth' ]"
 			:label="loading.clear_on_uninstall ? `${label.clear_on_uninstall} (loading...)` : label.clear_on_uninstall"
 			:description="help.clear_on_uninstall"
-			:value="storage.clear_on_uninstall"
+			:value="storage.hasOwnProperty( 'clear_on_uninstall' ) ? storage.clear_on_uninstall : false"
 			:disabled="isLoading"
 			@input="changeVal( 'clear_on_uninstall', $event )"
 		></cx-vui-switcher>
@@ -28,7 +28,7 @@
 				:wrapper-css="[ 'equalwidth' ]"
 				:label="loading.disable_next_button ? `${label.disable_next_button} (loading...)` : label.disable_next_button"
 				:description="help.disable_next_button"
-				:value="storage.disable_next_button"
+				:value="storage.hasOwnProperty( 'disable_next_button' ) ? storage.disable_next_button : true"
 				:disabled="isLoading"
 				@input="changeVal( 'disable_next_button', $event )"
 			></cx-vui-switcher>
@@ -37,7 +37,7 @@
 				:wrapper-css="[ 'equalwidth' ]"
 				:label="loading.scroll_on_next ? `${label.scroll_on_next} (loading...)` : label.scroll_on_next"
 				:description="help.scroll_on_next"
-				:value="storage.scroll_on_next"
+				:value="storage.hasOwnProperty( 'scroll_on_next' ) ? storage.scroll_on_next : false"
 				:disabled="isLoading"
 				@input="changeVal( 'scroll_on_next', $event )"
 			></cx-vui-switcher>
@@ -46,7 +46,7 @@
 				:wrapper-css="[ 'equalwidth' ]"
 				:label="loading.auto_focus ? `${label.auto_focus} (loading...)` : label.auto_focus"
 				:description="help.auto_focus"
-				:value="storage.auto_focus"
+				:value="storage.hasOwnProperty( 'auto_focus' ) ? storage.auto_focus : false"
 				:disabled="isLoading"
 				@input="changeVal( 'auto_focus', $event )"
 			></cx-vui-switcher>

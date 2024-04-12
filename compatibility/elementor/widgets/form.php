@@ -261,8 +261,8 @@ class Form extends Widget_Base implements Widget_Base_It {
 			'checkradio_fields_gap',
 			array(
 				'selectors' => array(
-					'body:not(.rtl) ' . $this->selector( '__field-wrap.checkradio-wrap span::before' ) => 'margin-right: {{SIZE}}px;',
-					'body.rtl ' . $this->selector( '__field-wrap.checkradio-wrap span::before' )       => 'margin-left: {{SIZE}}px;',
+					'body:not(.rtl) ' . $this->selector( '__field-wrap.checkradio-wrap span::before' ) => 'margin-right: {{SIZE}}{{UNIT}};',
+					'body.rtl ' . $this->selector( '__field-wrap.checkradio-wrap span::before' )       => 'margin-left: {{SIZE}}{{UNIT}};',
 				),
 			),
 			array( 'recursive' => true )
@@ -307,7 +307,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Checkbox Size', 'jet-form-builder' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 				'range'      => array(
 					'px' => array(
 						'min' => 0,
@@ -315,7 +315,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 					),
 				),
 				'selectors'  => array(
-					$this->selector( '__field-wrap .for-checkbox span::before' ) => 'font-size: {{SIZE}}px;',
+					$this->selector( '__field-wrap .for-checkbox span::before' ) => 'font-size: {{SIZE}}{{UNIT}};',
 				),
 				'condition'  => array(
 					'builder__checkbox_show_decorator' => 'inline-block',
@@ -413,7 +413,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Radio Size', 'jet-form-builder' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 				'range'      => array(
 					'px' => array(
 						'min' => 0,
@@ -421,7 +421,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 					),
 				),
 				'selectors'  => array(
-					$this->selector( '__field-wrap .for-radio span::before' ) => 'font-size: {{SIZE}}px;',
+					$this->selector( '__field-wrap .for-radio span::before' ) => 'font-size: {{SIZE}}{{UNIT}};',
 				),
 				'condition'  => array(
 					'builder__radio_show_decorator' => 'inline-block',
@@ -610,7 +610,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Margin', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 				'selectors'  => array(
 					$selector_callable( '-progress-pages' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
@@ -621,7 +621,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Padding', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 				'selectors'  => array(
 					$selector_callable( '-progress-pages' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
@@ -703,7 +703,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Padding', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 				'selectors'  => array(
 					$selector_callable( $scheme['active-item'] ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
@@ -714,7 +714,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Margin', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 				'selectors'  => array(
 					$selector_callable( $scheme['active-item'] ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
@@ -765,7 +765,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Height', 'jet-form-builder' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 				'range'      => array(
 					'px' => array(
 						'min' => 1,
@@ -773,7 +773,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 					),
 				),
 				'selectors'  => array(
-					$selector_callable( $scheme['active-separator'] ) => 'height: {{SIZE}}px; min-height: {{SIZE}}px;',
+					$selector_callable( $scheme['active-separator'] ) => 'height: {{SIZE}}{{UNIT}}; min-height: {{SIZE}}{{UNIT}};',
 				),
 			)
 		);
@@ -813,7 +813,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Padding', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 				'selectors'  => array(
 					$selector_callable( $scheme['next-item'] ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
@@ -824,7 +824,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Margin', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 				'selectors'  => array(
 					$selector_callable( $scheme['next-item'] ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
@@ -875,7 +875,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Height', 'jet-form-builder' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 				'range'      => array(
 					'px' => array(
 						'min' => 1,
@@ -883,7 +883,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 					),
 				),
 				'selectors'  => array(
-					$selector_callable( $scheme['next-separator'] ) => 'height: {{SIZE}}px; min-height: {{SIZE}}px;',
+					$selector_callable( $scheme['next-separator'] ) => 'height: {{SIZE}}{{UNIT}}; min-height: {{SIZE}}{{UNIT}};',
 				),
 			)
 		);
@@ -923,7 +923,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Padding', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 				'selectors'  => array(
 					$selector_callable( $scheme['prev-item'] ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
@@ -934,7 +934,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Margin', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 				'selectors'  => array(
 					$selector_callable( $scheme['prev-item'] ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
@@ -985,7 +985,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Height', 'jet-form-builder' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => array( 'px' ),
+				'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 				'range'      => array(
 					'px' => array(
 						'min' => 1,
@@ -993,7 +993,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 					),
 				),
 				'selectors'  => array(
-					$selector_callable( $scheme['prev-separator'] ) => 'height: {{SIZE}}px; min-height: {{SIZE}}px;',
+					$selector_callable( $scheme['prev-separator'] ) => 'height: {{SIZE}}{{UNIT}}; min-height: {{SIZE}}{{UNIT}};',
 				),
 			)
 		);
@@ -1142,7 +1142,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 
 					'type'       => Controls_Manager::SLIDER,
 					'label'      => __( 'Gap Before', 'jet-form-builder' ),
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 0,
@@ -1150,7 +1150,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( '-row' ) => 'margin-top: {{SIZE}}px;',
+						$this->selector( '-row' ) => 'margin-top: {{SIZE}}{{UNIT}};',
 					),
 				)
 			);
@@ -1161,7 +1161,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 
 					'type'       => Controls_Manager::SLIDER,
 					'label'      => __( 'Gap After', 'jet-form-builder' ),
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 0,
@@ -1169,7 +1169,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( '-row' ) => 'margin-bottom: {{SIZE}}px;',
+						$this->selector( '-row' ) => 'margin-bottom: {{SIZE}}{{UNIT}};',
 					),
 				)
 			);
@@ -1193,7 +1193,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__label' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -1205,7 +1205,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__label' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -1318,7 +1318,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__desc' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -1330,7 +1330,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__desc' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -1422,11 +1422,11 @@ class Form extends Widget_Base implements Widget_Base_It {
 					'options'     => array(
 						'inline-block' => array(
 							'title' => __( 'Horizontal', 'jet-form-builder' ),
-							'icon'  => 'fa fa-ellipsis-h',
+							'icon'  => 'eicon-ellipsis-h',
 						),
 						'block'        => array(
 							'title' => __( 'Vertical', 'jet-form-builder' ),
-							'icon'  => 'fa fa-bars',
+							'icon'  => 'eicon-editor-list-ul',
 						),
 					),
 					'selectors'   => array(
@@ -1448,7 +1448,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Gap between control and label', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'default' => array(
 						'size' => 8,
 					),
@@ -1459,7 +1459,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( '__field-wrap.checkradio-wrap span' ) => 'gap: {{SIZE}}px;',
+						$this->selector( '__field-wrap.checkradio-wrap span' ) => 'gap: {{SIZE}}{{UNIT}};',
 					),
 				)
 			);
@@ -1468,7 +1468,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Control Size', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 0,
@@ -1476,7 +1476,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( '__field-wrap span::before' ) => 'font-size: {{SIZE}}px;',
+						$this->selector( '__field-wrap span::before' ) => 'font-size: {{SIZE}}{{UNIT}};',
 					),
 				)
 			);
@@ -1546,16 +1546,70 @@ class Form extends Widget_Base implements Widget_Base_It {
 			$this->end_controls_tab();
 
 			$this->start_controls_tab(
+				'tab__checkradio_control_border__hover',
+				array(
+					'label' => __( 'Hover', 'jet-form-builder' ),
+				)
+			);
+
+			$this->add_border(
+				$this,
+				'tab__checkradio_control_border__hover',
+				$this->selector( '__field-wrap label :not(:disabled):not(:checked):hover + span::before' )
+			);
+
+			$this->add_control(
+				'tab__checkradio_control_bg_color__hover',
+				array(
+					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__field-wrap label :not(:disabled):not(:checked):hover + span::before' ) => 'background-color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
+				'tab__checkradio_control_border__focus',
+				array(
+					'label' => __( 'Focus', 'jet-form-builder' ),
+				)
+			);
+
+			$this->add_border(
+				$this,
+				'tab__checkradio_control_border__focus',
+				$this->selector( '__field-wrap label :focus:not(:checked) + span::before' )
+			);
+
+			$this->add_control(
+				'tab__checkradio_control_bg_color__focus',
+				array(
+					'label'     => esc_html__( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__field-wrap label :focus:not(:checked) + span::before' ) => 'background-color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->end_controls_tab();
+
+			$this->start_controls_tab(
 				'tab__checkradio_control_border__checked',
 				array(
 					'label' => __( 'Checked', 'jet-form-builder' ),
 				)
 			);
+
 			$this->add_border(
 				$this,
 				'tab__checkradio_control_border__checked',
 				$this->selector( '__field-wrap label :checked + span::before' )
 			);
+
 			$this->add_control(
 				'tab__checkradio_control_bg_color__checked',
 				array(
@@ -1635,7 +1689,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( $simple_input ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -1647,7 +1701,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( $simple_input ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -1669,7 +1723,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Border Radius', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( $simple_input ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -1689,7 +1743,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Fields width', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px', '%' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 50,
@@ -1707,7 +1761,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Textarea Height', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 10,
@@ -1715,7 +1769,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( '__field.textarea-field' ) => 'height:{{SIZE}}px;min-height:{{SIZE}}px;',
+						$this->selector( '__field.textarea-field' ) => 'height:{{SIZE}}{{UNIT}}; min-height:{{SIZE}}{{UNIT}};',
 					),
 				)
 			);
@@ -1788,7 +1842,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Prefix size', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 10,
@@ -1796,7 +1850,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( '__calculated-field-prefix' ) => 'font-size: {{SIZE}}px;',
+						$this->selector( '__calculated-field-prefix' ) => 'font-size: {{SIZE}}{{UNIT}};',
 					),
 				)
 			);
@@ -1817,7 +1871,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Suffix size', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 10,
@@ -1825,7 +1879,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( '__calculated-field-suffix' ) => 'font-size: {{SIZE}}px;',
+						$this->selector( '__calculated-field-suffix' ) => 'font-size: {{SIZE}}{{UNIT}};',
 					),
 				)
 			);
@@ -1846,7 +1900,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__calculated-field' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -1858,7 +1912,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__calculated-field' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -1880,7 +1934,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Border Radius', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__calculated-field' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -1921,12 +1975,12 @@ class Form extends Widget_Base implements Widget_Base_It {
 				)
 			);
 
-			$this->add_control(
+			$this->add_responsive_control(
 				'range_max_width',
 				array(
 					'label'      => esc_html__( 'Max Width', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px', '%' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 1,
@@ -1948,12 +2002,12 @@ class Form extends Widget_Base implements Widget_Base_It {
 				)
 			);
 
-			$this->add_control(
+			$this->add_responsive_control(
 				'track_height',
 				array(
 					'label'      => esc_html__( 'Track Height', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 1,
@@ -1969,12 +2023,12 @@ class Form extends Widget_Base implements Widget_Base_It {
 				)
 			);
 
-			$this->add_control(
+			$this->add_responsive_control(
 				'thumb_size',
 				array(
 					'label'      => esc_html__( 'Thumb Size', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 1,
@@ -2006,7 +2060,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Track Border Radius', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__field.range-field::-webkit-slider-runnable-track' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 						$this->selector( '__field.range-field::-moz-range-track' )              => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
@@ -2020,7 +2074,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Thumb Border Radius', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__field.range-field::-webkit-slider-thumb' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 						$this->selector( '__field.range-field::-moz-range-thumb' )     => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
@@ -2088,7 +2142,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Prefix size', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px', 'em', 'rem' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 10,
@@ -2096,7 +2150,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( '__field-value.range-value .%s__field-value-prefix' ) => 'font-size: {{SIZE}}px;',
+						$this->selector( '__field-value.range-value .%s__field-value-prefix' ) => 'font-size: {{SIZE}}{{UNIT}};',
 					),
 					'separator'  => 'before',
 				)
@@ -2118,7 +2172,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Suffix size', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px', 'em', 'rem' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 10,
@@ -2126,7 +2180,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 						),
 					),
 					'selectors'  => array(
-						$this->selector( '__field-value.range-value .%s__field-value-suffix' ) => 'font-size: {{SIZE}}px;',
+						$this->selector( '__field-value.range-value .%s__field-value-suffix' ) => 'font-size: {{SIZE}}{{UNIT}};',
 					),
 					'separator'  => 'before',
 				)
@@ -2191,7 +2245,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Gap', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__heading' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2231,7 +2285,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Gap', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__heading-desc' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2267,7 +2321,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%', 'em' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '-repeater__row' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2381,7 +2435,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%', 'em' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '-repeater__new' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2393,7 +2447,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%', 'em' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '-repeater__new' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2415,7 +2469,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Border Radius', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '-repeater__new' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2549,7 +2603,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%', 'em' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'separator'  => 'before',
 					'selectors'  => array(
 						$this->selector( '-repeater__remove' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
@@ -2562,7 +2616,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%', 'em' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '-repeater__remove' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2584,19 +2638,19 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Border Radius', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '-repeater__remove' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
 				)
 			);
 
-			$this->add_control(
+			$this->add_responsive_control(
 				'booking_form_repeater_del_size',
 				array(
 					'label'      => esc_html__( 'Icon Size', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 12,
@@ -2663,7 +2717,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%', 'em' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__conditional' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2675,7 +2729,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%', 'em' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__conditional' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2697,7 +2751,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Border Radius', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__conditional' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2814,6 +2868,23 @@ class Form extends Widget_Base implements Widget_Base_It {
 				)
 			);
 
+			$this->add_responsive_control(
+				'booking_form_submit_hover_transition',
+				array(
+
+					'type'       => Controls_Manager::SLIDER,
+					'label'      => __( 'Transition Duration', 'jet-form-builder' ),
+					'size_units' => array( 's', 'ms', 'custom' ),
+					'default'    => array(
+						'unit' => 's',
+						'size' => 0.3,
+					),
+					'selectors'  => array(
+						$this->selector( '__action-button' ) => 'transition: all {{SIZE}}{{UNIT}};',
+					),
+				)
+			);
+
 			$this->end_controls_tab();
 
 			$this->end_controls_tabs();
@@ -2823,11 +2894,6 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'name'           => 'booking_form_submit_typography',
 					'selector'       => $this->selector( '__action-button' ),
-					'fields_options' => array(
-						'typography' => array(
-							'separator' => 'after',
-						),
-					),
 				)
 			);
 
@@ -2836,7 +2902,8 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%', 'em' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
+					'separator'   => 'before',
 					'selectors'  => array(
 						$this->selector( '__action-button' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2848,7 +2915,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%', 'em' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__action-button' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2870,7 +2937,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => esc_html__( 'Border Radius', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px', '%' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__action-button' ) => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -2973,7 +3040,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Gap', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__next-page-wrap' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -3042,7 +3109,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__next-page' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -3054,7 +3121,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__next-page' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -3193,7 +3260,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__prev-page' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -3205,7 +3272,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__prev-page' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -3349,7 +3416,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__next-page-msg' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -3361,7 +3428,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '__next-page-msg' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -3418,7 +3485,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '-message--success' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -3430,7 +3497,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '-message--success' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -3514,7 +3581,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Margin', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '-message--error' ) => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -3526,7 +3593,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
-					'size_units' => array( 'px' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'selectors'  => array(
 						$this->selector( '-message--error' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),
@@ -3618,7 +3685,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'      => __( 'Border Radius', 'jet-form-builder' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px', '%' ),
+				'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 				'selectors'  => array(
 					$selector => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),

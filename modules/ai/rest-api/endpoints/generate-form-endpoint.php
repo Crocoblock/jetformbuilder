@@ -28,9 +28,7 @@ class Generate_Form_Endpoint extends Rest_Api_Endpoint_Base {
 		$action->set_prompt(
 			$request->get_param( 'prompt' )
 		);
-		$action->set_license(
-			md5( Http_Tools::get_server_ip_address() )
-		);
+		$action->set_license( $this->get_license() );
 
 		try {
 			$response = $action->send_request();
@@ -61,5 +59,25 @@ class Generate_Form_Endpoint extends Rest_Api_Endpoint_Base {
 				'limit' => $response['data']['limit'],
 			)
 		);
+	}
+
+	private function get_license(): string {
+		$server_ip = Http_Tools::get_server_ip_address();
+
+		// Define local IP address ranges
+		$local_ip_ranges = array(
+			'127.',       // Loopback
+			'192.168.',   // Private network
+			'10.',        // Private network
+		);
+
+		// Check if the server IP is within any of the local ranges
+		foreach ( $local_ip_ranges as $range ) {
+			if ( 0 === strpos( $server_ip, $range ) ) {
+				return md5( $server_ip . site_url() ); // It's a local IP address
+			}
+		}
+
+		return md5( $server_ip ); // It's not a local IP address
 	}
 }

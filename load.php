@@ -14,6 +14,15 @@ if ( version_compare( PHP_VERSION, '7.0.0', '>=' ) ) {
 
 	add_action( 'plugins_loaded', 'jet_form_builder_init' );
 
+	// we install this very early, because it could be needed in activation hook
+	$admin_module = new JFB_Modules\Admin\Module();
+	jet_form_builder()->get_modules()->install( $admin_module );
+
+	register_activation_hook(
+		JET_FORM_BUILDER__FILE__,
+		array( $admin_module, 'on_plugin_activate' )
+	);
+
 	return;
 }
 

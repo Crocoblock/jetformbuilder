@@ -1449,7 +1449,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 					'label'      => __( 'Gap between control and label', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
 					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
-					'default' => array(
+					'default'    => array(
 						'size' => 8,
 					),
 					'range'      => array(
@@ -1743,7 +1743,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Fields width', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 50,
@@ -2892,8 +2892,8 @@ class Form extends Widget_Base implements Widget_Base_It {
 			$this->add_group_control(
 				Group_Control_Typography::get_type(),
 				array(
-					'name'           => 'booking_form_submit_typography',
-					'selector'       => $this->selector( '__action-button' ),
+					'name'     => 'booking_form_submit_typography',
+					'selector' => $this->selector( '__action-button' ),
 				)
 			);
 
@@ -2903,7 +2903,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
-					'separator'   => 'before',
+					'separator'  => 'before',
 					'selectors'  => array(
 						$this->selector( '__action-button' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),

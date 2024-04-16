@@ -52,18 +52,7 @@ abstract class Base_Captcha implements
 	abstract protected function render(): string;
 
 	public function get_output(): string {
-		if ( $this->is_locked_render() ) {
-			return '';
-		}
-
-		try {
-			$output = $this->render();
-		} catch ( Render_Empty_Field $exception ) {
-			return '';
-		}
-		$this->lock_render();
-
-		return $output;
+		return $this->render();
 	}
 
 	public function sanitize_options( array $options ): Base_Captcha {

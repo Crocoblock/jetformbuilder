@@ -10,6 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Block_Helper;
+use Jet_Form_Builder\Blocks\Exceptions\Render_Empty_Field;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -58,6 +59,14 @@ final class Module implements
 	 * @var Base_Captcha[]
 	 */
 	private $current = array();
+
+	/**
+	 * It becomes false inside `on_render_field`, if it renders the captcha.
+	 * And if it true - captcha renders inside the `on_end_render_form` method
+	 *
+	 * @var bool
+	 */
+	private $should_render = true;
 
 	public function rep_item_id() {
 		return 'captcha';
@@ -152,7 +161,9 @@ final class Module implements
 	 * @see Forms_Captcha::check_is_container_exist
 	 */
 	public function on_render_field( string $content, string $field_name, array $attrs ): string {
-		if ( 'submit-field' !== $field_name ) {
+		$type = $attrs['action_type'] ?? '';
+
+		if ( 'submit-field' !== $field_name || 'submit' !== $type ) {
 			return $content;
 		}
 
@@ -162,12 +173,9 @@ final class Module implements
 			return $content;
 		}
 
-		$type = $attrs['action_type'] ?? '';
+		$this->should_render = false;
 
-		if (
-			'submit' !== $type ||
-			$current->is_exist_container()
-		) {
+		if ( $current->is_exist_container() ) {
 			return $content;
 		}
 
@@ -184,7 +192,12 @@ final class Module implements
 	 * @return string
 	 */
 	public function on_end_render_form( string $content ): string {
-		$content .= $this->render();
+		$should_render       = $this->should_render;
+		$this->should_render = true;
+
+		if ( $should_render ) {
+			$content .= $this->render();
+		}
 
 		return $content;
 	}
@@ -262,6 +275,8 @@ final class Module implements
 		try {
 			return $this->get_current()->get_output();
 		} catch ( Repository_Exception $exception ) {
+			return '';
+		} catch ( Render_Empty_Field $exception ) {
 			return '';
 		}
 	}
@@ -341,10 +356,10 @@ final class Module implements
 
 		$current->set_exist_container(
 			! empty(
-				Block_Helper::find_by_block_name(
-					$blocks,
-					'jet-forms/captcha-container'
-				)
+			Block_Helper::find_by_block_name(
+				$blocks,
+				'jet-forms/captcha-container'
+			)
 			)
 		);
 

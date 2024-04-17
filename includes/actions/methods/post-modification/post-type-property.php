@@ -51,6 +51,9 @@ class Post_Type_Property extends Base_Object_Property {
 			return;
 		}
 
+		/**
+		 * @since 3.3.3
+		 */
 		$allow_to_change = apply_filters(
 			'jet-form-builder/action/insert-post/allow-change-post-type',
 			false,

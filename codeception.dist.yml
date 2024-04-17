@@ -37,6 +37,8 @@ modules:
             adminPath: /wp-admin
             browser: chrome
             port: 4444
+            headers:
+                X_WPBROWSER_REQUEST: 1 # Check this in the wp-config.php
             capabilities:
                 chromeOptions:
                     args:

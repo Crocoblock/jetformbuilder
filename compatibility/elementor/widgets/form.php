@@ -1420,17 +1420,39 @@ class Form extends Widget_Base implements Widget_Base_It {
 					'type'        => Controls_Manager::CHOOSE,
 					'label_block' => false,
 					'options'     => array(
-						'inline-block' => array(
+						'row' => array(
 							'title' => __( 'Horizontal', 'jet-form-builder' ),
 							'icon'  => 'eicon-ellipsis-h',
 						),
-						'block'        => array(
+						'column'        => array(
 							'title' => __( 'Vertical', 'jet-form-builder' ),
 							'icon'  => 'eicon-editor-list-ul',
 						),
 					),
 					'selectors'   => array(
-						$this->selector( '__field-wrap.checkradio-wrap' ) => 'display: {{VALUE}};',
+						$this->selector( '__fields-group' ) => 'flex-direction: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->add_responsive_control(
+				'checkradio_fields_gaps',
+				array(
+					'label'      => __( 'Gaps', 'jet-form-builder' ),
+					'type'       => Controls_Manager::GAPS,
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
+					'default'    => array(
+						'row' => '0.7',
+						'column' => '0.7',
+						'unit' => 'em',
+					),
+					'validators' => array(
+						'Number' => array(
+							'min' => 0,
+						),
+					),
+					'selectors'   => array(
+						$this->selector( '__fields-group' ) => 'gap: {{ROW}}{{UNIT}} {{COLUMN}}{{UNIT}};',
 					),
 				)
 			);
@@ -1449,7 +1471,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 					'label'      => __( 'Gap between control and label', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
 					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
-					'default'    => array(
+					'default' => array(
 						'size' => 8,
 					),
 					'range'      => array(
@@ -1743,7 +1765,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Fields width', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
+					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 50,
@@ -2892,8 +2914,8 @@ class Form extends Widget_Base implements Widget_Base_It {
 			$this->add_group_control(
 				Group_Control_Typography::get_type(),
 				array(
-					'name'     => 'booking_form_submit_typography',
-					'selector' => $this->selector( '__action-button' ),
+					'name'           => 'booking_form_submit_typography',
+					'selector'       => $this->selector( '__action-button' ),
 				)
 			);
 
@@ -2903,7 +2925,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 					'label'      => esc_html__( 'Padding', 'jet-form-builder' ),
 					'type'       => Controls_Manager::DIMENSIONS,
 					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
-					'separator'  => 'before',
+					'separator'   => 'before',
 					'selectors'  => array(
 						$this->selector( '__action-button' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					),

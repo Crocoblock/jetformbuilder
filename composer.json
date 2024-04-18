@@ -31,7 +31,8 @@
 		"codeception/module-filesystem": "^1.0",
 		"codeception/module-cli": "^1.0",
 		"codeception/module-rest": "^1.2",
-		"codeception/util-universalframework": "^1.0"
+		"codeception/util-universalframework": "^1.0",
+		"codeception/assert-throws": "^1.4"
 	},
 	"config": {
 		"allow-plugins": {

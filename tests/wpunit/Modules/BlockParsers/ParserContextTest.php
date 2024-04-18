@@ -1,11 +1,14 @@
 <?php
 
-namespace  JFB_Tests\Wpunit\Modules\BlockParsers;
+namespace JFB_Tests\Wpunit\Modules\BlockParsers;
 
 use Jet_Form_Builder\Request\Parser_Context;
 use Jet_Form_Builder\Classes\Tools;
 
 class ParserContextTest extends \Codeception\TestCase\WPTestCase {
+
+	const DATA_PATH = 'tests/_data/modules/BlockParsers/';
+
 	/**
 	 * @var \WpunitTester
 	 */
@@ -18,10 +21,10 @@ class ParserContextTest extends \Codeception\TestCase\WPTestCase {
 		// Before...
 		parent::setUp();
 
-		$blocks_path = jet_form_builder()->plugin_dir( 'tests/_data/parser-context-test-form.html' );
+		$blocks_path = jet_form_builder()->plugin_dir( self::DATA_PATH . 'parser-context-test-form.html' );
 		$blocks_html = file_get_contents( $blocks_path );
 
-		$request_path = jet_form_builder()->plugin_dir( 'tests/_data/parser_context_test_request.json' );
+		$request_path = jet_form_builder()->plugin_dir( self::DATA_PATH . 'parser_context_test_request.json' );
 		$request      = Tools::decode_json( file_get_contents( $request_path ) );
 
 		$this->context = new Parser_Context();

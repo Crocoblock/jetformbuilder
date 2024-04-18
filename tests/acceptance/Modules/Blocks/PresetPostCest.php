@@ -14,7 +14,7 @@ class PresetPostCest
     public function trySeePlainPreset(\AcceptanceTester $I)
     {
 	    $I->seeInFormFields('form[data-form-id="5"]', [
-		    'text_field' => 'Source post',
+		    'text_field' => 'Source post 1',
 		    'checkbox_categories[]' => array( 6, 8 ),
 		    'choices_multiple[]' => array( 6, 8 ),
 		    'radio_post_id_s' => 14,

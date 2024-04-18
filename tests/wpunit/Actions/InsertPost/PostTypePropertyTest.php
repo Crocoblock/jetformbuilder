@@ -5,6 +5,7 @@ namespace JFB_Tests\Wpunit\Actions\InsertPost;
 use Codeception\AssertThrows;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Modifier;
 use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Type_Property;
+use Jet_Form_Builder\Actions\Types\Insert_Post;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 
@@ -101,6 +102,52 @@ class PostTypePropertyTest extends \Codeception\TestCase\WPTestCase {
 		$property = $this->modifier->get( 'post_type' );
 
 		$this->assertEquals( 'page', $property->get_value( $this->modifier ) );
+	}
+
+	public function testComputedNames() {
+		$action      = new Insert_Post();
+		$action->_id = 7755;
+
+		jet_fb_action_handler()->save_action( $action, array() );
+
+		$action->settings = array(
+			'post_type' => 'page'
+		);
+
+		jet_fb_action_handler()->process_single_action( $action );
+
+		$this->assertNotEmpty( jet_fb_context()->get_value( 'inserted_page' ) );
+		$this->assertIsNumeric( jet_fb_context()->get_value( 'inserted_page' ) );
+
+	}
+
+	public function testComputedNamesOnUpdateWithEmptyPostType() {
+		$post_id = wp_insert_post(
+			array(
+				'post_type'    => 'page',
+				'post_title'   => 'something',
+				'post_content' => '12345',
+			)
+		);
+
+		$action      = new Insert_Post();
+		$action->_id = 7755;
+
+		jet_fb_action_handler()->save_action( $action, array() );
+
+		$action->settings = array(
+			'fields_map' => array(
+				'_post_id' => 'ID',
+			),
+		);
+
+
+		jet_fb_context()->update_request( $post_id, '_post_id' );
+		jet_fb_action_handler()->process_single_action( $action );
+
+		$this->assertNotEmpty( jet_fb_context()->get_value( 'inserted_page' ) );
+		$this->assertIsNumeric( jet_fb_context()->get_value( 'inserted_page' ) );
+
 	}
 
 

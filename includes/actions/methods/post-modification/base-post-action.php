@@ -59,8 +59,14 @@ abstract class Base_Post_Action extends Base_Modifier_Action {
 			);
 		}
 
+		$post_type = $this->modifier->source_arr['post_type'] ?? '';
+
+		if ( ! $post_type ) {
+			$post_type = get_post_type( $this->inserted_id );
+		}
+
 		$inserted_key = jet_fb_context()->get_unique_name(
-			'inserted_' . $this->modifier->source_arr['post_type']
+			'inserted_' . $post_type
 		);
 
 		jet_fb_context()->update_request( $this->inserted_id, $inserted_key );

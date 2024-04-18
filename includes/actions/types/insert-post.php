@@ -113,14 +113,8 @@ class Insert_Post extends Base {
 			);
 		}
 
-		$post_types    = Tools::get_post_types_for_js();
-		$post_types[0] = array(
-			'label' => __( '-- Keep current (when updating post) --', 'jet-form-builder' ),
-			'value' => '',
-		);
-
 		return array(
-			'postTypes'    => $post_types,
+			'postTypes'    => Tools::get_post_types_for_js(),
 			'taxonomies'   => Tools::get_taxonomies_for_modify(),
 			'postStatuses' => $this->get_post_statuses_for_options(),
 			'properties'   => $properties,

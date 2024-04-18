@@ -116,9 +116,8 @@ class PostTypePropertyTest extends \Codeception\TestCase\WPTestCase {
 
 		jet_fb_action_handler()->process_single_action( $action );
 
-		$this->assertNotEmpty( jet_fb_context()->get_value( 'inserted_page' ) );
 		$this->assertIsNumeric( jet_fb_context()->get_value( 'inserted_page' ) );
-
+		$this->assertIsNumeric( jet_fb_context()->get_value( 'inserted_post_id' ) );
 	}
 
 	public function testComputedNamesOnUpdateWithEmptyPostType() {
@@ -145,7 +144,6 @@ class PostTypePropertyTest extends \Codeception\TestCase\WPTestCase {
 		jet_fb_context()->update_request( $post_id, '_post_id' );
 		jet_fb_action_handler()->process_single_action( $action );
 
-		$this->assertNotEmpty( jet_fb_context()->get_value( 'inserted_page' ) );
 		$this->assertIsNumeric( jet_fb_context()->get_value( 'inserted_page' ) );
 
 	}

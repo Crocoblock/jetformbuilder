@@ -8,7 +8,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 * UPD: The Update Post action will fail if you try to change the post type. Use this filter to allow post type change:
 `add_filter( 'jet-form-builder/action/insert-post/allow-change-post-type', '__return_true' );`
 * UPD: When you activate the plugin for new sites, the following options will be updated: 
-`Disable Next button` => disabled, `Scroll to the top on page change` => enabled, `Automatic focus` => enabled 
+`Disable Next button` => disabled, `Scroll to the top on page change` => enabled, `Automatic focus` => enabled
+* ADD: Added missing size units & responsive controls for the JetForm Elementor widget 
+(props [@stijnvanouplines](https://github.com/stijnvanouplines))
 * FIX: Ignoring "0" as default, minimum, and maximum attributes
 * FIX: Automatic page transition failed if the trigger field was inside a conditional block that disappears 
 from the tree DOM.

@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 6.0
-Tested up to: 6.4.3
+Tested up to: 6.5.2
 Requires PHP: 7.0
-Stable tag: 3.3.2
+Stable tag: 3.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,18 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.3.3**
+- UPD: The Update Post action will fail if you try to change the post type. Use this filter to allow post type change:
+`add_filter( 'jet-form-builder/action/insert-post/allow-change-post-type', '__return_true' );`
+- UPD: When you activate the plugin for new sites, the following options will be updated:
+`Disable Next button` => disabled, `Scroll to the top on page change` => enabled, `Automatic focus` => enabled
+- FIX: Ignoring "0" as default, minimum, and maximum attributes
+- FIX: Automatic page transition failed if the trigger field was inside a conditional block that disappears
+from the tree DOM.
+- FIX: Correct apply changes in daterangepicker on change value (jet-booking compatibility)
+- FIX: Form generation via AI on local servers
+- FIX: Captcha in a listing grid / query loop does not work correctly
 
 **3.3.2**
 - FIX: Use macros in Send Email when verifying a submission or processing a gateway.

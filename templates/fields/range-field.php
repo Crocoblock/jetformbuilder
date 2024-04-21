@@ -24,6 +24,7 @@ $this->add_attribute( 'data-jfb-sync' );
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
 <div class="jet-form-builder__field-wrap range-wrap">
+	<?php do_action( 'jet-form-builder/before-field', $this ); ?>
 	<input type="range" <?php $this->render_attributes_string(); ?>>
 	<div class="jet-form-builder__field-value range-value">
 		<?php if ( ! empty( $args['prefix'] ) ) : ?>
@@ -34,5 +35,6 @@ $this->add_attribute( 'data-jfb-sync' );
 			<span class="jet-form-builder__field-value-suffix"><?php echo wp_kses_post( $args['suffix'] ); ?></span>
 		<?php endif; ?>
 	</div>
+	<?php do_action( 'jet-form-builder/after-field', $this ); ?>
 </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

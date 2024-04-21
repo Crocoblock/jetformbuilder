@@ -22,6 +22,8 @@ $this->add_attribute( 'id', $this->block_type->get_field_id( $args ) );
 $this->add_attribute( 'data-jfb-sync' );
 ?>
 <div class="jet-form-builder__field-wrap">
+	<?php do_action( 'jet-form-builder/before-field', $this ); ?>
 	<input type="number" <?php $this->render_attributes_string(); ?>>
+	<?php do_action( 'jet-form-builder/after-field', $this ); ?>
 </div>
 <?php

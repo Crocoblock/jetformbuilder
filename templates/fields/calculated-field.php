@@ -41,6 +41,7 @@ $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field-
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WhiteSpace.PrecisionAlignment.Found
 ?>
 <div <?php $this->render_attributes_string(); ?>>
+	<?php do_action( 'jet-form-builder/before-field', $this ); ?>
 	<?php if ( false !== $prefix ) : ?>
 		<div class="jet-form-builder__calculated-field-prefix"><?php echo wp_kses_post( $prefix ); ?></div>
 	<?php endif; ?>
@@ -56,5 +57,6 @@ $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field-
 	<?php if ( false !== $suffix ) : ?>
 		<div class="jet-form-builder__calculated-field-suffix"><?php echo wp_kses_post( $suffix ); ?></div>
 	<?php endif; ?>
+	<?php do_action( 'jet-form-builder/after-field', $this ); ?>
 </div>
 <?php

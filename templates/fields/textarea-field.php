@@ -39,6 +39,8 @@ if ( ! empty( $args['maxlength'] ) ) {
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
 <div class="jet-form-builder__field-wrap">
+	<?php do_action( 'jet-form-builder/before-field', $this ); ?>
 	<textarea <?php $this->render_attributes_string(); ?>><?php echo $this->has_attribute( 'data-value' ) ? '' : esc_textarea( $args['default'] ); ?></textarea>
+	<?php do_action( 'jet-form-builder/after-field', $this ); ?>
 </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

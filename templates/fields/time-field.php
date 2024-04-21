@@ -42,5 +42,7 @@ if ( jet_form_builder()->regexp->has_macro( $this->args['max'] ) ) {
 	);
 }
 ?>
+<?php do_action( 'jet-form-builder/before-field', $this ); ?>
 <input <?php $this->render_attributes_string(); ?>>
+<?php do_action( 'jet-form-builder/after-field', $this ); ?>
 <?php

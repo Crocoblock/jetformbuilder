@@ -87,8 +87,9 @@ function AjaxSubmit( form ) {
 
 		if ( response.redirect ) {
 			window.location = response.redirect;
-		}
-		else if ( response.reload ) {
+		} else if ( response.redirect_new_tab ) {
+			window.open( response.redirect_new_tab, '_blank' );
+		} else if ( response.reload ) {
 			window.location.reload();
 		}
 

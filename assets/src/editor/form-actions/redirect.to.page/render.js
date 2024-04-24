@@ -153,6 +153,15 @@ function RedirectToPageRender( props ) {
 				onChange={ redirect_hash => onChangeSettingObj(
 					{ redirect_hash } ) }
 			/>
+			<ToggleControl
+				key="open_in_new_tab"
+				label={ label( 'open_in_new_tab' ) }
+				help="Works with AJAX submit type only."
+				checked={ settings.open_in_new_tab || false }
+				onChange={
+					open_in_new_tab => onChangeSettingObj( { open_in_new_tab } )
+				}
+			/>
 		</div>
 	);
 	/* eslint-enable jsx-a11y/no-onchange */

@@ -43,6 +43,9 @@ class Redirect_To_Page extends Base {
 			'redirect_args' => array(
 				'default' => array(),
 			),
+			'open_in_new_tab' => array(
+				'default' => false,
+			),
 		);
 	}
 
@@ -132,6 +135,8 @@ class Redirect_To_Page extends Base {
 
 		$to_url = $this->get_completed_redirect_url( $to_url );
 
+		$handler->response_data['open_in_new_tab'] = ! empty( $this->settings['open_in_new_tab'] );
+
 		$handler->response_data['redirect'] = $to_url;
 	}
 
@@ -141,11 +146,18 @@ class Redirect_To_Page extends Base {
 
 	public function editor_labels() {
 		return array(
-			'redirect_type' => __( 'Redirect to:', 'jet-form-builder' ),
-			'redirect_page' => __( 'Select page:', 'jet-form-builder' ),
-			'redirect_url'  => __( 'Redirect URL:', 'jet-form-builder' ),
-			'redirect_args' => __( 'Add query arguments to redirect URL:', 'jet-form-builder' ),
-			'redirect_hash' => __( 'Add hash to redirect URL:', 'jet-form-builder' ),
+			'redirect_type'   => __( 'Redirect to:', 'jet-form-builder' ),
+			'redirect_page'   => __( 'Select page:', 'jet-form-builder' ),
+			'redirect_url'    => __( 'Redirect URL:', 'jet-form-builder' ),
+			'redirect_args'   => __( 'Add query arguments to redirect URL:', 'jet-form-builder' ),
+			'redirect_hash'   => __( 'Add hash to redirect URL:', 'jet-form-builder' ),
+			'open_in_new_tab' => __( 'Open in new tab', 'jet-form-builder' ),
+		);
+	}
+
+	public function editor_labels_help() {
+		return array(
+			'open_in_new_tab' => __( 'Works with AJAX submit type only', 'jet-form-builder' ),
 		);
 	}
 

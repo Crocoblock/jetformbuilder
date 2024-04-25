@@ -35,6 +35,7 @@ function RedirectToPageRender( props ) {
 	const {
 		      source,
 		      label,
+			  help,
 		      settings,
 		      onChangeSetting,
 		      onChangeSettingObj,
@@ -152,6 +153,15 @@ function RedirectToPageRender( props ) {
 				value={ settings.redirect_hash }
 				onChange={ redirect_hash => onChangeSettingObj(
 					{ redirect_hash } ) }
+			/>
+			<ToggleControl
+				key="open_in_new_tab"
+				label={ label( 'open_in_new_tab' ) }
+				help={ help( 'open_in_new_tab' ) }
+				checked={ settings.open_in_new_tab || false }
+				onChange={
+					open_in_new_tab => onChangeSettingObj( { open_in_new_tab } )
+				}
 			/>
 		</div>
 	);

@@ -35,6 +35,7 @@ function RedirectToPageRender( props ) {
 	const {
 		      source,
 		      label,
+			  help,
 		      settings,
 		      onChangeSetting,
 		      onChangeSettingObj,
@@ -156,7 +157,7 @@ function RedirectToPageRender( props ) {
 			<ToggleControl
 				key="open_in_new_tab"
 				label={ label( 'open_in_new_tab' ) }
-				help="Works with AJAX submit type only."
+				help={ help( 'open_in_new_tab' ) }
 				checked={ settings.open_in_new_tab || false }
 				onChange={
 					open_in_new_tab => onChangeSettingObj( { open_in_new_tab } )

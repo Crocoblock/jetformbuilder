@@ -32,12 +32,9 @@ import MessagesPlugin from './store/plugins/MessagesPlugin';
 import OnUpdateEditableCellPlugin
 	from './store/plugins/OnUpdateEditableCellPlugin';
 import EditCollectorPlugin from './store/plugins/EditCollectorPlugin';
-import PortalVue from 'portal-vue';
-import { PortalTarget, Portal } from 'portal-vue';
 import ActionsWithFilters from './components/ActionsWithFilters';
 
 Vue.use( Vuex );
-Vue.use( PortalVue );
 
 window.JetFBComponents = {
 	...window.JetFBComponents,
@@ -60,9 +57,7 @@ window.JetFBComponents = {
 	DashboardPanel,
 	SideBarBoxes,
 	FormBuilderPage,
-	ActionsWithFilters,
-	PortalTarget,
-	Portal,
+	ActionsWithFilters
 };
 
 window.JetFBMixins = {

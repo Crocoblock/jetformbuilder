@@ -1,7 +1,7 @@
 import isNotEmpty from './isNotEmpty';
 
 const {
-	      AdvancedRestriction = () => {},
+	      AdvancedRestriction = function () {},
       } = JetFormBuilderAbstract;
 
 function NotEmptyAdvancedWithCustomOption() {

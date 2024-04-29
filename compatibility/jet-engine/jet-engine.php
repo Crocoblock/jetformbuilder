@@ -5,8 +5,8 @@ namespace JFB_Compatibility\Jet_Engine;
 
 use Jet_Engine\Query_Builder\Queries\Base_Query;
 use Jet_Form_Builder\Actions\Methods\Object_Properties_Collection;
-use Jet_Form_Builder\Blocks\Render\Checkbox_Field_Render;
-use Jet_Form_Builder\Blocks\Render\Radio_Field_Render;
+use JFB_Modules\Option_Field\Blocks\Checkbox;
+use JFB_Modules\Option_Field\Blocks\Radio;
 use Jet_Form_Builder\Classes\Builder_Helper;
 use JFB_Compatibility\Jet_Engine\Actions\Update_Options;
 use JFB_Compatibility\Jet_Engine\Blocks\Map_Field;
@@ -200,25 +200,34 @@ class Jet_Engine implements
 	}
 
 	public function register_scripts() {
-		$handle = $this->get_handle( 'map-field' );
+		$handle       = $this->get_handle( 'map-field' );
+		$script_asset = require_once $this->get_dir( 'assets/build/frontend/listing.options.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			Module::MAIN_SCRIPT_HANDLE
+		);
 
 		wp_register_script(
 			Module::LISTING_OPTIONS_HANDLE,
-			$this->get_url( 'assets/build/js/frontend/listing.options.js' ),
-			array(
-				Module::MAIN_SCRIPT_HANDLE,
-			),
-			jet_form_builder()->get_version(),
+			$this->get_url( 'assets/build/frontend/listing.options.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
+		);
+
+		$script_asset = require_once $this->get_dir( 'assets/build/frontend/map.field.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			Module::MAIN_SCRIPT_HANDLE
 		);
 
 		wp_register_script(
 			$handle,
-			$this->get_url( 'assets/build/js/frontend/map.field.js' ),
-			array(
-				Module::MAIN_SCRIPT_HANDLE,
-			),
-			jet_form_builder()->get_version(),
+			$this->get_url( 'assets/build/frontend/map.field.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 
@@ -240,13 +249,14 @@ class Jet_Engine implements
 	}
 
 	public function enqueue_admin_assets() {
-		$handle = $this->get_handle( 'editor' );
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+		$handle       = $this->get_handle( 'editor' );
 
 		wp_enqueue_script(
 			$handle,
-			$this->get_url( 'assets/build/js/editor.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$this->get_url( 'assets/build/editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 
@@ -302,7 +312,7 @@ class Jet_Engine implements
 	 * @param string $item
 	 * @param $value
 	 * @param $option
-	 * @param Checkbox_Field_Render|Radio_Field_Render $render
+	 * @param Checkbox\Block_Render|Radio\Block_Render $render
 	 *
 	 * @return string
 	 */

@@ -1,13 +1,7 @@
 import GenerateFormModal from '../../components/GenerateFormModal';
 import AiModalFooter from './AiModalFooter';
-
-const {
-	      useState,
-      } = wp.element;
-
-const {
-	      __,
-      } = wp.i18n;
+import { useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 function AiFormButton() {
 	const [ showModal, setShowModal ] = useState( false );

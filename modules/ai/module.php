@@ -9,6 +9,8 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
@@ -17,10 +19,16 @@ use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Ai\Rest_Api\Endpoints\Generate_Form_Endpoint;
 use JFB_Modules\Post_Type;
 
-class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_It, Base_Module_After_Install_It {
+class Module implements
+	Base_Module_It,
+	Base_Module_Url_It,
+	Base_Module_Handle_It,
+	Base_Module_After_Install_It,
+	Base_Module_Dir_It {
 
 	use Base_Module_Url_Trait;
 	use Base_Module_Handle_Trait;
+	use Base_Module_Dir_Trait;
 
 	public function rep_item_id() {
 		return 'ai';
@@ -69,25 +77,26 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 
 		$parser_module->register_scripts();
 
+		$script_asset = require_once $this->get_dir( 'assets/build/admin/forms.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			$parser_module->get_handle()
+		);
+
 		wp_enqueue_style(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/modal.css' ),
 			array(
 				'wp-components',
 			),
-			jet_form_builder()->get_version()
+			$script_asset['version']
 		);
 		wp_enqueue_script(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/admin/forms.js' ),
-			array(
-				$parser_module->get_handle(),
-				'wp-api-fetch',
-				'wp-dom-ready',
-				'wp-components',
-				'wp-i18n',
-			),
-			jet_form_builder()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 

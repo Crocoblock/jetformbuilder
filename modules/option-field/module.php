@@ -87,12 +87,14 @@ final class Module implements
 	}
 
 	public function enqueue_admin_assets() {
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+
 		// for all blocks
 		wp_enqueue_script(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/editor.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 
@@ -105,49 +107,74 @@ final class Module implements
 
 	public function register_frontend_scripts() {
 		// select
+		$script_asset = require_once $this->get_dir( 'assets/build/select.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			BlocksModule::MAIN_SCRIPT_HANDLE
+		);
+
 		wp_register_script(
 			$this->get_handle( 'select' ),
 			$this->get_url( 'assets/build/select.js' ),
-			array(
-				BlocksModule::MAIN_SCRIPT_HANDLE,
-			),
-			Plugin::instance()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 		wp_register_style(
 			$this->get_handle( 'select' ),
 			$this->get_url( 'assets/build/select.css' ),
 			array(),
-			jet_form_builder()->get_version()
+			$script_asset['version']
 		);
 
 		// checkbox
+		$script_asset = require_once $this->get_dir( 'assets/build/checkbox.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			BlocksModule::MAIN_SCRIPT_HANDLE
+		);
+
 		wp_register_script(
 			Blocks\Checkbox\Block_Type::HANDLE,
 			$this->get_url( 'assets/build/checkbox.js' ),
-			array(
-				BlocksModule::MAIN_SCRIPT_HANDLE,
-			),
-			Plugin::instance()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
+
+		// options restrictions
+		$script_asset = require_once $this->get_dir(
+			'assets/build/custom.options.restrictions.asset.php'
+		);
+
+		array_push(
+			$script_asset['dependencies'],
+			BlocksModule::MAIN_SCRIPT_HANDLE
+		);
+
 		wp_register_script(
 			Blocks\Checkbox\Block_Type::HANDLE_CUSTOM,
 			$this->get_url( 'assets/build/custom.options.restrictions.js' ),
-			array(
-				BlocksModule::MAIN_SCRIPT_HANDLE,
-			),
-			jet_form_builder()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
+
 		// radio
+		$script_asset = require_once $this->get_dir( 'assets/build/radio.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			BlocksModule::MAIN_SCRIPT_HANDLE
+		);
+
 		wp_register_script(
 			Blocks\Radio\Block_Type::HANDLE,
 			$this->get_url( 'assets/build/radio.js' ),
-			array(
-				BlocksModule::MAIN_SCRIPT_HANDLE,
-			),
-			Plugin::instance()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}

@@ -4,8 +4,10 @@
 namespace JFB_Compatibility\Jet_Booking;
 
 use Jet_Form_Builder\Blocks\Module;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use JFB_Components\Compatibility\Base_Compat_Dir_Trait;
+use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Modules\Deprecated;
-use Jet_Form_Builder\Plugin;
 use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
 use JFB_Components\Compatibility\Base_Compat_Url_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
@@ -20,10 +22,12 @@ if ( ! defined( 'WPINC' ) ) {
 class Jet_Booking implements
 	Base_Module_It,
 	Base_Module_Handle_It,
-	Base_Module_Url_It {
+	Base_Module_Url_It,
+	Base_Module_Dir_It {
 
 	use Base_Compat_Handle_Trait;
 	use Base_Compat_Url_Trait;
+	use Base_Compat_Dir_Trait;
 
 	public function rep_item_id() {
 		return 'jet-booking';
@@ -60,19 +64,23 @@ class Jet_Booking implements
 	}
 
 	/**
-	 * @throws \Jet_Form_Builder\Exceptions\Repository_Exception
+	 * @throws Repository_Exception
 	 */
 	public function register_scripts() {
-		$deprecated = jet_form_builder()->module( Deprecated\Module::class );
+		$script_asset = require_once $this->get_dir( 'assets/build/frontend.asset.php' );
+		$deprecated   = jet_form_builder()->module( Deprecated\Module::class );
+
+		array_push(
+			$script_asset['dependencies'],
+			Module::MAIN_SCRIPT_HANDLE,
+			$deprecated->get_handle()
+		);
 
 		wp_register_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/frontend.js' ),
-			array(
-				Module::MAIN_SCRIPT_HANDLE,
-				$deprecated->get_handle(),
-			),
-			Plugin::instance()->get_version(),
+			$this->get_url( 'assets/build/frontend.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}

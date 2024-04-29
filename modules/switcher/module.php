@@ -62,11 +62,13 @@ class Module implements
 	}
 
 	public function enqueue_admin_assets() {
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+
 		wp_enqueue_script(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/editor.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 
@@ -74,25 +76,30 @@ class Module implements
 			$this->get_handle(),
 			$this->get_url( 'assets/build/switcher.css' ),
 			array(),
-			jet_form_builder()->get_version()
+			$script_asset['version']
 		);
 	}
 
 	public function register_frontend_scripts() {
+		$script_asset = require_once $this->get_dir( 'assets/build/switcher.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			BlocksModule::MAIN_SCRIPT_HANDLE
+		);
+
 		wp_register_script(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/switcher.js' ),
-			array(
-				BlocksModule::MAIN_SCRIPT_HANDLE,
-			),
-			jet_form_builder()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 		wp_register_style(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/switcher.css' ),
 			array(),
-			jet_form_builder()->get_version()
+			$script_asset['version']
 		);
 	}
 }

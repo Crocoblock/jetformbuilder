@@ -3,6 +3,8 @@
 
 namespace JFB_Modules\Html_Parser;
 
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
@@ -14,10 +16,15 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Module implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_It {
+class Module implements
+	Base_Module_It,
+	Base_Module_Handle_It,
+	Base_Module_Url_It,
+	Base_Module_Dir_It {
 
 	use Base_Module_Url_Trait;
 	use Base_Module_Handle_Trait;
+	use Base_Module_Dir_Trait;
 
 	public function rep_item_id() {
 		return 'html-parser';
@@ -34,18 +41,28 @@ class Module implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_I
 	}
 
 	public function register_scripts() {
+		$script_asset = require_once $this->get_dir( 'assets/build/parser.asset.php' );
+
+		// script have already registered
+		if ( true === $script_asset ) {
+			return;
+		}
+
 		/** @var \JFB_Modules\Jet_Plugins\Module $jet_plugins */
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$jet_plugins = jet_form_builder()->module( 'jet-plugins' );
 		$jet_plugins->register_scripts();
 
+		array_push(
+			$script_asset['dependencies'],
+			$jet_plugins::HANDLE
+		);
+
 		wp_register_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/parser.js' ),
-			array(
-				$jet_plugins::HANDLE,
-			),
-			jet_form_builder()->get_version(),
+			$this->get_url( 'assets/build/parser.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 

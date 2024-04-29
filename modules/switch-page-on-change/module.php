@@ -5,6 +5,8 @@ namespace JFB_Modules\Switch_Page_On_Change;
 
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
@@ -20,10 +22,12 @@ class Module implements
 	Base_Module_It,
 	Base_Module_Url_It,
 	Base_Module_Handle_It,
-	Base_Module_After_Install_It {
+	Base_Module_After_Install_It,
+	Base_Module_Dir_It {
 
 	use Base_Module_Url_Trait;
 	use Base_Module_Handle_Trait;
+	use Base_Module_Dir_Trait;
 
 	const SUPPORT_NAME   = 'jetFBSwitchPageOnChange';
 	const ATTRIBUTE_NAME = 'switch_on_change';
@@ -73,21 +77,30 @@ class Module implements
 	}
 
 	public function register_editor_scripts() {
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets-build/js/editor/main.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$this->get_url( 'assets/build/editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}
 
 	public function register_frontend_scripts() {
+		$script_asset = require_once $this->get_dir( 'assets/build/frontend.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			\Jet_Form_Builder\Blocks\Module::MAIN_SCRIPT_HANDLE
+		);
+
 		wp_register_script(
 			$this->get_handle(),
-			$this->get_url( 'assets-build/js/frontend/main.js' ),
-			array( \Jet_Form_Builder\Blocks\Module::MAIN_SCRIPT_HANDLE ),
-			jet_form_builder()->get_version(),
+			$this->get_url( 'assets/build/frontend.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}

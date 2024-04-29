@@ -11,6 +11,8 @@ if ( ! defined( 'WPINC' ) ) {
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
@@ -25,11 +27,13 @@ final class Module implements
 	Base_Module_It,
 	Base_Module_Url_It,
 	Base_Module_Handle_It,
-	Base_Module_After_Install_It {
+	Base_Module_After_Install_It,
+	Base_Module_Dir_It {
 
 	use Base_Module_Handle_Trait;
 	use Base_Module_Url_Trait;
 	use Repository_Pattern_Trait;
+	use Base_Module_Dir_Trait;
 
 	const SUPPORT_NAME   = 'jetFBSanitizeValue';
 	const ATTRIBUTE_NAME = 'sanitizeValue';
@@ -102,7 +106,7 @@ final class Module implements
 		}
 
 		if ( block_has_support( $block_type, array( self::SUPPORT_NAME ) ) &&
-			! array_key_exists( self::ATTRIBUTE_NAME, $block_type->attributes )
+		     ! array_key_exists( self::ATTRIBUTE_NAME, $block_type->attributes )
 		) {
 			$block_type->attributes[ self::ATTRIBUTE_NAME ] = array(
 				'type'    => 'array',
@@ -112,13 +116,14 @@ final class Module implements
 	}
 
 	public function register_editor_scripts() {
-		$handle = $this->get_handle();
+		$handle       = $this->get_handle();
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
 
 		wp_enqueue_script(
 			$handle,
-			$this->get_url( 'assets/build/js/editor.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$this->get_url( 'assets/build/editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 

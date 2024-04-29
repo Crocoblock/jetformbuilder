@@ -1,14 +1,7 @@
 import AiFormHeaderButton from './AiFormHeaderButton';
 import AiFormPatternButton from './AiFormPatternButton';
-
-const {
-	      createRoot,
-      } = wp.element;
-
-const {
-	      subscribe,
-	      dispatch,
-      } = wp.data;
+import { createRoot } from '@wordpress/element';
+import { subscribe, dispatch } from '@wordpress/data';
 
 const buttonDiv = document.createElement( 'div' );
 buttonDiv.classList.add( 'jfb-generate-form-ai-wrapper' );

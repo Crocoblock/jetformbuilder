@@ -120,13 +120,14 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 	 */
 	public function enqueue_assets_for_records() {
 		/** @var Module $module */
-		$module = jet_form_builder()->module( 'verification' );
+		$module       = jet_form_builder()->module( 'verification' );
+		$script_asset = require_once $module->get_dir( 'assets/build/admin/form-records.asset.php' );
 
 		wp_enqueue_script(
 			$this->get_handle(),
-			$module->get_url( 'assets/build/js/admin/form-records.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$module->get_url( 'assets/build/admin/form-records.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}
@@ -136,15 +137,14 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 	 */
 	public function enqueue_assets_for_record_single() {
 		/** @var Module $module */
-		$module = jet_form_builder()->module( 'verification' );
+		$module       = jet_form_builder()->module( 'verification' );
+		$script_asset = require_once $module->get_dir( 'assets/build/admin/form-record-single.asset.php' );
 
 		wp_enqueue_script(
 			$this->get_handle(),
-			$module->get_url( 'assets/build/js/admin/form-record-single.js' ),
-			array(
-				'wp-api-fetch',
-			),
-			jet_form_builder()->get_version(),
+			$module->get_url( 'assets/build/admin/form-record-single.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}

@@ -3,6 +3,8 @@
 
 namespace JFB_Modules\Form_Record\Admin\Pages;
 
+use Jet_Form_Builder\Admin\Pages\interfaces\Page_Script_Declaration_Interface;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Components\Admin\Notices\Traits\With_Notices_Trait;
 use JFB_Modules\Form_Record\Admin\Meta_Boxes;
 use JFB_Modules\Form_Record\Admin\Notices\Update_Db_Notice;
@@ -10,13 +12,14 @@ use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers;
 use JFB_Modules\Form_Record\Admin\Pages\Traits\Form_Records_Pages_Trait;
+use JFB_Modules\Form_Record\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Single_Form_Record_Page extends Base_Single_Page {
+class Single_Form_Record_Page extends Base_Single_Page implements Page_Script_Declaration_Interface {
 
 	use With_Notices_Trait;
 	use Form_Records_Pages_Trait;
@@ -69,6 +72,27 @@ class Single_Form_Record_Page extends Base_Single_Page {
 		wp_enqueue_script( Pages_Manager::SCRIPT_VUEX_PACKAGE );
 
 		parent::assets();
+	}
+
+	/**
+	 * @return void
+	 * @throws Repository_Exception
+	 */
+	public function register_scripts() {
+		/** @var Module $module */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$module       = jet_form_builder()->module( 'form-record' );
+		$script_asset = require_once $module->get_dir(
+			'assets/build/admin/pages/jfb-records-single.asset.php'
+		);
+
+		wp_register_script(
+			$this->slug(),
+			$this->base_script_url(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
+		);
 	}
 
 }

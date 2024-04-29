@@ -1,22 +1,12 @@
 import GenerateFormModal from '../components/GenerateFormModal';
 import AiEditorFooterFill from './AiEditorFooterFill';
+import { useState } from '@wordpress/element';
+import { FlexItem, Flex } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 const {
 	      PatternInserterButton,
       } = JetFBComponents;
-
-const {
-	      useState,
-      } = wp.element;
-
-const {
-	      FlexItem,
-	      Flex,
-      } = wp.components;
-
-const {
-	      __,
-      } = wp.i18n;
 
 function AiFormPatternButton( { pattern } ) {
 	const [ showModal, setShowModal ] = useState( false );

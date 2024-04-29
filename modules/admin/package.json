@@ -6,16 +6,7 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"hidden:dev:js": "webpack --config .config/dev.webpack.config.js --progress",
-		"hidden:dev:js:w": "webpack --config .config/dev.webpack.config.js --progress -w",
-		"hidden:build:js": "webpack --config .config/prod.webpack.config.js --progress",
-		"hidden:build:css": "sass assets\\src\\scss\\plugins\\go-pro.scss:assets\\build\\css\\go-pro.css assets\\src\\scss\\plugins\\deactivate.scss:assets\\build\\css\\deactivate.css -s compressed --watch --no-source-map"
-	},
-	"devDependencies": {
-		"@babel/core": "^7.14.3",
-		"babel-loader": "^8.2.2",
-		"webpack": "^5.37.1",
-		"webpack-cli": "^4.7.0",
-		"sass": "^1.60.0"
+		"build": "npx webpack build --mode production",
+		"dev": "npx webpack build --mode development -w"
 	}
 }

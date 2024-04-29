@@ -66,28 +66,32 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Dir_It, 
 	}
 
 	public function editor_assets_before() {
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+
 		wp_enqueue_script(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/editor.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}
 
 	public function editor_assets_package_before() {
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.package.asset.php' );
+
 		wp_enqueue_script(
 			$this->get_handle( 'package' ),
 			$this->get_url( 'assets/build/editor.package.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 		wp_enqueue_style(
 			$this->get_handle( 'package' ),
 			$this->get_url( 'assets/build/editor.css' ),
 			array(),
-			jet_form_builder()->get_version()
+			$script_asset['version']
 		);
 	}
 

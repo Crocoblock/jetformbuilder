@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Admin\Pages;
 
+use Jet_Form_Builder\Admin\Pages\interfaces\Page_Script_Declaration_Interface;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use JFB_Components\Admin\Page\Interfaces\Action_Page_It;
 use JFB_Components\Admin\Page\Interfaces\Admin_Page_It;
@@ -251,13 +252,17 @@ class Pages_Manager {
 			true
 		);
 
-		wp_register_script(
-			$this->current_page->slug(),
-			$this->current_page->base_script_url(),
-			array(),
-			Plugin::instance()->get_version(),
-			true
-		);
+		if ( $this->current_page instanceof Page_Script_Declaration_Interface ) {
+			$this->current_page->register_scripts();
+		} else {
+			wp_register_script(
+				$this->current_page->slug(),
+				$this->current_page->base_script_url(),
+				array(),
+				Plugin::instance()->get_version(),
+				true
+			);
+		}
 
 		wp_set_script_translations(
 			$this->current_page->slug(),

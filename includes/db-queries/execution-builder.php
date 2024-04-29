@@ -105,9 +105,12 @@ class Execution_Builder {
 			);
 		}
 
+		$prefix = $model::DB_TABLE_PREFIX;
+		$table = $model::table_name();
+
 		throw new Sql_Exception(
 			esc_html(
-				"Something went wrong on insert into: {$model::DB_TABLE_PREFIX}{$model::table_name()}"
+				"Something went wrong on insert into: " . $prefix . $table
 			),
 			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			$wpdb->last_error,

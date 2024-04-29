@@ -38,7 +38,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	public function register_scripts() {
 		wp_register_script(
 			self::HANDLE,
-			$this->get_url( 'assets/build/js/index.js' ),
+			$this->get_url( 'assets/build/index.js' ),
 			array( 'jquery' ),
 			'1.0.0',
 			true

@@ -1,0 +1,1 @@
+(()=>{"use strict";(0,window.wp.hooks.addAction)("jet.fb.render.page","jet-form-builder/verification",(function(e){const[t]=e.$children;t.setActionPromises({action:"verify",promise:t.promiseWrapper((({resolve:e,reject:i})=>{t.apiFetch().then((i=>{t.$store.dispatch("scope-default/fetchPage"),e(i.message)})).catch(i)}))})}))})();

@@ -3,9 +3,10 @@
 
 namespace JFB_Compatibility\Jet_Appointment;
 
-use Jet_Form_Builder\Plugin;
+use JFB_Components\Compatibility\Base_Compat_Dir_Trait;
 use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
 use JFB_Components\Compatibility\Base_Compat_Url_Trait;
+use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Url_It;
@@ -19,10 +20,12 @@ if ( ! defined( 'WPINC' ) ) {
 class Jet_Appointment implements
 	Base_Module_It,
 	Base_Module_Handle_It,
-	Base_Module_Url_It {
+	Base_Module_Url_It,
+	Base_Module_Dir_It {
 
 	use Base_Compat_Handle_Trait;
 	use Base_Compat_Url_Trait;
+	use Base_Compat_Dir_Trait;
 
 	public function rep_item_id() {
 		return 'jet-appointment';
@@ -59,14 +62,19 @@ class Jet_Appointment implements
 	}
 
 	public function register_scripts() {
+		$script_asset = require_once $this->get_dir( 'assets/build/frontend.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			Module::MAIN_SCRIPT_HANDLE,
+			Module::LISTING_OPTIONS_HANDLE
+		);
+
 		wp_register_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/frontend.js' ),
-			array(
-				Module::MAIN_SCRIPT_HANDLE,
-				Module::LISTING_OPTIONS_HANDLE,
-			),
-			Plugin::instance()->get_version(),
+			$this->get_url( 'assets/build/frontend.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}

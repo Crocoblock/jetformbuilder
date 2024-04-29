@@ -1,14 +1,10 @@
 import CheckOutInput from './CheckOutInput';
 import { FORMAT } from './constants';
+import { getCheckoutFieldFormat, getCheckoutFieldLayout } from './functions';
 
 const {
 	      BaseSignal,
       } = JetFormBuilderAbstract;
-
-const {
-	      layout       = 'single',
-	      field_format = FORMAT,
-      } = window.JetABAFInput;
 
 function CheckOutSignal() {
 	BaseSignal.call( this );
@@ -18,7 +14,7 @@ function CheckOutSignal() {
 	};
 
 	this.runSignal = function ( prevValue ) {
-		'single' === layout
+		'single' === getCheckoutFieldLayout()
 		? this.runSignalForSingle()
 		: this.runSignalForSeparate( prevValue );
 	};
@@ -34,7 +30,7 @@ function CheckOutSignal() {
 		}
 
 		dateInput.value = current.map(
-			date => moment( date, FORMAT ).format( field_format ),
+			date => moment( date, FORMAT ).format( getCheckoutFieldFormat() ),
 		).join( ' - ' );
 	};
 
@@ -55,12 +51,14 @@ function CheckOutSignal() {
 			return;
 		}
 
-		startDate.value = moment( current[ 0 ], FORMAT ).format( field_format );
+		startDate.value = moment( current[ 0 ], FORMAT ).format(
+			getCheckoutFieldFormat(),
+		);
 		endDate.value   = moment(
 			current[ 1 ] ?? current[ 0 ], // for one-day bookings
 			FORMAT,
 		).format(
-			field_format,
+			getCheckoutFieldFormat(),
 		);
 
 		this.updateCalendar();
@@ -77,11 +75,13 @@ function CheckOutSignal() {
 			return;
 		}
 
+		const fieldFormat = getCheckoutFieldFormat();
+
 		// console.log( current );
 		jQuery( wrapper ).data( 'dateRangePicker' ).setDateRange(
-			moment( current[ 0 ] ).format( field_format ),
+			moment( current[ 0 ] ).format( fieldFormat ),
 			// for one-day bookings
-			moment( current[ 1 ] ?? current[ 0 ] ).format( field_format ),
+			moment( current[ 1 ] ?? current[ 0 ] ).format( fieldFormat ),
 			true,
 		);
 	};

@@ -1,4 +1,9 @@
 import { FORMAT } from './constants';
+import {
+	getCheckoutDataSetting,
+	getCheckoutFieldFormat,
+	getCheckoutFieldLayout,
+} from './functions';
 
 const {
 	      InputData,
@@ -7,16 +12,6 @@ const {
 const {
 	      isEmpty,
       } = JetFormBuilderFunctions;
-
-const {
-	      field_format = FORMAT,
-	      layout       = 'single',
-      } = window?.JetABAFInput ?? {};
-
-const {
-	      per_nights,
-	      one_day_bookings,
-      } = window?.JetABAFData ?? {};
 
 function CheckOutInput() {
 	InputData.call( this );
@@ -41,7 +36,10 @@ function CheckOutInput() {
 
 		// convert to default format
 		return dates.map(
-			currentDate => moment( currentDate, field_format ).format( FORMAT ),
+			currentDate => moment(
+				currentDate,
+				getCheckoutFieldFormat(),
+			).format( FORMAT ),
 		);
 	} );
 
@@ -105,7 +103,7 @@ function CheckOutInput() {
 
 		this.inputType = 'checkin-checkout';
 
-		if ( 'single' === layout ) {
+		if ( 'single' === getCheckoutFieldLayout() ) {
 			return;
 		}
 
@@ -138,13 +136,13 @@ CheckOutInput.prototype.parseValueForCalculated = function () {
 		 * @type {string[]}
 		 */
 		const dates = this.getValue().map( singleDate => (
-			moment( singleDate, FORMAT ).format( field_format )
+			moment( singleDate, FORMAT ).format( getCheckoutFieldFormat() )
 		) );
 
 		return JetBooking.calcBookedDates( dates.join( ' - ' ) );
 	}
 
-	if ( one_day_bookings ) {
+	if ( getCheckoutDataSetting( 'one_day_bookings' ) ) {
 		return 1;
 	}
 
@@ -159,7 +157,7 @@ CheckOutInput.prototype.parseValueForCalculated = function () {
 	let value = dates[ 1 ].diff( dates[ 0 ], 'days' );
 	value     = Number( value );
 
-	if ( !per_nights ) {
+	if ( !getCheckoutDataSetting( 'per_nights' ) ) {
 		value++;
 	}
 

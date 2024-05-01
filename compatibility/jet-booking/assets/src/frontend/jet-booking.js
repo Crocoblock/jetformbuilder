@@ -51,8 +51,6 @@ addFilter(
 	},
 );
 
-const relatedCheckOut = [];
-
 addFilter(
 	'jet.fb.onCalculate.part',
 	'jet-form-builder/booking-compatibility',
@@ -75,10 +73,10 @@ addFilter(
 			return 0;
 		}
 
-		const formId = formula.input.getSubmit().getFormId();
+		formula.cachedFields = formula.cachedFields || [];
 
-		if ( !relatedCheckOut.includes( formId + checkoutField.name ) ) {
-			relatedCheckOut.push( formId + checkoutField.name );
+		if ( !formula.cachedFields.includes( checkoutField.name ) ) {
+			formula.cachedFields.push( checkoutField.name );
 
 			checkoutField.watch( () => formula.setResult() );
 		}

@@ -1,8 +1,11 @@
 const WPExtractorPlugin = require(
 	'@wordpress/dependency-extraction-webpack-plugin',
 );
-const path              = require( 'path' );
-const devMode           = !process.argv.join( ':' ).
+
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+
+const path    = require( 'path' );
+const devMode = !process.argv.join( ':' ).
 	includes( '--mode:production' );
 
 module.exports = {
@@ -39,7 +42,7 @@ module.exports = {
 			{
 				test: /\.css$/,
 				use: [
-					'style-loader',
+					MiniCssExtractPlugin.loader,
 					'css-loader',
 					'postcss-loader',
 				],
@@ -48,5 +51,6 @@ module.exports = {
 	},
 	plugins: [
 		new WPExtractorPlugin(),
+		new MiniCssExtractPlugin(),
 	],
 };

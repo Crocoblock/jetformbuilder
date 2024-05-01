@@ -13,7 +13,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-$this->add_attribute( 'class', 'jet-form-builder__field select-field' );
+$this->add_attribute( 'class', 'jet-form-builder__field select-field jfb-select' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'required', $this->block_type->get_required_val() );
 $this->add_attribute( 'name', $this->block_type->get_field_name() );

@@ -103,6 +103,13 @@ final class Module implements
 			'JetFormOptionFieldData',
 			$this->get_localize_data()
 		);
+
+		wp_enqueue_style(
+			$this->get_handle(),
+			$this->get_url( 'assets/build/editor.css' ),
+			array(),
+			$script_asset['version']
+		);
 	}
 
 	public function register_frontend_scripts() {

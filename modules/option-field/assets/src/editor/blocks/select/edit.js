@@ -1,10 +1,17 @@
 import preview from './preview';
-import { SelectRadioCheckPlaceholder } from '../../components/SelectRadioCheckPlaceholder';
 import SelectRadioCheck from '../../components/SelectRadioCheck';
+import { __ } from '@wordpress/i18n';
+import {
+	useBlockProps,
+	InspectorControls,
+} from '@wordpress/block-editor';
+import {
+	ToggleControl,
+	PanelBody,
+	RangeControl,
+} from '@wordpress/components';
+import SelectView from './SelectView';
 
-const {
-	      __,
-      } = wp.i18n;
 const {
 	      ToolBarFields,
 	      BlockLabel,
@@ -23,17 +30,6 @@ const {
 const {
 	      useUniqueNameOnDuplicate,
       } = JetFBHooks;
-
-const {
-	      InspectorControls,
-	      useBlockProps,
-      } = wp.blockEditor;
-
-const {
-	      ToggleControl,
-	      PanelBody,
-	      RangeControl,
-      } = wp.components;
 
 /**
  * @param props
@@ -99,11 +95,8 @@ export default function SelectEdit( props ) {
 				<BlockClassName/>
 			</PanelBody>
 		</InspectorControls> }
-		<div key={ uniqKey( 'viewBlock' ) } { ...blockProps }>
-			<SelectRadioCheckPlaceholder
-				scriptData={ window.JetFormOptionFieldData }
-				{ ...props }
-			/>
+		<div { ...blockProps }>
+			<SelectView attributes={ attributes }/>
 			<SelectRadioCheck { ...props }>
 				<ToggleControl
 					key="multiple"

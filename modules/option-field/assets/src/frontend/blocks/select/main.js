@@ -1,6 +1,9 @@
 import MultiSelectData from './input';
 import SignalSelect from './signal';
 
+// it's important to compile separate css file
+import JfbSelect from '../../../shared/JfbSelect';
+
 const { addFilter } = JetPlugins.hooks;
 
 window.JetFormBuilderAbstract = {

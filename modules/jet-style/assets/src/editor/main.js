@@ -12,10 +12,7 @@ import StyleBorderRadiusItem
 import StyleBox from './components/StyleBox';
 import registerAttribute from './helpers/registerAttribute';
 import StyleSize from './components/StyleSize';
-
-const {
-	      addFilter,
-      } = wp.hooks;
+import { addFilter } from '@wordpress/hooks';
 
 addFilter(
 	'blocks.registerBlockType',

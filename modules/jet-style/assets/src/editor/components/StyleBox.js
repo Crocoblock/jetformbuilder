@@ -1,25 +1,11 @@
 import BlockJetStyleItemContext from '../context/BlockJetStyleItemContext';
 import StylePanelItemContext from './StylePanelItemContext';
 import { SIDES } from '../abstract/BoxCSSCompiler';
-
-const {
-	      useContext,
-      } = wp.element;
-
-let {
-	    __experimentalBoxControl,
-	    BoxControl,
-	    __experimentalToolsPanelItem,
-	    ToolsPanelItem,
-    } = wp.components;
-
-ToolsPanelItem = (
-	ToolsPanelItem || __experimentalToolsPanelItem
-);
-
-BoxControl = (
-	BoxControl || __experimentalBoxControl
-);
+import { useContext } from '@wordpress/element';
+import {
+	__experimentalBoxControl as BoxControl,
+	__experimentalToolsPanelItem as ToolsPanelItem,
+} from '@wordpress/components';
 
 function UnCompleteBox( {
 	label = '',
@@ -44,6 +30,19 @@ function UnCompleteBox( {
 		return SIDES.includes( firstKey );
 	};
 
+	const onChange = value => {
+		const modifiedValue = {};
+
+		sides.forEach( currentSide => {
+			modifiedValue[ currentSide ] = Number.isNaN(
+				Number( value[ currentSide ] ),
+			) ? value[ currentSide ]
+			  : value[ currentSide ] + 'px';
+		} );
+
+		updateCss( modifiedValue );
+	};
+
 	return <ToolsPanelItem
 		label={ label }
 		onDeselect={ onDeselect }
@@ -52,7 +51,7 @@ function UnCompleteBox( {
 	>
 		<BoxControl
 			label={ labelForControl ?? label }
-			onChange={ updateCss }
+			onChange={ onChange }
 			sides={ sides }
 			value={ cssValue }
 		/>

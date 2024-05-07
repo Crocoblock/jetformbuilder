@@ -25,10 +25,17 @@ const {
 	      BlockClassName,
 	      FieldControl,
 	      SwitchPageOnChangeControls,
+	      StylePanel,
+	      StyleColorItem,
+	      StyleColorItemsWrapper,
+	      StyleBorderItem,
+	      StyleBorderRadiusItem,
+	      StyleBox,
       } = JetFBComponents;
 
 const {
 	      useUniqueNameOnDuplicate,
+	      useJetStyle,
       } = JetFBHooks;
 
 /**
@@ -45,7 +52,8 @@ export default function SelectEdit( props ) {
 		      editProps: { uniqKey, attrHelp },
 	      } = props;
 
-	const blockProps = useBlockProps();
+	const jetStyle   = useJetStyle?.() ?? {};
+	const blockProps = useBlockProps( jetStyle );
 
 	useUniqueNameOnDuplicate();
 
@@ -65,36 +73,81 @@ export default function SelectEdit( props ) {
 			{ ...props }
 		/>
 		{ !attributes.multiple && <SwitchPageOnChangeControls/> }
-		{ isSelected && <InspectorControls
-			key={ uniqKey( 'InspectorControls' ) }
-		>
-			<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
-				<BlockLabel/>
-				<BlockName/>
-				<BlockDescription/>
-			</PanelBody>
-			<PanelBody title={ __( 'Value', 'jet-form-builder' ) }>
-				<BlockAdvancedValue/>
-			</PanelBody>
-			<PanelBody
-				title={ __( 'Advanced', 'jet-form-builder' ) }
+		{ isSelected && <>
+			<InspectorControls
+				key={ uniqKey( 'InspectorControls' ) }
 			>
-				<BlockPlaceholder/>
-				{ (
-					!!attributes.placeholder.length
-				) && <ToggleControl
-					key={ uniqKey( 'is_disabled_placeholder' ) }
-					label={ __( 'Disable placeholder', 'jet-form-builder' ) }
-					checked={ attributes.is_disabled_placeholder }
-					onChange={ is_disabled_placeholder => setAttributes(
-						{ is_disabled_placeholder } ) }
-				/> }
-				<BlockAddPrevButton/>
-				<BlockPrevButtonLabel/>
-				<BlockVisibility/>
-				<BlockClassName/>
-			</PanelBody>
-		</InspectorControls> }
+				<PanelBody title={ __( 'General', 'jet-form-builder' ) }>
+					<BlockLabel/>
+					<BlockName/>
+					<BlockDescription/>
+				</PanelBody>
+				<PanelBody title={ __( 'Value', 'jet-form-builder' ) }>
+					<BlockAdvancedValue/>
+				</PanelBody>
+				<PanelBody
+					title={ __( 'Advanced', 'jet-form-builder' ) }
+				>
+					<BlockPlaceholder/>
+					{ (
+						!!attributes.placeholder.length
+					) && <ToggleControl
+						key={ uniqKey( 'is_disabled_placeholder' ) }
+						label={ __( 'Disable placeholder',
+							'jet-form-builder' ) }
+						checked={ attributes.is_disabled_placeholder }
+						onChange={ is_disabled_placeholder => setAttributes(
+							{ is_disabled_placeholder } ) }
+					/> }
+					<BlockAddPrevButton/>
+					<BlockPrevButtonLabel/>
+					<BlockVisibility/>
+					<BlockClassName/>
+				</PanelBody>
+			</InspectorControls>
+			{ Boolean( StylePanel ) && <InspectorControls group="styles">
+				<StylePanel
+					label={ __( 'Colors', 'jet-form-builder' ) }
+				>
+					<StyleColorItemsWrapper>
+						<StyleColorItem
+							cssVar="--jfb-input-text"
+							label={ __( 'Text color', 'jet-form-builder' ) }
+						/>
+						<StyleColorItem
+							cssVar="--jfb-input-bg"
+							label={ __( 'Background', 'jet-form-builder' ) }
+						/>
+					</StyleColorItemsWrapper>
+				</StylePanel>
+				<StylePanel
+					label={ __( 'Border', 'jet-form-builder' ) }
+				>
+					<StyleBorderItem
+						cssVar="--jfb-input-border"
+						label={ __( 'Border', 'jet-form-builder' ) }
+						enableAlpha
+						labelForControl
+					/>
+					<StyleBorderRadiusItem
+						cssVar="--jfb-input-border-radius"
+						label={ __( 'Radius', 'jet-form-builder' ) }
+					/>
+				</StylePanel>
+				<StylePanel
+					label={ __( 'Dimensions', 'jet-form-builder' ) }
+				>
+					<StyleBox
+						cssVar="--jfb-input-padding"
+						label={ __( 'Padding', 'jet-form-builder' ) }
+					/>
+					<StyleBox
+						cssVar="--jfb-input-margin"
+						label={ __( 'Margin', 'jet-form-builder' ) }
+					/>
+				</StylePanel>
+			</InspectorControls> }
+		</> }
 		<div { ...blockProps }>
 			<SelectView attributes={ attributes }/>
 			<SelectRadioCheck { ...props }>

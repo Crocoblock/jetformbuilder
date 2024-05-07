@@ -1,2 +1,129 @@
-.wp-block-jet-forms-select-field[style*="--jfb-input-padding"] .jfb-select{padding-top:var(--jfb-input-padding-top);padding-right:var(--jfb-input-padding-right);padding-bottom:var(--jfb-input-padding-bottom);padding-left:var(--jfb-input-padding-left);}.wp-block-jet-forms-select-field[style*="--jfb-input-background-color"] .jfb-select{background-color:var(--jfb-input-background-color);}.jet--ua-safari .jet-form-builder__field-wrap select.jfb-select{-webkit-appearance:none;background-image:linear-gradient(45deg, transparent 50%, currentColor 50%),linear-gradient(135deg, currentColor 50%, transparent 50%);-webkit-background-position:calc(100% - 20px) calc(1em + 2px),calc(100% - 15px) calc(1em + 2px);background-position:calc(100% - 20px) calc(1em + 2px),calc(100% - 15px) calc(1em + 2px);-webkit-background-size:5px 5px,5px 5px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;}.rtl.jet--ua-safari .jet-form-builder__field-wrap select.jfb-select{-webkit-background-position:calc(10% - 20px) calc(1em + 2px),calc(10% - 15px) calc(1em + 2px);background-position:calc(10% - 20px) calc(1em + 2px),calc(10% - 15px) calc(1em + 2px);}.wp-core-ui .jfb-select{width:100%;max-width:unset;}
+.jfb-input {
+    [style*="--jfb-input-padding-top"] & {
+        padding-top: var(--jfb-input-padding-top);
+    }
 
+    [style*="--jfb-input-padding-right"] & {
+        padding-right: var(--jfb-input-padding-right);
+    }
+
+    [style*="--jfb-input-padding-bottom"] & {
+        padding-bottom: var(--jfb-input-padding-bottom);
+    }
+
+    [style*="--jfb-input-padding-left"] & {
+        padding-left: var(--jfb-input-padding-left);
+    }
+
+    [style*="--jfb-input-margin-top"] & {
+        margin-top: var(--jfb-input-margin-top);
+    }
+
+    [style*="--jfb-input-margin-right"] & {
+        margin-right: var(--jfb-input-margin-right);
+    }
+
+    [style*="--jfb-input-margin-bottom"] & {
+        margin-bottom: var(--jfb-input-margin-bottom);
+    }
+
+    [style*="--jfb-input-margin-left"] & {
+        margin-left: var(--jfb-input-margin-left);
+    }
+
+    [style*="--jfb-input-bg:"] & {
+        background-color: var(--jfb-input-bg);
+    }
+
+    [style*="--jfb-input-text:"] & {
+        color: var(--jfb-input-text);
+    }
+
+    [style*="--jfb-input-border-width-top"] & {
+        border-top-width: var(--jfb-input-border-width-top);
+    }
+
+    [style*="--jfb-input-border-width-right"] & {
+        border-right-width: var(--jfb-input-border-width-right);
+    }
+
+    [style*="--jfb-input-border-width-bottom"] & {
+        border-bottom-width: var(--jfb-input-border-width-bottom);
+    }
+
+    [style*="--jfb-input-border-width-left"] & {
+        border-left-width: var(--jfb-input-border-width-left);
+    }
+
+    [style*="--jfb-input-border-style-top"] & {
+        border-top-style: var(--jfb-input-border-style-top);
+    }
+
+    [style*="--jfb-input-border-style-right"] & {
+        border-right-style: var(--jfb-input-border-style-right);
+    }
+
+    [style*="--jfb-input-border-style-bottom"] & {
+        border-bottom-style: var(--jfb-input-border-style-bottom);
+    }
+
+    [style*="--jfb-input-border-style-left"] & {
+        border-left-style: var(--jfb-input-border-style-left);
+    }
+
+    [style*="--jfb-input-border-color-top"] & {
+        border-top-color: var(--jfb-input-border-color-top);
+    }
+
+    [style*="--jfb-input-border-color-right"] & {
+        border-right-color: var(--jfb-input-border-color-right);
+    }
+
+    [style*="--jfb-input-border-color-bottom"] & {
+        border-bottom-color: var(--jfb-input-border-color-bottom);
+    }
+
+    [style*="--jfb-input-border-color-left"] & {
+        border-left-color: var(--jfb-input-border-color-left);
+    }
+
+    [style*="--jfb-input-border-radius-top-left"] & {
+        border-top-left-radius: var(--jfb-input-border-radius-top-left);
+    }
+
+    [style*="--jfb-input-border-radius-top-right"] & {
+        border-top-right-radius: var(--jfb-input-border-radius-top-right);
+    }
+
+    [style*="--jfb-input-border-radius-bottom-left"] & {
+        border-bottom-left-radius: var(--jfb-input-border-radius-bottom-left);
+    }
+
+    [style*="--jfb-input-border-radius-bottom-right"] & {
+        border-bottom-right-radius: var(--jfb-input-border-radius-bottom-right);
+    }
+
+    [style*="--jfb-input-width"] & {
+        width: var(--jfb-input-width);
+    }
+
+    .jet--ua-safari .jet-form-builder__field-wrap select & {
+        -webkit-appearance: none; /* Remove default arrow in Safari */
+        background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+        linear-gradient(135deg, currentColor 50%, transparent 50%);
+        background-position: calc(100% - 20px) calc(1em + 2px),
+        calc(100% - 15px) calc(1em + 2px);
+        background-size: 5px 5px,
+        5px 5px;
+        background-repeat: no-repeat;
+    }
+
+    .rtl.jet--ua-safari .jet-form-builder__field-wrap select & {
+        background-position: calc(10% - 20px) calc(1em + 2px), calc(10% - 15px) calc(1em + 2px);
+    }
+
+    .wp-core-ui & {
+        width: 100%;
+        max-width: unset;
+    }
+}

@@ -1,10 +1,10 @@
 import usePreviewOptions from '../../hooks/usePreviewOptions';
-import JfbSelect from '../../../shared/JfbSelect';
+import '../../../shared/JfbSelect.css';
 
 function SelectView( { attributes } ) {
 	const options = usePreviewOptions( attributes );
 
-	return <select className={ JfbSelect }>
+	return <select className={ [ 'jfb-input' ].join( ' ' ) }>
 		{ attributes.placeholder && (
 			<option
 				value=""

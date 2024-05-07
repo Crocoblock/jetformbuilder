@@ -2,7 +2,7 @@ import MultiSelectData from './input';
 import SignalSelect from './signal';
 
 // it's important to compile separate css file
-import JfbSelect from '../../../shared/JfbSelect';
+import JfbSelect from '../../../shared/JfbSelect.css';
 
 const { addFilter } = JetPlugins.hooks;
 

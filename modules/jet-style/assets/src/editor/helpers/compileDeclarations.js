@@ -2,10 +2,12 @@ import BaseCSSCompiler from '../abstract/BaseCSSCompiler';
 import BorderCSSCompiler from '../abstract/BorderCSSCompiler';
 import BorderRadiusCSSCompiler from '../abstract/BorderRadiusCSSCompiler';
 import BoxCSSCompiler from '../abstract/BoxCSSCompiler';
+import BorderV2CSSCompiler from '../abstract/BorderV2CSSCompiler';
 
 const compilers = [
 	new BoxCSSCompiler(),
 	new BorderRadiusCSSCompiler(),
+	new BorderV2CSSCompiler(),
 	new BorderCSSCompiler(),
 	new BaseCSSCompiler(),
 ];

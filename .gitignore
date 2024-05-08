@@ -3,6 +3,7 @@ composer.lock
 node_modules
 package-lock.json
 *.LICENSE.txt
+.nx
 
 /vendor/woocommerce/action-scheduler/changelog.txt
 /vendor/woocommerce/action-scheduler/readme.txt

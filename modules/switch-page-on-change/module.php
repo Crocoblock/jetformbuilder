@@ -91,6 +91,10 @@ class Module implements
 	public function register_frontend_scripts() {
 		$script_asset = require_once $this->get_dir( 'assets/build/frontend.asset.php' );
 
+		if ( true === $script_asset ) {
+			return;
+		}
+
 		array_push(
 			$script_asset['dependencies'],
 			\Jet_Form_Builder\Blocks\Module::MAIN_SCRIPT_HANDLE

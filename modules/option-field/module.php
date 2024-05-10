@@ -109,6 +109,10 @@ final class Module implements
 		// select
 		$script_asset = require_once $this->get_dir( 'assets/build/select.asset.php' );
 
+		if ( true === $script_asset ) {
+			return;
+		}
+
 		array_push(
 			$script_asset['dependencies'],
 			BlocksModule::MAIN_SCRIPT_HANDLE

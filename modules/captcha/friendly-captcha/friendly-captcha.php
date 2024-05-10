@@ -89,6 +89,10 @@ class Friendly_Captcha extends Base_Captcha_From_Options implements
 	public function enqueue_editor_script() {
 		$script_asset = require_once $this->module()->get_dir( 'assets/build/friendly.captcha/editor.asset.php' );
 
+		if ( true === $script_asset ) {
+			return;
+		}
+
 		wp_enqueue_script(
 			$this->get_handle(),
 			$this->module()->get_url( 'assets/build/friendly.captcha/editor.js' ),

@@ -87,6 +87,10 @@ final class Module implements
 	public function register_frontend_scripts() {
 		$script_asset = require_once $this->get_dir( 'assets/build/wysiwyg.asset.php' );
 
+		if ( true === $script_asset ) {
+			return;
+		}
+
 		array_push(
 			$script_asset['dependencies'],
 			BlocksModule::MAIN_SCRIPT_HANDLE

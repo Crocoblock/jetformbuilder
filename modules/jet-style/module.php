@@ -88,6 +88,10 @@ class Module implements
 	public function register_scripts() {
 		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
 
+		if ( true === $script_asset ) {
+			return;
+		}
+
 		wp_enqueue_script(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/editor.js' ),

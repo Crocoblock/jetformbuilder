@@ -79,6 +79,10 @@ class Module implements
 
 		$script_asset = require_once $this->get_dir( 'assets/build/admin/forms.asset.php' );
 
+		if ( true === $script_asset ) {
+			return;
+		}
+
 		array_push(
 			$script_asset['dependencies'],
 			$parser_module->get_handle()

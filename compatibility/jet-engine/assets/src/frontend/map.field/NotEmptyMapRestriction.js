@@ -16,7 +16,7 @@ NotEmptyMapRestriction.prototype = Object.create(
 
 NotEmptyMapRestriction.prototype.isSupported = function ( node, reporting ) {
 	return (
-		NotEmptyRestriction.prototype.isSupported.call(
+		NotEmptyRestriction.prototype?.isSupported?.call?.(
 			this,
 			node,
 			reporting,

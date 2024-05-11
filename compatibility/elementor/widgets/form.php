@@ -1420,14 +1420,18 @@ class Form extends Widget_Base implements Widget_Base_It {
 					'type'        => Controls_Manager::CHOOSE,
 					'label_block' => false,
 					'options'     => array(
-						'row' => array(
+						'inline-block' => array(
 							'title' => __( 'Horizontal', 'jet-form-builder' ),
 							'icon'  => 'eicon-ellipsis-h',
 						),
-						'column'        => array(
+						'block'        => array(
 							'title' => __( 'Vertical', 'jet-form-builder' ),
 							'icon'  => 'eicon-editor-list-ul',
 						),
+					),
+					'selectors_dictionary' => array(
+						'inline-block' => 'row',
+						'block' => 'column',
 					),
 					'selectors'   => array(
 						$this->selector( '__fields-group' ) => 'flex-direction: {{VALUE}};',

@@ -646,10 +646,10 @@ input[type="range"] {
 }
 
 .jet-form-builder__fields-group {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: column;
 	flex-wrap: wrap;
-    gap: .7em;
+	gap: .7em;
 }
 
 .jet-form-builder__field-wrap.checkradio-wrap span {

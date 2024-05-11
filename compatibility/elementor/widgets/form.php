@@ -1765,7 +1765,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				array(
 					'label'      => __( 'Fields width', 'jet-form-builder' ),
 					'type'       => Controls_Manager::SLIDER,
-					'size_units' => array( 'px', 'em', 'rem', 'custom' ),
+					'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 					'range'      => array(
 						'px' => array(
 							'min' => 50,

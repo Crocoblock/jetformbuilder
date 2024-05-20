@@ -19,7 +19,7 @@ jobs:
                     ref="${GITHUB_REF}"
                     if [[ "$ref" =~ ^refs/heads/ ]]; then
                         branch_name="${ref#refs/heads/}"
-                        if ! [[ "$branch_name" =~ ^(main|(release/[0-9]+\.[0-9]+\.[0-9]+)|(issue/[0-9]+)|(suggestion/[0-9]+)|(feature/[a-z0-9\-]+)|(dev/[a-z0-9\-]+))$ ]]; then
+                        if ! [[ "$branch_name" =~ ^(main|(release/[0-9\.]+)|(issue/[0-9]+)|(suggestion/[0-9]+)|(feature/[a-z0-9\-]+)|(dev/[a-z0-9\-]+))$ ]]; then
                             echo "Invalid branch name: $branch_name"
                             echo "Allowed patterns: main, release/x.y.z, issue/123, suggestion/123, feature/feature-name, dev/branch-name"
                             exit 1

@@ -19,9 +19,13 @@ class Preset_Source_Query_Var extends Base_Source {
 		return $_GET;
 	}
 
-	public function get_prop() {
-		return ! empty( $this->field_data['other']['query_var'] ) ? $this->field_data['other']['query_var'] : '';
-	}
+    public function get_prop() {
+        if ( ! empty( $this->field_data['other']['query_var'] ) ) {
+            return $this->field_data['other']['query_var'];
+        }
+
+        return ! empty( $this->field_data['key'] ) ? $this->field_data['key'] : '';
+    }
 
 	public function get_result_on_prop() {
 		return isset( $this->src()[ $this->prop ] ) ? $this->src()[ $this->prop ] : null;

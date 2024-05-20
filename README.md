@@ -4,6 +4,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.3.3.1
+* Tweak: banner for admin-pages
+
 ## 3.3.3
 * UPD: The Update Post action will fail if you try to change the post type. Use this filter to allow post type change:
 `add_filter( 'jet-form-builder/action/insert-post/allow-change-post-type', '__return_true' );`

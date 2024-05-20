@@ -29,7 +29,7 @@ function ValidationPlugin() {
 
 	const [ isEditValidation, setEditValidation ] = useState( false );
 	const [ isLoadNonce, setLoadNonce ]           = useState( 'render' === (
-		args?.load_nonce ?? 'render'
+		args.load_nonce || 'render'
 	) );
 
 	useEffect( () => {

@@ -1,17 +1,7 @@
 import serialize from './serialize';
-
-const {
-	      Flex,
-	      Button,
-      } = wp.components;
-
-const {
-	      __,
-      } = wp.i18n;
-
-const {
-	      apiFetch,
-      } = wp;
+import { Flex, Button } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import apiFetch from '@wordpress/api-fetch';
 
 const {
 	      parseHTMLtoBlocks,

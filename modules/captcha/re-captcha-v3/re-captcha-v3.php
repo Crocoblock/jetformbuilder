@@ -151,26 +151,35 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options implements
 	}
 
 	public function enqueue_editor_script() {
+		$script_asset = require_once $this->module()->get_dir( 'assets/build/re-captcha-v3/editor.asset.php' );
+
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->module()->get_url( 'assets-build/js/re-captcha-v3/editor.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$this->module()->get_url( 'assets/build/re-captcha-v3/editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}
 
 	public function register_frontend_scripts() {
-		$handle = $this->get_handle();
+		$script_asset = require_once $this->module()->get_dir( 'assets/build/re-captcha-v3/frontend.asset.php' );
 
-		if ( wp_script_is( $handle, 'registered' ) ) {
+		// scripts have already registered
+		if ( true === $script_asset ) {
 			return;
 		}
+
+		array_push(
+			$script_asset['dependencies'],
+			'jet-plugins'
+		);
+
 		wp_register_script(
-			$handle,
-			$this->module()->get_url( 'assets-build/js/re-captcha-v3/frontend.js' ),
-			array( 'jet-plugins' ),
-			jet_form_builder()->get_version(),
+			$this->get_handle(),
+			$this->module()->get_url( 'assets/build/re-captcha-v3/frontend.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}

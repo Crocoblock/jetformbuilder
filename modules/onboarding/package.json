@@ -6,21 +6,7 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"hidden:dev:js": "webpack --config .config/dev.webpack.config.js --progress",
-		"hidden:dev:js:w": "webpack --config .config/dev.webpack.config.js --progress -w",
-		"hidden:build:js": "webpack --config .config/prod.webpack.config.js --progress",
-		"css": "sass assets/src/editor-package/index.scss:assets/build/editor.css -s compressed --no-source-map",
-		"dev:css": "sass assets/src/editor-package/index.scss:assets/build/editor.css -s compressed --no-source-map -w"
-	},
-	"devDependencies": {
-		"@babel/core": "^7.14.3",
-		"@babel/plugin-proposal-class-properties": "^7.13.0",
-		"@babel/plugin-transform-react-jsx": "^7.14.3",
-		"@babel/preset-env": "^7.14.2",
-		"@babel/preset-react": "^7.13.13",
-		"babel-loader": "^8.2.2",
-		"webpack": "^5.37.1",
-		"webpack-cli": "^4.7.0",
-		"sass": "^1.60.0"
+		"build": "npx webpack build --mode production",
+		"dev": "npx webpack build --mode development -w"
 	}
 }

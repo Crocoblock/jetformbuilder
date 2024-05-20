@@ -1,8 +1,6 @@
 import * as switcher from './blocks/switcher';
 
-const {
-	      addFilter,
-      } = wp.hooks;
+import { addFilter } from '@wordpress/hooks';
 
 addFilter(
 	'jet.fb.register.fields',

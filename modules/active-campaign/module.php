@@ -5,6 +5,8 @@ namespace JFB_Modules\Active_Campaign;
 
 use Jet_Form_Builder\Actions\Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Rest_Api\Rest_Api_Controller_Base;
 use JFB_Modules\Active_Campaign\Actions\Active_Campaign_Action;
 use JFB_Modules\Active_Campaign\Rest_Api\Rest_Controller;
@@ -25,10 +27,12 @@ final class Module implements
 	Base_Module_It,
 	Base_Module_After_Install_It,
 	Base_Module_Url_It,
-	Base_Module_Handle_It {
+	Base_Module_Handle_It,
+	Base_Module_Dir_It {
 
 	use Base_Module_Url_Trait;
 	use Base_Module_Handle_Trait;
+	use Base_Module_Dir_Trait;
 
 	private $rest;
 
@@ -88,21 +92,25 @@ final class Module implements
 	}
 
 	public function editor_assets() {
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/editor.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$this->get_url( 'assets/build/editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}
 
 	public function admin_settings_assets() {
+		$script_asset = require_once $this->get_dir( 'assets/build/admin/jfb-settings.asset.php' );
+
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/admin/jfb-settings.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$this->get_url( 'assets/build/admin/jfb-settings.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}

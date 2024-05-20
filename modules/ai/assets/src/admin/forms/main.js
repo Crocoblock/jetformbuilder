@@ -1,8 +1,6 @@
 import AiFormButton from './AiFormButton';
-
-const {
-	      createRoot,
-      } = wp.element;
+import { createRoot } from '@wordpress/element';
+import domReady from '@wordpress/dom-ready';
 
 const mountGenerateFormAIButton = () => {
 	// Render our button.
@@ -18,4 +16,4 @@ const mountGenerateFormAIButton = () => {
 	createRoot( buttonDiv ).render( <AiFormButton/> );
 };
 
-wp.domReady( mountGenerateFormAIButton );
+domReady( mountGenerateFormAIButton );

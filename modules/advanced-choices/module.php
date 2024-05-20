@@ -5,18 +5,14 @@ namespace JFB_Modules\Advanced_Choices;
 
 use Jet_Form_Builder\Blocks\Module as BlocksModule;
 use JFB_Modules\Advanced_Choices\Block_Parsers\Choices_Field_Parser;
-use JFB_Modules\Advanced_Choices\Block_Sanitizers\Choices_Default_Value_Sanitizer;
-use JFB_Modules\Advanced_Choices\Block_Sanitizers\Choice_Single_Context_Sanitizer;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
-use JFB_Modules\Advanced_Choices\Block_Types;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
-use Jet_Form_Builder\Plugin;
 use JFB_Modules\Block_Sanitizer;
 use JFB_Modules\Block_Parsers;
 
@@ -125,41 +121,60 @@ class Module implements
 	}
 
 	public function register_frontend_scripts() {
+		$script_asset = require_once $this->get_dir( 'assets/build/frontend/choices.field.asset.php' );
+
+		if ( true === $script_asset ) {
+			return;
+		}
+
+		array_push(
+			$script_asset['dependencies'],
+			BlocksModule::MAIN_SCRIPT_HANDLE
+		);
+
 		wp_register_script(
 			$this->get_handle(),
-			$this->get_url( 'assets-build/js/frontend/choices.field.js' ),
-			array(
-				BlocksModule::MAIN_SCRIPT_HANDLE,
-			),
-			Plugin::instance()->get_version(),
+			$this->get_url( 'assets/build/frontend/choices.field.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 		wp_register_style(
 			$this->get_handle(),
-			$this->get_url( 'assets-build/css/main.css' ),
+			$this->get_url( 'assets/build/main.css' ),
 			array(),
-			jet_form_builder()->get_version()
+			$script_asset['version']
 		);
 	}
 
 	public function enqueue_admin_assets() {
-		$path = jet_form_builder()->has_module( 'jet-style' )
-			? 'assets-build/js/editor/main.js'
-			: 'assets-build/js/editor-not-supported/main.js';
+		if ( jet_form_builder()->has_module( 'jet-style' ) ) {
+			$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
 
-		wp_enqueue_script(
-			$this->get_handle(),
-			$this->get_url( $path ),
-			array(),
-			jet_form_builder()->get_version(),
-			true
-		);
+			wp_enqueue_script(
+				$this->get_handle(),
+				$this->get_url( 'assets/build/editor.js' ),
+				$script_asset['dependencies'],
+				$script_asset['version'],
+				true
+			);
+		} else {
+			$script_asset = require_once $this->get_dir( 'assets/build/editor-not-supported.asset.php' );
+
+			wp_enqueue_script(
+				$this->get_handle(),
+				$this->get_url( 'assets/build/editor-not-supported.js' ),
+				$script_asset['dependencies'],
+				$script_asset['version'],
+				true
+			);
+		}
 
 		wp_enqueue_style(
 			$this->get_handle(),
-			$this->get_url( 'assets-build/css/main.css' ),
+			$this->get_url( 'assets/build/main.css' ),
 			array(),
-			jet_form_builder()->get_version()
+			$script_asset['version']
 		);
 	}
 

@@ -128,7 +128,7 @@ For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</
 
 		wp_enqueue_style(
 			$this->get_handle( 'go-pro' ),
-			$this->get_url( 'assets/build/css/go-pro.css' ),
+			$this->get_url( 'assets/build/go-pro.css' ),
 			array(),
 			jet_form_builder()->get_version()
 		);
@@ -165,14 +165,14 @@ For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</
 
 		wp_enqueue_style(
 			$handle,
-			$this->get_url( 'assets/build/css/deactivate.css' ),
+			$this->get_url( 'assets/build/deactivate.css' ),
 			array(),
 			jet_form_builder()->get_version()
 		);
 
 		wp_enqueue_script(
 			$handle,
-			$this->get_url( 'assets/build/js/plugins.js' ),
+			$this->get_url( 'assets/build/plugins.js' ),
 			array(),
 			jet_form_builder()->get_version(),
 			true

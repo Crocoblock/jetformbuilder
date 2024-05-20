@@ -1,16 +1,9 @@
-const {
-	      __,
-      } = wp.i18n;
+import { __ } from '@wordpress/i18n';
+import { Button, Flex, Popover } from '@wordpress/components';
 
 const {
 	      parseHTMLtoBlocks,
       } = JetFormBuilderParser;
-
-const {
-	      Button,
-	      Flex,
-	      Popover,
-      } = wp.components;
 
 const {
 	      useTriggerPopover,

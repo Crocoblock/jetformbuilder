@@ -1,24 +1,14 @@
-const {
-	      Modal,
-	      TextareaControl,
-	      Button,
-	      Notice,
-	      ExternalLink,
-	      Flex,
-      } = wp.components;
-
-const {
-	      useState,
-      } = wp.element;
-
-const {
-	      __,
-	      sprintf,
-      } = wp.i18n;
-
-const {
-	      apiFetch,
-      } = wp;
+import {
+	TextareaControl,
+	Button,
+	Flex,
+	ExternalLink,
+	Notice,
+	Modal,
+} from '@wordpress/components';
+import { useState } from '@wordpress/element';
+import { sprintf, __ } from '@wordpress/i18n';
+import apiFetch from '@wordpress/api-fetch';
 
 const {
 	      parseHTMLtoBlocks,

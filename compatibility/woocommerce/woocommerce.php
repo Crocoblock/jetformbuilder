@@ -4,8 +4,10 @@
 namespace JFB_Compatibility\Woocommerce;
 
 use JFB_Compatibility\Woocommerce\Methods\Wc_Product_Modification\Wc_Product_Modifier;
+use JFB_Components\Compatibility\Base_Compat_Dir_Trait;
 use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
 use JFB_Components\Compatibility\Base_Compat_Url_Trait;
+use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
@@ -15,10 +17,15 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Woocommerce implements Base_Module_Url_It, Base_Module_It, Base_Module_Handle_It {
+class Woocommerce implements
+	Base_Module_Url_It,
+	Base_Module_It,
+	Base_Module_Handle_It,
+	Base_Module_Dir_It {
 
 	use Base_Compat_Url_Trait;
 	use Base_Compat_Handle_Trait;
+	use Base_Compat_Dir_Trait;
 
 	public function rep_item_id() {
 		return 'woocommerce';
@@ -51,11 +58,13 @@ class Woocommerce implements Base_Module_Url_It, Base_Module_It, Base_Module_Han
 	}
 
 	public function enqueue_admin_assets() {
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets/build/js/editor.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$this->get_url( 'assets/build/editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}

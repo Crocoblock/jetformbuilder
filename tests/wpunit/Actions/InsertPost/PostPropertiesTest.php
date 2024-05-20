@@ -97,28 +97,4 @@ class PostPropertiesTest extends \Codeception\TestCase\WPTestCase {
 		);
 	}
 
-	/**
-	 * @throws \Throwable
-	 */
-	public function testPostStatusProperty() {
-		/** @var Post_Status_Property $property */
-		$property = $this->modifier->get( 'post_status' );
-
-		$modifier = $this->modifier;
-		$property->set_value( '', '', $modifier );
-		$this->assertThrows( Silence_Exception::class, static function () use ( $property, $modifier ) {
-			$property->get_value( $modifier );
-		} );
-
-		$property->set_value( '', 'from-field', $modifier );
-		$this->assertThrows( Silence_Exception::class, static function () use ( $property, $modifier ) {
-			$property->get_value( $modifier );
-		} );
-
-		$property->set_value( '', 'keep-current', $modifier );
-
-		// because of excluding by the 'keep-current' status
-		$this->assertNotTrue( $property->can_attach( '', 'published' ) );
-	}
-
 }

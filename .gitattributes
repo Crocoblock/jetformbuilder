@@ -10,15 +10,8 @@ package.json            export-ignore
 phpcs.xml               export-ignore
 README.md               export-ignore
 wp-cli.local.yml        export-ignore
-
-assets/src              export-ignore
-assets/scss             export-ignore
-assets/.babelrc         export-ignore
-assets/.gitignore       export-ignore
-assets/*.js             export-ignore
-assets/*.json           export-ignore
-assets/.config          export-ignore
-assets/.helpers         export-ignore
+nx.json                 export-ignore
+.babelrc                export-ignore
 
 .git                    export-ignore
 .github                 export-ignore

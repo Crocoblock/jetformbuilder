@@ -57,7 +57,7 @@ window.JetFBComponents = {
 	DashboardPanel,
 	SideBarBoxes,
 	FormBuilderPage,
-	ActionsWithFilters,
+	ActionsWithFilters
 };
 
 window.JetFBMixins = {

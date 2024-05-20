@@ -89,19 +89,34 @@ class Execution_Builder {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$wpdb->insert( $model::table(), $insert_columns, $format );
 
-		if ( ! $wpdb->rows_affected ) {
-			throw new Sql_Exception(
-				esc_html( "Something went wrong on insert into: {$model::table()}" ),
-				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
-				$wpdb->last_error,
-				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
-				$insert_columns
+		if ( $wpdb->rows_affected ) {
+			$model->after_insert( $insert_columns );
+
+			return $wpdb->insert_id;
+		}
+
+		if ( 0 === strpos( $model::table_name(), 'records' ) ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions
+			error_log(
+				sprintf(
+					'[jetformbuilder]: %s',
+					$wpdb->last_error
+				)
 			);
 		}
 
-		$model->after_insert( $insert_columns );
+		$prefix = $model::DB_TABLE_PREFIX;
+		$table = $model::table_name();
 
-		return $wpdb->insert_id;
+		throw new Sql_Exception(
+			esc_html(
+				"Something went wrong on insert into: " . $prefix . $table
+			),
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+			$wpdb->last_error,
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+			$insert_columns
+		);
 	}
 
 	/**

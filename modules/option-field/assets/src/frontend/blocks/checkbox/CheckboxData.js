@@ -87,6 +87,7 @@ function CheckboxData() {
 
 	this.setValue = function () {
 		this.value.current = this.getActiveValue();
+		this.value.applySanitizers( this.value.current );
 	};
 
 	this.setNode = function ( node ) {

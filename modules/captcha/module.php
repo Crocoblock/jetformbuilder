@@ -231,11 +231,13 @@ final class Module implements
 	}
 
 	public function enqueue_editor_assets() {
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+
 		wp_enqueue_script(
 			$this->get_handle(),
-			$this->get_url( 'assets-build/js/editor.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$this->get_url( 'assets/build/editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 
@@ -249,11 +251,13 @@ final class Module implements
 	}
 
 	public function enqueue_editor_package_assets() {
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.package.asset.php' );
+
 		wp_enqueue_script(
 			$this->get_handle( 'package' ),
-			$this->get_url( 'assets-build/js/editor.package.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$this->get_url( 'assets/build/editor.package.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}

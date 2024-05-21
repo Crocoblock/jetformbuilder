@@ -95,3 +95,19 @@ JetPlugins.bulkBlocksInit( [
 
 jQuery( window ).on( 'elementor/frontend/init', initElementor );
 
+addEventListener( 'load', () => {
+	/**
+	 * @type {Observable[]}
+	 */
+	const forms = Object.values( JetFormBuilder );
+
+	for ( const root of forms ) {
+		if ( !( root instanceof Observable ) ) {
+			continue;
+		}
+		root.getInputs().forEach( input => {
+			input.setValue();
+		} );
+	}
+} );
+

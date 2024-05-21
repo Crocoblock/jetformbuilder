@@ -177,14 +177,16 @@ InputData.prototype.merge = function ( inputData ) {
 	this.nodes = [ ...inputData.getNode() ];
 };
 InputData.prototype.setValue = function () {
+	let value;
 	if ( this.isArray() ) {
-		this.value.current = Array.from( this.nodes ).
+		value = Array.from( this.nodes ).
 			map( ( { value } ) => value );
 	}
 	else {
-		this.value.current = this.nodes[ 0 ]?.value;
+		value = this.nodes[ 0 ]?.value;
 	}
-	this.calcValue = this.value.current;
+	this.calcValue = value;
+	this.value.current = value;
 };
 /**
  * @param node {HTMLElement|HTMLInputElement}

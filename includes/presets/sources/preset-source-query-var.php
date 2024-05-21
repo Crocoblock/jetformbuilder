@@ -4,6 +4,8 @@
 namespace Jet_Form_Builder\Presets\Sources;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Exceptions\Preset_Exception;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -28,6 +30,10 @@ class Preset_Source_Query_Var extends Base_Source {
     }
 
 	public function get_result_on_prop() {
-		return isset( $this->src()[ $this->prop ] ) ? $this->src()[ $this->prop ] : null;
+        if ( isset( $this->src()[ $this->prop ] ) ) {
+            return $this->src()[ $this->prop ];
+        }
+
+        throw new Preset_Exception( '$_GET does not have ' . $this->prop . '  field' );
 	}
 }

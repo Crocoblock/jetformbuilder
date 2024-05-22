@@ -105,9 +105,7 @@ addEventListener( 'load', () => {
 		if ( !( root instanceof Observable ) ) {
 			continue;
 		}
-		root.getInputs().forEach( input => {
-			input.setValue();
-		} );
+		root.reQueryValues();
 	}
 } );
 

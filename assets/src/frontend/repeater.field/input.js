@@ -147,6 +147,21 @@ function RepeaterData() {
 			row.remove();
 		}
 	};
+
+	this.reQueryValue = function () {
+		if ( !this.value.current?.length ) {
+			return;
+		}
+
+		/**
+		 * @type {ObservableRow[]}
+		 */
+		const repeaterRows = this.value.current
+
+		repeaterRows.forEach( row => {
+			row.getInputs().forEach( input => input.setValue() );
+		} )
+	}
 }
 
 RepeaterData.prototype = Object.create( InputData.prototype );

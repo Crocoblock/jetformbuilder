@@ -275,6 +275,14 @@ Observable.prototype = {
 			input.onRemove();
 		}
 	},
+	/**
+	 * Runs only once on window "load" event
+	 */
+	reQueryValues: function () {
+		for ( const input of this.getInputs() ) {
+			input.reQueryValue();
+		}
+	}
 };
 
 export default Observable;

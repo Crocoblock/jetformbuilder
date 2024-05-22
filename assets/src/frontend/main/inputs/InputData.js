@@ -466,4 +466,11 @@ InputData.prototype.getParentPath = function () {
 	return [];
 };
 
+/**
+ * Runs only once on window "load" event
+ */
+InputData.prototype.reQueryValue = function () {
+	this.setValue();
+}
+
 export default InputData;

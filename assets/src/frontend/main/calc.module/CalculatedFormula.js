@@ -7,16 +7,12 @@ import applyFilters from './applyFilters';
 import getFilters from './getFilters';
 import attachConstNamespace from './attachConstNamespace';
 import InputData from '../inputs/InputData';
+import { __, sprintf } from "@wordpress/i18n";
 
 const {
 	      applyFilters: wpFilters,
 	      addFilter,
       } = JetPlugins.hooks;
-
-const {
-	      __,
-	      sprintf,
-      } = wp.i18n;
 
 addFilter(
 	'jet.fb.custom.formula.macro',

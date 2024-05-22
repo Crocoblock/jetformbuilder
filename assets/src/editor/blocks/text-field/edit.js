@@ -6,55 +6,48 @@ import {
 } from './options';
 import preview from './preview';
 
-const {
-	      ToolBarFields,
-	      BlockName,
-	      BlockLabel,
-	      BlockDescription,
-	      AdvancedFields,
-	      FieldWrapper,
-	      FieldSettingsWrapper,
-	      ValidationToggleGroup,
-	      ValidationBlockMessage,
-	      BlockAdvancedValue,
-	      EditAdvancedRulesButton,
-	      BaseHelp,
-	      AdvancedInspectorControl,
-	      AttributeHelp,
-      } = JetFBComponents;
-const {
-	      useIsAdvancedValidation,
-	      useUniqueNameOnDuplicate,
-      } = JetFBHooks;
-const {
-	      __,
-      } = wp.i18n;
-const {
-	      InspectorControls,
-	      useBlockProps,
-      } = wp.blockEditor;
+import { __ } from "@wordpress/i18n";
+
+import {
+	TextControl,
+	SelectControl,
+	ToggleControl,
+	PanelBody,
+} from "@wordpress/components";
+
+import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
 
 const {
-	      TextControl,
-	      SelectControl,
-	      ToggleControl,
-	      PanelBody,
-	      __experimentalNumberControl,
-      } = wp.components;
+	ToolBarFields,
+	BlockName,
+	BlockLabel,
+	BlockDescription,
+	AdvancedFields,
+	FieldWrapper,
+	FieldSettingsWrapper,
+	ValidationToggleGroup,
+	ValidationBlockMessage,
+	BlockAdvancedValue,
+	EditAdvancedRulesButton,
+	BaseHelp,
+	AdvancedInspectorControl,
+	AttributeHelp,
+} = JetFBComponents;
+const {
+	useIsAdvancedValidation,
+	useUniqueNameOnDuplicate,
+} = JetFBHooks;
 
-let { NumberControl } = wp.components;
-
-NumberControl = NumberControl || __experimentalNumberControl;
 
 export default function TextEdit( props ) {
 	const {
-		      attributes,
-		      setAttributes,
-		      isSelected,
-		      editProps: { uniqKey, attrHelp },
-	      } = props;
+		attributes,
+		setAttributes,
+		isSelected,
+		editProps: { uniqKey, attrHelp },
+	} = props;
 
-	const blockProps           = useBlockProps();
+	const blockProps = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
 
 	useUniqueNameOnDuplicate();
@@ -96,6 +89,17 @@ export default function TextEdit( props ) {
 					} }
 					options={ fieldTypesList }
 				/>
+				{ 'password' === attributes.field_type && <>
+					<ToggleControl
+						label={ __( 'Show eye icon', 'jet-form-builder' ) }
+						checked={ attributes.showEye }
+						help={ __(
+							'Enable to allow user control visibility of value in input',
+							'jet-form-builder'
+						) }
+						onChange={ showEye => setAttributes( { showEye } ) }
+					/>
+				</> }
 				<AdvancedInspectorControl
 					value={ attributes.minlength }
 					label={ __( 'Min length (symbols)', 'jet-form-builder' ) }

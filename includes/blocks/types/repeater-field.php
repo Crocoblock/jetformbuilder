@@ -364,13 +364,19 @@ class Repeater_Field extends Base {
 	}
 
 	public function register_scripts() {
+        $script_asset = require_once jet_form_builder()->plugin_dir( 'assets/js/frontend/repeater.field.asset.php' );
+
+        if ( true === $script_asset ) {
+            return;
+        }
+
+        $script_asset['dependencies'][] = Module::MAIN_SCRIPT_HANDLE;
+
 		wp_register_script(
 			self::HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/repeater.field.js' ),
-			array(
-				Module::MAIN_SCRIPT_HANDLE,
-			),
-			Plugin::instance()->get_version(),
+            $script_asset['dependencies'],
+            $script_asset['version'],
 			true
 		);
 	}

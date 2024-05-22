@@ -217,15 +217,15 @@ final class Module implements Base_Module_It {
 		$jet_plugins = jet_form_builder()->module( 'jet-plugins' );
 		$jet_plugins->register_scripts();
 
+        $script_asset = require_once jet_form_builder()->plugin_dir( 'assets/js/frontend/main.asset.php' );
+
+        $script_asset['dependencies'][] = $jet_plugins::HANDLE;
+
 		wp_register_script(
 			self::MAIN_SCRIPT_HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/main.js' ),
-			array(
-				$jet_plugins::HANDLE,
-				'wp-i18n',
-				'wp-api-fetch',
-			),
-			Plugin::instance()->get_version(),
+            $script_asset['dependencies'],
+            $script_asset['version'],
 			true
 		);
 

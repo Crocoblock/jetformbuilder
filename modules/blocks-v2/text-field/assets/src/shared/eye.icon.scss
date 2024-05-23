@@ -13,6 +13,10 @@
 	cursor: pointer;
 	user-select: none;
 
+	&& {
+		width: auto;
+	}
+
 	.icon::before {
 		content: '';
 		display: inline-block;

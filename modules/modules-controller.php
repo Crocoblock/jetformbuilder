@@ -34,6 +34,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Rest_Api\Module(),
 			new Option_Query\Module(),
 			new Blocks\Module(),
+			new Blocks_V2\Module(),
 			new Security\Module(),
 			new Rich_Content\Module(),
 			// additional

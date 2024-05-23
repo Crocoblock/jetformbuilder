@@ -94,7 +94,7 @@ InputData.prototype.attrs = {};
  * @returns {boolean}
  */
 InputData.prototype.isSupported = function ( node ) {
-	return true;
+	return false;
 };
 InputData.prototype.addListeners = function () {
 	const [ node ] = this.nodes;

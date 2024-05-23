@@ -11,7 +11,6 @@ import * as number from './number-field';
 import * as range from './range-field';
 import * as repeater from './repeater-field';
 import * as submit from './submit-field';
-import * as text from './text-field';
 import * as textarea from './textarea-field';
 import * as time from './time-field';
 import * as colorPicker from './color-picker-field';
@@ -41,7 +40,6 @@ const fields = applyFilters( 'jet.fb.register.fields', [
 	range,
 	repeater,
 	submit,
-	text,
 	textarea,
 	time,
 	colorPicker,

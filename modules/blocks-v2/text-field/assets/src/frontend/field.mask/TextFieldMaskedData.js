@@ -1,17 +1,21 @@
-import InputData from './InputData';
-import { isInputMask } from '../supports';
-import ReactiveHook from '../reactive/ReactiveHook';
-
 const { applyFilters } = JetPlugins.hooks;
 
-function InputMaskedData() {
+const {
+	ReactiveHook,
+	InputData,
+} = JetFormBuilderAbstract;
+
+function TextFieldMaskedData() {
 	InputData.call( this );
 
 	this.maskOptions   = {};
 	this.clearOnSubmit = false;
 
-	this.isSupported  = function ( node ) {
-		return isInputMask( node );
+	this.isSupported = function ( node ) {
+		return (
+			node.classList.contains( 'jet-form-builder__masked-field' ) &&
+			jQuery.fn.inputmask
+		);
 	};
 	this.addListeners = function () {
 		const [ node ] = this.nodes;
@@ -69,6 +73,6 @@ function InputMaskedData() {
 
 }
 
-InputMaskedData.prototype = Object.create( InputData.prototype );
+TextFieldMaskedData.prototype = Object.create( InputData.prototype );
 
-export default InputMaskedData;
+export default TextFieldMaskedData;

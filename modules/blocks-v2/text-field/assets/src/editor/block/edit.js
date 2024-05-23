@@ -5,17 +5,16 @@ import {
 	maskVisibilitiesList,
 } from './options';
 import preview from './preview';
-
 import { __ } from "@wordpress/i18n";
-
 import {
 	TextControl,
 	SelectControl,
 	ToggleControl,
 	PanelBody,
 } from "@wordpress/components";
-
 import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
+import { styled } from "@linaria/react";
+import { useState, useEffect } from "@wordpress/element";
 
 const {
 	ToolBarFields,
@@ -38,6 +37,11 @@ const {
 	useUniqueNameOnDuplicate,
 } = JetFBHooks;
 
+const FullWidthInput = styled.input`
+    width: 100%;
+    margin: unset;
+`;
+
 
 export default function TextEdit( props ) {
 	const {
@@ -51,6 +55,10 @@ export default function TextEdit( props ) {
 	const isAdvancedValidation = useIsAdvancedValidation();
 
 	useUniqueNameOnDuplicate();
+
+	const [ showPassword, setShowPassword ] = useState( null );
+
+	useEffect( () => setShowPassword( false ), [ attributes.field_type, attributes.showEye ] );
 
 	if ( attributes.isPreview ) {
 		return <div style={ {
@@ -244,12 +252,26 @@ export default function TextEdit( props ) {
 				key={ uniqKey( 'FieldWrapper' ) }
 				{ ...props }
 			>
-				<TextControl
-					placeholder={ attributes.placeholder }
-					key={ uniqKey( 'place_holder_block' ) }
-					onChange={ () => {
-					} }
-				/>
+				<div className={ [
+					"jet-form-builder__field-wrap",
+					attributes.showEye && 'has-eye-icon'
+				].join( ' ' ) }>
+					<FullWidthInput
+						placeholder={ attributes.placeholder }
+						minLength={ attributes.minlength }
+						maxLength={ attributes.maxlength }
+						type={ showPassword ? 'text' : attributes.field_type }
+					/>
+					{ ( attributes.showEye && 'password' === attributes.field_type ) && <label className="jfb-eye-icon">
+						<input
+							type="checkbox"
+							onChange={ event => (
+								setShowPassword( event.target.checked )
+							) }
+						/>
+						<span className="icon"></span>
+					</label> }
+				</div>
 			</FieldWrapper>
 		</div>,
 	];

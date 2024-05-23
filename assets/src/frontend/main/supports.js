@@ -10,17 +10,6 @@ function isChangeType( node ) {
  * @param node {HTMLElement}
  * @returns {boolean}
  */
-function isInputMask( node ) {
-	return (
-		node.classList.contains( 'jet-form-builder__masked-field' ) &&
-		jQuery.fn.inputmask
-	);
-}
-
-/**
- * @param node {HTMLElement}
- * @returns {boolean}
- */
 function isHidden( node ) {
 	return 'hidden' === node.type;
 }
@@ -37,5 +26,4 @@ export {
 	isHidden,
 	isRange,
 	isChangeType,
-	isInputMask,
 };

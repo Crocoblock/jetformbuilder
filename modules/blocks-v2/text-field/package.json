@@ -1,0 +1,12 @@
+{
+	"name": "jet-form-builder-text-field",
+	"description": "Text Field block for JetFormBuilder Plugin",
+	"version": "3.3.4",
+	"author": "hug.reed <sanko200065@gmail.com>",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"build": "npx webpack build --mode production",
+		"dev": "npx webpack build --mode development -w"
+	}
+}

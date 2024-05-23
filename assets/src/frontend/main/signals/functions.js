@@ -1,6 +1,5 @@
 import SignalHiddenArray from './SignalHiddenArray';
 import SignalRange from './SignalRange';
-import SignalText from './SignalText';
 import SignalRenderState from './SignalRenderState';
 
 const {
@@ -13,7 +12,6 @@ const getSignalTypes = () => applyFilters(
 		SignalRange,
 		SignalRenderState,
 		SignalHiddenArray,
-		SignalText,
 	],
 );
 

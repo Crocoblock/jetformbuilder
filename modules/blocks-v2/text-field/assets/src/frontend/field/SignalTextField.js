@@ -1,6 +1,6 @@
-import BaseSignal from './BaseSignal';
+const { BaseSignal } = JetFormBuilderAbstract;
 
-function SignalText() {
+function SignalTextField() {
 	BaseSignal.call( this );
 
 	this.isSupported = function ( node, inputData ) {
@@ -23,6 +23,6 @@ function SignalText() {
 	};
 }
 
-SignalText.prototype = Object.create( BaseSignal.prototype );
+SignalTextField.prototype = Object.create( BaseSignal.prototype );
 
-export default SignalText;
+export default SignalTextField;

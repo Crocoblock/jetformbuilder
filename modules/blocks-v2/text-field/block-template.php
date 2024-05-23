@@ -71,9 +71,21 @@ if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {
 			break;
 	}
 }
+$show_eye     = $this->args['showEye'] ?? false;
+$wrap_classes = sprintf(
+	'jet-form-builder__field-wrap %s',
+	$show_eye ? 'has-eye-icon' : ''
+)
+
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
-<div class="jet-form-builder__field-wrap">
-	<input <?php $this->render_attributes_string(); ?>>
-</div>
+    <div class="<?php echo esc_attr( trim( $wrap_classes ) ); ?>">
+        <input <?php $this->render_attributes_string(); ?>>
+		<?php if ( $show_eye && 'password' === $args['field_type'] ): ?>
+            <label class="jfb-eye-icon">
+                <input type="checkbox"/>
+                <span class="icon"></span>
+            </label>
+		<?php endif; ?>
+    </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

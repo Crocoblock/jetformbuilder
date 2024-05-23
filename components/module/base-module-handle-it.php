@@ -10,6 +10,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 interface Base_Module_Handle_It {
 
+	const PREFIX = 'jet-fb-';
+
 	public function get_handle( string $unique_string = '' ): string;
 
 }

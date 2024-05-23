@@ -1,19 +1,22 @@
 <?php
 
-namespace Jet_Form_Builder\Blocks\Types;
+namespace JFB_Modules\Blocks_V2\Text_Field;
 
-use Jet_Form_Builder\Blocks\Render\Text_Field_Render;
-use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Blocks\Types\Base;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use JFB_Components\Module\Base_Module_Handle_It;
+use JFB_Modules\Blocks_V2\Interfaces\Block_Type_With_Assets_Interface;
+use JFB_Modules\Blocks_V2\Module;
+use JFB_Modules\Blocks_V2\Traits\Block_Type_With_Assets_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-/**
- * Define Text field block class
- */
-class Text_Field extends Base {
+class Block_Type extends Base implements Block_Type_With_Assets_Interface {
+
+	use Block_Type_With_Assets_Trait;
 
 	public $enable_mask = false;
 
@@ -31,6 +34,13 @@ class Text_Field extends Base {
 			'field'   => '__field-wrap input',
 			'wrapper' => '__field-wrap',
 		);
+	}
+
+	protected function register_block() {
+		$this->set_assets( new Block_Asset() );
+		$this->get_assets()->init_hooks();
+
+		parent::register_block();
 	}
 
 	public function jsm_controls() {
@@ -124,16 +134,34 @@ class Text_Field extends Base {
 		$this->enable_mask = ! empty( $this->block_attrs['enable_input_mask'] ) && ! empty( $this->block_attrs['input_mask'] );
 
 		if ( $this->enable_mask ) {
-			wp_enqueue_script(
-				'jet-form-builder-inputmask',
-				Plugin::instance()->plugin_url( 'assets/lib/inputmask/jquery.inputmask.min.js' ),
-				array( 'jquery' ),
-				Plugin::instance()->get_version(),
-				true
-			);
+			wp_enqueue_script( Base_Module_Handle_It::PREFIX . 'blocks-v2-text-field-mask' );
 		}
 
-		return ( new Text_Field_Render( $this ) )->render();
+		return ( new Block_Render( $this ) )->render();
+	}
+
+	/**
+	 * @param $path
+	 *
+	 * @return string
+	 * @throws Repository_Exception
+	 */
+	public function get_field_template( $path ) {
+		/** @var Module $blocks_v2 */
+		$blocks_v2 = jet_form_builder()->module( 'blocks-v2' );
+
+		return $blocks_v2->get_dir( 'text-field/block-template.php' );
+	}
+
+	/**
+	 * @return string
+	 * @throws Repository_Exception
+	 */
+	public function get_path_metadata_block() {
+		/** @var Module $blocks_v2 */
+		$blocks_v2 = jet_form_builder()->module( 'blocks-v2' );
+
+		return $blocks_v2->get_dir( 'text-field' );
 	}
 
 

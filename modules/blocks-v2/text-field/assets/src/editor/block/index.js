@@ -1,9 +1,8 @@
 import TextEdit from './edit';
-import metadata from '@blocks/text-field/block.json';
-
-const { __ } = wp.i18n;
-
-const { createBlock } = wp.blocks;
+import metadata from '../../../../block.json';
+import { __ } from "@wordpress/i18n";
+import { createBlock } from "@wordpress/blocks";
+import '../../shared/eye.icon.scss';
 
 const { name, icon = '' } = metadata;
 

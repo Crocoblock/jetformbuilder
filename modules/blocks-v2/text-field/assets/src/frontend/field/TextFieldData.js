@@ -25,6 +25,9 @@ function TextFieldData() {
 			return;
 		}
 
+		const label = checkbox.closest( '.jfb-eye-icon' );
+		label.style.display = 'block';
+
 		checkbox.addEventListener( 'change', event => {
 			node.type = event.target.checked ? 'text' : 'password';
 		} );

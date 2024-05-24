@@ -82,7 +82,7 @@ $wrap_classes = sprintf(
     <div class="<?php echo esc_attr( trim( $wrap_classes ) ); ?>">
         <input <?php $this->render_attributes_string(); ?>>
 		<?php if ( $show_eye && 'password' === $args['field_type'] ): ?>
-            <label class="jfb-eye-icon">
+            <label class="jfb-eye-icon" style="display:none;">
                 <input type="checkbox"/>
                 <span class="icon"></span>
             </label>

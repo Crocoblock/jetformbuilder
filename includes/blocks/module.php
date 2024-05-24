@@ -21,12 +21,7 @@ final class Module implements Base_Module_It {
 	const MAIN_SCRIPT_HANDLE     = 'jet-form-builder-frontend-forms';
 	const LISTING_OPTIONS_HANDLE = 'jet-form-builder-listing-options';
 
-	/**
-	 * @var bool
-	 */
 	// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
-	private $_registered_scripts = false;
-
 	private $_builder_blocks_repository;
 	private $_default_blocks_repository;
 
@@ -207,17 +202,16 @@ final class Module implements Base_Module_It {
 	}
 
 	public function register_form_scripts() {
-		if ( $this->_registered_scripts ) {
-			return;
-		}
-		$this->_registered_scripts = true;
-
 		/** @var \JFB_Modules\Jet_Plugins\Module $jet_plugins */
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$jet_plugins = jet_form_builder()->module( 'jet-plugins' );
 		$jet_plugins->register_scripts();
 
         $script_asset = require_once jet_form_builder()->plugin_dir( 'assets/js/frontend/main.asset.php' );
+
+		if ( true === $script_asset ) {
+			return;
+		}
 
         $script_asset['dependencies'][] = $jet_plugins::HANDLE;
 

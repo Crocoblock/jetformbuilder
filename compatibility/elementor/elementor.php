@@ -55,7 +55,7 @@ class Elementor implements Base_Module_It, Base_Module_Handle_It, Base_Module_Ur
 		remove_action( 'elementor/init', array( $this, 'init_widgets' ) );
 		remove_action( 'elementor/editor/after_enqueue_styles', array( $this, 'editor_styles' ) );
 		remove_action( 'elementor/preview/enqueue_scripts', array( $this, 'enqueue_form_scripts' ), 9 );
-		remove_action( 'elementor/preview/enqueue_scripts', array( $this, 'enqueue_form_styles' ) );
+		remove_action( 'elementor/preview/enqueue_styles', array( $this, 'enqueue_form_styles' ) );
 		add_action( 'elementor/elements/categories_registered', array( $this, 'register_category' ) );
 
 		// compatibility with 3.7

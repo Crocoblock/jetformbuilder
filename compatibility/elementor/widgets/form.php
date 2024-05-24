@@ -8,6 +8,7 @@ use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Typography;
 use Elementor\Widget_Base;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Modules\General_Style_Functions;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Tools;
@@ -3272,6 +3273,55 @@ class Form extends Widget_Base implements Widget_Base_It {
 		);
 
 		$this->end_controls_tab();
+
+		$options = Tab_Handler_Manager::get_options( 'options-tab' );
+
+		if ( $options['disable_next_button'] ?? false ) {
+			$this->start_controls_tab(
+				'form_break_next--disabled',
+				array(
+					'label' => __( 'Disabled', 'jet-form-builder' ),
+				)
+			);
+
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				array(
+					'name'     => 'form_break_next_typography--disabled',
+					'selector' => $this->selector( '__next-page:disabled' ),
+				)
+			);
+
+			$this->add_border(
+				$this,
+				'form_break_next_border--disabled',
+				$this->selector( '__next-page:disabled' )
+			);
+
+			$this->add_control(
+				'form_break_next_color--disabled',
+				array(
+					'label'     => __( 'Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__next-page:disabled' ) => 'color: {{VALUE}};',
+					),
+				)
+			);
+			$this->add_control(
+				'form_break_next_bg_color--disabled',
+				array(
+					'label'     => __( 'Background Color', 'jet-form-builder' ),
+					'type'      => Controls_Manager::COLOR,
+					'selectors' => array(
+						$this->selector( '__next-page:disabled' ) => 'background-color: {{VALUE}};',
+					),
+				)
+			);
+
+			$this->end_controls_tab();
+		}
+
 		$this->end_controls_tabs();
 
 		$this->add_control(

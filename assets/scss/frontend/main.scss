@@ -645,15 +645,18 @@ input[type="range"] {
 	}
 }
 
-.jet-form-builder__field-wrap.checkradio-wrap {
-	margin-bottom: 0.7em;
+.jet-form-builder__fields-group {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	gap: .7em;
+}
 
-	span {
-		/*display: contents;*/
-		display: flex;
-		align-items: center;
-		gap: 8px;
-	}
+.jet-form-builder__field-wrap.checkradio-wrap span {
+	/*display: contents;*/
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
 
 .rtl .jet-form-builder-row,

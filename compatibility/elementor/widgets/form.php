@@ -682,15 +682,15 @@ class Form extends Widget_Base implements Widget_Base_It {
 			'active-separator' => "$wrapper.active-page .%s-progress-pages__separator",
 			'active-circle'    => "$wrapper.active-page .%s$item--circle",
 
-			'next-wrapper'     => "$wrapper:not(.passed-page):not(.active-page)",
-			'next-item'        => "$wrapper:not(.passed-page):not(.active-page) .%s$item",
-			'next-separator'   => "$wrapper:not(.passed-page):not(.active-page) .%s-progress-pages__separator",
-			'next-circle'      => "$wrapper:not(.passed-page):not(.active-page) .%s$item--circle",
+			'next-wrapper'   => "$wrapper:not(.passed-page):not(.active-page)",
+			'next-item'      => "$wrapper:not(.passed-page):not(.active-page) .%s$item",
+			'next-separator' => "$wrapper:not(.passed-page):not(.active-page) .%s-progress-pages__separator",
+			'next-circle'    => "$wrapper:not(.passed-page):not(.active-page) .%s$item--circle",
 
-			'prev-wrapper'     => "$wrapper.passed-page",
-			'prev-item'        => "$wrapper.passed-page .%s$item",
-			'prev-separator'   => "$wrapper.passed-page .%s-progress-pages__separator",
-			'prev-circle'      => "$wrapper.passed-page .%s$item--circle",
+			'prev-wrapper'   => "$wrapper.passed-page",
+			'prev-item'      => "$wrapper.passed-page .%s$item",
+			'prev-separator' => "$wrapper.passed-page .%s-progress-pages__separator",
+			'prev-circle'    => "$wrapper.passed-page .%s$item--circle",
 		);
 
 		$instance->start_controls_tab(
@@ -1465,10 +1465,10 @@ class Form extends Widget_Base implements Widget_Base_It {
 		$this->add_responsive_control(
 			'checkradio_fields_layout',
 			array(
-				'label'       => __( 'Layout', 'jet-form-builder' ),
-				'type'        => Controls_Manager::CHOOSE,
-				'label_block' => false,
-				'options'     => array(
+				'label'                => __( 'Layout', 'jet-form-builder' ),
+				'type'                 => Controls_Manager::CHOOSE,
+				'label_block'          => false,
+				'options'              => array(
 					'inline-block' => array(
 						'title' => __( 'Horizontal', 'jet-form-builder' ),
 						'icon'  => 'eicon-ellipsis-h',
@@ -1478,8 +1478,34 @@ class Form extends Widget_Base implements Widget_Base_It {
 						'icon'  => 'eicon-editor-list-ul',
 					),
 				),
-				'selectors'   => array(
-					$this->selector( '__field-wrap.checkradio-wrap' ) => 'display: {{VALUE}};',
+				'selectors_dictionary' => array(
+					'inline-block' => 'row',
+					'block'        => 'column',
+				),
+				'selectors'            => array(
+					$this->selector( '__fields-group' ) => 'flex-direction: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'checkradio_fields_gaps',
+			array(
+				'label'      => __( 'Gaps', 'jet-form-builder' ),
+				'type'       => Controls_Manager::GAPS,
+				'size_units' => array( 'px', 'em', 'rem', 'custom' ),
+				'default'    => array(
+					'row'    => '0.7',
+					'column' => '0.7',
+					'unit'   => 'em',
+				),
+				'validators' => array(
+					'Number' => array(
+						'min' => 0,
+					),
+				),
+				'selectors'  => array(
+					$this->selector( '__fields-group' ) => 'gap: {{ROW}}{{UNIT}} {{COLUMN}}{{UNIT}};',
 				),
 			)
 		);
@@ -3732,48 +3758,50 @@ class Form extends Widget_Base implements Widget_Base_It {
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
 		$this->end_controls_section();
-	}
+}
 
 
-	private function add_border( $instance, $control_id, $selector ) {
-		$instance->add_group_control(
-			Group_Control_Border::get_type(),
-			array(
-				'name'        => $control_id,
-				'label'       => __( 'Border', 'jet-form-builder' ),
-				'placeholder' => '1px',
-				'selector'    => $selector,
-			)
-		);
-		$instance->add_responsive_control(
-			$control_id . '_radius',
-			array(
-				'label'      => __( 'Border Radius', 'jet-form-builder' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
-				'selectors'  => array(
-					$selector => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				),
-			)
-		);
-	}
+private
+function add_border( $instance, $control_id, $selector ) {
+	$instance->add_group_control(
+		Group_Control_Border::get_type(),
+		array(
+			'name'        => $control_id,
+			'label'       => __( 'Border', 'jet-form-builder' ),
+			'placeholder' => '1px',
+			'selector'    => $selector,
+		)
+	);
+	$instance->add_responsive_control(
+		$control_id . '_radius',
+		array(
+			'label'      => __( 'Border Radius', 'jet-form-builder' ),
+			'type'       => Controls_Manager::DIMENSIONS,
+			'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
+			'selectors'  => array(
+				$selector => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+			),
+		)
+	);
+}
 
-	/**
-	 * Render the widget output on the frontend.
-	 *
-	 * Written in PHP and used to generate the final HTML.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @access protected
-	 */
-	protected function render() {
-		wp_print_styles( 'wp-block-library' );
-		$settings = $this->get_settings_for_display();
+/**
+ * Render the widget output on the frontend.
+ *
+ * Written in PHP and used to generate the final HTML.
+ *
+ * @since 1.1.0
+ *
+ * @access protected
+ */
+protected
+function render() {
+	wp_print_styles( 'wp-block-library' );
+	$settings = $this->get_settings_for_display();
 
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo jet_fb_render_form( $settings );
-	}
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo jet_fb_render_form( $settings );
+}
 
 
 }

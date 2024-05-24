@@ -43,6 +43,7 @@ $max_size_message = $this->block_type->get_max_size_message();
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
 <div class="jet-form-builder__field-wrap jet-form-builder-file-upload">
+	<?php do_action( 'jet-form-builder/before-field', $this ); ?>
 	<div class="jet-form-builder-file-upload__content">
 		<?php echo File_Upload::instance()->get_loader(); ?>
 		<div class="jet-form-builder-file-upload__files" <?php $this->files()->render_attributes_string(); ?>>
@@ -56,5 +57,6 @@ $max_size_message = $this->block_type->get_max_size_message();
 	</div>
 	<div class="jet-form-builder-file-upload__message"><small><?php echo wp_kses_post( $max_size_message ); ?></small></div>
 	<div class="jet-form-builder-file-upload__errors is-hidden"></div>
+	<?php do_action( 'jet-form-builder/after-field', $this ); ?>
 </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

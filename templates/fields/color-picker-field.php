@@ -21,6 +21,8 @@ $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'data-jfb-sync' );
 ?>
 <div class="jet-form-builder__field-wrap">
+	<?php do_action( 'jet-form-builder/before-field', $this ); ?>
 	<input <?php $this->render_attributes_string(); ?>>
+	<?php do_action( 'jet-form-builder/after-field', $this ); ?>
 </div>
 <?php

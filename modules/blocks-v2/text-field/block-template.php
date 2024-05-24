@@ -2,12 +2,12 @@
 /**
  * input[type="hidden"] template
  *
- * @var Block_Render $this
+ * @var Base $this
  * @var array $args
  */
 
+use Jet_Form_Builder\Blocks\Render\Base;
 use Jet_Form_Builder\Classes\Tools;
-use JFB_Modules\Blocks_V2\Text_Field\Block_Render;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -80,6 +80,7 @@ $wrap_classes = sprintf(
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
     <div class="<?php echo esc_attr( trim( $wrap_classes ) ); ?>">
+	    <?php do_action( 'jet-form-builder/before-field', $this ); ?>
         <input <?php $this->render_attributes_string(); ?>>
 		<?php if ( $show_eye && 'password' === $args['field_type'] ): ?>
             <span
@@ -92,5 +93,6 @@ $wrap_classes = sprintf(
                 <?php echo $this->get_unseen_icon(); ?>
             </span>
 		<?php endif; ?>
+	    <?php do_action( 'jet-form-builder/after-field', $this ); ?>
     </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

@@ -105,6 +105,17 @@ class Block_Asset implements Block_Asset_Interface {
 			array(),
 			$asset['version']
 		);
+
+		$block_render = new Block_Render( new Block_Type() );
+
+		wp_localize_script(
+			$blocks_v2->get_handle( 'text-field-editor' ),
+			'JFBTextFieldConfig',
+			array(
+				'seenIcon'   => $block_render->get_seen_icon(),
+				'unSeenIcon' => $block_render->get_unseen_icon(),
+			)
+		);
 	}
 
 	public function enqueue_required_assets() {

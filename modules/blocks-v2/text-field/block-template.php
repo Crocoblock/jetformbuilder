@@ -2,12 +2,12 @@
 /**
  * input[type="hidden"] template
  *
- * @var Base $this
+ * @var Block_Render $this
  * @var array $args
  */
 
-use Jet_Form_Builder\Blocks\Render\Base;
 use Jet_Form_Builder\Classes\Tools;
+use JFB_Modules\Blocks_V2\Text_Field\Block_Render;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -82,10 +82,15 @@ $wrap_classes = sprintf(
     <div class="<?php echo esc_attr( trim( $wrap_classes ) ); ?>">
         <input <?php $this->render_attributes_string(); ?>>
 		<?php if ( $show_eye && 'password' === $args['field_type'] ): ?>
-            <label class="jfb-eye-icon" style="display:none;">
-                <input type="checkbox"/>
-                <span class="icon"></span>
-            </label>
+            <span
+                    class="jfb-eye-icon seen"
+                    role="button"
+                    tabindex="0"
+                    style="<?php echo Tools::is_editor() ? 'display:none;' : '' ?>"
+            >
+                <?php echo $this->get_seen_icon(); ?>
+                <?php echo $this->get_unseen_icon(); ?>
+            </span>
 		<?php endif; ?>
     </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

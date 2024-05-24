@@ -16,20 +16,32 @@ function TextFieldData() {
 		const [ node ] = this.nodes;
 
 		const wrapper = this.getWrapperNode();
-		const checkbox = wrapper.querySelector(
-			'.has-eye-icon input[type="checkbox"]'
-		);
+		const button = wrapper.querySelector( '.jfb-eye-icon' );
 
 		// show eye icon is disabled
-		if ( !checkbox ) {
+		if ( !button ) {
 			return;
 		}
 
-		const label = checkbox.closest( '.jfb-eye-icon' );
-		label.style.display = 'block';
+		button.addEventListener( 'click', function () {
+			button.classList.toggle(  'seen' );
+			let isPressed = this.getAttribute( 'aria-pressed' ) === 'true';
+			this.setAttribute( 'aria-pressed', !isPressed );
 
-		checkbox.addEventListener( 'change', event => {
-			node.type = event.target.checked ? 'text' : 'password';
+			node.type = button.classList.contains( 'seen' ) ? 'password' : 'text';
+		} );
+
+		button.addEventListener( 'keydown', function ( event ) {
+			if ( event.key === ' ' || event.key === 'Enter' ) {
+				event.preventDefault();
+				this.click();
+			}
+		} );
+
+		button.addEventListener( 'keyup', function ( event ) {
+			if ( event.key === ' ' ) {
+				event.preventDefault();
+			}
 		} );
 	}
 }

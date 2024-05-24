@@ -14,7 +14,7 @@ import {
 } from "@wordpress/components";
 import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
 import { styled } from "@linaria/react";
-import { useState, useEffect } from "@wordpress/element";
+import { useState, useEffect, RawHTML } from "@wordpress/element";
 
 const {
 	ToolBarFields,
@@ -41,6 +41,8 @@ const FullWidthInput = styled.input`
     width: 100%;
     margin: unset;
 `;
+
+const { seenIcon, unSeenIcon } = JFBTextFieldConfig;
 
 
 export default function TextEdit( props ) {
@@ -262,15 +264,16 @@ export default function TextEdit( props ) {
 						maxLength={ attributes.maxlength }
 						type={ showPassword ? 'text' : attributes.field_type }
 					/>
-					{ ( attributes.showEye && 'password' === attributes.field_type ) && <label className="jfb-eye-icon">
-						<input
-							type="checkbox"
-							onChange={ event => (
-								setShowPassword( event.target.checked )
-							) }
-						/>
-						<span className="icon"></span>
-					</label> }
+					{ ( attributes.showEye && 'password' === attributes.field_type ) && <span
+						className={ [
+							'jfb-eye-icon',
+							showPassword ? '' : 'seen'
+						].join( ' ' ) }
+						onClick={ () => setShowPassword( prev => !prev ) }
+					>
+						<RawHTML>{ seenIcon }</RawHTML>
+						<RawHTML>{ unSeenIcon }</RawHTML>
+					</span> }
 				</div>
 			</FieldWrapper>
 		</div>,

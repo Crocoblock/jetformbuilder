@@ -3758,50 +3758,48 @@ class Form extends Widget_Base implements Widget_Base_It {
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
 		$this->end_controls_section();
-}
+	}
 
 
-private
-function add_border( $instance, $control_id, $selector ) {
-	$instance->add_group_control(
-		Group_Control_Border::get_type(),
-		array(
-			'name'        => $control_id,
-			'label'       => __( 'Border', 'jet-form-builder' ),
-			'placeholder' => '1px',
-			'selector'    => $selector,
-		)
-	);
-	$instance->add_responsive_control(
-		$control_id . '_radius',
-		array(
-			'label'      => __( 'Border Radius', 'jet-form-builder' ),
-			'type'       => Controls_Manager::DIMENSIONS,
-			'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
-			'selectors'  => array(
-				$selector => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-			),
-		)
-	);
-}
+	private function add_border( $instance, $control_id, $selector ) {
+		$instance->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'name'        => $control_id,
+				'label'       => __( 'Border', 'jet-form-builder' ),
+				'placeholder' => '1px',
+				'selector'    => $selector,
+			)
+		);
+		$instance->add_responsive_control(
+			$control_id . '_radius',
+			array(
+				'label'      => __( 'Border Radius', 'jet-form-builder' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
+				'selectors'  => array(
+					$selector => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+	}
 
-/**
- * Render the widget output on the frontend.
- *
- * Written in PHP and used to generate the final HTML.
- *
- * @since 1.1.0
- *
- * @access protected
- */
-protected
-function render() {
-	wp_print_styles( 'wp-block-library' );
-	$settings = $this->get_settings_for_display();
+	/**
+	 * Render the widget output on the frontend.
+	 *
+	 * Written in PHP and used to generate the final HTML.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @access protected
+	 */
+	protected function render() {
+		wp_print_styles( 'wp-block-library' );
+		$settings = $this->get_settings_for_display();
 
-	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	echo jet_fb_render_form( $settings );
-}
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo jet_fb_render_form( $settings );
+	}
 
 
 }

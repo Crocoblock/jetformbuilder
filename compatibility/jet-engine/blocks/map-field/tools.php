@@ -1,14 +1,14 @@
 <?php
 
 
-namespace JFB_Compatibility\Jet_Engine\Blocks;
+namespace JFB_Compatibility\Jet_Engine\Blocks\Map_Field;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Map_Tools {
+class Tools {
 
 	const STRING  = 'location_string';
 	const ARRAY   = 'location_array';

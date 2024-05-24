@@ -80,6 +80,7 @@ class Autoloader {
 		'Jet_Form_Builder\\Gateways\\Query_Views\\Payment_With_Record_View'                          => 'JFB_Modules\\Gateways\\Query_Views\\Payment_With_Record_View',
 		// jet-engine compatibility
 		'Jet_Form_Builder\\Blocks\\Types\\Map_Field'                                                 => 'JFB_Compatibility\\Jet_Engine\\Blocks\\Map_Field',
+		'JFB_Compatibility\\Jet_Engine\\Blocks\\Map_Field' => '',
 		// repository component
 		'Jet_Form_Builder\\Classes\\Repository\\Repository_Pattern_Trait'                            => 'JFB_Components\\Repository\\Repository_Pattern_Trait',
 		'Jet_Form_Builder\\Classes\\Repository\\Repository_Static_Item_It'                           => 'JFB_Components\\Repository\\Repository_Static_Item_It',

@@ -1,22 +1,22 @@
 <?php
 
 
-namespace JFB_Compatibility\Jet_Engine\Blocks\Map_Field;
+namespace JFB_Compatibility\Jet_Engine\Blocks;
 
 use Jet_Engine\Modules\Maps_Listings\Base_Provider;
 use Jet_Engine\Modules\Maps_Listings\Module;
+use Jet_Form_Builder\Blocks\Render\Base as RenderBase;
 use Jet_Form_Builder\Blocks\Types\Base;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Compatibility\Jet_Engine\Preset_Sources\Preset_Source_Options_Page;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
-use JFB_Compatibility\Jet_Engine\Jet_Engine;
+use JFB_Components\Compatibility\Compatibility_Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Block_Type extends Base {
+class Map_Field extends Base {
 
 	const HANDLE       = 'jet-fb-map-field';
 	const DEFAULT_ZOOM = 14;
@@ -28,20 +28,17 @@ class Block_Type extends Base {
 		return 'map-field';
 	}
 
-	protected function register_block() {
-		/** @var \JFB_Modules\Block_Parsers\Module $module */
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$module = jet_form_builder()->module( 'block-parsers' );
-
-		$module->install( new Block_Parser() );
-
-		parent::register_block();
+	public function get_path_metadata_block() {
+		return Compatibility_Tools::get_dir(
+			'jet-engine',
+			"blocks-metadata/{$this->get_name()}"
+		);
 	}
 
 	public function get_field_settings(): array {
 		return array(
 			'height'       => $this->block_attrs['height'] ?? 300,
-			'format'       => $this->block_attrs['format'] ?? Tools::STRING,
+			'format'       => $this->block_attrs['format'] ?? Map_Tools::STRING,
 			'field_prefix' => $this->block_attrs['name'] ?? '',
 			'zoom'         => $this->block_attrs['zoom'] ?? 14,
 		);
@@ -153,8 +150,8 @@ class Block_Type extends Base {
 	}
 
 	protected function render_field( array $attrs, $content = null, $wp_block = null ): string {
-		if ( ! Tools::is_supported() ) {
-			return Tools::get_help_message();
+		if ( ! Map_Tools::is_supported() ) {
+			return Map_Tools::get_help_message();
 		}
 
 		return parent::render_field( $attrs, $content, $wp_block );
@@ -172,31 +169,20 @@ class Block_Type extends Base {
 		$provider->register_public_assets();
 		$provider->public_assets( null, array( 'marker_clustering' => false ), null );
 
-		return ( new Block_Render( $this ) )->render();
-	}
+		return ( new class( $this ) extends RenderBase {
+			public function get_name() {
+				return 'map-field';
+			}
 
-	/**
-	 * @param $path
-	 *
-	 * @return string
-	 * @throws Repository_Exception
-	 */
-	public function get_field_template( $path ) {
-		/** @var Jet_Engine $compat */
-		$compat = jet_form_builder()->compat( 'jet-engine' );
-
-		return $compat->get_dir( 'blocks/map-field/block-template.php' );
-	}
-
-	/**
-	 * @return string
-	 * @throws Repository_Exception
-	 */
-	public function get_path_metadata_block() {
-		/** @var Jet_Engine $compat */
-		$compat = jet_form_builder()->compat( 'jet-engine' );
-
-		return $compat->get_dir( 'blocks/map-field' );
+			/**
+			 * @see \Jet_Form_Builder\Blocks\Render\Calculated_Field_Render::get_fields_label_tag
+			 *
+			 * @return string
+			 */
+			protected function get_fields_label_tag(): string {
+				return 'div';
+			}
+		} )->render();
 	}
 
 }

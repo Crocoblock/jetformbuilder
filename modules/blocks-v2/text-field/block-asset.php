@@ -119,6 +119,6 @@ class Block_Asset implements Block_Asset_Interface {
 	}
 
 	public function enqueue_required_assets() {
-		wp_enqueue_script( Base_Module_Handle_It::PREFIX . 'blocks-v2-text-field' );
+		wp_enqueue_script( Base_Module_Handle_It::HANDLE_PREFIX . 'blocks-v2-text-field' );
 	}
 }

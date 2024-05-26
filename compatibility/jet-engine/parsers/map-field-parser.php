@@ -1,8 +1,9 @@
 <?php
 
 
-namespace JFB_Compatibility\Jet_Engine\Blocks\Map_Field;
+namespace JFB_Compatibility\Jet_Engine\Parsers;
 
+use Jet_Form_Builder\Exceptions\Parse_Exception;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
 use JFB_Modules\Block_Parsers\Fields\Default_Parser;
 use JFB_Modules\Block_Parsers\Interfaces\Multiple_Parsers;
@@ -12,7 +13,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Block_Parser extends Field_Data_Parser implements Multiple_Parsers {
+class Map_Field_Parser extends Field_Data_Parser implements Multiple_Parsers {
 
 	/**
 	 * @return mixed

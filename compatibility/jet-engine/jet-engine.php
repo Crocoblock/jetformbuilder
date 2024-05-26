@@ -61,10 +61,22 @@ class Jet_Engine implements
 	}
 
 	public function on_install() {
+		/** @var \JFB_Modules\Block_Parsers\Module $module */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$module = jet_form_builder()->module( 'block-parsers' );
+
+		$module->install( new Map_Field_Parser() );
+
 		$this->option_query = new Inner_Module();
 	}
 
 	public function on_uninstall() {
+		/** @var \JFB_Modules\Block_Parsers\Module $module */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$module = jet_form_builder()->module( 'block-parsers' );
+
+		$module->uninstall( new Map_Field_Parser() );
+
 		$this->option_query = null;
 	}
 
@@ -212,7 +224,8 @@ class Jet_Engine implements
 
 		array_push(
 			$script_asset['dependencies'],
-			Module::MAIN_SCRIPT_HANDLE
+			Module::MAIN_SCRIPT_HANDLE,
+			'wp-api-fetch'
 		);
 
 		wp_register_script(

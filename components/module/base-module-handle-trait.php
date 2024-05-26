@@ -12,7 +12,7 @@ trait Base_Module_Handle_Trait {
 
 	public function get_handle( string $unique_string = '' ): string {
 		$parts = array(
-			Base_Module_Handle_It::PREFIX . $this->rep_item_id(),
+			Base_Module_Handle_It::HANDLE_PREFIX . $this->rep_item_id(),
 			$unique_string,
 		);
 

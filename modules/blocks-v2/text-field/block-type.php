@@ -134,7 +134,7 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 		$this->enable_mask = ! empty( $this->block_attrs['enable_input_mask'] ) && ! empty( $this->block_attrs['input_mask'] );
 
 		if ( $this->enable_mask ) {
-			wp_enqueue_script( Base_Module_Handle_It::PREFIX . 'blocks-v2-text-field-mask' );
+			wp_enqueue_script( Base_Module_Handle_It::HANDLE_PREFIX . 'blocks-v2-text-field-mask' );
 		}
 
 		return ( new Block_Render( $this ) )->render();

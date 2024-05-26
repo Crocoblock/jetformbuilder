@@ -9,13 +9,10 @@ use JFB_Modules\Option_Field\Blocks\Checkbox;
 use JFB_Modules\Option_Field\Blocks\Radio;
 use Jet_Form_Builder\Classes\Builder_Helper;
 use JFB_Compatibility\Jet_Engine\Actions\Update_Options;
-use JFB_Compatibility\Jet_Engine\Blocks\Map_Field;
-use JFB_Compatibility\Jet_Engine\Blocks\Map_Tools;
 use JFB_Compatibility\Jet_Engine\Generators\Get_From_Field;
 use JFB_Compatibility\Jet_Engine\Generators\Get_From_Je_Query;
 use JFB_Compatibility\Jet_Engine\Methods\Post_Modification\Post_Je_Relation_Property;
 use JFB_Compatibility\Jet_Engine\Option_Query\Inner_Module;
-use JFB_Compatibility\Jet_Engine\Parsers\Map_Field_Parser;
 use JFB_Compatibility\Jet_Engine\Preset_Sources\Preset_Source_Options_Page;
 use JFB_Compatibility\Jet_Engine\Preset_Sources\Preset_User;
 use JFB_Components\Compatibility\Base_Compat_Dir_Trait;
@@ -61,22 +58,10 @@ class Jet_Engine implements
 	}
 
 	public function on_install() {
-		/** @var \JFB_Modules\Block_Parsers\Module $module */
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$module = jet_form_builder()->module( 'block-parsers' );
-
-		$module->install( new Map_Field_Parser() );
-
 		$this->option_query = new Inner_Module();
 	}
 
 	public function on_uninstall() {
-		/** @var \JFB_Modules\Block_Parsers\Module $module */
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$module = jet_form_builder()->module( 'block-parsers' );
-
-		$module->uninstall( new Map_Field_Parser() );
-
 		$this->option_query = null;
 	}
 
@@ -200,7 +185,6 @@ class Jet_Engine implements
 	}
 
 	public function register_scripts() {
-		$handle       = $this->get_handle( 'map-field' );
 		$script_asset = require_once $this->get_dir( 'assets/build/frontend/listing.options.asset.php' );
 
 		if ( true === $script_asset ) {
@@ -219,38 +203,6 @@ class Jet_Engine implements
 			$script_asset['version'],
 			true
 		);
-
-		$script_asset = require_once $this->get_dir( 'assets/build/frontend/map.field.asset.php' );
-
-		array_push(
-			$script_asset['dependencies'],
-			Module::MAIN_SCRIPT_HANDLE,
-			'wp-api-fetch'
-		);
-
-		wp_register_script(
-			$handle,
-			$this->get_url( 'assets/build/frontend/map.field.js' ),
-			$script_asset['dependencies'],
-			$script_asset['version'],
-			true
-		);
-
-		wp_localize_script(
-			$handle,
-			'JetMapFieldsSettings',
-			array(
-				'api'     => jet_engine()->api->get_route( 'get-map-point-data' ),
-				'apiHash' => jet_engine()->api->get_route( 'get-map-location-hash' ),
-				'nonce'   => wp_create_nonce( 'jet-map-field' ),
-				'i18n'    => array(
-					'loading'   => esc_html__( 'Loading ...', 'jet-form-builder' ),
-					'notFound'  => esc_html__( 'Address not found', 'jet-form-builder' ),
-					'resetBtn'  => esc_html__( 'Reset location', 'jet-form-builder' ),
-					'descTitle' => esc_html__( 'Lat and Lng are separately stored in the following fields', 'jet-form-builder' ),
-				),
-			)
-		);
 	}
 
 	public function enqueue_admin_assets() {
@@ -263,17 +215,6 @@ class Jet_Engine implements
 			$script_asset['dependencies'],
 			$script_asset['version'],
 			true
-		);
-
-		wp_localize_script(
-			$handle,
-			'JetFBMapField',
-			array(
-				'image'        => $this->get_url( 'assets/img/map-placeholder.png' ),
-				'formats'      => Map_Tools::get_formats(),
-				'is_supported' => Map_Tools::is_supported(),
-				'help'         => Map_Tools::get_help_message(),
-			)
 		);
 	}
 
@@ -298,7 +239,10 @@ class Jet_Engine implements
 	}
 
 	public function add_blocks( array $blocks ): array {
-		$blocks[] = new Map_Field();
+		array_push(
+			$blocks,
+			new Blocks\Map_Field\Block_Type()
+		);
 
 		return $blocks;
 	}

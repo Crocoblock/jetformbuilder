@@ -8,16 +8,19 @@ const devMode           = !process.argv.join( ':' ).
 module.exports = {
 	context: path.resolve( __dirname, 'assets/src' ),
 	entry: {
-		'editor': './editor/main',
-		'frontend/listing.options': './frontend/listing.options/main',
+		'editor': './editor/index',
+		'frontend': './frontend/index',
 	},
 	output: {
 		path: path.resolve( __dirname, 'assets/build' ),
-		devtoolNamespace: 'jfb-engine',
+		devtoolNamespace: 'jfb-engine-map-field',
 	},
 	devtool: devMode ? 'inline-cheap-module-source-map' : false,
 	resolve: {
 		extensions: [ '.js', '.jsx' ],
+		alias: {
+			'@root': path.resolve( __dirname, './' ),
+		},
 	},
 	module: {
 		rules: [

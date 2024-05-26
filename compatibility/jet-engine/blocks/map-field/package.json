@@ -1,6 +1,6 @@
 {
-	"name": "jet-form-builder-engine",
-	"description": "JetEngine compatibility for JetFormBuilder Plugin",
+	"name": "jet-form-builder-engine-map-field",
+	"description": "JetEngine Map Field for JetFormBuilder Plugin",
 	"version": "3.4.0",
 	"author": "hug.reed <sanko200065@gmail.com>",
 	"license": "MIT",

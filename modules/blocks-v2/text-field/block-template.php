@@ -79,20 +79,20 @@ $wrap_classes = sprintf(
 
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
-    <div class="<?php echo esc_attr( trim( $wrap_classes ) ); ?>">
-	    <?php do_action( 'jet-form-builder/before-field', $this ); ?>
-        <input <?php $this->render_attributes_string(); ?>>
-		<?php if ( $show_eye && 'password' === $args['field_type'] ): ?>
-            <span
-                    class="jfb-eye-icon seen"
-                    role="button"
-                    tabindex="0"
-                    style="<?php echo Tools::is_editor() ? 'display:none;' : '' ?>"
-            >
-                <?php echo $this->get_seen_icon(); ?>
-                <?php echo $this->get_unseen_icon(); ?>
-            </span>
+	<div class="<?php echo esc_attr( trim( $wrap_classes ) ); ?>">
+		<?php do_action( 'jet-form-builder/before-field', $this ); ?>
+		<input <?php $this->render_attributes_string(); ?>>
+		<?php if ( $show_eye && 'password' === $args['field_type'] ) : ?>
+			<span
+					class="jfb-eye-icon seen"
+					role="button"
+					tabindex="0"
+					style="<?php echo Tools::is_editor() ? 'display:none;' : ''; ?>"
+			>
+				<?php echo $this->get_seen_icon(); ?>
+				<?php echo $this->get_unseen_icon(); ?>
+			</span>
 		<?php endif; ?>
-	    <?php do_action( 'jet-form-builder/after-field', $this ); ?>
-    </div>
+		<?php do_action( 'jet-form-builder/after-field', $this ); ?>
+	</div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

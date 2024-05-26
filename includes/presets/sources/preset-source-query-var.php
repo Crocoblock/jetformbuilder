@@ -21,19 +21,21 @@ class Preset_Source_Query_Var extends Base_Source {
 		return $_GET;
 	}
 
-    public function get_prop() {
-        if ( ! empty( $this->field_data['other']['query_var'] ) ) {
-            return $this->field_data['other']['query_var'];
-        }
+	public function get_prop() {
+		if ( ! empty( $this->field_data['other']['query_var'] ) ) {
+			return $this->field_data['other']['query_var'];
+		}
 
-        return ! empty( $this->field_data['key'] ) ? $this->field_data['key'] : '';
-    }
+		return ! empty( $this->field_data['key'] ) ? $this->field_data['key'] : '';
+	}
 
 	public function get_result_on_prop() {
-        if ( isset( $this->src()[ $this->prop ] ) ) {
-            return $this->src()[ $this->prop ];
-        }
+		if ( isset( $this->src()[ $this->prop ] ) ) {
+			return $this->src()[ $this->prop ];
+		}
 
-        throw new Preset_Exception( '$_GET does not have ' . $this->prop . '  field' );
+		throw new Preset_Exception(
+			'$_GET does not have ' . esc_attr( $this->prop ) . '  field'
+		);
 	}
 }

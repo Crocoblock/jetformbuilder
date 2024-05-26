@@ -1094,7 +1094,6 @@ class Form extends Widget_Base implements Widget_Base_It {
 		/** Form Break Disabled Message */
 		$this->section_form_break_disabled_style();
 
-
 		$this->run_form_progress_controls(
 			$this,
 			array( $this, 'selector' ),

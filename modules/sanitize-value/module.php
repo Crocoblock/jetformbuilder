@@ -106,7 +106,7 @@ final class Module implements
 		}
 
 		if ( block_has_support( $block_type, array( self::SUPPORT_NAME ) ) &&
-		     ! array_key_exists( self::ATTRIBUTE_NAME, $block_type->attributes )
+			! array_key_exists( self::ATTRIBUTE_NAME, $block_type->attributes )
 		) {
 			$block_type->attributes[ self::ATTRIBUTE_NAME ] = array(
 				'type'    => 'array',

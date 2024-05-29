@@ -1,7 +1,7 @@
 {
 	"name": "jet-form-builder-onboarding",
 	"description": "Onboarding module for JetFormBuilder Plugin",
-	"version": "3.3.0",
+	"version": "3.4.0",
 	"author": "hug.reed <sanko200065@gmail.com>",
 	"license": "MIT",
 	"private": true,

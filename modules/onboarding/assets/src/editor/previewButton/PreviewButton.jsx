@@ -27,12 +27,20 @@ function PreviewButton() {
 		}
 	}, [ isSavingForm ] );
 
+	const openPreviewPage = () => {
+		if ( previewPage && !previewPage?.closed ) {
+			previewPage.focus();
+
+			return;
+		}
+
+		setPreviewPage( window.open( JFBOnboardingConfig.previewURL ) );
+	};
+
 	return <Button
 		variant="tertiary"
 		icon={ external }
-		onClick={ () => {
-			setPreviewPage( window.open( JFBOnboardingConfig.previewURL ) );
-		} }
+		onClick={ openPreviewPage }
 	/>;
 }
 

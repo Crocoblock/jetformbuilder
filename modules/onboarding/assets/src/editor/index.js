@@ -1,9 +1,7 @@
 import * as welcome from './welcomeBlock';
 import './previewButton';
-
-const {
-	      addFilter,
-      } = wp.hooks;
+import './useFormButton';
+import { addFilter } from '@wordpress/hooks';
 
 addFilter(
 	'jet.fb.register.fields',

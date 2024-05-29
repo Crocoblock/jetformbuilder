@@ -30,8 +30,7 @@ function CheckboxData() {
 
 CheckboxData.prototype = Object.create( InputData.prototype );
 
-CheckboxData.prototype.wrapper          = null;
-CheckboxData.prototype.isResetCalcValue = false;
+CheckboxData.prototype.wrapper = null;
 
 CheckboxData.prototype.isSupported  = function ( node ) {
 	return (
@@ -42,9 +41,7 @@ CheckboxData.prototype.isSupported  = function ( node ) {
 CheckboxData.prototype.addListeners = function () {
 	this.enterKey = new ReactiveHook();
 
-	this.wrapper.addEventListener( 'change', () => {
-		this.value.current = this.getActiveValue();
-	} );
+	this.wrapper.addEventListener( 'change', this.onChangeValue.bind( this ) );
 	this.wrapper.addEventListener(
 		'keydown',
 		this.handleEnterKey.bind( this ),
@@ -91,6 +88,10 @@ CheckboxData.prototype.addListeners = function () {
 
 	this.callable = null;
 	this.sanitize( value => sanitizeCheckbox( value, this ) );
+};
+
+CheckboxData.prototype.onChangeValue = function ( event ) {
+	this.value.current = this.getActiveValue();
 };
 
 CheckboxData.prototype.setValue = function () {
@@ -167,7 +168,7 @@ CheckboxData.prototype.processValueFormSingleChoice = function ( node, value ) {
 
 	// disabled or enable input, depending on checkbox check state
 	value.push( !node.checked ? false : input.value );
-}
+};
 
 CheckboxData.prototype.isArray = function () {
 	return (

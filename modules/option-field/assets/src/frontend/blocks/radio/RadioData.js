@@ -28,9 +28,7 @@ RadioData.prototype.isSupported  = function ( node ) {
 RadioData.prototype.addListeners = function () {
 	this.enterKey = new ReactiveHook();
 
-	this.wrapper.addEventListener( 'change', ( { target } ) => {
-		target.dataset.custom ? this.toggleCustomOption() : this.setValue();
-	} );
+	this.wrapper.addEventListener( 'change', this.onChangeValue.bind( this ) );
 	this.wrapper.addEventListener(
 		'keydown',
 		this.handleEnterKey.bind( this ),
@@ -76,6 +74,10 @@ RadioData.prototype.addListeners = function () {
 RadioData.prototype.setValue = function () {
 	this.value.current = this.getActiveValue();
 };
+
+RadioData.prototype.onChangeValue = function ( event ) {
+	event.target.dataset.custom ? this.toggleCustomOption() : this.setValue();
+}
 
 RadioData.prototype.toggleCustomOption = function () {
 	const node  = this.lastNode();

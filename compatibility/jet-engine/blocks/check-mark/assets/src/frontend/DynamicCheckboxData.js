@@ -1,4 +1,3 @@
-import resolveCheckMark from './resolveCheckMark';
 import sanitizeDynamicCheckbox from './sanitizeDynamicCheckbox';
 
 const {
@@ -26,27 +25,24 @@ DynamicCheckboxData.prototype.addListeners = function () {
 	this.sanitize( value => sanitizeDynamicCheckbox( value, this ) );
 };
 
-DynamicCheckboxData.prototype.processValueFormSingleChoice = function (
-	node, value,
-) {
+/**
+ * @param event {Event}
+ */
+DynamicCheckboxData.prototype.onChangeValue = function ( event ) {
+	if ( event.target.classList.contains( 'jet-form-builder__field' ) ) {
+		CheckboxData.prototype.onChangeValue.call( this, event );
 
-	const prevLength = value.length;
-
-	CheckboxData.prototype.processValueFormSingleChoice.call(
-		this,
-		node,
-		value,
-	);
-
-	if ( value.includes( node.value ) ) {
 		return;
 	}
 
-	const checkMark = resolveCheckMark( node );
+	const realInput = event.target.closest(
+		'.jet-form-builder__field-wrap',
+	).querySelector(
+		'.jet-form-builder__field',
+	);
 
-	if ( checkMark?.checked ) {
-		value.push( node.value );
-	}
+	realInput.checked = event.target.checked;
+	CheckboxData.prototype.onChangeValue.call( this, event );
 };
 
 export default DynamicCheckboxData;

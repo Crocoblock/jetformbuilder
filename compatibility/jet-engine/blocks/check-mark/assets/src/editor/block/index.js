@@ -1,5 +1,5 @@
 import CheckMarkEdit from './edit';
-import metadata from '@root/block.json';
+import metadata from '@blockJson';
 
 const { __ } = wp.i18n;
 

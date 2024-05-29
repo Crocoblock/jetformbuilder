@@ -4,15 +4,17 @@ const WPExtractorPlugin = require(
 
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
-const path              = require( 'path' );
-const devMode           = !process.argv.join( ':' ).
+const path    = require( 'path' );
+const devMode = !process.argv.join( ':' ).
 	includes( '--mode:production' );
 
 module.exports = {
 	context: path.resolve( __dirname, 'assets/src' ),
 	entry: {
 		'editor': './editor/index',
-		'frontend': './frontend/index',
+		'frontend/main': './frontend/index.pcss',
+		'frontend/checkbox': './frontend/checkbox/index',
+		'frontend/radio': './frontend/radio/index',
 	},
 	output: {
 		path: path.resolve( __dirname, 'assets/build' ),
@@ -22,7 +24,7 @@ module.exports = {
 	resolve: {
 		extensions: [ '.js', '.jsx' ],
 		alias: {
-			'@root': path.resolve( __dirname, './' ),
+			'@blockJson': path.resolve( __dirname, './block.json' ),
 		},
 	},
 	module: {

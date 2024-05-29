@@ -18,6 +18,8 @@ if ( ! $width || ! is_numeric( $width ) || 10 > $width ) {
 /** @noinspection PhpUnhandledExceptionInspection */
 $module = jet_form_builder()->compat( \JFB_Compatibility\Jet_Engine\Jet_Engine::class );
 
+wp_enqueue_script( $module->get_handle( 'check-mark-' . $module->get_option_type() ) );
+
 ?>
 <div 
 <?php
@@ -40,6 +42,7 @@ echo get_block_wrapper_attributes( // phpcs:ignore WordPress.Security.EscapeOutp
 	<?php else : ?>
 		<input
 				type="<?php echo esc_attr( $module->get_option_type() ); ?>"
+                class="check-mark-control"
 		>
 		<span></span>
 	<?php endif; ?>

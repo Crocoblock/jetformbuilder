@@ -40,6 +40,5 @@
 		}
 	},
 	"render": "file:./block-render.php",
-	"viewScript": "jet-fb-compat-jet-engine-check-mark",
 	"viewStyle": "jet-fb-compat-jet-engine-check-mark"
 }

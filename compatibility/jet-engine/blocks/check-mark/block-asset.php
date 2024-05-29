@@ -29,7 +29,7 @@ class Block_Asset implements Block_Asset_Interface {
 	 * @throws Repository_Exception
 	 */
 	public function register_frontend_assets() {
-		$script_asset = require_once $this->get_dir( '/assets/build/frontend.asset.php' );
+		$script_asset = require_once $this->get_dir( '/assets/build/frontend/radio.asset.php' );
 
 		if ( true === $script_asset ) {
 			return;
@@ -37,20 +37,34 @@ class Block_Asset implements Block_Asset_Interface {
 
 		array_push(
 			$script_asset['dependencies'],
-			Module::MAIN_SCRIPT_HANDLE,
 			'jet-fb-radio-field'
 		);
 
 		wp_register_style(
 			$this->get_handle( 'check-mark' ),
-			$this->get_url( '/assets/build/frontend.css' ),
+			$this->get_url( '/assets/build/frontend/main.css' ),
 			array(),
 			$script_asset['version']
 		);
 
 		wp_register_script(
-			$this->get_handle( 'check-mark' ),
-			$this->get_url( '/assets/build/frontend.js' ),
+			$this->get_handle( 'check-mark-radio' ),
+			$this->get_url( '/assets/build/frontend/radio.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
+		);
+
+		$script_asset = require_once $this->get_dir( '/assets/build/frontend/checkbox.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			'jet-fb-checkbox-field'
+		);
+
+		wp_register_script(
+			$this->get_handle( 'check-mark-checkbox' ),
+			$this->get_url( '/assets/build/frontend/checkbox.js' ),
 			$script_asset['dependencies'],
 			$script_asset['version'],
 			true

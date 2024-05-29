@@ -1,4 +1,4 @@
-import resolveCheckMark from '@root/assets/src/frontend/resolveCheckMark';
+import resolveCheckMark from '../resolveCheckMark';
 
 /**
  * @param value {Array}

@@ -29,7 +29,7 @@ DynamicCheckboxData.prototype.addListeners = function () {
  * @param event {Event}
  */
 DynamicCheckboxData.prototype.onChangeValue = function ( event ) {
-	if ( event.target.classList.contains( 'jet-form-builder__field' ) ) {
+	if ( !event.target.classList.contains( 'check-mark-control' ) ) {
 		CheckboxData.prototype.onChangeValue.call( this, event );
 
 		return;

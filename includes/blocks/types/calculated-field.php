@@ -26,9 +26,10 @@ class Calculated_Field extends Base {
 	}
 
 	public function register_scripts() {
+		// todo: refactor with new way of assets loading
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/calculated.field.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/frontend/calculated.field.js' ),
 			array(
 				Manager::MAIN_SCRIPT_HANDLE,
 			),

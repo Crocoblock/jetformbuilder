@@ -33,9 +33,10 @@ class Form_Break_Field extends Base {
 	}
 
 	public function register_scripts() {
+		// todo: refactor with new way of assets loading
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/multi.step.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/frontend/multi.step.js' ),
 			array(
 				Conditional_Block::HANDLE,
 				Manager::MAIN_SCRIPT_HANDLE,

@@ -184,7 +184,7 @@ final class Module implements Base_Module_It {
 	public function enqueue_frontend_styles() {
 		wp_register_style(
 			'jet-form-builder-frontend',
-			Plugin::instance()->plugin_url( 'assets/css/frontend.css' ),
+			Plugin::instance()->plugin_url( 'assets/build/frontend/main.css' ),
 			array(),
 			Plugin::instance()->get_version()
 		);
@@ -207,7 +207,7 @@ final class Module implements Base_Module_It {
 		$jet_plugins = jet_form_builder()->module( 'jet-plugins' );
 		$jet_plugins->register_scripts();
 
-		$script_asset = require_once jet_form_builder()->plugin_dir( 'assets/js/frontend/main.asset.php' );
+		$script_asset = require_once jet_form_builder()->plugin_dir( 'assets/build/frontend/main.asset.php' );
 
 		if ( true === $script_asset ) {
 			return;
@@ -217,7 +217,7 @@ final class Module implements Base_Module_It {
 
 		wp_register_script(
 			self::MAIN_SCRIPT_HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/main.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/frontend/main.js' ),
 			$script_asset['dependencies'],
 			$script_asset['version'],
 			true

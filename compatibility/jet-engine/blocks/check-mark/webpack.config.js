@@ -1,6 +1,9 @@
 const WPExtractorPlugin = require(
 	'@wordpress/dependency-extraction-webpack-plugin',
 );
+
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+
 const path              = require( 'path' );
 const devMode           = !process.argv.join( ':' ).
 	includes( '--mode:production' );
@@ -13,7 +16,7 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve( __dirname, 'assets/build' ),
-		devtoolNamespace: 'jfb-engine-map-field',
+		devtoolNamespace: 'jfb-engine-check-mark',
 	},
 	devtool: devMode ? 'inline-cheap-module-source-map' : false,
 	resolve: {
@@ -33,9 +36,9 @@ module.exports = {
 				exclude: /node_modules/,
 			},
 			{
-				test: /\.css$/,
+				test: /\.[sp]?css$/,
 				use: [
-					'style-loader',
+					MiniCssExtractPlugin.loader,
 					'css-loader',
 					'postcss-loader',
 				],
@@ -44,5 +47,6 @@ module.exports = {
 	},
 	plugins: [
 		new WPExtractorPlugin(),
+		new MiniCssExtractPlugin(),
 	],
 };

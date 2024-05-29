@@ -11,7 +11,7 @@ class Block_Asset implements Block_Asset_Interface {
 
 	public function init_hooks() {
 		add_action(
-			'jet-form-builder/editor-assets/before',
+			'enqueue_block_editor_assets',
 			array( $this, 'enqueue_editor_assets' )
 		);
 		add_action(
@@ -37,7 +37,15 @@ class Block_Asset implements Block_Asset_Interface {
 
 		array_push(
 			$script_asset['dependencies'],
-			Module::MAIN_SCRIPT_HANDLE
+			Module::MAIN_SCRIPT_HANDLE,
+			'jet-fb-radio-field'
+		);
+
+		wp_register_style(
+			$this->get_handle( 'check-mark' ),
+			$this->get_url( '/assets/build/frontend.css' ),
+			array(),
+			$script_asset['version']
 		);
 
 		wp_register_script(
@@ -53,6 +61,12 @@ class Block_Asset implements Block_Asset_Interface {
 	 * @return void
 	 */
 	public function enqueue_editor_assets() {
+		$screen = get_current_screen();
+
+		if ( ! $screen || 'jet-engine' !== $screen->post_type ) {
+			return;
+		}
+
 		$script_asset = require_once $this->get_dir( '/assets/build/editor.asset.php' );
 
 		wp_enqueue_script(

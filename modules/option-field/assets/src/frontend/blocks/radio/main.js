@@ -1,5 +1,6 @@
 import RadioData from './RadioData';
 import SignalRadio from './SignalRadio';
+import './index.pcss';
 
 const {
 	      addFilter,

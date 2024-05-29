@@ -1,9 +1,12 @@
 import preview from './preview';
 import {
 	PanelBody,
-	ToggleControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
-	__experimentalToggleGroupControlOption as ToggleGroupControlOption, Flex,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
+	Flex,
+	Button,
+	ResizableBox,
+	ToolbarButton,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import {
@@ -11,23 +14,33 @@ import {
 	useBlockProps,
 	MediaUploadCheck,
 	MediaUpload,
+	BlockControls,
 } from '@wordpress/block-editor';
 import Help from '../components/Help';
 import SimpleChooseMediaButton from '../components/SimpleChooseMediaButton';
+import Label from '../components/Label';
+import { useState } from '@wordpress/element';
+import { check } from '@wordpress/icons';
 
 export default function CheckMarkEdit( props ) {
 	const {
 		      setAttributes,
 		      attributes,
+		      toggleSelection,
 	      } = props;
+	const {
+		      '.jet-form-builder-check-mark-img': { width: imgWidth },
+	      } = attributes.style;
 
-	const blockProps = useBlockProps();
-
-	const [ isChecked, toggleChecked ] = useCheckedChoiceState();
+	const blockProps                   = useBlockProps();
+	const [ isChecked, toggleChecked ] = useState( false );
 
 	const controlImageUrl = (
 		() => {
-			if ( 'image' !== attributes.controlType ) {
+			if ( 'image' !== attributes.controlType ||
+				!attributes?.checkedImageControl?.url ||
+				!attributes?.defaultImageControl?.url
+			) {
 				return false;
 			}
 
@@ -48,20 +61,62 @@ export default function CheckMarkEdit( props ) {
 	}
 
 	return <>
-		<span { ...blockProps }>
+		<BlockControls>
+			<ToolbarButton
+				icon={ check }
+				title={ isChecked
+				        ? __( 'Show unchecked state', 'jet-form-builder' )
+				        : __( 'Show checked state', 'jet-form-builder' )
+				}
+				onClick={ () => toggleChecked( prev => !prev ) }
+				isActive={ isChecked }
+			/>
+		</BlockControls>
+		<div { ...blockProps }>
 			{ !!controlImageUrl
-			  ? <img
-				  src={ controlImageUrl }
-				  className={ 'jet-form-builder-check-mark-img' }
-				  alt={ fieldName + ' ' + __( 'control', 'jet-form-builder' ) }
-			  />
+			  ? <ResizableBox
+				  enable={ {
+					  bottom: false,
+					  bottomLeft: false,
+					  bottomRight: false,
+					  left: false,
+					  right: true,
+					  top: false,
+					  topLeft: false,
+					  topRight: false,
+				  } }
+				  size={ {
+					  width: imgWidth,
+				  } }
+				  minWidth="10"
+				  onResizeStop={ ( event, direction, elt, delta ) => {
+					  setAttributes( {
+						  style: {
+							  ...attributes.style,
+							  '.jet-form-builder-check-mark-img': {
+								  width: imgWidth + delta.width,
+							  },
+						  },
+					  } );
+					  toggleSelection( true );
+				  } }
+				  onResizeStart={ () => {
+					  toggleSelection( false );
+				  } }
+			  >
+				  <img
+					  src={ controlImageUrl }
+					  className={ 'jet-form-builder-check-mark-img' }
+					  alt={ __( 'Check mark control', 'jet-form-builder' ) }
+				  />
+			  </ResizableBox>
 			  : <input
 				  type="checkbox"
 				  checked={ isChecked }
 				  onChange={ () => toggleChecked( prev => !prev ) }
 				  className={ 'jet-form-builder-check-mark-input' }
 			  /> }
-		</span>
+		</div>
 		<InspectorControls>
 			<div style={ { padding: '20px' } }>
 				<ToggleGroupControl
@@ -81,13 +136,6 @@ export default function CheckMarkEdit( props ) {
 						value={ 'image' }
 					/>
 				</ToggleGroupControl>
-				<ToggleControl
-					label={ __(
-						'Show checked state',
-						'jet-form-builder',
-					) }
-					onChange={ () => toggleChecked( prev => !prev ) }
-				/>
 			</div>
 		</InspectorControls>
 		{ 'image' === attributes.controlType && <>
@@ -103,12 +151,12 @@ export default function CheckMarkEdit( props ) {
 								marginBottom: '8px',
 							} }
 						>
-							<label>
+							<Label>
 								{ __(
 									'Default icon',
 									'jet-form-builder',
 								) }
-							</label>
+							</Label>
 							<MediaUpload
 								onSelect={ media => setAttributes( {
 									defaultImageControl: {
@@ -169,12 +217,12 @@ export default function CheckMarkEdit( props ) {
 								marginBottom: '8px',
 							} }
 						>
-							<label>
+							<Label>
 								{ __(
 									'Checked icon',
 									'jet-form-builder',
 								) }
-							</label>
+							</Label>
 							<MediaUpload
 								onSelect={ media => setAttributes( {
 									checkedImageControl: {

@@ -105,9 +105,10 @@ class Conditional_Block extends Base {
 	}
 
 	public function register_scripts() {
+		// todo: refactor with new way of assets loading
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/conditional.block.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/frontend/conditional.block.js' ),
 			array(
 				Manager::MAIN_SCRIPT_HANDLE,
 			),

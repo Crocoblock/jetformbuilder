@@ -313,9 +313,10 @@ class Editor {
 	public function enqueue_assets() {
 		do_action( 'jet-form-builder/editor-package/before', $this, self::EDITOR_PACKAGE_HANDLE );
 
+		// todo: refactor with new way of assets loading
 		wp_enqueue_script(
 			self::EDITOR_PACKAGE_HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/editor/package.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/editor/package.js' ),
 			array(
 				'wp-editor',
 				'wp-core-data',
@@ -348,9 +349,10 @@ class Editor {
 
 		do_action( 'jet-form-builder/editor-assets/before', $this, self::EDITOR_HANDLE );
 
+		// todo: refactor with new way of assets loading
 		wp_enqueue_script(
 			self::EDITOR_HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/editor/form.builder.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/editor/form.builder.js' ),
 			array(),
 			JET_FORM_BUILDER_VERSION,
 			true
@@ -436,9 +438,10 @@ class Editor {
 
 		do_action( 'jet-form-builder/other-editor-assets/before', $this, $handle );
 
+		// todo: refactor with new way of assets loading
 		wp_register_script(
 			$handle,
-			Plugin::instance()->plugin_url( 'assets/js/editor/default.builder.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/editor/default.builder.js' ),
 			array(
 				'wp-core-data',
 				'wp-data',
@@ -452,7 +455,7 @@ class Editor {
 
 		wp_register_style(
 			'jet-form-builder-others',
-			Plugin::instance()->plugin_url( 'assets/css/frontend.css' ),
+			Plugin::instance()->plugin_url( 'assets/build/frontend/main.css' ),
 			array(),
 			Plugin::instance()->get_version()
 		);

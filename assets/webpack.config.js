@@ -2,6 +2,8 @@ const path                     = require( 'path' );
 const { VueLoaderPlugin }      = require( 'vue-loader' );
 const { getAdminPagesEntries } = require( './.helpers/getAdminPagesEntries' );
 
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+
 const devMode = !process.argv.join( ':' ).
 	includes( '--mode:production' );
 
@@ -29,7 +31,7 @@ module.exports = {
 		...getAdminPagesEntries(),
 	},
 	output: {
-		path: path.resolve( __dirname, 'js' ),
+		path: path.resolve( __dirname, 'build' ),
 		devtoolNamespace: 'jfb',
 	},
 	devtool: devMode ? 'inline-cheap-module-source-map' : false,
@@ -77,10 +79,19 @@ module.exports = {
 					'css-loader',
 				],
 			},
+			{
+				test: /\.pcss$/,
+				use: [
+					MiniCssExtractPlugin.loader,
+					'css-loader',
+					'postcss-loader',
+				],
+			},
 		],
 	},
 	plugins: [
 		new VueLoaderPlugin(),
 		new WPExtractorPlugin(),
+		new MiniCssExtractPlugin(),
 	],
 };

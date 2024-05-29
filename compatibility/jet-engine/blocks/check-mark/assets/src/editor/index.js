@@ -1,12 +1,4 @@
 import * as checkMark from './block';
-import { addFilter } from '@wordpress/hooks';
+import { registerBlockType } from '@wordpress/blocks';
 
-addFilter(
-	'jet.fb.register.fields',
-	'jet-form-builder/check-mark',
-	blocks => {
-		blocks.push( checkMark );
-
-		return blocks;
-	},
-);
+registerBlockType( checkMark.name, checkMark.settings );

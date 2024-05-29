@@ -5,6 +5,8 @@ namespace JFB_Compatibility\Jet_Engine;
 
 use Jet_Engine\Query_Builder\Queries\Base_Query;
 use Jet_Form_Builder\Actions\Methods\Object_Properties_Collection;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use JFB_Compatibility\Jet_Engine\Blocks\Check_Mark\Block_Asset;
 use JFB_Modules\Option_Field\Blocks\Checkbox;
 use JFB_Modules\Option_Field\Blocks\Radio;
 use Jet_Form_Builder\Classes\Builder_Helper;
@@ -48,6 +50,7 @@ class Jet_Engine implements
 	 * @var Inner_Module|null
 	 */
 	private $option_query;
+	private $option_type = 'checkbox';
 
 	public function rep_item_id() {
 		return 'jet-engine';
@@ -96,15 +99,19 @@ class Jet_Engine implements
 			array( $this, 'add_blocks' ),
 			0
 		);
+		add_action(
+			'jet-engine/blocks-views/register-block-types',
+			array( $this, 'register_listing_related_blocks' )
+		);
 		add_filter(
 			'jet-form-builder/render/checkbox-field/option',
-			array( $this, 'on_render_field_option' ),
+			array( $this, 'on_render_field_checkbox' ),
 			10,
 			4
 		);
 		add_filter(
 			'jet-form-builder/render/radio-field/option',
-			array( $this, 'on_render_field_option' ),
+			array( $this, 'on_render_field_radio' ),
 			10,
 			4
 		);
@@ -247,6 +254,14 @@ class Jet_Engine implements
 		return $blocks;
 	}
 
+	public function register_listing_related_blocks() {
+		register_block_type(
+			$this->get_dir( 'blocks/check-mark' )
+		);
+
+		( new Block_Asset() )->init_hooks();
+	}
+
 	public function add_actions( \Jet_Form_Builder\Actions\Manager $manager ) {
 		$manager->register_action_type( new Update_Options() );
 	}
@@ -255,6 +270,18 @@ class Jet_Engine implements
 		Object_Properties_Collection $collection
 	): Object_Properties_Collection {
 		return $collection->add( new Post_Je_Relation_Property() );
+	}
+
+	public function on_render_field_checkbox( string $item, $value, $option, $render ): string {
+		$this->option_type = 'checkbox';
+
+		return $this->on_render_field_option( $item, $value, $option, $render );
+	}
+
+	public function on_render_field_radio( string $item, $value, $option, $render ): string {
+		$this->option_type = 'radio';
+
+		return $this->on_render_field_option( $item, $value, $option, $render );
 	}
 
 	/**
@@ -323,6 +350,15 @@ class Jet_Engine implements
 			default:
 				return $data_object;
 		}
+	}
+
+	/**
+	 * Only for the internal usage.
+	 *
+	 * @return string
+	 */
+	public function get_option_type(): string {
+		return $this->option_type;
 	}
 
 }

@@ -43,7 +43,7 @@ class Dynamic_Value {
 	public function register_scripts() {
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/dynamic.value.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/frontend/dynamic.value.js' ),
 			array(
 				Conditional_Block::HANDLE,
 			),

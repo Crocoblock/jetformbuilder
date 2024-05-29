@@ -13,6 +13,7 @@ metadata.attributes.isPreview = {
 };
 
 const settings = {
+	...metadata,
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
 		`Input coordinates by pinning the needed location on the map easily. 
@@ -53,7 +54,6 @@ Save the value conveniently into the Map meta field of JetEngine.`,
 };
 
 export {
-	metadata,
 	name,
 	settings,
 };

@@ -130,9 +130,10 @@ class Media_Field extends Base {
 			Plugin::instance()->get_version(),
 			true
 		);
+		// todo: refactor with new way of assets loading
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/frontend/media.field.js' ),
 			array(
 				Module::MAIN_SCRIPT_HANDLE,
 				'jet-form-builder-sortable',
@@ -140,9 +141,10 @@ class Media_Field extends Base {
 			Plugin::instance()->get_version(),
 			true
 		);
+		// todo: refactor with new way of assets loading
 		wp_register_script(
 			self::RESTRICTIONS,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field.restrictions.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/frontend/media.field.restrictions.js' ),
 			array(
 				\JFB_Modules\Validation\Module::HANDLE,
 			),

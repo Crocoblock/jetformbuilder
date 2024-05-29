@@ -24,8 +24,9 @@
 	"workspaces": [
 		"assets",
 		"modules/*",
+		"modules/blocks-v2/*",
 		"compatibility/*",
-		"modules/blocks-v2/*"
+		"compatibility/jet-engine/blocks/*"
 	],
 	"devDependencies": {
 		"@babel/eslint-parser": "^7.23.10",
@@ -38,9 +39,12 @@
 		"husky": "^8.0.3",
 		"mini-css-extract-plugin": "^2.8.0",
 		"nx": "18.0.4",
+		"postcss-import": "^16.1.0",
 		"postcss-loader": "^8.1.0",
 		"postcss-minify": "^1.1.0",
+		"postcss-mixins": "^10.0.1",
 		"postcss-nested": "^6.0.1",
+		"postcss-simple-vars": "^7.0.1",
 		"sass": "^1.60.0",
 		"sass-loader": "^14.1.1",
 		"style-loader": "^3.3.4",

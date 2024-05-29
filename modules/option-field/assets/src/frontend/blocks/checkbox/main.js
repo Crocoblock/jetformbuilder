@@ -1,4 +1,5 @@
 import CheckboxData from './CheckboxData';
+import './index.pcss';
 
 const {
 	      addFilter,

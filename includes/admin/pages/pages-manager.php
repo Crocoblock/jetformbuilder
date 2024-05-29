@@ -222,9 +222,10 @@ class Pages_Manager {
 			Plugin::instance()->get_version()
 		);
 
+		// todo: refactor with new way of assets loading
 		wp_register_script(
 			self::SCRIPT_PACKAGE,
-			Plugin::instance()->plugin_url( 'assets/js/admin/package.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/admin/package.js' ),
 			array(
 				'wp-api',
 				'wp-api-fetch',
@@ -241,9 +242,10 @@ class Pages_Manager {
 			)
 		);
 
+		// todo: refactor with new way of assets loading
 		wp_register_script(
 			self::SCRIPT_VUEX_PACKAGE,
-			Plugin::instance()->plugin_url( 'assets/js/admin/vuex.package.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/admin/vuex.package.js' ),
 			array(
 				self::SCRIPT_VUEX,
 				self::SCRIPT_PACKAGE,

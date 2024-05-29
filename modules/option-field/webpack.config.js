@@ -1,6 +1,9 @@
 const WPExtractorPlugin = require(
 	'@wordpress/dependency-extraction-webpack-plugin',
 );
+
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+
 const path              = require( 'path' );
 const devMode           = !process.argv.join( ':' ).
 	includes( '--mode:production' );
@@ -37,9 +40,9 @@ module.exports = {
 			},
 			// Do not use together style-loader and mini-css-extract-plugin
 			{
-				test: /\.css$/,
+				test: /\.[sp]?css$/,
 				use: [
-					'style-loader',
+					MiniCssExtractPlugin.loader,
 					'css-loader',
 					'postcss-loader',
 				],
@@ -48,5 +51,6 @@ module.exports = {
 	},
 	plugins: [
 		new WPExtractorPlugin(),
+		new MiniCssExtractPlugin(),
 	],
 };

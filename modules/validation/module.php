@@ -148,7 +148,7 @@ final class Module implements
 	public function register_scripts() {
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/js/frontend/advanced.reporting.js' ),
+			Plugin::instance()->plugin_url( 'assets/build/frontend/advanced.reporting.js' ),
 			array(
 				\Jet_Form_Builder\Blocks\Module::MAIN_SCRIPT_HANDLE,
 			),

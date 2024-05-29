@@ -50,7 +50,7 @@ trait Admin_Dashboard_Page_Trait {
 	}
 
 	public function base_script_url(): string {
-		return Plugin::instance()->plugin_url( "assets/js/admin/pages/{$this->slug()}.js" );
+		return Plugin::instance()->plugin_url( "assets/build/admin/pages/{$this->slug()}.js" );
 	}
 
 	public function render_config() {

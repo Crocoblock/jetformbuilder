@@ -1,3 +1,6 @@
+// styles
+import './main.pcss'
+
 import initElementor from './init/initElementor';
 import BaseSignal from './signals/BaseSignal';
 import ReactiveVar from './reactive/ReactiveVar';

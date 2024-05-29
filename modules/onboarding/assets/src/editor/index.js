@@ -1,4 +1,5 @@
-import * as welcome from './welcome-block';
+import * as welcome from './welcomeBlock';
+import './previewButton';
 
 const {
 	      addFilter,

@@ -2,6 +2,7 @@ import AiFormHeaderButton from './AiFormHeaderButton';
 import AiFormPatternButton from './AiFormPatternButton';
 import { createRoot } from '@wordpress/element';
 import { subscribe, dispatch } from '@wordpress/data';
+import domReady from '@wordpress/dom-ready';
 
 const buttonDiv = document.createElement( 'div' );
 buttonDiv.classList.add( 'jfb-generate-form-ai-wrapper' );
@@ -9,25 +10,30 @@ buttonDiv.classList.add( 'jfb-generate-form-ai-wrapper' );
 // Render our button.
 createRoot( buttonDiv ).render( <AiFormHeaderButton/> );
 
-const appendButton = function () {
+const appendButton = function ( unsubscribeCallback, result ) {
 	const header = document.querySelector(
 		'.edit-post-header-toolbar',
 	);
 
-	if ( !header ||
-		header.querySelector( '.jfb-generate-form-ai-wrapper' )
-	) {
-		return null;
+	if ( !header ) {
+		return;
 	}
 
+	// unsubscribeCallback();
 	header.appendChild( buttonDiv );
 
-	return null;
+	if ( !result.isAddedTimeout ) {
+		result.isAddedTimeout = true;
+		setTimeout( unsubscribeCallback, 500 );
+	}
 };
 
-wp.domReady( () => {
-	subscribe( () => {
-		setTimeout( appendButton, 0 );
+domReady( () => {
+	const result = { isAddedTimeout: false };
+	setTimeout( () => {
+		const unsubscribe = subscribe(
+			() => appendButton( unsubscribe, result ),
+		);
 	} );
 } );
 

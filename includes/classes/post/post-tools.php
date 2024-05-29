@@ -29,7 +29,9 @@ class Post_Tools {
 			throw new Not_Found_Post_Exception( 'Not found post row' );
 		}
 
-		if ( 'publish' !== $post->post_status ) {
+		if ( 'publish' !== $post->post_status &&
+		     ! current_user_can( 'edit_jet_fb_form', $post_id )
+		) {
 			throw new Not_Found_Post_Exception( "Post isn't published" );
 		}
 

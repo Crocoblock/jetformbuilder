@@ -13,7 +13,7 @@ function DynamicRadioData() {
 
 DynamicRadioData.prototype = Object.create( RadioData.prototype );
 
-DynamicCheckboxData.prototype.isSupported = function ( node ) {
+DynamicRadioData.prototype.isSupported = function ( node ) {
 	return (
 		CheckboxData.prototype.isSupported.call( this, node ) &&
 		!!node.querySelector(
@@ -22,7 +22,7 @@ DynamicCheckboxData.prototype.isSupported = function ( node ) {
 	);
 };
 
-DynamicCheckboxData.prototype.addListeners = function () {
+DynamicRadioData.prototype.addListeners = function () {
 	CheckboxData.prototype.addListeners.call( this );
 
 	this.watch( () => onChangeRadio( this ) );
@@ -31,7 +31,7 @@ DynamicCheckboxData.prototype.addListeners = function () {
 /**
  * @param event {Event}
  */
-DynamicCheckboxData.prototype.onChangeValue = function ( event ) {
+DynamicRadioData.prototype.onChangeValue = function ( event ) {
 	if ( event.target.classList.contains( 'jet-form-builder__field' ) ) {
 		RadioData.prototype.onChangeValue.call( this, event );
 

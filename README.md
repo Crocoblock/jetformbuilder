@@ -4,6 +4,17 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.3.4
+* ADD: Eye-icon for password field
+* ADD: Gap controls for Checkbox / Radio fields (props [@stijnvanouplines](https://github.com/stijnvanouplines))
+* ADD: PHP actions `jet-form-builder/before-field` & `jet-form-builder/after-field` (props [@stijnvanouplines](https://github.com/stijnvanouplines))
+* ADD: Style controls for disabled Next Button
+* FIX: Advanced validation compatibility with Map Field
+* FIX: When returned to the form page, the Calculated values of the fields were not updated
+* FIX: The option to manage WP nonce was not in the correct state when creating a new form
+* FIX: Error in the database when trying to send a form on a page without the current post
+* FIX: Compatibility with JetBooking & Calculated Field
+
 ## 3.3.3.1
 * Tweak: banner for admin-pages
 

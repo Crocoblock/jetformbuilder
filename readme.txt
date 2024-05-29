@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.0
 Tested up to: 6.5.3
 Requires PHP: 7.0
-Stable tag: 3.3.3.1
+Stable tag: 3.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,17 @@ Yes. It's a push-a-button easy to import/export and duplicate your forms using t
 Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-form-record-action/" target="_blank">**Store Form Record Action**</a> you can check every single submitted form field data, submission date, the status of completeness, and user name on the <a href="https://jetformbuilder.com/features/wordpress-custom-form-records-page/" target="_blank">**Form Records Page</a>.
 
 == Changelog ==
+
+**3.3.4**
+- ADD: Eye-icon for password field
+- ADD: Gap controls for Checkbox / Radio fields (props [@stijnvanouplines](https://github.com/stijnvanouplines))
+- ADD: PHP actions `jet-form-builder/before-field` & `jet-form-builder/after-field` (props [@stijnvanouplines](https://github.com/stijnvanouplines))
+- ADD: Style controls for disabled Next Button
+- FIX: Advanced validation compatibility with Map Field
+- FIX: When returned to the form page, the Calculated values of the fields were not updated
+- FIX: The option to manage WP nonce was not in the correct state when creating a new form
+- FIX: Error in the database when trying to send a form on a page without the current post
+- FIX: Compatibility with JetBooking & Calculated Field
 
 **3.3.3.1**
 - Tweak: banner for admin-pages

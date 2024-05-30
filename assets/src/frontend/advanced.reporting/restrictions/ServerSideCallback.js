@@ -1,9 +1,8 @@
 import CustomBaseRestriction from './CustomBaseRestriction';
+import apiFetch from '@wordpress/api-fetch';
 
 function ServerSideCallback() {
 	CustomBaseRestriction.call( this );
-
-	const { apiFetch } = wp;
 
 	this.getSlug         = function () {
 		return 'ssr';

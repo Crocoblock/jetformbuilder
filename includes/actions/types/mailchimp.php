@@ -270,7 +270,7 @@ class Mailchimp extends Integration_Base_Action {
 	private function get_body_args( $fields_map ) {
 		$status_if_new = isset( $this->settings['double_opt_in'] ) && filter_var(
 			$this->settings['double_opt_in'],
-			FILTER_VALIDATE_BOOLEAN
+			defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN
 		) ? 'pending' : 'subscribed';
 
 		$body_args = array(

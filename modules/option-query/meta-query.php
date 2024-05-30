@@ -92,7 +92,7 @@ class Meta_Query implements Option_Query_It {
 	 */
 	protected function get_checked_options( $options ): \Generator {
 		foreach ( $options as $label => $checked ) {
-			$checked = filter_var( $checked, FILTER_VALIDATE_BOOLEAN );
+			$checked = filter_var( $checked, defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN );
 
 			if ( $this->has_query( 'search' ) &&
 				 false === strpos( (string) $label, $this->get_query( 'search' ) )

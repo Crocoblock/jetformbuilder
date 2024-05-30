@@ -197,7 +197,7 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 
 		foreach ( $this->options_list() as $name => $option ) {
 			$is_required = (
-				! isset( $option['required'] ) || filter_var( $option['required'], FILTER_VALIDATE_BOOLEAN )
+				! isset( $option['required'] ) || filter_var( $option['required'], defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN )
 			);
 
 			$default_val = $option['default'] ?? false;

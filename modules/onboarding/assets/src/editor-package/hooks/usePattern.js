@@ -1,18 +1,9 @@
 import useAnotherBlocks from './useAnotherBlocks';
-import constants from '../store/constants';
-
-const {
-	      useBlockEditContext,
-      } = wp.blockEditor;
-
-const {
-	      createBlocksFromInnerBlocksTemplate,
-      } = wp.blocks;
-
-const {
-	      useDispatch,
-	      useSelect,
-      } = wp.data;
+import constants from '../patternsStore/constants';
+import { useBlockEditContext } from '@wordpress/block-editor';
+import { createBlocksFromInnerBlocksTemplate } from '@wordpress/blocks';
+import { useDispatch, useSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 const {
 	      convertFlow,
@@ -21,10 +12,6 @@ const {
 const {
 	      useActions,
       } = JetFBHooks;
-
-const {
-	      __,
-      } = wp.i18n;
 
 /**
  * @param name {String}
@@ -51,7 +38,8 @@ function usePattern( { name, onApply = () => {} } ) {
 		[],
 	);
 	const saveRecord = useSelect(
-		select => select( 'jet-forms/patterns' ).getSetting( 'saveRecord' ),
+		select => select( constants.store ).getSetting( 'saveRecord' ),
+		[],
 	);
 
 	const displayNotice = () => createInfoNotice(

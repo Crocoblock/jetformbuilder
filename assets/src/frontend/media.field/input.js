@@ -64,6 +64,8 @@ function FileData() {
 	};
 
 	this.initNotifyValue = () => {};
+
+	this.reQueryValue = () => {};
 }
 
 FileData.prototype = Object.create( InputData.prototype );

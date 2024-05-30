@@ -123,6 +123,20 @@ class Media_Field extends Base {
 	}
 
 	public function register_scripts() {
+		$script_asset = require_once jet_form_builder()->plugin_dir(
+			'assets/js/frontend/media.field.asset.php'
+		);
+
+		if ( true === $script_asset ) {
+			return;
+		}
+
+		array_push(
+			$script_asset['dependencies'],
+			Module::MAIN_SCRIPT_HANDLE,
+			'jet-form-builder-sortable'
+		);
+
 		wp_register_script(
 			'jet-form-builder-sortable',
 			Plugin::instance()->plugin_url( 'assets/lib/jquery-sortable/sortable.js' ),
@@ -133,20 +147,25 @@ class Media_Field extends Base {
 		wp_register_script(
 			self::HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field.js' ),
-			array(
-				Module::MAIN_SCRIPT_HANDLE,
-				'jet-form-builder-sortable',
-			),
-			Plugin::instance()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
+
+		$script_asset = require_once jet_form_builder()->plugin_dir(
+			'assets/js/frontend/media.field.restrictions.asset.php'
+		);
+
+		array_push(
+			$script_asset['dependencies'],
+			\JFB_Modules\Validation\Module::HANDLE
+		);
+
 		wp_register_script(
 			self::RESTRICTIONS,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/media.field.restrictions.js' ),
-			array(
-				\JFB_Modules\Validation\Module::HANDLE,
-			),
-			Plugin::instance()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}

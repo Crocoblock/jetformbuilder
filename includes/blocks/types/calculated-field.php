@@ -26,13 +26,24 @@ class Calculated_Field extends Base {
 	}
 
 	public function register_scripts() {
+		$script_asset = require_once jet_form_builder()->plugin_dir(
+			'assets/js/frontend/calculated.field.asset.php'
+		);
+
+		if ( true === $script_asset ) {
+			return;
+		}
+
+		array_push(
+			$script_asset['dependencies'],
+			Manager::MAIN_SCRIPT_HANDLE
+		);
+
 		wp_register_script(
 			self::HANDLE,
 			Plugin::instance()->plugin_url( 'assets/js/frontend/calculated.field.js' ),
-			array(
-				Manager::MAIN_SCRIPT_HANDLE,
-			),
-			Plugin::instance()->get_version(),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}

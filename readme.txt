@@ -275,6 +275,8 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 **3.3.4.1**
 - FIX: Advanced Validation with Server-Side callback does not work on frontend
 - FIX: Honeypot protection breaks the form on frontend
+- FIX: Incorrect value in Calculated Field after page loading
+- FIX: Compatibility with PHP version < 8.0
 
 **3.3.4**
 - ADD: Eye-icon for password field

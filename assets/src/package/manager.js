@@ -211,6 +211,8 @@ import getSupport from './blocks/helpers/getSupport';
 import useEvents from './events/hooks/useEvents';
 import useTriggerPopover from './hooks/useTriggerPopover';
 import useOpenEditorPanel from './hooks/useOpenEditorPanel';
+import Help from './components/Help';
+import Label from './components/Label';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -317,6 +319,8 @@ window.JetFBComponents = {
 	ActionButtonPlaceholder,
 	ActionModalFooterSlotFill,
 	ScopedAttributesProvider,
+	Help,
+	Label,
 };
 
 // JFBFunctions

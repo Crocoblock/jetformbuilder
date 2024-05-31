@@ -2,9 +2,7 @@ import dispatchers from './dispatchers';
 
 const DEFAULT_STATE = {
 	builders: [],
-	settings: {
-		saveRecord: true,
-	},
+	settings: {},
 };
 
 export default function ( state = DEFAULT_STATE, action ) {

@@ -111,7 +111,7 @@ class Module implements
 				'previewURL' => add_query_arg(
 					array(
 						self::PREVIEW_ID_KEY => get_the_ID(),
-						'_nonce' => $this->get_preview_nonce()->create(),
+						'_nonce'             => $this->get_preview_nonce()->create(),
 					),
 					site_url()
 				),
@@ -129,12 +129,6 @@ class Module implements
 			$script_asset['version'],
 			true
 		);
-		wp_enqueue_style(
-			$this->get_handle( 'package' ),
-			$this->get_url( 'assets/build/editor.css' ),
-			array(),
-			$script_asset['version']
-		);
 	}
 
 	public function add_default_fields_to_form( $arguments ) {
@@ -147,12 +141,14 @@ class Module implements
 
 	public function render_form_preview( $content ) {
 		if (
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			empty( $_GET[ self::PREVIEW_ID_KEY ] ) ||
 			! $this->get_preview_nonce()->verify()
 		) {
 			return $content;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$form_id = absint( $_GET[ self::PREVIEW_ID_KEY ] );
 
 		if ( ! current_user_can( 'edit_jet_fb_form', $form_id ) ) {
@@ -164,7 +160,6 @@ class Module implements
 		$blocks = jet_form_builder()->module( \Jet_Form_Builder\Blocks\Module::class );
 
 		return $blocks->get_form_class()->render_callback_field( array( 'form_id' => $form_id ) );
-
 	}
 
 	public function get_preview_nonce(): Wp_Nonce {

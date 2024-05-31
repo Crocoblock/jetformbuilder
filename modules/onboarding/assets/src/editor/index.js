@@ -2,6 +2,8 @@ import * as welcome from './welcomeBlock';
 import './previewButton';
 import './useFormButton';
 import { addFilter } from '@wordpress/hooks';
+import { dispatch } from '@wordpress/data';
+import blockBuilder from './useFormButton/blockBuilder';
 
 addFilter(
 	'jet.fb.register.fields',
@@ -12,3 +14,7 @@ addFilter(
 		return blocks;
 	},
 );
+
+dispatch( 'jet-forms/use-form' ).registerBuilders( [
+	blockBuilder,
+] );

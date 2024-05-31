@@ -1,6 +1,10 @@
 import constants from './constants';
 import selectors from './selectors';
 
+const defaultEmbed = {
+	src: 'https://www.youtube.com/embed/LBO8E7W4AF0',
+};
+
 export default {
 	[ constants.registerBuilders ]( state, action ) {
 		if ( !Array.isArray( action.items ) ) {
@@ -13,10 +17,12 @@ export default {
 				continue;
 			}
 
-			const issetIndex = selectors.getTypeIndex( state, item.name );
+			const issetIndex = selectors.getBuilderIndex( state, item.name );
 
 			// is new pattern type
 			if ( -1 === issetIndex ) {
+				item.embed ??= { ...defaultEmbed };
+
 				state.builders.push( { ...item } );
 			}
 			else {

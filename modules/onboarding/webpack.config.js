@@ -34,7 +34,7 @@ module.exports = {
 			},
 			// Do not use together style-loader and mini-css-extract-plugin
 			{
-				test: /\.pcss$/,
+				test: /\.p?css$/,
 				use: [
 					'style-loader',
 					'css-loader',

@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { Flex } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
+import ErrorNotice from './components/ErrorNotice';
 
 const {
 	      BuilderHelpSlotFill,
@@ -12,6 +13,7 @@ function FirstPart() {
 	), [] );
 
 	return <>
+		<ErrorNotice/>
 		<h3>
 			{ __(
 				'1. How you want to use the form?',

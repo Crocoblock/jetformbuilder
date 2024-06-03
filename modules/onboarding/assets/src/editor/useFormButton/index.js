@@ -1,8 +1,8 @@
 import { registerPlugin } from '@wordpress/plugins';
-import UseFormButton from './UseFormButton';
+import PluginRoot from './PluginRoot';
 import './index.pcss'
 
 registerPlugin(
 	'jfb-use-form',
-	{ render: UseFormButton },
+	{ render: PluginRoot },
 );

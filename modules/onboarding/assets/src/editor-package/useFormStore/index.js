@@ -1,11 +1,10 @@
 import reducer from './reducer';
-import actions from './actions';
-import selectors from './selectors';
-import constants from './constants';
+import * as actions from './actions';
+import * as selectors from './selectors';
+import { store } from './constants';
+import { createReduxStore } from '@wordpress/data';
 
-const { createReduxStore } = wp.data;
-
-export default createReduxStore( constants.store, {
+export default createReduxStore( store, {
 	reducer,
 	actions,
 	selectors,

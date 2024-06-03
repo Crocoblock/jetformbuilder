@@ -8,7 +8,7 @@ import { useDispatch } from '@wordpress/data';
 import FirstPart from './FirstPart';
 import SecondPart from './SecondPart/SecondPart';
 
-function UseFormButton() {
+function PluginRoot() {
 	const { closeGeneralSidebar } = useDispatch( 'core/edit-post' );
 
 	return <PluginSidebar
@@ -26,4 +26,4 @@ function UseFormButton() {
 	</PluginSidebar>;
 }
 
-export default UseFormButton;
+export default PluginRoot;

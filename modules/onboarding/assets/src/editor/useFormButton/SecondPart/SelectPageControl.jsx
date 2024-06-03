@@ -1,28 +1,21 @@
 import useSettings from '../hooks/useSettings';
-import { ComboboxControl, Flex, Button } from '@wordpress/components';
+import {
+	ComboboxControl,
+	Flex,
+	FlexBlock,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useEntityRecords } from '@wordpress/core-data';
 import { useState } from '@wordpress/element';
-import { styled } from '@linaria/react';
+import UseFormButton from './UseFormButton';
 
 const { Label } = JetFBComponents;
-
-const WrapperComboboxWithButton = styled( Flex )`
-    & > div {
-        flex: 1;
-    }
-
-    .components-base-control__field {
-        margin-bottom: inherit;
-        padding-bottom: 0;
-    }
-`;
 
 function SelectPageControl() {
 	const [ settings, updateSettings ] = useSettings();
 	const [ search, setSearch ]        = useState( '' );
 
-	const pages     = useEntityRecords(
+	const pages = useEntityRecords(
 		'postType',
 		'page',
 		{
@@ -44,23 +37,18 @@ function SelectPageControl() {
 				'jet-form-builder',
 			) }
 		</Label>
-		<WrapperComboboxWithButton align="flex-start">
-			<ComboboxControl
-				options={ pagesList }
-				value={ settings.pageId }
-				onChange={ pageId => updateSettings( { pageId } ) }
-				onFilterValueChange={ setSearch }
-				__nextHasNoMarginBottom
-			/>
-			<Button
-				variant="primary"
-				onClick={ () => {} }
-				isBusy={ false }
-				disabled={ false }
-			>
-				{ __( 'Use the form', 'jet-form-builder-pdf' ) }
-			</Button>
-		</WrapperComboboxWithButton>
+		<Flex align="flex-start">
+			<FlexBlock>
+				<ComboboxControl
+					options={ pagesList }
+					value={ settings.pageId }
+					onChange={ pageId => updateSettings( { pageId } ) }
+					onFilterValueChange={ setSearch }
+					__nextHasNoMarginBottom
+				/>
+			</FlexBlock>
+			<UseFormButton/>
+		</Flex>
 	</>;
 }
 

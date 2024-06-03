@@ -14,6 +14,8 @@ use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Components\Wp_Nonce\Wp_Nonce;
 use Jet_Form_Builder\Blocks;
+use JFB_Modules\Onboarding\Builders\Block_Editor_Builder;
+use JFB_Modules\Onboarding\Rest_Api\Use_Form_Route\Use_Form_Route;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -32,6 +34,10 @@ class Module implements
 	use Base_Module_Dir_Trait;
 
 	private $preview_nonce;
+	/**
+	 * @var Block_Editor_Builder
+	 */
+	private $builder;
 
 	const PREVIEW_ID_KEY = 'jfb-preview-form';
 
@@ -45,10 +51,11 @@ class Module implements
 
 	public function on_install() {
 		$this->preview_nonce = new Wp_Nonce( 'jfb-preview-form' );
+		$this->builder       = new Block_Editor_Builder();
 	}
 
 	public function on_uninstall() {
-		unset( $this->preview_nonce );
+		unset( $this->preview_nonce, $this->builder );
 	}
 
 	public function init_hooks() {
@@ -71,6 +78,13 @@ class Module implements
 			'the_content',
 			array( $this, 'render_form_preview' )
 		);
+
+		add_action(
+			'rest_api_init',
+			array( $this, 'rest_api_init' )
+		);
+
+		$this->get_builder()->init_hooks();
 	}
 
 	public function remove_hooks() {
@@ -91,6 +105,15 @@ class Module implements
 			'the_content',
 			array( $this, 'render_form_preview' )
 		);
+		remove_action(
+			'rest_api_init',
+			array( $this, 'rest_api_init' )
+		);
+	}
+
+	public function rest_api_init() {
+		$route = new Use_Form_Route();
+		$route->register();
 	}
 
 	public function editor_assets_before() {
@@ -164,5 +187,9 @@ class Module implements
 
 	public function get_preview_nonce(): Wp_Nonce {
 		return $this->preview_nonce;
+	}
+
+	public function get_builder(): Block_Editor_Builder {
+		return $this->builder;
 	}
 }

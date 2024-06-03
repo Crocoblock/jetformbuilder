@@ -1,12 +1,16 @@
-import constants from './constants';
-import selectors from './selectors';
+import {
+	REGISTER_BUILDERS,
+	UNREGISTER_BUILDERS,
+	UPDATE_SETTINGS,
+} from './constants';
+import { getBuilderIndex } from './selectors';
 
 const defaultEmbed = {
 	src: 'https://www.youtube.com/embed/LBO8E7W4AF0',
 };
 
 export default {
-	[ constants.registerBuilders ]( state, action ) {
+	[ REGISTER_BUILDERS ]( state, action ) {
 		if ( !Array.isArray( action.items ) ) {
 			action.items = [ action.items ];
 		}
@@ -17,7 +21,7 @@ export default {
 				continue;
 			}
 
-			const issetIndex = selectors.getBuilderIndex( state, item.name );
+			const issetIndex = getBuilderIndex( state, item.name );
 
 			// is new pattern type
 			if ( -1 === issetIndex ) {
@@ -35,7 +39,7 @@ export default {
 
 		return state;
 	},
-	[ constants.unRegisterBuilders ]( state, action ) {
+	[ UNREGISTER_BUILDERS ]( state, action ) {
 		const { names } = action;
 
 		state.builders = state.builders.filter(
@@ -44,7 +48,7 @@ export default {
 
 		return state;
 	},
-	[ constants.updateSettings ]( state, action ) {
+	[ UPDATE_SETTINGS ]( state, action ) {
 		const { settings } = action;
 
 		return {

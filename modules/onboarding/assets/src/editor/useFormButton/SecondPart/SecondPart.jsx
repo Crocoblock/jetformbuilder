@@ -4,6 +4,7 @@ import { edit, plus } from '@wordpress/icons';
 import VideoInstructions from './VideoInstructions';
 import useSettings from '../hooks/useSettings';
 import SelectPageControl from './SelectPageControl';
+import CreatePageControl from './CreatePageControl';
 
 function SecondPart() {
 	const [ settings, updateSettings ] = useSettings();
@@ -53,7 +54,7 @@ function SecondPart() {
 				</Button>
 			</Flex>
 			{ 'select' === settings.pageType && <SelectPageControl/> }
-			{ 'new' === settings.pageType && null }
+			{ 'new' === settings.pageType && <CreatePageControl/> }
 			<VideoInstructions/>
 		</Flex>
 	</>;

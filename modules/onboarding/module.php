@@ -15,6 +15,7 @@ use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Components\Wp_Nonce\Wp_Nonce;
 use Jet_Form_Builder\Blocks;
 use JFB_Modules\Onboarding\Builders\Block_Editor_Builder;
+use JFB_Modules\Onboarding\Builders\No_Builder_Handler;
 use JFB_Modules\Onboarding\Rest_Api\Use_Form_Route\Use_Form_Route;
 
 // If this file is called directly, abort.
@@ -37,7 +38,11 @@ class Module implements
 	/**
 	 * @var Block_Editor_Builder
 	 */
-	private $builder;
+	private $block_builder;
+	/**
+	 * @var No_Builder_Handler
+	 */
+	private $no_builder;
 
 	const PREVIEW_ID_KEY = 'jfb-preview-form';
 
@@ -51,11 +56,12 @@ class Module implements
 
 	public function on_install() {
 		$this->preview_nonce = new Wp_Nonce( 'jfb-preview-form' );
-		$this->builder       = new Block_Editor_Builder();
+		$this->block_builder = new Block_Editor_Builder();
+		$this->no_builder    = new No_Builder_Handler();
 	}
 
 	public function on_uninstall() {
-		unset( $this->preview_nonce, $this->builder );
+		unset( $this->preview_nonce, $this->block_builder );
 	}
 
 	public function init_hooks() {
@@ -84,7 +90,8 @@ class Module implements
 			array( $this, 'rest_api_init' )
 		);
 
-		$this->get_builder()->init_hooks();
+		$this->get_block_builder()->init_hooks();
+		$this->get_no_builder()->init_hooks();
 	}
 
 	public function remove_hooks() {
@@ -189,7 +196,14 @@ class Module implements
 		return $this->preview_nonce;
 	}
 
-	public function get_builder(): Block_Editor_Builder {
-		return $this->builder;
+	public function get_block_builder(): Block_Editor_Builder {
+		return $this->block_builder;
+	}
+
+	/**
+	 * @return No_Builder_Handler
+	 */
+	public function get_no_builder(): No_Builder_Handler {
+		return $this->no_builder;
 	}
 }

@@ -5,6 +5,9 @@ namespace JFB_Compatibility\Elementor;
 
 use Jet_Form_Builder\Blocks;
 use Jet_Form_Builder\Classes\Builder_Helper;
+use JFB_Components\Compatibility\Base_Compat_Dir_Trait;
+use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Modules\Deprecated;
 use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
 use JFB_Components\Compatibility\Base_Compat_Url_Trait;
@@ -18,12 +21,23 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Elementor implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_It {
+class Elementor implements
+	Base_Module_It,
+	Base_Module_Handle_It,
+	Base_Module_Url_It,
+	Base_Module_Dir_It,
+	Base_Module_After_Install_It {
 
 	use Base_Compat_Handle_Trait;
 	use Base_Compat_Url_Trait;
+	use Base_Compat_Dir_Trait;
 
 	private $types;
+
+	/**
+	 * @var Onboarding_Builder
+	 */
+	private $onboarding_builder;
 
 	public function rep_item_id() {
 		return 'elementor';
@@ -33,12 +47,26 @@ class Elementor implements Base_Module_It, Base_Module_Handle_It, Base_Module_Ur
 		return defined( 'ELEMENTOR_VERSION' );
 	}
 
+	public function on_install() {
+		$this->onboarding_builder = new Onboarding_Builder();
+	}
+
+	public function on_uninstall() {
+	}
+
 	public function init_hooks() {
 		add_action( 'elementor/init', array( $this, 'init_widgets' ) );
 		add_action( 'elementor/editor/after_enqueue_styles', array( $this, 'editor_styles' ) );
 		add_action( 'elementor/preview/enqueue_scripts', array( $this, 'enqueue_form_scripts' ), 9 );
 		add_action( 'elementor/preview/enqueue_styles', array( $this, 'enqueue_form_styles' ) );
 		add_action( 'elementor/elements/categories_registered', array( $this, 'register_category' ) );
+
+		add_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'block_editor_assets' )
+		);
+
+		$this->get_onboarding_builder()->init_hooks();
 
 		// compatibility with 3.7
 		if (
@@ -56,7 +84,12 @@ class Elementor implements Base_Module_It, Base_Module_Handle_It, Base_Module_Ur
 		remove_action( 'elementor/editor/after_enqueue_styles', array( $this, 'editor_styles' ) );
 		remove_action( 'elementor/preview/enqueue_scripts', array( $this, 'enqueue_form_scripts' ), 9 );
 		remove_action( 'elementor/preview/enqueue_styles', array( $this, 'enqueue_form_styles' ) );
-		add_action( 'elementor/elements/categories_registered', array( $this, 'register_category' ) );
+		remove_action( 'elementor/elements/categories_registered', array( $this, 'register_category' ) );
+
+		remove_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'block_editor_assets' )
+		);
 
 		// compatibility with 3.7
 		if (
@@ -141,5 +174,24 @@ class Elementor implements Base_Module_It, Base_Module_Handle_It, Base_Module_Ur
 
 	public function enqueue_form_styles() {
 		wp_enqueue_style( 'jet-form-builder-frontend' );
+	}
+
+	public function block_editor_assets() {
+		$script_asset = require_once $this->get_dir( 'assets/build/block.editor.asset.php' );
+
+		wp_enqueue_script(
+			$this->get_handle( 'block-editor' ),
+			$this->get_url( 'assets/build/block.editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
+		);
+	}
+
+	/**
+	 * @return Onboarding_Builder
+	 */
+	public function get_onboarding_builder(): Onboarding_Builder {
+		return $this->onboarding_builder;
 	}
 }

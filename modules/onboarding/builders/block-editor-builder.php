@@ -42,6 +42,7 @@ class Block_Editor_Builder {
 			array(
 				'post_title'   => $create_page->get_title(),
 				'post_type'    => 'page',
+				'post_status'  => 'draft',
 				'post_content' => sprintf(
 					'<!-- wp:jet-forms/form-block {"form_id":%d} /-->',
 					$create_page->get_form_id()

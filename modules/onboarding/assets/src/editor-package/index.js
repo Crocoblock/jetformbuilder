@@ -14,6 +14,7 @@ import usePattern from './hooks/usePattern';
 import PatternInserterButton from './components/PatternInserterButton';
 import { register, dispatch } from '@wordpress/data';
 import BuilderHelpSlotFill from './components/BuilderHelpSlotFill';
+import usePluginUseSettings from './hooks/usePluginUseSettings';
 
 register( patternsStore );
 register( useFormStore );
@@ -43,4 +44,5 @@ window.JetFBHooks = {
 		window.JetFBHooks ?? {}
 	),
 	usePattern,
+	usePluginUseSettings,
 };

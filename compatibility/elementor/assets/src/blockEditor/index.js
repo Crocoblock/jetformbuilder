@@ -1,6 +1,6 @@
 import { dispatch } from '@wordpress/data';
-import bricksBuilder from './bricksBuilder';
+import elementorBuilder from './elementorBuilder';
 
 dispatch( 'jet-forms/use-form' ).registerBuilders( [
-	bricksBuilder,
+	elementorBuilder,
 ] );

@@ -10,7 +10,7 @@ const {
 	      usePluginUseSettings,
       } = JetFBHooks;
 
-function BlockBuilder( { name } ) {
+function ElementorBuilder( { name } ) {
 	const [ settings, updateSettings ] = usePluginUseSettings();
 
 	const isActive = name === settings.builder;
@@ -22,7 +22,7 @@ function BlockBuilder( { name } ) {
 			variant={ isActive ? 'primary' : 'secondary' }
 		>
 			{ __(
-				'Block for Block Editor',
+				'Elementor Widget',
 				'jet-form-builder',
 			) }
 		</Button>
@@ -37,4 +37,4 @@ function BlockBuilder( { name } ) {
 	</>;
 }
 
-export default BlockBuilder;
+export default ElementorBuilder;

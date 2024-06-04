@@ -39,7 +39,7 @@ class Use_Form_Endpoint implements Endpoint_Interface {
 			: $this->get_builder_for_create( $request );
 
 		$builder->set_form_id( $request->get_param( 'formId' ) );
-		$builder->set_builder_type( $request->get_param( 'builder' ) );
+		$builder->set_builder_type( (string) $request->get_param( 'builder' ) );
 
 		try {
 			do_action( 'jet-form-builder/use-form', $builder );

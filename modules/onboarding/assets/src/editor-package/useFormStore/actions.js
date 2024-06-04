@@ -64,7 +64,11 @@ export const createNewPage      = () => async ( {
 
 	return await dispatch.makeFetch( options );
 };
-export const updateSelectedPage = () => async ( { dispatch, select, registry } ) => {
+export const updateSelectedPage = () => async ( {
+	dispatch,
+	select,
+	registry,
+} ) => {
 	const pageId  = select.getSetting( 'pageId' );
 	const builder = select.getSetting( 'builder' );
 	const formId  = registry.select(
@@ -84,12 +88,7 @@ export const updateSelectedPage = () => async ( { dispatch, select, registry } )
 };
 
 export const makeFetch = ( options ) => async ( { dispatch, registry } ) => {
-	const { savePost } = registry.dispatch( 'core/editor' );
-	/**
-	 * We shouldn't track state of saving the form,
-	 * because opening edited / created page will take more time
-	 */
-	savePost();
+	dispatch.maybeSaveForm();
 
 	dispatch.startExecution();
 	let response;
@@ -106,6 +105,50 @@ export const makeFetch = ( options ) => async ( { dispatch, registry } ) => {
 	}
 
 	return response;
+};
+
+export const maybeSaveForm = () => ( { registry } ) => {
+	const isSaving                     = registry.select( 'core/editor' ).
+		isSavingPost();
+	const isSaveable                   = registry.select( 'core/editor' ).
+		isEditedPostSaveable();
+	const isPostSavingLocked           = registry.select( 'core/editor' ).
+		isPostSavingLocked();
+	const hasNonPostEntityChanges      = registry.select( 'core/editor' ).
+		hasNonPostEntityChanges();
+	const isSavingNonPostEntityChanges = registry.select( 'core/editor' ).
+		isSavingNonPostEntityChanges();
+
+	const isSavingDisabled =
+		      (
+			      isSaving ||
+			      !isSaveable ||
+			      isPostSavingLocked
+		      )
+		      &&
+		      (
+			      !hasNonPostEntityChanges ||
+			      isSavingNonPostEntityChanges
+		      );
+
+	if ( isSavingDisabled ) {
+		return;
+	}
+
+	const { savePost, editPost } = registry.dispatch( 'core/editor' );
+
+	const formStatus = registry.select( 'core/editor' ).
+		getEditedPostAttribute( 'status' );
+
+	if ( 'publish' !== formStatus ) {
+		editPost( { status: 'draft' } );
+	}
+
+	/**
+	 * We shouldn't track the state of saving the form
+	 * because opening an edited / created page will take more time
+	 */
+	savePost();
 };
 
 export const setError = ( error ) => {

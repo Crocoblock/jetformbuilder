@@ -1,6 +1,6 @@
 import { dispatch } from '@wordpress/data';
-import bricksBuilder from './bricksBuilder';
+import shortcodeBuilder from './shortcodeBuilder';
 
 dispatch( 'jet-forms/use-form' ).registerBuilders( [
-	bricksBuilder,
+	shortcodeBuilder,
 ] );

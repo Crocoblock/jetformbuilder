@@ -97,9 +97,9 @@ class Csrf_Tools {
 		}
 	}
 
-	public static function generate(): string {
+	public static function generate( int $bytes = 16 ): string {
 		try {
-			return \bin2hex( \random_bytes( 16 ) );
+			return \bin2hex( \random_bytes( $bytes ) );
 		} catch ( \Exception $e ) {
 			return uniqid( wp_rand(), true );
 		}

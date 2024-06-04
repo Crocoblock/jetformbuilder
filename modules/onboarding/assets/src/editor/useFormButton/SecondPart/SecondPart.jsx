@@ -2,12 +2,16 @@ import { __ } from '@wordpress/i18n';
 import { Button, Flex } from '@wordpress/components';
 import { edit, plus } from '@wordpress/icons';
 import VideoInstructions from './VideoInstructions';
-import useSettings from '../hooks/useSettings';
 import SelectPageControl from './SelectPageControl';
 import CreatePageControl from './CreatePageControl';
 
+const {
+	      usePluginUseSettings,
+      } = JetFBHooks;
+
+
 function SecondPart() {
-	const [ settings, updateSettings ] = useSettings();
+	const [ settings, updateSettings ] = usePluginUseSettings();
 
 	return <>
 		<h3>

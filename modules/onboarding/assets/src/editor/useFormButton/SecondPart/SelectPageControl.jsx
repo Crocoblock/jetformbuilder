@@ -1,4 +1,3 @@
-import useSettings from '../hooks/useSettings';
 import {
 	ComboboxControl,
 	Flex,
@@ -11,8 +10,13 @@ import UseFormButton from './UseFormButton';
 
 const { Label } = JetFBComponents;
 
+const {
+	      usePluginUseSettings,
+      } = JetFBHooks;
+
+
 function SelectPageControl() {
-	const [ settings, updateSettings ] = useSettings();
+	const [ settings, updateSettings ] = usePluginUseSettings();
 	const [ search, setSearch ]        = useState( '' );
 
 	const pages = useEntityRecords(

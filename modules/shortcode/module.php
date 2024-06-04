@@ -7,7 +7,13 @@ use Jet_Form_Builder\Classes\Arguments\Default_Form_Arguments;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
+use JFB_Components\Module\Base_Module_Handle_It;
+use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
+use JFB_Components\Module\Base_Module_Url_It;
+use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 
 // If this file is called directly, abort.
@@ -20,9 +26,20 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @package JFB_Modules\Shortcode
  */
-final class Module implements Base_Module_It, Base_Module_After_Install_It {
+final class Module implements
+	Base_Module_It,
+	Base_Module_After_Install_It,
+	Base_Module_Handle_It,
+	Base_Module_Url_It,
+	Base_Module_Dir_It {
 
 	use Repository_Pattern_Trait;
+	use Base_Module_Dir_Trait;
+	use Base_Module_Handle_Trait;
+	use Base_Module_Url_Trait;
+
+
+	private $onboarding_builder;
 
 	public function rep_item_id() {
 		return 'shortcode';
@@ -54,6 +71,12 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It {
 			10,
 			2
 		);
+
+		add_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'block_editor_assets' ),
+			21
+		);
 	}
 
 	public function remove_hooks() {
@@ -67,6 +90,11 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It {
 		remove_action(
 			"manage_{$slug}_posts_custom_column",
 			array( $this, 'add_admin_column_content' )
+		);
+		remove_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'block_editor_assets' ),
+			21
 		);
 	}
 
@@ -123,6 +151,18 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It {
 		}
 
 		return sprintf( $format, $type->get_name(), $this->generate_arguments_string( $arguments ) );
+	}
+
+	public function block_editor_assets() {
+		$script_asset = require_once $this->get_dir( 'assets/build/block.editor.asset.php' );
+
+		wp_enqueue_script(
+			$this->get_handle( 'block-editor' ),
+			$this->get_url( 'assets/build/block.editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
+		);
 	}
 
 	private function generate_arguments_string( $arguments ): string {

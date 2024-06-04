@@ -9,6 +9,7 @@ use Jet_Form_Builder\Classes\Tools;
 use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
 use JFB_Components\Compatibility\Base_Compat_Url_Trait;
 use JFB_Components\Compatibility\Base_Compat_Dir_Trait;
+use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
@@ -19,11 +20,21 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Bricks implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_It, Base_Module_Dir_It {
+class Bricks implements
+	Base_Module_It,
+	Base_Module_Handle_It,
+	Base_Module_Url_It,
+	Base_Module_Dir_It,
+	Base_Module_After_Install_It {
 
 	use Base_Compat_Handle_Trait;
 	use Base_Compat_Url_Trait;
 	use Base_Compat_Dir_Trait;
+
+	/**
+	 * @var Onboarding_Builder
+	 */
+	private $onboarding_builder;
 
 	public function rep_item_id() {
 		return 'bricks';
@@ -33,14 +44,33 @@ class Bricks implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_I
 		return defined( 'BRICKS_VERSION' );
 	}
 
+	public function on_install() {
+		$this->onboarding_builder = new Onboarding_Builder();
+	}
+
+	public function on_uninstall() {
+	}
+
 	public function init_hooks() {
 		add_action( 'init', array( $this, 'register_elements' ), 10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'editor_styles' ) );
+
+		add_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'block_editor_assets' )
+		);
+
+		$this->get_onboarding_builder()->init_hooks();
 	}
 
 	public function remove_hooks() {
 		remove_action( 'init', array( $this, 'register_elements' ) );
 		remove_action( 'wp_enqueue_scripts', array( $this, 'editor_styles' ) );
+
+		remove_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'block_editor_assets' )
+		);
 	}
 
 	public function register_elements() {
@@ -60,5 +90,24 @@ class Bricks implements Base_Module_It, Base_Module_Handle_It, Base_Module_Url_I
 				Plugin::instance()->get_version()
 			);
 		}
+	}
+
+	public function block_editor_assets() {
+		$script_asset = require_once $this->get_dir( 'assets/build/block.editor.asset.php' );
+
+		wp_enqueue_script(
+			$this->get_handle( 'block-editor' ),
+			$this->get_url( 'assets/build/block.editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
+		);
+	}
+
+	/**
+	 * @return Onboarding_Builder
+	 */
+	public function get_onboarding_builder(): Onboarding_Builder {
+		return $this->onboarding_builder;
 	}
 }

@@ -1,12 +1,15 @@
-import useSettings from '../hooks/useSettings';
 import { __ } from '@wordpress/i18n';
 import { TextControl, Flex, FlexBlock } from '@wordpress/components';
 import UseFormButton from './UseFormButton';
 
 const { Label } = JetFBComponents;
 
+const {
+	      usePluginUseSettings,
+      } = JetFBHooks;
+
 function CreatePageControl() {
-	const [ settings, updateSettings ] = useSettings();
+	const [ settings, updateSettings ] = usePluginUseSettings();
 
 	return <>
 		<Label>

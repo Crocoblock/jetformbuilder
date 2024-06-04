@@ -168,6 +168,8 @@ class Record_View extends View_Base {
 			$this->set_select( Models\Record_Model::schema_columns() );
 		}
 
+		error_log( ( new Query_Builder() )->set_view( $this )->sql() );
+
 		return ( new Query_Builder() )->set_view( $this );
 	}
 

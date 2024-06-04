@@ -38,7 +38,9 @@ final class Module implements
 	use Base_Module_Handle_Trait;
 	use Base_Module_Url_Trait;
 
-
+	/**
+	 * @var Onboarding_Builder
+	 */
 	private $onboarding_builder;
 
 	public function rep_item_id() {
@@ -47,6 +49,8 @@ final class Module implements
 
 	public function on_install() {
 		$this->rep_install();
+
+		$this->onboarding_builder = new Onboarding_Builder();
 	}
 
 	public function on_uninstall() {
@@ -77,6 +81,8 @@ final class Module implements
 			array( $this, 'block_editor_assets' ),
 			21
 		);
+
+		$this->get_onboarding_builder()->init_hooks();
 	}
 
 	public function remove_hooks() {
@@ -173,5 +179,12 @@ final class Module implements
 		}
 
 		return implode( ' ', $response );
+	}
+
+	/**
+	 * @return Onboarding_Builder
+	 */
+	public function get_onboarding_builder(): Onboarding_Builder {
+		return $this->onboarding_builder;
 	}
 }

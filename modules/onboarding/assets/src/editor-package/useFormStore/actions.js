@@ -118,12 +118,21 @@ export const maybeSaveForm = () => ( { registry } ) => {
 		hasNonPostEntityChanges();
 	const isSavingNonPostEntityChanges = registry.select( 'core/editor' ).
 		isSavingNonPostEntityChanges();
+	const isPublishable                = registry.select( 'core/editor' ).
+		isEditedPostPublishable();
 
+	/**
+	 * Copied and pasted from <PostPublishButton>
+	 *
+	 * @see https://github.com/WordPress/gutenberg/blob/trunk/packages/editor/src/components/post-publish-button/index.js
+	 * @type {*|boolean}
+	 */
 	const isSavingDisabled =
 		      (
 			      isSaving ||
 			      !isSaveable ||
-			      isPostSavingLocked
+			      isPostSavingLocked ||
+			      !isPublishable
 		      )
 		      &&
 		      (

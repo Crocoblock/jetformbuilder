@@ -10,6 +10,8 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
 use JFB_Components\Module\Base_Module_After_Install_It;
+use JFB_Components\Module\Base_Module_Dir_It;
+use JFB_Components\Module\Base_Module_Dir_Trait;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
@@ -26,10 +28,12 @@ final class Module implements
 	Base_Module_It,
 	Base_Module_Handle_It,
 	Base_Module_Url_It,
+	Base_Module_Dir_It,
 	Base_Module_After_Install_It {
 
 	use Base_Module_Url_Trait;
 	use Base_Module_Handle_Trait;
+	use Base_Module_Dir_Trait;
 
 	const FORMAT_ADVANCED = 'advanced';
 	const FORMAT_BROWSER  = 'browser';
@@ -146,13 +150,24 @@ final class Module implements
 	}
 
 	public function register_scripts() {
+		$script_asset = require_once jet_form_builder()->plugin_dir(
+			'assets/build/frontend/advanced.reporting.asset.php'
+		);
+
+		if ( true === $script_asset ) {
+			return;
+		}
+
+		array_push(
+			$script_asset['dependencies'],
+			\Jet_Form_Builder\Blocks\Module::MAIN_SCRIPT_HANDLE
+		);
+
 		wp_register_script(
 			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/build/frontend/advanced.reporting.js' ),
-			array(
-				\Jet_Form_Builder\Blocks\Module::MAIN_SCRIPT_HANDLE,
-			),
-			Plugin::instance()->get_version(),
+			jet_form_builder()->plugin_url( 'assets/build/frontend/advanced.reporting.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 	}

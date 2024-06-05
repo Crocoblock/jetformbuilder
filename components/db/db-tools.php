@@ -14,8 +14,6 @@ class Db_Tools {
 			return '';
 		}
 
-		$name = strtolower( $name );
-
 		return preg_replace( '/[^a-z0-9_\-\`\.]/', '', $name );
 	}
 

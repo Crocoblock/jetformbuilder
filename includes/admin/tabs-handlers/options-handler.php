@@ -33,7 +33,7 @@ class Options_Handler extends Base_Handler {
 
 			$options[ $name ] = filter_var(
 				sanitize_key( $_POST[ $name ] ),
-				FILTER_VALIDATE_BOOL
+				defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN
 			);
 
 		}

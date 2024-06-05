@@ -105,6 +105,8 @@ function CalculatedData() {
 
 	// calculated field can't be validated
 	this.report = () => {};
+
+	this.reQueryValue = () => {};
 }
 
 CalculatedData.prototype = Object.create( InputData.prototype );

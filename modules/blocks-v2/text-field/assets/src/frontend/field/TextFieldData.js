@@ -1,7 +1,6 @@
 const {
-	InputData,
-} = JetFormBuilderAbstract;
-
+	      InputData,
+      } = JetFormBuilderAbstract;
 
 function TextFieldData() {
 	InputData.call( this );
@@ -15,8 +14,9 @@ function TextFieldData() {
 
 		const [ node ] = this.nodes;
 
-		const wrapper = this.getWrapperNode();
-		const button = wrapper.querySelector( '.jfb-eye-icon' );
+		const button = this.getWrapperNode()?.querySelector?.(
+			'.jfb-eye-icon',
+		);
 
 		// show eye icon is disabled
 		if ( !button ) {
@@ -24,11 +24,13 @@ function TextFieldData() {
 		}
 
 		button.addEventListener( 'click', function () {
-			button.classList.toggle(  'seen' );
+			button.classList.toggle( 'seen' );
 			let isPressed = this.getAttribute( 'aria-pressed' ) === 'true';
 			this.setAttribute( 'aria-pressed', !isPressed );
 
-			node.type = button.classList.contains( 'seen' ) ? 'password' : 'text';
+			node.type = button.classList.contains( 'seen' )
+			            ? 'password'
+			            : 'text';
 		} );
 
 		button.addEventListener( 'keydown', function ( event ) {
@@ -43,7 +45,7 @@ function TextFieldData() {
 				event.preventDefault();
 			}
 		} );
-	}
+	};
 }
 
 TextFieldData.prototype = Object.create( InputData.prototype );

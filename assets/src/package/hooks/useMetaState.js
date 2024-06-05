@@ -1,15 +1,13 @@
-const {
-	      useSelect,
-	      useDispatch,
-      } = wp.data;
+import { useSelect, useDispatch } from '@wordpress/data';
 
 function useMetaState(
 	key,
 	ifEmpty      = '{}',
-	dependencies = undefined,
+	dependencies = [],
 ) {
 	const meta = useSelect( ( select ) => {
-		const rawMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' ) || {};
+		const rawMeta = select( 'core/editor' ).
+			getEditedPostAttribute( 'meta' ) || {};
 
 		return JSON.parse( rawMeta[ key ] || ifEmpty );
 	}, dependencies );
@@ -17,14 +15,9 @@ function useMetaState(
 	const { editPost } = useDispatch( 'core/editor' );
 
 	const setMetaStateValue = callable => {
-		let value;
-
-		if ( 'function' === typeof callable ) {
-			value = callable( meta );
-		}
-		else {
-			value = callable;
-		}
+		let value = 'function' === typeof callable
+		            ? callable( meta )
+		            : callable;
 
 		if ( 'object' !== typeof value || null === value ) {
 			value = JSON.parse( ifEmpty );
@@ -33,7 +26,6 @@ function useMetaState(
 		editPost( {
 			meta: (
 				{
-					...meta,
 					[ key ]: JSON.stringify( value ),
 				}
 			),

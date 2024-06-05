@@ -19,7 +19,7 @@ const appendButton = function ( unsubscribeCallback ) {
 	unsubscribeCallback();
 	header.insertBefore(
 		buttonDiv,
-		header.querySelector( '.editor-post-publish-button' ),
+		header.querySelector( '.editor-post-publish-button__button' ),
 	);
 };
 

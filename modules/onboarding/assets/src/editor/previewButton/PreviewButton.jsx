@@ -38,7 +38,6 @@ function PreviewButton() {
 	};
 
 	return <Button
-		variant="tertiary"
 		icon={ external }
 		onClick={ openPreviewPage }
 	/>;

@@ -1,14 +1,18 @@
 import { Button } from '@wordpress/components';
 import { external } from '@wordpress/icons';
 import { useState, useEffect, useRef } from '@wordpress/element';
-import { useSelect } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
 
 function PreviewButton() {
 	const [ previewPage, setPreviewPage ] = useState( false );
 
 	const isSavingForm = useSelect( select => {
-		return select( 'core/editor' ).isSavingPost();
+		const coreEditor = select( 'core/editor' );
+
+		return coreEditor.isSavingPost() || coreEditor.isAutosavingPost();
 	}, [] );
+
+	const { autosave } = useDispatch( 'core/editor' );
 
 	const wasSaving = useRef( false );
 
@@ -34,7 +38,9 @@ function PreviewButton() {
 			return;
 		}
 
-		setPreviewPage( window.open( JFBOnboardingConfig.previewURL ) );
+		autosave().then( () => {
+			setPreviewPage( window.open( JFBOnboardingConfig.previewURL ) );
+		} );
 	};
 
 	return <Button

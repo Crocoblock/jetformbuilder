@@ -28,7 +28,15 @@ module.exports = {
 					'@wyw-in-js/webpack-loader',
 				],
 				exclude: /node_modules/,
-			}
+			},
+			{
+				test: /\.p?css$/,
+				use: [
+					'style-loader',
+					'css-loader',
+					'postcss-loader',
+				],
+			},
 		],
 	},
 	plugins: [

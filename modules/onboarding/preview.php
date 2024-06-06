@@ -55,11 +55,18 @@ class Preview {
 			return $content;
 		}
 
+		$form_id = get_the_ID();
+		$latest_revision = wp_get_latest_revision_id_and_total_count();
+
+		if ( ! empty( $latest_revision['latest_id'] ) ) {
+			$form_id = (int) $latest_revision['latest_id'];
+		}
+
 		/** @var Module $blocks */
 		/** @noinspection PhpUnhandledExceptionInspection */
 		$blocks = jet_form_builder()->module( Module::class );
 
-		return $blocks->get_form_class()->render_callback_field( array( 'form_id' => get_the_ID() ) );
+		return $blocks->get_form_class()->render_callback_field( array( 'form_id' => $form_id ) );
 	}
 
 	/**

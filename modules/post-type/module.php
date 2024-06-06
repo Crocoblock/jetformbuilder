@@ -196,7 +196,7 @@ class Module implements
 			'capability_type'       => 'jet_fb_form',
 			'menu_icon'             => $this->get_post_type_icon(),
 			'menu_position'         => 120,
-			'supports'              => array( 'title', 'editor', 'custom-fields' ),
+			'supports'              => array( 'title', 'editor', 'custom-fields', 'revisions' ),
 		);
 
 		register_post_type(

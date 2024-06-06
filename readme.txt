@@ -1,7 +1,7 @@
 ﻿=== JetFormBuilder — Dynamic Blocks Form Builder ===
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
-Requires at least: 6.0
+Requires at least: 6.1
 Tested up to: 6.5.3
 Requires PHP: 7.0
 Stable tag: 3.3.4.1

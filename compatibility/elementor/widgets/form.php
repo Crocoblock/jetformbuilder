@@ -1132,7 +1132,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'   => __( 'Fields Layout', 'jet-form-builder' ),
 				'type'    => Controls_Manager::SELECT,
-				'default' => __( 'column', 'jet-form-builder' ),
+				'default' => '',
 				'options' => $options['fields_layout'],
 			)
 		);
@@ -1142,7 +1142,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'   => __( 'Required Mark', 'jet-form-builder' ),
 				'type'    => Controls_Manager::TEXT,
-				'default' => __( '*', 'jet-form-builder' ),
+				'default' => '',
 			)
 		);
 
@@ -1151,7 +1151,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'   => __( 'Fields label HTML tag', 'jet-form-builder' ),
 				'type'    => Controls_Manager::SELECT,
-				'default' => 'div',
+				'default' => '',
 				'options' => $options['fields_label_tag'],
 			)
 		);
@@ -1161,7 +1161,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label'   => __( 'Submit Type', 'jet-form-builder' ),
 				'type'    => Controls_Manager::SELECT,
-				'default' => __( 'reload', 'jet-form-builder' ),
+				'default' => '',
 				'options' => $options['submit_type'],
 			)
 		);
@@ -1170,6 +1170,18 @@ class Form extends Widget_Base implements Widget_Base_It {
 			'enable_progress',
 			array(
 				'label'        => __( 'Enable form pages progress', 'jet-form-builder' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Yes', 'jet-form-builder' ),
+				'label_off'    => __( 'No', 'jet-form-builder' ),
+				'return_value' => true,
+				'default'      => false,
+			)
+		);
+
+		$this->add_control(
+			'clear',
+			array(
+				'label'        => __( 'Clear data on success submit', 'jet-form-builder' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => __( 'Yes', 'jet-form-builder' ),
 				'label_off'    => __( 'No', 'jet-form-builder' ),

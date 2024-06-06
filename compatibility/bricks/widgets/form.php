@@ -173,6 +173,16 @@ class Form extends Base {
 			)
 		);
 
+		$this->register_jet_control(
+			'clear',
+			array(
+				'tab'     => 'content',
+				'label'   => esc_html__( 'Clear data on success submit', 'jet-form-builder' ),
+				'type'    => 'checkbox',
+				'default' => false,
+			)
+		);
+
 		$this->end_jet_control_group();
 	}
 	// End form settings

@@ -145,8 +145,6 @@ class Form_Builder {
 		$this->add_attribute( 'data-clear', jet_fb_live_args()->clear ? 1 : '' );
 		$this->add_attribute( 'novalidate' );
 
-		do_action( 'qm/debug', jet_fb_live_args() );
-
 		/**
 		 * Backward compatibility.
 		 * We leave only the basic ones in the classes, because the value

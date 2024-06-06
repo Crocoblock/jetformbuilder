@@ -4,6 +4,7 @@ import { __ } from '@wordpress/i18n';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useCopyToClipboard } from '@wordpress/compose';
 import useShortcodeArgumentsString from './useShortcodeArgumentsString';
+import { styled } from '@linaria/react';
 
 const {
 	      BuilderHelpSlotFill,
@@ -12,6 +13,11 @@ const {
 const {
 	      usePluginUseSettings,
       } = JetFBHooks;
+
+const ShortCode = styled.code`
+    overflow-x: auto;
+    text-wrap: nowrap;
+`;
 
 function ShortcodeBuilder( { name } ) {
 	const [ settings, updateSettings ] = usePluginUseSettings();
@@ -57,7 +63,7 @@ function ShortcodeBuilder( { name } ) {
 				</b>
 			</p>
 			<Flex as="p" justify="flex-start">
-				<code>{ shortcode }</code>
+				<ShortCode>{ shortcode }</ShortCode>
 				<Button ref={ copyButtonRef } variant="tertiary">
 					{ __( 'Copy', 'jet-form-builder' ) }
 				</Button>

@@ -7,6 +7,18 @@ import {
 import { useDispatch } from '@wordpress/data';
 import FirstPart from './FirstPart';
 import SecondPart from './SecondPart/SecondPart';
+import { styled } from '@linaria/react';
+
+const ResponsiveModal = styled( Modal )`
+
+    @media (min-width: 900px) {
+        width: 70vw;
+    }
+	
+    @media (min-width: 1200px) {
+        width: 55vw;
+    }
+`;
 
 function PluginRoot() {
 	const { closeGeneralSidebar } = useDispatch( 'core/edit-post' );
@@ -16,13 +28,13 @@ function PluginRoot() {
 		name="sidebar"
 		title={ __( 'Use the form', 'jet-form-builder' ) }
 	>
-		<Modal
+		<ResponsiveModal
 			title={ __( 'Use the form', 'jet-form-builder' ) }
 			onRequestClose={ closeGeneralSidebar }
 		>
 			<FirstPart/>
 			<SecondPart/>
-		</Modal>
+		</ResponsiveModal>
 	</PluginSidebar>;
 }
 

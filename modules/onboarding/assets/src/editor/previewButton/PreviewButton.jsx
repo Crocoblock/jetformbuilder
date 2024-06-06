@@ -33,7 +33,9 @@ function PreviewButton() {
 
 	const openPreviewPage = () => {
 		if ( previewPage && !previewPage?.closed ) {
-			previewPage.focus();
+			autosave().finally( () => {
+				previewPage.focus();
+			} );
 
 			return;
 		}

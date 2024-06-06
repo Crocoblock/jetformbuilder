@@ -1,27 +1,23 @@
 <?php
 
-namespace Jet_Form_Builder\Blocks\Render;
+namespace JFB_Modules\Blocks_V2\Repeater_Field;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Blocks\Block_Helper;
-use Jet_Form_Builder\Blocks\Types\Repeater_Field;
+use Jet_Form_Builder\Blocks\Render\Base;
 use Jet_Form_Builder\Classes\Builder_Helper;
-use Jet_Form_Builder\Classes\Tools;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
 /**
- * @property Repeater_Field block_type
+ * @property Block_Type block_type
  *
  * Class Repeater_Field_Render
  * @package Jet_Form_Builder\Blocks\Render
  */
-class Repeater_Field_Render extends Base {
-
-	public $current_repeater_i = false;
-	public $current_repeater;
+class Block_Render extends Base {
 
 	public function get_name() {
 		return 'repeater-field';
@@ -89,8 +85,8 @@ class Repeater_Field_Render extends Base {
 			yield Block_Helper::render_with_context(
 				$row,
 				$this->block_type->block_context + array(
-					Repeater_Field::CONTEXT_NAME         => $this->block_type->block_attrs['name'] ?? '',
-					Repeater_Field::CONTEXT_MANAGE_ITEMS => $this->block_type->manage_items,
+					Block_Type::CONTEXT_NAME         => $this->block_type->block_attrs['name'] ?? '',
+					Block_Type::CONTEXT_MANAGE_ITEMS => $this->block_type->manage_items,
 				)
 			);
 		}

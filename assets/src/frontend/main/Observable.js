@@ -7,6 +7,7 @@ import observeMacroAttr from './html.macro/observeMacroAttr';
 import observeNode from './html.macro/observeNode';
 import { validateInputsAll } from './reporting/functions';
 import ReportingContext from './reporting/ReportingContext';
+import ReactiveVar from './reactive/ReactiveVar';
 
 const {
 	      doAction,
@@ -55,6 +56,10 @@ Observable.prototype = {
 	 */
 	rootNode: null,
 	isObserved: false,
+	/**
+	 * @type {ReactiveVar}
+	 */
+	value: null,
 	observe: function ( root = null ) {
 		if ( this.isObserved ) {
 			return;
@@ -82,6 +87,8 @@ Observable.prototype = {
 		this.initMacros();
 
 		this.initActionButtons();
+
+		this.initValue();
 
 		doAction( 'jet.fb.observe.after', this );
 	},
@@ -282,7 +289,28 @@ Observable.prototype = {
 		for ( const input of this.getInputs() ) {
 			input.reQueryValue();
 		}
-	}
+	},
+	initValue() {
+		this.value = new ReactiveVar( {} );
+
+		this.value.watch( () => {
+			const entries = Object.entries(
+				this.value.current,
+			);
+
+			for ( const [ fieldName, value ] of entries ) {
+				this.getInput( fieldName ).revertValue( value );
+			}
+		} );
+
+		for ( const input of this.getInputs() ) {
+			input.watch( () => {
+				this.value.current[ input.getName() ] = input.getValue();
+			} );
+		}
+
+		this.value.make();
+	},
 };
 
 export default Observable;

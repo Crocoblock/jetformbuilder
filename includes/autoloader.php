@@ -38,6 +38,8 @@ class Autoloader {
 		'Jet_Form_Builder\\Blocks\\Manager'                => 'Jet_Form_Builder\\Blocks\\Module',
 		'Jet_Form_Builder\\Blocks\\Types\\Text_Field'      => 'JFB_Modules\\Blocks_V2\\Text_Field\\Block_Type',
 		'Jet_Form_Builder\\Blocks\\Render\\Text_Field_Render' => 'JFB_Modules\\Blocks_V2\\Text_Field\\Block_Render',
+		'Jet_Form_Builder\\Blocks\\Types\\Repeater_Field' => 'JFB_Modules\\Blocks_V2\\Repeater_Field\\Block_Type',
+		'Jet_Form_Builder\\Blocks\\Types\\Repeater_Row' => 'JFB_Modules\\Blocks_V2\\Repeater_Field\\Block_Type_Row',
 		// gateways
 		'Jet_Form_Builder\\Gateways\\Base_Gateway'         => 'JFB_Modules\\Gateways\\Base_Gateway',
 		'Jet_Form_Builder\\Gateways\\Base_Scenario_Gateway' => 'JFB_Modules\\Gateways\\Base_Scenario_Gateway',

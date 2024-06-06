@@ -14,9 +14,12 @@ function SignalRepeater() {
 		return isRepeater( node );
 	};
 	this.runSignal   = function ( prevValue = [] ) {
-		const { current } = this.input.value;
+		const { current }     = this.input.value;
+		const hasDeletedItems = (
+			prevValue?.length && prevValue.length > current.length
+		);
 
-		if ( prevValue?.length && prevValue.length > current.length ) {
+		if ( hasDeletedItems ) {
 			this.removePrevItems( prevValue );
 		}
 
@@ -24,7 +27,7 @@ function SignalRepeater() {
 			if ( !current.hasOwnProperty( index ) ) {
 				continue;
 			}
-			this.runItem( +index );
+			this.runItem( +index, hasDeletedItems );
 		}
 
 		let calcValue = 0;
@@ -38,16 +41,22 @@ function SignalRepeater() {
 	};
 	/**
 	 * @param currentIndex {Number}
+	 * @param shouldReObserve
 	 */
-	this.runItem = function ( currentIndex ) {
+	this.runItem = function ( currentIndex, shouldReObserve = false ) {
 		/**
 		 * @type {ObservableRow}
 		 */
 		const observable = this.input.value.current[ currentIndex ];
 
 		if ( observable.isObserved ) {
-			return;
+			if ( !shouldReObserve ) {
+				return;
+			}
+
+			observable.rootNode.remove();
 		}
+
 		const template     = document.createElement( 'template' );
 		template.innerHTML = this.input.template.innerHTML.trim();
 
@@ -70,11 +79,19 @@ function SignalRepeater() {
 			);
 		}
 
+		if ( observable.isObserved ) {
+			observable.reObserve( appended );
+
+			return;
+		}
 		observable.observe( appended );
 	};
 
 	this.removePrevItems = function ( prevRows ) {
-		const { current } = this.input.value;
+		/**
+		 * @type {ObservableRow[]}
+		 */
+		const current = this.input.value.current;
 
 		for ( const prevRow of prevRows ) {
 			if ( !current.includes( prevRow ) ) {

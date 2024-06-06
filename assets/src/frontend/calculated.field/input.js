@@ -107,6 +107,8 @@ function CalculatedData() {
 	this.report = () => {};
 
 	this.reQueryValue = () => {};
+
+	this.revertValue = () => {};
 }
 
 CalculatedData.prototype = Object.create( InputData.prototype );

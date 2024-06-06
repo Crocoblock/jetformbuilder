@@ -1,6 +1,7 @@
 import RepeaterData from './input';
 import SignalRepeater from './signal';
 import RepeaterRestriction from './restrictions/RepeaterRestriction';
+import './index.pcss';
 
 const {
 	      addFilter,
@@ -38,13 +39,13 @@ const addRestriction = ( restrictions ) => {
 addFilter(
 	'jet.fb.restrictions.default',
 	'jet-form-builder/repeater-field',
-	addRestriction
+	addRestriction,
 );
 
 addFilter(
 	'jet.fb.restrictions',
 	'jet-form-builder/repeater-field',
-	addRestriction
+	addRestriction,
 );
 
 addAction(
@@ -72,7 +73,7 @@ addAction(
 		function observeInnerInput( currentInput ) {
 			pageState.handleInputEnter( currentInput );
 
-			if ( ! currentInput.reporting?.restrictions?.length ) {
+			if ( !currentInput.reporting?.restrictions?.length ) {
 				return;
 			}
 

@@ -8,15 +8,17 @@ use Jet_Form_Builder\Blocks\Module;
 use Jet_Form_Builder\Blocks\Modules\Base_Module;
 use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Classes\Compatibility;
-use Jet_Form_Builder\Exceptions\Repository_Exception;
-use JFB_Components\Repository\Repository_Item_Instance_Trait;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Break;
 use Jet_Form_Builder\Live_Form;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Presets\Preset_Manager;
 use Jet_Form_Builder\Presets\Sources\Base_Source;
 use JET_SM\Gutenberg\Controls_Manager;
+use JFB_Components\Repository\Repository_Item_Instance_Trait;
+use JFB_Modules\Blocks_V2\Repeater_Field\Block_Type;
+use JFB_Modules\Blocks_V2\Repeater_Field\Block_Type_Row;
 use JFB_Modules\Rich_Content;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -442,7 +444,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		}
 
 		$name = $this->block_attrs['name'] ?? '';
-		$row  = $this->block_context[ Repeater_Row::CONTEXT_DEFAULT ] ?? array();
+		$row  = $this->block_context[ Block_Type_Row::CONTEXT_DEFAULT ] ?? array();
 
 		$custom_value = $this->get_value_from_repeater( $row, $name );
 
@@ -521,7 +523,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	}
 
 	protected function get_repeater_index(): int {
-		return intval( $this->block_context[ Repeater_Row::CONTEXT_INDEX ] ?? - 1 );
+		return intval( $this->block_context[ Block_Type_Row::CONTEXT_INDEX ] ?? - 1 );
 	}
 
 	/**
@@ -752,7 +754,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	}
 
 	public function get_repeater_name(): string {
-		return $this->block_context[ Repeater_Field::CONTEXT_NAME ] ?? '';
+		return $this->block_context[ Block_Type::CONTEXT_NAME ] ?? '';
 	}
 
 	public function get_field_value( $attributes = array() ) {

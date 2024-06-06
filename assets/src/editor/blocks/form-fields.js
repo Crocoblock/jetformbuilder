@@ -9,7 +9,6 @@ import * as hidden from './hidden-field';
 import * as media from './media-field';
 import * as number from './number-field';
 import * as range from './range-field';
-import * as repeater from './repeater-field';
 import * as submit from './submit-field';
 import * as textarea from './textarea-field';
 import * as time from './time-field';
@@ -38,7 +37,6 @@ const fields = applyFilters( 'jet.fb.register.fields', [
 	media,
 	number,
 	range,
-	repeater,
 	submit,
 	textarea,
 	time,

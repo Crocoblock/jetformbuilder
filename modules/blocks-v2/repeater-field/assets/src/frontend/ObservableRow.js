@@ -15,6 +15,16 @@ ObservableRow.prototype            = Object.create( Observable.prototype );
 ObservableRow.prototype.calc       = 1;
 ObservableRow.prototype.initedCalc = false;
 
+ObservableRow.prototype.reObserve = function ( root ) {
+	this.isObserved = false;
+
+	const prevValues = { ...this.value.current };
+	this.dataInputs  = {};
+	Observable.prototype.observe.call( this, root );
+
+	this.value.current = prevValues;
+};
+
 ObservableRow.prototype.observe = function ( root ) {
 	Observable.prototype.observe.call( this, root );
 

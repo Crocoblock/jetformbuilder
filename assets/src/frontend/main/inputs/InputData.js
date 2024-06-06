@@ -473,4 +473,11 @@ InputData.prototype.reQueryValue = function () {
 	this.setValue();
 }
 
+/**
+ * Runs on set Observable.value.current
+ */
+InputData.prototype.revertValue = function ( value ) {
+	this.value.current = value;
+}
+
 export default InputData;

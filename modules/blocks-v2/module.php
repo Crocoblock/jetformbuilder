@@ -33,7 +33,12 @@ final class Module implements Base_Module_It, Base_Module_Handle_It, Base_Module
 	}
 
 	public function add_blocks_types( array $block_types ): array {
-		$block_types[] = new Text_Field\Block_Type();
+		array_push(
+			$block_types,
+			new Text_Field\Block_Type(),
+			new Repeater_Field\Block_Type_Row(),
+			new Repeater_Field\Block_Type()
+		);
 
 		return $block_types;
 	}

@@ -1,14 +1,16 @@
 <?php
 
 
-namespace Jet_Form_Builder\Blocks\Types;
+namespace JFB_Modules\Blocks_V2\Repeater_Field;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Blocks\Types\Base;
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Repeater_Row extends Base {
+class Block_Type_Row extends Base {
 
 	public $use_style_manager = false;
 
@@ -43,7 +45,7 @@ class Repeater_Row extends Base {
 					self::CONTEXT_DEFAULT => 'rowDefault',
 				),
 				'uses_context'     => array(
-					Repeater_Field::CONTEXT_MANAGE_ITEMS,
+					Block_Type::CONTEXT_MANAGE_ITEMS,
 				),
 				'render_callback'  => array( $this, 'render_callback_field' ),
 			)
@@ -71,21 +73,14 @@ class Repeater_Row extends Base {
 	}
 
 	public function get_row_html( $wp_block ): string {
-		$index = - 1 === ( $this->block_attrs['currentIndex'] ?? - 1 )
-			? 0
-			: $this->block_attrs['currentIndex'];
-
-		$html = sprintf(
-			'<div class="jet-form-builder-repeater__row" data-repeater-row="1" data-index="%1$s">',
-			$index
-		);
+		$html = '<div class="jet-form-builder-repeater__row" data-repeater-row="1">';
 
 		$html .= sprintf(
 			'<div class="jet-form-builder-repeater__row-fields">%s</div>',
 			$this->block_content
 		);
 
-		$manage_items = $this->block_context[ Repeater_Field::CONTEXT_MANAGE_ITEMS ] ?? '';
+		$manage_items = $this->block_context[ Block_Type::CONTEXT_MANAGE_ITEMS ] ?? '';
 
 		if ( 'manually' === $manage_items || ! $manage_items ) {
 			$html .= '<div class="jet-form-builder-repeater__row-remove">';

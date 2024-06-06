@@ -24,7 +24,6 @@ class Form_Builder_Blocks_Repository extends Blocks_Repository_Base {
 				new Types\Heading_Field(),
 				new Types\Textarea_Field(),
 				new Types\Action_Button(),
-				new Types\Repeater_Field(),
 				new Types\Form_Break_Field(),
 				new Types\Group_Break_Field(),
 				new Types\Conditional_Block(),
@@ -32,7 +31,6 @@ class Form_Builder_Blocks_Repository extends Blocks_Repository_Base {
 				new Types\Color_Picker_Field(),
 				new Types\Progress_Bar(),
 				new Types\Form_Break_Start(),
-				new Types\Repeater_Row(),
 			)
 		);
 	}

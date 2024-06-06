@@ -18,7 +18,6 @@ module.exports = {
 		'frontend/media.field': './frontend/media.field/main.js',
 		'frontend/media.field.restrictions': './frontend/media.field.restrictions/main.js',
 		'frontend/multi.step': './frontend/multi.step/main.js',
-		'frontend/repeater.field': './frontend/repeater.field/main.js',
 		'frontend/calculated.field': './frontend/calculated.field/main.js',
 		'frontend/conditional.block': './frontend/conditional.block/main.js',
 		'frontend/advanced.reporting': './frontend/advanced.reporting/main.js',

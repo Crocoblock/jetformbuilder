@@ -1,11 +1,12 @@
 <?php
 
-namespace Jet_Form_Builder\Blocks\Types;
+namespace JFB_Modules\Blocks_V2\Repeater_Field;
 
-use Jet_Form_Builder\Blocks\Module;
-use Jet_Form_Builder\Blocks\Render\Repeater_Field_Render;
-use Jet_Form_Builder\Classes\Tools;
-use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Blocks\Types\Base;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use JFB_Modules\Blocks_V2\Interfaces\Block_Type_With_Assets_Interface;
+use JFB_Modules\Blocks_V2\Module;
+use JFB_Modules\Blocks_V2\Traits\Block_Type_With_Assets_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -15,9 +16,11 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Define Text field block class
  */
-class Repeater_Field extends Base {
+class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 
-	const HANDLE               = 'jet-fb-repeater-field';
+	use Block_Type_With_Assets_Trait;
+
+	const HANDLE               = Block_Asset::HANDLE;
 	const CONTEXT_NAME         = 'jet-forms/repeater-field--name';
 	const CONTEXT_MANAGE_ITEMS = 'jet-forms/repeater-field--manage-items';
 
@@ -342,15 +345,11 @@ class Repeater_Field extends Base {
 		$this->controls_manager->end_section();
 	}
 
-	public function register_block_type() {
-		parent::register_block_type();
+	protected function register_block() {
+		$this->set_assets( new Block_Asset() );
+		$this->get_assets()->init_hooks();
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
-
-		/**
-		 * @link https://github.com/Crocoblock/issues-tracker/issues/1542
-		 */
-		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_scripts' ) );
+		parent::register_block();
 	}
 
 	public function expected_preset_type(): array {
@@ -363,24 +362,6 @@ class Repeater_Field extends Base {
 		yield 'skip_inner_blocks' => true;
 	}
 
-	public function register_scripts() {
-		$script_asset = require_once jet_form_builder()->plugin_dir( 'assets/build/frontend/repeater.field.asset.php' );
-
-		if ( true === $script_asset ) {
-			return;
-		}
-
-		$script_asset['dependencies'][] = Module::MAIN_SCRIPT_HANDLE;
-
-		wp_register_script(
-			self::HANDLE,
-			Plugin::instance()->plugin_url( 'assets/build/frontend/repeater.field.js' ),
-			$script_asset['dependencies'],
-			$script_asset['version'],
-			true
-		);
-	}
-
 	/**
 	 * Returns current block render
 	 *
@@ -389,14 +370,12 @@ class Repeater_Field extends Base {
 	 * @return string
 	 */
 	public function get_block_renderer( $wp_block = null ) {
-		wp_enqueue_script( self::HANDLE );
-
 		$this->set_manage_items();
 		$this->set_items_field();
 		$this->set_calc_type();
 		$this->set_new_repeater_label();
 
-		return ( new Repeater_Field_Render( $this ) )->render( $wp_block );
+		return ( new Block_Render( $this ) )->render( $wp_block );
 	}
 
 	public function set_manage_items() {
@@ -464,6 +443,30 @@ class Repeater_Field extends Base {
 		);
 
 		return (string) $formula;
+	}
+
+	/**
+	 * @param $path
+	 *
+	 * @return string
+	 * @throws Repository_Exception
+	 */
+	public function get_field_template( $path ) {
+		/** @var Module $blocks_v2 */
+		$blocks_v2 = jet_form_builder()->module( 'blocks-v2' );
+
+		return $blocks_v2->get_dir( 'repeater-field/block-template.php' );
+	}
+
+	/**
+	 * @return string
+	 * @throws Repository_Exception
+	 */
+	public function get_path_metadata_block() {
+		/** @var Module $blocks_v2 */
+		$blocks_v2 = jet_form_builder()->module( 'blocks-v2' );
+
+		return $blocks_v2->get_dir( 'repeater-field' );
 	}
 
 }

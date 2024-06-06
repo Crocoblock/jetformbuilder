@@ -3,8 +3,6 @@
 
 namespace JFB_Modules\Advanced_Choices\Block_Types;
 
-use Jet_Form_Builder\Blocks\Types\Repeater_Row;
-
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }

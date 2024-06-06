@@ -105,7 +105,7 @@ class Form_Arguments implements Arrayable {
 	 * @param null $clear
 	 */
 	public function set_clear( $clear ) {
-		$this->clear = $clear;
+		$this->clear = (bool) $clear;
 	}
 
 	/**
@@ -180,10 +180,9 @@ class Form_Arguments implements Arrayable {
 			'submit_type'      => $this->submit_type,
 			'required_mark'    => $this->required_mark,
 			'fields_layout'    => $this->fields_layout,
-			'enable_progress'  => $this->enable_progress,
 			'fields_label_tag' => $this->fields_label_tag,
-			'load_nonce'       => $this->load_nonce,
-			'use_csrf'         => $this->use_csrf,
+			'enable_progress'  => $this->enable_progress,
+			'clear'            => $this->clear,
 		);
 	}
 

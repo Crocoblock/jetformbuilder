@@ -140,6 +140,16 @@ final class Module implements
 			$arguments
 		);
 
+		if ( isset( $arguments['load_nonce'] ) ) {
+			unset( $arguments['load_nonce'] );
+		}
+		if ( isset( $arguments['use_honeypot'] ) ) {
+			unset( $arguments['use_honeypot'] );
+		}
+		if ( isset( $arguments['use_csrf'] ) ) {
+			unset( $arguments['use_csrf'] );
+		}
+
 		printf(
 			'<input readonly type="text" onclick="this.select()" value="%s" style="%s"/>',
 			esc_attr( $this->get_shortcode( 'jet_fb_form', $arguments ) ),

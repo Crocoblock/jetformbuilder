@@ -29,7 +29,7 @@ function ValidationPlugin() {
 
 	const [ isEditValidation, setEditValidation ] = useState( false );
 	const [ isLoadNonce, setLoadNonce ]           = useState( 'render' === (
-		args.load_nonce || 'render'
+		args.load_nonce
 	) );
 
 	useEffect( () => {
@@ -56,7 +56,7 @@ function ValidationPlugin() {
 		/>
 		<ToggleControl
 			label={ __( 'Enable csrf protection', 'jet-form-builder' ) }
-			checked={ args.use_csrf }
+			checked={ args?.use_csrf ?? false }
 			onChange={ () => {
 				setArgs( prev => {
 					const use_csrf = !Boolean( prev.use_csrf );
@@ -67,7 +67,7 @@ function ValidationPlugin() {
 		/>
 		<ToggleControl
 			label={ __( 'Enable Honeypot protection', 'jet-form-builder' ) }
-			checked={ args.use_honeypot }
+			checked={ args?.use_honeypot ?? false }
 			onChange={ () => {
 				setArgs( prev => (
 					{
@@ -81,7 +81,7 @@ function ValidationPlugin() {
 			onChange={ type => setValidation( prev => (
 				{ ...prev, type }
 			) ) }
-			value={ validation.type ?? 'browser' }
+			value={ validation?.type ?? 'browser' }
 			label={ __( 'Validation type', 'jet-form-builder' ) }
 			isBlock={ true }
 			isAdaptiveWidth={ false }

@@ -34,7 +34,6 @@ class Module implements
 	use Base_Module_Url_Trait;
 	use Base_Module_Dir_Trait;
 
-	private $preview_nonce;
 	/**
 	 * @var Block_Editor_Builder
 	 */
@@ -44,7 +43,10 @@ class Module implements
 	 */
 	private $no_builder;
 
-	const PREVIEW_ID_KEY = 'jfb-preview-form';
+	/**
+	 * @var Preview
+	 */
+	private $preview;
 
 	public function rep_item_id() {
 		return 'onboarding';
@@ -55,13 +57,17 @@ class Module implements
 	}
 
 	public function on_install() {
-		$this->preview_nonce = new Wp_Nonce( 'jfb-preview-form' );
 		$this->block_builder = new Block_Editor_Builder();
 		$this->no_builder    = new No_Builder_Handler();
+		$this->preview = new Preview();
 	}
 
 	public function on_uninstall() {
-		unset( $this->preview_nonce, $this->block_builder );
+		unset(
+			$this->block_builder,
+			$this->no_builder,
+			$this->preview
+		);
 	}
 
 	public function init_hooks() {
@@ -80,10 +86,6 @@ class Module implements
 			array( $this, 'add_default_fields_to_form' ),
 			99
 		);
-		add_filter(
-			'the_content',
-			array( $this, 'render_form_preview' )
-		);
 
 		add_action(
 			'rest_api_init',
@@ -92,6 +94,7 @@ class Module implements
 
 		$this->get_block_builder()->init_hooks();
 		$this->get_no_builder()->init_hooks();
+		$this->get_preview()->init_hooks();
 	}
 
 	public function remove_hooks() {
@@ -107,10 +110,6 @@ class Module implements
 			'jet-form-builder/post-type/args',
 			array( $this, 'add_default_fields_to_form' ),
 			99
-		);
-		remove_filter(
-			'the_content',
-			array( $this, 'render_form_preview' )
 		);
 		remove_action(
 			'rest_api_init',
@@ -132,20 +131,6 @@ class Module implements
 			$script_asset['dependencies'],
 			$script_asset['version'],
 			true
-		);
-
-		wp_localize_script(
-			$this->get_handle(),
-			'JFBOnboardingConfig',
-			array(
-				'previewURL' => add_query_arg(
-					array(
-						self::PREVIEW_ID_KEY => get_the_ID(),
-						'_nonce'             => $this->get_preview_nonce()->create(),
-					),
-					site_url()
-				),
-			)
 		);
 	}
 
@@ -169,28 +154,7 @@ class Module implements
 		return $arguments;
 	}
 
-	public function render_form_preview( $content ) {
-		if (
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			empty( $_GET[ self::PREVIEW_ID_KEY ] ) ||
-			! $this->get_preview_nonce()->verify()
-		) {
-			return $content;
-		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$form_id = absint( $_GET[ self::PREVIEW_ID_KEY ] );
-
-		if ( ! current_user_can( 'edit_jet_fb_form', $form_id ) ) {
-			return $content;
-		}
-
-		/** @var Blocks\Module $blocks */
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$blocks = jet_form_builder()->module( \Jet_Form_Builder\Blocks\Module::class );
-
-		return $blocks->get_form_class()->render_callback_field( array( 'form_id' => $form_id ) );
-	}
 
 	public function get_preview_nonce(): Wp_Nonce {
 		return $this->preview_nonce;
@@ -205,5 +169,12 @@ class Module implements
 	 */
 	public function get_no_builder(): No_Builder_Handler {
 		return $this->no_builder;
+	}
+
+	/**
+	 * @return Preview
+	 */
+	public function get_preview(): Preview {
+		return $this->preview;
 	}
 }

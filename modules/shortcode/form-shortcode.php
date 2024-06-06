@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Shortcode;
 
+use Jet_Form_Builder\Blocks\Types\Form;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 
 // If this file is called directly, abort.
@@ -46,6 +47,7 @@ class Form_Shortcode extends Shortcode {
 	 * @return mixed
 	 */
 	public function generate( $settings ) {
+		/** @var Form $form */
 		$form = jet_form_builder()->blocks->get_form_class();
 
 		return do_shortcode( $form->render_callback_field( $settings ) );

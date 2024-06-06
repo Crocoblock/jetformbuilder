@@ -61,6 +61,7 @@
 		"@wordpress/block-editor": "^12.26.0",
 		"@wordpress/blocks": "^12.35.0",
 		"@wordpress/components": "^26.0.1",
+		"@wordpress/compose": "^7.0.0",
 		"@wordpress/core-data": "^6.35.0",
 		"@wordpress/data": "^9.26.0",
 		"@wordpress/dom-ready": "^3.54.0",

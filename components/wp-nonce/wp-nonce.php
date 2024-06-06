@@ -45,6 +45,12 @@ class Wp_Nonce {
 	 * @return false|int
 	 */
 	public function verify() {
+		$nonce = $this->get_nonce();
+
+		if ( ! $nonce ) {
+			return false;
+		}
+
 		return wp_verify_nonce( $this->get_nonce(), $this->action );
 	}
 

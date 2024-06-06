@@ -18,7 +18,7 @@ export default function PluginArgs() {
 	return <>
 		<SelectControl
 			label={ __( 'Fields Layout', 'jet-form-builder' ) }
-			value={ args.fields_layout }
+			value={ args?.fields_layout ?? '' }
 			options={ source.fields_layout }
 			onChange={ newVal => {
 				setArgs( ( prevArgs ) => (
@@ -31,7 +31,7 @@ export default function PluginArgs() {
 		/>
 		<TextControl
 			label={ __( 'Required Mark', 'jet-form-builder' ) }
-			value={ args.required_mark }
+			value={ args?.required_mark ?? '' }
 			onChange={ newVal => {
 				setArgs( ( prevArgs ) => (
 					{
@@ -44,7 +44,7 @@ export default function PluginArgs() {
 
 		<SelectControl
 			label={ __( 'Fields label HTML tag', 'jet-form-builder' ) }
-			value={ args.fields_label_tag }
+			value={ args?.fields_label_tag ?? '' }
 			options={ source.fields_label_tag }
 			onChange={ newVal => {
 				setArgs( ( prevArgs ) => (
@@ -58,7 +58,7 @@ export default function PluginArgs() {
 
 		<SelectControl
 			label={ __( 'Submit Type', 'jet-form-builder' ) }
-			value={ args.submit_type }
+			value={ args?.submit_type ?? '' }
 			options={ source.submit_type }
 			onChange={ newVal => {
 				setArgs( ( prevArgs ) => (
@@ -74,7 +74,7 @@ export default function PluginArgs() {
 		<ToggleControl
 			key={ 'enable_progress' }
 			label={ __( 'Enable form pages progress', 'jet-from-builder' ) }
-			checked={ args.enable_progress }
+			checked={ args?.enable_progress ?? false }
 			help={ __( 'Displays the progress of a multi-page form',
 				'jet-form-builder' ) }
 			onChange={ () => {
@@ -88,7 +88,7 @@ export default function PluginArgs() {
 		<ToggleControl
 			key={ 'clear_on_ajax' }
 			label={ __( 'Clear data on success submit', 'jet-from-builder' ) }
-			checked={ args.clear }
+			checked={ args?.clear ?? false }
 			help={ __( 'Remove input values on successful submit',
 				'jet-form-builder' ) }
 			onChange={ () => {

@@ -22,7 +22,11 @@ class Args_Meta extends Base_Meta_Type {
 	}
 
 	public function get_default(): string {
-		return Tools::encode_json( Form_Arguments::arguments() );
+		return Tools::encode_json(
+			array(
+				'load_nonce' => 'render',
+			)
+		);
 	}
 
 	public function query( $form_id ) {

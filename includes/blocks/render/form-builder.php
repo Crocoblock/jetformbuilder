@@ -142,8 +142,10 @@ class Form_Builder {
 		$this->add_attribute( 'data-layout', jet_fb_live_args()->fields_layout );
 		$this->add_attribute( 'enctype', 'multipart/form-data' );
 		$this->add_attribute( 'data-validation-type', jet_fb_live_args()->validation_type );
-		$this->add_attribute( 'data-clear', jet_fb_live_args()->clear );
+		$this->add_attribute( 'data-clear', jet_fb_live_args()->clear ? 1 : '' );
 		$this->add_attribute( 'novalidate' );
+
+		do_action( 'qm/debug', jet_fb_live_args() );
 
 		/**
 		 * Backward compatibility.

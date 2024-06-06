@@ -17,8 +17,8 @@ class Default_Form_Arguments extends Form_Arguments {
 		$this->set_required_mark( '*' );
 		$this->set_fields_layout( 'column' );
 		$this->set_enable_progress( false );
+		$this->set_clear( false );
 		$this->set_fields_label_tag( 'div' );
-		$this->set_load_nonce( 'render' );
 	}
 
 	public function to_array(): array {

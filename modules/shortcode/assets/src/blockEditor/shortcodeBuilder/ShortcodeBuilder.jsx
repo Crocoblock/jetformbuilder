@@ -3,6 +3,7 @@ import { copySmall } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useCopyToClipboard } from '@wordpress/compose';
+import useShortcodeArgumentsString from './useShortcodeArgumentsString';
 
 const {
 	      BuilderHelpSlotFill,
@@ -15,12 +16,10 @@ const {
 function ShortcodeBuilder( { name } ) {
 	const [ settings, updateSettings ] = usePluginUseSettings();
 
-	const isActive = name === settings.builder;
-	const formId   = useSelect( select => (
-		select( 'core/editor' ).getEditedPostAttribute( 'id' )
-	), [] );
+	const isActive      = name === settings.builder;
+	const shortcodeArgs = useShortcodeArgumentsString();
 
-	const shortcode = `[jet_fb_form form_id="${ formId }" submit_type="ajax"]`;
+	const shortcode = `[jet_fb_form ${ shortcodeArgs }]`;
 
 	const { createNotice } = useDispatch( 'core/notices' );
 	const copyButtonRef    = useCopyToClipboard(

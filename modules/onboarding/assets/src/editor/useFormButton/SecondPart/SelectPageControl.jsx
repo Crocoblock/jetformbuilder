@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
 import { useEntityRecords } from '@wordpress/core-data';
 import { useState } from '@wordpress/element';
 import UseFormButton from './UseFormButton';
+import { useDebouncedInput } from '@wordpress/compose';
 
 const { Label } = JetFBComponents;
 
@@ -14,17 +15,17 @@ const {
 	      usePluginUseSettings,
       } = JetFBHooks;
 
-
 function SelectPageControl() {
 	const [ settings, updateSettings ] = usePluginUseSettings();
-	const [ search, setSearch ]        = useState( '' );
 
-	const pages = useEntityRecords(
+	const [ search, setSearch, lazySearch ] = useDebouncedInput( '' );
+
+	const pages     = useEntityRecords(
 		'postType',
 		'page',
 		{
 			per_page: 20,
-			search,
+			search: lazySearch,
 		},
 	);
 	const pagesList = pages.records?.map?.( page => (
@@ -51,7 +52,7 @@ function SelectPageControl() {
 					__nextHasNoMarginBottom
 				/>
 			</FlexBlock>
-			<UseFormButton/>
+			<UseFormButton disabled={ !Boolean( search.length ) }/>
 		</Flex>
 	</>;
 }

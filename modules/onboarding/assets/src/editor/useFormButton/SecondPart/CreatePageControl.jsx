@@ -26,7 +26,9 @@ function CreatePageControl() {
 					__nextHasNoMarginBottom
 				/>
 			</FlexBlock>
-			<UseFormButton/>
+			<UseFormButton
+				disabled={ !Boolean( settings?.pageTitle?.length ) }
+			/>
 		</Flex>
 	</>;
 }

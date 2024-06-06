@@ -90,6 +90,15 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 							setAttributes( { enable_progress: Boolean( newVal ) } );
 						} }
 					/>
+					<ToggleControl
+						label={ __( 'Clear data on success submit', 'jet-form-builder' ) }
+						checked={ attributes.clear }
+						help={ __( 'Remove input values on successful submit',
+							'jet-form-builder' ) }
+						onChange={ newVal => {
+							setAttributes( { clear: Boolean( newVal ) } );
+						} }
+					/>
 				</React.Fragment> }
 			</PanelBody>
 		</InspectorControls>,

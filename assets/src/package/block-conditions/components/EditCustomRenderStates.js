@@ -1,24 +1,11 @@
 import ActionModal from '../../action-modal/components/ActionModal';
 import ActionModalFooterSlotFill
 	from '../../action-modal/components/ActionModalFooterSlotFill';
-
-const {
-	      Button,
-	      TextControl,
-      } = wp.components;
-const {
-	      __,
-      } = wp.i18n;
-const {
-	      useState,
-      } = wp.element;
-
-const {
-	      useSelect,
-	      useDispatch,
-      } = wp.data;
-
-const { apiFetch } = wp;
+import apiFetch from '@wordpress/api-fetch';
+import { Button, TextControl } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
+import { useSelect, useDispatch } from '@wordpress/data';
 
 const {
 	      rest_add_state,

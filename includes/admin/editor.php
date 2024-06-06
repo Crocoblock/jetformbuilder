@@ -8,6 +8,7 @@ use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Http\Utm_Url;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Plugin;
 use Jet_Form_Builder\Blocks\Conditional_Block\Condition_Manager as Block_Condition_Manager;
 use JFB_Modules\Post_Type\Module;
@@ -309,23 +310,22 @@ class Editor {
 	 * Enqueue editor assets
 	 *
 	 * @return void
+	 * @throws Repository_Exception
 	 */
 	public function enqueue_assets() {
+		$script_asset = require_once jet_form_builder()->plugin_dir( 'assets/build/editor/package.asset.php' );
+
+		if ( true === $script_asset ) {
+			return;
+		}
+
 		do_action( 'jet-form-builder/editor-package/before', $this, self::EDITOR_PACKAGE_HANDLE );
 
-		// todo: refactor with new way of assets loading
 		wp_enqueue_script(
 			self::EDITOR_PACKAGE_HANDLE,
 			Plugin::instance()->plugin_url( 'assets/build/editor/package.js' ),
-			array(
-				'wp-editor',
-				'wp-core-data',
-				'wp-data',
-				'wp-block-library',
-				'wp-format-library',
-				'wp-api-fetch',
-			),
-			JET_FORM_BUILDER_VERSION,
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 
@@ -347,14 +347,16 @@ class Editor {
 			Plugin::instance()->plugin_dir( 'languages' )
 		);
 
+		$script_asset = require_once jet_form_builder()->plugin_dir( 'assets/build/editor/form.builder.asset.php' );
+
 		do_action( 'jet-form-builder/editor-assets/before', $this, self::EDITOR_HANDLE );
 
 		// todo: refactor with new way of assets loading
 		wp_enqueue_script(
 			self::EDITOR_HANDLE,
 			Plugin::instance()->plugin_url( 'assets/build/editor/form.builder.js' ),
-			array(),
-			JET_FORM_BUILDER_VERSION,
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 

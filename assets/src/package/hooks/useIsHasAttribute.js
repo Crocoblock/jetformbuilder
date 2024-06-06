@@ -1,9 +1,5 @@
-const {
-	      useBlockProps,
-      } = wp.blockEditor;
-const {
-	      useSelect,
-      } = wp.data;
+import { useBlockProps } from '@wordpress/block-editor';
+import { useSelect } from '@wordpress/data';
 
 function useIsHasAttribute( attrName ) {
 	const blockProps = useBlockProps();

@@ -7,6 +7,8 @@ use Jet_Engine\Query_Builder\Queries\Base_Query;
 use Jet_Form_Builder\Actions\Methods\Object_Properties_Collection;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Compatibility\Jet_Engine\Blocks\Check_Mark\Block_Asset;
+use JFB_Compatibility\Jet_Engine\Compatibility\Bricks\Bricks;
+use JFB_Compatibility\Jet_Engine\Compatibility\Elementor\Elementor;
 use JFB_Modules\Option_Field\Blocks\Checkbox;
 use JFB_Modules\Option_Field\Blocks\Radio;
 use Jet_Form_Builder\Classes\Builder_Helper;
@@ -52,6 +54,16 @@ class Jet_Engine implements
 	private $option_query;
 	private $option_type = 'checkbox';
 
+	/**
+	 * @var Elementor
+	 */
+	private $elementor;
+
+	/**
+	 * @var Bricks
+	 */
+	private $bricks;
+
 	public function rep_item_id() {
 		return 'jet-engine';
 	}
@@ -62,10 +74,14 @@ class Jet_Engine implements
 
 	public function on_install() {
 		$this->option_query = new Inner_Module();
+		$this->elementor    = new Elementor();
+		$this->bricks       = new Bricks();
 	}
 
 	public function on_uninstall() {
 		$this->option_query = null;
+		$this->elementor    = null;
+		$this->bricks       = null;
 	}
 
 	public function init_hooks() {
@@ -132,6 +148,14 @@ class Jet_Engine implements
 		}
 
 		$this->option_query->init_hooks();
+
+		if ( jet_form_builder()->has_compat( 'elementor' ) ) {
+			$this->elementor->init_hooks();
+		}
+
+		if ( jet_form_builder()->has_compat( 'bricks' ) ) {
+			$this->bricks->init_hooks();
+		}
 	}
 
 	public function remove_hooks() {

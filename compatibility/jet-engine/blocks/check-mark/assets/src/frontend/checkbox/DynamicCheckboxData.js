@@ -14,7 +14,7 @@ DynamicCheckboxData.prototype.isSupported = function ( node ) {
 	return (
 		CheckboxData.prototype.isSupported.call( this, node ) &&
 		!!node.querySelector(
-			'.jet-form-builder__field-template .wp-block-jet-forms-check-mark input',
+			'.jet-form-builder__field-template .jet-fb-check-mark input',
 		)
 	);
 };

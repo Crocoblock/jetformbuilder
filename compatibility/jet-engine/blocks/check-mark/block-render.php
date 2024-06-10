@@ -15,6 +15,7 @@ $block_attributes->set_default_icon_url( $attributes['defaultImageControl']['url
 $block_attributes->set_checked_icon_url( $attributes['checkedImageControl']['url'] ?? '' );
 $block_attributes->set_width( $attributes['style']['.jet-form-builder-check-mark-img']['width'] ?? '' );
 
+$attributes = $block_attributes;
 /**
  * @var Jet_Engine $module
  * @noinspection PhpUnhandledExceptionInspection

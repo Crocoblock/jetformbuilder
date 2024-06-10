@@ -1,0 +1,72 @@
+.jet-fb-map-field {
+
+    &__search {
+        position: relative;
+        margin: 0 0 10px;
+
+        &-list {
+            list-style: none;
+            display: none;
+            position: absolute;
+            top: calc(100% - 1px);
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            margin: 0;
+            background-color: #fff;
+            border: 1px solid #a9a9a9;
+            border-radius: 0 0 2px 2px;
+            padding: 0;
+
+            &.show {
+                display: block;
+            }
+        }
+
+        &-item,
+        &-no-results {
+            margin: 0;
+            padding: 5px;
+        }
+
+        &-item {
+            cursor: pointer;
+
+            &:hover, &.selected, &:focus {
+                background-color: #f1f1f1;
+            }
+        }
+
+        &-loader {
+            display: none;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #a9a9a9;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+
+            .rtl & {
+                left: 5px;
+                right: auto;
+            }
+
+            &.show {
+                display: block;
+            }
+        }
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+}

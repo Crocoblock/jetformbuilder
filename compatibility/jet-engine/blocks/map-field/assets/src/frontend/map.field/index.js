@@ -2,6 +2,7 @@ import MapFieldData from './input';
 import SignalMapField from './signal';
 import NotEmptyMapRestriction from './NotEmptyMapRestriction';
 import RequiredMapRestriction from './RequiredMapRestriction';
+import './index.pcss';
 
 const { addFilter } = JetPlugins.hooks;
 

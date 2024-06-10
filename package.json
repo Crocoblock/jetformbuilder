@@ -72,6 +72,7 @@
 		"@wordpress/i18n": "^4.51.0",
 		"@wordpress/icons": "^9.43.0",
 		"@wordpress/plugins": "^6.26.0",
+		"@wordpress/url": "^4.0.0",
 		"friendly-challenge": "^0.9.11",
 		"semver": "^7.6.0",
 		"v-click-outside-x": "^4.1.3"

@@ -17,6 +17,10 @@
 		"html": false
 	},
 	"attributes": {
+		"autocomplete": {
+			"type": "boolean",
+			"default": false
+		},
 		"validation": {
 			"type": "object",
 			"default": {}
@@ -101,5 +105,6 @@
 		"jet-forms/repeater-row--default",
 		"jet-forms/repeater-row--current-index"
 	],
-	"viewScript": "jet-fb-compat-jet-engine-map-field"
+	"viewScript": "jet-fb-compat-jet-engine-map-field",
+	"viewStyle": "jet-fb-compat-jet-engine-map-field"
 }

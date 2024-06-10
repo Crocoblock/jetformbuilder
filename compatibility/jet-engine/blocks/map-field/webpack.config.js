@@ -1,15 +1,19 @@
 const WPExtractorPlugin = require(
 	'@wordpress/dependency-extraction-webpack-plugin',
 );
-const path              = require( 'path' );
-const devMode           = !process.argv.join( ':' ).
+
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+
+const path    = require( 'path' );
+const devMode = !process.argv.join( ':' ).
 	includes( '--mode:production' );
 
 module.exports = {
 	context: path.resolve( __dirname, 'assets/src' ),
 	entry: {
 		'editor': './editor/index',
-		'frontend': './frontend/index',
+		'frontend/map': './frontend/map.field/index',
+		'frontend/autocomplete': './frontend/autocomplete/index',
 	},
 	output: {
 		path: path.resolve( __dirname, 'assets/build' ),
@@ -33,9 +37,9 @@ module.exports = {
 				exclude: /node_modules/,
 			},
 			{
-				test: /\.css$/,
+				test: /\.[sp]?css$/,
 				use: [
-					'style-loader',
+					MiniCssExtractPlugin.loader,
 					'css-loader',
 					'postcss-loader',
 				],
@@ -44,5 +48,6 @@ module.exports = {
 	},
 	plugins: [
 		new WPExtractorPlugin(),
+		new MiniCssExtractPlugin(),
 	],
 };

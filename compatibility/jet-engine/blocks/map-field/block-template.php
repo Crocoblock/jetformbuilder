@@ -27,6 +27,15 @@ $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'data-jfb-sync' );
 ?>
 	<div class="jet-fb-map-field">
+		<?php if ( ! empty( $args['autocomplete'] ) ) : ?>
+			<?php wp_enqueue_script( 'jet-fb-compat-jet-engine-map-field-autocomplete' ); ?>
+			<?php wp_enqueue_style( 'jet-fb-compat-jet-engine-map-field-autocomplete' ); ?>
+			<div class="jet-fb-map-field__search">
+				<input type="text" placeholder="<?php esc_html_e( 'Search...', 'jet-form-builder' ); ?>">
+				<div class="jet-fb-map-field__search-loader"></div>
+				<ul class="jet-fb-map-field__search-list"></ul>
+			</div>
+		<?php endif; ?>
 		<input <?php $this->render_attributes_string(); ?> />
 		<input
 			type="hidden"

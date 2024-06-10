@@ -31,7 +31,7 @@ class Block_Asset implements Block_Asset_Interface {
 	public function register_frontend_assets() {
 		/** @var Jet_Engine $compat */
 		$compat       = jet_form_builder()->compat( Jet_Engine::class );
-		$script_asset = require_once $compat->get_dir( 'blocks/map-field/assets/build/frontend.asset.php' );
+		$script_asset = require_once $compat->get_dir( 'blocks/map-field/assets/build/frontend/map.asset.php' );
 
 		if ( true === $script_asset ) {
 			return;
@@ -41,26 +41,53 @@ class Block_Asset implements Block_Asset_Interface {
 
 		array_push(
 			$script_asset['dependencies'],
-			Module::MAIN_SCRIPT_HANDLE,
-			'wp-api-fetch'
+			Module::MAIN_SCRIPT_HANDLE
 		);
 
 		wp_register_script(
 			$handle,
-			$compat->get_url( 'blocks/map-field/assets/build/frontend.js' ),
+			$compat->get_url( 'blocks/map-field/assets/build/frontend/map.js' ),
 			$script_asset['dependencies'],
 			$script_asset['version'],
 			true
+		);
+
+		wp_register_style(
+			$handle,
+			$compat->get_url( 'blocks/map-field/assets/build/frontend/map.css' ),
+			array(),
+			$script_asset['version']
+		);
+
+		$script_asset = require_once $compat->get_dir(
+			'blocks/map-field/assets/build/frontend/autocomplete.asset.php'
+		);
+
+		wp_register_script(
+			$handle . '-autocomplete',
+			$compat->get_url( 'blocks/map-field/assets/build/frontend/autocomplete.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
+		);
+
+		wp_register_style(
+			$handle . '-autocomplete',
+			$compat->get_url( 'blocks/map-field/assets/build/frontend/autocomplete.css' ),
+			array(),
+			$script_asset['version']
 		);
 
 		wp_localize_script(
 			$handle,
 			'JetMapFieldsSettings',
 			array(
-				'api'     => jet_engine()->api->get_route( 'get-map-point-data' ),
-				'apiHash' => jet_engine()->api->get_route( 'get-map-location-hash' ),
-				'nonce'   => wp_create_nonce( 'jet-map-field' ),
-				'i18n'    => array(
+				'api'             => jet_engine()->api->get_route( 'get-map-point-data' ),
+				'apiHash'         => jet_engine()->api->get_route( 'get-map-location-hash' ),
+				'apiLocation'     => jet_engine()->api->get_route( 'get-map-location-data' ),
+				'apiAutocomplete' => jet_engine()->api->get_route( 'get-map-autocomplete-data' ),
+				'nonce'           => wp_create_nonce( 'jet-map-field' ),
+				'i18n'            => array(
 					'loading'   => esc_html__( 'Loading ...', 'jet-form-builder' ),
 					'notFound'  => esc_html__( 'Address not found', 'jet-form-builder' ),
 					'resetBtn'  => esc_html__( 'Reset location', 'jet-form-builder' ),

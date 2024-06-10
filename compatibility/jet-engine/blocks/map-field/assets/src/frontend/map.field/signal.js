@@ -1,4 +1,5 @@
 import { getProvider, isMapField } from './functions';
+import apiFetch from '@wordpress/api-fetch';
 
 const {
 	      BaseSignal,
@@ -76,7 +77,7 @@ function SignalMapField() {
 
 			case 'location_address':
 
-				wp.apiFetch( {
+				apiFetch( {
 					method: 'get',
 					path: JetMapFieldsSettings.api + '?lat=' + position.lat +
 						'&lng=' + position.lng,
@@ -224,17 +225,17 @@ SignalMapField.prototype.updateHashFieldPromise = function ( location ) {
 };
 
 SignalMapField.prototype.render = function () {
-	let template = '<div class="jet-engine-map-field__preview" style="display: none; justify-content: space-between; padding: 0 0 5px; align-items: center;">' +
-		'<address class="jet-engine-map-field__position"></address>' +
-		'<div class="jet-engine-map-field__reset" role="button" style="cursor: pointer; color: #c92c2c; font-weight: 500; flex-shrink: 0;">× ' +
+	let template = '<div class="jet-fb-map-field__preview">' +
+		'<address class="jet-fb-map-field__position"></address>' +
+		'<div class="jet-fb-map-field__reset" role="button">× ' +
 		JetMapFieldsSettings.i18n.resetBtn + '</div>' +
 		'</div>' +
-		'<div class="jet-engine-map-field__frame" style="height: ' +
+		'<div class="jet-fb-map-field__frame" style="height: ' +
 		this.input.fieldSettings.height + 'px; width: 100%;"></div>';
 
 	// map field in repeater
 	if ( this.input.root.parent ) {
-		template += '<div class="jet-engine-map-field__description">' +
+		template += '<div class="jet-fb-map-field__description">' +
 			'<p style="margin-bottom: 0;"><strong>' +
 			JetMapFieldsSettings.i18n.descTitle + ':</strong> <i>' +
 			this.input.fieldSettings.field_prefix + '_lat, ' +
@@ -246,15 +247,9 @@ SignalMapField.prototype.render = function () {
 
 	container.append( toHTML( template ) );
 
-	this.preview  = container.querySelector(
-		'.jet-engine-map-field__preview',
-	);
-	this.position = container.querySelector(
-		'.jet-engine-map-field__position',
-	);
-	this.mapFrame = container.querySelector(
-		'.jet-engine-map-field__frame',
-	);
+	this.preview  = container.querySelector( '.jet-fb-map-field__preview' );
+	this.position = container.querySelector( '.jet-fb-map-field__position' );
+	this.mapFrame = container.querySelector( '.jet-fb-map-field__frame' );
 
 	const provider = getProvider();
 
@@ -287,7 +282,9 @@ SignalMapField.prototype.render = function () {
 		this.input.value.current = provider.getMarkerPosition( marker, true );
 	} );
 
-	const resetBtn = container.querySelector( '.jet-engine-map-field__reset' );
+	const resetBtn = container.querySelector(
+		'.jet-fb-map-field__reset',
+	);
 
 	resetBtn.addEventListener( 'click', () => {
 		this.input.value.current = null;
@@ -295,6 +292,34 @@ SignalMapField.prototype.render = function () {
 
 	// allow to run signal
 	this.lock.current = false;
+};
+
+SignalMapField.prototype.setMarker = function ( { lat, lng } ) {
+	lat = Number( lat );
+	lng = Number( lng );
+
+	this.input.value.current = { lat, lng };
+
+	const provider = getProvider();
+
+	this.removeMarker();
+	this.marker = provider.addMarker( {
+		...this.markerDefaults,
+		position: this.input.value.current,
+		map: this.map,
+	} );
+
+	this.setCenterByPosition();
+};
+
+SignalMapField.prototype.setCenterByPosition = function () {
+	const provider = getProvider();
+
+	provider.setCenterByPosition( {
+		position: this.input.value.current,
+		map: this.map,
+		zoom: 12,
+	} );
 };
 
 export default SignalMapField;

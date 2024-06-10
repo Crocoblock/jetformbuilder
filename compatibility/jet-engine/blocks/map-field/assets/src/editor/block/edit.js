@@ -1,4 +1,15 @@
 import preview from './preview';
+import {
+	PanelBody,
+	RangeControl,
+	TextControl,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
+	ToggleControl,
+} from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import { RawHTML } from '@wordpress/element';
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 
 const {
 	      AdvancedFields,
@@ -20,28 +31,6 @@ const {
 const {
 	      isEmpty,
       } = JetFBActions;
-
-const {
-	      PanelBody,
-	      RangeControl,
-	      TextControl,
-	      __experimentalToggleGroupControl: ToggleGroupControl,
-	      __experimentalToggleGroupControlOption: ToggleGroupControlOption,
-      } = wp.components;
-
-const {
-	      __,
-      } = wp.i18n;
-
-const {
-	      RawHTML,
-	      useMemo,
-      } = wp.element;
-
-const {
-	      InspectorControls,
-	      useBlockProps,
-      } = wp.blockEditor;
 
 const defaults = {
 	height: 300,
@@ -176,6 +165,16 @@ them with a comma: 50.45, 30.53.`,
 				</AdvancedInspectorControl> }
 			</PanelBody>
 			<PanelBody title={ __( 'Map Settings', 'jet-form-builder' ) }>
+				<ToggleControl
+					label={ __(
+						'Show search autocomplete',
+						'jet-form-builder',
+					) }
+					checked={ attributes.autocomplete }
+					onChange={ val => setAttributes( {
+						autocomplete: Boolean( val ),
+					} ) }
+				/>
 				<RangeControl
 					label={ __( 'Height', 'jet-form-builder' ) }
 					value={ attributes.height ?? defaults.height }

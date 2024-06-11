@@ -55,7 +55,7 @@ class Preview {
 			return $content;
 		}
 
-		$form_id = get_the_ID();
+		$form_id         = get_the_ID();
 		$latest_revision = wp_get_latest_revision_id_and_total_count();
 
 		if ( ! empty( $latest_revision['latest_id'] ) ) {

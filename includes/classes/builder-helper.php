@@ -75,11 +75,16 @@ class Builder_Helper {
 
 		wp_enqueue_script( Module::LISTING_OPTIONS_HANDLE );
 
-		$result = sprintf(
-			'<div class="%3$s" data-value="%1$d">%2$s</div>',
-			esc_attr( $object_id ),
-			apply_filters( 'jet-form-builder/custom-template-content', $content, $object_id, $listing_id ),
-			join( ' ', $classes )
+		$result = apply_filters(
+			'jet-form-builder/custom-template-content',
+			sprintf(
+				'<div class="%3$s" data-value="%1$d">%2$s</div>',
+				esc_attr( $object_id ),
+				$content,
+				join( ' ', $classes )
+			),
+			$object_id,
+			$listing_id
 		);
 
 		if ( in_array( $object, array( \WP_User::class, \WP_Post::class, \WP_Term::class ), true ) ) {

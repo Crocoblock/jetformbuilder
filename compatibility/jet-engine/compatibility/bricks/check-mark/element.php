@@ -37,31 +37,26 @@ class Element extends Base {
 		$this->register_jet_control_group(
 			'section_default_image',
 			array(
-				'tab'       => 'content',
-				'label'     => __( 'Control Default', 'jet-form-builder' ),
-				'condition' => array(
-					'controlType' => 'image',
-				),
+				'tab'      => 'content',
+				'title'    => __( 'Control Default', 'jet-form-builder' ),
+				'required' => array( 'controlType', '=', 'image' ),
+
 			)
 		);
 		$this->register_jet_control_group(
 			'section_checked_image',
 			array(
-				'tab'       => 'content',
-				'label'     => __( 'Control Checked', 'jet-form-builder' ),
-				'condition' => array(
-					'controlType' => 'image',
-				),
+				'tab'      => 'content',
+				'title'    => __( 'Control Checked', 'jet-form-builder' ),
+				'required' => array( 'controlType', '=', 'image' ),
 			)
 		);
 		$this->register_jet_control_group(
 			'section_image_style',
 			array(
-				'label'     => __( 'Image', 'jet-form-builder' ),
-				'tab'       => 'style',
-				'condition' => array(
-					'controlType' => 'image',
-				),
+				'title'    => __( 'Image', 'jet-form-builder' ),
+				'tab'      => 'style',
+				'required' => array( 'controlType', '=', 'image' ),
 			)
 		);
 	}

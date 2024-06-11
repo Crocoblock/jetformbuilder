@@ -14,11 +14,11 @@ function SearchBox( searchInput, dropDown ) {
 		this.searchInput.searchNode.value = (
 			this.getDropDown().selected.current.textContent
 		);
-		this.dropDown.setItems( [] );
+		this.getDropDown().hideList();
 	} );
 
 	this.getDropDown().focusTopOutside = () => {
-		this.searchInput.focus();
+		this.getSearchInput().searchNode.focus();
 	};
 
 	this.getSearchInput().searchNode.addEventListener( 'keydown', ( event ) => {
@@ -28,10 +28,32 @@ function SearchBox( searchInput, dropDown ) {
 		}
 	} );
 
-	this.getSearchInput().search.watch( () => {
-		if ( 2 > this.searchInput.search.current?.length ) {
-			this.dropDown.setItems( [] );
+	this.getSearchInput().searchNode.addEventListener( 'focus', ( event ) => {
+		this.getDropDown().showList();
+	} );
+
+	this.getSearchInput().searchNode.addEventListener( 'blur', ( event ) => {
+		if ( event.relatedTarget?.parentElement ===
+			this.getDropDown().listNode
+		) {
+			return;
 		}
+		this.getDropDown().hideList();
+	} );
+
+	this.getDropDown().listNode.addEventListener( 'focusout', ( event ) => {
+		if (
+			// is it a search field?
+			event.relatedTarget === this.getSearchInput().searchNode ||
+			// is it one of the elements in the list?
+			(
+				event.relatedTarget?.parentElement ===
+				this.getDropDown().listNode
+			)
+		) {
+			return;
+		}
+		this.getDropDown().hideList();
 	} );
 }
 

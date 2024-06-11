@@ -33,6 +33,7 @@ function handleMapFieldWithAutocomplete( input ) {
 		),
 	);
 	box.setMapInput( input );
+	box.initHooks();
 
 }
 

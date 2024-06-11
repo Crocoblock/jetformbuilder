@@ -47,7 +47,6 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 
 	public function get_field_settings(): array {
 		return array(
-			'height'       => $this->block_attrs['height'] ?? 300,
 			'format'       => $this->block_attrs['format'] ?? Tools::STRING,
 			'field_prefix' => $this->block_attrs['name'] ?? '',
 			'zoom'         => $this->block_attrs['zoom'] ?? 14,

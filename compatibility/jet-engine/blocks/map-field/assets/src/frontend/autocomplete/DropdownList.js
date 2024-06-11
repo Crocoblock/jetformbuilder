@@ -24,7 +24,17 @@ DropdownList.prototype.setItems = function ( items ) {
 	const liElements = items.map( this.createItem.bind( this ) );
 
 	this.listNode.append( ...liElements );
-	this.listNode.classList.toggle( 'show', Boolean( liElements.length ) );
+};
+
+DropdownList.prototype.showList = function () {
+	if ( !this.listNode.querySelector( 'li' ) ) {
+		return;
+	}
+	this.listNode.classList.add( 'show' );
+};
+
+DropdownList.prototype.hideList = function () {
+	this.listNode.classList.remove( 'show' );
 };
 
 DropdownList.prototype.onSelect = function () {

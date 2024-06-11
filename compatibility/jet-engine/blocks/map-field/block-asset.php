@@ -88,10 +88,8 @@ class Block_Asset implements Block_Asset_Interface {
 				'apiAutocomplete' => jet_engine()->api->get_route( 'get-map-autocomplete-data' ),
 				'nonce'           => wp_create_nonce( 'jet-map-field' ),
 				'i18n'            => array(
-					'loading'   => esc_html__( 'Loading ...', 'jet-form-builder' ),
-					'notFound'  => esc_html__( 'Address not found', 'jet-form-builder' ),
-					'resetBtn'  => esc_html__( 'Reset location', 'jet-form-builder' ),
-					'descTitle' => esc_html__( 'Lat and Lng are separately stored in the following fields', 'jet-form-builder' ),
+					'loading'  => esc_html__( 'Loading ...', 'jet-form-builder' ),
+					'notFound' => esc_html__( 'Address not found', 'jet-form-builder' ),
 				),
 			)
 		);

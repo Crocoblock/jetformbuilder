@@ -29,7 +29,12 @@ SearchInput.prototype.initEventListeners = function () {
 SearchInput.prototype.onChangeSearch = function () {
 	this.abort();
 
+	if ( this.searchNode.value !== this.search.current ) {
+		this.searchNode.value = this.search.current;
+	}
+
 	if ( 2 > this.search.current?.length ) {
+		this.loading.end();
 		return;
 	}
 
@@ -50,12 +55,15 @@ SearchInput.prototype.onChangeSearch = function () {
 			success: !!response.success,
 			response,
 		};
+		this.loading.end();
 	} ).catch( error => {
+		if ( 'AbortError' === error.name ) {
+			return;
+		}
 		this.response.current = {
 			success: false,
 			response: error,
 		};
-	} ).finally( () => {
 		this.loading.end();
 	} );
 };

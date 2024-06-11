@@ -9,7 +9,11 @@ import { addQueryArgs } from '@wordpress/url';
  */
 function SearchAddressBox( searchInput, dropDown ) {
 	SearchBox.call( this, searchInput, dropDown );
+}
 
+SearchAddressBox.prototype = Object.create( SearchBox.prototype );
+
+SearchAddressBox.prototype.initHooks = function () {
 	this.getDropDown().selected.watch( () => {
 		const selectedNode = this.getDropDown().selected.current;
 
@@ -25,6 +29,7 @@ function SearchAddressBox( searchInput, dropDown ) {
 	} );
 
 	this.getSearchInput().loading.watch( () => {
+		console.log( this.getSearchInput().loading.current );
 		this.getLoaderNode().classList.toggle(
 			'show',
 			this.getSearchInput().loading.current,
@@ -39,6 +44,7 @@ function SearchAddressBox( searchInput, dropDown ) {
 		              : [ { label: current.response.html } ];
 
 		this.getDropDown().setItems( items );
+		this.getDropDown().showList();
 	} );
 
 	this.getDropDown().createItem = ( item ) => {
@@ -65,9 +71,15 @@ function SearchAddressBox( searchInput, dropDown ) {
 
 		return element;
 	};
-}
 
-SearchAddressBox.prototype = Object.create( SearchBox.prototype );
+	this.getMapInput().value.watch( () => {
+		if ( this.getMapInput().value.current ) {
+			return;
+		}
+		this.getSearchInput().search.current = '';
+		this.getDropDown().setItems( [] );
+	} );
+}
 
 SearchAddressBox.prototype.setLoaderNode = function ( node ) {
 	this.loader = node;

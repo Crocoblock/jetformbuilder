@@ -4,6 +4,7 @@ import { __ } from '@wordpress/i18n';
 import {
 	BuilderHelpSlotFill,
 	usePluginUseSettings,
+	Description,
 } from 'jet-form-builder-use-form';
 
 function BricksBuilder( { name } ) {
@@ -23,12 +24,12 @@ function BricksBuilder( { name } ) {
 			) }
 		</Button>
 		{ isActive && <BuilderHelpSlotFill.Fill>
-			<p>
+			<Description>
 				{ __(
 					'The form will be automatically added to the end of the selected page',
 					'jet-form-builder',
 				) }
-			</p>
+			</Description>
 		</BuilderHelpSlotFill.Fill> }
 	</>;
 }

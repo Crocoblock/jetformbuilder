@@ -9,11 +9,16 @@ use JFB_Modules\Onboarding\Builders\Exceptions\Use_Form_Exception;
 use JFB_Modules\Onboarding\Builders\Interfaces\Builder_Create_Page_Interface;
 use JFB_Modules\Onboarding\Builders\Interfaces\Builder_Interface;
 use JFB_Modules\Onboarding\Builders\Interfaces\Builder_Update_Page_Interface;
+use JFB_Modules\Onboarding\Module;
 
 class Onboarding_Builder {
 
 	public function init_hooks() {
 		add_action( 'jet-form-builder/use-form', array( $this, 'handle_use' ) );
+		add_action(
+			'jet-form-builder/use-form/register-assets',
+			array( $this, 'block_editor_assets' )
+		);
 	}
 
 	/**
@@ -110,6 +115,30 @@ class Onboarding_Builder {
 		);
 
 		$update_page->set_redirect_url( $document->get_edit_url() );
+	}
+
+	public function block_editor_assets() {
+		/** @var Module $onboarding */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$onboarding = jet_form_builder()->module( 'onboarding' );
+		/** @var Elementor $elementor */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$elementor = jet_form_builder()->compat( 'elementor' );
+
+		$script_asset = require_once $elementor->get_dir( 'assets/build/block.editor.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			$onboarding->get_use_form()->get_handle()
+		);
+
+		wp_enqueue_script(
+			$elementor->get_handle( 'block-editor' ),
+			$elementor->get_url( 'assets/build/block.editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
+		);
 	}
 
 	private function get_elements_with_wrapper( array $elements ): array {

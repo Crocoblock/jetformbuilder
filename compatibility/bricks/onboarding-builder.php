@@ -7,12 +7,17 @@ use JFB_Modules\Onboarding\Builders\Exceptions\Use_Form_Exception;
 use JFB_Modules\Onboarding\Builders\Interfaces\Builder_Create_Page_Interface;
 use JFB_Modules\Onboarding\Builders\Interfaces\Builder_Interface;
 use JFB_Modules\Onboarding\Builders\Interfaces\Builder_Update_Page_Interface;
+use JFB_Modules\Onboarding\Module;
 use JFB_Modules\Security\Csrf\Csrf_Tools;
 
 class Onboarding_Builder {
 
 	public function init_hooks() {
 		add_action( 'jet-form-builder/use-form', array( $this, 'handle_use' ) );
+		add_action(
+			'jet-form-builder/use-form/register-assets',
+			array( $this, 'block_editor_assets' )
+		);
 	}
 
 	/**
@@ -105,6 +110,30 @@ class Onboarding_Builder {
 
 		$update_page->set_redirect_url(
 			\Bricks\Helpers::get_builder_edit_link( $update_page->get_page_id() )
+		);
+	}
+
+	public function block_editor_assets() {
+		/** @var Module $onboarding */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$onboarding = jet_form_builder()->module( 'onboarding' );
+		/** @var Bricks $bricks */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$bricks = jet_form_builder()->compat( 'bricks' );
+
+		$script_asset = require_once $bricks->get_dir( 'assets/build/block.editor.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			$onboarding->get_use_form()->get_handle()
+		);
+
+		wp_enqueue_script(
+			$bricks->get_handle( 'block-editor' ),
+			$bricks->get_url( 'assets/build/block.editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
 		);
 	}
 

@@ -1,14 +1,10 @@
 import { Button } from '@wordpress/components';
 import { copySmall } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-
-const {
-	      BuilderHelpSlotFill,
-      } = JetFBComponents;
-
-const {
-	      usePluginUseSettings,
-      } = JetFBHooks;
+import {
+	BuilderHelpSlotFill,
+	usePluginUseSettings,
+} from 'jet-form-builder-use-form';
 
 function BricksBuilder( { name } ) {
 	const [ settings, updateSettings ] = usePluginUseSettings();

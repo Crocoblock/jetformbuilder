@@ -1,5 +1,5 @@
 import { useDispatch, useSelect } from '@wordpress/data';
-import { store } from '../useFormStore/constants';
+import { store } from '../store/constants';
 
 /**
  * @returns {[Object, Function]}

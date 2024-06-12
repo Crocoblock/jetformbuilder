@@ -4,30 +4,28 @@ import { edit, plus } from '@wordpress/icons';
 import VideoInstructions from './VideoInstructions';
 import SelectPageControl from './SelectPageControl';
 import CreatePageControl from './CreatePageControl';
-
-const {
-	      usePluginUseSettings,
-      } = JetFBHooks;
-
+import usePluginUseSettings from '../hooks/usePluginUseSettings';
+import SecondaryTitle from '../components/SecondaryTitle';
+import Description from '../components/Description';
 
 function SecondPart() {
 	const [ settings, updateSettings ] = usePluginUseSettings();
 
-	return <>
-		<h3>
+	return <Flex direction="column" gap={ 3 }>
+		<SecondaryTitle>
 			{ __(
 				'2. Where you want to use the form?',
 				'jet-form-builder',
 			) }
-		</h3>
-		<p>
+		</SecondaryTitle>
+		<Description>
 			{ __(
 				'Where you want to place the form',
 				'jet-form-builder',
 			) }
-		</p>
-		<Flex direction="column" gap={ 4 }>
-			<Flex justify="flex-start" wrap gap={ 4 }>
+		</Description>
+		<Flex direction="column" gap={ 3 }>
+			<Flex justify="flex-start" wrap gap={ 3 }>
 				<Button
 					onClick={ () => updateSettings(
 						{ pageType: 'select' } ) }
@@ -41,9 +39,9 @@ function SecondPart() {
 						'jet-form-builder',
 					) }
 				</Button>
-				<p style={ { margin: 'unset' } }>
+				<Description>
 					{ __( 'or', 'jet-form-builder' ) }
-				</p>
+				</Description>
 				<Button
 					onClick={ () => updateSettings( { pageType: 'new' } ) }
 					icon={ plus }
@@ -61,7 +59,7 @@ function SecondPart() {
 			{ 'new' === settings.pageType && <CreatePageControl/> }
 			<VideoInstructions/>
 		</Flex>
-	</>;
+	</Flex>;
 }
 
 export default SecondPart;

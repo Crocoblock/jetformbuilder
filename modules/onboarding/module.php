@@ -17,6 +17,7 @@ use Jet_Form_Builder\Blocks;
 use JFB_Modules\Onboarding\Builders\Block_Editor_Builder;
 use JFB_Modules\Onboarding\Builders\No_Builder_Handler;
 use JFB_Modules\Onboarding\Rest_Api\Use_Form_Route\Use_Form_Route;
+use JFB_Modules\Onboarding\Use_Form\Use_Form;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -35,18 +36,14 @@ class Module implements
 	use Base_Module_Dir_Trait;
 
 	/**
-	 * @var Block_Editor_Builder
-	 */
-	private $block_builder;
-	/**
-	 * @var No_Builder_Handler
-	 */
-	private $no_builder;
-
-	/**
 	 * @var Preview
 	 */
 	private $preview;
+
+	/**
+	 * @var Use_Form
+	 */
+	private $use_form;
 
 	public function rep_item_id() {
 		return 'onboarding';
@@ -57,16 +54,14 @@ class Module implements
 	}
 
 	public function on_install() {
-		$this->block_builder = new Block_Editor_Builder();
-		$this->no_builder    = new No_Builder_Handler();
-		$this->preview = new Preview();
+		$this->preview  = new Preview();
+		$this->use_form = new Use_Form();
 	}
 
 	public function on_uninstall() {
 		unset(
-			$this->block_builder,
-			$this->no_builder,
-			$this->preview
+			$this->preview,
+			$this->use_form
 		);
 	}
 
@@ -86,15 +81,12 @@ class Module implements
 			array( $this, 'add_default_fields_to_form' ),
 			99
 		);
-
 		add_action(
-			'rest_api_init',
-			array( $this, 'rest_api_init' )
+			'jet-form-builder/render-preview',
+			array( $this, 'enqueue_frontend_assets' )
 		);
-
-		$this->get_block_builder()->init_hooks();
-		$this->get_no_builder()->init_hooks();
 		$this->get_preview()->init_hooks();
+		$this->get_use_form()->init_hooks();
 	}
 
 	public function remove_hooks() {
@@ -111,15 +103,6 @@ class Module implements
 			array( $this, 'add_default_fields_to_form' ),
 			99
 		);
-		remove_action(
-			'rest_api_init',
-			array( $this, 'rest_api_init' )
-		);
-	}
-
-	public function rest_api_init() {
-		$route = new Use_Form_Route();
-		$route->register();
 	}
 
 	public function editor_assets_before() {
@@ -135,11 +118,41 @@ class Module implements
 	}
 
 	public function editor_assets_package_before() {
+		do_action( 'jet-form-builder/use-form/register-assets' );
+
 		$script_asset = require_once $this->get_dir( 'assets/build/editor.package.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			$this->get_handle( 'use-form' )
+		);
 
 		wp_enqueue_script(
 			$this->get_handle( 'package' ),
 			$this->get_url( 'assets/build/editor.package.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
+		);
+	}
+
+	public function enqueue_frontend_assets() {
+		do_action( 'jet-form-builder/use-form/register-assets' );
+
+		$script_asset = require_once $this->get_dir( 'assets/build/preview.frontend.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			$this->get_handle( 'use-form' ),
+			'jet-plugins'
+		);
+
+		wp_enqueue_style( 'wp-components' );
+		wp_enqueue_style( 'jet-fb-components' );
+
+		wp_enqueue_script(
+			$this->get_handle( 'preview-frontend' ),
+			$this->get_url( 'assets/build/preview.frontend.js' ),
 			$script_asset['dependencies'],
 			$script_asset['version'],
 			true
@@ -154,27 +167,17 @@ class Module implements
 		return $arguments;
 	}
 
-
-
-	public function get_preview_nonce(): Wp_Nonce {
-		return $this->preview_nonce;
-	}
-
-	public function get_block_builder(): Block_Editor_Builder {
-		return $this->block_builder;
-	}
-
-	/**
-	 * @return No_Builder_Handler
-	 */
-	public function get_no_builder(): No_Builder_Handler {
-		return $this->no_builder;
-	}
-
 	/**
 	 * @return Preview
 	 */
 	public function get_preview(): Preview {
 		return $this->preview;
+	}
+
+	/**
+	 * @return Use_Form
+	 */
+	public function get_use_form(): Use_Form {
+		return $this->use_form;
 	}
 }

@@ -1,14 +1,11 @@
 import { Button } from '@wordpress/components';
 import { copySmall } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-
-const {
-	      BuilderHelpSlotFill,
-      } = JetFBComponents;
-
-const {
-	      usePluginUseSettings,
-      } = JetFBHooks;
+import {
+	usePluginUseSettings,
+	BuilderHelpSlotFill,
+	Description
+} from 'jet-form-builder-use-form';
 
 function BlockBuilder( { name } ) {
 	const [ settings, updateSettings ] = usePluginUseSettings();
@@ -27,12 +24,12 @@ function BlockBuilder( { name } ) {
 			) }
 		</Button>
 		{ isActive && <BuilderHelpSlotFill.Fill>
-			<p>
+			<Description>
 				{ __(
 					'The form will be automatically added to the end of the selected page',
 					'jet-form-builder',
 				) }
-			</p>
+			</Description>
 		</BuilderHelpSlotFill.Fill> }
 	</>;
 }

@@ -55,22 +55,12 @@ class Bricks implements
 		add_action( 'init', array( $this, 'register_elements' ), 10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'editor_styles' ) );
 
-		add_action(
-			'jet-form-builder/editor-assets/before',
-			array( $this, 'block_editor_assets' )
-		);
-
 		$this->get_onboarding_builder()->init_hooks();
 	}
 
 	public function remove_hooks() {
 		remove_action( 'init', array( $this, 'register_elements' ) );
 		remove_action( 'wp_enqueue_scripts', array( $this, 'editor_styles' ) );
-
-		remove_action(
-			'jet-form-builder/editor-assets/before',
-			array( $this, 'block_editor_assets' )
-		);
 	}
 
 	public function register_elements() {
@@ -90,18 +80,6 @@ class Bricks implements
 				Plugin::instance()->get_version()
 			);
 		}
-	}
-
-	public function block_editor_assets() {
-		$script_asset = require_once $this->get_dir( 'assets/build/block.editor.asset.php' );
-
-		wp_enqueue_script(
-			$this->get_handle( 'block-editor' ),
-			$this->get_url( 'assets/build/block.editor.js' ),
-			$script_asset['dependencies'],
-			$script_asset['version'],
-			true
-		);
 	}
 
 	/**

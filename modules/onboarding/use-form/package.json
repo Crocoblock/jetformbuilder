@@ -1,0 +1,16 @@
+{
+	"name": "jet-form-builder-use-form",
+	"description": "Use form module for JetFormBuilder Plugin",
+	"version": "3.4.0",
+	"main": "assets/src/index.js",
+	"author": "hug.reed <sanko200065@gmail.com>",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"build": "npx webpack build --mode production",
+		"dev": "npx webpack build --mode development -w"
+	},
+	"dependencies": {
+		"jet-form-builder-components": "*"
+	}
+}

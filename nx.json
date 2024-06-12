@@ -2,6 +2,12 @@
 	"extends": "nx/presets/npm.json",
 	"$schema": "./node_modules/nx/schemas/nx-schema.json",
 	"targetDefaults": {
+		"dev": {
+			"dependsOn": [
+				"^build"
+			],
+			"cache": true
+		},
 		"build": {
 			"dependsOn": [
 				"^build"

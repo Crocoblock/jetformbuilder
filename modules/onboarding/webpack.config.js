@@ -10,6 +10,8 @@ module.exports = {
 	entry: {
 		'editor': './editor/index.js',
 		'editor.package': './editor-package/index.js',
+		'block.builder': './blockBuilder/index.js',
+		'preview.frontend': './previewFrontend/index.js',
 	},
 	output: {
 		path: path.resolve( __dirname, 'assets/build' ),
@@ -46,4 +48,8 @@ module.exports = {
 	plugins: [
 		new WPExtractorPlugin(),
 	],
+	externalsType: 'window',
+	externals: {
+		'jet-form-builder-use-form': [ 'jfb', 'useForm' ],
+	},
 };

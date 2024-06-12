@@ -1,5 +1,4 @@
 import patternsStore from './patternsStore';
-import useFormStore from './useFormStore';
 import constants from './patternsStore/constants';
 import insertPostPattern from './patterns/insert.post.js';
 import defaultPattern from './patterns/default.js';
@@ -13,11 +12,8 @@ import newsletterPattern from './patterns/newsletter.js';
 import usePattern from './hooks/usePattern';
 import PatternInserterButton from './components/PatternInserterButton';
 import { register, dispatch } from '@wordpress/data';
-import BuilderHelpSlotFill from './components/BuilderHelpSlotFill';
-import usePluginUseSettings from './hooks/usePluginUseSettings';
 
 register( patternsStore );
-register( useFormStore );
 
 dispatch( constants.store ).register( [
 	defaultPattern,
@@ -36,7 +32,6 @@ window.JetFBComponents = {
 		window.JetFBComponents ?? {}
 	),
 	PatternInserterButton,
-	BuilderHelpSlotFill,
 };
 
 window.JetFBHooks = {
@@ -44,5 +39,4 @@ window.JetFBHooks = {
 		window.JetFBHooks ?? {}
 	),
 	usePattern,
-	usePluginUseSettings,
 };

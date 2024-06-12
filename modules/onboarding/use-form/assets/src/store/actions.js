@@ -28,30 +28,30 @@ export function updateSettings( settings ) {
 	};
 }
 
-export const useForm = () => async ( { dispatch, select } ) => {
-	const pageType = select.getSetting( 'pageType' );
+export const useForm = ( props ) =>
+	async ( { dispatch, select } ) => {
+		const pageType = select.getSetting( 'pageType' );
 
-	const response = 'new' === pageType
-	                 ? await dispatch.createNewPage()
-	                 : await dispatch.updateSelectedPage();
+		const response = 'new' === pageType
+		                 ? await dispatch.createNewPage( props )
+		                 : await dispatch.updateSelectedPage( props );
 
-	if ( !response?.redirect ) {
-		return;
-	}
+		if ( !response?.redirect ) {
+			return;
+		}
 
-	window.open( response.redirect );
-};
+		window.open( response.redirect );
+	};
 
-export const createNewPage      = () => async ( {
+export const createNewPage      = ( {
+	formId = 0,
+	shouldUpdateForm = true,
+} ) => async ( {
 	dispatch,
 	select,
-	registry,
 } ) => {
 	const pageTitle = select.getSetting( 'pageTitle' );
 	const builder   = select.getSetting( 'builder' );
-	const formId    = registry.select(
-		'core/editor',
-	).getEditedPostAttribute( 'id' );
 
 	const options = {
 		path: `jet-form-builder/v1/use-form/${ formId }`,
@@ -62,18 +62,21 @@ export const createNewPage      = () => async ( {
 		},
 	};
 
+	if ( shouldUpdateForm ) {
+		dispatch.maybeSaveForm();
+	}
+
 	return await dispatch.makeFetch( options );
 };
-export const updateSelectedPage = () => async ( {
+export const updateSelectedPage = ( {
+	formId = 0,
+	shouldUpdateForm = true,
+} ) => async ( {
 	dispatch,
 	select,
-	registry,
 } ) => {
 	const pageId  = select.getSetting( 'pageId' );
 	const builder = select.getSetting( 'builder' );
-	const formId  = registry.select(
-		'core/editor',
-	).getEditedPostAttribute( 'id' );
 
 	const options = {
 		path: `jet-form-builder/v1/use-form/${ formId }`,
@@ -84,12 +87,14 @@ export const updateSelectedPage = () => async ( {
 		},
 	};
 
+	if ( shouldUpdateForm ) {
+		dispatch.maybeSaveForm();
+	}
+
 	return await dispatch.makeFetch( options );
 };
 
 export const makeFetch = ( options ) => async ( { dispatch, registry } ) => {
-	dispatch.maybeSaveForm();
-
 	dispatch.startExecution();
 	let response;
 

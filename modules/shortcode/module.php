@@ -75,11 +75,10 @@ final class Module implements
 			10,
 			2
 		);
-
 		add_action(
-			'jet-form-builder/editor-assets/before',
+			'jet-form-builder/use-form/register-assets',
 			array( $this, 'block_editor_assets' ),
-			21
+			20
 		);
 
 		$this->get_onboarding_builder()->init_hooks();
@@ -98,9 +97,9 @@ final class Module implements
 			array( $this, 'add_admin_column_content' )
 		);
 		remove_action(
-			'jet-form-builder/editor-assets/before',
+			'jet-form-builder/use-form/register-assets',
 			array( $this, 'block_editor_assets' ),
-			21
+			20
 		);
 	}
 
@@ -170,7 +169,15 @@ final class Module implements
 	}
 
 	public function block_editor_assets() {
+		/** @var \JFB_Modules\Onboarding\Module $onboarding */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$onboarding   = jet_form_builder()->module( 'onboarding' );
 		$script_asset = require_once $this->get_dir( 'assets/build/block.editor.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			$onboarding->get_use_form()->get_handle()
+		);
 
 		wp_enqueue_script(
 			$this->get_handle( 'block-editor' ),

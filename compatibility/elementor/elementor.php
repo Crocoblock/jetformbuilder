@@ -61,11 +61,6 @@ class Elementor implements
 		add_action( 'elementor/preview/enqueue_styles', array( $this, 'enqueue_form_styles' ) );
 		add_action( 'elementor/elements/categories_registered', array( $this, 'register_category' ) );
 
-		add_action(
-			'jet-form-builder/editor-assets/before',
-			array( $this, 'block_editor_assets' )
-		);
-
 		$this->get_onboarding_builder()->init_hooks();
 
 		// compatibility with 3.7
@@ -85,11 +80,6 @@ class Elementor implements
 		remove_action( 'elementor/preview/enqueue_scripts', array( $this, 'enqueue_form_scripts' ), 9 );
 		remove_action( 'elementor/preview/enqueue_styles', array( $this, 'enqueue_form_styles' ) );
 		remove_action( 'elementor/elements/categories_registered', array( $this, 'register_category' ) );
-
-		remove_action(
-			'jet-form-builder/editor-assets/before',
-			array( $this, 'block_editor_assets' )
-		);
 
 		// compatibility with 3.7
 		if (
@@ -174,18 +164,6 @@ class Elementor implements
 
 	public function enqueue_form_styles() {
 		wp_enqueue_style( 'jet-form-builder-frontend' );
-	}
-
-	public function block_editor_assets() {
-		$script_asset = require_once $this->get_dir( 'assets/build/block.editor.asset.php' );
-
-		wp_enqueue_script(
-			$this->get_handle( 'block-editor' ),
-			$this->get_url( 'assets/build/block.editor.js' ),
-			$script_asset['dependencies'],
-			$script_asset['version'],
-			true
-		);
 	}
 
 	/**

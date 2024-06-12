@@ -5,15 +5,10 @@ import {
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useEntityRecords } from '@wordpress/core-data';
-import { useState } from '@wordpress/element';
 import UseFormButton from './UseFormButton';
 import { useDebouncedInput } from '@wordpress/compose';
-
-const { Label } = JetFBComponents;
-
-const {
-	      usePluginUseSettings,
-      } = JetFBHooks;
+import usePluginUseSettings from '../hooks/usePluginUseSettings';
+import { Label } from 'jet-form-builder-components';
 
 function SelectPageControl() {
 	const [ settings, updateSettings ] = usePluginUseSettings();

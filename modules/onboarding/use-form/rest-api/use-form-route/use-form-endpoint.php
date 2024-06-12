@@ -1,6 +1,6 @@
 <?php
 
-namespace JFB_Modules\Onboarding\Rest_Api\Use_Form_Route;
+namespace JFB_Modules\Onboarding\Use_Form\Rest_Api\Use_Form_Route;
 
 use JFB_Components\Rest_Api\Interfaces\Endpoint_Interface;
 use JFB_Modules\Onboarding\Builders\Builder_Create_Page;

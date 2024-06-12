@@ -55,6 +55,10 @@ class Preview {
 			return $content;
 		}
 
+		if ( ! did_action( 'jet-form-builder/render-preview' ) ) {
+			do_action( 'jet-form-builder/render-preview' );
+		}
+
 		$form_id         = get_the_ID();
 		$latest_revision = wp_get_latest_revision_id_and_total_count();
 

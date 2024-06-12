@@ -1,15 +1,8 @@
-import { useSelect } from '@wordpress/data';
-
-const {
-	      useMetaState,
-      } = JetFBHooks;
+import { useContext } from '@wordpress/element';
+import { FormAttributesContext } from 'jet-form-builder-use-form';
 
 function useShortcodeArgumentsString() {
-	const formId = useSelect( select => (
-		select( 'core/editor' ).getEditedPostAttribute( 'id' )
-	), [] );
-
-	const [ args ] = useMetaState( '_jf_args' );
+	const { formId, args } = useContext( FormAttributesContext );
 
 	const preparedArgs = Object.entries( {
 		form_id: formId,

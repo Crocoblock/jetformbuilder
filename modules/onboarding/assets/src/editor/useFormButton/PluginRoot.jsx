@@ -1,27 +1,26 @@
 import { PluginSidebar } from '@wordpress/edit-post';
 import { next } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
+import { useDispatch, useSelect } from '@wordpress/data';
 import {
-	Modal,
-} from '@wordpress/components';
-import { useDispatch } from '@wordpress/data';
-import FirstPart from './FirstPart';
-import SecondPart from './SecondPart/SecondPart';
-import { styled } from '@linaria/react';
+	ResponsiveModal,
+	UseFormRoot,
+	FormAttributesContext,
+} from 'jet-form-builder-use-form';
+import { store } from '@wordpress/editor';
 
-const ResponsiveModal = styled( Modal )`
-
-    @media (min-width: 900px) {
-        width: 70vw;
-    }
-	
-    @media (min-width: 1200px) {
-        width: 55vw;
-    }
-`;
+const {
+	      useMetaState,
+      } = JetFBHooks;
 
 function PluginRoot() {
 	const { closeGeneralSidebar } = useDispatch( 'core/edit-post' );
+
+	const formId = useSelect( select => (
+		select( store ).getEditedPostAttribute( 'id' )
+	), [] );
+
+	const [ args ] = useMetaState( '_jf_args' );
 
 	return <PluginSidebar
 		icon={ next }
@@ -32,8 +31,11 @@ function PluginRoot() {
 			title={ __( 'Use the form', 'jet-form-builder' ) }
 			onRequestClose={ closeGeneralSidebar }
 		>
-			<FirstPart/>
-			<SecondPart/>
+			<FormAttributesContext.Provider
+				value={ { formId, args, shouldUpdateForm: true } }
+			>
+				<UseFormRoot/>
+			</FormAttributesContext.Provider>
 		</ResponsiveModal>
 	</PluginSidebar>;
 }

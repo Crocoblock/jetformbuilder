@@ -1,9 +1,16 @@
 import { useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Button } from '@wordpress/components';
+import { useContext } from '@wordpress/element';
+import FormAttributesContext from '../context/FormAttributesContext';
 
 function UseFormButton( { disabled = false } ) {
 	const { useForm } = useDispatch( 'jet-forms/use-form' );
+
+	const {
+		      formId,
+		      shouldUpdateForm,
+	      } = useContext( FormAttributesContext );
 
 	const isExecuting = useSelect( select => (
 		select( 'jet-forms/use-form' ).isExecuting()
@@ -11,7 +18,7 @@ function UseFormButton( { disabled = false } ) {
 
 	return <Button
 		variant="primary"
-		onClick={ useForm }
+		onClick={ () => useForm( { formId, shouldUpdateForm } ) }
 		isBusy={ isExecuting }
 		disabled={ isExecuting || disabled }
 	>

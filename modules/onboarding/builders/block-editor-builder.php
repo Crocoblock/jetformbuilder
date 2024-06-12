@@ -6,11 +6,17 @@ use JFB_Modules\Onboarding\Builders\Exceptions\Use_Form_Exception;
 use JFB_Modules\Onboarding\Builders\Interfaces\Builder_Create_Page_Interface;
 use JFB_Modules\Onboarding\Builders\Interfaces\Builder_Interface;
 use JFB_Modules\Onboarding\Builders\Interfaces\Builder_Update_Page_Interface;
+use JFB_Modules\Onboarding\Module;
 
 class Block_Editor_Builder {
 
 	public function init_hooks() {
 		add_action( 'jet-form-builder/use-form', array( $this, 'handle_use' ) );
+		add_action(
+			'jet-form-builder/use-form/register-assets',
+			array( $this, 'enqueue_builder_assets' ),
+			15
+		);
 	}
 
 	/**
@@ -90,6 +96,26 @@ class Block_Editor_Builder {
 
 		$update_page->set_redirect_url(
 			get_edit_post_link( $update_page->get_page_id(), false )
+		);
+	}
+
+	public function enqueue_builder_assets() {
+		/** @var Module $onboarding */
+		/** @noinspection PhpUnhandledExceptionInspection */
+		$onboarding   = jet_form_builder()->module( 'onboarding' );
+		$script_asset = require_once $onboarding->get_dir( 'assets/build/block.builder.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			$onboarding->get_use_form()->get_handle()
+		);
+
+		wp_enqueue_script(
+			$onboarding->get_handle( 'block-builder' ),
+			$onboarding->get_url( 'assets/build/block.builder.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
 		);
 	}
 }

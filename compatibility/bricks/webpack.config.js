@@ -46,4 +46,8 @@ module.exports = {
 		new WPExtractorPlugin(),
 		new MiniCssExtractPlugin(),
 	],
+	externalsType: 'window',
+	externals: {
+		'jet-form-builder-use-form': [ 'jfb', 'useForm' ],
+	},
 };

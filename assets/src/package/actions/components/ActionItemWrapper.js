@@ -1,12 +1,11 @@
 import useLoopedAction from '../hooks/useLoopedAction';
+import { Card } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
+import { styled } from '@linaria/react';
 
-const {
-	      useSelect,
-      } = wp.data;
-
-const {
-	      Card,
-      } = wp.components;
+const MarginLessCard = styled( Card )`
+    margin-bottom: unset;
+`;
 
 function ActionItemWrapper( props = {} ) {
 	const { action } = useLoopedAction();
@@ -28,10 +27,10 @@ function ActionItemWrapper( props = {} ) {
 		wrapper.push( 'is-current' );
 	}
 
-	return <Card
+	return <MarginLessCard
 		elevation={ 2 }
 		size={ 'extraSmall' }
-		className={ wrapper }
+		className={ wrapper.join( ' ' ) }
 		{ ...props }
 	/>;
 }

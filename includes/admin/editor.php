@@ -321,6 +321,11 @@ class Editor {
 
 		do_action( 'jet-form-builder/editor-package/before', $this, self::EDITOR_PACKAGE_HANDLE );
 
+		array_push(
+			$script_asset['dependencies'],
+			'jet-fb-components'
+		);
+
 		wp_enqueue_script(
 			self::EDITOR_PACKAGE_HANDLE,
 			Plugin::instance()->plugin_url( 'assets/build/editor/package.js' ),

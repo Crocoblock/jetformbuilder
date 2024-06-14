@@ -9,7 +9,7 @@ const {
 	      EditActionSettingsButton,
 	      EditActionConditionsButton,
 	      ActionItemWrapper,
-	      SelectActionsControl,
+	      ActionTitle,
 	      ActionItemMoreButton,
 	      ActionItemDetails,
       } = JetFBComponents;
@@ -45,9 +45,7 @@ const ActionItemFooterModifier = ( DefaultItem ) => () => {
 
 	return <ActionItemWrapper>
 		<CardBody>
-			<div>
-				<SelectActionsControl/>
-			</div>
+			<ActionTitle/>
 			<Flex style={ { marginTop: '0.5em' } } justify="space-between">
 				<EditActionSettingsButton/>
 				<EditActionConditionsButton/>

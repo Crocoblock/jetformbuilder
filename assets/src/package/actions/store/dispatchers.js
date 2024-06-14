@@ -83,18 +83,30 @@ export default {
 			},
 		};
 	},
-	[ constants.addCallback ]: ( state, action ) => (
-		{
-			...state,
-			callbacks: {
-				...state.callbacks,
-				[ action.actionType ]: withActionLocalizeScript(
-					action.actionType,
-					action.callback,
-				),
-			},
+	[ constants.registerAction ]: ( state, action ) => {
+		const { actionSettings } = action;
+
+		// backward compatibility
+		if ( !actionSettings.hasOwnProperty( 'label' ) ) {
+			actionSettings.label = window.jetFormActionTypes.find( action => (
+				action.id === actionSettings.type
+			) )?.name;
 		}
-	),
+
+		return {
+			...state,
+			types: [
+				...state.types,
+				{
+					...actionSettings,
+					edit: withActionLocalizeScript(
+						actionSettings.type,
+						actionSettings.edit,
+					),
+				},
+			],
+		};
+	},
 	[ constants.addDetail ]: ( state, action ) => (
 		{
 			...state,
@@ -122,19 +134,20 @@ export default {
 		};
 	},
 	[ constants.editAction ]: ( state, action ) => {
-		const list = state.list.map( current => {
-			return current.value !== action.actionType
+		const { actionSettings } = action;
+
+		const types = state.types.map( current => {
+			return current.value !== actionSettings.type
 			       ? current
 			       : {
 					...current,
-					...action.replace,
-					value: action.actionType, // .value should not changed
+					...actionSettings,
 				};
 		} );
 
 		return {
 			...state,
-			list,
+			types,
 		};
 	},
 	[ constants.openActionSettings ]: ( state, action ) => {

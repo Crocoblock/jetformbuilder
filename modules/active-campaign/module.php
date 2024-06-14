@@ -62,8 +62,7 @@ final class Module implements
 		add_action( 'jet-form-builder/actions/register', array( $this, 'add_action' ) );
 		add_action(
 			'jet-form-builder/editor-assets/before',
-			array( $this, 'editor_assets' ),
-			0
+			array( $this, 'editor_assets' )
 		);
 		add_action(
 			'jet-fb/admin-pages/before-assets/jfb-settings',
@@ -77,8 +76,7 @@ final class Module implements
 		remove_action( 'jet-form-builder/actions/register', array( $this, 'add_action' ) );
 		remove_action(
 			'jet-form-builder/editor-assets/before',
-			array( $this, 'editor_assets' ),
-			0
+			array( $this, 'editor_assets' )
 		);
 		remove_action(
 			'jet-fb/admin-pages/before-assets/jfb-settings',

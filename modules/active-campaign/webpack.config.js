@@ -18,7 +18,7 @@ module.exports = {
 	},
 	devtool: devMode ? 'inline-cheap-module-source-map' : false,
 	resolve: {
-		extensions: [ '.js', '.vue' ],
+		extensions: [ '.js', '.vue', '.jsx' ],
 	},
 	module: {
 		rules: [

@@ -1,3 +1,6 @@
+import { useSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
+
 const {
 	      ActionModal,
 	      ActionModalHeaderSlotFill,
@@ -10,17 +13,10 @@ const {
 	      useUpdateCurrentActionMeta,
       } = JetFBHooks;
 
-const {
-	      useSelect,
-      } = wp.data;
-
-const {
-	      __,
-      } = wp.i18n;
-
 function EditSettingsModal() {
 	const isSettingsModal = useSelect(
 		select => select( 'jet-forms/actions' ).isSettingsModal(),
+		[],
 	);
 
 	const ActionCallback                     = useActionCallback();

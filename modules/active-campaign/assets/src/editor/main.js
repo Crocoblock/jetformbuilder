@@ -1,7 +1,4 @@
-import ActiveCampaignAction from './ActiveCampaignAction';
+import activeCampaign from './activeCampaign';
+import { dispatch } from '@wordpress/data';
 
-const {
-	      addAction,
-      } = JetFBActions;
-
-addAction( 'active_campaign', ActiveCampaignAction );
+dispatch( 'jet-forms/actions' ).registerAction( activeCampaign );

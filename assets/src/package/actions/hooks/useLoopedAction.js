@@ -1,8 +1,5 @@
 import ActionListItemContext from '../context/ActionListItemContext';
-
-const {
-	      useContext,
-      } = wp.element;
+import { useContext } from '@wordpress/element';
 
 function useLoopedAction() {
 	return useContext( ActionListItemContext );

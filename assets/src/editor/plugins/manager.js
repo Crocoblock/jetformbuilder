@@ -6,21 +6,16 @@ import limitAddon from './limit-addon';
 import scheduleAddon from './schedule-addon';
 import validation from './validation';
 import './rating-popover';
-
-const {
-	      applyFilters,
-	      addFilter,
-      } = wp.hooks;
-
-const {
-	      registerPlugin,
-	      getPlugin,
-	      unregisterPlugin,
-      } = wp.plugins;
-
-const {
-	      PluginDocumentSettingPanel,
-      } = wp.editPost;
+import {
+	applyFilters,
+	addFilter,
+} from '@wordpress/hooks';
+import {
+	registerPlugin,
+	getPlugin,
+	unregisterPlugin,
+} from '@wordpress/plugins';
+import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 
 const withPluginProps = ( settings, base ) => {
 	const PluginRender = settings.render;
@@ -56,9 +51,9 @@ if ( !JetFormEditorData.isActivePro ) {
 export default function RegisterPlugins() {
 	const sortedPlugins = [];
 	const jfbPlugins    = applyFilters( 'jet.fb.register.plugins', [
+		actions,
 		args,
 		validation,
-		actions,
 		preset,
 		messages,
 	] );

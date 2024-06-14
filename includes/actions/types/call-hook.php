@@ -23,14 +23,6 @@ class Call_Hook extends Base {
 		return 'call_hook';
 	}
 
-	public function action_attributes() {
-		return array(
-			'hook_name' => array(
-				'default' => '',
-			),
-		);
-	}
-
 	/**
 	 * Run a hook notification
 	 *
@@ -71,16 +63,6 @@ class Call_Hook extends Base {
 			true,
 			$request,
 			$handler
-		);
-	}
-
-	public function self_script_name() {
-		return 'jetFormCallHookData';
-	}
-
-	public function editor_labels() {
-		return array(
-			'hook_name' => __( 'Hook Name:', 'jet-form-builder' ),
 		);
 	}
 

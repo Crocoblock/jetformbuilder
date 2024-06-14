@@ -11,4 +11,5 @@ export default {
 	addComputedField: 'ADD_COMPUTED_FIELD',
 	editAction: 'EDIT_ACTION',
 	openActionSettings: 'OPEN_ACTION_SETTINGS',
+	registerAction: 'REGISTER_ACTION',
 };

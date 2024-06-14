@@ -54,11 +54,42 @@ export default {
 			item,
 		};
 	},
+	registerActions: ( types ) => ( { dispatch } ) => {
+		for ( const actionType of types ) {
+			dispatch.registerAction( actionType );
+		}
+	},
+	registerAction: ( actionSettings ) => ( { select, dispatch } ) => {
+		const action = select.getAction( actionSettings.type );
+
+		if ( !action ) {
+			dispatch.addAction( actionSettings );
+
+			return;
+		}
+
+		dispatch.addAction( actionSettings );
+	},
+	addAction( actionSettings ) {
+		return {
+			type: constants.registerAction,
+			actionSettings,
+		};
+	},
+	/**
+	 * @deprecated 3.4.0. Use registerAction instead of this
+	 *
+	 * @param actionType
+	 * @param callback
+	 * @returns {{actionSettings: {edit, type}, type: string}}
+	 */
 	addCallback( actionType, callback ) {
 		return {
-			type: constants.addCallback,
-			actionType,
-			callback,
+			type: constants.registerAction,
+			actionSettings: {
+				type: actionType,
+				edit: callback,
+			},
 		};
 	},
 	addDetail( actionType, item ) {
@@ -75,11 +106,20 @@ export default {
 			settings,
 		};
 	},
+	/**
+	 * @deprecated 3.4.0. Use registerAction instead of this
+	 *
+	 * @param actionType
+	 * @param replace
+	 * @returns {{actionSettings: (*&{type}), type: string}}
+	 */
 	editAction( actionType, replace ) {
 		return {
 			type: constants.editAction,
-			actionType,
-			replace,
+			actionSettings: {
+				type: actionType,
+				...replace,
+			},
 		};
 	},
 	openActionSettings( { item, index } ) {

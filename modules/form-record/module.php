@@ -106,6 +106,11 @@ final class Module implements
 			'jet-form-builder/admin/action-pages',
 			array( $this, 'add_action_admin_pages' )
 		);
+		add_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'editor_assets' ),
+			0
+		);
 	}
 
 	public function remove_hooks() {
@@ -143,6 +148,11 @@ final class Module implements
 		remove_filter(
 			'jet-form-builder/admin/action-pages',
 			array( $this, 'add_action_admin_pages' )
+		);
+		remove_action(
+			'jet-form-builder/editor-assets/before',
+			array( $this, 'editor_assets' ),
+			0
 		);
 	}
 
@@ -226,6 +236,18 @@ final class Module implements
 		} catch ( Handler_Exception $exception ) {
 			// do nothing
 		}
+	}
+
+	public function editor_assets() {
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+
+		wp_enqueue_script(
+			$this->get_handle(),
+			$this->get_url( 'assets/build/editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
+		);
 	}
 
 	public function get_rest(): Records_Rest_Controller {

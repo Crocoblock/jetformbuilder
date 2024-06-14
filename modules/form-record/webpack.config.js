@@ -9,6 +9,7 @@ const devMode             = !process.argv.join( ':' ).
 module.exports = {
 	context: path.resolve( __dirname, 'assets/src' ),
 	entry: {
+		'editor': './editor/index',
 		'admin/pages/jfb-records': './admin/pages/jfb-records/index',
 		'admin/pages/jfb-records-single': './admin/pages/jfb-records-single/index',
 		'admin/pages/record-print': './admin/pages/record-print/index',
@@ -19,7 +20,7 @@ module.exports = {
 	},
 	devtool: devMode ? 'inline-cheap-module-source-map' : false,
 	resolve: {
-		extensions: [ '.js', '.vue' ]
+		extensions: [ '.js', '.vue', '.jsx' ],
 	},
 	module: {
 		rules: [

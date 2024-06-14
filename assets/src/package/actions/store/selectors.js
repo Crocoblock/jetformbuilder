@@ -11,29 +11,23 @@ const self = {
 		       ? state.loadingState[ actionIndex ]
 		       : { ...DEFAULT_LOADING_STATE };
 	},
-	getCallback( state, actionType ) {
-		return state.callbacks[ actionType ];
-	},
-	getDetail( state, actionType ) {
-		return state.details[ actionType ];
-	},
 	getComputedFields( state ) {
 		return state.computedFields;
-	},
-	getActionsList( state ) {
-		return state.list;
 	},
 	getActionsMap( state ) {
 		const map = {};
 
-		for ( const listElement of state.list ) {
-			map[ listElement.value ] = listElement;
+		for ( const listElement of state.types ) {
+			map[ listElement.type ] = listElement;
 		}
 
 		return map;
 	},
-	getAction( state, type ) {
-		return state.list.find( ( { value } ) => value === type );
+	getActions( state ) {
+		return state.types;
+	},
+	getAction( state, actionType ) {
+		return state.types.find( ( { type } ) => type === actionType );
 	},
 };
 
@@ -51,10 +45,10 @@ export default {
 	getCurrentAction( state ) {
 		return state.currentAction;
 	},
-	getCurrentCallback( state ) {
+	getCurrentEdit( state ) {
 		const type = state.currentAction?.type ?? false;
 
-		return self.getCallback( state, type );
+		return self.getAction( state, type )?.edit;
 	},
 	getCurrentDetail( state ) {
 		const type = state.currentAction?.type ?? false;

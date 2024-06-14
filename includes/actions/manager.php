@@ -34,12 +34,10 @@ class Manager {
 			new Types\Send_Email(),
 			new Types\Insert_Post(),
 			new Types\Register_User(),
-			new Types\Fake_User_Login(),
 			new Types\Update_User(),
 			new Types\Call_Hook(),
 			new Types\Call_Webhook(),
 			new Types\Redirect_To_Page(),
-			new Types\Fake_Wc_Add_To_Cart(),
 			new Types\Mailchimp(),
 			new Types\Getresponse(),
 		);

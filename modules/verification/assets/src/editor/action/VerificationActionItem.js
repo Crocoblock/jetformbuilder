@@ -5,7 +5,7 @@ const {
 const {
 	      EditActionSettingsButton,
 	      ActionItemWrapper,
-	      SelectActionsControl,
+	      ActionTitle,
 	      ActionItemMoreButton,
       } = JetFBComponents;
 
@@ -23,9 +23,7 @@ const VerificationActionItem = ( DefaultItem ) => () => {
 
 	return <ActionItemWrapper>
 		<CardBody>
-			<div>
-				<SelectActionsControl/>
-			</div>
+			<ActionTitle/>
 			<Flex style={ { marginTop: '0.5em' } } justify="space-between">
 				<EditActionSettingsButton/>
 				<ActionItemMoreButton exclude={ [ 'up', 'down', 'off-on' ] }/>

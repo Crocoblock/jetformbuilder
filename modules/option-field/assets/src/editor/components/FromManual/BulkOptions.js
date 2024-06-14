@@ -1,38 +1,26 @@
 import toBulk from './toBulk';
 import fromBulk from './fromBulk';
-
-const {
-	      __,
-      } = wp.i18n;
-
-const {
-	      useState,
-	      useEffect,
-      } = wp.element;
-
-let {
-	    TextareaControl,
-	    SelectControl,
-	    Popover,
-	    ButtonGroup,
-	    Button,
-	    __experimentalSpacer,
-	    Spacer,
-	    Flex,
-    } = wp.components;
-
-Spacer = (
-	Spacer || __experimentalSpacer
-);
+import {
+	useTriggerPopover,
+	PopoverStandard,
+	Help,
+} from 'jet-form-builder-components';
+import { __ } from '@wordpress/i18n';
+import { useState, useEffect } from '@wordpress/element';
+import {
+	TextareaControl,
+	SelectControl,
+	ButtonGroup,
+	Button,
+	Flex,
+} from '@wordpress/components';
 
 const {
 	      useScopedAttributesContext,
-	      useTriggerPopover,
       } = JetFBHooks;
 
 const {
 	      ActionModalFooterSlotFill,
-	      BaseHelp,
       } = JetFBComponents;
 
 const {
@@ -101,7 +89,7 @@ function BulkOptions( { setModalContent } ) {
 			onChange={ val => setBulk( toBulk( val ) ) }
 			rows={ 16 }
 		/>
-		<BaseHelp>
+		<Help>
 			{ __(
 				`You can specify a different value and value 
 for the calculator field by separating them with a colon character`,
@@ -110,7 +98,7 @@ for the calculator field by separating them with a colon character`,
 			<br/>
 			<br/>
 			Book #1 : book_1 : 100
-		</BaseHelp>
+		</Help>
 		<ModalFooterFill>
 			<ButtonGroup
 				className="jet-form-edit-modal__actions"
@@ -144,83 +132,70 @@ for the calculator field by separating them with a colon character`,
 			</ButtonGroup>
 		</ModalFooterFill>
 		{ showPopoverAdd && (
-			<Popover
+			<PopoverStandard
 				position={ 'top-start' }
 				noArrow={ false }
 				isAlternate
 				{ ...popoverPropsAdd }
 			>
-				<div
-					style={ {
-						padding: '0.5em',
-						width: 'max-content',
-					} }
-				>
-					<span>{ __(
-						'Are you sure you want to add new options?',
-						'jet-form-builder',
-					) }</span>
-					<Flex justify="center" gap={ 1 }>
-						<Button
-							isLink
-							onClick={ () => {
-								addOptions();
-								setModalContent( false );
-							} }
-						>
-							{ __( 'Yes', 'jet-form-builder' ) }
-						</Button>
-						{ ' / ' }
-						<Button
-							isLink
-							isDestructive
-							onClick={ () => setShowPopoverAdd( false ) }
-						>
-							{ __( 'No', 'jet-form-builder' ) }
-						</Button>
-					</Flex>
-				</div>
-			</Popover>
+				<span>{ __(
+					'Are you sure you want to add new options?',
+					'jet-form-builder',
+				) }</span>
+				<Flex justify="center" gap={ 1 }>
+					<Button
+						isLink
+						onClick={ () => {
+							addOptions();
+							setModalContent( false );
+						} }
+					>
+						{ __( 'Yes', 'jet-form-builder' ) }
+					</Button>
+					{ ' / ' }
+					<Button
+						isLink
+						isDestructive
+						onClick={ () => setShowPopoverAdd( false ) }
+					>
+						{ __( 'No', 'jet-form-builder' ) }
+					</Button>
+				</Flex>
+			</PopoverStandard>
 		) }
 		{ showPopoverReplace && (
-			<Popover
+			<PopoverStandard
 				position={ 'top-start' }
 				noArrow={ false }
 				isAlternate
 				{ ...popoverPropsReplace }
 			>
-				<div
-					style={ {
-						padding: '0.5em',
-						width: 'max-content',
-					} }
-				>
+
 					<span>{ __(
 						`Are you sure you want to replace the old options 
 with new ones?`,
 						'jet-form-builder',
 					) }</span>
-					<Flex justify="center" gap={ 1 }>
-						<Button
-							isLink
-							onClick={ () => {
-								replaceOptions();
-								setModalContent( false );
-							} }
-						>
-							{ __( 'Yes', 'jet-form-builder' ) }
-						</Button>
-						{ ' / ' }
-						<Button
-							isLink
-							onClick={ () => setShowPopoverReplace( false ) }
-							isDestructive
-						>
-							{ __( 'No', 'jet-form-builder' ) }
-						</Button>
-					</Flex>
-				</div>
-			</Popover>
+				<Flex justify="center" gap={ 1 }>
+					<Button
+						isLink
+						onClick={ () => {
+							replaceOptions();
+							setModalContent( false );
+						} }
+					>
+						{ __( 'Yes', 'jet-form-builder' ) }
+					</Button>
+					{ ' / ' }
+					<Button
+						isLink
+						onClick={ () => setShowPopoverReplace( false ) }
+						isDestructive
+					>
+						{ __( 'No', 'jet-form-builder' ) }
+					</Button>
+				</Flex>
+			</PopoverStandard>
 		) }
 	</>;
 }

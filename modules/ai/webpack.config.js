@@ -30,7 +30,7 @@ module.exports = {
 				exclude: /node_modules/,
 			},
 			{
-				test: /\.css$/,
+				test: /\.p?css$/,
 				use: [
 					'style-loader',
 					'css-loader',
@@ -42,4 +42,8 @@ module.exports = {
 	plugins: [
 		new WPExtractorPlugin(),
 	],
+	externalsType: 'window',
+	externals: {
+		'jet-form-builder-components': [ 'jfb', 'components' ],
+	},
 };

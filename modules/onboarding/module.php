@@ -12,11 +12,6 @@ use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
-use JFB_Components\Wp_Nonce\Wp_Nonce;
-use Jet_Form_Builder\Blocks;
-use JFB_Modules\Onboarding\Builders\Block_Editor_Builder;
-use JFB_Modules\Onboarding\Builders\No_Builder_Handler;
-use JFB_Modules\Onboarding\Rest_Api\Use_Form_Route\Use_Form_Route;
 use JFB_Modules\Onboarding\Use_Form\Use_Form;
 
 // If this file is called directly, abort.
@@ -124,7 +119,8 @@ class Module implements
 
 		array_push(
 			$script_asset['dependencies'],
-			$this->get_handle( 'use-form' )
+			$this->get_handle( 'use-form' ),
+			'jet-fb-components'
 		);
 
 		wp_enqueue_script(

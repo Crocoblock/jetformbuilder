@@ -8,5 +8,8 @@
 	"scripts": {
 		"build": "npx webpack build --mode production",
 		"dev": "npx webpack build --mode development -w"
+	},
+	"dependencies": {
+		"jet-form-builder-components": "*"
 	}
 }

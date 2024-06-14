@@ -28,7 +28,11 @@ const ListActionItemFiltered = withFilters( 'jet.fb.action.item' )(
 const FlexSortable = styled( Sortable )`
     display: flex;
     flex-direction: column;
-    gap: 0.5em;
+    gap: 8px;
+	
+	.sortable-chosen {
+		border: 4px solid lightgrey;
+	}
 `;
 
 function PluginActions() {
@@ -38,27 +42,29 @@ function PluginActions() {
 		title={ __( 'Post Submit Actions', 'jet-form-builder' ) }
 		className="jfb-actions-panel"
 	>
-		<FlexSortable
-			list={ actions }
-			setList={ setActions }
-			direction="vertical"
-			handle=".jfb-action-handle"
-		>
-			{ actions.map( ( action, index ) => <Fragment key={ action.id }>
-					<ActionListItemContext.Provider
-						value={ { index, action } }
-					>
-						<ListActionItemFiltered/>
-					</ActionListItemContext.Provider>
-				</Fragment>,
-			) }
-		</FlexSortable>
-		<ActionsAfterNewButtonSlotFill.Slot>
-			{ fills => <Flex wrap className="jfb-actions-panel--buttons">
-				<AddActionButton/>
-				{ fills }
-			</Flex> }
-		</ActionsAfterNewButtonSlotFill.Slot>
+		<Flex direction="column">
+			<FlexSortable
+				list={ actions }
+				setList={ setActions }
+				direction="vertical"
+				handle=".jfb-action-handle"
+			>
+				{ actions.map( ( action, index ) => <Fragment key={ action.id }>
+						<ActionListItemContext.Provider
+							value={ { index, action } }
+						>
+							<ListActionItemFiltered/>
+						</ActionListItemContext.Provider>
+					</Fragment>,
+				) }
+			</FlexSortable>
+			<ActionsAfterNewButtonSlotFill.Slot>
+				{ fills => <Flex wrap className="jfb-actions-panel--buttons">
+					<AddActionButton/>
+					{ fills }
+				</Flex> }
+			</ActionsAfterNewButtonSlotFill.Slot>
+		</Flex>
 		<AllProActionsLink/>
 		<EditSettingsModal/>
 		<EditConditionsModal/>

@@ -1,11 +1,5 @@
-const {
-	      useState,
-	      useRef,
-      } = wp.element;
+import { useState, useRef } from '@wordpress/element';
 
-/**
- * @returns {{ref, setShowPopover: *, showPop<>over: *, popoverProps: {onClose: (function(): *), onFocusOutside: popoverProps.onFocusOutside, anchorRef}}}
- */
 function useTriggerPopover() {
 	const [ showPopover, setShowPopover ] = useState( false );
 
@@ -32,5 +26,8 @@ function useTriggerPopover() {
 		popoverProps,
 	};
 }
+
+window.JetFBHooks = window.JetFBHooks || {};
+window.JetFBHooks.useTriggerPopover = useTriggerPopover;
 
 export default useTriggerPopover;

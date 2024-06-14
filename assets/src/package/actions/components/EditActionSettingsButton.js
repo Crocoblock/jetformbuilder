@@ -1,17 +1,9 @@
 import useActionCallback from '../hooks/useActionCallback';
 import useLoopedAction from '../hooks/useLoopedAction';
-
-const {
-	      __,
-      } = wp.i18n;
-
-const {
-	      useDispatch,
-      } = wp.data;
-
-const {
-	      Button,
-      } = wp.components;
+import { __ } from '@wordpress/i18n';
+import { useDispatch } from '@wordpress/data';
+import { Button } from '@wordpress/components';
+import { edit } from '@wordpress/icons';
 
 function EditActionSettingsButton() {
 	const { action, index } = useLoopedAction();
@@ -19,13 +11,14 @@ function EditActionSettingsButton() {
 	const {
 		      setCurrentAction,
 		      setMeta,
-	      } = useDispatch( 'jet-forms/actions', [] );
+	      } = useDispatch( 'jet-forms/actions' );
 
 	const ActionCallback = useActionCallback( action.type );
 
 	return <Button
 		disabled={ !ActionCallback }
-		icon="edit"
+		size="small"
+		icon={ edit }
 		label={ __( 'Edit Action', 'jet-form-builder' ) }
 		onClick={ () => {
 			setCurrentAction( { ...action, index } );

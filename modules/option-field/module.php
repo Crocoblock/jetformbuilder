@@ -89,6 +89,11 @@ final class Module implements
 	public function enqueue_admin_assets() {
 		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
 
+		array_push(
+			$script_asset['dependencies'],
+			'jet-fb-components'
+		);
+
 		// for all blocks
 		wp_enqueue_script(
 			$this->get_handle(),

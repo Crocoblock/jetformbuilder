@@ -1,16 +1,7 @@
 import useLoopedAction from '../hooks/useLoopedAction';
-
-const {
-	      __,
-      } = wp.i18n;
-
-const {
-	      useDispatch,
-      } = wp.data;
-
-const {
-	      Button,
-      } = wp.components;
+import { __ } from '@wordpress/i18n';
+import { useDispatch } from '@wordpress/data';
+import { Button } from '@wordpress/components';
 
 function EditActionConditionsButton() {
 	const { action, index } = useLoopedAction();
@@ -18,7 +9,7 @@ function EditActionConditionsButton() {
 	const {
 		      setCurrentAction,
 		      setMeta,
-	      } = useDispatch( 'jet-forms/actions', [] );
+	      } = useDispatch( 'jet-forms/actions' );
 
 	const conditionsIcon = action?.conditions?.length ? <span
 		className="dashicon dashicons dashicons-randomize"
@@ -26,7 +17,7 @@ function EditActionConditionsButton() {
 	/> : <span className="dashicon dashicons dashicons-randomize"/>;
 
 	return <Button
-		className={ 'jet-fb-button' }
+		size="small"
 		icon={ conditionsIcon }
 		label={ __(
 			'Edit Conditions & Events',

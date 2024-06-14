@@ -325,6 +325,7 @@ class Editor {
 			$script_asset['dependencies'],
 			'jet-fb-components'
 		);
+		wp_enqueue_style( 'jet-fb-components' );
 
 		wp_enqueue_script(
 			self::EDITOR_PACKAGE_HANDLE,

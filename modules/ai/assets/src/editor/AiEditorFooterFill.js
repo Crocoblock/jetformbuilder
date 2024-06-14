@@ -1,14 +1,15 @@
 import { __ } from '@wordpress/i18n';
-import { Button, Flex, Popover } from '@wordpress/components';
+import { Button, Flex } from '@wordpress/components';
+import {
+	PopoverStandard,
+	useTriggerPopover,
+} from 'jet-form-builder-components';
 
 const {
 	      parseHTMLtoBlocks,
       } = JetFormBuilderParser;
 
-const {
-	      useTriggerPopover,
-	      usePattern,
-      } = JetFBHooks;
+const { usePattern } = JetFBHooks;
 
 function AiEditorFooterFill( { clearHTML, formHTML, children = null } ) {
 
@@ -45,44 +46,37 @@ function AiEditorFooterFill( { clearHTML, formHTML, children = null } ) {
 		>
 			{ __( 'Change generation prompt', 'jet-form-builder' ) }
 		</Button>
-		{ showPopover && <Popover
+		{ showPopover && <PopoverStandard
 			position={ 'top-start' }
 			noArrow={ false }
 			{ ...popoverProps }
 		>
-			<div
-				style={ {
-					padding: '0.5em',
-					width: 'max-content',
-				} }
+			<span>{ __( 'I want to', 'jet-form-builder' ) }</span>
+			&nbsp;
+			<Button
+				isLink
+				isDestructive
+				onClick={ () => insert( {
+					blocks: parseHTMLtoBlocks( formHTML ),
+				} ) }
 			>
-				<span>{ __( 'I want to', 'jet-form-builder' ) }</span>
-				&nbsp;
-				<Button
-					isLink
-					isDestructive
-					onClick={ () => insert( {
-						blocks: parseHTMLtoBlocks( formHTML ),
-					} ) }
-				>
-					{ __( 'replace', 'jet-form-builder' ) }
-				</Button>
-				{ ' / ' }
-				<Button
-					isLink
-					onClick={ () => append( {
-						blocks: parseHTMLtoBlocks( formHTML ),
-					} ) }
-				>
-					{ __( 'append', 'jet-form-builder' ) }
-				</Button>
-				&nbsp;
-				<span>{ __(
-					'form settings and blocks',
-					'jet-form-builder',
-				) }</span>
-			</div>
-		</Popover> }
+				{ __( 'replace', 'jet-form-builder' ) }
+			</Button>
+			{ ' / ' }
+			<Button
+				isLink
+				onClick={ () => append( {
+					blocks: parseHTMLtoBlocks( formHTML ),
+				} ) }
+			>
+				{ __( 'append', 'jet-form-builder' ) }
+			</Button>
+			&nbsp;
+			<span>{ __(
+				'form settings and blocks',
+				'jet-form-builder',
+			) }</span>
+		</PopoverStandard> }
 		{ children }
 	</Flex>;
 }

@@ -209,7 +209,6 @@ import ScopedAttributesProvider
 	from './blocks/components/ScopedAttributesProvider';
 import getSupport from './blocks/helpers/getSupport';
 import useEvents from './events/hooks/useEvents';
-import useTriggerPopover from './hooks/useTriggerPopover';
 import useOpenEditorPanel from './hooks/useOpenEditorPanel';
 
 // JFBComponents
@@ -362,6 +361,9 @@ window.JetFBActions = {
 
 // JFBHooks
 window.JetFBHooks = {
+	...(
+		window?.JetFBHooks ?? {}
+	),
 	useActions,
 	useMetaState,
 	useSelectPostMeta,
@@ -396,7 +398,6 @@ window.JetFBHooks = {
 	useSupport,
 	useLoopedAction,
 	useScopedAttributesContext,
-	useTriggerPopover,
 	useOpenEditorPanel,
 };
 

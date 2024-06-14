@@ -1,16 +1,9 @@
-const {
-	      useTriggerPopover,
-      } = JetFBHooks;
-
-const {
-	      Button,
-	      Popover,
-	      ExternalLink,
-      } = wp.components;
-
-const {
-	      __,
-      } = wp.i18n;
+import {
+	useTriggerPopover,
+	PopoverStandard,
+} from 'jet-form-builder-components';
+import { Button, ExternalLink } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 function ProSinglePattern( { pattern } ) {
 	const {
@@ -36,31 +29,25 @@ function ProSinglePattern( { pattern } ) {
 			{ pattern.title }
 		</span>
 		{ showPopover && (
-			<Popover
+			<PopoverStandard
 				position={ 'top-start' }
 				noArrow={ false }
 				isAlternate
 				{ ...popoverProps }
 			>
-				<div
-					style={ {
-						padding: '0.5em',
-						width: 'max-content',
-					} }
-				>
+
 					<span>{ __(
 						'This is paid addon. You can buy it here:',
 						'jet-form-builder',
 					) }</span>
-					&nbsp;
-					<ExternalLink
-						href={ pattern.link ??
-							'https://jetformbuilder.com/pricing/' }
-					>
-						jetformbuilder.com
-					</ExternalLink>
-				</div>
-			</Popover>
+				&nbsp;
+				<ExternalLink
+					href={ pattern.link ??
+						'https://jetformbuilder.com/pricing/' }
+				>
+					jetformbuilder.com
+				</ExternalLink>
+			</PopoverStandard>
 		) }
 	</li>;
 }

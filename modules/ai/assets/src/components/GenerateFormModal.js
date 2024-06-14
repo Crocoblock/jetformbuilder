@@ -1,3 +1,4 @@
+import './GenerateFormModal.pcss';
 import {
 	TextareaControl,
 	Button,

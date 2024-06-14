@@ -88,14 +88,6 @@ class Module implements
 			$parser_module->get_handle()
 		);
 
-		wp_enqueue_style(
-			$this->get_handle(),
-			$this->get_url( 'assets/build/modal.css' ),
-			array(
-				'wp-components',
-			),
-			$script_asset['version']
-		);
 		wp_enqueue_script(
 			$this->get_handle(),
 			$this->get_url( 'assets/build/admin/forms.js' ),
@@ -132,7 +124,8 @@ class Module implements
 
 		array_push(
 			$script_asset['dependencies'],
-			$parser_module->get_handle()
+			$parser_module->get_handle(),
+			'jet-fb-components'
 		);
 
 		wp_enqueue_script(
@@ -141,12 +134,6 @@ class Module implements
 			$script_asset['dependencies'],
 			$script_asset['version'],
 			true
-		);
-		wp_enqueue_style(
-			$this->get_handle(),
-			$this->get_url( 'assets/build/modal.css' ),
-			array(),
-			$script_asset['version']
 		);
 	}
 }

@@ -1,19 +1,11 @@
 import usePattern from '../hooks/usePattern';
 import useAnotherBlocks from '../hooks/useAnotherBlocks';
-
-const {
-	      Button,
-	      Popover,
-	      Icon,
-      } = wp.components;
-
-const {
-	      __,
-      } = wp.i18n;
-
-const {
-	      useTriggerPopover,
-      } = JetFBHooks;
+import {
+	useTriggerPopover,
+	PopoverStandard,
+} from 'jet-form-builder-components';
+import { Button } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 function PatternInserterButton( {
 	patternName,
@@ -61,41 +53,34 @@ function PatternInserterButton( {
 			{ ...props }
 		/>
 		{ showPopover && (
-			<Popover
+			<PopoverStandard
 				position={ 'top-start' }
 				noArrow={ false }
 				isAlternate
 				{ ...popoverProps }
 			>
-				<div
-					style={ {
-						padding: '0.5em',
-						width: 'max-content',
-					} }
+				<span>{ __( 'I want to', 'jet-form-builder' ) }</span>
+				&nbsp;
+				<Button
+					isLink
+					isDestructive
+					onClick={ () => insert() }
 				>
-					<span>{ __( 'I want to', 'jet-form-builder' ) }</span>
-					&nbsp;
-					<Button
-						isLink
-						isDestructive
-						onClick={ () => insert() }
-					>
-						{ __( 'replace', 'jet-form-builder' ) }
-					</Button>
-					{ ' / ' }
-					<Button
-						isLink
-						onClick={ () => append() }
-					>
-						{ __( 'append', 'jet-form-builder' ) }
-					</Button>
-					&nbsp;
-					<span>{ __(
-						'form settings and blocks',
-						'jet-form-builder',
-					) }</span>
-				</div>
-			</Popover>
+					{ __( 'replace', 'jet-form-builder' ) }
+				</Button>
+				{ ' / ' }
+				<Button
+					isLink
+					onClick={ () => append() }
+				>
+					{ __( 'append', 'jet-form-builder' ) }
+				</Button>
+				&nbsp;
+				<span>{ __(
+					'form settings and blocks',
+					'jet-form-builder',
+				) }</span>
+			</PopoverStandard>
 		) }
 	</>;
 }

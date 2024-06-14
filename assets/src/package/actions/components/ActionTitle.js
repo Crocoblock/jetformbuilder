@@ -1,23 +1,16 @@
 import useLoopedAction from '../hooks/useLoopedAction';
 import useActionsEdit from '../hooks/useActionsEdit';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { edit } from '@wordpress/icons';
-import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { styled } from '@linaria/react';
 
-const WideButton = styled( Button )`
-    width: 100%;
-	
-	&& {
-        white-space: normal;
-    }
+const ActionLabel = styled.span`
+    font-size: 13px;
+    line-height: 1.4;
 `;
 
 function ActionTitle() {
 	const { deleteAction } = useActionsEdit();
-
-	const { openActionSettings } = useDispatch( 'jet-forms/actions' );
 
 	const { action, index } = useLoopedAction();
 	const actionFromList    = useSelect( select => (
@@ -27,13 +20,9 @@ function ActionTitle() {
 	);
 
 	return Boolean( actionFromList )
-	       ? <WideButton
-		       variant="secondary"
-		       onClick={ () => openActionSettings( { item: action, index } ) }
-		       icon={ edit }
-	       >
+	       ? <ActionLabel>
 		       { actionFromList.label }
-	       </WideButton>
+	       </ActionLabel>
 	       : <WideButton
 		       isDestructive
 		       variant="secondary"

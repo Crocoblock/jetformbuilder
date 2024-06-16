@@ -7,5 +7,6 @@ export default {
 	label: __( 'Register User', 'jet-form-builder' ),
 	edit: RegisterUserRender,
 	icon: commentAuthorAvatar,
-	docHref: 'https://jetformbuilder.com/features/register-user/'
+	docHref: 'https://jetformbuilder.com/features/register-user/',
+	category: 'user',
 }

@@ -7,5 +7,6 @@ export default {
 	label: __( 'Call Webhook', 'jet-form-builder' ),
 	edit: CallWebHookRender,
 	icon: cloud,
-	docHref: 'https://jetformbuilder.com/features/call-webhook/'
+	docHref: 'https://jetformbuilder.com/features/call-webhook/',
+	category: 'advanced'
 };

@@ -1,7 +1,4 @@
-import UpdateOptionsAction from './update.options.action'
+import updateOptions from './update.options';
+import { dispatch } from '@wordpress/data';
 
-const {
-	      addAction,
-      } = JetFBActions;
-
-addAction( 'update_options', UpdateOptionsAction );
+dispatch( 'jet-forms/actions' ).registerAction( updateOptions );

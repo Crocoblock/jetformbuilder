@@ -1,5 +1,4 @@
 import PluginVerification from './plugin';
-import VerificationActionItem from './action/VerificationActionItem';
 import VerificationActionWatcher from './action/VerificationActionWatcher';
 import TokenComputedField from './action/TokenComputedField';
 import GeneratedTokenComputedField from './action/GeneratedTokenComputedField';
@@ -37,12 +36,6 @@ addFilter(
 
 		return plugins;
 	},
-);
-
-addFilter(
-	'jet.fb.action.item',
-	'jet-form-builder/verification-action',
-	VerificationActionItem,
 );
 
 addFilter(

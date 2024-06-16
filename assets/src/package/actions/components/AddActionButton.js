@@ -1,12 +1,55 @@
 import useActionsEdit from '../hooks/useActionsEdit';
 import { __ } from '@wordpress/i18n';
-import { Button } from '@wordpress/components';
-import { Modal } from '@wordpress/components';
+import { Button, SelectControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { __experimentalGrid as Grid } from '@wordpress/components';
 import ActionGridItem from './ActionGridItem';
 import BaseAction from '../abstract/BaseAction';
+import { plus } from '@wordpress/icons';
+import { ResponsiveModal } from 'jet-form-builder-components';
+
+const useCategoriesAndActionTypes = () => {
+	const [ category, setCategory ] = useState( '' );
+
+	const { actionTypes, categories } = useSelect( select => {
+		const selector = select( 'jet-forms/actions' );
+
+		const actionTypes = selector.getActions().filter( mappedCategory => (
+			!category ||
+			(
+				!mappedCategory?.category && 'misc' === category
+			) ||
+			mappedCategory.category === category
+		) );
+
+		const categories = [
+			{
+				value: '',
+				label: __( 'All', 'jet-form-builder' ),
+			},
+			...selector.getCategories().map(
+				mappedCategory => (
+					{
+						value: mappedCategory.type,
+						label: mappedCategory.label,
+					}
+				),
+			),
+			{
+				value: 'misc',
+				label: __( 'Misc', 'jet-form-builder' ),
+			},
+		];
+
+		return {
+			actionTypes,
+			categories,
+		};
+	}, [ category ] );
+
+	return { category, categories, actionTypes, setCategory };
+};
 
 function AddActionButton() {
 	const { actions, setActions } = useActionsEdit();
@@ -14,9 +57,12 @@ function AddActionButton() {
 
 	const [ showModal, setShowModal ] = useState( false );
 
-	const actionTypes = useSelect( select => (
-		select( 'jet-forms/actions' ).getActions()
-	), [] );
+	const {
+		      category,
+		      categories,
+		      actionTypes,
+		      setCategory,
+	      } = useCategoriesAndActionTypes();
 
 	const onAddAction = ( event, action ) => {
 		if ( event.target?.classList?.contains?.(
@@ -43,13 +89,19 @@ function AddActionButton() {
 		<Button
 			isPrimary
 			onClick={ () => setShowModal( true ) }
+			icon={ plus }
 		>
-			{ __( '+ New Action', 'jet-form-builder' ) }
+			{ __( 'New Action', 'jet-form-builder' ) }
 		</Button>
-		{ showModal && <Modal
+		{ showModal && <ResponsiveModal
 			title={ __( 'Add new action', 'jet-form-builder' ) }
 			onRequestClose={ () => setShowModal( false ) }
 		>
+			<SelectControl
+				value={ category }
+				onChange={ setCategory }
+				options={ categories }
+			/>
 			<Grid columns={ 3 }>
 				{ actionTypes.map( action => (
 					<ActionGridItem
@@ -59,7 +111,7 @@ function AddActionButton() {
 					/>
 				) ) }
 			</Grid>
-		</Modal> }
+		</ResponsiveModal> }
 	</>;
 }
 

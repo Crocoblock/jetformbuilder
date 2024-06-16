@@ -107,6 +107,18 @@ export default {
 			],
 		};
 	},
+	[ constants.registerCategory ]: ( state, action ) => {
+
+		return {
+			...state,
+			categories: [
+				...state.categories,
+				{
+					...action.category
+				}
+			]
+		};
+	},
 	[ constants.addDetail ]: ( state, action ) => (
 		{
 			...state,

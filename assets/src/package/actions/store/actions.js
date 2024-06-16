@@ -59,6 +59,21 @@ export default {
 			dispatch.registerAction( actionType );
 		}
 	},
+	/**
+	 * @param actionSettings {{
+	 *     type: string,
+	 *     label: string,
+	 *     edit: Function,
+	 *     icon: Object,
+	 *     category: string,
+	 *     docHref: string,
+	 *     provideEvents: Function
+	 *     disableConditions: Boolean,
+	 *     disabled: Boolean,
+	 *     fixed: Boolean
+	 * }}
+	 * @returns {(function({select: *, dispatch: *}): void)|*}
+	 */
 	registerAction: ( actionSettings ) => ( { select, dispatch } ) => {
 		const action = select.getAction( actionSettings.type );
 
@@ -69,6 +84,16 @@ export default {
 		}
 
 		dispatch.addAction( actionSettings );
+	},
+	/**
+	 * @param category {{ type: string, label: string }}
+	 * @returns {{type: string, category}}
+	 */
+	registerCategory( category ) {
+		return {
+			type: constants.registerCategory,
+			category,
+		};
 	},
 	addAction( actionSettings ) {
 		return {

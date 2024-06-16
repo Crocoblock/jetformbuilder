@@ -7,5 +7,6 @@ export default {
 	label: __( 'Update User', 'jet-form-builder' ),
 	edit: UpdateUserRender,
 	icon: commentAuthorAvatar,
-	docHref: 'https://jetformbuilder.com/features/update-user/'
-}
+	docHref: 'https://jetformbuilder.com/features/update-user/',
+	category: 'user',
+};

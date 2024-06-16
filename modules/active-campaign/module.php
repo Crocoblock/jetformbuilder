@@ -61,7 +61,7 @@ final class Module implements
 		add_action( 'rest_api_init', array( $this->get_rest(), 'register_routes' ) );
 		add_action( 'jet-form-builder/actions/register', array( $this, 'add_action' ) );
 		add_action(
-			'jet-form-builder/editor-assets/before',
+			'jet-form-builder/editor-assets/after',
 			array( $this, 'editor_assets' )
 		);
 		add_action(
@@ -75,7 +75,7 @@ final class Module implements
 		remove_action( 'rest_api_init', array( $this->get_rest(), 'register_routes' ) );
 		remove_action( 'jet-form-builder/actions/register', array( $this, 'add_action' ) );
 		remove_action(
-			'jet-form-builder/editor-assets/before',
+			'jet-form-builder/editor-assets/after',
 			array( $this, 'editor_assets' )
 		);
 		remove_action(

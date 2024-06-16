@@ -8,4 +8,5 @@ export default {
 	edit: MailChimpRender,
 	icon,
 	docHref: 'https://jetformbuilder.com/features/mailchimp/',
+	category: 'communication',
 };

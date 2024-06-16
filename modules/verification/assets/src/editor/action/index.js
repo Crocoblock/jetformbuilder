@@ -10,4 +10,7 @@ export default {
 	icon: key,
 	docHref: 'https://jetformbuilder.com/features/email-verification/',
 	provideEvents: () => [ SUCCESS_EVENT, FAILED_EVENT ],
+	fixed: true,
+	disableConditions: true,
+	category: 'user',
 };

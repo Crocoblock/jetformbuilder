@@ -8,4 +8,5 @@ export default {
 	edit: ActiveCampaignAction,
 	icon,
 	docHref: 'https://jetformbuilder.com/features/activecampaign/',
+	category: 'communication',
 };

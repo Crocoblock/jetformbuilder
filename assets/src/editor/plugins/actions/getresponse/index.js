@@ -8,4 +8,5 @@ export default {
 	edit: GetResponseAction,
 	icon,
 	docHref: 'https://jetformbuilder.com/features/getresponse/',
+	category: 'communication'
 }

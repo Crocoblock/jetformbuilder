@@ -210,6 +210,7 @@ import ScopedAttributesProvider
 import getSupport from './blocks/helpers/getSupport';
 import useEvents from './events/hooks/useEvents';
 import useOpenEditorPanel from './hooks/useOpenEditorPanel';
+import ActionItemBody from './actions/components/ActionItemBody';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -316,6 +317,7 @@ window.JetFBComponents = {
 	ActionButtonPlaceholder,
 	ActionModalFooterSlotFill,
 	ScopedAttributesProvider,
+	ActionItemBody,
 };
 
 // JFBFunctions

@@ -26,6 +26,9 @@ const self = {
 	getActions( state ) {
 		return state.types;
 	},
+	getCategories( state ) {
+		return state.categories;
+	},
 	getAction( state, actionType ) {
 		return state.types.find( ( { type } ) => type === actionType );
 	},
@@ -38,6 +41,11 @@ export default {
 	},
 	isConditionalModal( state ) {
 		return 'conditions' === state.meta?.modalType;
+	},
+	isFixed( state, actionType ) {
+		const action = self.getAction( state, actionType );
+
+		return action?.fixed ?? false;
 	},
 	getMetaIndex( state ) {
 		return state.meta?.index;

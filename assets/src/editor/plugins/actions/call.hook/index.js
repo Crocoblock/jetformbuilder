@@ -7,5 +7,6 @@ export default {
 	label: __( 'Call Hook', 'jet-form-builder' ),
 	edit: CallHookRender,
 	icon: code,
-	docHref: 'https://jetformbuilder.com/features/call-hook/'
+	docHref: 'https://jetformbuilder.com/features/call-hook/',
+	category: 'advanced'
 };

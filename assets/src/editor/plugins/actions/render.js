@@ -29,10 +29,10 @@ const FlexSortable = styled( Sortable )`
     display: flex;
     flex-direction: column;
     gap: 8px;
-	
-	.sortable-chosen {
-		border: 4px solid lightgrey;
-	}
+
+    .sortable-chosen {
+        border: 4px solid lightgrey;
+    }
 `;
 
 function PluginActions() {
@@ -48,6 +48,7 @@ function PluginActions() {
 				setList={ setActions }
 				direction="vertical"
 				handle=".jfb-action-handle"
+				filter=".not-draggable"
 			>
 				{ actions.map( ( action, index ) => <Fragment key={ action.id }>
 						<ActionListItemContext.Provider

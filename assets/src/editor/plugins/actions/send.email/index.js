@@ -8,4 +8,5 @@ export default {
 	edit: SendEmailRender,
 	icon: inbox,
 	docHref: 'https://jetformbuilder.com/features/send-email/',
+	category: 'communication',
 };

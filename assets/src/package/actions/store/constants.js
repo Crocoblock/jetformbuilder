@@ -12,4 +12,5 @@ export default {
 	editAction: 'EDIT_ACTION',
 	openActionSettings: 'OPEN_ACTION_SETTINGS',
 	registerAction: 'REGISTER_ACTION',
+	registerCategory: 'REGISTER_CATEGORY',
 };

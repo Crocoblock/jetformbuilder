@@ -1,3 +1,6 @@
+import { Button, CardFooter, Flex } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+
 const {
 	      useLoopedAction,
 	      useActionsEdit,
@@ -6,24 +9,9 @@ const {
       } = JetFBHooks;
 
 const {
-	      EditActionSettingsButton,
-	      EditActionConditionsButton,
 	      ActionItemWrapper,
-	      ActionTitle,
-	      ActionItemMoreButton,
-	      ActionItemDetails,
+	      ActionItemBody,
       } = JetFBComponents;
-
-const {
-	      Flex,
-	      CardBody,
-	      CardFooter,
-	      Button,
-      } = wp.components;
-
-const {
-	      __,
-      } = wp.i18n;
 
 const ActionItemFooterModifier = ( DefaultItem ) => () => {
 	const { action }          = useLoopedAction();
@@ -44,15 +32,7 @@ const ActionItemFooterModifier = ( DefaultItem ) => () => {
 	}
 
 	return <ActionItemWrapper>
-		<CardBody>
-			<ActionTitle/>
-			<Flex style={ { marginTop: '0.5em' } } justify="space-between">
-				<EditActionSettingsButton/>
-				<EditActionConditionsButton/>
-				<ActionItemMoreButton/>
-				<ActionItemDetails/>
-			</Flex>
-		</CardBody>
+		<ActionItemBody/>
 		<CardFooter>
 			<Flex
 				justify="flex-start"

@@ -17,4 +17,5 @@ export default {
 	edit: InsertPostRender,
 	icon: customPostType,
 	docHref: 'https://jetformbuilder.com/features/insert-update-post/',
+	category: 'content',
 };

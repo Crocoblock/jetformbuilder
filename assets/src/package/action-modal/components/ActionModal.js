@@ -1,19 +1,9 @@
 import ActionModalContext from '../context/ActionModalContext';
 import ActionModalFooterSlotFill from './ActionModalFooterSlotFill';
+import { Modal, Button, ButtonGroup } from '@wordpress/components';
+import { useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
-const {
-	      Button,
-	      ButtonGroup,
-	      Modal,
-      } = wp.components;
-
-const {
-	      useState,
-      } = wp.element;
-
-const {
-	      __,
-      } = wp.i18n;
 
 const {
 	      Slot: FooterSlot,
@@ -24,6 +14,7 @@ function ActionModal( {
 	children,
 	title = '',
 	classNames = [],
+	className = '',
 	onUpdateClick,
 	onCancelClick,
 	updateBtnLabel = 'Update',
@@ -31,9 +22,10 @@ function ActionModal( {
 	cancelBtnProps = {},
 	cancelBtnLabel = 'Cancel',
 	fixedHeight = '',
+	...props
 } ) {
 
-	const modalClasses = [ 'jet-form-edit-modal', ...classNames ];
+	const modalClasses = [ 'jet-form-edit-modal', ...classNames, className ];
 
 	const [ actionClick, setActionClick ] = useState( null );
 
@@ -61,6 +53,7 @@ function ActionModal( {
 		className={ modalClasses.join( ' ' ) }
 		title={ title }
 		style={ style }
+		{ ...props }
 	>
 		{ !children && <div
 			className="jet-form-edit-modal__content"
@@ -73,7 +66,7 @@ function ActionModal( {
 					value={ { actionClick, onRequestClose } }>
 					<div className="jet-form-edit-modal__content">
 						{ 'function' === typeof children &&
-						children( { actionClick, onRequestClose } ) }
+							children( { actionClick, onRequestClose } ) }
 						{ 'function' !== typeof children && children }
 					</div>
 				</ActionModalContext.Provider>

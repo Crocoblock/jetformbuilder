@@ -1,9 +1,5 @@
 import ActionModalContext from '../context/ActionModalContext';
-
-const {
-	      useContext,
-	      useEffect,
-      } = wp.element;
+import { useContext, useEffect } from '@wordpress/element';
 
 /**
  * @param callback {Function}

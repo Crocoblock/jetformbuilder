@@ -20,8 +20,8 @@ const FlexActionButtons = styled( Flex )`
     top: 0;
     right: 0;
     height: 100%;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 20%);
-    padding: 0 4px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 15%);
+    padding: 0 4px 0 25px;
 
     && {
         width: auto;
@@ -29,6 +29,7 @@ const FlexActionButtons = styled( Flex )`
 
     .rtl & {
         left: 0;
+        padding: 0 25px 0 4px;
     }
 `;
 

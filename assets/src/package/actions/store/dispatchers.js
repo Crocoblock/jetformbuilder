@@ -114,20 +114,11 @@ export default {
 			categories: [
 				...state.categories,
 				{
-					...action.category
-				}
-			]
+					...action.category,
+				},
+			],
 		};
 	},
-	[ constants.addDetail ]: ( state, action ) => (
-		{
-			...state,
-			details: {
-				...state.details,
-				[ action.actionType ]: action.item,
-			},
-		}
-	),
 	[ constants.addComputedField ]: ( state, action ) => {
 		const computedFields = [
 			...state.computedFields,
@@ -172,6 +163,12 @@ export default {
 				modalType: 'settings',
 			},
 			currentAction: item,
+		};
+	},
+	[ constants.showActionsInserterModal ]: ( state, action ) => {
+		return {
+			...state,
+			showActionsInserterModal: action.show,
 		};
 	},
 

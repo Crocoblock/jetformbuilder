@@ -211,6 +211,9 @@ import getSupport from './blocks/helpers/getSupport';
 import useEvents from './events/hooks/useEvents';
 import useOpenEditorPanel from './hooks/useOpenEditorPanel';
 import ActionItemBody from './actions/components/ActionItemBody';
+import ActionModalBackButton from './actions/components/ActionModalBackButton';
+import ActionModalCloseButton
+	from './actions/components/ActionModalCloseButton';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -318,6 +321,8 @@ window.JetFBComponents = {
 	ActionModalFooterSlotFill,
 	ScopedAttributesProvider,
 	ActionItemBody,
+	ActionModalBackButton,
+	ActionModalCloseButton,
 };
 
 // JFBFunctions

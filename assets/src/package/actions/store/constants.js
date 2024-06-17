@@ -5,7 +5,6 @@ export default {
 	updateCurrentSettings: 'UPDATE_ACTION_SETTINGS',
 	updateCurrentConditions: 'UPDATE_ACTION_CONDITIONS',
 	addCallback: 'ADD_CALLBACK',
-	addDetail: 'ADD_DETAIL',
 	setMeta: 'SET_CURRENT_META',
 	clearCurrent: 'CLEAR_CURRENT',
 	addComputedField: 'ADD_COMPUTED_FIELD',
@@ -13,4 +12,5 @@ export default {
 	openActionSettings: 'OPEN_ACTION_SETTINGS',
 	registerAction: 'REGISTER_ACTION',
 	registerCategory: 'REGISTER_CATEGORY',
+	showActionsInserterModal: 'SHOW_ACTIONS_INSERTER_MODAL',
 };

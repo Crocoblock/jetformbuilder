@@ -36,6 +36,9 @@ const self = {
 
 export default {
 	...self,
+	isShowActionsInserterModal( state ) {
+		return state.showActionsInserterModal;
+	},
 	isSettingsModal( state ) {
 		return 'settings' === state.meta?.modalType;
 	},
@@ -46,6 +49,15 @@ export default {
 		const action = self.getAction( state, actionType );
 
 		return action?.fixed ?? false;
+	},
+	/**
+	 * Use to determine how was opened the action settings modal
+	 *
+	 * @param state
+	 * @returns {string}
+	 */
+	getOpenScenario( state ) {
+		return state.meta?.scenario;
 	},
 	getMetaIndex( state ) {
 		return state.meta?.index;

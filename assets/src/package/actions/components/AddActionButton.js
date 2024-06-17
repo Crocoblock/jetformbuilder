@@ -53,9 +53,11 @@ const useCategoriesAndActionTypes = () => {
 
 function AddActionButton() {
 	const { actions, setActions } = useActionsEdit();
-	const { openActionSettings }  = useDispatch( 'jet-forms/actions' );
 
-	const [ showModal, setShowModal ] = useState( false );
+	const {
+		      openActionSettings,
+		      showActionsInserterModal,
+	      } = useDispatch( 'jet-forms/actions' );
 
 	const {
 		      category,
@@ -63,6 +65,10 @@ function AddActionButton() {
 		      actionTypes,
 		      setCategory,
 	      } = useCategoriesAndActionTypes();
+
+	const showModal = useSelect( select => (
+		select( 'jet-forms/actions' ).isShowActionsInserterModal()
+	), [] );
 
 	const onAddAction = ( event, action ) => {
 		if ( event.target?.classList?.contains?.(
@@ -78,24 +84,25 @@ function AddActionButton() {
 			...actions,
 			newAction,
 		] );
-		setShowModal( false );
+		showActionsInserterModal( false );
 		openActionSettings( {
 			item: newAction,
 			index: actions.length,
+			scenario: 'inserter'
 		} );
 	};
 
 	return <>
 		<Button
 			isPrimary
-			onClick={ () => setShowModal( true ) }
+			onClick={ () => showActionsInserterModal( true ) }
 			icon={ plus }
 		>
 			{ __( 'New Action', 'jet-form-builder' ) }
 		</Button>
 		{ showModal && <ResponsiveModal
 			title={ __( 'Add new action', 'jet-form-builder' ) }
-			onRequestClose={ () => setShowModal( false ) }
+			onRequestClose={ () => showActionsInserterModal( false ) }
 		>
 			<SelectControl
 				value={ category }

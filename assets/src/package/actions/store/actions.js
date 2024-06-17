@@ -117,13 +117,6 @@ export default {
 			},
 		};
 	},
-	addDetail( actionType, item ) {
-		return {
-			type: constants.addDetail,
-			actionType,
-			item,
-		};
-	},
 	addComputedField( field, settings = {} ) {
 		return {
 			type: constants.addComputedField,
@@ -147,7 +140,7 @@ export default {
 			},
 		};
 	},
-	openActionSettings( { item, index } ) {
+	openActionSettings( { item, index, scenario = '' } ) {
 		dispatch( 'jet-forms/actions' ).setCurrentAction( {
 			...item,
 			index,
@@ -158,7 +151,17 @@ export default {
 			item: {
 				index,
 				modalType: 'settings',
+				scenario,
 			},
+		};
+	},
+	/**
+	 * @param show {Boolean}
+	 */
+	showActionsInserterModal( show ) {
+		return {
+			type: constants.showActionsInserterModal,
+			show,
 		};
 	},
 };

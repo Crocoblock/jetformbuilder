@@ -35,7 +35,7 @@ function ToggleActionExecutionButton() {
 		>
 			<span>
 				{ __( 'Delete this action?',
-					'jet-form-builder-formless-actions-endpoints' ) }
+					'jet-form-builder' ) }
 			</span>
 			&nbsp;
 			<Button

@@ -1,26 +1,26 @@
-const {
-	      __,
-      } = wp.i18n;
+import { styled } from '@linaria/react';
+import { Flex } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import { Icon } from '@wordpress/icons';
 
-const {
-	      Icon,
-	      Flex,
-      } = wp.components;
+const StyledFlex = styled( Flex )`
+    border-top: 1px solid var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+    margin-top: 16px;
+    margin-left: -16px;
+    margin-bottom: -8px;
+    padding-top: 8px;
+
+    && {
+        width: calc(100% + 32px);
+    }
+`;
 
 function AllProActionsLink() {
 	return (
 		!JetFormEditorData.isActivePro
-	) && <Flex
+	) && <StyledFlex
 		gap={ 3 }
 		justify="center"
-		style={ {
-			width: 'calc( 100% + 32px )',
-			borderTop: '1px solid rgb(224, 224, 224)',
-			marginTop: '16px',
-			marginLeft: '-16px',
-			marginBottom: '-8px',
-			paddingTop: '8px',
-		} }
 	>
 		<a
 			href={ JetFormEditorData.utmLinks.allProActions }
@@ -48,7 +48,7 @@ function AllProActionsLink() {
 				/>
 			</Flex>
 		</a>
-	</Flex>;
+	</StyledFlex>;
 }
 
 export default AllProActionsLink;

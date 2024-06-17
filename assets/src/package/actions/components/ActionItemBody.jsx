@@ -10,7 +10,13 @@ import { useSelect } from '@wordpress/data';
 import useLoopedAction from '../hooks/useLoopedAction';
 
 const CursoredIcon = styled( Icon )`
-    cursor: grab;
+    cursor: not-allowed;
+    opacity: 0.3;
+
+    .jet-form-action.draggable & {
+        cursor: grab;
+        opacity: 1;
+    }
 `;
 
 const FlexActionButtons = styled( Flex )`
@@ -52,12 +58,10 @@ function ActionItemBody() {
 
 	return <ActionCardBody>
 		<Flex align="center" justify="flex-start">
-			{ (
-				!actionType.fixed
-			) && <CursoredIcon
-				className="jfb-action-handle"
+			<CursoredIcon
+				className={ 'jfb-action-handle' }
 				icon={ dragHandle }
-			/> }
+			/>
 			<ActionTitle/>
 		</Flex>
 		<FlexActionButtons justify="flex-end">

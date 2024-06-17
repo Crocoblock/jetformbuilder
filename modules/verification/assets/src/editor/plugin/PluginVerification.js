@@ -1,15 +1,7 @@
-const {
-	      __,
-      } = wp.i18n;
-
-const {
-	      useMemo,
-      } = wp.element;
-
-const {
-	      Button,
-	      Tooltip,
-      } = wp.components;
+import { __ } from '@wordpress/i18n';
+import { useMemo } from '@wordpress/element';
+import { Button, Tooltip } from '@wordpress/components';
+import { plus } from '@wordpress/icons';
 
 const {
 	      useActionsEdit,
@@ -66,8 +58,9 @@ function PluginVerification() {
 				onClick={ onAddVerification }
 				disabled={ hasVerification }
 				variant="tertiary"
+				icon={ plus }
 			>
-				{ __( '+ Verification', 'jet-form-builder' ) }
+				{ __( 'Verification', 'jet-form-builder' ) }
 			</Button>
 		</Tooltip>
 	</ActionsAfterNewButtonSlotFill.Fill>;

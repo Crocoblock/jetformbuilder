@@ -22,7 +22,7 @@ function ActionItemWrapper( { className = '', ...props } = {} ) {
 	const wrapper   = [
 		className,
 		'jet-form-action',
-		isFixed ? 'not-draggable' : '',
+		isFixed ? '' : 'draggable',
 	];
 	const isExecute = (
 		action.is_execute ?? true

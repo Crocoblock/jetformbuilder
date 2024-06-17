@@ -30,6 +30,12 @@ abstract class Base_Meta_Type implements
 		if ( false === $form_id ) {
 			$form_id = (int) jet_fb_live()->form_id;
 		}
+		$form = get_post( $form_id );
+
+		if ( $form->post_parent ) {
+			$form_id = $form->post_parent;
+		}
+
 		return Tools::decode_json(
 			get_post_meta(
 				$form_id,

@@ -47,7 +47,10 @@ function SelectPageControl() {
 					__nextHasNoMarginBottom
 				/>
 			</FlexBlock>
-			<UseFormButton disabled={ !Boolean( search.length ) }/>
+			<UseFormButton disabled={
+				!Boolean( search.length ) &&
+				!settings.pageId
+			}/>
 		</Flex>
 	</>;
 }

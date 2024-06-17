@@ -48,7 +48,7 @@ function ActionGridItem( { action, onClick } ) {
 			align="center"
 		>
 			<ActionTitle>{ action.label }</ActionTitle>
-			<ColoredIcon icon={ action?.icon ?? plugins } size={ 128 }/>
+			<ColoredIcon icon={ action?.icon ?? plugins } size={ 64 }/>
 			{ action?.docHref && <ExternalLink href={ action?.docHref }>
 				{ __( 'Documentation', 'jet-form-builder' ) }
 			</ExternalLink> }

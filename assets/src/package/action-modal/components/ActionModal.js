@@ -4,7 +4,6 @@ import { Modal, Button, ButtonGroup } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
-
 const {
 	      Slot: FooterSlot,
       } = ActionModalFooterSlotFill;

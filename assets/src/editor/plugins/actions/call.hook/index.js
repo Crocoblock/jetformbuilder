@@ -8,5 +8,10 @@ export default {
 	edit: CallHookRender,
 	icon: code,
 	docHref: 'https://jetformbuilder.com/features/call-hook/',
-	category: 'advanced'
+	category: 'advanced',
+	validators: [
+		( { settings } ) => settings?.hook_name
+		                    ? false
+		                    : { type: 'empty', property: 'hook_name' },
+	],
 };

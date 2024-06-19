@@ -77,6 +77,8 @@ function DynamicPropertySelect( {
 					value: dynamic.includes( value ) ? '' : value,
 				} );
 			} }
+			__next40pxDefaultSize
+			__nextHasNoMarginBottom
 		/>
 	);
 

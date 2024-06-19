@@ -357,7 +357,6 @@ class Editor {
 
 		do_action( 'jet-form-builder/editor-assets/before', $this, self::EDITOR_HANDLE );
 
-		// todo: refactor with new way of assets loading
 		wp_enqueue_script(
 			self::EDITOR_HANDLE,
 			Plugin::instance()->plugin_url( 'assets/build/editor/form.builder.js' ),
@@ -368,16 +367,15 @@ class Editor {
 
 		wp_enqueue_style(
 			self::EDITOR_HANDLE,
-			JET_FORM_BUILDER_URL . 'assets/css/editor.css',
+			Plugin::instance()->plugin_url( 'assets/build/editor/form.builder.css' ),
 			array(
 				'media',
 				'l10n',
 				'buttons',
 				'wp-edit-blocks',
-				'wp-editor',
+				'wp-editor'
 			),
-			JET_FORM_BUILDER_VERSION,
-			'all'
+			$script_asset['version']
 		);
 
 		$conditions_settings = ( new Action_Condition_Manager() )->get_settings();

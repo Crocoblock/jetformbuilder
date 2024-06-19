@@ -1,5 +1,17 @@
 import JetDefaultMetaControl from '../../../blocks/controls/default-meta';
 import PostPropertySelect from '../../../components/post.property.select';
+import { SelectControl, Flex } from '@wordpress/components';
+import { useEffect, useState } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
+import {
+	ControlWithErrorStyle, IconText,
+	RequiredLabel,
+	Label,
+	RowControl, RowControlEnd, RowControlEndStyle,
+	WideLine,
+} from 'jet-form-builder-components';
+import { cx } from '@linaria/core';
+import { __ } from '@wordpress/i18n';
 
 const {
 	      convertListToFieldsMap,
@@ -8,29 +20,12 @@ const {
 	      ActionFieldsMap,
 	      WrapperRequiredControl,
 	      DynamicPropertySelect,
+	      ValidatorProvider,
       } = JetFBComponents;
 const {
 	      useSanitizeFieldsMap,
 	      useFields,
       } = JetFBHooks;
-
-/**
- * Internal dependencies
- */
-const {
-	      BaseControl,
-	      SelectControl,
-      } = wp.components;
-const {
-	      __,
-      } = wp.i18n;
-const {
-	      useState,
-	      useEffect,
-      } = wp.element;
-const {
-	      applyFilters,
-      } = wp.hooks;
 
 const modifiers = applyFilters(
 	'jet.fb.insert.post.modifiers',
@@ -94,32 +89,65 @@ function InsertPostRender( props ) {
 	/* eslint-disable jsx-a11y/no-onchange */
 
 	return (
-		<>
-			<SelectControl
-				key="post_type"
-				className="full-width"
-				labelPosition="side"
-				value={ settings.post_type }
-				options={ source.postTypes }
-				label={ label( 'post_type' ) }
-				help={ help( 'post_type' ) }
-				onChange={ post_type => onChangeSettingObj( { post_type } ) }
-			/>
-			<SelectControl
-				key="post_status"
-				className="full-width"
-				labelPosition="side"
-				value={ settings.post_status }
-				options={ source.postStatuses }
-				label={ label( 'post_status' ) }
-				help={ help( 'post_status' ) }
-				onChange={ post_status => onChangeSettingObj(
-					{ post_status },
-				) }
-			/>
+		<Flex direction="column">
+			<RowControl>
+				{ ( { id } ) => <ValidatorProvider
+					isSupported={ error => 'post_type' === error?.property }
+				>
+					{ ( { hasError, setShowError } ) => <>
+						<RequiredLabel htmlFor={ id }>
+							{ __( 'Post type', 'jet-form-builder' ) }
+						</RequiredLabel>
+						<Flex
+							className={ cx(
+								RowControlEndStyle,
+								hasError && ControlWithErrorStyle,
+							) }
+							direction="column"
+						>
+							{ hasError && <IconText>
+								{ __(
+									'Please fill this required field',
+									'jet-form-builder',
+								) }
+							</IconText> }
+							<SelectControl
+								id={ id }
+								value={ settings.post_type }
+								options={ source.postTypes }
+								help={ help( 'post_type' ) }
+								onChange={ post_type => onChangeSettingObj(
+									{ post_type } ) }
+								onBlur={ () => setShowError( true ) }
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+							/>
+						</Flex>
+					</> }
+				</ValidatorProvider> }
+			</RowControl>
+			<WideLine/>
+			<RowControl>
+				{ ( { id } ) => <>
+					<Label htmlFor={ id }>
+						{ label( 'post_status' ) }
+					</Label>
+					<SelectControl
+						id={ id }
+						value={ settings.post_status }
+						options={ source.postStatuses }
+						help={ help( 'post_status' ) }
+						onChange={ post_status => onChangeSettingObj(
+							{ post_status },
+						) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+					/>
+				</> }
+			</RowControl>
+			<WideLine/>
 			<ActionFieldsMap
 				label={ label( 'fields_map' ) }
-				key="user_fields_map"
 				fields={ formFields }
 			>
 				<WrapperRequiredControl>
@@ -136,18 +164,19 @@ function InsertPostRender( props ) {
 					</DynamicPropertySelect>
 				</WrapperRequiredControl>
 			</ActionFieldsMap>
-			<BaseControl
-				label={ label( 'default_meta' ) }
-				key="default_meta"
-			>
-				<JetDefaultMetaControl
-					defaultMeta={ settings.default_meta }
-					onChange={ default_meta => onChangeSettingObj(
-						{ default_meta },
-					) }
-				/>
-			</BaseControl>
-		</>
+			<WideLine/>
+			<RowControl>
+				<Label>{ label( 'default_meta' ) }</Label>
+				<RowControlEnd>
+					<JetDefaultMetaControl
+						defaultMeta={ settings.default_meta }
+						onChange={ default_meta => onChangeSettingObj(
+							{ default_meta },
+						) }
+					/>
+				</RowControlEnd>
+			</RowControl>
+		</Flex>
 	);
 	/* eslint-enable jsx-a11y/no-onchange */
 }

@@ -6,6 +6,7 @@ export default {
 	updateCurrentConditions: 'UPDATE_ACTION_CONDITIONS',
 	addCallback: 'ADD_CALLBACK',
 	setMeta: 'SET_CURRENT_META',
+	editMeta: 'EDIT_CURRENT_META',
 	clearCurrent: 'CLEAR_CURRENT',
 	addComputedField: 'ADD_COMPUTED_FIELD',
 	editAction: 'EDIT_ACTION',

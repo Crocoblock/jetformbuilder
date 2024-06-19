@@ -7,6 +7,7 @@ import { Fragment } from '@wordpress/element';
 
 const ActionTitle = styled.h3`
     margin: unset;
+    text-align: center;
 `;
 
 const ColoredIcon = styled( Icon )`

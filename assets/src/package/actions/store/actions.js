@@ -1,8 +1,5 @@
 import constants from './constants';
-
-const {
-	      dispatch,
-      } = wp.data;
+import { dispatch } from '@wordpress/data';
 
 export default {
 	setCurrentAction( item = {} ) {
@@ -14,6 +11,12 @@ export default {
 	setMeta( item ) {
 		return {
 			type: constants.setMeta,
+			item,
+		};
+	},
+	editMeta( item ) {
+		return {
+			type: constants.editMeta,
 			item,
 		};
 	},

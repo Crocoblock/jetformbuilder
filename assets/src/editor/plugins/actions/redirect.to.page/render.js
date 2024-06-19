@@ -1,34 +1,28 @@
-const {
-	      getFormFieldsBlocks,
-      } = JetFBActions;
+import {
+	TextControl,
+	SelectControl,
+	BaseControl,
+	CheckboxControl, Flex,
+} from '@wordpress/components';
+import useRedirectTypes from './useRedirectTypes';
+import { __ } from '@wordpress/i18n';
+import {
+	ControlWithErrorStyle, IconText,
+	RequiredLabel, RowControl,
+	RowControlEndStyle, WideLine,
+} from 'jet-form-builder-components';
+import { cx } from '@linaria/core';
+import RedirectTypeRow
+	from '@/plugins/actions/redirect.to.page/RedirectTypeRow';
+import RedirectPageRow
+	from '@/plugins/actions/redirect.to.page/RedirectPageRow';
 
 const {
 	      AdvancedModalControl,
+	      ValidatorProvider,
       } = JetFBComponents;
 
-/**
- * Internal dependencies
- */
-const {
-	      TextControl,
-	      ToggleControl,
-	      SelectControl,
-	      BaseControl,
-	      CheckboxControl,
-      } = wp.components;
-
-const { __ } = wp.i18n;
-
-const {
-	      useState,
-	      useEffect,
-      } = wp.element;
-
-const { withRequestFields } = JetFBHooks;
-
-const { withSelect } = wp.data;
-
-const { applyFilters } = wp.hooks;
+const { useFields } = JetFBHooks;
 
 function RedirectToPageRender( props ) {
 
@@ -36,34 +30,11 @@ function RedirectToPageRender( props ) {
 		      source,
 		      label,
 		      settings,
-		      onChangeSetting,
 		      onChangeSettingObj,
-		      requestFields,
 	      } = props;
 
-	const [ typePages, setTypePages ] = useState( source.redirect_types );
-	const [ fields, setFields ]       = useState( [] );
-
-	useEffect( () => {
-		const hasInserted = requestFields.findIndex(
-			field => 'inserted_post_id' === field.value );
-
-		if ( -1 === hasInserted ) {
-			setTypePages(
-				prev => prev.filter( type => 'inserted_post' !== type.value ) );
-		}
-
-		const filterTypes = applyFilters( 'jet.fb.redirect_to_page.types', [],
-			props );
-
-		if ( filterTypes.length ) {
-			setTypePages( prev => (
-				[ ...prev, ...filterTypes ]
-			) );
-		}
-
-		setFields( [ ...getFormFieldsBlocks(), ...requestFields ] );
-	}, [] );
+	const fields        = useFields( { withInner: false } );
+	const redirectTypes = useRedirectTypes( { fields } );
 
 	const isChecked = function ( name ) {
 		const args_fields = Array.from( settings.redirect_args || [] );
@@ -87,76 +58,62 @@ function RedirectToPageRender( props ) {
 	};
 
 	/* eslint-disable jsx-a11y/no-onchange */
-	return (
-		<div key="redirect_to_page">
-			<SelectControl
-				className="full-width"
-				key="redirect_type"
-				label={ label( 'redirect_type' ) }
-				labelPosition="side"
-				value={ settings.redirect_type }
-				options={ typePages }
-				onChange={ redirect_type => onChangeSettingObj(
-					{ redirect_type } ) }
-			/>
-			{ 'static_page' === settings.redirect_type && <SelectControl
-				key="redirect_type_page"
-				className="full-width"
-				label={ label( 'redirect_page' ) }
-				labelPosition="side"
-				value={ settings.redirect_page }
-				options={ source.pages }
-				onChange={ redirect_page => onChangeSettingObj(
-					{ redirect_page } ) }
-			/> }
-
-			{ 'custom_url' === settings.redirect_type && <AdvancedModalControl
+	return <Flex direction="column">
+		<RedirectTypeRow
+			settings={ settings }
+			onChangeSettingObj={ onChangeSettingObj }
+		/>
+		<WideLine/>
+		{ 'static_page' === settings.redirect_type && <RedirectPageRow
+			settings={ settings }
+			onChangeSettingObj={ onChangeSettingObj }
+		/> }
+		{ 'custom_url' === settings.redirect_type && <AdvancedModalControl
+			value={ settings.redirect_url }
+			label={ label( 'redirect_url' ) }
+			macroWithCurrent
+			onChangePreset={ redirect_url => onChangeSettingObj(
+				{ redirect_url },
+			) }
+			onChangeMacros={ name => onChangeSettingObj( {
+				redirect_url: (
+					settings.redirect_url ?? ''
+				) + name,
+			} ) }
+		>
+			{ ( { instanceId } ) => <TextControl
+				id={ instanceId }
 				value={ settings.redirect_url }
-				label={ label( 'redirect_url' ) }
-				macroWithCurrent
-				onChangePreset={ redirect_url => onChangeSettingObj(
+				onChange={ redirect_url => onChangeSettingObj(
 					{ redirect_url },
 				) }
-				onChangeMacros={ name => onChangeSettingObj( {
-					redirect_url: (
-						settings.redirect_url ?? ''
-					) + name,
-				} ) }
-			>
-				{ ( { instanceId } ) => <TextControl
-					id={ instanceId }
-					value={ settings.redirect_url }
-					onChange={ redirect_url => onChangeSettingObj(
-						{ redirect_url },
-					) }
-				/> }
-			</AdvancedModalControl> }
-			<BaseControl
-				label={ label( 'redirect_args' ) }
-				key="redirect_args_control"
-			>
-				<div className="jet-user-fields-map__list">
-					{ fields.map( ( { name }, index ) => <CheckboxControl
-							key={ `checkbox_args_${ name }_${ index }` }
-							label={ name }
-							checked={ isChecked( name ) }
-							onChange={ newVal => onChangeRedirectArgs( newVal,
-								name ) }
-						/>,
-					) }
-				</div>
-			</BaseControl>
-			<TextControl
-				key="redirect_hash_control"
-				label={ label( 'redirect_hash' ) }
-				value={ settings.redirect_hash }
-				onChange={ redirect_hash => onChangeSettingObj(
-					{ redirect_hash } ) }
-			/>
-		</div>
-	);
+			/> }
+		</AdvancedModalControl> }
+		<BaseControl
+			label={ label( 'redirect_args' ) }
+			key="redirect_args_control"
+		>
+			<div className="jet-user-fields-map__list">
+				{ fields.map( ( { name }, index ) => <CheckboxControl
+						key={ `checkbox_args_${ name }_${ index }` }
+						label={ name }
+						checked={ isChecked( name ) }
+						onChange={ newVal => onChangeRedirectArgs( newVal,
+							name ) }
+					/>,
+				) }
+			</div>
+		</BaseControl>
+		<TextControl
+			key="redirect_hash_control"
+			label={ label( 'redirect_hash' ) }
+			value={ settings.redirect_hash }
+			onChange={ redirect_hash => onChangeSettingObj(
+				{ redirect_hash } ) }
+		/>
+	</Flex>;
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 
-export default withSelect( withRequestFields )( RedirectToPageRender );
+export default RedirectToPageRender;
 

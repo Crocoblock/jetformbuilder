@@ -214,6 +214,10 @@ import ActionItemBody from './actions/components/ActionItemBody';
 import ActionModalBackButton from './actions/components/ActionModalBackButton';
 import ActionModalCloseButton
 	from './actions/components/ActionModalCloseButton';
+import ValidatorProvider from './actions/components/ValidatorProvider';
+import useActionErrors from './actions/hooks/useActionErrors';
+import useActionValidatorProvider
+	from './actions/hooks/useActionValidatorProvider';
 
 // JFBComponents
 window.JetFBComponents = {
@@ -323,6 +327,7 @@ window.JetFBComponents = {
 	ActionItemBody,
 	ActionModalBackButton,
 	ActionModalCloseButton,
+	ValidatorProvider,
 };
 
 // JFBFunctions
@@ -406,5 +411,7 @@ window.JetFBHooks = {
 	useLoopedAction,
 	useScopedAttributesContext,
 	useOpenEditorPanel,
+	useActionErrors,
+	useActionValidatorProvider,
 };
 

@@ -1,15 +1,31 @@
 import useActionsEdit from '../hooks/useActionsEdit';
 import ActionListItemContext from '../context/ActionListItemContext';
+import { styled } from '@linaria/react';
+import { __ } from '@wordpress/i18n';
+import { useSelect } from '@wordpress/data';
+import { useContext } from '@wordpress/element';
 
-const {
-	      useSelect,
-      } = wp.data;
+const EventButton = styled.button`
+    padding: 0 4px;
+    border-radius: 5px;
+    color: #5c5c5c;
+    font-size: 0.9em;
+    background-color: #f3f4f5;
+    cursor: pointer;
+    margin: auto;
+    border: 0;
+    font-family: monospace;
 
-const {
-	      useContext,
-      } = wp.element;
+    &:after {
+        content: ' X';
+        font-weight: bold;
+    }
 
-const { __ } = wp.i18n;
+    &:focus {
+        outline: 1px solid #5c5c5c;
+        background-color: #e7e8e9;
+    }
+`;
 
 function EventItem( props ) {
 	const {
@@ -22,6 +38,7 @@ function EventItem( props ) {
 
 	const event = useSelect(
 		select => select( 'jet-forms/events' ).getType( slug ),
+		[ slug ],
 	);
 
 	const { updateActionObj } = useActionsEdit();
@@ -37,14 +54,13 @@ function EventItem( props ) {
 		__( '(Click to delete)', 'jet-form-builder' ),
 	].join( ' ' );
 
-	return <button
+	return <EventButton
 		type={ 'button' }
-		className={ 'jfb-events-item' }
 		title={ title }
 		onClick={ onDelete }
 	>
 		{ event?.value ?? slug }
-	</button>;
+	</EventButton>;
 }
 
 function EventsList( props ) {

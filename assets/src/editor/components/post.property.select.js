@@ -40,6 +40,8 @@ function PostPropertySelect() {
 					onChange={ value => setMapField(
 						{ nameField: name, value },
 					) }
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 			</div>;
 		case 'post_terms':
@@ -54,6 +56,8 @@ function PostPropertySelect() {
 						{ nameField: name, value },
 					) }
 					options={ source.taxonomies }
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
 				/>
 			</div>;
 		default:

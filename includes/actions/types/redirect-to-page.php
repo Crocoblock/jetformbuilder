@@ -135,59 +135,13 @@ class Redirect_To_Page extends Base {
 		$handler->response_data['redirect'] = $to_url;
 	}
 
-	public function self_script_name() {
-		return 'jetFormRedirectToPageData';
-	}
-
 	public function editor_labels() {
 		return array(
-			'redirect_type' => __( 'Redirect to:', 'jet-form-builder' ),
 			'redirect_page' => __( 'Select page:', 'jet-form-builder' ),
 			'redirect_url'  => __( 'Redirect URL:', 'jet-form-builder' ),
 			'redirect_args' => __( 'Add query arguments to redirect URL:', 'jet-form-builder' ),
 			'redirect_hash' => __( 'Add hash to redirect URL:', 'jet-form-builder' ),
 		);
 	}
-
-	/**
-	 * Register custom action data for the editor
-	 *
-	 * @return mixed|void [description]
-	 */
-	public function action_data() {
-		return apply_filters(
-			"jet-form-builder/action/{$this->get_id()}/editor-data",
-			array(
-				'pages'          => Tools::with_placeholder( Tools::get_pages_list_for_js() ),
-				'redirect_types' => $this->get_redirect_types(),
-			)
-		);
-	}
-
-	public function get_redirect_types(): array {
-		return array(
-			array(
-				'value' => '',
-				'label' => __( 'Set a redirect to...', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'static_page',
-				'label' => __( 'Static Page', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'custom_url',
-				'label' => __( 'Custom URL', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'current_page',
-				'label' => __( 'Current Page', 'jet-form-builder' ),
-			),
-			array(
-				'value' => 'inserted_post',
-				'label' => __( 'Inserted/Updated post', 'jet-form-builder' ),
-			),
-		);
-	}
-
 
 }

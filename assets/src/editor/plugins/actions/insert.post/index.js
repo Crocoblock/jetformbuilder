@@ -23,4 +23,11 @@ export default {
 	</svg>,
 	docHref: 'https://jetformbuilder.com/features/insert-update-post/',
 	category: 'content',
+	validators: [
+		( { settings } ) => {
+			return settings?.post_type
+			       ? false
+			       : { type: 'empty', property: 'post_type' };
+		},
+	],
 };

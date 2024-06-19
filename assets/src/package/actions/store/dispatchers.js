@@ -27,6 +27,15 @@ export default {
 			},
 		}
 	),
+	[ constants.editMeta ]: ( state, action ) => (
+		{
+			...state,
+			meta: {
+				...state.meta,
+				...action.item,
+			},
+		}
+	),
 	[ constants.clearCurrent ]: ( state ) => (
 		{
 			...state,

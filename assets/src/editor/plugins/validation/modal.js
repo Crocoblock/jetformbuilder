@@ -1,3 +1,6 @@
+import { useEffect, useContext, useState } from '@wordpress/element';
+import { Flex } from '@wordpress/components';
+
 const {
 	      ActionModalContext,
 	      ValidationMetaMessage,
@@ -6,15 +9,6 @@ const {
 	      useMetaState,
 	      useGroupedValidationMessages,
       } = JetFBHooks;
-const {
-	      useEffect,
-	      useState,
-	      useContext,
-      } = wp.element;
-
-const {
-	      __,
-      } = wp.i18n;
 
 function ValidationModal() {
 	const [ args, setArgs ] = useMetaState(
@@ -40,19 +34,17 @@ function ValidationModal() {
 		}
 	}, [ actionClick ] );
 
-	return <>
-		<div className="jet-fb-validation-messages jet-control-clear-full">
-			{ messages.map( ( message, index ) => <ValidationMetaMessage
-				key={ 'message_item' + message.id }
-				message={ message }
-				messages={ current }
-				update={ setCurrent }
-				value={ current[ message.id ] }
-				className={ index !== 0 ? 'jet-control-full' : '' }
-				style={ index !== 0 ? {} : { paddingBottom: '5px' } }
-			/> ) }
-		</div>
-	</>;
+	return <Flex gap={ 4 } direction="column">
+		{ messages.map( ( message, index ) => <ValidationMetaMessage
+			key={ 'message_item' + message.id }
+			message={ message }
+			messages={ current }
+			update={ setCurrent }
+			value={ current[ message.id ] }
+			className={ index !== 0 ? 'jet-control-full' : '' }
+			style={ index !== 0 ? {} : { paddingBottom: '5px' } }
+		/> ) }
+	</Flex>;
 }
 
 export default ValidationModal;

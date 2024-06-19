@@ -1,11 +1,14 @@
-import { useSelect } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { Icon } from '@wordpress/icons';
 import { styled } from '@linaria/react';
+import { Button, Flex } from '@wordpress/components';
+import { IconText, StickyModalActions } from 'jet-form-builder-components';
 
 const {
 	      ActionModal,
 	      ActionModalHeaderSlotFill,
+	      ActionModalFooterSlotFill,
 	      ActionModalBackButton,
 	      ActionModalCloseButton,
       } = JetFBComponents;
@@ -15,6 +18,7 @@ const {
 	      useActionCallback,
 	      useUpdateCurrentAction,
 	      useUpdateCurrentActionMeta,
+	      useActionErrors,
       } = JetFBHooks;
 
 const ModalHeading = styled.div`
@@ -22,7 +26,7 @@ const ModalHeading = styled.div`
 `;
 
 const ModalHeader = styled.div`
-	background-color: #ffffffdb;
+    background-color: #ffffffdb;
 `;
 
 function EditSettingsModal() {
@@ -31,15 +35,23 @@ function EditSettingsModal() {
 	const { setTypeSettings, clearCurrent }  = useUpdateCurrentAction();
 	const { currentAction, currentSettings } = useCurrentAction();
 
-	const { isSettingsModal, actionType } = useSelect( select => (
+	const { editMeta } = useDispatch( 'jet-forms/actions' );
+
+	const { isSettingsModal, actionType, isShowErrorNotice } = useSelect(
+		select => (
 			{
-				isSettingsModal: select( 'jet-forms/actions' ).isSettingsModal(),
+				isSettingsModal: select( 'jet-forms/actions' ).
+					isSettingsModal(),
 				actionType: select( 'jet-forms/actions' ).
 					getAction( currentAction.type ),
+				isShowErrorNotice: select( 'jet-forms/actions' ).
+					getErrorVisibility(),
 			}
 		),
 		[ currentAction.type ],
 	);
+
+	const errors = useActionErrors( isSettingsModal ? currentAction : {} );
 
 	if ( !isSettingsModal ) {
 		return null;
@@ -77,6 +89,55 @@ function EditSettingsModal() {
 			actionId={ currentAction.id }
 			onChange={ settings => setTypeSettings( settings ) }
 		/> }
+		<ActionModalFooterSlotFill.Fill>
+			{ ( { updateClick, cancelClick } ) => <StickyModalActions
+				justify="space-between"
+			>
+				<Flex
+					justify="flex-start"
+					gap={ 3 }
+					style={ { flex: 1 } }
+				>
+					<Button
+						isPrimary
+						onClick={ () => {
+							if ( !errors?.length ) {
+								updateClick();
+
+								return;
+							}
+							editMeta( { errorsShow: true } );
+						} }
+					>
+						{ __( 'Update', 'jet-form-builder' ) }
+					</Button>
+					<Button
+						isSecondary
+						onClick={ cancelClick }
+					>
+						{ __( 'Cancel', 'jet-form-builder' ) }
+					</Button>
+				</Flex>
+				{ (
+					Boolean( errors.length ) && isShowErrorNotice
+				) && <Flex style={ { flex: 4 } }>
+					<IconText>
+						{ __(
+							'You have errors in some fields',
+							'jet-form-builder',
+						) }
+					</IconText>
+					<div>
+						<Button
+							variant="tertiary"
+							onClick={ updateClick }
+						>
+							{ __( 'Update anyway', 'jet-form-builder' ) }
+						</Button>
+					</div>
+				</Flex> }
+			</StickyModalActions> }
+		</ActionModalFooterSlotFill.Fill>
 	</ActionModal>;
 }
 

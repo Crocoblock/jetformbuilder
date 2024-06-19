@@ -62,6 +62,9 @@ export default {
 	getMetaIndex( state ) {
 		return state.meta?.index;
 	},
+	getErrorVisibility( state ) {
+		return state.meta?.errorsShow;
+	},
 	getCurrentAction( state ) {
 		return state.currentAction;
 	},

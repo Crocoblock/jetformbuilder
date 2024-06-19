@@ -50,9 +50,7 @@ class JetDefaultMetaControl extends wp.element.Component {
 	/* eslint-disable jsx-a11y/no-onchange */
 	render() {
 
-		return <div
-			className="jet-user-fields-map__list"
-		>
+		return <>
 			{ this.getDefaultMeta().map( ( currentItem, index ) => {
 				return <div
 					className="jet-user-meta__row"
@@ -98,9 +96,9 @@ class JetDefaultMetaControl extends wp.element.Component {
 				isSecondary
 				onClick={ this.addNewOption }
 			>
-				{ __( 'Add New Option' ) }
+				{ __( 'Add New Option', 'jet-form-builder' ) }
 			</Button>
-		</div>;
+		</>;
 	}
 }
 

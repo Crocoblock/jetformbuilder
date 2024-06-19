@@ -1,8 +1,10 @@
 import ActionFieldsMapContext from '../context/ActionFieldsMapContext';
-
-const {
-	      BaseControl,
-      } = wp.components;
+import {
+	RowControlEnd,
+	Label,
+	RowControl,
+} from 'jet-form-builder-components';
+import { Fragment } from '@wordpress/element';
 
 function ActionFieldsMap( {
 	fields = [],
@@ -12,11 +14,9 @@ function ActionFieldsMap( {
 	customHelp = false,
 } ) {
 
-	return <BaseControl
-		label={ label }
-		key="jet_fields_map"
-	>
-		<div className="jet-user-fields-map__list">
+	return <RowControl align="flex-start">
+		<Label>{ label }</Label>
+		<RowControlEnd>
 			{ (
 				customHelp && 'function' === typeof customHelp
 			) && customHelp() }
@@ -25,7 +25,7 @@ function ActionFieldsMap( {
 				className={ 'description-controls' }
 			>{ plainHelp }</span> }
 
-			{ fields.map( ( [ fieldId, fieldData ], index ) => <React.Fragment
+			{ fields.map( ( [ fieldId, fieldData ], index ) => <Fragment
 				key={ `field_in_map_${ fieldId + index }` }
 			>
 				<ActionFieldsMapContext.Provider value={ {
@@ -37,9 +37,9 @@ function ActionFieldsMap( {
 					  ? children( { fieldId, fieldData, index } )
 					  : children }
 				</ActionFieldsMapContext.Provider>
-			</React.Fragment> ) }
-		</div>
-	</BaseControl>;
+			</Fragment> ) }
+		</RowControlEnd>
+	</RowControl>;
 }
 
 export default ActionFieldsMap;

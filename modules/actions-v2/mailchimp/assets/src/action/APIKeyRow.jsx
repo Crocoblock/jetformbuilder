@@ -23,14 +23,39 @@ const StyledTextControl = styled( TextControl )`
 `;
 
 function APIKeyRow( { settings, onChangeSettingObj } ) {
-	const { fetchApiData } = useDispatch( STORE_NAME );
+	const { fetchApiData }     = useDispatch( STORE_NAME );
+	const { editEntityRecord } = useDispatch( 'core' );
 
-	const { isFetchLoading, fetchError } = useSelect( select => (
-		{
-			isFetchLoading: select( STORE_NAME ).isFetchLoading(),
-			fetchError: select( STORE_NAME ).getFetchError(),
-		}
-	), [] );
+	const updateGlobalApiKey = props => {
+		editEntityRecord(
+			'root',
+			'site',
+			undefined,
+			{
+				'jet_form_builder_settings__mailchimp-tab': JSON.stringify( {
+					...props,
+				} ),
+			},
+		);
+	};
+
+	const { isFetchLoading, fetchError, globalSettings } = useSelect(
+		select => {
+			const allSettings = select( 'core' ).getEditedEntityRecord(
+				'root',
+				'site',
+			);
+
+			return {
+				isFetchLoading: select( STORE_NAME ).isFetchLoading(),
+				fetchError: select( STORE_NAME ).getFetchError(),
+				globalSettings: JSON.parse(
+					allSettings[ 'jet_form_builder_settings__mailchimp-tab' ],
+				),
+			};
+		},
+		[],
+	);
 
 	const { hasError, setShowError } = useActionValidatorProvider( {
 		isSupported: error => 'api_key' === error?.property,
@@ -64,17 +89,25 @@ function APIKeyRow( { settings, onChangeSettingObj } ) {
 				) }
 			</IconText> }
 			<Flex>
-				<StyledTextControl
+				{ settings.use_global ? <StyledTextControl
 					id={ id }
-					disabled={ settings.use_global }
-					value={ settings.api_key }
-					onChange={ api_key => onChangeSettingObj(
+					value={ globalSettings.api_key }
+					onChange={ api_key => updateGlobalApiKey(
 						{ api_key },
 					) }
 					onBlur={ () => setShowError( true ) }
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom
-				/>
+				/> : <StyledTextControl
+					  id={ id }
+					  value={ settings.api_key }
+					  onChange={ api_key => onChangeSettingObj(
+						  { api_key },
+					  ) }
+					  onBlur={ () => setShowError( true ) }
+					  __next40pxDefaultSize
+					  __nextHasNoMarginBottom
+				  /> }
 				<Button
 					onClick={ () => fetchApiData( settings.api_key ) }
 					disabled={ isFetchLoading }

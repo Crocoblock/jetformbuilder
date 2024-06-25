@@ -3,6 +3,7 @@
 namespace JFB_Modules\Actions_V2\Mailchimp;
 
 use Jet_Form_Builder\Actions\Manager;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Base_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use JFB_Modules\Actions_V2\interfaces\Action_Integration_Interface;
 use JFB_Modules\Actions_V2\Mailchimp\Rest_Api\Mailchimp\Mailchimp_Route;
@@ -56,5 +57,15 @@ final class Mailchimp implements Action_Integration_Interface {
 	public function rest_api_init() {
 		$mailchimp = new Mailchimp_Route();
 		$mailchimp->register();
+
+		register_setting(
+			trim( Base_Handler::PREFIX, '_' ),
+			Base_Handler::PREFIX . 'mailchimp-tab',
+			array(
+				'type'         => 'string',
+				'show_in_rest' => true,
+				'default'      => '{}',
+			)
+		);
 	}
 }

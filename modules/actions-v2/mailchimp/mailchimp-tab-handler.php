@@ -1,14 +1,11 @@
 <?php
 
 
-namespace Jet_Form_Builder\Admin\Tabs_Handlers;
+namespace JFB_Modules\Actions_V2\Mailchimp;
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
+use Jet_Form_Builder\Admin\Tabs_Handlers\Base_Handler;
 
-class Mailchimp_Handler extends Base_Handler {
+class Mailchimp_Tab_Handler extends Base_Handler {
 
 	public function slug() {
 		return 'mailchimp-tab';

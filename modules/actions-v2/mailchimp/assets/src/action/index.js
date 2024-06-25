@@ -1,6 +1,7 @@
 import MailChimpRender from './render';
 import { __ } from '@wordpress/i18n';
 import icon from './icon';
+import validators from './validators';
 
 export default {
 	type: 'mailchimp',
@@ -9,4 +10,5 @@ export default {
 	icon,
 	docHref: 'https://jetformbuilder.com/features/mailchimp/',
 	category: 'communication',
+	validators,
 };

@@ -1,10 +1,11 @@
 import GroupedSelectControl from '../../components/GroupedSelectControl';
+import {
+	TextControl,
+	SelectControl,
+	CustomSelectControl,
+} from '@wordpress/components';
+import { Label } from 'jet-form-builder-components';
 
-const {
-	      TextControl,
-	      SelectControl,
-	      CustomSelectControl,
-      } = wp.components;
 
 function MapFieldPreset( {
 	data,
@@ -32,6 +33,8 @@ function MapFieldPreset( {
 							onChangeValue( newVal,
 								'current_field_' + data.name );
 						} }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</div>
 			);
@@ -44,7 +47,6 @@ function MapFieldPreset( {
 				>
 					<SelectControl
 						key={ 'control_' + data.name + index }
-						labelPosition="side"
 						options={ data.options }
 						label={ data.label }
 						value={ value }
@@ -52,6 +54,8 @@ function MapFieldPreset( {
 							onChangeValue( newVal,
 								'current_field_' + data.name );
 						} }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</div>
 			);
@@ -68,7 +72,8 @@ function MapFieldPreset( {
 						options={ data.options }
 						onChange={ ( { selectedItem } ) => {
 							value = selectedItem.key;
-							onChangeValue( value, 'current_field_' + data.name );
+							onChangeValue( value,
+								'current_field_' + data.name );
 						} }
 						value={ data.options.find(
 							option => option.key === value ) }
@@ -80,12 +85,10 @@ function MapFieldPreset( {
 				isCurrentFieldVisible( currentState, data ) &&
 				<div
 					key={ data.name + index }
-					className={ 'jet-form-preset__row' }
 				>
+					<Label>{ data.label }</Label>
 					<GroupedSelectControl
 						options={ data.options }
-						label={ data.label }
-						labelPosition="side"
 						value={ value }
 						onChange={ newVal => {
 							onChangeValue( newVal,

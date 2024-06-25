@@ -26,26 +26,6 @@ class Redirect_To_Page extends Base {
 		return 'redirect_to_page';
 	}
 
-	public function action_attributes() {
-		return array(
-			'redirect_type' => array(
-				'default' => '',
-			),
-			'redirect_page' => array(
-				'default' => '',
-			),
-			'redirect_hash' => array(
-				'default' => '',
-			),
-			'redirect_url'  => array(
-				'default' => '',
-			),
-			'redirect_args' => array(
-				'default' => array(),
-			),
-		);
-	}
-
 	public function get_redirect_url() {
 		$type = ! empty( $this->settings['redirect_type'] ) ? $this->settings['redirect_type'] : 'static_page';
 
@@ -133,15 +113,6 @@ class Redirect_To_Page extends Base {
 		$to_url = $this->get_completed_redirect_url( $to_url );
 
 		$handler->response_data['redirect'] = $to_url;
-	}
-
-	public function editor_labels() {
-		return array(
-			'redirect_page' => __( 'Select page:', 'jet-form-builder' ),
-			'redirect_url'  => __( 'Redirect URL:', 'jet-form-builder' ),
-			'redirect_args' => __( 'Add query arguments to redirect URL:', 'jet-form-builder' ),
-			'redirect_hash' => __( 'Add hash to redirect URL:', 'jet-form-builder' ),
-		);
 	}
 
 }

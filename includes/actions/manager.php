@@ -4,7 +4,6 @@ namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
 
-use Jet_Form_Builder\Actions\Types;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Messages\Action_Messages_Manager;
@@ -38,7 +37,6 @@ class Manager {
 			new Types\Call_Hook(),
 			new Types\Call_Webhook(),
 			new Types\Redirect_To_Page(),
-			new Types\Mailchimp(),
 			new Types\Getresponse(),
 		);
 	}

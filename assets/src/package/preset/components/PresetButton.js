@@ -1,15 +1,11 @@
-import ActionModal from '../../action-modal/components/ActionModal';
 import DynamicPreset from './DynamicPreset';
-
-const {
-	      __,
-      } = wp.i18n;
-const {
-	      Button,
-      } = wp.components;
-const {
-	      useState,
-      } = wp.element;
+import {
+	StickyModalActions,
+	ModalFooterStyle,
+} from 'jet-form-builder-components';
+import { Button, Modal } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 
 function PresetButton( {
 	value,
@@ -18,6 +14,16 @@ function PresetButton( {
 } ) {
 
 	const [ showModal, setShowModal ] = useState( false );
+	const [ stateValue, setStateValue ] = useState( value );
+
+	const updateClick = () => {
+		onChange( stateValue );
+		setShowModal( false );
+	};
+
+	const cancelClick = () => {
+		setShowModal( false );
+	};
 
 	return <>
 		<Button
@@ -27,17 +33,32 @@ function PresetButton( {
 			className={ 'jet-fb-is-thick' }
 			onClick={ () => setShowModal( true ) }
 		/>
-		{ showModal && <ActionModal
-			classNames={ [ 'width-60' ] }
+		{ showModal && <Modal
+			size="medium"
 			title={ title ?? __( 'Edit Preset', 'jet-form-builder' ) }
 			onRequestClose={ () => setShowModal( false ) }
+			className={ ModalFooterStyle }
 		>
 			<DynamicPreset
 				key={ 'dynamic_key_preset' }
-				value={ value }
-				onSavePreset={ onChange }
+				value={ stateValue }
+				onChange={ setStateValue }
 			/>
-		</ActionModal> }
+			<StickyModalActions>
+				<Button
+					isPrimary
+					onClick={ updateClick }
+				>
+					{ __( 'Update', 'jet-form-builder' ) }
+				</Button>
+				<Button
+					isSecondary
+					onClick={ cancelClick }
+				>
+					{ __( 'Cancel', 'jet-form-builder' ) }
+				</Button>
+			</StickyModalActions>
+		</Modal> }
 	</>;
 }
 

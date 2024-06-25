@@ -1,3 +1,5 @@
+import { Flex } from '@wordpress/components';
+
 const {
 	      GlobalField,
 	      AvailableMapField,
@@ -18,7 +20,7 @@ function GeneralPreset( {
 		onChange( { ...value, [ name ]: newValue } );
 	};
 
-	return <>
+	return <Flex direction="column" gap={ 4 }>
 		{ window.JetFormEditorData.presetConfig.global_fields.map(
 			( data, index ) => <GlobalField
 				key={ data.name + index }
@@ -42,7 +44,7 @@ function GeneralPreset( {
 				value={ value }
 			/> )
 		) }
-	</>;
+	</Flex>;
 }
 
 export default withPreset( GeneralPreset );

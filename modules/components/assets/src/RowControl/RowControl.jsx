@@ -1,15 +1,17 @@
 import { styled } from '@linaria/react';
 import { Flex } from '@wordpress/components';
-import ClearBaseControl from '../ClearBaseControlStyle';
+import ClearBaseControlStyle from '../ClearBaseControlStyle';
 import Label from '../Label/Label';
 import { useInstanceId } from '@wordpress/compose';
 import { forwardRef } from '@wordpress/element';
 import RowControlEndStyle from './RowControlEndStyle';
+import RowControlStartStyle from './RowControlStartStyle';
 
 function UnForwardedRowControl( {
 	children,
 	className,
 	createId = true,
+	controlSize = 3,
 	...props
 }, ref ) {
 	const htmlId = useInstanceId(
@@ -20,7 +22,7 @@ function UnForwardedRowControl( {
 
 	return <Flex
 		ref={ ref }
-		className={ [ className, ClearBaseControl ].join( ' ' ) }
+		className={ [ className, ClearBaseControlStyle ].join( ' ' ) }
 		gap={ 2 }
 		align="flex-start"
 		{ ...props }
@@ -34,12 +36,14 @@ function UnForwardedRowControl( {
 const UnStyledRowControl = forwardRef( UnForwardedRowControl );
 
 const RowControl = styled( UnStyledRowControl )`
-    ${ Label } {
+    & > ${ Label }, & > .${ RowControlStartStyle } {
         flex: 1;
     }
 
-    .components-base-control, .${ RowControlEndStyle } {
-        flex: 3;
+    & > .components-base-control,
+    & > .${ RowControlEndStyle },
+    & > .components-form-token-field {
+        flex: ${ ( { controlSize = 3 } ) => controlSize };
     }
 `;
 

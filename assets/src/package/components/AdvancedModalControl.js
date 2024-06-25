@@ -1,13 +1,7 @@
 import PresetButton from '../preset/components/PresetButton';
 import MacrosFields from '../macros.button/components/MacrosFields';
-
-const {
-	      Flex,
-	      FlexItem,
-      } = wp.components;
-const {
-	      useInstanceId,
-      } = wp.compose;
+import { Flex, FlexItem } from '@wordpress/components';
+import { useInstanceId } from '@wordpress/compose';
 
 function AdvancedModalControl( {
 	children,

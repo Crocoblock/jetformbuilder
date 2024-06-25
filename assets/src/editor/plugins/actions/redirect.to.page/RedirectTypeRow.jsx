@@ -16,7 +16,7 @@ const { useFields, useActionValidatorProvider } = JetFBHooks;
 function RedirectTypeRow( { settings, onChangeSettingObj } ) {
 	const fields        = useFields( { withInner: false } );
 	const redirectTypes = useRedirectTypes( { fields } );
-	const id            = useInstanceId( RedirectTypeRow, 'jfb-control' );
+	const id            = useInstanceId( RowControl, 'jfb-control' );
 
 	const { hasError, setShowError } = useActionValidatorProvider( {
 		isSupported: error => 'redirect_type' === error?.property,

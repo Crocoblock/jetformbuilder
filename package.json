@@ -25,6 +25,7 @@
 		"assets",
 		"modules/*",
 		"modules/blocks-v2/*",
+		"modules/actions-v2/*",
 		"modules/onboarding/*",
 		"compatibility/*",
 		"compatibility/jet-engine/blocks/*"

@@ -38,6 +38,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Blocks_V2\Module(),
 			new Security\Module(),
 			new Rich_Content\Module(),
+			new Actions_V2\Module(),
 			// additional
 			new Shortcode\Module(),
 			new Option_Field\Module(),

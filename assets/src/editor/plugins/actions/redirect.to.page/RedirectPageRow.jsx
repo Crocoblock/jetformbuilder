@@ -14,7 +14,7 @@ const { useActionValidatorProvider } = JetFBHooks;
 
 function RedirectPageRow( { settings, onChangeSettingObj } ) {
 
-	const { hasError, setShowError } = useActionValidatorProvider( {
+	const { hasError } = useActionValidatorProvider( {
 		isSupported: error => 'redirect_page' === error?.property,
 	} );
 
@@ -58,7 +58,6 @@ function RedirectPageRow( { settings, onChangeSettingObj } ) {
 				onChange={ redirect_page => onChangeSettingObj(
 					{ redirect_page },
 				) }
-				onBlur={ () => setShowError( true ) }
 				onFilterValueChange={ setSearch }
 				__next40pxDefaultSize
 				__nextHasNoMarginBottom

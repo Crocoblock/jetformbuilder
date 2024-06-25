@@ -1,48 +1,33 @@
 import withPreset from './withPreset';
 import GlobalFieldPreset from './GlobalFieldPreset';
 import MapFieldPreset from './MapFieldPreset';
-import useOnUpdateModal from '../../action-modal/hooks/useOnUpdateModal';
 import ControlPresetRestrictionContext
 	from '../context/ControlPresetRestrictionContext';
-
-const {
-	      useState,
-	      useContext,
-      } = wp.element;
-
-const {
-	      ToggleControl,
-      } = wp.components;
-
-const { __ } = wp.i18n;
+import { useContext } from '@wordpress/element';
+import { ToggleControl, Flex } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 let DynamicPreset = function ( {
 	value,
-	onSavePreset,
+	onChange,
 	parseValue,
 	excludeOptions,
 	isCurrentFieldVisible,
 	isVisible,
 } ) {
 
-	const position                 = 'dynamic';
-	const [ stateValue, setValue ] = useState(
-		() => parseValue( value ),
-	);
+	const position   = 'dynamic';
+	const stateValue = parseValue( value );
 
 	const restrictionContext = useContext( ControlPresetRestrictionContext );
 
 	const onChangeValue = ( newValue, name ) => {
-		setValue( prev => (
-			{ ...prev, [ name ]: newValue }
+		onChange( () => JSON.stringify(
+			{ ...stateValue, [ name ]: newValue },
 		) );
 	};
 
-	useOnUpdateModal( () => {
-		onSavePreset( JSON.stringify( stateValue ) );
-	} );
-
-	return <>
+	return <Flex direction="column" gap={ 4 }>
 		{ window.JetFormEditorData.presetConfig.global_fields.map(
 			( data, index ) => <GlobalFieldPreset
 				key={ `current_field_${ data.name }_${ index }` }
@@ -80,14 +65,14 @@ can't be accidentally changed from form Actions`,
 				'jet-form-builder',
 			) }
 			checked={ stateValue.restricted ?? true }
-			onChange={ restricted => setValue( prev => (
+			onChange={ restricted => onChange( prev => JSON.stringify(
 				{
 					...prev,
 					restricted: restricted ? undefined : restricted,
-				}
+				},
 			) ) }
 		/> }
-	</>;
+	</Flex>;
 };
 
 DynamicPreset = withPreset( DynamicPreset );

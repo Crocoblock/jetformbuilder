@@ -1,8 +1,9 @@
 import RowControlEndStyle from './RowControlEndStyle';
+import { cx } from '@linaria/core';
 
 function RowControlEnd( { className, ...props } ) {
 	return <div
-		className={ [ className, RowControlEndStyle ].join( ' ' ) }
+		className={ cx( className, RowControlEndStyle ) }
 		{ ...props }
 	/>;
 }

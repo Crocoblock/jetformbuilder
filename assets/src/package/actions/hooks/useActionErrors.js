@@ -19,6 +19,12 @@ function useActionErrors( action ) {
 	for ( const validator of validators ) {
 		const error = validator( { settings: action.selfSettings } );
 
+		if ( Array.isArray( error ) ) {
+			errors.push( ...error );
+
+			continue;
+		}
+
 		if ( !error ) {
 			continue;
 		}

@@ -44,6 +44,8 @@ function CallHookRender( {
 									replace( /[^\w\-]/g, '' ),
 							} ) }
 							onBlur={ () => setShowError( true ) }
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
 						/>
 					</Flex>
 				</> }

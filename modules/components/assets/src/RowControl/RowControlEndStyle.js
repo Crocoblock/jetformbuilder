@@ -1,7 +1,7 @@
 import { css } from '@linaria/core';
 
 const RowControlEndStyle = css`
-    display: block;
+    margin: unset;
 `;
 
 export default RowControlEndStyle;

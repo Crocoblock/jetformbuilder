@@ -8,5 +8,10 @@ export default {
 	edit: CallWebHookRender,
 	icon: cloud,
 	docHref: 'https://jetformbuilder.com/features/call-webhook/',
-	category: 'advanced'
+	category: 'advanced',
+	validators: [
+		( { settings } ) => settings?.webhook_url
+		                    ? false
+		                    : { type: 'empty', property: 'webhook_url' },
+	],
 };

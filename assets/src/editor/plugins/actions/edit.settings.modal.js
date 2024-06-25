@@ -57,6 +57,10 @@ function EditSettingsModal() {
 		return null;
 	}
 
+	const showErrors = (
+		Boolean( errors.length ) && isShowErrorNotice
+	);
+
 	return <ActionModal
 		size="large"
 		__experimentalHideHeader
@@ -117,25 +121,19 @@ function EditSettingsModal() {
 					>
 						{ __( 'Cancel', 'jet-form-builder' ) }
 					</Button>
-				</Flex>
-				{ (
-					Boolean( errors.length ) && isShowErrorNotice
-				) && <Flex style={ { flex: 4 } }>
-					<IconText>
+					{ showErrors && <IconText>
 						{ __(
 							'You have errors in some fields',
 							'jet-form-builder',
 						) }
-					</IconText>
-					<div>
-						<Button
-							variant="tertiary"
-							onClick={ updateClick }
-						>
-							{ __( 'Update anyway', 'jet-form-builder' ) }
-						</Button>
-					</div>
-				</Flex> }
+					</IconText> }
+				</Flex>
+				{ showErrors && <Button
+					variant="tertiary"
+					onClick={ updateClick }
+				>
+					{ __( 'Update anyway', 'jet-form-builder' ) }
+				</Button> }
 			</StickyModalActions> }
 		</ActionModalFooterSlotFill.Fill>
 	</ActionModal>;

@@ -3,8 +3,11 @@ import { Flex } from '@wordpress/components';
 import { Icon } from '@wordpress/icons';
 
 const StyledFlex = styled( Flex )`
-    width: auto;
     color: #cc1818;
+
+    && {
+        width: auto;
+    }
 `;
 
 const errorIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">

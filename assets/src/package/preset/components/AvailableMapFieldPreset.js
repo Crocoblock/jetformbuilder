@@ -85,6 +85,8 @@ function AvailableMapFieldPreset( {
 									[ field ]: currentVal,
 								}, 'fields_map' );
 							} }
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
 						/> )
 					);
 				case 'select':
@@ -92,8 +94,6 @@ function AvailableMapFieldPreset( {
 						<AvailableFieldWrapper { ...props } key={ uniqKey }>
 							<SelectControl
 								options={ data.options }
-								//label={ data.label }
-								labelPosition="top"
 								value={ currentVal[ data.name ] }
 								onChange={ newVal => {
 									currentVal[ data.name ] = newVal;
@@ -102,6 +102,8 @@ function AvailableMapFieldPreset( {
 										[ field ]: currentVal,
 									}, 'fields_map' );
 								} }
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
 							/>
 						</AvailableFieldWrapper>
 					);
@@ -125,8 +127,6 @@ function AvailableMapFieldPreset( {
 						<AvailableFieldWrapper { ...props } key={ uniqKey }>
 							<GroupedSelectControl
 								options={ data.options }
-								//label={ data.label }
-								labelPosition="top"
 								value={ currentVal[ data.name ] }
 								onChange={ newVal => {
 									currentVal[ data.name ] = newVal;

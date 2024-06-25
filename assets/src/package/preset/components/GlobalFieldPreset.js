@@ -27,6 +27,8 @@ function GlobalFieldPreset( {
 						onChange={ newVal => {
 							onChangeValue( newVal, data.name )
 						} }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</div>
 			);
@@ -38,13 +40,14 @@ function GlobalFieldPreset( {
 				>
 					<SelectControl
 						key={ data.name + index }
-						labelPosition="side"
 						options={ excludeOptions( data.options ) }
 						label={ data.label }
 						value={ value[ data.name ] }
 						onChange={ newVal => {
 							onChangeValue( newVal, data.name )
 						} }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 				</div>
 			);

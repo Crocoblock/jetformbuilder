@@ -6,7 +6,6 @@ import updateUser from './update.user';
 import callHook from './call.hook';
 import callWebhook from './call.webhook';
 import redirectToPage from './redirect.to.page';
-import mailchimp from './mailchimp';
 import getresponse from './getresponse';
 import proActions from './pro.actions';
 import { dispatch } from '@wordpress/data';
@@ -22,7 +21,6 @@ dispatch( 'jet-forms/actions' ).registerActions( [
 	callWebhook,
 	redirectToPage,
 	proActions[ 1 ],
-	mailchimp,
 	getresponse,
 ] );
 

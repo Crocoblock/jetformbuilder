@@ -2,7 +2,7 @@ import useLoopedAction from '../hooks/useLoopedAction';
 import { Card } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { styled } from '@linaria/react';
-import { css } from '@linaria/core';
+import { css, cx } from '@linaria/core';
 import useActionErrors from '../hooks/useActionErrors';
 
 const MarginLessCard = styled( Card )`
@@ -38,7 +38,7 @@ function ActionItemWrapper( { className = '', ...props } = {} ) {
 				isFixed: select( 'jet-forms/actions' ).isFixed( action.type ),
 			}
 		),
-		[],
+		[ action.type ],
 	);
 
 	const errors = useActionErrors( action );
@@ -50,14 +50,14 @@ function ActionItemWrapper( { className = '', ...props } = {} ) {
 	return <MarginLessCard
 		elevation={ 2 }
 		size={ 'extraSmall' }
-		className={ [
+		className={ cx(
 			'jet-form-action',
 			className,
-			isFixed ? '' : 'draggable',
-			isExecute ? '' : disabledStyle,
-			currentAction?.id === action.id ? currentStyle : '',
-			errors.length ? errorStyle : '',
-		].join( ' ' ) }
+			!isFixed && 'draggable',
+			!isExecute && disabledStyle,
+			currentAction?.id === action.id && currentStyle,
+			errors.length && errorStyle,
+		) }
 		{ ...props }
 	/>;
 }

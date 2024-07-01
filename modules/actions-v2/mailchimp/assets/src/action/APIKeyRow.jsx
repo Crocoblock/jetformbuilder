@@ -13,6 +13,7 @@ import { STORE_NAME } from '../store';
 import { cloud } from '@wordpress/icons';
 import APIKeyHelp from './APIKeyHelp';
 import { styled } from '@linaria/react';
+import { useSiteOptionJSON } from 'jet-form-builder-data';
 
 const {
 	      useActionValidatorProvider,
@@ -23,43 +24,25 @@ const StyledTextControl = styled( TextControl )`
 `;
 
 function APIKeyRow( { settings, onChangeSettingObj } ) {
-	const { fetchApiData }     = useDispatch( STORE_NAME );
-	const { editEntityRecord } = useDispatch( 'core' );
+	const { fetchApiData } = useDispatch( STORE_NAME );
 
-	const updateGlobalApiKey = props => {
-		editEntityRecord(
-			'root',
-			'site',
-			undefined,
+	const { isFetchLoading, fetchError } = useSelect(
+		select => (
 			{
-				'jet_form_builder_settings__mailchimp-tab': JSON.stringify( {
-					...props,
-				} ),
-			},
-		);
-	};
-
-	const { isFetchLoading, fetchError, globalSettings } = useSelect(
-		select => {
-			const allSettings = select( 'core' ).getEditedEntityRecord(
-				'root',
-				'site',
-			);
-
-			return {
 				isFetchLoading: select( STORE_NAME ).isFetchLoading(),
 				fetchError: select( STORE_NAME ).getFetchError(),
-				globalSettings: JSON.parse(
-					allSettings[ 'jet_form_builder_settings__mailchimp-tab' ],
-				),
-			};
-		},
+			}
+		),
 		[],
 	);
 
 	const { hasError, setShowError } = useActionValidatorProvider( {
 		isSupported: error => 'api_key' === error?.property,
 	} );
+
+	const [ globalSettings, setGlobalSettings ] = useSiteOptionJSON(
+		'jet_form_builder_settings__mailchimp-tab',
+	);
 
 	const id = useInstanceId( RowControl, 'jfb-control' );
 
@@ -92,7 +75,7 @@ function APIKeyRow( { settings, onChangeSettingObj } ) {
 				{ settings.use_global ? <StyledTextControl
 					id={ id }
 					value={ globalSettings.api_key }
-					onChange={ api_key => updateGlobalApiKey(
+					onChange={ api_key => setGlobalSettings(
 						{ api_key },
 					) }
 					onBlur={ () => setShowError( true ) }
@@ -109,7 +92,11 @@ function APIKeyRow( { settings, onChangeSettingObj } ) {
 					  __nextHasNoMarginBottom
 				  /> }
 				<Button
-					onClick={ () => fetchApiData( settings.api_key ) }
+					onClick={ () => fetchApiData(
+						settings.use_global
+						? globalSettings.api_key
+						: settings.api_key,
+					) }
 					disabled={ isFetchLoading }
 					isBusy={ isFetchLoading }
 					icon={ cloud }

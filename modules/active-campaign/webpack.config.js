@@ -55,4 +55,9 @@ module.exports = {
 		new VueLoaderPlugin(),
 		new WPExtractorPlugin(),
 	],
+	externalsType: 'window',
+	externals: {
+		'jet-form-builder-components': [ 'jfb', 'components' ],
+		'jet-form-builder-data': [ 'jfb', 'data' ],
+	},
 };

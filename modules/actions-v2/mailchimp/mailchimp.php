@@ -42,7 +42,8 @@ final class Mailchimp implements Action_Integration_Interface {
 
 		array_push(
 			$script_asset['dependencies'],
-			'jet-fb-components'
+			'jet-fb-components',
+			'jet-fb-data'
 		);
 
 		wp_enqueue_script(

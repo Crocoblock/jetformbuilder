@@ -24,6 +24,7 @@ class Modules_Controller implements Module_Controller_It {
 		return array(
 			// core required modules
 			new Components\Module(),
+			new Data\Module(),
 			new Jobs\Module(),
 			new Jet_Plugins\Module(),
 			new Logger\Module(),

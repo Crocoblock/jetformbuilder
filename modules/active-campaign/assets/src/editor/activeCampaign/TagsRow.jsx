@@ -1,10 +1,10 @@
+import { __ } from '@wordpress/i18n';
 import {
 	RowControl,
 	Label,
 } from 'jet-form-builder-components';
-import { __ } from '@wordpress/i18n';
-import { FormTokenField } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
+import { FormTokenField } from '@wordpress/components';
 
 function TagsRow( { settings, onChangeSettingObj } ) {
 

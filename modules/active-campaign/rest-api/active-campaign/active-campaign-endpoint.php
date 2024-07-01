@@ -1,35 +1,39 @@
 <?php
 
 
-namespace JFB_Modules\Active_Campaign\Rest_Api;
+namespace JFB_Modules\Active_Campaign\Rest_Api\Active_Campaign;
 
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
+use JFB_Components\Rest_Api\Interfaces\Endpoint_Interface;
 use JFB_Modules\Active_Campaign\Api\Retrieve_Custom_Fields_Action;
 use JFB_Modules\Active_Campaign\Api\Retrieve_Lists_Action;
-use JFB_Components\Rest_Api\Rest_Api_Endpoint_Base;
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
+class Active_Campaign_Endpoint implements Endpoint_Interface {
 
-class Editor_Fetch_Endpoint extends Rest_Api_Endpoint_Base {
-
-	public static function get_rest_base() {
-		return 'activecampaign/editor';
-	}
-
-	public static function get_methods() {
+	public function get_method(): string {
 		return \WP_REST_Server::READABLE;
 	}
 
-	public function check_permission(): bool {
+	public function has_permission(): bool {
 		return current_user_can( 'manage_options' );
 	}
 
-	public function run_callback( \WP_REST_Request $request ) {
-		$token = $request->get_header( 'API-TOKEN' );
-		$url   = $request->get_header( 'API-URL' );
+	public function get_args(): array {
+		return array(
+			'apiKey' => array(
+				'type'     => 'string',
+				'required' => true,
+			),
+			'apiUrl' => array(
+				'type'     => 'string',
+				'required' => true,
+			),
+		);
+	}
+
+	public function process( \WP_REST_Request $request ): \WP_REST_Response {
+		$token = $request['apiKey'] ?? '';
+		$url   = $request['apiUrl'] ?? '';
 
 		try {
 			/** @var Retrieve_Custom_Fields_Action $fields */

@@ -57,5 +57,6 @@ module.exports = {
 	externalsType: 'window',
 	externals: {
 		'jet-form-builder-components': [ 'jfb', 'components' ],
+		'jet-form-builder-data': [ 'jfb', 'data' ],
 	},
 };

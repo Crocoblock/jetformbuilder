@@ -2,12 +2,8 @@ export function getLists( state ) {
 	return state?.api?.lists ?? [];
 }
 
-export function getGroups( state ) {
-	return state?.api?.groups ?? {};
-}
-
 export function getFields( state ) {
-	return state?.api?.fields ?? {};
+	return state?.api?.fields ?? [];
 }
 
 export function isFetchLoading( state ) {

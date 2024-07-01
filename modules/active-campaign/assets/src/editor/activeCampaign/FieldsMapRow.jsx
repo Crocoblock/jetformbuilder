@@ -14,20 +14,18 @@ const {
 	      useFields,
       } = JetFBHooks;
 
-function FieldsMapRow( { getMapField, setMapField, listId } ) {
+function FieldsMapRow( { getMapField, setMapField } ) {
 
 	const formFields = useFields( {
 		withInner: false,
 		placeholder: '--',
 	} );
 
-	const fields = useSelect( select => {
-		const allFields = select( STORE_NAME ).getFields();
+	const fields = useSelect( select => (
+		select( STORE_NAME ).getFields()
+	), [] );
 
-		return allFields?.[ listId ] ?? [];
-	}, [ listId ] );
-
-	return <RowControl align="flex-start">
+	return <RowControl>
 		<Label>{ __( 'Fields map', 'jet-form-builder' ) }</Label>
 		<Flex
 			className={ cx( RowControlEndStyle ) }

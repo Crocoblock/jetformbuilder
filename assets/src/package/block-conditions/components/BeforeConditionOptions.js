@@ -1,4 +1,4 @@
-import useFields from '../../blocks/hooks/useFields';
+import { useFields } from 'jet-form-builder-blocks-to-actions';
 
 const {
 	      SelectControl,

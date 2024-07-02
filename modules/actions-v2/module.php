@@ -13,8 +13,7 @@ use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Components\Repository\Interfaces\Repository_Pattern_Interface;
 use JFB_Components\Repository\Repository_Pattern_Trait;
-use JFB_Modules\Actions_V2\interfaces\Action_Integration_Interface;
-use JFB_Modules\Actions_V2\Mailchimp\Mailchimp;
+use JFB_Modules\Actions_V2\Interfaces\Action_Integration_Interface;
 
 final class Module implements
 	Base_Module_It,
@@ -31,6 +30,13 @@ final class Module implements
 
 	public function rep_item_id() {
 		return 'actions-v2';
+	}
+
+	public function rep_instances(): array {
+		return array(
+			new Mailchimp\Mailchimp(),
+			new Get_Response\Get_Response(),
+		);
 	}
 
 	public function on_install() {
@@ -53,14 +59,37 @@ final class Module implements
 	public function init_hooks() {
 		add_action( 'jet-form-builder/actions/register', array( $this, 'register_actions' ) );
 
+		add_action(
+			'enqueue_block_editor_assets',
+			array( $this, 'register_assets' ),
+			-9
+		);
+		add_action(
+			'wp_enqueue_scripts',
+			array( $this, 'register_assets' ),
+			-9
+		);
+
 		/** @var Action_Integration_Interface $integration_item */
 		foreach ( $this->rep_generate_items() as $integration_item ) {
 			$integration_item->init_hooks();
 		}
 	}
 
+
 	public function remove_hooks() {
 		remove_action( 'jet-form-builder/actions/register', array( $this, 'register_actions' ) );
+
+		remove_action(
+			'enqueue_block_editor_assets',
+			array( $this, 'register_assets' ),
+			-9
+		);
+		remove_action(
+			'wp_enqueue_scripts',
+			array( $this, 'register_assets' ),
+			-9
+		);
 	}
 
 
@@ -71,10 +100,25 @@ final class Module implements
 		}
 	}
 
+	public function register_assets() {
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
 
-	public function rep_instances(): array {
-		return array(
-			new Mailchimp(),
+		if ( true === $script_asset ) {
+			return;
+		}
+
+		array_push(
+			$script_asset['dependencies'],
+			'jet-fb-components',
+			'jet-fb-data'
+		);
+
+		wp_register_script(
+			$this->get_handle(),
+			$this->get_url( 'assets/build/editor.js' ),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
 		);
 	}
 }

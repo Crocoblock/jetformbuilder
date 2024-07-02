@@ -1,6 +1,6 @@
 import MacrosFieldsTemplate from './MacrosFieldsTemplate';
 import MacroFieldItem from './MacroFieldItem';
-import useFields from '../../blocks/hooks/useFields';
+import { useFields } from 'jet-form-builder-blocks-to-actions';
 
 function MacrosFields( {
 	onClick = () => {},

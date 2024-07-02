@@ -12,6 +12,11 @@ import {
 } from 'jet-form-builder-components';
 import { cx } from '@linaria/core';
 import { __ } from '@wordpress/i18n';
+import { ValidatorProvider } from 'jet-form-builder-actions';
+import {
+	useFields,
+	useSanitizeFieldsMap,
+} from 'jet-form-builder-blocks-to-actions';
 
 const {
 	      convertListToFieldsMap,
@@ -20,12 +25,7 @@ const {
 	      ActionFieldsMap,
 	      WrapperRequiredControl,
 	      DynamicPropertySelect,
-	      ValidatorProvider,
       } = JetFBComponents;
-const {
-	      useSanitizeFieldsMap,
-	      useFields,
-      } = JetFBHooks;
 
 const modifiers = applyFilters(
 	'jet.fb.insert.post.modifiers',

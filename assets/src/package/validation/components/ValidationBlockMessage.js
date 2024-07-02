@@ -1,6 +1,6 @@
 import useBlockAttributes from '../../blocks/hooks/useBlockAttributes';
 import useUniqKey from '../../blocks/hooks/useUniqKey';
-import useMetaState from '../../hooks/useMetaState';
+import { useMetaState } from 'jet-form-builder-data';
 import getItemByName from '../helpers/getItemByName';
 
 const {

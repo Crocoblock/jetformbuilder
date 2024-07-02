@@ -10,10 +10,7 @@ import { Flex, SelectControl } from '@wordpress/components';
 import { cx } from '@linaria/core';
 import { useSelect } from '@wordpress/data';
 import { STORE_NAME } from '../store';
-
-const {
-	      useActionValidatorProvider,
-      } = JetFBHooks;
+import { useActionValidatorProvider } from 'jet-form-builder-actions';
 
 function SelectListRow( { settings, onChangeSettingObj } ) {
 	const lists = useSelect( select => (
@@ -54,7 +51,7 @@ function SelectListRow( { settings, onChangeSettingObj } ) {
 					{
 						value: '',
 						label: __(
-							'-- Select list / audience',
+							'-- Select list / audience --',
 							'jet-form-builder',
 						),
 					},

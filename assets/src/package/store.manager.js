@@ -1,4 +1,3 @@
-import actions from './actions/store';
 import gateways from './gateways/store';
 import events from './events/store';
 import blockConditions from './block-conditions/store';
@@ -18,7 +17,6 @@ const {
 const stores = [
 	gateways,
 	events,
-	actions,
 	blockConditions,
 	macros,
 	validation,

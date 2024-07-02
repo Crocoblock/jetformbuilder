@@ -4,6 +4,7 @@ import { Icon } from '@wordpress/icons';
 import { styled } from '@linaria/react';
 import { Button, Flex } from '@wordpress/components';
 import { IconText, StickyModalActions } from 'jet-form-builder-components';
+import { useActionErrors } from 'jet-form-builder-actions';
 
 const {
 	      ActionModal,
@@ -18,7 +19,6 @@ const {
 	      useActionCallback,
 	      useUpdateCurrentAction,
 	      useUpdateCurrentActionMeta,
-	      useActionErrors,
       } = JetFBHooks;
 
 const ModalHeading = styled.div`

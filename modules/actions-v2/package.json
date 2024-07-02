@@ -1,0 +1,17 @@
+{
+	"name": "jet-form-builder-actions",
+	"description": "Actions module for JetFormBuilder Plugin",
+	"version": "3.4.0",
+	"author": "hug.reed <sanko200065@gmail.com>",
+	"main": "assets/src/index.js",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"build": "npx webpack build --mode production",
+		"dev": "npx webpack build --mode development -w"
+	},
+	"dependencies": {
+		"jet-form-builder-components": "*",
+		"jet-form-builder-data": "*"
+	}
+}

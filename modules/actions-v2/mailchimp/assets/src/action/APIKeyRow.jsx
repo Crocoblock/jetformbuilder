@@ -14,10 +14,8 @@ import { cloud } from '@wordpress/icons';
 import APIKeyHelp from './APIKeyHelp';
 import { styled } from '@linaria/react';
 import { useSiteOptionJSON } from 'jet-form-builder-data';
+import { useActionValidatorProvider } from 'jet-form-builder-actions';
 
-const {
-	      useActionValidatorProvider,
-      } = JetFBHooks;
 
 const StyledTextControl = styled( TextControl )`
     flex: 1;

@@ -1,5 +1,4 @@
-import CurrentActionEditContext
-	from '../../actions/context/CurrentActionEditContext';
+import { CurrentActionEditContext } from 'jet-form-builder-actions';
 import ActionFieldsMapContext from '../context/ActionFieldsMapContext';
 import CurrentPropertyMapContext from '../context/CurrentPropertyMapContext';
 

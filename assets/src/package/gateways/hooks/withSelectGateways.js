@@ -1,6 +1,6 @@
 import gatewayAttr from '../helpers/gatewayAttr';
 import gatewayLabel from '../helpers/gatewayLabel';
-import globalTab from '../../actions/helpers/globalTab';
+import { globalTab } from 'jet-form-builder-actions';
 
 function withSelectGateways( select ) {
 	const store = select( 'jet-forms/gateways' );

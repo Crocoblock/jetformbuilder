@@ -8,8 +8,7 @@ import {
 	ControlWithErrorStyle,
 } from 'jet-form-builder-components';
 import { cx } from '@linaria/core';
-
-const { ValidatorProvider } = JetFBComponents;
+import { ValidatorProvider } from 'jet-form-builder-actions';
 
 function CallHookRender( {
 	settings,

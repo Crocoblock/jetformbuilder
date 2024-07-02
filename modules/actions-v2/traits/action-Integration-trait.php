@@ -1,6 +1,6 @@
 <?php
 
-namespace JFB_Modules\Actions_V2\traits;
+namespace JFB_Modules\Actions_V2\Traits;
 
 use JFB_Modules\Actions_V2\Module;
 

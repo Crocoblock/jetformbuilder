@@ -1,6 +1,6 @@
 <?php
 
-namespace JFB_Modules\Actions_V2\interfaces;
+namespace JFB_Modules\Actions_V2\Interfaces;
 
 use Jet_Form_Builder\Actions\Manager;
 use JFB_Components\Module\Base_Module_Dir_It;

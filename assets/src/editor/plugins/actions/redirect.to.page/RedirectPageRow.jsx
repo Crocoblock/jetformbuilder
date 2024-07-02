@@ -9,8 +9,7 @@ import { Flex, ComboboxControl } from '@wordpress/components';
 import { cx } from '@linaria/core';
 import { useDebouncedInput } from '@wordpress/compose';
 import { useEntityRecords } from '@wordpress/core-data';
-
-const { useActionValidatorProvider } = JetFBHooks;
+import { useActionValidatorProvider } from 'jet-form-builder-actions';
 
 function RedirectPageRow( { settings, onChangeSettingObj } ) {
 

@@ -58,5 +58,7 @@ module.exports = {
 	externals: {
 		'jet-form-builder-components': [ 'jfb', 'components' ],
 		'jet-form-builder-data': [ 'jfb', 'data' ],
+		'jet-form-builder-actions': [ 'jfb', 'actions' ],
+		'jet-form-builder-blocks-to-actions': [ 'jfb', 'blocksToActions' ],
 	},
 };

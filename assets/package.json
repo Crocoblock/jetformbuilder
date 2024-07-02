@@ -10,6 +10,9 @@
 		"dev": "npx webpack build --mode development -w"
 	},
 	"dependencies": {
-		"jet-form-builder-components": "*"
+		"jet-form-builder-components": "*",
+		"jet-form-builder-data": "*",
+		"jet-form-builder-actions": "*",
+		"jet-form-builder-blocks-to-actions": "*"
 	}
 }

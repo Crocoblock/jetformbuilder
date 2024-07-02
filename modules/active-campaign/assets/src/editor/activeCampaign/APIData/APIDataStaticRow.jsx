@@ -12,10 +12,7 @@ import APIDataHelp from './APIDataHelp';
 import { useInstanceId } from '@wordpress/compose';
 import APIDataFetchButton from './APIDataFetchButton';
 import { cx } from '@linaria/core';
-
-const {
-	      useActionValidatorProvider,
-      } = JetFBHooks;
+import { useActionValidatorProvider } from 'jet-form-builder-actions';
 
 function APIDataStaticRow( { settings, onChangeSettingObj } ) {
 	const fetchError = useSelect(

@@ -1,0 +1,27 @@
+import { createSlotFill } from '@wordpress/components';
+
+const ActionMessagesSlotFills = {};
+
+for ( const { self } of jetFormActionTypes ) {
+	if (
+		!window[ self ]?.hasOwnProperty?.( '__messages' ) ||
+		!Object.keys( window[ self ].__messages )?.length
+	) {
+		continue;
+	}
+
+	for ( const messageKey of Object.keys( window[ self ].__messages ) ) {
+		if ( ActionMessagesSlotFills.hasOwnProperty( messageKey ) ) {
+			continue;
+		}
+		ActionMessagesSlotFills[ messageKey ] = createSlotFill(
+			`JFBActionMessageRow-${ messageKey }`,
+		);
+	}
+}
+
+// backward compatibility
+window.JetFBComponents                         = window?.JetFBComponents ?? {};
+window.JetFBComponents.ActionMessagesSlotFills = ActionMessagesSlotFills;
+
+export default ActionMessagesSlotFills;

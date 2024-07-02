@@ -1,16 +1,7 @@
-import useRequestFields from '../../actions/hooks/useRequestFields';
-
-const {
-	      useSelect,
-      } = wp.data;
-const {
-	      useBlockEditContext,
-      } = wp.blockEditor;
-
-const {
-	      __,
-	      sprintf,
-      } = wp.i18n;
+import { useRequestFields } from 'jet-form-builder-actions';
+import { useSelect } from '@wordpress/data';
+import { useBlockEditContext } from '@wordpress/block-editor';
+import { sprintf, __ } from '@wordpress/i18n';
 
 const actionTypesMap = {};
 
@@ -37,6 +28,7 @@ function useIsUniqueFieldName() {
 					isUniqueName( clientId ),
 			};
 		},
+		[ clientId ],
 	);
 
 	if ( !inFormFields ) {
@@ -56,7 +48,7 @@ function useIsUniqueFieldName() {
 	const computed = actionFields.find(
 		( { value } ) => fieldNames.includes( value ) );
 
-	if ( ! computed ) {
+	if ( !computed ) {
 		return {};
 	}
 

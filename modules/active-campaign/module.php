@@ -8,10 +8,8 @@ use Jet_Form_Builder\Admin\Tabs_Handlers\Base_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
-use JFB_Components\Rest_Api\Rest_Api_Controller_Base;
 use JFB_Modules\Active_Campaign\Actions\Active_Campaign_Action;
 use JFB_Modules\Active_Campaign\Rest_Api\Active_Campaign\Active_Campaign_Route;
-use JFB_Modules\Active_Campaign\Rest_Api\Rest_Controller;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Handle_It;
 use JFB_Components\Module\Base_Module_Handle_Trait;
@@ -88,6 +86,14 @@ final class Module implements
 
 	public function editor_assets() {
 		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+
+		array_push(
+			$script_asset['dependencies'],
+			'jet-fb-components',
+			'jet-fb-data',
+			'jet-fb-actions-v2',
+			'jet-fb-blocks-v2-to-actions-v2'
+		);
 
 		wp_enqueue_script(
 			$this->get_handle(),

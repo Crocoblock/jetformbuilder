@@ -10,8 +10,8 @@ import { cx } from '@linaria/core';
 import useRedirectTypes
 	from './useRedirectTypes';
 import { useInstanceId } from '@wordpress/compose';
-
-const { useFields, useActionValidatorProvider } = JetFBHooks;
+import { useActionValidatorProvider } from 'jet-form-builder-actions';
+import { useFields } from 'jet-form-builder-blocks-to-actions';
 
 function RedirectTypeRow( { settings, onChangeSettingObj } ) {
 	const fields        = useFields( { withInner: false } );

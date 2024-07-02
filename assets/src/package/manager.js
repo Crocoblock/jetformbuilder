@@ -2,9 +2,6 @@ import ActionFieldsMap from './action-fields-map/components/ActionFieldsMap';
 import ActionModal from './action-modal/components/ActionModal';
 import WrapperRequiredControl
 	from './action-fields-map/components/WrapperRequiredControl';
-import RequestButton from './actions/components/RequestButton';
-import ValidateButton from './actions/components/ValidateButton';
-import addAction from './actions/helpers/addAction';
 import Tools, {
 	classnames,
 	event,
@@ -35,27 +32,18 @@ import registerGateway from './gateways/helpers/registerGateway';
 import renderGateway from './gateways/helpers/renderGateway';
 import renderGatewayWithPlaceholder
 	from './gateways/helpers/renderGatewayWithPlaceholder';
-import useActions from './actions/hooks/useActions';
-import useMetaState from './hooks/useMetaState';
-import useStateLoadingClasses from './hooks/useStateLoadingClasses';
-import useStateValidClasses from './hooks/useStateValidClasses';
 import useSuccessNotice from './hooks/useSuccessNotice';
-import useRequestFields from './actions/hooks/useRequestFields';
 import useSelectPostMeta from './hooks/useSelectPostMeta';
-import withRequestFields from './actions/hooks/withRequestFields';
 import useOnUpdateModal from './action-modal/hooks/useOnUpdateModal';
 import withSelectFormFields from './hooks/withSelectFormFields';
 import withSelectGateways from './gateways/hooks/withSelectGateways';
 import withDispatchGateways from './gateways/hooks/withDispatchGateways';
-import useSanitizeFieldsMap from './actions/hooks/useSanitizeFieldsMap';
-import withSelectActionLoading from './actions/hooks/withSelectActionLoading';
 import useRequestEvents from './events/hooks/useRequestEvents';
 import useBlockConditions from './block-conditions/hooks/useBlockConditions';
 import useUniqKey from './blocks/hooks/useUniqKey';
 import useIsAdvancedValidation from './blocks/hooks/useIsAdvancedValidation';
 import useBlockAttributes from './blocks/hooks/useBlockAttributes';
 import useIsHasAttribute from './hooks/useIsHasAttribute';
-import globalTab from './actions/helpers/globalTab';
 
 import DynamicPreset from './preset/components/DynamicPreset';
 import JetFieldsMapControl from '../editor/blocks/controls/fields-map';
@@ -73,23 +61,16 @@ import withPreset from './preset/components/withPreset';
 import AdvancedFields from './blocks/components/AdvancedFields';
 import GeneralFields from './blocks/components/GeneralFields';
 import ToolBarFields from './blocks/components/ToolBarFields';
-import PlaceholderMessage from './actions/components/PlaceholderMessage';
-import ActionMessages from './actions/components/ActionMessages';
 import HorizontalLine from './components/HorizontalLine';
-import RequestLoadingButton from './actions/components/RequestLoadingButton';
-import convertListToFieldsMap from './actions/helpers/convertListToFieldsMap';
 import FieldSettingsWrapper from './blocks/components/FieldSettingsWrapper';
 import GroupedSelectControl from './components/GroupedSelectControl';
 import getBlockControls from './blocks/helpers/getBlockControls';
 import BaseHelp from './components/BaseHelp';
-import ValidateButtonWithStore
-	from './actions/components/ValidateButtonWithStore';
 import GatewayFetchButton from './gateways/components/GatewayFetchButton';
 import './store.manager';
 import ActionModalContext from './action-modal/context/ActionModalContext';
 import SafeDeleteContext from './repeater/context/safe.delete';
 import RepeaterItemContext from './repeater/context/repeater.item';
-import ActionListItemContext from './actions/context/ActionListItemContext';
 import RepeaterBodyContext from './repeater/context/repeater.custom.item.body';
 import RepeaterHeadContext from './repeater/context/repeater.custom.item.head';
 import RepeaterButtonsContext
@@ -104,15 +85,12 @@ import ValidationBlockMessage
 	from './validation/components/ValidationBlockMessage';
 import ValidationMetaMessage
 	from './validation/components/ValidationMetaMessage';
-import CurrentActionEditContext
-	from './actions/context/CurrentActionEditContext';
 import ActionFieldsMapContext
 	from './action-fields-map/context/ActionFieldsMapContext';
 import CurrentPropertyMapContext
 	from './action-fields-map/context/CurrentPropertyMapContext';
 import DynamicPropertySelect
 	from './action-fields-map/components/DynamicPropertySelect';
-import ActionFetchButton from './actions/components/ActionFetchButton';
 import DynamicValues from './dynamic.value/components/DynamicValues';
 import RepeaterAddOrOperator from './repeater/components/repeater.add.or';
 import EditAdvancedRulesButton
@@ -145,11 +123,7 @@ import ClientSideMacros
 	from './macros.button/components/ClientSideMacros';
 import { insertMacro } from './macros.button/functions';
 import useInsertMacro from './macros.button/hooks/useInsertMacro';
-import addDetail from './actions/helpers/addDetail';
 import ToggleControl from './components/ToggleControl';
-import BaseAction from './actions/abstract/BaseAction';
-import addComputedField from './actions/helpers/addComputedField';
-import BaseComputedField from './actions/abstract/BaseComputedField';
 import DetailsContainer from './components/DetailsContainer';
 import HoverContainer from './components/HoverContainer';
 import getCurrentInnerBlocks from './blocks/helpers/getCurrentInnerBlocks';
@@ -161,44 +135,12 @@ import humanReadableCondition
 import ConditionsRepeaterContextProvider
 	from './block-conditions/components/ConditionsRepeaterContextProvider';
 import ServerSideMacros from './macros.button/components/ServerSideMacros';
-import convertFlow from './actions/helpers/convertFlow';
-import ActionsFlow from './actions/abstract/ActionsFlow';
-import useCurrentAction from './actions/hooks/useCurrentAction';
-import useUpdateCurrentAction from './actions/hooks/useUpdateCurrentAction';
-import useUpdateCurrentActionMeta
-	from './actions/hooks/useUpdateCurrentActionMeta';
-import useActionsEdit from './actions/hooks/useActionsEdit';
-import useActionCallback from './actions/hooks/useActionCallback';
-import useActionDetail from './actions/hooks/useActionDetail';
 import useUniqueNameOnDuplicate from './blocks/hooks/useUniqueNameOnDuplicate';
-import useFields from './blocks/hooks/useFields';
 import SelectVariations from './blocks/components/SelectVariations';
 import ToggleGroupVariations from './blocks/components/ToggleGroupVariations';
 import BaseLabel from './components/BaseLabel';
 import useSupport from './blocks/hooks/useSupport';
 import AttributeHelp from './blocks/components/AttributeHelp';
-import ActionMessagesSlotFills
-	from './actions/components/ActionMessagesSlotFills';
-import ListActionItem from './actions/components/ListActionItem';
-import ActionItemWrapper from './actions/components/ActionItemWrapper';
-import ActionItemHeader from './actions/components/ActionItemHeader';
-import ActionItemFooter from './actions/components/ActionItemFooter';
-import EditActionSettingsButton
-	from './actions/components/EditActionSettingsButton';
-import AllProActionsLink from './actions/components/AllProActionsLink';
-import AddActionButton from './actions/components/AddActionButton';
-import ActionsAfterNewButtonSlotFill
-	from './actions/components/ActionsAfterNewButtonSlotFill';
-import EditActionConditionsButton
-	from './actions/components/EditActionConditionsButton';
-import ActionItemDetails from './actions/components/ActionItemDetails';
-import ActionItemDetailsSlotFill
-	from './actions/components/ActionItemDetailsSlotFill';
-import ActionItemMoreButton from './actions/components/ActionItemMoreButton';
-import useLoopedAction from './actions/hooks/useLoopedAction';
-import ActionTitle from './actions/components/ActionTitle';
-import ActionModalHeaderSlotFill
-	from './actions/components/ActionModalHeaderSlotFill';
 import ActionButtonPlaceholder
 	from './action-buttons/components/ActionButtonPlaceholder';
 import ActionModalFooterSlotFill
@@ -210,28 +152,21 @@ import ScopedAttributesProvider
 import getSupport from './blocks/helpers/getSupport';
 import useEvents from './events/hooks/useEvents';
 import useOpenEditorPanel from './hooks/useOpenEditorPanel';
-import ActionItemBody from './actions/components/ActionItemBody';
-import ActionModalBackButton from './actions/components/ActionModalBackButton';
-import ActionModalCloseButton
-	from './actions/components/ActionModalCloseButton';
-import ValidatorProvider from './actions/components/ValidatorProvider';
-import useActionErrors from './actions/hooks/useActionErrors';
-import useActionValidatorProvider
-	from './actions/hooks/useActionValidatorProvider';
 
 // JFBComponents
 window.JetFBComponents = {
+	...(
+		window?.JetFBComponents ?? {}
+	),
 	BaseLabel,
 	ActionFieldsMap,
 	ActionModal,
 	ActionModalContext,
 	SafeDeleteContext,
 	RepeaterItemContext,
-	ActionListItemContext,
 	RepeaterBodyContext,
 	RepeaterHeadContext,
 	RepeaterButtonsContext,
-	CurrentActionEditContext,
 	ActionFieldsMapContext,
 	CurrentPropertyMapContext,
 	BlockValueItemContext,
@@ -240,9 +175,6 @@ window.JetFBComponents = {
 	RepeaterAddNew,
 	RepeaterAddOrOperator,
 	Repeater,
-	RequestButton,
-	ValidateButton,
-	RequestLoadingButton,
 	WrapperRequiredControl,
 	DynamicPreset,
 	JetFieldsMapControl,
@@ -257,18 +189,14 @@ window.JetFBComponents = {
 	GeneralFields,
 	ToolBarFields,
 	FieldControl,
-	PlaceholderMessage,
 	HorizontalLine,
 	FieldSettingsWrapper,
-	ActionMessages,
 	GroupedSelectControl,
 	BaseHelp,
-	ValidateButtonWithStore,
 	GatewayFetchButton,
 	ValidationToggleGroup,
 	ValidationBlockMessage,
 	ValidationMetaMessage,
-	ActionFetchButton,
 	DynamicValues,
 	EditAdvancedRulesButton,
 	RepeaterStateContext,
@@ -294,45 +222,25 @@ window.JetFBComponents = {
 	AdvancedModalControl,
 	ClientSideMacros,
 	ToggleControl,
-	BaseAction,
-	BaseComputedField,
 	DetailsContainer,
 	HoverContainer,
 	ContainersList,
 	HumanReadableConditions,
 	ConditionsRepeaterContextProvider,
 	ServerSideMacros,
-	ActionsFlow,
 	SelectVariations,
 	ToggleGroupVariations,
 	AttributeHelp,
-	ActionMessagesSlotFills,
-	ActionsAfterNewButtonSlotFill,
-	ListActionItem,
-	ActionItemWrapper,
-	ActionItemHeader,
-	ActionItemFooter,
-	EditActionSettingsButton,
-	AllProActionsLink,
-	AddActionButton,
-	EditActionConditionsButton,
-	ActionItemDetails,
-	ActionItemDetailsSlotFill,
-	ActionItemMoreButton,
-	ActionTitle,
-	ActionModalHeaderSlotFill,
 	ActionButtonPlaceholder,
 	ActionModalFooterSlotFill,
 	ScopedAttributesProvider,
-	ActionItemBody,
-	ActionModalBackButton,
-	ActionModalCloseButton,
-	ValidatorProvider,
 };
 
 // JFBFunctions
 window.JetFBActions = {
-	addAction,
+	...(
+		window?.JetFBActions ?? {}
+	),
 	withPreset,
 	getInnerBlocks,
 	getAvailableFieldsString,
@@ -347,9 +255,7 @@ window.JetFBActions = {
 	listen,
 	renderGateway,
 	renderGatewayWithPlaceholder,
-	globalTab,
 	versionCompare,
-	convertListToFieldsMap,
 	maybeCyrToLatin,
 	getConvertedName,
 	getBlockControls,
@@ -358,12 +264,9 @@ window.JetFBActions = {
 	convertObjectToOptionsList,
 	appendField,
 	insertMacro,
-	addDetail,
 	column,
-	addComputedField,
 	getCurrentInnerBlocks,
 	humanReadableCondition,
-	convertFlow,
 	assetUrl,
 	set,
 	isEmpty,
@@ -376,11 +279,7 @@ window.JetFBHooks = {
 	...(
 		window?.JetFBHooks ?? {}
 	),
-	useActions,
-	useMetaState,
 	useSelectPostMeta,
-	useStateValidClasses,
-	useStateLoadingClasses,
 	useSuccessNotice,
 	useEvents,
 	useRequestEvents,
@@ -389,29 +288,15 @@ window.JetFBHooks = {
 	useBlockAttributes,
 	useIsAdvancedValidation,
 	useGroupedValidationMessages,
-	useSanitizeFieldsMap,
-	withRequestFields,
-	useRequestFields,
-	withSelectActionLoading,
 	withSelectFormFields,
 	withSelectGateways,
 	withDispatchGateways,
 	useOnUpdateModal,
 	useInsertMacro,
 	useIsHasAttribute,
-	useCurrentAction,
-	useUpdateCurrentAction,
-	useUpdateCurrentActionMeta,
-	useActionsEdit,
-	useActionCallback,
-	useActionDetail,
 	useUniqueNameOnDuplicate,
-	useFields: useFields,
 	useSupport,
-	useLoopedAction,
 	useScopedAttributesContext,
 	useOpenEditorPanel,
-	useActionErrors,
-	useActionValidatorProvider,
 };
 

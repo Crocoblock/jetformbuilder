@@ -4,9 +4,10 @@ namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
 
-use JFB_Components\Repository\Repository_Pattern_Trait;
+use Jet_Form_Builder\Admin\Editor;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Messages\Action_Messages_Manager;
+use JFB_Components\Repository\Repository_Pattern_Trait;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -21,23 +22,19 @@ class Manager {
 
 	private $localized_actions = array();
 
-	const ENGINE_HANDLE = 'jet-fb-action-localize-helper';
-
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_action_types' ), 99 );
-		add_action( 'jet-form-builder/editor-package/before', array( $this, 'register_assets' ), 10, 2 );
+		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'register_assets' ) );
 	}
 
 	public function rep_instances(): array {
 		return array(
 			new Types\Send_Email(),
 			new Types\Insert_Post(),
-			new Types\Register_User(),
 			new Types\Update_User(),
 			new Types\Call_Hook(),
 			new Types\Call_Webhook(),
 			new Types\Redirect_To_Page(),
-			new Types\Getresponse(),
 		);
 	}
 
@@ -164,23 +161,15 @@ class Manager {
 		}
 	}
 
-	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
-	public function register_assets( $editor, $handle ) {
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
-		wp_enqueue_script(
-			self::ENGINE_HANDLE, // todo: refactor
-			JET_FORM_BUILDER_URL . 'assets/build/action-localize-helper.js',
-			array(),
-			JET_FORM_BUILDER_VERSION
-		);
+	public function register_assets() {
 		$data = self::prepare_actions_data( $this->rep_get_items() );
 
 		wp_localize_script(
-			self::ENGINE_HANDLE,
+			'jet-fb-components',
 			'jetFormActionTypes',
 			$data
 		);
 
-		$this->register_action_types_assets( self::ENGINE_HANDLE );
+		$this->register_action_types_assets( Editor::EDITOR_PACKAGE_HANDLE );
 	}
 }

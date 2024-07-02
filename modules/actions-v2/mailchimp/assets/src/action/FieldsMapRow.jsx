@@ -8,11 +8,8 @@ import {
 } from 'jet-form-builder-components';
 import { cx } from '@linaria/core';
 import { useSelect } from '@wordpress/data';
-import FieldsMapField from './FieldsMapField';
-
-const {
-	      useFields,
-      } = JetFBHooks;
+import { FieldsMapField } from 'jet-form-builder-actions';
+import { useFields } from 'jet-form-builder-blocks-to-actions';
 
 function FieldsMapRow( { getMapField, setMapField, listId } ) {
 

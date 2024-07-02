@@ -314,7 +314,7 @@ abstract class Base_Gateway_Action {
 	 * @throws Gateway_Exception
 	 */
 	public function check_response_code(): self {
-		if ( in_array( $this->get_response_code(), self::SUCCESS_CODES, true ) ) {
+		if ( 200 <= $this->get_response_code() && $this->get_response_code() <= 299 ) {
 			return $this;
 		}
 

@@ -1,11 +1,7 @@
 import withSelectGateways from '../hooks/withSelectGateways';
-import FetchApiButton from '../../actions/components/FetchApiButton';
-
-const { compose } = wp.compose;
-
-const {
-	      withSelect,
-      } = wp.data;
+import { FetchApiButton } from 'jet-form-builder-actions';
+import { compose } from '@wordpress/compose';
+import { withSelect } from '@wordpress/data';
 
 function GatewayFetchButton( {
 	initialLabel = 'Valid',

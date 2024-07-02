@@ -5,9 +5,9 @@ namespace JFB_Modules\Actions_V2\Mailchimp;
 use Jet_Form_Builder\Actions\Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Base_Handler;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
-use JFB_Modules\Actions_V2\interfaces\Action_Integration_Interface;
+use JFB_Modules\Actions_V2\Interfaces\Action_Integration_Interface;
 use JFB_Modules\Actions_V2\Mailchimp\Rest_Api\Mailchimp\Mailchimp_Route;
-use JFB_Modules\Actions_V2\traits\Action_Integration_Trait;
+use JFB_Modules\Actions_V2\Traits\Action_Integration_Trait;
 
 final class Mailchimp implements Action_Integration_Interface {
 
@@ -43,7 +43,9 @@ final class Mailchimp implements Action_Integration_Interface {
 		array_push(
 			$script_asset['dependencies'],
 			'jet-fb-components',
-			'jet-fb-data'
+			'jet-fb-data',
+			'jet-fb-actions-v2',
+			'jet-fb-blocks-v2-to-actions-v2'
 		);
 
 		wp_enqueue_script(

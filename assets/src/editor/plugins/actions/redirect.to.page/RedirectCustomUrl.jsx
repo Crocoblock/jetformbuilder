@@ -9,15 +9,12 @@ import {
 import { __ } from '@wordpress/i18n';
 import { Flex, TextControl } from '@wordpress/components';
 import { cx } from '@linaria/core';
+import { useActionValidatorProvider } from 'jet-form-builder-actions';
 
 const {
 	      PresetButton,
 	      MacrosFields,
       } = JetFBComponents;
-
-const {
-	      useActionValidatorProvider,
-      } = JetFBHooks;
 
 function RedirectCustomUrl( { settings, onChangeSettingObj } ) {
 

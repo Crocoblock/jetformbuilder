@@ -1,5 +1,5 @@
 import ExtraMacroContext from '../context/ExtraMacroContext';
-import useRequestFields from '../../actions/hooks/useRequestFields';
+import { useRequestFields } from 'jet-form-builder-actions';
 
 function ServerSideMacros( { children } ) {
 	const requestFields = useRequestFields();

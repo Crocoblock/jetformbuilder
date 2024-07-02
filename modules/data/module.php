@@ -33,12 +33,12 @@ class Module implements
 		add_action(
 			'enqueue_block_editor_assets',
 			array( $this, 'register_assets' ),
-			-1
+			-10
 		);
 		add_action(
 			'wp_enqueue_scripts',
 			array( $this, 'register_assets' ),
-			-1
+			-10
 		);
 	}
 
@@ -46,12 +46,12 @@ class Module implements
 		remove_action(
 			'enqueue_block_editor_assets',
 			array( $this, 'register_assets' ),
-			-1
+			-10
 		);
 		remove_action(
 			'wp_enqueue_scripts',
 			array( $this, 'register_assets' ),
-			-1
+			-10
 		);
 	}
 

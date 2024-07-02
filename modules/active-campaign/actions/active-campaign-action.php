@@ -28,39 +28,6 @@ class Active_Campaign_Action extends Base {
 		return 'active_campaign';
 	}
 
-	public function action_attributes() {
-		return array(
-			'api_key'    => array(
-				'default' => '',
-				'path'    => 'activecampaign/api_key',
-			),
-			'api_url'    => array(
-				'default' => '',
-				'path'    => 'activecampaign/api_url',
-			),
-			'lists'      => array(
-				'default' => '',
-				'path'    => 'activecampaign/lists',
-			),
-			'fields_map' => array(
-				'default' => '',
-				'path'    => 'activecampaign/fields_map',
-			),
-			'isValidAPI' => array(
-				'default' => '',
-				'path'    => 'activecampaign/isValidAPI',
-			),
-			'list_id'    => array(
-				'default' => '',
-				'path'    => 'activecampaign/list_id',
-			),
-			'tags'       => array(
-				'default' => '',
-				'path'    => 'activecampaign/tags',
-			),
-		);
-	}
-
 	/**
 	 * Run a hook notification
 	 *
@@ -91,17 +58,5 @@ class Active_Campaign_Action extends Base {
 			->set( '#tags', $tags )
 			->run();
 	}
-
-
-	public function editor_labels() {
-		return array(
-			'list_id'          => __( 'List Id:', 'jet-form-builder' ),
-			'update_list_ids'  => __( 'Update List', 'jet-form-builder' ),
-			'tags'             => __( 'Tags:', 'jet-form-builder' ),
-			'fields_map'       => __( 'Fields Map:', 'jet-form-builder' ),
-			'use_global'       => __( 'Use Global Settings', 'jet-form-builder' ),
-		);
-	}
-
 
 }

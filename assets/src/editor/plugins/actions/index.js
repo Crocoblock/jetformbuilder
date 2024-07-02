@@ -1,12 +1,10 @@
 import PluginActions from './render';
 import sendEmail from './send.email';
 import insertPost from './insert.post';
-import registerUser from './register.user';
 import updateUser from './update.user';
 import callHook from './call.hook';
 import callWebhook from './call.webhook';
 import redirectToPage from './redirect.to.page';
-import getresponse from './getresponse';
 import proActions from './pro.actions';
 import { dispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
@@ -14,14 +12,12 @@ import { __ } from '@wordpress/i18n';
 dispatch( 'jet-forms/actions' ).registerActions( [
 	sendEmail,
 	insertPost,
-	registerUser,
 	proActions[ 0 ],
 	updateUser,
 	callHook,
 	callWebhook,
 	redirectToPage,
-	proActions[ 1 ],
-	getresponse,
+	proActions[ 1 ]
 ] );
 
 dispatch( 'jet-forms/actions' ).registerCategory(

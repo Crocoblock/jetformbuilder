@@ -323,7 +323,10 @@ class Editor {
 
 		array_push(
 			$script_asset['dependencies'],
-			'jet-fb-components'
+			'jet-fb-components',
+			'jet-fb-data',
+			'jet-fb-actions-v2',
+			'jet-fb-blocks-v2-to-actions-v2'
 		);
 		wp_enqueue_style( 'jet-fb-components' );
 
@@ -373,7 +376,7 @@ class Editor {
 				'l10n',
 				'buttons',
 				'wp-edit-blocks',
-				'wp-editor'
+				'wp-editor',
 			),
 			$script_asset['version']
 		);

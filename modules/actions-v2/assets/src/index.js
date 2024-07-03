@@ -107,6 +107,7 @@ export {
 /**
  * Helpers
  */
+export { default as registerAction } from './helpers/registerAction';
 export { default as addAction } from './helpers/addAction';
 export { default as addComputedField } from './helpers/addComputedField';
 export { default as convertFlow } from './helpers/convertFlow';

@@ -170,6 +170,6 @@ class Manager {
 			$data
 		);
 
-		$this->register_action_types_assets( Editor::EDITOR_PACKAGE_HANDLE );
+		$this->register_action_types_assets( 'jet-fb-components' );
 	}
 }

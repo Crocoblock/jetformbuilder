@@ -113,21 +113,6 @@ export function registerActions( types ) {
 	};
 }
 
-/**
- * @param actionSettings {{
- *     type: string,
- *     label: string,
- *     edit: Function,
- *     icon: Object,
- *     category: string,
- *     docHref: string,
- *     provideEvents: Function
- *     disableConditions: Boolean,
- *     disabled: Boolean,
- *     fixed: Boolean
- * }}
- * @returns {(function({select: *, dispatch: *}): void)|*}
- */
 export function registerAction( actionSettings ) {
 	return ( { select, dispatch } ) => {
 		const action = select.getAction( actionSettings.type );

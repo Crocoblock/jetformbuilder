@@ -3,18 +3,10 @@
 namespace JFB_Modules\Actions_V2\Register_User;
 
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Actions\Events\Bad_Request\Bad_Request_Event;
-use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
-use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Actions\Methods\Update_User\User_Meta_Property;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
-
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
 
 /**
  * Define Base_Type class
@@ -27,28 +19,6 @@ class Register_User_Action extends Base {
 
 	public function get_id() {
 		return 'register_user';
-	}
-	public function editor_labels() {
-		return array(
-			'allow_register'    => __( 'Allow creating new users by existing users', 'jet-form-builder' ),
-			'role_can_register' => __( 'Who can add new user?', 'jet-form-builder' ),
-			'fields_map'        => __( 'Fields Map:', 'jet-form-builder' ),
-			'user_role'         => __( 'User Role:', 'jet-form-builder' ),
-			'user_meta'         => __( 'User Meta:', 'jet-form-builder' ),
-			'log_in'            => __( 'Log In User after Register:', 'jet-form-builder' ),
-			'add_user_id'       => __( 'Add User ID to form data:', 'jet-form-builder' ),
-			'remember_me_field' => __( '"Remember me" field:', 'jet-form-builder' ),
-		);
-	}
-
-	public function editor_labels_help() {
-		return array(
-			'add_user_id' => __(
-				'Registered user ID will be added to form data. If form is filled by logged 
-			in user - current user ID will be added to form data.',
-				'jet-form-builder'
-			),
-		);
 	}
 
 	/**
@@ -270,69 +240,6 @@ class Register_User_Action extends Base {
 			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Action_Exception( 'failed', $userarr );
 		}
-	}
-
-
-	/**
-	 * Regsiter custom action data for the editor
-	 *
-	 * @return array [type] [description]
-	 */
-	public function action_data() {
-		return array(
-			'userRoles'     => Tools::get_user_roles_for_js(),
-			'allUserRoles'  => Tools::get_user_roles_for_js( array() ),
-			'userFields'    => $this->get_user_fields(),
-		);
-	}
-
-	public function messages() {
-		return array(
-			'password_mismatch' => array(
-				'label' => __( 'Passwords mismatch', 'jet-form-builder' ),
-				'value' => 'Passwords don\'t match.',
-			),
-			'username_exists'   => array(
-				'label' => __( 'Username exists', 'jet-form-builder' ),
-				'value' => 'This username already taken.',
-			),
-			'email_exists'      => array(
-				'label' => __( 'Email exists', 'jet-form-builder' ),
-				'value' => 'This email address is already used.',
-			),
-			'sanitize_user'     => array(
-				'label' => __( 'Incorrect username', 'jet-form-builder' ),
-				'value' => 'Username contains not allowed characters.',
-			),
-			'empty_username'    => array(
-				'label' => __( 'Empty username', 'jet-form-builder' ),
-				'value' => 'Please set username.',
-			),
-			'empty_email'       => array(
-				'label' => __( 'Empty email', 'jet-form-builder' ),
-				'value' => 'Please set user email.',
-			),
-			'empty_password'    => array(
-				'label' => __( 'Empty password', 'jet-form-builder' ),
-				'value' => 'Please set user password.',
-			),
-			'already_logged_in' => array(
-				'label' => __( 'Logged in (appears only if register user is only notification)', 'jet-form-builder' ),
-				'value' => 'You are already logged in.',
-			),
-			'not_logged_in'     => array(
-				'label' => sprintf(
-				/* translators: %s: action label */
-					__( 'Not Logged in (appears only when the "%s" option is enabled)', 'jet-form-builder' ),
-					$this->editor_labels()['allow_register']
-				),
-				'value' => 'You are not logged in.',
-			),
-			'not_enough_cap'    => array(
-				'label' => __( 'Not enough capabilities', 'jet-form-builder' ),
-				'value' => 'Not enough capabilities to register a user.',
-			),
-		);
 	}
 
 }

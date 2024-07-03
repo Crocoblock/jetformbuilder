@@ -21,7 +21,7 @@ use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
-use JFB_Modules\Actions_V2\Register_User\Register_User;
+use JFB_Modules\Actions_V2\Register_User\Register_User_Action;
 use JFB_Modules\Form_Record\Tools;
 use JFB_Modules\Security\Csrf\Csrf_Tools;
 use JFB_Modules\Verification\Actions\Verification;
@@ -161,9 +161,9 @@ class Module implements
 	/**
 	 * Generate unique token, if it used
 	 *
-	 * @param Register_User $action
+	 * @param Register_User_Action $action
 	 */
-	public function register_user_before( Register_User $action ) {
+	public function register_user_before( Register_User_Action $action ) {
 		$fields_map = array_values( $action->settings['fields_map'] ?? array() );
 
 		if (

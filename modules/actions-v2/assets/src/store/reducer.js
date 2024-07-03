@@ -9,7 +9,6 @@ import {
 	REGISTER_CATEGORY,
 	ADD_COMPUTED_FIELD,
 	EDIT_ACTION,
-	OPEN_ACTION_SETTINGS,
 	SHOW_ACTIONS_INSERTER_MODAL,
 } from './constants';
 import withActionLocalizeScript from '../helpers/withActionLocalizeScript';
@@ -143,18 +142,6 @@ export default function ( state = DEFAULT_STATE, action ) {
 			return {
 				...state,
 				types,
-			};
-
-		case OPEN_ACTION_SETTINGS:
-			const { index, item } = action;
-
-			return {
-				...state,
-				meta: {
-					index,
-					modalType: 'settings',
-				},
-				currentAction: item,
 			};
 
 		case SHOW_ACTIONS_INSERTER_MODAL:

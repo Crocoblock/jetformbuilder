@@ -1,7 +1,19 @@
 import ActionMessagesSlotFills from './ActionMessagesSlotFills';
-import { TextControl, BaseControl } from '@wordpress/components';
+import { TextControl, Card, Flex } from '@wordpress/components';
 import { useMemo, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import {
+	Label,
+	RowControl,
+	RowControlEndStyle,
+} from 'jet-form-builder-components';
+import { cx } from '@linaria/core';
+import { styled } from '@linaria/react';
+import { useInstanceId } from '@wordpress/compose';
+
+const StyledCard = styled( Card )`
+    padding: 1em;
+`;
 
 function ActionMessageRow( props ) {
 	const {
@@ -14,20 +26,30 @@ function ActionMessageRow( props ) {
 	const { Slot: RowSlot } = useMemo( () => ActionMessagesSlotFills[ type ],
 		[ type ] );
 
-	return <div
-		className="jet-user-meta__row"
-	>
-		<RowSlot fillProps={ props }>
-			{ ( fills ) => (
-				Boolean( fills?.length ) ? fills :
-				<TextControl
-					label={ label }
-					value={ value }
-					onChange={ onChange }
-				/>
-			) }
-		</RowSlot>
-	</div>;
+	const htmlId = useInstanceId( ActionMessageRow, 'jfb-message-item' );
+
+	return <StyledCard elevation={ 2 }>
+		<RowControl
+			createId={ false }
+			controlSize={ 1 }
+		>
+			<Label htmlFor={ htmlId }>
+				{ label }
+			</Label>
+			<RowSlot fillProps={ { ...props, id: htmlId } }>
+				{ ( fills ) => (
+					Boolean( fills?.length ) ? fills :
+					<TextControl
+						id={ htmlId }
+						value={ value }
+						onChange={ onChange }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+					/>
+				) }
+			</RowSlot>
+		</RowControl>
+	</StyledCard>;
 }
 
 function ActionMessages( props ) {
@@ -68,22 +90,26 @@ function ActionMessages( props ) {
 		return getMapField( { name, source } );
 	};
 
-	return <BaseControl
-		label={ __( 'Messages Settings:', 'jet-form-builder' ) }
-		key="messages_settings_fields"
-	>
-		<div className="jet-user-fields-map__list">
+	return <RowControl createId={ false }>
+		<Label>
+			{ __( 'Messages Settings', 'jet-form-builder' ) }
+		</Label>
+		<Flex
+			className={ cx( RowControlEndStyle ) }
+			direction="column"
+			gap={ 4 }
+		>
 			{ settings.messages && Object.entries( settings.messages ).
-				map( ( [ type, data ], id ) => <ActionMessageRow
-						key={ 'message_' + type + id }
+				map( ( [ type, data ] ) => <ActionMessageRow
+						key={ 'message_' + type }
 						type={ type }
 						label={ messages( type ).label }
 						value={ getMessage( type ) }
 						onChange={ newValue => setMessage( newValue, type ) }
 					/>,
 				) }
-		</div>
-	</BaseControl>;
+		</Flex>
+	</RowControl>;
 }
 
 // backward compatibility

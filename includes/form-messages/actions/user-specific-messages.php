@@ -4,8 +4,8 @@
 namespace Jet_Form_Builder\Form_Messages\Actions;
 
 use Jet_Form_Builder\Actions\Types\Base;
-use Jet_Form_Builder\Actions\Types\Register_User;
 use Jet_Form_Builder\Actions\Types\Update_User;
+use JFB_Modules\Actions_V2\Register_User\Register_User_Action;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -20,7 +20,7 @@ class User_Specific_Messages extends Base_Action_Messages {
 		return in_array(
 			$current,
 			array(
-				Register_User::class,
+				Register_User_Action::class,
 				Update_User::class,
 			),
 			true

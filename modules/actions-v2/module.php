@@ -36,6 +36,7 @@ final class Module implements
 		return array(
 			new Mailchimp\Mailchimp(),
 			new Get_Response\Get_Response(),
+			new Register_User\Register_User(),
 		);
 	}
 

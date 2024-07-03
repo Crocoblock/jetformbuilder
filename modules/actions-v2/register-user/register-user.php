@@ -3,8 +3,7 @@
 namespace JFB_Modules\Actions_V2\Register_User;
 
 use Jet_Form_Builder\Actions\Manager;
-use Jet_Form_Builder\Admin\Tabs_Handlers\Base_Handler;
-use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Classes\Tools;
 use JFB_Modules\Actions_V2\Interfaces\Action_Integration_Interface;
 use JFB_Modules\Actions_V2\Traits\Action_Integration_Trait;
 
@@ -27,7 +26,7 @@ final class Register_User implements Action_Integration_Interface {
 	}
 
 	public function register_actions( Manager $manager ) {
-		$manager->register_action_type();
+		$manager->register_action_type( new Register_User_Action() );
 	}
 
 	public function editor_assets() {
@@ -47,6 +46,15 @@ final class Register_User implements Action_Integration_Interface {
 			$script_asset['dependencies'],
 			$script_asset['version'],
 			true
+		);
+
+		wp_localize_script(
+			$this->get_handle(),
+			'JetFBRegisterAction',
+			array(
+				'userRoles'    => Tools::get_user_roles_for_js(),
+				'allUserRoles' => Tools::get_user_roles_for_js( array() ),
+			)
 		);
 	}
 }

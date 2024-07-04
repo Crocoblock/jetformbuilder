@@ -1,5 +1,6 @@
 export { default as Label } from './Label/Label';
 export { default as RequiredLabel } from './Label/RequiredLabel';
+export { default as LabelWithActions } from './Label/LabelWithActions';
 export { default as Help } from './Help';
 export { default as Sortable } from './Sortable';
 export { default as ResponsiveModal } from './ResponsiveModal';

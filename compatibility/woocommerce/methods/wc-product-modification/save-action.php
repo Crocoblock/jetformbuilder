@@ -4,8 +4,8 @@
 namespace JFB_Compatibility\Woocommerce\Methods\Wc_Product_Modification;
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Base_Post_Action;
-use Jet_Form_Builder\Actions\Types\Insert_Post;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Base_Post_Action;
+use JFB_Modules\Actions_V2\Insert_Post\Insert_Post_Action;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -42,7 +42,7 @@ class Save_Action extends Base_Post_Action {
 		jet_fb_action_handler()->add_context_once(
 			'insert_post',
 			array(
-				Insert_Post::get_context_post_key( $this->inserted_id ) => array(
+				Insert_Post_Action::get_context_post_key( $this->inserted_id ) => array(
 					'__action'    => $this->get_id(),
 					'ID'          => $this->inserted_id,
 					'post_status' => $product->get_status(),

@@ -3,7 +3,7 @@
 namespace JFB_Tests\Wpunit\Actions\InsertPost;
 
 use Codeception\AssertThrows;
-use Jet_Form_Builder\Actions\Types\Insert_Post;
+use JFB_Modules\Actions_V2\Insert_Post\Insert_Post_Action;
 
 class PostTitlePropertyTest extends \Codeception\TestCase\WPTestCase {
 
@@ -15,7 +15,7 @@ class PostTitlePropertyTest extends \Codeception\TestCase\WPTestCase {
 		parent::setUp();
 
 
-		$this->action      = new Insert_Post();
+		$this->action      = new Insert_Post_Action();
 		$this->action->_id = 7755;
 
 		jet_fb_action_handler()->save_action( $this->action, array() );

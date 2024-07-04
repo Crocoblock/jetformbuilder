@@ -5,6 +5,8 @@ namespace JFB_Modules\Actions_V2\Register_User;
 use Jet_Form_Builder\Actions\Manager;
 use Jet_Form_Builder\Classes\Tools;
 use JFB_Modules\Actions_V2\Interfaces\Action_Integration_Interface;
+use JFB_Modules\Actions_V2\Register_User\Messages\Register_User_Messages;
+use JFB_Modules\Actions_V2\Register_User\Messages\User_Specific_Messages;
 use JFB_Modules\Actions_V2\Traits\Action_Integration_Trait;
 
 final class Register_User implements Action_Integration_Interface {
@@ -20,6 +22,10 @@ final class Register_User implements Action_Integration_Interface {
 			'jet-form-builder/editor-assets/after',
 			array( $this, 'editor_assets' )
 		);
+		add_filter(
+			'jet-form-builder/form-messages/register',
+			array( $this, 'register_message_types' )
+		);
 	}
 
 	public function on_install() {
@@ -27,6 +33,16 @@ final class Register_User implements Action_Integration_Interface {
 
 	public function register_actions( Manager $manager ) {
 		$manager->register_action_type( new Register_User_Action() );
+	}
+
+	public function register_message_types( array $types ): array {
+		array_push(
+			$types,
+			new User_Specific_Messages(),
+			new Register_User_Messages()
+		);
+
+		return $types;
 	}
 
 	public function editor_assets() {

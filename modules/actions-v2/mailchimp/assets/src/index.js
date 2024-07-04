@@ -1,7 +1,7 @@
 import action from './action';
 import store from './store';
-import { dispatch, register } from '@wordpress/data';
+import { register } from '@wordpress/data';
+import { registerAction } from 'jet-form-builder-actions';
 
 register( store );
-
-dispatch( 'jet-forms/actions' ).registerAction( action );
+registerAction( action );

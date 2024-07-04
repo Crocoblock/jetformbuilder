@@ -5,8 +5,8 @@ namespace JFB_Compatibility\Jet_Engine\Methods\Post_Modification;
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
 use Jet_Form_Builder\Actions\Methods\Object_Dynamic_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Base_Post_Action;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Trash_Action;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Base_Post_Action;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Trash_Action;
 use Jet_Form_Builder\Classes\Arrayable\Array_Continue_Exception;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 

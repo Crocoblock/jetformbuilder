@@ -1,12 +1,13 @@
 import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import useActionErrors from './useActionErrors';
+import { STORE_NAME } from '../store';
 
 function useActionValidatorProvider( { isSupported } ) {
 	const { currentAction, isShowErrors } = useSelect( select => (
 		{
-			currentAction: select( 'jet-forms/actions' ).getCurrentAction(),
-			isShowErrors: select( 'jet-forms/actions' ).getErrorVisibility(),
+			currentAction: select( STORE_NAME ).getCurrentAction(),
+			isShowErrors: select( STORE_NAME ).getErrorVisibility(),
 		}
 	), [] );
 
@@ -22,7 +23,7 @@ function useActionValidatorProvider( { isSupported } ) {
 			isShowLocalError || isShowErrors
 		)
 		? currentAction
-		: {},
+		: { type: false },
 	);
 
 	const hasSupportedError = errors.some( isSupported );

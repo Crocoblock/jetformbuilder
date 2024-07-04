@@ -2,6 +2,8 @@ import { FAILED_EVENT, SUCCESS_EVENT } from '../constants';
 import useSearchPages from './useSearchPages';
 import fetchPages from '../fetchPages';
 import SendEmailFlowRaw from '@root/actions/send.email.flow.json';
+import { useFields } from 'jet-form-builder-blocks-to-actions';
+import { useActions, useCurrentAction } from 'jet-form-builder-actions';
 
 let {
 	    __experimentalToggleGroupControl,
@@ -48,12 +50,6 @@ const {
       } = JetFBComponents;
 
 const {
-	      useActions,
-	      useFields,
-	      useCurrentAction,
-      } = JetFBHooks;
-
-const {
 	      Tools,
 	      convertFlow,
       } = JetFBActions;
@@ -82,7 +78,7 @@ const mergePages = ( prevPages, newPages ) => {
 function VerificationUserRender( { onChangeSettingObj, settings } ) {
 	const [ actions, setActions ] = useActions( [] );
 
-	const fields            = useFields( { withInner: false }, [] );
+	const fields            = useFields( { withInner: false } );
 	const { currentAction } = useCurrentAction();
 
 	const emailField = useMemo(

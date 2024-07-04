@@ -3,8 +3,8 @@
 namespace JFB_Tests\Wpunit\Actions\InsertPost;
 
 use Codeception\AssertThrows;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Id_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Modifier;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Post_Id_Property;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Post_Modifier;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 
 class PostIDPropertyTest extends \Codeception\TestCase\WPTestCase {

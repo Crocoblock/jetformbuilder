@@ -3,11 +3,11 @@
 namespace JFB_Tests\Wpunit\Actions\InsertPost;
 
 use Codeception\AssertThrows;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Modifier;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Type_Property;
-use Jet_Form_Builder\Actions\Types\Insert_Post;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Post_Modifier;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Post_Type_Property;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
+use JFB_Modules\Actions_V2\Insert_Post\Insert_Post_Action;
 
 class PostTypePropertyTest extends \Codeception\TestCase\WPTestCase {
 
@@ -105,7 +105,7 @@ class PostTypePropertyTest extends \Codeception\TestCase\WPTestCase {
 	}
 
 	public function testComputedNames() {
-		$action      = new Insert_Post();
+		$action      = new Insert_Post_Action();
 		$action->_id = 7755;
 
 		jet_fb_action_handler()->save_action( $action, array() );
@@ -129,7 +129,7 @@ class PostTypePropertyTest extends \Codeception\TestCase\WPTestCase {
 			)
 		);
 
-		$action      = new Insert_Post();
+		$action      = new Insert_Post_Action();
 		$action->_id = 7755;
 
 		jet_fb_action_handler()->save_action( $action, array() );

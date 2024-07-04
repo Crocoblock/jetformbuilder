@@ -4,7 +4,6 @@ namespace Jet_Form_Builder\Actions;
 
 // If this file is called directly, abort.
 
-use Jet_Form_Builder\Admin\Editor;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Form_Messages\Action_Messages_Manager;
 use JFB_Components\Repository\Repository_Pattern_Trait;
@@ -28,14 +27,7 @@ class Manager {
 	}
 
 	public function rep_instances(): array {
-		return array(
-			new Types\Send_Email(),
-			new Types\Insert_Post(),
-			new Types\Update_User(),
-			new Types\Call_Hook(),
-			new Types\Call_Webhook(),
-			new Types\Redirect_To_Page(),
-		);
+		return array();
 	}
 
 	/**
@@ -45,9 +37,6 @@ class Manager {
 	 */
 	public function register_action_types() {
 		$this->rep_install();
-
-		// register basic hook for formatting settings
-		Send_Email_Hooks::register();
 
 		do_action( 'jet-form-builder/actions/register', $this );
 	}

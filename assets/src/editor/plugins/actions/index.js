@@ -1,22 +1,10 @@
 import PluginActions from './render';
-import sendEmail from './send.email';
-import insertPost from './insert.post';
-import updateUser from './update.user';
-import callHook from './call.hook';
-import callWebhook from './call.webhook';
-import redirectToPage from './redirect.to.page';
 import proActions from './pro.actions';
 import { dispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 
 dispatch( 'jet-forms/actions' ).registerActions( [
-	sendEmail,
-	insertPost,
 	proActions[ 0 ],
-	updateUser,
-	callHook,
-	callWebhook,
-	redirectToPage,
 	proActions[ 1 ]
 ] );
 

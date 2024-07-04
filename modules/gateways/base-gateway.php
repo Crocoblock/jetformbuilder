@@ -3,7 +3,6 @@
 
 namespace JFB_Modules\Gateways;
 
-use Jet_Form_Builder\Actions\Types\Redirect_To_Page;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -11,6 +10,7 @@ use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Form_Messages\Manager;
 use Jet_Form_Builder\Form_Response\Response;
 use Jet_Form_Builder\Form_Response\Types\Reload_Response;
+use JFB_Modules\Actions_V2\Redirect_To_Page\Redirect_To_Page_Action;
 use JFB_Modules\Gateways\Scenarios_Abstract\Scenarios_Manager_Abstract;
 
 // If this file is called directly, abort.
@@ -33,7 +33,7 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	const SUCCESS_TYPE = 'success';
 	const FAILED_TYPE  = 'cancel';
 
-	/** @var Redirect_To_Page */
+	/** @var Redirect_To_Page_Action */
 	protected $redirect;
 	protected $order_token;
 

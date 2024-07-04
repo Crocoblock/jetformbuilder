@@ -34,9 +34,15 @@ final class Module implements
 
 	public function rep_instances(): array {
 		return array(
+			new Send_Email\Send_Email(),
+			new Insert_Post\Insert_Post(),
+			new Register_User\Register_User(),
+			new Update_User\Update_User(),
+			new Redirect_To_Page\Redirect_To_Page(),
+			new Call_Hook\Call_Hook(),
+			new Call_Webhook\Call_Webhook(),
 			new Mailchimp\Mailchimp(),
 			new Get_Response\Get_Response(),
-			new Register_User\Register_User(),
 		);
 	}
 

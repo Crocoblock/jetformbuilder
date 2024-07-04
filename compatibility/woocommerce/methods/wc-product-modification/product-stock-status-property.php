@@ -4,7 +4,7 @@
 namespace JFB_Compatibility\Woocommerce\Methods\Wc_Product_Modification;
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Excerpt_Property;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Post_Excerpt_Property;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

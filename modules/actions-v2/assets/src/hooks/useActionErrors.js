@@ -1,11 +1,12 @@
 import BaseAction from '../abstract/BaseAction';
 import { useSelect } from '@wordpress/data';
+import { STORE_NAME } from '../store';
 
 function useActionErrors( action ) {
 	action = new BaseAction( action );
 
 	const validators = useSelect( select => {
-			const actionType = select( 'jet-forms/actions' ).getAction(
+			const actionType = select( STORE_NAME ).getAction(
 				action.type,
 			);
 

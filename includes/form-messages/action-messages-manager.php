@@ -6,8 +6,6 @@ namespace Jet_Form_Builder\Form_Messages;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Form_Messages\Actions\Base_Action_Messages;
-use Jet_Form_Builder\Form_Messages\Actions\Register_User_Messages;
-use Jet_Form_Builder\Form_Messages\Actions\User_Specific_Messages;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -28,13 +26,7 @@ class Action_Messages_Manager {
 	private $types;
 
 	public function __construct() {
-		$this->types = apply_filters(
-			'jet-form-builder/form-messages/register',
-			array(
-				new User_Specific_Messages(),
-				new Register_User_Messages(),
-			)
-		);
+		$this->types = apply_filters( 'jet-form-builder/form-messages/register', array() );
 	}
 
 	public function get_messages_values( Base $action ): array {

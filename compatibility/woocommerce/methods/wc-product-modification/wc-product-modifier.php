@@ -4,11 +4,11 @@
 namespace JFB_Compatibility\Woocommerce\Methods\Wc_Product_Modification;
 
 use Jet_Form_Builder\Actions\Methods\Object_Properties_Collection;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Abstract_Post_Modifier;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Meta_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Terms_Property;
-use Jet_Form_Builder\Actions\Types\Insert_Post;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Abstract_Post_Modifier;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Post_Meta_Property;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Post_Terms_Property;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
+use JFB_Modules\Actions_V2\Insert_Post\Insert_Post_Action;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Wc_Product_Modifier extends Abstract_Post_Modifier {
 
-	public function is_supported( Insert_Post $action ): bool {
+	public function is_supported( Insert_Post_Action $action ): bool {
 		return 'product' === $action->get_post_type();
 	}
 
@@ -25,7 +25,7 @@ class Wc_Product_Modifier extends Abstract_Post_Modifier {
 		return 'product';
 	}
 
-	public function before_run( Insert_Post $action ) {
+	public function before_run( Insert_Post_Action $action ) {
 		parent::before_run( $action );
 
 		// for property post_title

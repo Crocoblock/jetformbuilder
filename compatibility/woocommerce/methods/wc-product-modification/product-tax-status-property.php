@@ -4,8 +4,8 @@
 namespace JFB_Compatibility\Woocommerce\Methods\Wc_Product_Modification;
 
 use Jet_Form_Builder\Actions\Methods\Abstract_Modifier;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Content_Property;
-use Jet_Form_Builder\Actions\Methods\Post_Modification\Post_Excerpt_Property;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Post_Content_Property;
+use JFB_Modules\Actions_V2\Insert_Post\Properties\Post_Excerpt_Property;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 

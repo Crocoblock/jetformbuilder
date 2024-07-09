@@ -9,4 +9,3 @@ interface Subscriber_Interface extends List_Interface {
 	public function get_email_address(): string;
 
 }
-

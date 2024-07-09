@@ -32,8 +32,10 @@
 	],
 	"devDependencies": {
 		"@babel/eslint-parser": "^7.23.10",
+		"@stylistic/eslint-plugin": "^2.3.0",
 		"@wordpress/babel-preset-default": "^7.35.0",
 		"@wordpress/dependency-extraction-webpack-plugin": "^5.2.0",
+		"@wordpress/eslint-plugin": "^19.2.0",
 		"@wyw-in-js/webpack-loader": "^0.4.1",
 		"autoprefixer": "^10.4.19",
 		"babel-loader": "^8.2.2",

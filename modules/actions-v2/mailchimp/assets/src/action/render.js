@@ -14,6 +14,7 @@ import { STORE_NAME } from '../store';
 
 const { ToggleControl } = JetFBComponents;
 
+// eslint-disable-next-line max-lines-per-function
 function MailChimpRender( props ) {
 
 	const {

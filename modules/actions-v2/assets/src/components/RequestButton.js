@@ -1,6 +1,7 @@
 import { Button } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
 
+// eslint-disable-next-line max-lines-per-function
 function RequestButton( {
 	label,
 	ajaxArgs = {},
@@ -56,6 +57,7 @@ function RequestButton( {
 		if ( isHidden && -1 === hasFetched ) {
 			request();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	if ( isHidden ) {

@@ -8,7 +8,7 @@ export function getLoading(state, actionId) {
 	const actionIndex = getLoadingIndex(state, actionId);
 
 	return actionIndex !== -1
-	       ? state.loadingState[actionIndex]
+	       ? state.loadingState[ actionIndex ]
 	       : { ...DEFAULT_LOADING_STATE };
 }
 
@@ -20,7 +20,7 @@ export function getActionsMap(state) {
 	const map = {};
 
 	for (const listElement of state.types) {
-		map[listElement.type] = listElement;
+		map[ listElement.type ] = listElement;
 	}
 
 	return map;
@@ -59,8 +59,8 @@ export function isFixed(state, actionType) {
 /**
  * Use to determine how was opened the action settings modal
  *
- * @param state
- * @returns {string}
+ * @param  state
+ * @return {string}
  */
 export function getOpenScenario(state) {
 	return state.meta?.scenario;
@@ -84,17 +84,11 @@ export function getCurrentEdit(state) {
 	return getAction(state, type)?.edit;
 }
 
-export function getCurrentDetail(state) {
-	const type = state.currentAction?.type ?? false;
-
-	return getDetail(state, type);
-}
-
 export function getCurrentSettings(state) {
 	const settings = state.currentAction?.settings ?? {};
 	const type = state.currentAction?.type ?? false;
 
-	return settings[type] ?? {};
+	return settings[ type ] ?? {};
 }
 
 export function getCurrentLoading(state) {

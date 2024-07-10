@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const WPExtractorPlugin   = require(
 	'@wordpress/dependency-extraction-webpack-plugin',
 );

@@ -1,8 +1,8 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const WPExtractorPlugin = require(
 	'@wordpress/dependency-extraction-webpack-plugin',
 );
 const path              = require( 'path' );
-const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const devMode           = !process.argv.join( ':' ).
 	includes( '--mode:production' );
 

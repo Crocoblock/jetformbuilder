@@ -123,13 +123,13 @@ export function registerAction( actionSettings ) {
 			return;
 		}
 
-		dispatch.addAction( actionSettings );
+		dispatch.editAction( actionSettings );
 	};
 }
 
 /**
- * @param category {{ type: string, label: string }}
- * @returns {{type: string, category}}
+ * @param  category {{ type: string, label: string }}
+ * @return {{type: string, category}}
  */
 export function registerCategory( category ) {
 	return {
@@ -148,17 +148,16 @@ export function addAction( actionSettings ) {
 /**
  * @deprecated 3.4.0. Use registerAction instead of this
  *
- * @param actionType
- * @param callback
- * @returns {{actionSettings: {edit, type}, type: string}}
+ * @param  actionType
+ * @param  callback
+ * @return {(function({dispatch: *}): void)|*}
  */
 export function addCallback( actionType, callback ) {
-	return {
-		type: REGISTER_ACTION,
-		actionSettings: {
+	return ( { dispatch } ) => {
+		dispatch.registerAction( {
 			type: actionType,
 			edit: callback,
-		},
+		} );
 	};
 }
 
@@ -173,9 +172,9 @@ export function addComputedField( field, settings = {} ) {
 /**
  * @deprecated 3.4.0. Use registerAction instead of this
  *
- * @param actionType
- * @param replace
- * @returns {{actionSettings: (*&{type}), type: string}}
+ * @param  actionType
+ * @param  replace
+ * @return {{actionSettings: (*&{type}), type: string}}
  */
 export function editAction( actionType, replace ) {
 	return {

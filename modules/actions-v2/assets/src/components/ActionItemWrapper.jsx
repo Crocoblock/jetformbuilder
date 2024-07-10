@@ -1,9 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import useLoopedAction from '../hooks/useLoopedAction';
-import { Card } from '@wordpress/components';
+import { Card, Tooltip } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { styled } from '@linaria/react';
 import { css, cx } from '@linaria/core';
 import useActionErrors from '../hooks/useActionErrors';
+import { __ } from '@wordpress/i18n';
 
 const MarginLessCard = styled( Card )`
     margin-bottom: unset;
@@ -47,19 +49,30 @@ function ActionItemWrapper( { className = '', ...props } = {} ) {
 		action.is_execute ?? true
 	);
 
-	return <MarginLessCard
-		elevation={ 2 }
-		size={ 'extraSmall' }
-		className={ cx(
-			'jet-form-action',
-			className,
-			!isFixed && 'draggable',
-			!isExecute && disabledStyle,
-			currentAction?.id === action.id && currentStyle,
-			errors.length && errorStyle,
-		) }
-		{ ...props }
-	/>;
+	const errorText = (
+		Boolean( errors.length )
+		? __(
+			'This action isn\'t set up properly. Please check the settings of the action',
+			'jet-form-builder',
+		)
+		: ''
+	);
+
+	return <Tooltip text={ errorText } delay={ 200 } placement="top">
+		<MarginLessCard
+			elevation={ 2 }
+			size={ 'extraSmall' }
+			className={ cx(
+				'jet-form-action',
+				className,
+				!isFixed && 'draggable',
+				!isExecute && disabledStyle,
+				currentAction?.id === action.id && currentStyle,
+				errors.length && errorStyle,
+			) }
+			{ ...props }
+		/>
+	</Tooltip>;
 }
 
 // backward compatibility

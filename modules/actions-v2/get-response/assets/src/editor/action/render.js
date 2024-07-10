@@ -12,6 +12,7 @@ const {
 	      ToggleControl,
       } = JetFBComponents;
 
+// eslint-disable-next-line max-lines-per-function
 function ActiveCampaignAction( props ) {
 
 	const {

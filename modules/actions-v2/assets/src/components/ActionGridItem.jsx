@@ -15,17 +15,17 @@ const ColoredIcon = styled( Icon )`
 `;
 
 const FlexWrapper = styled( Flex )`
-    box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
     cursor: pointer;
     padding: 1em;
-    border-radius: 8px;
+    border-radius: 2px;
+    border: 1px solid #ddd;
 
     &, & ${ ActionTitle } {
         transition: 0.2s ease-in-out;
     }
 
     &:hover {
-        box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+        box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
     }
 
     &:hover, &:hover ${ ActionTitle } {

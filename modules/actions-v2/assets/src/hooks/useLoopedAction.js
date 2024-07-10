@@ -2,7 +2,7 @@ import ActionListItemContext from '../context/ActionListItemContext';
 import { useContext } from '@wordpress/element';
 
 /**
- * @returns {{ action: Object, index: Number }}
+ * @return {{action: Object, index: number}}
  */
 function useLoopedAction() {
 	return useContext( ActionListItemContext );

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { styled } from '@linaria/react';
 import { Flex } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';

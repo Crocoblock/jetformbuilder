@@ -3,9 +3,9 @@ function getLocalized(actionType, objectKey = '') {
 	if (!preparedAction) {
 		return false;
 	}
-	const actionSelfLocalized = window[preparedAction.self];
+	const actionSelfLocalized = window[ preparedAction.self ];
 
-	return (objectKey && actionSelfLocalized[objectKey]) ? actionSelfLocalized[objectKey] : actionSelfLocalized;
+	return (objectKey && actionSelfLocalized[ objectKey ]) ? actionSelfLocalized[ objectKey ] : actionSelfLocalized;
 }
 
 function getSourceObjectName(actionType) {
@@ -17,10 +17,10 @@ function getSourceObjectName(actionType) {
 function getLocalizedWithFunc({ actionType = false, source = false }, objectKey, ifEmptyReturn = '') {
 	let action = false;
 
-	if (source && source[objectKey]) {
-		action = source[objectKey];
+	if (source && source[ objectKey ]) {
+		action = source[ objectKey ];
 	} else if (actionType) {
-		action = (getLocalized(actionType)[objectKey]);
+		action = (getLocalized(actionType)[ objectKey ]);
 	}
 
 	if (!action) {
@@ -29,16 +29,11 @@ function getLocalizedWithFunc({ actionType = false, source = false }, objectKey,
 
 	return attr => {
 		if (attr) {
-			return (action[attr] ? action[attr] : ifEmptyReturn);
-		} else {
+			return (action[ attr ] ? action[ attr ] : ifEmptyReturn);
+		} 
 			return action;
-		}
+		
 	};
-}
-
-function getActionLabel(type) {
-	const action = window.jetFormActionTypes.find(el => el.id === type);
-	return action ? action.name : '';
 }
 
 function localizedLabel(settings) {
@@ -57,12 +52,6 @@ function localizedMessages(settings) {
 	return getLocalizedWithFunc(settings, '__messages', {});
 }
 
-function isInDefaultFlow(actionType) {
-	const flow = 'Jet_Form_Builder\\Actions\\Executors\\Action_Default_Executor';
-
-	return flow === getLocalized(actionType, '__flow');
-}
-
 export function getLocalizedFullPack(actionType, source = false) {
 	if (!source) {
 		source = getLocalized(actionType);
@@ -71,11 +60,11 @@ export function getLocalizedFullPack(actionType, source = false) {
 	function setSource(props = {}) {
 		const name = getSourceObjectName(actionType);
 
-		if (!name || !window[name]) {
+		if (!name || !window[ name ]) {
 			return false;
 		}
-		window[name] = {
-			...window[name],
+		window[ name ] = {
+			...window[ name ],
 			...props,
 		};
 

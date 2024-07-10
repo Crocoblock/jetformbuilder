@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import useActionCallback from '../hooks/useActionCallback';
 import useLoopedAction from '../hooks/useLoopedAction';
 import { __ } from '@wordpress/i18n';

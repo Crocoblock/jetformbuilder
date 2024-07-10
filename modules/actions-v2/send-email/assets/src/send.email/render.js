@@ -14,6 +14,7 @@ import ContentTypeRow from './ContentTypeRow';
 import ContentRow from './ContentRow';
 import AttachmentsRow from './AttachmentsRow';
 
+// eslint-disable-next-line max-lines-per-function
 function SendEmailRender( {
 	settings,
 	onChangeSettingObj,
@@ -86,8 +87,8 @@ function SendEmailRender( {
 				className={ ClearBaseControlStyle }
 				label={ __( 'Disable Auto-Formatting', 'jet-form-builder' ) }
 				checked={ settings.disable_format }
-				onChange={ disable_format => onChangeSettingObj(
-					{ disable_format },
+				onChange={ val => onChangeSettingObj(
+					{ disable_format: val },
 				) }
 				help={ __(
 					'By default, each new line in the email content field is changed to a separate paragraph element. And each link turns into a clickable hyperlink. To prevent this, enable this option.',

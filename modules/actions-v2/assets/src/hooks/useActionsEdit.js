@@ -1,7 +1,7 @@
 import useActions from './useActions';
 
 /**
- * @returns {{moveAction: moveAction, updateActionObj: updateActionObj,
+ * @return {{moveAction: moveAction, updateActionObj: updateActionObj,
  *     setActions: (function(*=): void), toggleExecute: toggleExecute, actions:
  *     *, deleteAction: deleteAction, addActionProps: addActionProps}}
  */

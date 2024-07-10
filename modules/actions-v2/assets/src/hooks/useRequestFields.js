@@ -25,6 +25,7 @@ const getRequestFields = ( { actions, fields } ) => {
 				field => field.value === requestField.name,
 			);
 
+			// eslint-disable-next-line max-depth
 			if ( -1 !== index ) {
 				continue;
 			}
@@ -48,8 +49,7 @@ const processComputedField = ( { computed, action, fields, nameSet } ) => {
 	computed.setAction( action );
 	computed.hasInList = false;
 
-	const label = computed.getLabel();
-	let name    = computed.getName();
+	let name = computed.getName();
 
 	if ( nameSet.has( name ) ) {
 		computed.hasInList = true;
@@ -62,13 +62,14 @@ const processComputedField = ( { computed, action, fields, nameSet } ) => {
 	}
 
 	nameSet.add( name );
+	const label = computed.getLabel();
 
 	fields.push( {
 		from: action.type,
 		id: action.id,
 		label: label || name,
 		value: name,
-		name: name,
+		name,
 		help: computed.getHelp(),
 	} );
 };
@@ -89,7 +90,7 @@ function getComputedFields( { fields, actions, computed, nameSet } ) {
 		 */
 		const current = new computedField();
 
-		for ( let action of actions ) {
+		for ( const action of actions ) {
 			processComputedField( {
 				computed: current,
 				action,
@@ -107,7 +108,7 @@ function getComputedFields( { fields, actions, computed, nameSet } ) {
 		fields.push( {
 			label: label || name,
 			value: name,
-			name: name,
+			name,
 			help: current.getHelp(),
 		} );
 	}

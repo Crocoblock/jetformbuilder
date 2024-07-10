@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import ActionMessagesSlotFills from './ActionMessagesSlotFills';
 import { TextControl, Card, Flex } from '@wordpress/components';
 import { useMemo, useEffect } from '@wordpress/element';
@@ -65,29 +66,30 @@ function ActionMessages( props ) {
 
 	useEffect( () => {
 		const oldMessages = settings.messages || {};
-		const messages    = {};
+		const newMessages = {};
 
 		Object.entries( source.__messages ).forEach( ( [ type, data ] ) => {
 			if ( !oldMessages[ type ] ) {
-				messages[ type ] = data.value;
+				newMessages[ type ] = data.value;
 			}
 		} );
 
-		if ( messages ) {
-			onChangeSetting( { ...oldMessages, ...messages }, 'messages' );
+		if ( newMessages ) {
+			onChangeSetting( { ...oldMessages, ...newMessages }, 'messages' );
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	const setMessage = ( value, nameField ) => {
-		const source = 'messages';
+		const sourceName = 'messages';
 
-		setMapField( { value, nameField, source } );
+		setMapField( { value, nameField, source: sourceName } );
 	};
 
 	const getMessage = name => {
-		const source = 'messages';
+		const sourceName = 'messages';
 
-		return getMapField( { name, source } );
+		return getMapField( { name, source: sourceName } );
 	};
 
 	return <RowControl createId={ false }>
@@ -100,7 +102,7 @@ function ActionMessages( props ) {
 			gap={ 4 }
 		>
 			{ settings.messages && Object.entries( settings.messages ).
-				map( ( [ type, data ] ) => <ActionMessageRow
+				map( ( [ type ] ) => <ActionMessageRow
 						key={ 'message_' + type }
 						type={ type }
 						label={ messages( type ).label }

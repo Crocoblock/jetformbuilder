@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import RedirectToPageRender from './render';
 import { __ } from '@wordpress/i18n';
 import { moveTo } from '@wordpress/icons';

@@ -1,16 +1,10 @@
-const {
-	      BaseComputedField,
-      } = JetFBComponents;
-
-const {
-	      sprintf,
-	      __,
-      } = wp.i18n;
+import { sprintf, __ } from '@wordpress/i18n';
+import { BaseComputedField } from 'jet-form-builder-actions';
 
 const getPostType = action => {
-	const { insert_post = {} } = action?.settings;
+	const { insert_post: insertPost = {} } = action?.settings;
 
-	return insert_post.post_type;
+	return insertPost.post_type;
 };
 
 function DynamicInsertedPostID() {
@@ -35,6 +29,7 @@ function DynamicInsertedPostID() {
 
 	this.getHelp = function () {
 		return sprintf(
+			// translators: %s - action ID
 			__(
 				'A computed field from the <b>Insert/Update Post (%s)</b> action.',
 				'jet-form-builder',

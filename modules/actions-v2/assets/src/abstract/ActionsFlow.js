@@ -17,8 +17,8 @@ ActionsFlow.prototype = {
 		}
 	},
 	/**
-	 * @param type {String}
-	 * @returns {boolean}
+	 * @param  type {String}
+	 * @return {boolean}
 	 */
 	hasType( type ) {
 		return this.list.some( current => current.type === type );

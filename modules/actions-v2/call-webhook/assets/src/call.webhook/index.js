@@ -1,5 +1,6 @@
 import CallWebHookRender from './render';
 import { __ } from '@wordpress/i18n';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { cloud } from '@wordpress/icons';
 
 export default {

@@ -2,6 +2,7 @@ import CurrentActionEditContext from '../context/CurrentActionEditContext';
 import { withFilters } from '@wordpress/components';
 import { getLocalizedFullPack } from './legacyLocalize';
 
+// eslint-disable-next-line max-lines-per-function
 function withActionLocalizeScript( actionType, ActionInstance ) {
 	const localizedData = getLocalizedFullPack( actionType );
 

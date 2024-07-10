@@ -3,10 +3,12 @@ import {
 	useSanitizeFieldsMap,
 	useFields,
 } from 'jet-form-builder-blocks-to-actions';
-import { convertListToFieldsMap } from 'jet-form-builder-actions';
+import {
+	convertListToFieldsMap,
+	useActionValidatorProvider,
+} from 'jet-form-builder-actions';
 import { SelectControl, Flex } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { useActionValidatorProvider } from 'jet-form-builder-actions';
 import {
 	IconText,
 	Label,
@@ -21,6 +23,7 @@ const {
 	      DynamicPropertySelect,
       } = JetFBComponents;
 
+// eslint-disable-next-line max-lines-per-function
 function UpdateUserRender( props ) {
 
 	const formFields = convertListToFieldsMap(
@@ -35,7 +38,7 @@ function UpdateUserRender( props ) {
 	      } = props;
 
 	/**
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1315
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/1315
 	 */
 	useSanitizeFieldsMap();
 

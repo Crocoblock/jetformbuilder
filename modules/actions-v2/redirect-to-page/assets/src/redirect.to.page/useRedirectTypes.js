@@ -14,6 +14,7 @@ function useRedirectTypes( { fields } ) {
 			( { isSupported = () => true } ) => (
 				isSupported( { fields } )
 			) );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 }
 

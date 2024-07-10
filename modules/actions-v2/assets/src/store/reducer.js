@@ -14,6 +14,7 @@ import {
 import withActionLocalizeScript from '../helpers/withActionLocalizeScript';
 import DEFAULT_STATE from './default.state';
 
+// eslint-disable-next-line max-lines-per-function
 export default function ( state = DEFAULT_STATE, action ) {
 	switch ( action?.type ) {
 		case SET_CURRENT_ACTION:
@@ -82,8 +83,8 @@ export default function ( state = DEFAULT_STATE, action ) {
 			// backward compatibility
 			if ( !actionSettings.hasOwnProperty( 'label' ) ) {
 				actionSettings.label = window.jetFormActionTypes.find(
-					action => (
-						action.id === actionSettings.type
+					currentAction => (
+						currentAction.id === actionSettings.type
 					) )?.name;
 			}
 

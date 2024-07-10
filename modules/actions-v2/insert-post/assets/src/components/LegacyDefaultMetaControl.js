@@ -47,7 +47,7 @@ class LegacyDefaultMetaControl extends wp.element.Component {
 		this.props.onChange( items );
 	}
 
-	/* eslint-disable jsx-a11y/no-onchange */
+	// eslint-disable-next-line max-lines-per-function
 	render() {
 
 		return <>

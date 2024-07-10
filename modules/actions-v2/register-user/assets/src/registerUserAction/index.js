@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import RegisterUserRender from './Render';
 import { __ } from '@wordpress/i18n';
 import { commentAuthorAvatar } from '@wordpress/icons';

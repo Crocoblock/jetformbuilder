@@ -2,7 +2,7 @@ import { createSlotFill } from '@wordpress/components';
 
 const ActionMessagesSlotFills = {};
 
-for ( const { self } of jetFormActionTypes ) {
+for ( const { self } of window.jetFormActionTypes ) {
 	if (
 		!window[ self ]?.hasOwnProperty?.( '__messages' ) ||
 		!Object.keys( window[ self ].__messages )?.length
@@ -11,6 +11,7 @@ for ( const { self } of jetFormActionTypes ) {
 	}
 
 	for ( const messageKey of Object.keys( window[ self ].__messages ) ) {
+		// eslint-disable-next-line max-depth
 		if ( ActionMessagesSlotFills.hasOwnProperty( messageKey ) ) {
 			continue;
 		}

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import PostPropertySelect from '../components/PostPropertySelect';
 import { SelectControl, Flex } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
@@ -32,7 +33,7 @@ const modifiers = applyFilters(
 	[
 		{
 			id: 'all',
-			isSupported: settings => true,
+			isSupported: () => true,
 		},
 	],
 );
@@ -47,6 +48,7 @@ const getActionModifierId = settings => {
 	}
 };
 
+// eslint-disable-next-line max-lines-per-function
 function InsertPostRender( props ) {
 	const {
 		      settings,
@@ -73,16 +75,18 @@ function InsertPostRender( props ) {
 		if ( settings.requestFields?.length ) {
 			onChangeSettingObj( { requestFields: null } );
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	useEffect( () => {
 		const id = getActionModifierId( settings );
 
 		setProperties( source.properties[ id ] ?? [] );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ settings.post_type ] );
 
 	/**
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1315
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/1315
 	 */
 	useSanitizeFieldsMap();
 
@@ -116,8 +120,9 @@ function InsertPostRender( props ) {
 								value={ settings.post_type }
 								options={ source.postTypes }
 								help={ help( 'post_type' ) }
-								onChange={ post_type => onChangeSettingObj(
-									{ post_type } ) }
+								onChange={ val => onChangeSettingObj(
+									{ post_type: val },
+								) }
 								onBlur={ () => setShowError( true ) }
 								__next40pxDefaultSize
 								__nextHasNoMarginBottom
@@ -137,8 +142,8 @@ function InsertPostRender( props ) {
 						value={ settings.post_status }
 						options={ source.postStatuses }
 						help={ help( 'post_status' ) }
-						onChange={ post_status => onChangeSettingObj(
-							{ post_status },
+						onChange={ val => onChangeSettingObj(
+							{ post_status: val },
 						) }
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
@@ -170,8 +175,8 @@ function InsertPostRender( props ) {
 				<RowControlEnd>
 					<LegacyDefaultMetaControl
 						defaultMeta={ settings.default_meta }
-						onChange={ default_meta => onChangeSettingObj(
-							{ default_meta },
+						onChange={ val => onChangeSettingObj(
+							{ default_meta: val },
 						) }
 					/>
 				</RowControlEnd>

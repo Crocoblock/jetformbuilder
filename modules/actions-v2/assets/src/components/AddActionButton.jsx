@@ -1,30 +1,50 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import useActionsEdit from '../hooks/useActionsEdit';
 import BaseAction from '../abstract/BaseAction';
 import { STORE_NAME } from '../store';
 import { __ } from '@wordpress/i18n';
-import { Button, SelectControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { __experimentalGrid as Grid } from '@wordpress/components';
+import {
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalGrid as Grid,
+	Button,
+	SelectControl,
+	Modal,
+	TextControl,
+	Flex,
+} from '@wordpress/components';
 import ActionGridItem from './ActionGridItem';
-import { plus } from '@wordpress/icons';
-import { ResponsiveModal } from 'jet-form-builder-components';
+import { plus, closeSmall } from '@wordpress/icons';
+import { styled } from '@linaria/react';
+
+const StyledPlaceholder = styled.div`
+    text-align: center;
+`;
 
 const useCategoriesAndActionTypes = () => {
 	const [ category, setCategory ] = useState( '' );
+	const [ search, setSearch ]     = useState( '' );
 
 	const { actionTypes, categories } = useSelect( select => {
 		const selector = select( STORE_NAME );
 
-		const actionTypes = selector.getActions().filter( mappedCategory => (
-			!category ||
+		const actionTypesList = selector.getActions().filter( mappedAction => (
+			// category condition
 			(
-				!mappedCategory?.category && 'misc' === category
-			) ||
-			mappedCategory.category === category
+				!category ||
+				(
+					!mappedAction?.category && 'misc' === category
+				) ||
+				mappedAction.category === category
+			) &&
+			// search condition
+			mappedAction.label.toLowerCase().includes(
+				search.toLowerCase(),
+			)
 		) );
 
-		const categories = [
+		const categoriesList = [
 			{
 				value: '',
 				label: __( 'All', 'jet-form-builder' ),
@@ -44,14 +64,22 @@ const useCategoriesAndActionTypes = () => {
 		];
 
 		return {
-			actionTypes,
-			categories,
+			actionTypes: actionTypesList,
+			categories: categoriesList,
 		};
-	}, [ category ] );
+	}, [ search, category ] );
 
-	return { category, categories, actionTypes, setCategory };
+	return {
+		search,
+		setSearch,
+		category,
+		categories,
+		actionTypes,
+		setCategory,
+	};
 };
 
+// eslint-disable-next-line max-lines-per-function
 function AddActionButton() {
 	const { actions, setActions } = useActionsEdit();
 
@@ -61,6 +89,8 @@ function AddActionButton() {
 	      } = useDispatch( STORE_NAME );
 
 	const {
+		      search,
+		      setSearch,
 		      category,
 		      categories,
 		      actionTypes,
@@ -101,15 +131,47 @@ function AddActionButton() {
 		>
 			{ __( 'New Action', 'jet-form-builder' ) }
 		</Button>
-		{ showModal && <ResponsiveModal
+		{ showModal && <Modal
+			size="large"
 			title={ __( 'Add new action', 'jet-form-builder' ) }
 			onRequestClose={ () => showActionsInserterModal( false ) }
+			headerActions={ <Flex expanded={ false }>
+				<TextControl
+					placeholder={ __(
+						'Search action by name…',
+						'jet-form-builder',
+					) }
+					value={ search }
+					onChange={ setSearch }
+					__nextHasNoMarginBottom
+				/>
+				<SelectControl
+					value={ category }
+					onChange={ setCategory }
+					options={ categories }
+					__nextHasNoMarginBottom
+				/>
+			</Flex> }
 		>
-			<SelectControl
-				value={ category }
-				onChange={ setCategory }
-				options={ categories }
-			/>
+			{ !Boolean( actionTypes?.length ) && <StyledPlaceholder>
+				<h3>{ __(
+					'No actions were found by your search parameters.',
+					'jet-form-builder',
+				) }</h3>
+				<Button
+					variant="secondary"
+					icon={ closeSmall }
+					onClick={ () => {
+						setSearch( '' );
+						setCategory( '' );
+					} }
+				>
+					{ __(
+						'Clear search & category fields',
+						'jet-form-builder',
+					) }
+				</Button>
+			</StyledPlaceholder> }
 			<Grid columns={ 3 }>
 				{ actionTypes.map( action => (
 					<ActionGridItem
@@ -119,7 +181,7 @@ function AddActionButton() {
 					/>
 				) ) }
 			</Grid>
-		</ResponsiveModal> }
+		</Modal> }
 	</>;
 }
 

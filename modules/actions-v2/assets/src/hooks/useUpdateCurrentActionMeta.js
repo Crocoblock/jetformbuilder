@@ -3,7 +3,7 @@ import useActionsEdit from './useActionsEdit';
 
 /**
  * Update action in meta
- * @returns {function(*=): void}
+ * @return {function(*=): void}
  */
 export const useUpdateCurrentActionMeta = () => {
 	const { currentAction }                   = useCurrentAction();

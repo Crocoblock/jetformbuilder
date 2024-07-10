@@ -4,9 +4,9 @@ import { STORE_NAME } from '../store';
 /**
  * @param field
  * @param settings {{
- *     isScoped: boolean|undefined
- *     priority: number|undefined
- * }}
+ *                 isScoped: boolean|undefined
+ *                 priority: number|undefined
+ *                 }}
  */
 function addComputedField( field, settings = {} ) {
 	dispatch( STORE_NAME ).addComputedField( field, settings );

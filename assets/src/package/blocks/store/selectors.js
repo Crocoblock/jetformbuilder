@@ -49,7 +49,7 @@ const selectors = {
 
 		let hasChanged = false;
 
-		const names   = currentBlock?.fields?.map?.( ( { value } ) => value ) ??
+		const names = currentBlock?.fields?.map?.( ( { value } ) => value ) ??
 			[];
 		const scope = currentBlock.hasOwnProperty( 'parentBlock' )
 		              ? currentBlock.parentBlock.innerBlocks

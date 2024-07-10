@@ -123,7 +123,10 @@ export function registerAction( actionSettings ) {
 			return;
 		}
 
-		dispatch.editAction( actionSettings );
+		dispatch( {
+			type: EDIT_ACTION,
+			actionSettings,
+		} );
 	};
 }
 
@@ -174,15 +177,14 @@ export function addComputedField( field, settings = {} ) {
  *
  * @param  actionType
  * @param  replace
- * @return {{actionSettings: (*&{type}), type: string}}
+ * @return {(function({dispatch: *}): void)|*}
  */
 export function editAction( actionType, replace ) {
-	return {
-		type: EDIT_ACTION,
-		actionSettings: {
-			type: actionType,
+	return ( { dispatch } ) => {
+		dispatch.registerAction( {
 			...replace,
-		},
+			type: actionType,
+		} );
 	};
 }
 

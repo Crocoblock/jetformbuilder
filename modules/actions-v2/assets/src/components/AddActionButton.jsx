@@ -29,20 +29,22 @@ const useCategoriesAndActionTypes = () => {
 	const { actionTypes, categories } = useSelect( select => {
 		const selector = select( STORE_NAME );
 
-		const actionTypesList = selector.getActions().filter( mappedAction => (
-			// category condition
-			(
-				!category ||
+		const actionTypesList = selector.getSortedActions().filter(
+			mappedAction => (
+				// category condition
 				(
-					!mappedAction?.category && 'misc' === category
-				) ||
-				mappedAction.category === category
-			) &&
-			// search condition
-			mappedAction.label.toLowerCase().includes(
-				search.toLowerCase(),
-			)
-		) );
+					!category ||
+					(
+						!mappedAction?.category && 'misc' === category
+					) ||
+					mappedAction?.category === category
+				) &&
+				// search condition
+				mappedAction?.label?.toLowerCase?.().includes?.(
+					search.toLowerCase(),
+				)
+			),
+		);
 
 		const categoriesList = [
 			{
@@ -52,8 +54,8 @@ const useCategoriesAndActionTypes = () => {
 			...selector.getCategories().map(
 				mappedCategory => (
 					{
-						value: mappedCategory.type,
-						label: mappedCategory.label,
+						value: mappedCategory?.type,
+						label: mappedCategory?.label,
 					}
 				),
 			),

@@ -133,8 +133,15 @@ export default function ( state = DEFAULT_STATE, action ) {
 		case EDIT_ACTION:
 			const { actionSettings: editActionSettings } = action;
 
+			if ( 'edit' in editActionSettings ) {
+				editActionSettings.edit = withActionLocalizeScript(
+					editActionSettings.type,
+					editActionSettings.edit,
+				);
+			}
+
 			const types = state.types.map( current => (
-				current.value !== editActionSettings.type ? current : {
+				current.type !== editActionSettings.type ? current : {
 					...current,
 					...editActionSettings,
 				}

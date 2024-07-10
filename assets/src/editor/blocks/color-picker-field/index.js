@@ -18,8 +18,7 @@ const { name, icon } = metadata;
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Give your users an opportunity to design your website and pick 
-a certain color in the form with the help of the Color Picker Field.`,
+		`Give your users an opportunity to design your website and pick a certain color in the form with the help of the Color Picker Field.`,
 		'jet-form-builder'
 	),
 	edit: BlockEdit,

@@ -7,13 +7,14 @@ const {
 
 /**
  * @param comment
- * @param root {Observable}
+ * @param root    {Observable}
  */
 function observeComment( comment, root ) {
 	const formula = new CalculatedHtmlString( root );
 	formula.observe( comment.textContent );
 
 	if ( !formula.parts?.length ) {
+		/* eslint-disable no-console */
 		console.group(
 			__(
 				'JetFormBuilder: You have invalid html macro',
@@ -22,11 +23,14 @@ function observeComment( comment, root ) {
 		);
 		console.error(
 			sprintf(
+				// translators: %s - comment text
 				__( 'Content: %s', 'jet-form-builder' ),
 				comment.textContent,
 			),
 		);
 		console.groupEnd();
+		/* eslint-enable no-console */
+
 		formula.clearWatchers();
 
 		return;
@@ -34,7 +38,7 @@ function observeComment( comment, root ) {
 
 	const wrapper = document.createElement( 'span' );
 
-	let prevSibling = comment.parentNode.insertBefore(
+	const prevSibling = comment.parentNode.insertBefore(
 		wrapper,
 		comment,
 	);

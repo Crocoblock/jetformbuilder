@@ -12,6 +12,7 @@ const {
 	      applyFilters: deprecatedApplyFilters = false,
       } = window?.JetFormBuilderMain?.filters ?? {};
 
+// eslint-disable-next-line max-lines-per-function
 function CalculatedData() {
 	InputData.call( this );
 

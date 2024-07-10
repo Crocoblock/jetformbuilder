@@ -102,7 +102,7 @@ addEventListener( 'load', () => {
 	/**
 	 * @type {Observable[]}
 	 */
-	const forms = Object.values( JetFormBuilder );
+	const forms = Object.values( window.JetFormBuilder );
 
 	for ( const root of forms ) {
 		if ( !( root instanceof Observable ) ) {

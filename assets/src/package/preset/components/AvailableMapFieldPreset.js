@@ -1,4 +1,5 @@
 import GroupedSelectControl from '../../components/GroupedSelectControl';
+import { Fragment } from '@wordpress/element';
 
 const {
 	      TextControl,
@@ -9,6 +10,7 @@ const {
 	      CardHeader,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function
 function AvailableMapFieldPreset( {
 	fieldsMap,
 	field,
@@ -30,33 +32,33 @@ function AvailableMapFieldPreset( {
 		currentVal = {};
 	}
 
-	const AvailableFieldWrapper = ( { field, name, index, fIndex, children } ) => <Card
-		key={ field + name + index + fIndex }
+	const AvailableFieldWrapper = ( { field: fieldLocal, name, index: indexLocal, fIndex, children } ) => <Card
+		key={ fieldLocal + name + indexLocal + fIndex }
 		size={ 'extraSmall' }
 		style={ { marginBottom: '10px' } }
 	>
 		<CardHeader>
-			<span className='jet-label-overflow'>{ field }</span>
+			<span className='jet-label-overflow'>{ fieldLocal }</span>
 		</CardHeader>
 		<CardBody
-			key={ field + name + index + fIndex }
+			key={ fieldLocal + name + indexLocal + fIndex }
 			className={ 'jet-form-preset__fields-map-item' }
 		>
 			{ children }
 		</CardBody>
 	</Card>;
 
-	function AvailableFieldWrapperFunc( { field, name, index, fIndex }, children ) {
+	function AvailableFieldWrapperFunc( { field: fieldLocal, name, index: indexLocal, fIndex }, children ) {
 		return <Card
-			key={ field + name + index + fIndex }
+			key={ fieldLocal + name + indexLocal + fIndex }
 			size={ 'extraSmall' }
 			style={ { marginBottom: '10px' } }
 		>
 			<CardHeader>
-				<span className='jet-label-overflow'>{ field }</span>
+				<span className='jet-label-overflow'>{ fieldLocal }</span>
 			</CardHeader>
 			<CardBody
-				key={ field + name + index + fIndex }
+				key={ fieldLocal + name + indexLocal + fIndex }
 				className={ 'jet-form-preset__fields-map-item' }
 			>
 				{ children }
@@ -64,8 +66,9 @@ function AvailableMapFieldPreset( {
 		</Card>;
 	}
 
-	return <React.Fragment key={ `map_field_preset_${ field + index }` }>
+	return <Fragment key={ `map_field_preset_${ field + index }` }>
 
+		{/* eslint-disable-next-line max-lines-per-function */}
 		{ window.JetFormEditorData.presetConfig.map_fields.map( ( data, fIndex ) => {
 			const props = { field, name: data.name, index, fIndex };
 
@@ -137,9 +140,11 @@ function AvailableMapFieldPreset( {
 								} }
 							/>
 						</AvailableFieldWrapper> );
+				default:
+					return null;
 			}
 		} ) }
-	</React.Fragment>;
+	</Fragment>;
 }
 
 export default AvailableMapFieldPreset;

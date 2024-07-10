@@ -1,5 +1,5 @@
 import gateways from './gateways/store';
-import events from './events/store';
+import eventsStore from './events/store';
 import blockConditions from './block-conditions/store';
 import macros from './macros.button/store';
 import validation from './validation/store';
@@ -16,7 +16,7 @@ const {
 
 const stores = [
 	gateways,
-	events,
+	eventsStore,
 	blockConditions,
 	macros,
 	validation,

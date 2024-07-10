@@ -17,8 +17,7 @@ let HeaderControls = function () {
 			label={ __( 'Render in HTML', 'jet-form-builder' ) }
 			checked={ attributes.render }
 			help={ __(
-				`Enable this option if you use this field in Calculated Field, 
-Conditional Block, Advanced Validation, Global Macros, or Dynamic Value.`,
+				`Enable this option if you use this field in Calculated Field, Conditional Block, Advanced Validation, Global Macros, or Dynamic Value.`,
 				'jet-form-builder',
 			) }
 			onChange={ render => setAttributes(
@@ -26,12 +25,11 @@ Conditional Block, Advanced Validation, Global Macros, or Dynamic Value.`,
 		/> }
 		<ToggleControl
 			label={ __( 'Return the raw value', 'jet-form-builder' ) }
-			help={ __( `If this option is enabled, the value of the 
-field will be JSON-encoded if the value is an array or object`,
+			help={ __( `If this option is enabled, the value of the will be JSON-encoded if the value is an array or object`,
 				'jet-form-builder',
 			) }
 			checked={ attributes.return_raw }
-			onChange={ return_raw => setAttributes( { return_raw } ) }
+			onChange={ val => setAttributes( { return_raw: val } ) }
 		/>
 	</>;
 };

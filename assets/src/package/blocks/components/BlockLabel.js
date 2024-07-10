@@ -33,7 +33,7 @@ function BlockLabel( { label, help } ) {
 			label={ label ?? __( 'Field Label', 'jet-form-builder' ) }
 			className="jet-fb m-unset"
 			value={ attributes.label }
-			onChange={ label => setAttributes( { label } ) }
+			onChange={ val => setAttributes( { label: val } ) }
 			{ ...ref }
 		/>
 		<AttributeHelp name="label">

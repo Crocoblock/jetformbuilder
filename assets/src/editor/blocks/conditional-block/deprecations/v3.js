@@ -21,7 +21,7 @@ function migrateSetValue( block, conditions ) {
 	for ( const {
 		            field,
 		            operator,
-		            set_value,
+		            set_value: setValue,
 		            value
 	            } of conditions
 		) {
@@ -31,7 +31,7 @@ function migrateSetValue( block, conditions ) {
 			conditions: [
 				{ field, operator, value },
 			],
-			to_set: set_value ?? '',
+			to_set: setValue ?? '',
 		};
 		groups.push( group );
 	}
@@ -52,15 +52,15 @@ export default {
 	supports: metadata.supports,
 	save: ConditionalSave,
 	isEligible( attributes ) {
-		const { func_type = false, conditions = [] } = attributes;
+		const { func_type: funcType = false, conditions = [] } = attributes;
 
 		return (
-			false === func_type && conditions?.length
+			false === funcType && conditions?.length
 		);
 	},
 	migrate( attributes, innerBlocks ) {
-		let parsed    = {},
-		    func_type = null;
+		const parsed = {};
+		let funcType = null;
 
 		const [ block ]          = innerBlocks || [];
 		const setValueConditions = [];
@@ -81,12 +81,12 @@ export default {
 			if ( ![ 'show', 'hide' ].includes( condition.type ) ) {
 				continue;
 			}
-			if ( null === func_type ) {
-				func_type = condition.type;
+			if ( null === funcType ) {
+				funcType = condition.type;
 			}
 			delete condition.type;
 
-			if ( 'hide' === func_type && Object.keys( parsed ).length ) {
+			if ( 'hide' === funcType && Object.keys( parsed ).length ) {
 				parsed[ condition.field + '_or' ] = {
 					or_operator: true,
 				};
@@ -99,11 +99,11 @@ export default {
 			migrateSetValue( block, setValueConditions );
 		}
 
-		func_type = func_type ?? 'show';
+		funcType = funcType ?? 'show';
 
 		return {
 			...attributes,
-			func_type,
+			func_type: funcType,
 			conditions: Object.values( parsed ),
 		};
 	},

@@ -1,6 +1,8 @@
 const { applyFilters } = wp.hooks;
 
+// eslint-disable-next-line max-lines-per-function
 function withPreset( WrappedComponent ) {
+	// eslint-disable-next-line max-lines-per-function
 	return function JetFormPresetEditor( props ) {
 
 		const parseValue = () => {
@@ -12,6 +14,7 @@ function withPreset( WrappedComponent ) {
 			else if ( props.value && 'string' === typeof props.value ) {
 				try {
 					val = JSON.parse( props.value );
+					// eslint-disable-next-line max-depth
 					if ( 'number' === typeof val ) {
 						throw new Error();
 					}
@@ -89,17 +92,17 @@ function withPreset( WrappedComponent ) {
 				if ( ! currentState.fields_map || ! currentState.fields_map[ field ] ) {
 					return false;
 				}
-				else {
+				
 					return currentState.fields_map[ field ][ data.condition.field ] === data.condition.value && currentState[ data.parent_condition.field ] === data.parent_condition.value;
-				}
+				
 			}
 			else if ( ! data.parent_condition && data.condition ) {
 				if ( ! currentState.fields_map || ! currentState.fields_map[ field ] ) {
 					return false;
 				}
-				else {
+				
 					return currentState.fields_map[ field ][ data.condition.field ] === data.condition.value;
-				}
+				
 			}
 
 			return true;

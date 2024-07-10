@@ -4,7 +4,7 @@ const { __ } = wp.i18n;
 
 const base = {
 	name: 'jf-limit-responses-panel',
-	title: __( 'Limit Form Responses','jet-form-builder' )
+	title: __( 'Limit Form Responses', 'jet-form-builder' )
 };
 
 const settings = {

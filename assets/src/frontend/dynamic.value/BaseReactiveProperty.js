@@ -13,7 +13,7 @@ BaseReactiveProperty.prototype = {
 	 * If you need specific check,
 	 * you can rewrite this function
 	 *
-	 * @param input {InputData}
+	 * @param  input {InputData}
 	 * @return {boolean}
 	 */
 	isSupported( input ) {
@@ -35,7 +35,7 @@ BaseReactiveProperty.prototype = {
 		this.observe( htmlAttr, formula );
 	},
 	/**
-	 * @param attr {BaseHtmlAttr}
+	 * @param attr    {BaseHtmlAttr}
 	 * @param formula {CalculatedFormula}
 	 */
 	observe( attr, formula ) {

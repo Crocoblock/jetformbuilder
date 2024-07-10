@@ -17,8 +17,7 @@ const { name, icon = '' } = metadata;
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Insert the date manually with Date Field, utilizing 
-a drop-down calendar to choose the date from there conveniently.`,
+		`Insert the date manually with Date Field, utilizing a drop-down calendar to choose the date from there conveniently.`,
 		'jet-form-builder'
 	),
 	edit: DateEdit,

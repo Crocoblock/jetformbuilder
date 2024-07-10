@@ -1,8 +1,7 @@
-const {
-	      __,
-      } = wp.i18n;
+import { __ } from '@wordpress/i18n';
+import apiFetch from '@wordpress/api-fetch';
 
-const columns = [
+const columns         = [
 	{ value: 'id', label: __( 'ID (primary)', 'jet-form-builder' ) },
 	{ value: 'amount_value', label: __( 'Amount Value', 'jet-form-builder' ) },
 	{ value: 'amount_code', label: __( 'Amount Code', 'jet-form-builder' ) },
@@ -20,7 +19,7 @@ const columns = [
 	{ value: 'created_at', label: __( 'Created', 'jet-form-builder' ) },
 	{ value: 'updated_at', label: __( 'Updated', 'jet-form-builder' ) },
 ];
-const payerColumns = [
+const payerColumns    = [
 	{ value: 'payer_id', label: __( 'Payer ID', 'jet-form-builder' ) },
 	{ value: 'first_name', label: __( 'First Name', 'jet-form-builder' ) },
 	{ value: 'last_name', label: __( 'Last Name', 'jet-form-builder' ) },
@@ -43,7 +42,7 @@ const shippingColumns = [
 ];
 
 const {
-	      counter_endpoint,
+	      counter_endpoint: counterEndpoint,
       } = window.JetFBPageConfig;
 
 const {
@@ -90,15 +89,15 @@ const ExportPaymentsModule = {
 			status: '',
 			columns,
 			selectedColumns: columns.map(
-				( { value } ) => value
+				( { value } ) => value,
 			),
 			payerColumns,
 			selectedPayerColumns: payerColumns.map(
-				( { value } ) => value
+				( { value } ) => value,
 			),
 			shippingColumns,
 			selectedShippingColumns: shippingColumns.map(
-				( { value } ) => value
+				( { value } ) => value,
 			),
 			count: 0,
 			loading: {},
@@ -108,14 +107,14 @@ const ExportPaymentsModule = {
 		setStatus( state, status ) {
 			state.status = status;
 		},
-		setColumns( state, columns ) {
-			state.selectedColumns = columns;
+		setColumns( state, selectedColumns ) {
+			state.selectedColumns = selectedColumns;
 		},
-		setPayerColumns( state, columns ) {
-			state.selectedPayerColumns = columns;
+		setPayerColumns( state, selectedPayerColumns ) {
+			state.selectedPayerColumns = selectedPayerColumns;
 		},
-		setShippingColumns( state, columns ) {
-			state.selectedShippingColumns = columns;
+		setShippingColumns( state, selectedShippingColumns ) {
+			state.selectedShippingColumns = selectedShippingColumns;
 		},
 		setCount( state, count ) {
 			state.count = count;
@@ -139,20 +138,21 @@ const ExportPaymentsModule = {
 				commit( 'setStatus', status.selected );
 			}
 		},
-		selectAllColumns( { commit, getters } ) {
-			commit( 'setColumns', getters.columnsValues );
+		selectAllColumns( { commit, getters: currentGetters } ) {
+			commit( 'setColumns', currentGetters.columnsValues );
 		},
 		clearAllColumns( { commit } ) {
 			commit( 'setColumns', [] );
 		},
-		selectAllPayerColumns( { commit, getters } ) {
-			commit( 'setPayerColumns', getters.payerColumnsValues );
+		selectAllPayerColumns( { commit, getters: currentGetters } ) {
+			commit( 'setPayerColumns', currentGetters.payerColumnsValues );
 		},
 		clearAllPayerColumns( { commit } ) {
 			commit( 'setPayerColumns', [] );
 		},
-		selectAllShippingColumns( { commit, getters } ) {
-			commit( 'setShippingColumns', getters.shippingColumnsValues );
+		selectAllShippingColumns( { commit, getters: currentGetters } ) {
+			commit( 'setShippingColumns',
+				currentGetters.shippingColumnsValues );
 		},
 		clearAllShippingColumns( { commit } ) {
 			commit( 'setShippingColumns', [] );
@@ -170,15 +170,15 @@ const ExportPaymentsModule = {
 
 			commit( 'setCount', response.total );
 		},
-		fetchPaymentsCount( { getters } ) {
+		fetchPaymentsCount( { getters: currentGetters } ) {
 			const url = addQueryArgs(
 				{
-					filters: getters.filtersObj,
+					filters: currentGetters.filtersObj,
 				},
-				counter_endpoint.url,
+				counterEndpoint.url,
 			);
 
-			return wp.apiFetch( { ...counter_endpoint, url } );
+			return apiFetch( { ...counterEndpoint, url } );
 		},
 	},
 };

@@ -45,6 +45,7 @@ const getGroupsElements = conditions => {
 	return [
 		<ConditionGroupItem
 			group={ groups[ 0 ] }
+			key="first_item"
 		/>,
 		...orGroups.map( renderGroup ),
 	];

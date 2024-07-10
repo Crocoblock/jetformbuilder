@@ -1,13 +1,13 @@
 import SignalHiddenArray from './SignalHiddenArray';
 
 /**
- * @property {RenderStateData} input
- * @constructor
+ * @property {RenderStateData} input Related input
+ * @class
  */
 function SignalRenderState() {
 	SignalHiddenArray.call( this );
 
-	this.isSupported = function ( node, input ) {
+	this.isSupported = function ( node ) {
 		return '_jfb_current_render_states[]' === node.name;
 	};
 

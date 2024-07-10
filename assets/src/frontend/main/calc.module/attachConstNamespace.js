@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import CurrentDate from './const.namespace/CurrentDate';
 import Min_In_Sec from './const.namespace/Min_In_Sec';
 import Month_In_Sec from './const.namespace/Month_In_Sec';
@@ -25,7 +26,7 @@ const getStaticFunctions = () => wpApplyFilters(
 let staticFunctions = [];
 
 /**
- * @param slug
+ * @param  slug
  * @return {boolean|BaseInternalMacro}
  */
 function getFunction( slug ) {
@@ -46,15 +47,13 @@ function getFunction( slug ) {
 }
 
 /**
- * @param result {String}
- * @param fieldName {String}
- * @param params {String[]}
+ * @param  result    {String}
+ * @param  fieldName {String}
  * @return {*}
  */
 function attachConstNamespace(
 	result,
 	fieldName,
-	params,
 ) {
 	if ( !fieldName.includes( 'CT::' ) ) {
 		return result;

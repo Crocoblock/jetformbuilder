@@ -16,38 +16,40 @@ function Restriction() {
 
 Restriction.prototype = {
 	/**
-	 * @param node {HTMLElement|HTMLInputElement}
+	 * @param node      {HTMLElement|HTMLInputElement}
 	 * @param reporting {ReportingInterface}
 	 */
-	isSupported: function ( node, reporting ) {
+	// eslint-disable-next-line no-unused-vars
+	isSupported ( node, reporting ) {
 		return true;
 	},
 	/**
 	 * @since 3.1.0
-	 * @returns {string}
+	 * @return {string}
 	 */
-	getType: function () {
+	getType () {
 		return this.type;
 	},
 	/**
 	 * @param reporting {ReportingInterface}
 	 */
-	setReporting: function ( reporting ) {
+	setReporting ( reporting ) {
 		this.reporting = reporting;
 	},
-	getValue: function () {
+	getValue () {
 		return this.reporting.input.value.current;
 	},
+	// eslint-disable-next-line jsdoc/require-returns-check
 	/**
-	 * @returns {boolean}
+	 * @return {boolean}
 	 */
-	validate: function () {
+	validate () {
 		throw new Error( 'validate is wrong' );
 	},
 	/**
 	 * @return {Promise<*>}
 	 */
-	validatePromise: async function () {
+	async validatePromise () {
 		let validationResult;
 
 		try {

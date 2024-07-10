@@ -1,24 +1,18 @@
-const {
-	      useBlockEditContext,
-      } = wp.blockEditor;
-const {
-	      useSelect,
-	      useDispatch,
-	      select,
-      } = wp.data;
+import { useBlockEditContext } from '@wordpress/block-editor';
+import { useSelect, useDispatch, select } from '@wordpress/data';
 
 function useBlockAttributes( otherClientId = null ) {
-	const blockProps   = useBlockEditContext();
+	const blockProps = useBlockEditContext();
 	let { clientId } = blockProps;
 
 	if ( otherClientId ) {
 		clientId = otherClientId;
 	}
 
-	const attributes      = useSelect( select => {
-		return select( 'core/block-editor' ).getBlockAttributes( clientId );
-	} );
-	const { updateBlock } = useDispatch( 'core/block-editor', [] );
+	const attributes      = useSelect( selectStore => (
+		selectStore( 'core/block-editor' ).getBlockAttributes( clientId )
+	), [ clientId ] );
+	const { updateBlock } = useDispatch( 'core/block-editor' );
 
 	/**
 	 * @param props {Object|Function}

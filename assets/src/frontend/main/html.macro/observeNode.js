@@ -1,8 +1,6 @@
 import CalculatedHtmlString from './CalculatedHtmlString';
 
-const {
-	      __,
-      } = wp.i18n;
+import { sprintf, __ } from '@wordpress/i18n';
 
 /**
  * @param node {Node}
@@ -13,6 +11,7 @@ function observeNode( node, root ) {
 	formula.observe( `%${ node.dataset.jfbMacro }%` );
 
 	if ( !formula.parts?.length ) {
+		/* eslint-disable no-console */
 		console.group(
 			__(
 				'JetFormBuilder: You have invalid html macro',
@@ -21,11 +20,13 @@ function observeNode( node, root ) {
 		);
 		console.error(
 			sprintf(
+				// translators: %s - macro
 				__( 'Content: %s', 'jet-form-builder' ),
 				node.dataset.jfbMacro,
 			),
 		);
 		console.groupEnd();
+		/* eslint-enable no-console */
 		formula.clearWatchers();
 
 		return;

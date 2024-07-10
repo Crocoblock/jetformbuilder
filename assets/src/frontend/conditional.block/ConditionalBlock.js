@@ -25,7 +25,7 @@ function ConditionalBlock( node, observable ) {
 	this.list = null;
 
 	/**
-	 * @type {String|Object}
+	 * @type {string | Object}
 	 */
 	this.function = null;
 	this.settings = null;
@@ -137,7 +137,7 @@ ConditionalBlock.prototype = {
 	 * Compatibility with Save Progress
 	 * @since 3.0.1 https://github.com/Crocoblock/issues-tracker/issues/2480
 	 *
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1553
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/1553
 	 */
 	validateInputs() {
 		setTimeout( () => {

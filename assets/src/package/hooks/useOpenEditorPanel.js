@@ -9,13 +9,14 @@ function useOpenEditorPanel( panelName ) {
 
 	const isOpened = useSelect(
 		select => select( 'core/edit-post' ).isEditorPanelOpened( panelName ),
-		[],
+		[ panelName ],
 	);
 
 	return () => {
 		// switch from block to post panel
 		enableComplementaryArea( 'core/edit-post', 'edit-post/document' );
 
+		// eslint-disable-next-line no-unused-expressions
 		!isOpened && toggleEditorPanelOpened( panelName );
 	};
 }

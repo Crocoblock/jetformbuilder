@@ -17,6 +17,7 @@ function useSuccessNotice ( text, options = {} ) {
 			noticeStore.createWarningNotice( text,
 				{ type: 'snackbar', ...options } );
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ hasCopied ] );
 
 	return setHasCopied;

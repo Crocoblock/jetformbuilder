@@ -1,4 +1,6 @@
-const { __, sprintf } = wp.i18n;
+import { sprintf, __ } from '@wordpress/i18n';
+
+/* eslint-disable @wordpress/i18n-no-variables, @wordpress/i18n-text-domain */
 
 export default {
 	methods: {

@@ -10,23 +10,42 @@ import { STRICT_MODE } from '../signals/BaseSignal';
 const { doAction } = JetPlugins.hooks;
 
 /**
- * @property {string} rawName
- * @property {string} name
- * @property {Node|boolean} comment
- * @property {HTMLInputElement|*[]} nodes
- * @property {ReactiveVar} value
- * @property {ConditionChecker|null} checker
- * @property {*} calcValue
- * @property {AdvancedReporting|BrowserReporting} reporting
- * @property {Observable} root
- * @property {PageState} page
- * @property {LoadingReactiveVar} loading
- * @property {Object<ReactiveVar>} attrs
- * @property {boolean} isRequired
- * @property {null|ReactiveHook} enterKey
- * @property {null|string} inputType
+ * @typedef {InputData}
  *
- * @constructor
+ * @property {string}                             rawName    Name of html field
+ *                                                           including special
+ *                                                           characters
+ * @property {string}                             name       Prepared name of
+ *                                                           the field
+ * @property {HTMLInputElement|*[]}               nodes      Related nodes
+ * @property {ReactiveVar}                        value      Reactive value
+ * @property {ConditionChecker|null}              checker    Condition checker
+ *                                                           used by
+ *                                                           Conditional Block
+ * @property {*}                                  calcValue  Calculated value
+ *                                                           used by Calculated
+ *                                                           Field
+ * @property {AdvancedReporting|BrowserReporting} reporting  Reporting object
+ *                                                           for validation and
+ *                                                           showing errors
+ * @property {Observable}                         root       Nearest observable
+ *                                                           instance, could be
+ *                                                           row of the
+ *                                                           repeater
+ * @property {PageState}                          page       Related page in
+ *                                                           multistep form
+ * @property {LoadingReactiveVar}                 loading    Reactive var to
+ *                                                           manage visual
+ *                                                           state of the field
+ * @property {Object<ReactiveVar>}                attrs      Object with
+ *                                                           reactive attributes
+ * @property {boolean}                            isRequired Is required field
+ *                                                           or not
+ * @property {null|ReactiveHook}                  enterKey   Used for handling
+ *                                                           inner hooks on
+ *                                                           press Enter button
+ * @property {null|string}                        inputType  Type identifier of
+ *                                                           the field
  */
 function InputData() {
 	this.rawName = '';
@@ -48,7 +67,7 @@ function InputData() {
 	 *  - 'repeater_name': name of repeater, where current field is placed
 	 *  - 0: index of repeater row, where current field is placed
 	 *  - 'text_field': name of current field name
-	 * @type {Array<String|Number>}
+	 * @type {Array<string | number>}
 	 */
 	this.path = [];
 
@@ -90,9 +109,10 @@ function InputData() {
 InputData.prototype.attrs = {};
 
 /**
- * @param node {HTMLElement}
- * @returns {boolean}
+ * @param  node {HTMLElement}
+ * @return {boolean}
  */
+// eslint-disable-next-line no-unused-vars
 InputData.prototype.isSupported = function ( node ) {
 	return false;
 };
@@ -103,14 +123,16 @@ InputData.prototype.addListeners = function () {
 		this.value.current = event.target.value;
 	} );
 
-	node.addEventListener( 'blur', event => {
+	node.addEventListener( 'blur', () => {
 		this.reportOnBlur();
 	} );
 
 	/**
 	 * @since 3.0.1
 	 */
+	// eslint-disable-next-line no-unused-expressions
 	!STRICT_MODE && jQuery( node ).on( 'change', event => {
+		// eslint-disable-next-line eqeqeq
 		if ( this.value.current == event.target.value ) {
 			return;
 		}
@@ -154,8 +176,8 @@ InputData.prototype.reportOnBlur = function () {
 	this.reporting.validateOnBlur();
 };
 /**
- * @param callable
- * @returns {(function(): *|*[])|*}
+ * @param  callable
+ * @return {(function(): *|*[])|*}
  */
 InputData.prototype.watch = function ( callable ) {
 	return this.value.watch( callable );
@@ -164,8 +186,8 @@ InputData.prototype.watchValidity = function ( callable ) {
 	return this.reporting.validityState.watch( callable );
 };
 /**
- * @param callable
- * @returns {(function(): *|*[])|*}
+ * @param  callable
+ * @return {(function(): *|*[])|*}
  */
 InputData.prototype.sanitize = function ( callable ) {
 	return this.value.sanitize( callable );
@@ -177,16 +199,16 @@ InputData.prototype.merge = function ( inputData ) {
 	this.nodes = [ ...inputData.getNode() ];
 };
 InputData.prototype.setValue = function () {
-	let value;
+	let fieldValue;
 	if ( this.isArray() ) {
-		value = Array.from( this.nodes ).
+		fieldValue = Array.from( this.nodes ).
 			map( ( { value } ) => value );
 	}
 	else {
-		value = this.nodes[ 0 ]?.value;
+		fieldValue = this.nodes[ 0 ]?.value;
 	}
-	this.calcValue = value;
-	this.value.current = value;
+	this.calcValue     = fieldValue;
+	this.value.current = fieldValue;
 };
 /**
  * @param node {HTMLElement|HTMLInputElement}
@@ -252,44 +274,44 @@ InputData.prototype.setRoot = function ( observable ) {
 InputData.prototype.onRemove = function () {
 };
 /**
- * @returns {string}
+ * @return {string}
  */
 InputData.prototype.getName = function () {
 	return this.name;
 };
 /**
- * @returns {array|string|boolean}
+ * @return {Array | string | boolean}
  */
 InputData.prototype.getValue = function () {
 	return this.value.current;
 };
 /**
- * @returns {array}
+ * @return {Array}
  */
 InputData.prototype.getNode = function () {
 	return this.nodes;
 };
 /**
- * @returns {boolean}
+ * @return {boolean}
  */
 InputData.prototype.isArray = function () {
 	return this.rawName.includes( '[]' );
 };
 /**
- * @param callable {Function|mixed}
+ * @param callable     {Function|mixed}
  * @param inputContext {InputData|Boolean}
  */
 InputData.prototype.beforeSubmit = function ( callable, inputContext = false ) {
 	this.getSubmit().submitter.promise( callable, inputContext );
 };
 /**
- * @returns {FormSubmit}
+ * @return {FormSubmit}
  */
 InputData.prototype.getSubmit = function () {
 	return this.getRoot().form;
 };
 /**
- * @returns {Observable}
+ * @return {Observable}
  */
 InputData.prototype.getRoot = function () {
 	if ( !this.root?.parent ) {
@@ -321,7 +343,7 @@ InputData.prototype.checkIsRequired = function () {
 InputData.prototype.silenceSet = function ( value ) {
 	/**
 	 * Related to issue
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1261#issuecomment-1293290291
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/1261#issuecomment-1293290291
 	 */
 	const tempReport = this.report.bind( this );
 
@@ -351,7 +373,7 @@ InputData.prototype.hasParent = function () {
 
 /**
  * For insert errors in advanced validation mode
- * @returns {*}
+ * @return {*}
  */
 InputData.prototype.getWrapperNode = function () {
 	return this.nodes[ 0 ].closest( '.jet-form-builder-row' );
@@ -425,14 +447,14 @@ InputData.prototype.populateInner = function () {
 /**
  * Executed with default browser validation
  *
- * @returns {boolean}
+ * @return {boolean}
  */
 InputData.prototype.hasAutoScroll = function () {
 	return true;
 };
 
 /**
- * @returns {HTMLInputElement|HTMLElement}
+ * @return {HTMLInputElement|HTMLElement}
  */
 InputData.prototype.getReportingNode = function () {
 	return this.nodes[ 0 ];
@@ -471,13 +493,14 @@ InputData.prototype.getParentPath = function () {
  */
 InputData.prototype.reQueryValue = function () {
 	this.setValue();
-}
+};
 
 /**
  * Runs on set Observable.value.current
+ * @param value
  */
 InputData.prototype.revertValue = function ( value ) {
 	this.value.current = value;
-}
+};
 
 export default InputData;

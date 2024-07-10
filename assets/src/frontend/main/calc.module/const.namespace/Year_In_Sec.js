@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import BaseInternalMacro from './BaseInternalMacro';
 import Constants from '../constants';
 

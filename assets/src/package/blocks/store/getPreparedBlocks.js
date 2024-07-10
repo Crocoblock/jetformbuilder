@@ -1,6 +1,4 @@
 import blocksRecursiveIterator from '../helpers/blocksRecursiveIterator';
-import { storeName } from './index';
-
 const {
 	      select,
       } = wp.data;

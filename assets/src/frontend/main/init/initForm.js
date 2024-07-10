@@ -11,7 +11,7 @@ function initForm( $scope ) {
 
 	const observable = new Observable();
 
-	JetFormBuilder[ form.dataset.formId ] = observable;
+	window.JetFormBuilder[ form.dataset.formId ] = observable;
 
 	jQuery( document ).trigger(
 		'jet-form-builder/init',

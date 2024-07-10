@@ -22,21 +22,21 @@ const {
 	      addFilter,
       } = wp.hooks;
 const {
-	      rule_types,
-	      ssr_callbacks,
+	      rule_types: ruleTypes,
+	      ssr_callbacks: ssrCallbacks,
       } = window.jetFormValidation;
 
-const ssr_callbacks_keys = ssr_callbacks.map( ( { value } ) => value );
+const ssrCallbacksKeys = ssrCallbacks.map( ( { value } ) => value );
 
 function getLabel( type ) {
-	const indexRule = rule_types.findIndex( ( { value } ) => value === type );
+	const indexRule = ruleTypes.findIndex( ( { value } ) => value === type );
 	const fallback  = __( 'Enter value', 'jet-form-builder' );
 
 	if ( -1 === indexRule ) {
 		return fallback;
 	}
 
-	return rule_types[ indexRule ]?.control_label ?? fallback;
+	return ruleTypes[ indexRule ]?.control_label ?? fallback;
 }
 
 function RuleSpecificControls( {
@@ -82,6 +82,7 @@ function RuleSpecificControls( {
 addFilter(
 	'jet.fb.advanced.rule.controls',
 	'jet-form-builder',
+	// eslint-disable-next-line max-lines-per-function
 	( DefaultControls ) => ( props ) => {
 		const { currentItem, changeCurrentItem } = props;
 		const [ showDetails, setShowDetails ]    = useState( false );
@@ -96,21 +97,22 @@ addFilter(
 			<SelectControl
 				labelPosition="side"
 				options={ Tools.withPlaceholder(
-					ssr_callbacks,
+					ssrCallbacks,
 					__( 'Custom function', 'jet-form-builder' ),
 				) }
 				label={ __( 'Choose callback', 'jet-form-builder' ) }
 				value={ currentItem.value }
 				onChange={ value => changeCurrentItem( { value } ) }
 			/>
-			{ !ssr_callbacks_keys.includes( currentItem.value ) && <>
+			{ !ssrCallbacksKeys.includes( currentItem.value ) && <>
 				<TextControl
 					label={ __( 'Function name', 'jet-form-builder' ) }
 					value={ currentItem.value }
 					onChange={ value => changeCurrentItem( { value } ) }
 				/>
 				<BaseHelp>
-					{ __( 'Example of registering a function below.' ) + ' ' }
+					{ __( 'Example of registering a function below.', 'jet-form-builder' ) + ' ' }
+					{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
 					<a
 						href="javascript:void(0)"
 						onClick={ () => setShowDetails( prev => !prev ) }
@@ -157,7 +159,7 @@ function AdvancedRuleModalItem() {
 	return <>
 		<SelectControl
 			labelPosition="side"
-			options={ Tools.withPlaceholder( rule_types ) }
+			options={ Tools.withPlaceholder( ruleTypes ) }
 			label={ __( 'Rule type', 'jet-form-builder' ) }
 			value={ currentItem.type }
 			onChange={ type => changeCurrentItem( { type } ) }

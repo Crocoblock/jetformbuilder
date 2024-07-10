@@ -61,8 +61,7 @@ addFilter(
 				isLink
 				onClick={ () => {} }
 				label={ __(
-					`If this block is removed from the HTML, then when sending 
-the form, the values from the inner fields will be empty`,
+					`If this block is removed from the HTML, then when sending the form, the values from the inner fields will be empty`,
 					'jet-form-builder',
 				) }
 				showTooltip
@@ -72,9 +71,10 @@ the form, the values from the inner fields will be empty`,
 );
 
 const BlockFunctionSettings = withFilters( 'jet.fb.block.condition.settings' )(
-	props => null,
+	() => null,
 );
 
+// eslint-disable-next-line max-lines-per-function
 export default function () {
 	const [ attributes, setAttributes ] = useBlockAttributes();
 	const [ current, setCurrent ]       = useState( () => attributes );
@@ -115,9 +115,9 @@ export default function () {
 			labelPosition="side"
 			value={ current.func_type }
 			options={ functions }
-			onChange={ func_type => setCurrent( prev => (
+			onChange={ val => setCurrent( prev => (
 				{
-					...prev, func_type,
+					...prev, func_type: val,
 				}
 			) ) }
 		/>

@@ -6,15 +6,15 @@ function FileExtensionRestriction() {
 	this.watchedAttrs.push( 'file_ext' );
 
 	this.isSupported = function ( node, reporting ) {
-		const { file_ext = false } = reporting.input.attrs;
+		const { file_ext: fileExt = false } = reporting.input.attrs;
 
-		return false !== file_ext;
+		return false !== fileExt;
 	};
 
 	this.validate = function () {
-		const { file_ext } = this.reporting.input.attrs;
+		const { file_ext: fileExt } = this.reporting.input.attrs;
 
-		return file_ext.value.current.includes( this.file.type );
+		return fileExt.value.current.includes( this.file.type );
 	};
 
 	this.getRawMessage = function () {

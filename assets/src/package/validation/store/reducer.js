@@ -14,7 +14,7 @@ const DEFAULT_STATE = {
 	formats: [],
 	ruleTypes: [],
 	ruleReaders: {
-		default: function ( rule ) {
+		default ( rule ) {
 			const ruleOptions = select( 'jet-forms/validation' ).getRule(
 				rule.type,
 			);
@@ -34,7 +34,7 @@ const DEFAULT_STATE = {
 				`<code>${ value }</code>`,
 			].join( ' ' );
 		},
-		ssr: function ( rule ) {
+		ssr ( rule ) {
 			return [
 				__( 'Function:', 'jet-form-builder' ),
 				rule?.value,

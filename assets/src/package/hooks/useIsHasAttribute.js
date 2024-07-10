@@ -11,7 +11,7 @@ function useIsHasAttribute( attrName ) {
 
 			return !!block.attributes[ attrName ];
 		},
-		[ type ],
+		[ attrName, type ],
 	);
 }
 

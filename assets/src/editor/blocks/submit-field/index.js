@@ -7,8 +7,6 @@ import './next.page/main';
 import './prev.page/main';
 import './change.render.state/main';
 
-const { __ } = wp.i18n;
-
 const { createBlock } = wp.blocks;
 
 const { name, icon = '' } = metadata;

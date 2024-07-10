@@ -84,7 +84,7 @@ ConditionsList.prototype = {
 		return true;
 	},
 	/**
-	 * @returns {array<ConditionFieldItem|ConditionPageStateItem>}
+	 * @return {Array<ConditionFieldItem | ConditionPageStateItem>}
 	 */
 	getConditions() {
 		return this.conditions;

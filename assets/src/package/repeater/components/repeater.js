@@ -22,10 +22,11 @@ const {
       } = wp.i18n;
 
 /**
- * @param props {{ items, onSetState, functions, children }}
- * @returns {JSX.Element}
- * @constructor
+ * @param  props {{ items, onSetState, functions, children }}
+ * @return {JSX.Element}
+ * @class
  */
+// eslint-disable-next-line max-lines-per-function
 function Repeater( props ) {
 	const {
 		      items,
@@ -33,6 +34,8 @@ function Repeater( props ) {
 		      functions,
 		      children,
 	      } = props;
+
+	/* eslint-disable react-hooks/rules-of-hooks */
 
 	const {
 		      cloneItem,
@@ -44,6 +47,8 @@ function Repeater( props ) {
 	      } = functions
 	?? useRepeaterState( onSetState )
 	?? useContext( RepeaterStateContext );
+
+	/* eslint-enable react-hooks/rules-of-hooks */
 
 	const {
 		      isSupported: isSupportedHeader,
@@ -75,6 +80,7 @@ function Repeater( props ) {
 		className={ 'jet-form-builder__repeater-component' }
 		key={ 'jet-form-builder-repeater' }
 	>
+		{/* eslint-disable-next-line max-lines-per-function */}
 		{ items.map( ( currentItem, index ) => <Card
 			size="small"
 			elevation={ 2 }

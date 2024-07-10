@@ -16,6 +16,7 @@ function useOnUpdateModal( callback ) {
 		if ( null !== actionClick ) {
 			onRequestClose();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ actionClick ] );
 }
 

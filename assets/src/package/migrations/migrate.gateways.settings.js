@@ -22,11 +22,11 @@ const editMeta = ( name, objectValue ) => {
 const getActiveActions = actions => {
 	const response = [];
 
-	for ( const [ action_id, { active = false } ] of Object.entries( actions ) ) {
+	for ( const [ actionId, { active = false } ] of Object.entries( actions ) ) {
 		if ( ! active ) {
 			continue;
 		}
-		response.push( + action_id );
+		response.push( + actionId );
 	}
 
 	return response;
@@ -39,7 +39,7 @@ const getGatewaysActions = () => {
 		actions = [];
 
 	try {
-		gateways = JSON.parse( formBuilderMeta[ '_jf_gateways' ] );
+		gateways = JSON.parse( formBuilderMeta._jf_gateways );
 	} catch ( error ) {
 		return [];
 	}
@@ -49,7 +49,7 @@ const getGatewaysActions = () => {
 	}
 
 	try {
-		actions = JSON.parse( formBuilderMeta[ '_jf_actions' ] );
+		actions = JSON.parse( formBuilderMeta._jf_actions );
 	} catch ( error ) {
 		return [ gateways ];
 	}
@@ -58,32 +58,32 @@ const getGatewaysActions = () => {
 };
 
 const migrate = ( gateways, actions ) => {
-	const on_success = getActiveActions( gateways[ 'notifications_success' ] ?? {} );
-	const on_failed = getActiveActions( gateways[ 'notifications_failed' ] ?? {} );
-	const on_before = getActiveActions( gateways[ 'notifications_before' ] ?? {} );
-	const use_redirect = gateways[ 'use_success_redirect' ] ?? false;
+	const onSuccess = getActiveActions( gateways.notifications_success ?? {} );
+	const onFailed = getActiveActions( gateways.notifications_failed ?? {} );
+	const onBefore = getActiveActions( gateways.notifications_before ?? {} );
+	const useRedirect = gateways.use_success_redirect ?? false;
 
-	let has_redirect = false;
+	let hasRedirect = false;
 
-	if ( ! on_success.length && ! on_failed.length && ! on_before.length && ! use_redirect ) {
+	if ( ! onSuccess.length && ! onFailed.length && ! onBefore.length && ! useRedirect ) {
 		throw 'nothing_to_migrate';
 	}
 
 	return actions.map( action => {
 		action.events = action.events ?? [];
 
-		if ( on_success.includes( action.id ) ) {
+		if ( onSuccess.includes( action.id ) ) {
 			action.events.push( 'GATEWAY.SUCCESS' );
 		}
-		if ( on_failed.includes( action.id ) ) {
+		if ( onFailed.includes( action.id ) ) {
 			action.events.push( 'GATEWAY.FAILED' );
 		}
-		if ( on_before.includes( action.id ) ) {
+		if ( onBefore.includes( action.id ) ) {
 			action.events.push( 'DEFAULT.PROCESS' );
 		}
-		if ( use_redirect && ! has_redirect && 'redirect_to_page' === action.type ) {
+		if ( useRedirect && ! hasRedirect && 'redirect_to_page' === action.type ) {
 			action.events.push( 'GATEWAY.SUCCESS' );
-			has_redirect = true;
+			hasRedirect = true;
 		}
 
 		return action;

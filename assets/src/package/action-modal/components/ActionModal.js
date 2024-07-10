@@ -8,6 +8,7 @@ const {
 	      Slot: FooterSlot,
       } = ActionModalFooterSlotFill;
 
+// eslint-disable-next-line max-lines-per-function
 function ActionModal( {
 	onRequestClose,
 	children,

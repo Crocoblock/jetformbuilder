@@ -18,6 +18,7 @@ if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
 }
 
+// eslint-disable-next-line max-lines-per-function
 function useControls( {
 	type,
 	attributes,
@@ -33,6 +34,7 @@ function useControls( {
 
 	const currentControl = controls[ type ];
 
+	// eslint-disable-next-line max-lines-per-function
 	const isValidCondition = ( attr ) => {
 		if ( !attr.condition ) {
 			return true;
@@ -62,6 +64,7 @@ function useControls( {
 					for ( const attrToCompare in items ) {
 						const valueCompare = items[ attrToCompare ];
 
+						// eslint-disable-next-line max-depth
 						if ( valueCompare === attributes[ attrToCompare ] ) {
 							return true;
 						}
@@ -104,7 +107,7 @@ function useControls( {
 	};
 
 	return currentControl.attrs.filter(
-		( { help = '', attrName, label, ...attr } ) => {
+		( { attrName, label, ...attr } ) => {
 			const isRegisterAttribute = (
 				attrName in attributes
 			);
@@ -124,15 +127,16 @@ function useControls( {
 /**
  * @deprecated 3.0.0
  *
- * @param props
+ * @param  props
  * @return {unknown[]}
- * @constructor
+ * @class
  */
+// eslint-disable-next-line max-lines-per-function
 function FieldControl( props ) {
-	let {
-		    setAttributes,
-		    attributes,
-	    } = props;
+	const {
+		      setAttributes,
+		      attributes,
+	      } = props;
 
 	const fieldControls = useControls( props );
 
@@ -140,6 +144,7 @@ function FieldControl( props ) {
 		setAttributes( { [ key ]: value } );
 	};
 
+	// eslint-disable-next-line max-lines-per-function
 	return fieldControls.map( ( { help = '', attrName, label, ...attr } ) => {
 		switch ( attr.type ) {
 			case 'text':
@@ -173,6 +178,9 @@ function FieldControl( props ) {
 					} }
 				/>;
 			case 'number':
+				/* eslint-disable-next-line
+				 @wordpress/no-base-control-with-label-without-id
+				 */
 				return <BaseControl
 					key={ `${ attr.type }-${ attrName }-BaseControl` }
 					label={ label }
@@ -189,6 +197,8 @@ function FieldControl( props ) {
 						   color: 'rgb(117, 117, 117)',
 					   } }>{ help }</p>
 				</BaseControl>;
+			default:
+				return null;
 		}
 
 	} );

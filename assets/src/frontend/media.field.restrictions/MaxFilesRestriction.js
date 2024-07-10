@@ -7,19 +7,19 @@ function MaxFilesRestriction() {
 
 	this.watchedAttrs.push( 'max_files' );
 
-	this.isSupported = function ( node, reporting ) {
+	this.isSupported = function ( node ) {
 		return (
 			'file' === node?.type
 		);
 	};
 
 	this.validate = function () {
-		const { max_files } = this.reporting.input.attrs;
+		const { max_files: maxFiles } = this.reporting.input.attrs;
 		let { current }     = this.reporting.input.value;
 
 		current = current?.length ?? 0;
 
-		return !current || current <= max_files.value.current;
+		return !current || current <= maxFiles.value.current;
 	};
 
 	this.getRawMessage = function () {

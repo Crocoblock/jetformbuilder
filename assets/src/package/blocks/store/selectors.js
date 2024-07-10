@@ -49,7 +49,7 @@ const selectors = {
 
 		let hasChanged = false;
 
-		let names   = currentBlock?.fields?.map?.( ( { value } ) => value ) ??
+		const names   = currentBlock?.fields?.map?.( ( { value } ) => value ) ??
 			[];
 		const scope = currentBlock.hasOwnProperty( 'parentBlock' )
 		              ? currentBlock.parentBlock.innerBlocks
@@ -82,7 +82,7 @@ const selectors = {
 		}
 
 		return {
-			hasChanged: hasChanged,
+			hasChanged,
 			names: names.join( '|' ),
 		};
 	},
@@ -103,6 +103,7 @@ const selectors = {
 			}
 
 			for ( const sanitizer of sanitizers ) {
+				// eslint-disable-next-line max-depth
 				if ( 'function' !== typeof sanitizer ) {
 					continue;
 				}
@@ -120,9 +121,9 @@ const selectors = {
 	/**
 	 * @since 3.1.0
 	 *
-	 * @param state
-	 * @param blockId {String} Block clientId or name
-	 * @returns {*}
+	 * @param  state
+	 * @param  blockId {String} Block clientId or name
+	 * @return {*}
 	 */
 	getBlock( state, blockId ) {
 		return state.blocks.find( ( { name, clientId } ) => (

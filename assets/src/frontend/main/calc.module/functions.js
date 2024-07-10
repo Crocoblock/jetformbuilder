@@ -36,7 +36,7 @@ function toDateTime( date ) {
 }
 
 /**
- * @param timeOrDate {String|Number}
+ * @param  timeOrDate {String|Number}
  * @return {{time: number, type: string}}
  */
 function getTimestamp( timeOrDate ) {

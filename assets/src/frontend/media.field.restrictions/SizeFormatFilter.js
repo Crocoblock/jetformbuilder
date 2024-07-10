@@ -1,3 +1,5 @@
+import { _x } from '@wordpress/i18n';
+
 const {
 	      Filter,
       } = JetFormBuilderAbstract;
@@ -10,10 +12,8 @@ const {
 const {
 	      getLanguage,
       } = JetFormBuilderFunctions;
-const {
-	      _x,
-      } = wp.i18n;
 
+/* eslint-disable camelcase */
 const symbols = {
 	[ _x( 'TB', 'unit symbol', 'jet-form-builder' ) ]: Tb_In_Bytes,
 	[ _x( 'GB', 'unit symbol', 'jet-form-builder' ) ]: Gb_In_Bytes,
@@ -21,6 +21,7 @@ const symbols = {
 	[ _x( 'KB', 'unit symbol', 'jet-form-builder' ) ]: Kb_In_Bytes,
 	[ _x( 'B', 'unit symbol', 'jet-form-builder' ) ]: 1,
 };
+/* eslint-enable camelcase */
 
 const lang = getLanguage();
 

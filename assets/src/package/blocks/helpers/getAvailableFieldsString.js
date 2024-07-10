@@ -5,7 +5,7 @@ const { __ } = wp.i18n;
 function getAvailableFieldsString( blockName ) {
 	const fields = getAvailableFields( [ blockName ] );
 
-	let fieldsString = [];
+	const fieldsString = [];
 	fields.forEach( function ( item ) {
 		fieldsString.push( '%FIELD::' + item + '%' );
 	} );

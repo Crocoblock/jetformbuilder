@@ -12,8 +12,7 @@ function SubtractDayFilter() {
 	this.isClientSide = true;
 
 	this.help = __(
-		`Subtracts the number of days by argument
-from a macro that returns a date or timestamp.`,
+		`Subtracts the number of days by argument from a macro that returns a date or timestamp.`,
 		'jet-form-builder',
 	);
 }

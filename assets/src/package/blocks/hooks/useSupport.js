@@ -9,7 +9,7 @@ const {
 const { get } = window._;
 
 function useSupport( supportName ) {
-	const { clientId, name } = useBlockEditContext();
+	const { name } = useBlockEditContext();
 
 	return useSelect(
 		select => {
@@ -17,7 +17,7 @@ function useSupport( supportName ) {
 
 			return get( blockType, [ 'supports', supportName ], false );
 		},
-		[ clientId ],
+		[ name, supportName ],
 	);
 }
 

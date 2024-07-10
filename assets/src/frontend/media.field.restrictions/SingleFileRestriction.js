@@ -11,12 +11,12 @@ const {
  * This restriction used for implement file-specific
  * restrictions for each single file
  *
- * @constructor
+ * @class
  */
 function SingleFileRestriction() {
 	AdvancedRestriction.call( this );
 
-	this.isSupported = function ( node, reporting ) {
+	this.isSupported = function ( node ) {
 		return (
 			'file' === node?.type
 		);
@@ -41,6 +41,7 @@ SingleFileRestriction.prototype.setReporting = function ( reporting ) {
 	this.singleFileRestrictions = getFileRestrictions( reporting );
 };
 
+// eslint-disable-next-line max-lines-per-function
 SingleFileRestriction.prototype.validatePromise = async function () {
 	/**
 	 * @type {SignalFile}

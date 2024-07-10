@@ -17,8 +17,7 @@ const { name, icon } = metadata;
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Pull out the values from the form fields and meta fields and 
-use them to calculate the formula of any complexity you've set before.`,
+		`Pull out the values from the form fields and meta fields and use them to calculate the formula of any complexity you've set before.`,
 		'jet-form-builder',
 	),
 	edit: EditCalculated,

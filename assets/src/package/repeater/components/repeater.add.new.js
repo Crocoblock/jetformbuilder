@@ -9,9 +9,9 @@ const {
       } = wp.element;
 
 /**
- * @param props {{ item, onSetState, functions, children }}
- * @returns {JSX.Element}
- * @constructor
+ * @param  props {{ item, onSetState, functions, children }}
+ * @return {JSX.Element}
+ * @class
  */
 function RepeaterAddNew( props ) {
 	const {
@@ -21,9 +21,13 @@ function RepeaterAddNew( props ) {
 		      children,
 	      } = props;
 
+	/* eslint-disable react-hooks/rules-of-hooks */
+
 	const { addNewItem } = functions
 	?? useRepeaterState( onSetState )
 	?? useContext( RepeaterStateContext );
+
+	/* eslint-disable react-hooks/rules-of-hooks */
 
 	return <Button
 		icon={ 'plus-alt2' }

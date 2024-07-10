@@ -35,6 +35,7 @@ ToolbarContext               = (
 	ToolbarContext || __experimentalToolbarContext
 );
 
+// eslint-disable-next-line max-lines-per-function
 function ToggleGroupVariationsBase( { value } ) {
 	const { name }     = useBlockEditContext();
 	const toolbarState = useContext( ToolbarContext );
@@ -57,17 +58,20 @@ function ToggleGroupVariationsBase( { value } ) {
 						           toolbarState?.baseId
 					           )
 					           ? <ToolbarItem
+						           key={ current.name }
 						           as={ ToggleGroupControlOptionIcon }
 						           value={ current.name }
 						           label={ current.title }
 						           icon={ current.icon }
 					           /> : <ToggleGroupControlOptionIcon
+						           key={ current.name }
 						           value={ current.name }
 						           label={ current.title }
 						           icon={ current.icon }
 					           /> ),
 			};
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[],
 	);
 
@@ -79,7 +83,7 @@ function ToggleGroupVariationsBase( { value } ) {
 		hideLabelFromVision
 		onChange={ varName => setAttributes( {
 			...variations.find(
-				( { name } ) => name === varName,
+				( { name: variationName } ) => variationName === varName,
 			).attributes,
 		} ) }
 		value={ value }

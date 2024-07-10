@@ -1,33 +1,34 @@
-import metadata from "@blocks/form-block/block.json"
+import metadata from '@blocks/form-block/block.json';
 import preview from './form-block.preview';
 
 const {
-		  registerBlockType,
-	  } = wp.blocks;
+	      registerBlockType,
+      } = wp.blocks;
 
 const { __ } = wp.i18n;
 
 const {
-		  InspectorControls,
-		  useBlockProps,
-	  } = wp.blockEditor ? wp.blockEditor : wp.editor;
+	      InspectorControls,
+	      useBlockProps,
+      } = wp.blockEditor ? wp.blockEditor : wp.editor;
 
 const {
-		  PanelBody,
-		  SelectControl,
-		  TextControl,
-		  ToggleControl,
-	  } = wp.components;
+	      PanelBody,
+	      SelectControl,
+	      TextControl,
+	      ToggleControl,
+      } = wp.components;
 
 const {
-		  serverSideRender: ServerSideRender,
-	  } = wp;
+	      serverSideRender: ServerSideRender,
+      } = wp;
 
 const uniqKey = suffix => `${ metadata.name }/${ suffix }`;
 
+// eslint-disable-next-line max-lines-per-function
 function FormEdit( { attributes, setAttributes, isSelected } ) {
 
-	const localize = window.JetFormData;
+	const localize   = window.JetFormData;
 	const blockProps = useBlockProps();
 
 	if ( attributes.isPreview ) {
@@ -45,53 +46,65 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 			key={ uniqKey( 'InspectorControls' ) }
 		>
 			<PanelBody
-				title={ __( 'Form Settings' ) }
+				title={ __( 'Form Settings', 'jet-form-builder' ) }
 				key={ uniqKey( 'PanelBody' ) }
 			>
 				<SelectControl
-					key='form_id'
-					label={ __( 'Choose Form' ) }
-					labelposition='top'
+					key="form_id"
+					label={ __( 'Choose Form', 'jet-form-builder' ) }
+					labelposition="top"
 					value={ attributes.form_id }
 					onChange={ newValue => {
 						setAttributes( { form_id: Number( newValue ) } );
 					} }
 					options={ localize.forms_list }
 				/>
-				{ Boolean( attributes.form_id ) && <React.Fragment>
+				{ Boolean( attributes.form_id ) && <>
 					<SelectControl
 						label={ __( 'Fields Layout', 'jet-form-builder' ) }
 						value={ attributes.fields_layout }
 						options={ localize.fields_layout }
-						onChange={ fields_layout => setAttributes( { fields_layout } ) }
+						onChange={ val => setAttributes(
+							{ fields_layout: val },
+						) }
 					/>
 					<TextControl
 						label={ __( 'Required Mark', 'jet-form-builder' ) }
 						value={ attributes.required_mark }
-						onChange={ required_mark => setAttributes( { required_mark } ) }
+						onChange={ val => setAttributes(
+							{ required_mark: val },
+						) }
 					/>
 					<SelectControl
-						label={ __( 'Fields label HTML tag', 'jet-form-builder' ) }
+						label={ __( 'Fields label HTML tag',
+							'jet-form-builder' ) }
 						value={ attributes.fields_label_tag }
 						options={ localize.fields_label_tag }
-						onChange={ fields_label_tag => setAttributes( { fields_label_tag } ) }
+						onChange={ val => setAttributes(
+							{ fields_label_tag: val },
+						) }
 					/>
 					<SelectControl
 						label={ __( 'Submit Type', 'jet-form-builder' ) }
 						value={ attributes.submit_type }
 						options={ localize.submit_type }
-						onChange={ submit_type => setAttributes( { submit_type } ) }
+						onChange={ val => setAttributes(
+							{ submit_type: val }
+						) }
 					/>
 					<ToggleControl
 						key={ 'enable_progress' }
-						label={ __( 'Enable form pages progress', 'jet-form-builder' ) }
+						label={ __( 'Enable form pages progress',
+							'jet-form-builder' ) }
 						checked={ attributes.enable_progress }
 						onChange={ newVal => {
-							setAttributes( { enable_progress: Boolean( newVal ) } );
+							setAttributes(
+								{ enable_progress: Boolean( newVal ) } );
 						} }
 					/>
 					<ToggleControl
-						label={ __( 'Clear data on success submit', 'jet-form-builder' ) }
+						label={ __( 'Clear data on success submit',
+							'jet-form-builder' ) }
 						checked={ attributes.clear }
 						help={ __( 'Remove input values on successful submit',
 							'jet-form-builder' ) }
@@ -99,7 +112,7 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 							setAttributes( { clear: Boolean( newVal ) } );
 						} }
 					/>
-				</React.Fragment> }
+				</> }
 			</PanelBody>
 		</InspectorControls>,
 		<div key={ uniqKey( 'viewBlock' ) } { ...blockProps }>
@@ -118,12 +131,11 @@ registerBlockType(
 		...metadata,
 		title: __( 'JetForm', 'jet-form-builder' ),
 		description: __(
-			`Display the created form on any WordPress page with 
-the JetForm widget or block. Set the fields layout, 
-required mark, and submit type.`,
-			'jet-form-builder'
+			`Display the created form on any WordPress page with the JetForm widget or block. Set the fields layout, required mark, and submit type.`,
+			'jet-form-builder',
 		),
-		icon: <span dangerouslySetInnerHTML={ { __html: metadata.icon } }></span>,
+		icon: <span
+			dangerouslySetInnerHTML={ { __html: metadata.icon } }></span>,
 		attributes: metadata.attributes,
 		edit: FormEdit,
 		example: {

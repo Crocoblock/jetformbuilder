@@ -28,7 +28,7 @@ BaseMacro.prototype.name = '';
 BaseMacro.prototype.namespace = 'CT';
 
 /**
- * @type {null|String|Function}
+ * @type {null | string | Function}
  */
 BaseMacro.prototype.help = null;
 

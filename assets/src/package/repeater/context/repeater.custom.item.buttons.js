@@ -1,4 +1,5 @@
-const { createContext } = wp.element;
+/* eslint-disable no-unused-vars */
+import { createContext } from '@wordpress/element';
 
 const RepeaterButtonsContext = createContext( {
 	edit: item => true,

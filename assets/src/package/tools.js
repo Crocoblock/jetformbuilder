@@ -1,10 +1,4 @@
-const semverGt  = require( 'semver/functions/gt' );
-const semverLt  = require( 'semver/functions/lt' );
-const semverGte = require( 'semver/functions/gte' );
-const semverLte = require( 'semver/functions/lte' );
-
-const { __ }           = wp.i18n;
-const { applyFilters } = wp.hooks;
+import { applyFilters } from '@wordpress/hooks';
 
 class Tools {
 
@@ -13,20 +7,6 @@ class Tools {
 			{ label, value },
 			...source,
 		];
-	}
-
-	/**
-	 * @deprecated 3.1.0
-	 *
-	 * @param object
-	 * @returns {boolean}
-	 */
-	static isEmptyObject( object ) {
-		console.warn(
-			'Use JetFBActions.isEmpty insteadof JetFBActions.Tools.isEmptyObject',
-		);
-
-		return isEmpty( object );
 	}
 
 	static getRandomID() {
@@ -42,30 +22,6 @@ export const event = name => {
 export const listen = ( name, func ) => {
 	document.addEventListener( name, func );
 };
-
-function getSemVerFunc( operator ) {
-	switch ( operator ) {
-		case '>':
-			return semverGt;
-		case '>=':
-			return semverGte;
-		case '<':
-			return semverLt;
-		case '<=':
-			return semverLte;
-	}
-
-	return () => false;
-}
-
-export function versionCompare( version1, version2, operator ) {
-	try {
-		return getSemVerFunc( operator )( version1, version2 );
-	}
-	catch ( te ) {
-		return false;
-	}
-}
 
 export function column( listArr, name ) {
 	if ( !listArr?.length ) {
@@ -151,13 +107,14 @@ export function classnames( ...additional ) {
 			if ( 'string' === typeof itemClass ) {
 				result.push( itemClass.trim() );
 			}
-			if ( 'object' === typeof itemClass ) {
-				for ( const itemClassKey in itemClass ) {
-					if ( itemClass[ itemClassKey ] ) {
-						result.push( (
-							itemClassKey + ''
-						).trim() );
-					}
+			if ( 'object' !== typeof itemClass ) {
+				return;
+			}
+			for ( const itemClassKey in itemClass ) {
+				if ( itemClass[ itemClassKey ] ) {
+					result.push( (
+						itemClassKey + ''
+					).trim() );
 				}
 			}
 		} );
@@ -179,8 +136,11 @@ export function convertObjectToOptionsList( entries = [], {
 		return usePlaceholder ? [ placeholder ] : [];
 	}
 
-	const options = Object.entries( entries ).map( ( [ value, label ] ) => {
-		return { value, label };
+	const options = Object.entries( entries ).map( ( option ) => {
+		return {
+			value: option.value,
+			label: option.label,
+		};
 	} );
 
 	return usePlaceholder ? [ placeholder, ...options ] : options;
@@ -193,10 +153,10 @@ export function assetUrl( url = '' ) {
 /**
  * @since 3.1.0
  *
- * @param obj
- * @param path
- * @param value
- * @returns {*}
+ * @param  obj
+ * @param  path
+ * @param  value
+ * @return {*}
  */
 export function set( obj, path, value ) {
 	// Create a shallow copy of the object
@@ -232,8 +192,8 @@ export function set( obj, path, value ) {
 /**
  * @since 3.1.0
  *
- * @param value
- * @returns {boolean}
+ * @param  value
+ * @return {boolean}
  */
 export function isEmpty( value ) {
 	if ( null === value || undefined === value ) {
@@ -262,6 +222,5 @@ export const extendPrototype = ( ParentFunction ) => {
 
 	return ChildFunctionPrototype;
 };
-
 
 export default Tools;

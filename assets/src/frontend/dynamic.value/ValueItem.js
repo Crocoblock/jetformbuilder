@@ -5,7 +5,7 @@ const {
 
 /**
  * @type {Function}
- * @constructor
+ * @class
  */
 function ValueItem() {
 }
@@ -25,34 +25,28 @@ ValueItem.prototype = {
 	 */
 	formulas: [],
 	/**
-	 * @param input {InputData}
-	 * @returns {boolean}
+	 * @param  input {InputData}
+	 * @return {boolean}
 	 */
+	// eslint-disable-next-line no-unused-vars
 	isSupported( input ) {
 		return true;
 	},
-	/**
-	 * @param to_set
-	 * @param conditions
-	 * @param set_on_empty {Boolean}
-	 * @param frequency {'once'|'always'|'on_change'}
-	 * @param input {InputData}
-	 */
 	observe(
 		{
-			to_set,
+			to_set: toSet,
 			conditions = [],
-			set_on_empty = false,
+			set_on_empty: setOnEmpty = false,
 			frequency = 'on_change',
 		},
 		input,
 	) {
 		this.input        = input;
 		this.frequency    = frequency;
-		this.set_on_empty = set_on_empty;
+		this.set_on_empty = setOnEmpty;
 		this.prevResult   = null;
 		this.prevValue    = null;
-		this.to_set       = to_set;
+		this.to_set       = toSet;
 		this.formulas     = [];
 
 		this.observeSetValue( conditions, input );
@@ -89,7 +83,7 @@ ValueItem.prototype = {
 		this.formulas.push( formula );
 	},
 	/**
-	 * @param list {ConditionsList|boolean}
+	 * @param list        {ConditionsList|boolean}
 	 * @param forceResult {boolean|null}
 	 */
 	applyValue( list, forceResult = null ) {

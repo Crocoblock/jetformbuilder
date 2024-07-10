@@ -8,6 +8,7 @@ import { __ } from '@wordpress/i18n';
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 import { Sortable } from 'jet-form-builder-components';
 import { Fragment } from '@wordpress/element';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { styled } from '@linaria/react';
 
 const {

@@ -17,8 +17,7 @@ const { name, icon = '' } = metadata;
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Insert a range with a slider in the form for the users to move it. 
-So the visitors can set the desired price range for products they want to buy.`,
+		`Insert a range with a slider in the form for the users to move it. So the visitors can set the desired price range for products they want to buy.`,
 		'jet-form-builder'
 	),
 	edit: RangeEdit,

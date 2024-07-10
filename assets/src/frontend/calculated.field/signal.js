@@ -5,12 +5,12 @@ const {
       } = window.JetFormBuilderAbstract;
 
 /**
- * @property {CalculatedData} input
+ * @property {CalculatedData} input Related input instance
  */
 function SignalCalculated() {
 	BaseSignal.call( this );
 
-	this.isSupported = function ( node, inputData ) {
+	this.isSupported = function ( node ) {
 		return isCalculated( node );
 	};
 

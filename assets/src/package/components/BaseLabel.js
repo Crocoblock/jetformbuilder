@@ -10,6 +10,7 @@ function BaseLabel( { label, children, ...props } ) {
 			marginBottom: '8px',
 		} }
 	>
+		{/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
 		<label
 			className={ 'jet-fb label' }
 			{ ...props }

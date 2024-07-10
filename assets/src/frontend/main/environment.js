@@ -10,7 +10,7 @@ const isSafari = /^((?!chrome|android).)*safari/i.test( userAgent ) ||
 			return '[object SafariRemoteNotification]' === p.toString();
 		}
 	)( !window.safari || (
-		typeof safari !== 'undefined' && safari.pushNotification
+		typeof safari !== 'undefined' && window.safari.pushNotification
 	) );
 
 const environment = {

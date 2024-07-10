@@ -16,8 +16,8 @@ export function getScopeName( box ) {
 }
 
 export function registerNamespacedModule( store, box ) {
-	const { render_type } = box;
-	let module            = ( modules = {} ) => (
+	const { render_type: renderType } = box;
+	const module            = ( modules = {} ) => (
 		{
 			...singleView,
 			modules: {
@@ -27,7 +27,7 @@ export function registerNamespacedModule( store, box ) {
 		}
 	);
 
-	switch ( render_type ) {
+	switch ( renderType ) {
 		case 'table':
 			store.registerModule(
 				getScopeName( box ),
@@ -62,32 +62,32 @@ export function setTableSeed( store, source ) {
 		      columns                   = {},
 		      total                     = 0,
 		      receive_url               = {},
-		      actions,
+		      actions: sourceActions,
 		      render_type               = '',
 		      empty_message             = '',
 		      is_editable_table         = false,
 		      is_editable_table_control = false,
-		      stable_limit              = null,
+		      stable_limit: stableLimit              = null,
 		      ...options
 	      } = source;
 
-	let getName = withScope( source );
+	const getName = withScope( source );
 
 	store.commit( getName( 'setEmptyMessage' ), empty_message );
 	store.commit( getName( 'setRenderType' ), render_type );
-	store.commit( getName( 'setActionsList' ), actions );
+	store.commit( getName( 'setActionsList' ), sourceActions );
 	store.commit( getName( 'setColumns' ), columns );
 	store.commit( getName( 'setList' ), list );
 	store.commit( getName( 'setTotal' ), total );
 	store.commit( getName( 'setReceiveEndpoint' ), receive_url );
-	store.commit( getName( 'setLimit' ), stable_limit ?? list?.length );
+	store.commit( getName( 'setLimit' ), stableLimit ?? list?.length );
 	store.commit( getName( 'toggleEditTable' ), is_editable_table );
 	store.commit( getName( 'setEditableTable' ), is_editable_table_control );
 	store.commit( getName( 'options/insert' ), options );
 
 	store.dispatch( getName( 'setQueriedPage' ), 1 );
 
-	store.subscribe( ( mutation, state ) => {
+	store.subscribe( ( mutation ) => {
 		const typeParts = mutation.type.split( '/' );
 
 		switch ( typeParts.at( -1 ) ) {
@@ -96,7 +96,7 @@ export function setTableSeed( store, source ) {
 					return;
 				}
 				store.dispatch( getName( 'fetchPageWithFilters' ) );
-				return;
+				
 		}
 	} );
 }
@@ -114,7 +114,7 @@ export function setListSeed( store, source ) {
 		      ...options
 	      } = source;
 
-	let getName = withScope( source );
+	const getName = withScope( source );
 
 	store.commit( getName( 'setColumns' ), columns );
 	store.commit( getName( 'setList' ), list );

@@ -1,7 +1,7 @@
 const { applyFilters } = wp.hooks;
 
 const getFormFields = ( blockParserFunc, blocks ) => {
-	blocks.map( block => {
+	blocks.forEach( block => {
 		blockParserFunc( block );
 
 		if ( block.innerBlocks.length ) {
@@ -17,7 +17,7 @@ const withSelectFormFields = (
 ) => select => {
 
 	let formFields = [];
-	let skipFields = [
+	const skipFields = [
 		'submit',
 		'form-break',
 		'heading',

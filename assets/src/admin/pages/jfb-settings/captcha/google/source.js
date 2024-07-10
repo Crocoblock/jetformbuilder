@@ -8,12 +8,11 @@ const label = {
 
 const help = {
 	threshold: __(
-		`It should be a value between 0 and 1, default 0.5 
-(1.0 is very likely a good interaction, 0.0 is very likely a bot).`,
+		`It should be a value between 0 and 1, default 0.5 (1.0 is very likely a good interaction, 0.0 is very likely a bot).`,
 		'jet-form-builder'
 	),
-	apiPref: __( 'Register reCAPTCHA v3 keys' ),
-	apiLinkLabel: __( 'here' ),
+	apiPref: __( 'Register reCAPTCHA v3 keys', 'jet-form-builder' ),
+	apiLinkLabel: __( 'here', 'jet-form-builder' ),
 	apiLink: 'https://www.google.com/recaptcha/admin/create'
 };
 

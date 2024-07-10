@@ -11,7 +11,6 @@ const {
 
 const {
 	      useState,
-	      useEffect,
 	      useContext,
       } = wp.element;
 
@@ -22,6 +21,7 @@ const {
 	      Button,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function
 function ConditionGroupItem( { group } ) {
 	const [ isHover, setHover ]         = useState( false );
 	const { setShowModal }              = useContext( ConditionalModalContext );
@@ -33,7 +33,9 @@ function ConditionGroupItem( { group } ) {
 	return <div
 		className="jet-fb p-relative"
 		onMouseOver={ () => setHover( true ) }
+		onFocus={ () => setHover( true ) }
 		onMouseOut={ () => setHover( false ) }
+		onBlur={ () => setHover( false ) }
 	>
 		<HoverContainer isHover={ isHover }>
 			<Button
@@ -42,7 +44,7 @@ function ConditionGroupItem( { group } ) {
 				icon={ 'edit' }
 				onClick={ () => {
 					setAttributes(
-						( { conditions } ) => conditions.map(
+						( { conditions: prevConditions } ) => prevConditions.map(
 							( current, index ) => {
 								current.__visible = index === indexes[ 0 ];
 								return current;

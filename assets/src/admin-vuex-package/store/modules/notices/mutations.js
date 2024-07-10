@@ -17,9 +17,9 @@ export default {
 		const notice = state.notices[ index ];
 		Vue.delete( state.notices, index );
 
-		const { is_hide_after_close } = notice.options;
+		const { is_hide_after_close: isHideAfterClose } = notice.options;
 
-		if ( ! is_hide_after_close ) {
+		if ( ! isHideAfterClose ) {
 			return;
 		}
 		const storageNotice = storage.getItem( notice.id, {} );

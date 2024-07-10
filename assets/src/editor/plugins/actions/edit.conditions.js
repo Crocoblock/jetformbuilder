@@ -1,12 +1,9 @@
 import { conditionSettings } from './options';
 
 const {
-	      FieldWithPreset,
-	      DynamicPreset,
 	      RepeaterItemContext,
 	      Repeater,
 	      RepeaterAddNew,
-	      SafeDeleteToggle,
 	      AdvancedModalControl,
 	      RepeaterState,
 	      BaseHelp,
@@ -27,7 +24,6 @@ const {
 	      TextareaControl,
 	      ToggleControl,
 	      FormTokenField,
-	      BaseControl,
 	      TabPanel,
       } = wp.components;
 
@@ -75,6 +71,7 @@ function getTransformerOption( value ) {
 	return getConditionOptionFrom( 'compare_value_formats', value );
 }
 
+// eslint-disable-next-line max-lines-per-function
 function RepeaterItem( { formFields } ) {
 	const { currentItem, changeCurrentItem } = useContext(
 		RepeaterItemContext );
@@ -116,8 +113,8 @@ function RepeaterItem( { formFields } ) {
 			labelPosition="side"
 			value={ currentItem.compare_value_format }
 			options={ conditionSettings.compare_value_formats }
-			onChange={ compare_value_format => {
-				changeCurrentItem( { compare_value_format } );
+			onChange={ val => {
+				changeCurrentItem( { compare_value_format: val } );
 			} }
 		/>
 		{ transformerOption( 'help' ).length > 0 && <p
@@ -161,14 +158,16 @@ function EditEvents( { events } ) {
 			label={ __( 'Add event', 'jet-form-builder' ) }
 			value={ currentAction.events ?? [] }
 			suggestions={ events }
-			onChange={ events => setCurrentAction(
-				{ ...currentAction, events } ) }
+			onChange={ newEvents => setCurrentAction(
+				{ ...currentAction, events: newEvents } ) }
 			tokenizeOnSpace
 			__experimentalExpandOnFocus
 			__experimentalShowHowTo={ '' }
 		/>
 		<BaseHelp>
-			{ __( 'Separate with commas or the Enter key.' ) + ' ' }
+			{ __( 'Separate with commas or the Enter key.',
+				'jet-form-builder' ) + ' ' }
+			{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */ }
 			<a
 				href="javascript:void(0)"
 				onClick={ () => setShowDetails( prev => !prev ) }
@@ -180,7 +179,7 @@ function EditEvents( { events } ) {
 		</BaseHelp>
 		{ showDetails && <ul className={ 'jet-fb-ul-revert-layer' }>
 			{ events.map(
-				event => <li>
+				event => <li key={ event }>
 					<b>{ event }</b>: <RawHTML>{ helpMap[ event ] }</RawHTML>
 				</li>,
 			) }
@@ -209,8 +208,8 @@ function EditFields() {
 			labelPosition="side"
 			value={ currentAction.condition_operator || 'and' }
 			options={ operators }
-			onChange={ condition_operator => setCurrentAction(
-				{ ...currentAction, condition_operator },
+			onChange={ conditionOperator => setCurrentAction(
+				{ ...currentAction, condition_operator: conditionOperator },
 			) }
 		/>
 		<RepeaterState state={ updateCurrentConditions }>

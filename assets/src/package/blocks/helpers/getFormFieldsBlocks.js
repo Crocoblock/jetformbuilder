@@ -2,7 +2,6 @@ import blocksRecursiveIterator from './blocksRecursiveIterator';
 
 const {
 	      applyFilters,
-	      addFilter,
       } = wp.hooks;
 const {
 	      select,
@@ -15,7 +14,7 @@ function getFormFieldsBlocks(
 	context        = 'default',
 ) {
 	let formFields = [];
-	let skipFields = [
+	const skipFields = [
 		'submit',
 		'form-break',
 		'heading',

@@ -4,11 +4,11 @@ const { doAction } = wp.hooks;
 
 const dispatchers = {
 	[ constants.register ]( state, action ) {
-		const { operators, functions, render_states } = action.items;
+		const { operators, functions, render_states: renderStates } = action.items;
 
 		state.operators    = [ ...operators ];
 		state.functions    = [ ...functions ];
-		state.renderStates = [ ...render_states ];
+		state.renderStates = [ ...renderStates ];
 
 		doAction(
 			'jet.fb.change.blockConditions.renderState',
@@ -40,7 +40,7 @@ const dispatchers = {
 		return state;
 	},
 	[ constants.deleteRenderStates ]( state, action ) {
-		let items = Array.isArray( action.items )
+		const items = Array.isArray( action.items )
 		            ? [ ...action.items ]
 		            : [ action.items ];
 

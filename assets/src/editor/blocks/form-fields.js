@@ -57,7 +57,7 @@ const registerFormField = block => {
 	 * @since 3.0.0
 	 */
 	if ( !settings.hasOwnProperty( 'jfbResolveBlock' ) ) {
-		settings.jfbResolveBlock = function ( context = 'default' ) {
+		settings.jfbResolveBlock = function () {
 			const base = {
 				clientId: this.clientId,
 				name: this.name,
@@ -85,9 +85,10 @@ const registerFormField = block => {
 		metadata.attributes.hasOwnProperty( 'name' )
 	) {
 		/**
-		 * @param attributes
-		 * @param context {{|'accessibility'|'visual'|'list-view'}}
-		 * @returns {*}
+		 * @param  attributes
+		 * @param  root1         {Object}
+		 * @param  root1.context {'accessibility'|'visual'|'list-view'}
+		 * @return {*}
 		 * @private
 		 */
 		settings.__experimentalLabel = ( attributes, { context } ) => {

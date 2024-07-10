@@ -1,6 +1,6 @@
 function ProgressBar( node, state ) {
 	/**
-	 * @param node {HTMLElement}
+	 * @param node  {HTMLElement}
 	 * @param state {MultiStepState}
 	 */
 	this.node = node;

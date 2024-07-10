@@ -17,8 +17,7 @@ const { name, icon = '' } = metadata;
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`With the help of Form Break Field, divide one big form into 
-several parts and make those parts appear after filling in the previous part.`,
+		`With the help of Form Break Field, divide one big form into several parts and make those parts appear after filling in the previous part.`,
 		'jet-form-builder',
 	),
 	edit: FormBreakEdit,

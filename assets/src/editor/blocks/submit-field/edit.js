@@ -7,10 +7,6 @@ const {
       } = JetFBComponents;
 
 const {
-	      __,
-      } = wp.i18n;
-
-const {
 	      InspectorControls,
       } = wp.blockEditor;
 
@@ -34,6 +30,7 @@ const ActionButtonPlaceholderFiltered = withFilters(
 	ActionButtonPlaceholder,
 );
 
+// eslint-disable-next-line max-lines-per-function
 const ButtonEdit = ( props ) => {
 
 	const {
@@ -78,6 +75,7 @@ const ButtonEdit = ( props ) => {
 	useEffect( () => {
 		setButtonClasses( classesButton() );
 		setWrapperClasses( classesWrapper() );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ attributes.action_type ] );
 
 	const setActionAttributes = attrs => {

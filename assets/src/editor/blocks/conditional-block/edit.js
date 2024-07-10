@@ -39,6 +39,7 @@ function hasFormBreakField( blocks ) {
 	return blocks.some( ( { name } ) => name.includes( 'form-break-field' ) );
 }
 
+// eslint-disable-next-line max-lines-per-function
 export default function ConditionalBlockEdit( props ) {
 
 	const blockProps = useBlockProps();
@@ -54,7 +55,8 @@ export default function ConditionalBlockEdit( props ) {
 		if ( !attributes.name ) {
 			setAttributes( { name: clientId } );
 		}
-	}, [] );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [ attributes.name, clientId ] );
 
 	const blocks     = getCurrentInnerBlocks();
 	const blockNames = blocks.reduce(
@@ -68,6 +70,7 @@ export default function ConditionalBlockEdit( props ) {
 
 	useEffect( () => {
 		setShowMultistep( hasFormBreakField( blocks ) );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ blockNames ] );
 
 	const functionDisplay = useSelect( select => (
@@ -150,8 +153,8 @@ export default function ConditionalBlockEdit( props ) {
 					help={ __(
 						'The value of this field will be set as the name of the last page with the "Progress Bar" block.',
 						'jet-form-builder' ) }
-					onChange={ last_page_name => setAttributes(
-						{ last_page_name },
+					onChange={ val => setAttributes(
+						{ last_page_name: val },
 					) }
 				/>
 			</PanelBody> }
@@ -161,8 +164,7 @@ export default function ConditionalBlockEdit( props ) {
 				<Tip>
 					<RawHTML>
 						{ __(
-							`Add the CSS class <code>jet-form-builder--hidden</code> to make 
-this block hidden by default.`,
+							`Add the CSS class <code>jet-form-builder--hidden</code> to make this block hidden by default.`,
 							'jet-form-builder',
 						) }
 					</RawHTML>
@@ -178,8 +180,8 @@ this block hidden by default.`,
 					'jet-form-builder',
 				) }
 				value={ attributes.class_name }
-				onChange={ class_name => setAttributes(
-					{ class_name },
+				onChange={ val => setAttributes(
+					{ class_name: val },
 				) }
 			/>
 		</InspectorControls>

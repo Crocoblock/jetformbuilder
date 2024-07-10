@@ -12,9 +12,9 @@ const {
       } = wp.blockEditor;
 
 /**
- * @param props
+ * @param  props
  * @return {boolean|JSX.Element}
- * @constructor
+ * @class
  */
 function FieldSettingsWrapper( props ) {
 	const {

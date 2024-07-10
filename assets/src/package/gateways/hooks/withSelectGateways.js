@@ -13,14 +13,14 @@ function withSelectGateways( select ) {
 	const { id: CURRENT_SCENARIO = 'PAY_NOW' } = scenario;
 
 	const {
-		      use_global = false,
+		      use_global: useGlobal = false,
 	      } = gatewaySpecific;
 
 	const currentTab = globalTab( { slug: CURRENT_GATEWAY } );
 
 	const getSpecificOrGlobal = ( key, ifEmpty = '' ) => {
 		return (
-			use_global ? (
+			useGlobal ? (
 				currentTab[ key ] || ifEmpty
 			) : (
 				gatewaySpecific[ key ] || ifEmpty

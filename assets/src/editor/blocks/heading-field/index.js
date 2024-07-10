@@ -17,8 +17,7 @@ const { name, icon = '' } = metadata;
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Build a heading for the form that can’t be changed by the users. 
-Add the labels and descriptions to the different parts of the form.`,
+		`Build a heading for the form that can’t be changed by the users. Add the labels and descriptions to the different parts of the form.`,
 		'jet-form-builder',
 	),
 	edit: HeadingEdit,
@@ -29,9 +28,10 @@ Add the labels and descriptions to the different parts of the form.`,
 		},
 	},
 	/**
-	 * @param attributes
-	 * @param context {{|'accessibility'|'visual'|'list-view'}}
-	 * @returns {*}
+	 * @param  attributes
+	 * @param  root1         {Object}
+	 * @param  root1.context {'accessibility'|'visual'|'list-view'}
+	 * @return {*}
 	 * @private
 	 */
 	__experimentalLabel: ( attributes, { context } ) => {

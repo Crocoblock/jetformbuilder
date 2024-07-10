@@ -5,13 +5,13 @@ import { createDefaultRestrictions } from './functions';
 function BrowserReporting() {
 	ReportingInterface.call( this );
 
-	this.isSupported = function ( node, input ) {
+	this.isSupported = function () {
 		return true;
 	};
 
-	this.reportRaw   = function ( validationErrors ) {
+	this.reportRaw   = function () {
 	};
-	this.reportFirst = function ( validationErrors ) {
+	this.reportFirst = function () {
 		const node = this.getNode();
 
 		node.reportValidity();
@@ -45,7 +45,7 @@ function BrowserReporting() {
 	};
 
 	/**
-	 * @returns {HTMLInputElement|HTMLElement}
+	 * @return {HTMLInputElement|HTMLElement}
 	 */
 	this.getNode = function () {
 		return this.input.getReportingNode();

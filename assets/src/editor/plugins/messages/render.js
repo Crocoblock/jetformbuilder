@@ -1,9 +1,4 @@
 const {
-	      Children,
-	      cloneElement,
-      } = wp.element;
-
-const {
 	      TextControl,
       } = wp.components;
 

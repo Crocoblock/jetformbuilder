@@ -16,7 +16,9 @@ function ChangeData() {
 			this.value.current = event.target.value;
 		} );
 
+		// eslint-disable-next-line no-unused-expressions
 		!STRICT_MODE && jQuery( node ).on( 'change', event => {
+			// eslint-disable-next-line eqeqeq
 			if ( this.value.current == event.target.value ) {
 				return;
 			}

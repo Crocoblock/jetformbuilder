@@ -2,13 +2,14 @@ function BaseInternalMacro() {
 }
 
 BaseInternalMacro.prototype = {
+	// eslint-disable-next-line jsdoc/require-returns-check
 	/**
-	 * @return {String}
+	 * @return {string}
 	 */
-	getId: function () {
+	getId () {
 		throw new Error( 'You need to rewrite this method' );
 	},
-	getResult: function () {
+	getResult () {
 		throw new Error( 'You need to rewrite this method' );
 	},
 };

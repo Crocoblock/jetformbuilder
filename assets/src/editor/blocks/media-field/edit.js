@@ -50,6 +50,7 @@ if ( typeof InputControl === 'undefined' ) {
 
 const localizeData = window.jetFormMediaFieldData;
 
+// eslint-disable-next-line max-lines-per-function
 export default function MediaEdit( props ) {
 
 	const blockProps           = useBlockProps();
@@ -86,7 +87,7 @@ export default function MediaEdit( props ) {
 				<FieldSettingsWrapper { ...props }>
 					<SelectControl
 						key="allowed_user_cap"
-						label={ __( 'User access' ) }
+						label={ __( 'User access', 'jet-form-builder' ) }
 						labelPosition="top"
 						value={ attributes.allowed_user_cap }
 						onChange={ ( newValue ) => {
@@ -97,7 +98,8 @@ export default function MediaEdit( props ) {
 					{ 'any_user' !== attributes.allowed_user_cap && <>
 						<ToggleControl
 							key="insert_attachment"
-							label={ __( 'Insert attachment' ) }
+							label={ __( 'Insert attachment',
+								'jet-form-builder' ) }
 							checked={ attributes.insert_attachment }
 							help={ attrHelp( 'insert_attachment' ) }
 							onChange={ ( newValue ) => {
@@ -108,7 +110,7 @@ export default function MediaEdit( props ) {
 						/>
 						{ attributes.insert_attachment && <SelectControl
 							key="value_format"
-							label={ __( 'Field value' ) }
+							label={ __( 'Field value', 'jet-form-builder' ) }
 							labelPosition="top"
 							value={ attributes.value_format }
 							onChange={ ( newValue ) => {
@@ -122,15 +124,17 @@ export default function MediaEdit( props ) {
 						value={ attributes.max_files }
 						label={ __( 'Maximum allowed files to upload',
 							'jet-form-builder' ) }
-						onChangePreset={ max_files => setAttributes(
-							{ max_files } ) }
+						onChangePreset={ val => setAttributes(
+							{ max_files: val },
+						) }
 					>
 						{ ( { instanceId } ) => <TextControl
 							id={ instanceId }
 							className="jet-fb m-unset"
 							value={ attributes.max_files }
-							onChange={ max_files => setAttributes(
-								{ max_files } ) }
+							onChange={ val => setAttributes(
+								{ max_files: val },
+							) }
 						/> }
 					</AdvancedInspectorControl>
 					<AttributeHelp name="max_files">
@@ -143,15 +147,16 @@ export default function MediaEdit( props ) {
 						value={ attributes.max_size }
 						label={ __( 'Maximum size in Mb',
 							'jet-form-builder' ) }
-						onChangePreset={ max_size => setAttributes(
-							{ max_size } ) }
+						onChangePreset={ val => setAttributes(
+							{ max_size: val } ) }
 					>
 						{ ( { instanceId } ) => <TextControl
 							id={ instanceId }
 							className="jet-fb m-unset"
 							value={ attributes.max_size }
-							onChange={ max_size => setAttributes(
-								{ max_size } ) }
+							onChange={ val => setAttributes(
+								{ max_size: val },
+							) }
 						/> }
 					</AdvancedInspectorControl>
 					<AttributeHelp name="max_size"/>
@@ -161,17 +166,16 @@ export default function MediaEdit( props ) {
 							'jet-form-builder',
 						) }
 						value={ attributes?.validation?.messages?.max_size ??
-						'Maximum file size: %max_size%' }
-						onChange={ max_size => {
+							'Maximum file size: %max_size%' }
+						onChange={ val => {
 							setAttributes( {
 								validation: {
-									messages: { max_size },
+									messages: { max_size: val },
 								},
 							} );
 						} }
 						help={ __(
-							`Use the %max_size% macro to display 
-							the maximum allowed file size`,
+							`Use the %max_size% macro to display the maximum allowed file size`,
 							'jet-form-builder',
 						) }
 					/>
@@ -180,8 +184,9 @@ export default function MediaEdit( props ) {
 						value={ attributes.allowed_mimes }
 						label={ __( 'Allow MIME types', 'jet-form-builder' ) }
 						suggestions={ localizeData.mime_types }
-						onChange={ allowed_mimes => setAttributes(
-							{ allowed_mimes } ) }
+						onChange={ val => setAttributes(
+							{ allowed_mimes: val },
+						) }
 						tokenizeOnSpace
 					/>
 				</FieldSettingsWrapper>

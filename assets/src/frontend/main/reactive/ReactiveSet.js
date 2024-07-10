@@ -26,6 +26,7 @@ ReactiveSet.prototype.remove = function ( stateName ) {
 
 ReactiveSet.prototype.toggle = function ( stateName, force = null ) {
 	if ( null !== force ) {
+		// eslint-disable-next-line no-unused-expressions
 		force ? this.add( stateName ) : this.remove( stateName );
 
 		return;

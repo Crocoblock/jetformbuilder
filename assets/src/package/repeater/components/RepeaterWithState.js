@@ -1,44 +1,50 @@
-const { __ } = wp.i18n;
+import { sprintf, __ } from '@wordpress/i18n';
+import {
+	Fragment,
+	useState,
+	useEffect,
+} from '@wordpress/element';
+import {
+	Button,
+	ButtonGroup,
+	Card,
+	CardBody,
+	CardHeader,
+	ToggleControl,
+	Flex,
+	FlexItem,
+} from '@wordpress/components';
 
-const {
-		  Button,
-		  ButtonGroup,
-		  Card,
-		  CardBody,
-		  CardHeader,
-		  ToggleControl,
-		  Flex,
-		  FlexItem,
-	  } = wp.components;
-
-const {
-		  useState,
-		  useEffect,
-	  } = wp.element;
-
+// eslint-disable-next-line max-lines-per-function
 function RepeaterWithState( {
-								children,
-								ItemHeading,
-								repeaterClasses = [],
-								repeaterItemClasses = [],
-								newItem,
-								addNewButtonLabel = 'Add New',
-								items = [],
-								isSaveAction,
-								onSaveItems,
-								onUnMount,
-								onAddNewItem,
-								onRemoveItem,
-								help = {
-									helpSource: {},
-									helpVisible: () => false,
-									helpKey: '',
-								},
-								additionalControls = null,
-							} ) {
+	children,
+	ItemHeading,
+	repeaterClasses = [],
+	repeaterItemClasses = [],
+	newItem,
+	addNewButtonLabel = 'Add New',
+	items = [],
+	isSaveAction,
+	onSaveItems,
+	onUnMount,
+	onAddNewItem,
+	onRemoveItem,
+	help = {
+		helpSource: {},
+		helpVisible: () => false,
+		helpKey: '',
+	},
+	additionalControls = null,
+} ) {
 
-	const classNames = [ 'jet-form-builder__repeater-component', ...repeaterClasses ].join( ' ' );
-	const itemClassNames = [ 'jet-form-builder__repeater-component-item', ...repeaterItemClasses ].join( ' ' );
+	const classNames     = [
+		'jet-form-builder__repeater-component',
+		...repeaterClasses,
+	].join( ' ' );
+	const itemClassNames = [
+		'jet-form-builder__repeater-component-item',
+		...repeaterItemClasses,
+	].join( ' ' );
 
 	const parsedItems = () => {
 		if ( items && items.length > 0 ) {
@@ -47,18 +53,21 @@ function RepeaterWithState( {
 
 				return item;
 			} );
-		} else {
-			return [ {
+		}
+		return [
+			{
 				...newItem,
 				__visible: true,
-			} ];
-		}
-	}
+			},
+		];
+
+	};
 
 	const [ itemsData, setItemsData ] = useState( [] );
 
 	useEffect( () => {
 		setItemsData( parsedItems() );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	const [ isSafeDeleting, setSafeDeleting ] = useState( true );
@@ -76,13 +85,23 @@ function RepeaterWithState( {
 	};
 
 	const onSaveDeleting = index => {
-		return confirm( __( `Are you sure you want to remove item ${ index + 1 }?`, 'jet-form-builder' ) );
-	}
+		// eslint-disable-next-line no-alert
+		return confirm(
+			sprintf(
+				// translators: %d - item index
+				__(
+					`Are you sure you want to remove item %d?`,
+					'jet-form-builder',
+				),
+				index + 1,
+			),
+		);
+	};
 
 	const removeOption = ( index ) => {
 		if (
-			isSafeDeleting && ! onSaveDeleting( index ) ||
-			onRemoveItem && ! onRemoveItem( index, itemsData )
+			isSafeDeleting && !onSaveDeleting( index ) ||
+			onRemoveItem && !onRemoveItem( index, itemsData )
 		) {
 			return;
 		}
@@ -93,59 +112,73 @@ function RepeaterWithState( {
 
 			return prevClone;
 		} );
-	}
+	};
 
 	const addNewItem = ( value ) => {
 		if ( onAddNewItem ) {
 			onAddNewItem( value, itemsData );
 		}
-		setItemsData( prev => [ ...prev, {
-			...value,
-			__visible: true,
-		} ] );
-	}
+		setItemsData( prev => [
+			...prev, {
+				...value,
+				__visible: true,
+			},
+		] );
+	};
 
 	const cloneItem = ( index ) => {
 		setItemsData( prev => {
-			const prevClone = JSON.parse( JSON.stringify( prev ) );
-			const [ before, after ] = [ prevClone.slice( 0, index + 1 ), prevClone.slice( index + 1 ) ];
+			const prevClone         = JSON.parse( JSON.stringify( prev ) );
+			const [ before, after ] = [
+				prevClone.slice( 0, index + 1 ),
+				prevClone.slice( index + 1 ),
+			];
 
 			return [ ...before, prevClone[ index ], ...after ];
 		} );
-	}
+	};
 
 	const moveRepeaterItem = ( { oldIndex, newIndex } ) => {
 		setItemsData( prev => {
 			const prevClone = JSON.parse( JSON.stringify( prev ) );
 
-			[ prevClone[ newIndex ], prevClone[ oldIndex ] ] = [ prevClone[ oldIndex ], prevClone[ newIndex ] ];
-
-			return prevClone;
-		} );
-	}
-
-	const moveUp = ( index ) => {
-		moveRepeaterItem( { oldIndex: index, newIndex: index - 1 } );
-	}
-	const moveDown = ( index ) => {
-		moveRepeaterItem( { oldIndex: index, newIndex: index + 1 } );
-	}
-
-	const isDisabledEnd = ( index ) => {
-		return ! ( index < itemsData.length - 1 );
-	}
-	/*
-	  
-	 */
-
-	const toggleVisible = index => {
-		setItemsData( prev => {
-			const prevClone = JSON.parse( JSON.stringify( prev ) );
-			prevClone[ index ].__visible = ! ( prevClone[ index ].__visible );
+			[
+				prevClone[ newIndex ],
+				prevClone[ oldIndex ],
+			] = [ prevClone[ oldIndex ], prevClone[ newIndex ] ];
 
 			return prevClone;
 		} );
 	};
+
+	const moveUp   = ( index ) => {
+		moveRepeaterItem( { oldIndex: index, newIndex: index - 1 } );
+	};
+	const moveDown = ( index ) => {
+		moveRepeaterItem( { oldIndex: index, newIndex: index + 1 } );
+	};
+
+	const isDisabledEnd = ( index ) => {
+		return !(
+			index < itemsData.length - 1
+		);
+	};
+	/*
+
+	 */
+
+	const toggleVisible = index => {
+		setItemsData( prev => {
+			const prevClone              = JSON.parse( JSON.stringify( prev ) );
+			prevClone[ index ].__visible = !(
+				prevClone[ index ].__visible
+			);
+
+			return prevClone;
+		} );
+	};
+
+	/* eslint-disable max-depth */
 
 	useEffect( () => {
 		if ( true === isSaveAction ) {
@@ -158,20 +191,25 @@ function RepeaterWithState( {
 			}
 			onSaveItems( itemsData );
 			onUnMount();
-		} else if ( false === isSaveAction ) {
+		}
+		else if ( false === isSaveAction ) {
 			onUnMount();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ isSaveAction ] );
+
+	/* eslint-enable max-depth */
 
 	const getRepeaterItemId = index => `jet-form-builder-repeater__item_${ index }`;
 
 	const {
-		helpSource,
-		helpVisible,
-		helpKey,
-	} = help;
+		      helpSource,
+		      helpVisible,
+		      helpKey,
+	      } = help;
 
-	const isVisibleHelp = helpVisible( itemsData ) && helpSource && helpSource[ helpKey ];
+	const isVisibleHelp = helpVisible( itemsData ) && helpSource &&
+		helpSource[ helpKey ];
 
 	return <div
 		className={ classNames }
@@ -212,13 +250,14 @@ function RepeaterWithState( {
 			</Flex>
 		</> }
 		{ additionalControls }
+		{/* eslint-disable-next-line max-lines-per-function */ }
 		{ itemsData.map( ( currentItem, index ) => <Card
 			elevation={ 2 }
 			className={ itemClassNames }
 			key={ getRepeaterItemId( index ) }
 		>
 			<CardHeader className={ 'repeater__item__header' }>
-				<div className='repeater-item__left-heading'>
+				<div className="repeater-item__left-heading">
 					<ButtonGroup className={ 'repeater-action-buttons' }>
 						<Button
 							isSmall
@@ -229,7 +268,7 @@ function RepeaterWithState( {
 						<Button
 							isSmall
 							isSecondary
-							disabled={ ! Boolean( index ) }
+							disabled={ !Boolean( index ) }
 							icon={ 'arrow-up-alt2' }
 							onClick={ () => moveUp( index ) }
 							className={ 'repeater-action-button' }
@@ -247,9 +286,10 @@ function RepeaterWithState( {
 							{ ItemHeading && <ItemHeading
 								currentItem={ currentItem }
 								index={ index }
-								changeCurrentItem={ data => changeCurrentItem( data, index ) }
+								changeCurrentItem={ data => changeCurrentItem(
+									data, index ) }
 							/> }
-						{ ! ItemHeading && `#${ index + 1 }` }
+						{ !ItemHeading && `#${ index + 1 }` }
 						</span>
 				</div>
 				<ButtonGroup>
@@ -273,24 +313,25 @@ function RepeaterWithState( {
 			{ currentItem.__visible && <CardBody
 				className={ 'repeater-item__content' }
 			>
-				{ children && <React.Fragment
+				{ children && <Fragment
 					key={ `repeater-component__item_${ index }` }
 				>
 					{ 'function' === typeof children && children( {
 						currentItem,
-						changeCurrentItem: data => changeCurrentItem( data, index ),
+						changeCurrentItem: data => changeCurrentItem( data,
+							index ),
 						currentIndex: index,
 					} ) }
 					{ 'function' !== typeof children && children }
-				</React.Fragment> }
-				{ ! children && 'Set up your Repeater Template, please.' }
+				</Fragment> }
+				{ !children && 'Set up your Repeater Template, please.' }
 			</CardBody> }
 		</Card> ) }
 		{ 1 < itemsData.length && <>
 			{ additionalControls }
 			<ToggleControl
-				className='jet-control-clear'
-				label={ __( 'Safe deleting' ) }
+				className="jet-control-clear"
+				label={ __( 'Safe deleting', 'jet-form-builder' ) }
 				checked={ isSafeDeleting }
 				onChange={ setSafeDeleting }
 			/>

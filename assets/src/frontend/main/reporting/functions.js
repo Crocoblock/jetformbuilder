@@ -31,9 +31,9 @@ const getDefaultRestrictions = () => applyFilters(
 let defaultRestrictions = [];
 
 /**
- * @param reporting {BrowserReporting}
- * @param node
- * @returns {*}
+ * @param  reporting {BrowserReporting}
+ * @param  node
+ * @return {*}
  */
 function createDefaultRestrictions( reporting, node ) {
 	if ( !defaultRestrictions.length ) {
@@ -54,7 +54,7 @@ function createDefaultRestrictions( reporting, node ) {
 }
 
 /**
- * @param input {InputData}
+ * @param  input {InputData}
  * @return {AdvancedReporting|BrowserReporting}
  */
 function createReport( input ) {
@@ -77,8 +77,8 @@ function createReport( input ) {
 }
 
 /**
- * @param inputs {InputData[]}
- * @param silence {Boolean}
+ * @param  inputs  {InputData[]}
+ * @param  silence {Boolean}
  *
  * @return {Function[]}
  */
@@ -91,11 +91,7 @@ function getValidateCallbacks( inputs, silence = false ) {
 		if ( !(
 			input instanceof InputData
 		) ) {
-			console.group( 'Input is not instance of InputData' );
-			console.error( input );
-			console.groupEnd();
-
-			continue;
+			throw new Error( 'Input is not instance of InputData' );
 		}
 		callbacks.push(
 			( resolve, reject ) => {
@@ -110,8 +106,8 @@ function getValidateCallbacks( inputs, silence = false ) {
 }
 
 /**
- * @param inputs {InputData[]}
- * @param silence {Boolean}
+ * @param  inputs  {InputData[]}
+ * @param  silence {Boolean}
  * @return {Promise<unknown[]>}
  */
 function validateInputs( inputs, silence = false ) {
@@ -123,7 +119,7 @@ function validateInputs( inputs, silence = false ) {
 }
 
 /**
- * @param inputs {InputData[]}
+ * @param inputs  {InputData[]}
  * @param silence {Boolean}
  */
 function validateInputsAll( inputs, silence = false ) {

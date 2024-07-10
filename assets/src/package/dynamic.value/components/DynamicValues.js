@@ -15,9 +15,9 @@ const {
 const {
 
 	      Button,
-	      Flex,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function
 function DynamicValues() {
 	const [ attributes, setAttributes ] = useBlockAttributes();
 
@@ -25,16 +25,16 @@ function DynamicValues() {
 	const value   = attributes.value ?? {};
 	const groups  = value.groups ?? [];
 
-	const orGroups = groups.filter(
-		// Exclude first item
-		( c, index ) => 0 !== index,
-	);
-
 	const [ openModal, setOpenModal ] = useState( false );
 
 	if ( !useIsHasAttribute( 'value' ) ) {
 		return null;
 	}
+
+	const orGroups = groups.filter(
+		// Exclude first item
+		( c, index ) => 0 !== index,
+	);
 
 	const updateValue = settings => {
 		setAttributes( {

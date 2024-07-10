@@ -35,6 +35,7 @@ const {
 	      ExternalLink,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function
 export default function DateTimeEdit( props ) {
 	const blockProps = useBlockProps();
 

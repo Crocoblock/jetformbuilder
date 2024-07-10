@@ -23,7 +23,7 @@ import SubtractYearFilter from './filters/SubtractYearFilter';
 const { applyFilters } = JetPlugins.hooks;
 
 /**
- * @type {array<Filter>}
+ * @type {Array<Filter>}
  */
 let filters = [];
 
@@ -88,7 +88,7 @@ function getFilters( filtersList ) {
 		return null;
 	}
 
-	for ( let filterName of filtersList ) {
+	for ( const filterName of filtersList ) {
 		const matches = filterName.match( /^(\w+)\(([^()]+)\)/ );
 
 		if ( null === matches ) {

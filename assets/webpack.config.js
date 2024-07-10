@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const path                     = require( 'path' );
 const { VueLoaderPlugin }      = require( 'vue-loader' );
 const { getAdminPagesEntries } = require( './.helpers/getAdminPagesEntries' );

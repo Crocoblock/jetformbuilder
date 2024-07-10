@@ -17,8 +17,7 @@ const { name, icon = '' } = metadata;
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Gives users the opportunity to upload media files to your website, 
-e.g., users photos or images of the product for sale.`,
+		`Gives users the opportunity to upload media files to your website, e.g., users photos or images of the product for sale.`,
 		'jet-form-builder'
 	),
 	edit: MediaEdit,

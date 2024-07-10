@@ -1,5 +1,6 @@
 export default {
 	methods: {
+		// eslint-disable-next-line max-lines-per-function
 		saveByAjax( currentTab, tabSlug ) {
 			const self = this;
 			let ajaxRequest = {};
@@ -38,8 +39,7 @@ export default {
 
 					if ( 'function' === typeof currentTab.onSaveDone ) {
 						currentTab.onSaveDone( response );
-					} else {
-						if ( response.success ) {
+					} else if ( response.success ) {
 							self.$CXNotice.add( {
 								message: response.data.message,
 								type: 'success',
@@ -58,7 +58,6 @@ export default {
 								currentTab.onSaveDoneError( response );
 							}
 						}
-					}
 					jfbEventBus.$emit( 'request-state', { state: 'end', slug: tabSlug } );
 				} )
 				.fail( function( jqXHR, textStatus, errorThrown ) {

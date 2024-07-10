@@ -23,6 +23,7 @@ const {
 	      formats,
       } = window.jetFormValidation;
 
+// eslint-disable-next-line max-lines-per-function
 function ValidationPlugin() {
 	const [ validation, setValidation ] = useMetaState( '_jf_validation' );
 	const [ args, setArgs ]             = useMetaState( '_jf_args' );
@@ -34,12 +35,13 @@ function ValidationPlugin() {
 
 	useEffect( () => {
 		setArgs( prev => {
-			const load_nonce = (
+			const loadNonce = (
 				                   !isLoadNonce
 			                   ) ? 'hide' : 'render';
 
-			return { ...prev, load_nonce };
+			return { ...prev, load_nonce: loadNonce };
 		} );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ isLoadNonce ] );
 
 	return <>
@@ -59,9 +61,9 @@ function ValidationPlugin() {
 			checked={ args?.use_csrf ?? false }
 			onChange={ () => {
 				setArgs( prev => {
-					const use_csrf = !Boolean( prev.use_csrf );
+					const useCsrf = !Boolean( prev.use_csrf );
 
-					return { ...prev, use_csrf };
+					return { ...prev, use_csrf: useCsrf };
 				} );
 			} }
 		/>

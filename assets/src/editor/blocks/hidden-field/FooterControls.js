@@ -8,25 +8,25 @@ const {
 let FooterControls = function ( { attributes, setAttributes } ) {
 	return <>
 		{ [ 'post_meta', 'user_meta' ].includes( attributes.field_value ) &&
-		<TextControl
-			key="hidden_value_field"
-			label="Meta Field to Get Value From"
-			value={ attributes.hidden_value_field }
-			onChange={ hidden_value_field => setAttributes(
-				{ hidden_value_field } ) }
-		/> }
+			<TextControl
+				key="hidden_value_field"
+				label="Meta Field to Get Value From"
+				value={ attributes.hidden_value_field }
+				onChange={ val => setAttributes(
+					{ hidden_value_field: val } ) }
+			/> }
 		{ 'query_var' === attributes.field_value && <TextControl
 			key="query_var_key"
 			label="Query Variable Key"
 			value={ attributes.query_var_key }
-			onChange={ query_var_key => setAttributes( { query_var_key } ) }
+			onChange={ val => setAttributes( { query_var_key: val } ) }
 		/> }
 		{ 'current_date' === attributes.field_value && <>
 			<TextControl
 				key="date_format"
 				label="Format"
 				value={ attributes.date_format }
-				onChange={ date_format => setAttributes( { date_format } ) }
+				onChange={ val => setAttributes( { date_format: val } ) }
 			/>
 			<b>{ __( 'Example:', 'jet-form-builder' ) }</b><br/>
 			<i>Y-m-d\TH:i - </i>{ __( 'datetime format',

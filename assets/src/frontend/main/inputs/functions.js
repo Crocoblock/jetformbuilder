@@ -25,9 +25,9 @@ const getDataTypes = () => applyFilters(
 let dataTypes = [];
 
 /**
- * @param node
- * @param observable {Observable}
- * @returns {*}
+ * @param  node
+ * @param  observable {Observable}
+ * @return {*}
  */
 function createInput( node, observable ) {
 	if ( !dataTypes.length ) {
@@ -48,7 +48,7 @@ function createInput( node, observable ) {
 		return current;
 	}
 
-	console.error( 'Something went wrong', node );
+	throw new Error( 'Something went wrong' );
 }
 
 function getParsedName( name ) {
@@ -80,6 +80,7 @@ function populateInputs( inputs ) {
 	for ( const input of inputs ) {
 		const inner = input.populateInner();
 
+		// eslint-disable-next-line no-unused-expressions
 		inner?.length && list.push( ...inner );
 
 		list.push( input );

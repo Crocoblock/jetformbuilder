@@ -35,6 +35,7 @@
 		"@stylistic/eslint-plugin": "^2.3.0",
 		"@wordpress/babel-preset-default": "^7.35.0",
 		"@wordpress/dependency-extraction-webpack-plugin": "^5.2.0",
+		"@wordpress/deprecated": "^4.2.0",
 		"@wordpress/eslint-plugin": "^19.2.0",
 		"@wyw-in-js/webpack-loader": "^0.4.1",
 		"autoprefixer": "^10.4.19",

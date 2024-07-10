@@ -4,8 +4,6 @@ const {
 	      ActionModal,
       } = JetFBComponents;
 
-const { __ } = wp.i18n;
-
 export default function ConditionsModal( props ) {
 	const {
 		      setShowModal,

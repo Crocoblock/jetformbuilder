@@ -16,10 +16,10 @@ const {
       } = JetFormBuilderFunctions;
 
 /**
- * @property {AdvancedRestriction} restrictions
+ * @property {AdvancedRestriction} restrictions List of advanced restrictions
  *
  * @this {ReportingInterface}
- * @constructor
+ * @class
  */
 function AdvancedReporting() {
 	ReportingInterface.call( this );
@@ -34,7 +34,7 @@ function AdvancedReporting() {
 	 *
 	 * @see AdvancedRestriction.onReady
 	 *
-	 * @type {String[]}
+	 * @type {string[]}
 	 */
 	this.watchAttrs = [];
 
@@ -170,8 +170,7 @@ AdvancedReporting.prototype.insertError = function ( message ) {
 };
 AdvancedReporting.prototype.createError = function (
 	node, message ) {
-	const error     = getErrorNode( node );
-	const inputNode = this.getNode();
+	const error = getErrorNode( node );
 
 	if ( error ) {
 		error.innerHTML = message;
@@ -179,7 +178,8 @@ AdvancedReporting.prototype.createError = function (
 		return error;
 	}
 
-	const div = document.createElement( 'div' );
+	const inputNode = this.getNode();
+	const div       = document.createElement( 'div' );
 
 	div.classList.add( 'error-message' );
 	div.innerHTML = message;
@@ -227,7 +227,7 @@ AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 	};
 
 	/**
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1766
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/1766
 	 */
 	if ( addToQueue && this.isProcess ) {
 		this.queue = [ callback ];
@@ -244,7 +244,7 @@ AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 
 AdvancedReporting.prototype.validateOnBlur = function () {
 	/**
-	 * @link https://github.com/Crocoblock/issues-tracker/issues/1766
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/1766
 	 */
 	if ( this.isProcess ) {
 		return;
@@ -284,7 +284,7 @@ AdvancedReporting.prototype.validateOnChangeState = function () {
 };
 
 /**
- * @param restriction {AdvancedRestriction|Restriction}
+ * @param  restriction {AdvancedRestriction|Restriction}
  * @return {boolean}
  */
 AdvancedReporting.prototype.canProcessRestriction = function ( restriction ) {

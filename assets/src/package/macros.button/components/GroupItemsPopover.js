@@ -9,7 +9,9 @@ const {
       } = wp.components;
 
 function GroupItemsPopover( { title, items, children, initialOpen } ) {
-	const elements = items.map( item => <PopoverItemMacro current={ item }/> );
+	const elements = items.map(
+		( item, index ) => <PopoverItemMacro key={ index } current={ item }/>,
+	);
 
 	return <PanelBody title={ title } initialOpen={ initialOpen }>
 		<ul style={ {

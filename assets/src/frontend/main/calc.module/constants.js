@@ -1,4 +1,4 @@
-let Constants = {
+const Constants = {
 	Milli_In_Sec: 1000,
 	Sec_In_Min: 60,
 	Min_In_Hour: 60,

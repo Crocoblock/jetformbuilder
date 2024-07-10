@@ -6,8 +6,8 @@ function ConditionPageStateItem() {
 	this.isSupported = function ( options ) {
 		return !!options?.page_state?.length;
 	};
-	this.setOptions  = function ( { page_state } ) {
-		this.pageState = page_state;
+	this.setOptions  = function ( { page_state: pageState } ) {
+		this.pageState = pageState;
 	};
 	this.isPassed    = function () {
 		const canSwitch = this.list?.block?.page?.canSwitch?.current;

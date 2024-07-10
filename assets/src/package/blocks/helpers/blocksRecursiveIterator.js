@@ -1,7 +1,7 @@
 const { select } = wp.data;
 
 function blocksRecursiveIterator( blockParserFunc ) {
-	const blocksRecursiveIterator = ( blocks, parent = null ) => {
+	const blocksRecursiveInnerIterator = ( blocks, parent = null ) => {
 
 		blocks = blocks || select( 'core/block-editor' ).getBlocks();
 
@@ -13,7 +13,7 @@ function blocksRecursiveIterator( blockParserFunc ) {
 				                      ? block
 				                      : parent;
 
-				blocksRecursiveIterator(
+				blocksRecursiveInnerIterator(
 					block.innerBlocks,
 					currentParent,
 				);
@@ -35,7 +35,7 @@ function blocksRecursiveIterator( blockParserFunc ) {
 			 * Introduced
 			 * @since 2.1.1
 			 *
-			 * @type {{clientId: String, innerBlocks: Array}[]}
+			 * @type {{clientId: string, innerBlocks: Array}[]}
 			 */
 			let innerReusable = select( 'core/block-editor' )?.
 				__unstableGetClientIdsTree?.(
@@ -59,11 +59,11 @@ function blocksRecursiveIterator( blockParserFunc ) {
 				innerReusableIds,
 			);
 
-			blocksRecursiveIterator( innerReusable );
+			blocksRecursiveInnerIterator( innerReusable );
 		} );
 	};
 
-	blocksRecursiveIterator();
+	blocksRecursiveInnerIterator();
 }
 
 export default blocksRecursiveIterator;

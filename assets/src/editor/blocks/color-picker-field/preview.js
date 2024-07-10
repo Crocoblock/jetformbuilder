@@ -23,7 +23,7 @@ const preview = (
 			<path d="M209.882 123.288V124.055H206.034V123.288H209.882ZM206.181 120.232V127.341H205.238V120.232H206.181ZM210.702 120.232V127.341H209.765V120.232H210.702ZM216.894 126.574V127.341H213.129V126.574H216.894ZM213.319 120.232V127.341H212.377V120.232H213.319ZM216.396 123.288V124.055H213.129V123.288H216.396ZM216.845 120.232V121.003H213.129V120.232H216.845ZM218.671 120.232L220.38 122.956L222.089 120.232H223.188L220.941 123.752L223.241 127.341H222.133L220.38 124.563L218.627 127.341H217.519L219.818 123.752L217.572 120.232H218.671Z" fill="#64748B"/>
 		</g>
 		<defs>
-			<filter id="filter0_d_75_1400" x="204.28" y="12.3766" width="16.683" height="11.683" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+			<filter id="filter0_d_75_1400" x="204.28" y="12.3766" width="16.683" height="11.683" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
 				<feFlood floodOpacity="0" result="BackgroundImageFix"/>
 				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 				<feOffset dx="-0.878599" dy="0.920745"/>

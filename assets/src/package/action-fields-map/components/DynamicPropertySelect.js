@@ -11,6 +11,7 @@ const {
 	      SelectControl,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function
 function DynamicPropertySelect( {
 	dynamic = [],
 	parseValue = null,
@@ -29,14 +30,14 @@ function DynamicPropertySelect( {
 		properties ?? source.properties
 	);
 
-	// context with current field in fields map
+	// context with current field in a field map
 	const {
 		      name,
 		      index,
 	      } = useContext( ActionFieldsMapContext );
 
 	const {
-		      fields_map = {},
+		      fields_map: fieldsMap = {},
 	      } = settings;
 
 	function getTypeFieldValue( value ) {
@@ -50,7 +51,7 @@ function DynamicPropertySelect( {
 	}
 
 	const [ currentProp, setCurrentProp ] = useState(
-		() => getTypeFieldValue( fields_map[ name ] ?? '' ),
+		() => getTypeFieldValue( fieldsMap[ name ] ?? '' ),
 	);
 
 	const getHelp = () => {

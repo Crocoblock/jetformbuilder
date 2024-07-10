@@ -2,8 +2,6 @@ import DynamicItemBody from './DynamicItemBody';
 import BlockValueItemContext from '../../context/block.value.item.context';
 import ActionModal from '../../action-modal/components/ActionModal';
 import humanReadablePreset from '../../preset/helpers/humanReadablePreset';
-import humanReadableCondition
-	from '../../block-conditions/helpers/humanReadableCondition';
 import HumanReadableConditions
 	from '../../block-conditions/components/HumanReadableConditions';
 import HoverContainer from '../../components/HoverContainer';
@@ -19,6 +17,7 @@ const {
 	      Button,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function
 function DynamicItem( { current, update, isOpenModal, setOpenModal } ) {
 	const updateCurrent = settings => {
 		update( value => {
@@ -60,7 +59,9 @@ function DynamicItem( { current, update, isOpenModal, setOpenModal } ) {
 		<div
 			className="jet-fb p-relative"
 			onMouseOver={ () => setHover( true ) }
+			onFocus={ () => setHover( true ) }
 			onMouseOut={ () => setHover( false ) }
+			onBlur={ () => setHover( false ) }
 		>
 			<HoverContainer isHover={ isHover }>
 				<Button

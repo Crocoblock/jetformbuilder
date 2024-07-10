@@ -37,7 +37,7 @@ const getAdvancedRules = () => applyFilters(
 );
 
 /**
- * @type {array<CustomBaseRestriction>}
+ * @type {Array<CustomBaseRestriction>}
  */
 let advancedRules = [];
 
@@ -74,6 +74,7 @@ function getPreparedRules( rules, reporting ) {
 		for ( const advancedRule of advancedRules ) {
 			const current = new advancedRule();
 
+			// eslint-disable-next-line max-depth
 			if ( rule.type !== current.getSlug() ) {
 				continue;
 			}
@@ -112,13 +113,13 @@ function getNodeValidationType( node ) {
  * @param input {InputData}
  */
 function getInheritValidationType( input ) {
-	const formId   = input.getSubmit().getFormId();
 	const allForms = window?.JetFormsValidation ?? false;
 
 	if ( false === allForms ) {
 		return '';
 	}
 
+	const formId        = input.getSubmit().getFormId();
 	const { type = '' } = allForms[ formId ] ?? {};
 
 	return type;
@@ -132,8 +133,8 @@ function getValidationMessages( node ) {
 }
 
 /**
- * @param restriction {Restriction}
- * @param slug {string}
+ * @param  restriction {Restriction}
+ * @param  slug        {string}
  * @return {string}
  */
 function getMessageBySlug( restriction, slug ) {
@@ -144,13 +145,13 @@ function getMessageBySlug( restriction, slug ) {
 		return message;
 	}
 
-	const form        = reporting.input.getSubmit();
 	const allMessages = window?.JetFormsValidation ?? false;
 
 	if ( false === allMessages ) {
 		return '';
 	}
 
+	const form         = reporting.input.getSubmit();
 	const { messages } = allMessages[ form.getFormId() ] ?? {};
 
 	return messages[ slug ] ?? '';
@@ -216,8 +217,8 @@ function setRestrictions( reporting ) {
  * because the Repeater Field validation will return
  * an error element from the internal field.
  *
- * @param wrapper {Element}
- * @returns {boolean|Element}
+ * @param  wrapper {Element}
+ * @return {boolean|Element}
  */
 function getErrorNode( wrapper ) {
 	for ( const child of wrapper.children ) {

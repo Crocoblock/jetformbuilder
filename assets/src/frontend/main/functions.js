@@ -8,7 +8,7 @@ import environment from './environment';
 const { applyFilters } = JetPlugins.hooks;
 
 /**
- * @param callbacks {Function[]}
+ * @param  callbacks {Function[]}
  * @return {Promise<*>}
  */
 async function allRejected( callbacks ) {
@@ -17,9 +17,11 @@ async function allRejected( callbacks ) {
 	);
 
 	if ( window?.JetFormBuilderSettings?.devmode ) {
+		/* eslint-disable no-console */
 		console.group( 'allRejected' );
 		console.info( ...results );
 		console.groupEnd();
+		/* eslint-enable no-console */
 	}
 
 	const invalid = results.filter(
@@ -78,7 +80,7 @@ function setAttrs( input ) {
 		inputHtmlAttrs = getInputHtmlAttr();
 	}
 
-	for ( let inputHtmlAttr of inputHtmlAttrs ) {
+	for ( const inputHtmlAttr of inputHtmlAttrs ) {
 		let current;
 		if ( 'string' === typeof inputHtmlAttr ) {
 			current = getDefaultAttrByName( inputHtmlAttr );
@@ -177,6 +179,7 @@ function focusOnInvalidInput( inputs ) {
 		if ( input.reporting.validityState.current ) {
 			continue;
 		}
+		// eslint-disable-next-line no-unused-expressions
 		!input.reporting.hasAutoScroll() && input.onFocus();
 		break;
 	}

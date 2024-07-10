@@ -3,7 +3,7 @@ import AdvancedRestriction from './AdvancedRestriction';
 function NotEmail() {
 	AdvancedRestriction.call( this );
 
-	this.isSupported   = function ( node, reporting ) {
+	this.isSupported   = function ( node ) {
 		return 'email' === node.type;
 	};
 	this.validate      = function () {

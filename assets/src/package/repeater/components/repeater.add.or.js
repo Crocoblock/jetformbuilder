@@ -15,9 +15,13 @@ function RepeaterAddOrOperator( props ) {
 		      children,
 	      } = props;
 
+	/* eslint-disable react-hooks/rules-of-hooks */
+
 	const { addNewItem } = functions
 	?? useRepeaterState( onSetState )
 	?? useContext( RepeaterStateContext );
+
+	/* eslint-disable react-hooks/rules-of-hooks */
 
 	return <Button
 		isSecondary

@@ -90,11 +90,11 @@ export default {
 			base.hasChanges = true;
 		},
 		revertChangesColumn( state, { column, record } ) {
-			let position, columnPair;
+			let position;
 			const { base } = state;
 
 			try {
-				[ columnPair, position ] = getEditableColumn( state, column, record );
+				[ , position ] = getEditableColumn( state, column, record );
 			} catch ( error ) {
 				return;
 			}

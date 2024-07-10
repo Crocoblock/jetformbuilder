@@ -5,10 +5,6 @@ import BlockVisibility from './BlockVisibility';
 import BlockClassName from './BlockClassName';
 
 const {
-	      __,
-      } = wp.i18n;
-
-const {
 	      InspectorAdvancedControls,
       } = wp.blockEditor;
 

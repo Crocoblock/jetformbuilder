@@ -9,6 +9,7 @@ for ( const { id, name } of window.jetFormActionTypes ) {
 	actionTypesMap[ id ] = name;
 }
 
+// eslint-disable-next-line max-lines-per-function
 function useIsUniqueFieldName() {
 	const { clientId } = useBlockEditContext();
 	const actionFields = useRequestFields(
@@ -56,6 +57,7 @@ function useIsUniqueFieldName() {
 		error: 'not_unique_in_actions',
 		message: computed?.from
 		         ? sprintf(
+					 // translators: %s - action name
 				__(
 					`The %s action already uses this field name. Please change it`,
 					'jet-form-builder',

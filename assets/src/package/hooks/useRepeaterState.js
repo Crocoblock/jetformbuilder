@@ -1,34 +1,43 @@
 import SafeDeleteContext from '../repeater/context/safe.delete';
+import { sprintf, __ } from '@wordpress/i18n';
 
 const {
 	      useContext,
       } = wp.element;
 
-const { __ } = wp.i18n;
-
 const onSaveDeleting = index => {
-	return confirm( __( `Are you sure you want to remove item ${ index + 1 }?`,
-		'jet-form-builder' ) );
+	// eslint-disable-next-line no-alert
+	return confirm(
+		sprintf(
+			// translators: %d - item index
+			__(
+				`Are you sure you want to remove item %d?`,
+				'jet-form-builder',
+			),
+			index + 1,
+		),
+	);
 };
 
 /**
- *
- * @param setItemsData
- * @returns {{
- * cloneItem: function,
- * addNewItem: function,
- * changeCurrentItem: function,
- * toggleVisible: function,
- * moveDown: function,
- * moveUp: function,
- * removeOption: function
+ * @param  setItemsData
+ * @return {{
+ * cloneItem: Function,
+ * addNewItem: Function,
+ * changeCurrentItem: Function,
+ * toggleVisible: Function,
+ * moveDown: Function,
+ * moveUp: Function,
+ * removeOption: Function
  * }|null}
  */
+// eslint-disable-next-line max-lines-per-function
 function useRepeaterState( setItemsData ) {
 	if ( 'undefined' === typeof setItemsData ) {
 		return null;
 	}
 
+	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const isSafeDeleting = useContext( SafeDeleteContext );
 
 	const changeCurrentItem = function ( valueToSet, index ) {

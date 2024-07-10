@@ -18,10 +18,10 @@ export function seedMetaBox( store, box ) {
 }
 
 export default function SingleMetaBoxesPlugin( store ) {
-	let boxes = [];
+	const boxes = [];
 	for ( const container of config().containers ) {
 		boxes.push( ...container.boxes.filter( box => {
-			return ['table', 'list' ].includes( box.render_type );
+			return [ 'table', 'list' ].includes( box.render_type );
 		} ) );
 	}
 

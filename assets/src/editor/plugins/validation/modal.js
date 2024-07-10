@@ -32,6 +32,7 @@ function ValidationModal() {
 		if ( null !== actionClick ) {
 			onRequestClose();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ actionClick ] );
 
 	return <Flex gap={ 4 } direction="column">

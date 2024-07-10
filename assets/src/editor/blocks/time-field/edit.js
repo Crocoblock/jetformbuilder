@@ -40,6 +40,7 @@ if ( typeof InputControl === 'undefined' ) {
 	InputControl = __experimentalInputControl;
 }
 
+// eslint-disable-next-line max-lines-per-function
 export default function TimeEdit( props ) {
 	const {
 		      isSelected,

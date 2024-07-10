@@ -27,6 +27,7 @@ function getRulesList( rules ) {
 	return [
 		<AdvancedRuleItem
 			rule={ rules[ 0 ] }
+			key="first_item"
 		/>,
 		...andRules.map(
 			( item, index ) => renderGroup( item, index + 1 ),

@@ -2,13 +2,13 @@ import constants from './constants';
 import selectors from './selectors';
 
 export default {
-	[ constants.clearGateway ]: ( state, action ) => (
+	[ constants.clearGateway ]: ( state ) => (
 		{
 			...state,
 			currentGateway: {},
 		}
 	),
-	[ constants.clearScenario ]: ( state, action ) => (
+	[ constants.clearScenario ]: ( state ) => (
 		{
 			...state,
 			currentScenario: {},

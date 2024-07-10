@@ -1,7 +1,7 @@
 /**
  * @this {ReactiveVar}
  *
- * @constructor
+ * @class
  */
 import ReactiveVar from './ReactiveVar';
 

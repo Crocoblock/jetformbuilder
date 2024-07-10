@@ -17,8 +17,8 @@ const getValues = () => applyFilters(
 let values      = [];
 
 /**
- * @param input
- * @returns {ValueItem}
+ * @param  input
+ * @return {ValueItem}
  */
 const getValue = ( input ) => {
 	if ( !values.length ) {
@@ -36,15 +36,7 @@ const getValue = ( input ) => {
 };
 
 function createValues( json, input ) {
-	let groups = [];
-
-	try {
-		groups = JSON.parse( json );
-	}
-	catch ( error ) {
-		console.error( error );
-		return;
-	}
+	const groups = JSON.parse( json );	
 
 	for ( const group of groups ) {
 		const value = getValue( input );
@@ -83,7 +75,7 @@ const reactProperties = [
 ];
 
 /**
- * @param input {InputData}
+ * @param  input {InputData}
  * @return {Generator<BaseReactiveProperty>}
  */
 function* getProperties( input ) {

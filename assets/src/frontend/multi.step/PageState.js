@@ -3,7 +3,6 @@ import ConditionPageStateItem from './ConditionPageStateItem';
 const {
 	      ReactiveVar,
 	      createConditionalBlock,
-	      InputData,
       } = JetFormBuilderAbstract;
 
 const {
@@ -16,9 +15,11 @@ const {
 const { addAction, doAction } = JetPlugins.hooks;
 
 /**
- * @property {InputData[]} inputs
- * @property {MultiStepState} state
- * @property {Element} node
+ * @property {InputData[]}    inputs Inner inputs
+ * @property {MultiStepState} state  Multistep state
+ * @property {Element}        node   Related node, element
+ * @param    {Element}        node   Related node, element
+ * @param    {MultiStepState} state  Multistep state
  */
 function PageState( node, state ) {
 	this.node      = node;
@@ -50,6 +51,7 @@ PageState.prototype.observe = function () {
 	this.canSwitch.make();
 	this.isShow.make();
 	this.isShow.watch( () => {
+		// eslint-disable-next-line no-unused-expressions
 		this.isShow.current ? this.onShow() : this.onHide();
 	} );
 
@@ -89,6 +91,7 @@ PageState.prototype.observeInputs = function () {
 	for ( const node of this.node.querySelectorAll( '[data-jfb-sync]' ) ) {
 		const input = this.observeInput( node );
 
+		// eslint-disable-next-line no-unused-expressions
 		input && doAction(
 			'jet.fb.multistep.page.observed.input',
 			input,
@@ -155,6 +158,7 @@ PageState.prototype.observeConditionalBlocks = function () {
 		);
 
 		for ( const condition of block.list.getConditions() ) {
+			// eslint-disable-next-line max-depth
 			if ( condition instanceof ConditionPageStateItem ) {
 				block.page = this;
 				this.canSwitch.watch( () => block.list.onChangeRelated() );
@@ -244,6 +248,7 @@ PageState.prototype.changePage          = async function ( isBack ) {
 		return;
 	}
 
+	// eslint-disable-next-line no-unused-expressions
 	this.autoFocus && focusOnInvalidInput( this.getInputs() );
 };
 PageState.prototype.isNodeBelongThis    = function ( node ) {
@@ -252,7 +257,7 @@ PageState.prototype.isNodeBelongThis    = function ( node ) {
 	return parentPage ? parentPage.isEqualNode( this.node ) : false;
 };
 /**
- * @returns {array<InputData>|*}
+ * @return {Array<InputData> | *}
  */
 PageState.prototype.getInputs = function () {
 	return populateInputs( this.inputs );
@@ -278,7 +283,7 @@ PageState.prototype.isLast = function () {
 /**
  * @since 3.0.5
  *
- * @returns {boolean}
+ * @return {boolean}
  */
 PageState.prototype.isFirst = function () {
 	return this.state.isFirstPage( this );
@@ -288,7 +293,7 @@ PageState.prototype.isFirst = function () {
  * @param input {InputData|RepeaterData}
  */
 PageState.prototype.handleInputEnter = function ( input ) {
-	input?.enterKey?.addFilter( canSubmit => {
+	input?.enterKey?.addFilter( () => {
 		this.changePage().then( () => {} ).catch( () => {} );
 
 		// prevent submit

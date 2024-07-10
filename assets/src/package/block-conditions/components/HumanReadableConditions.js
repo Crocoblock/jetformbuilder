@@ -19,7 +19,8 @@ function HumanReadableConditions( { conditions, showWarning = false } ) {
 			// Exclude first item
 			( c, index ) => 0 !== index,
 		).map(
-			condition => <span
+			( condition, index ) => <span
+				key={ index }
 				data-title={ __( 'And', 'jet-form-builder' ) + ':' }
 				dangerouslySetInnerHTML={ {
 					__html: humanReadableCondition( condition ),

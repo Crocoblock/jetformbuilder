@@ -1,13 +1,13 @@
-import { messagesConfig } from "./help-messages-config";
+import { messagesConfig } from './help-messages-config';
 
 const {
-	applyFilters
-} = wp.hooks;
+	      applyFilters,
+      } = wp.hooks;
 
 export function withCustomProps( block ) {
 	const { edit: EditComponent } = block.settings;
 
-	let _plugins = {};
+	const _plugins = {};
 
 	if ( 'useEditProps' in block.settings ) {
 		const { useEditProps } = block.settings;
@@ -36,33 +36,42 @@ const getHelpInstance = block => {
 	} );
 
 	return ( attribute, attributes = {} ) => {
-		if ( ! ( attribute in messages ) ) {
+		if ( !(
+			attribute in messages
+		) ) {
 			return '';
 		}
 		const item = messages[ attribute ];
 
-		if ( 'conditions' in item ) {
-			for ( const attrName in item.conditions ) {
-				if ( ! ( attrName in attributes ) || item.conditions[ attrName ] !== attributes[ attrName ] ) {
-					return;
-				}
+		if ( !(
+			'conditions' in item
+		) ) {
+			return item.message;
+		}
+		for ( const attrName in item.conditions ) {
+			if ( !(
+				attrName in attributes
+			) || item.conditions[ attrName ] !== attributes[ attrName ] ) {
+				return;
 			}
 		}
 		return item.message;
-	}
+	};
 };
 
 const editProps = applyFilters( 'jet.fb.register.editProps', [
 	{
 		name: 'uniqKey',
-		callable: block => ( suffix => `${ block.name }/${ suffix }` )
+		callable: block => (
+			suffix => `${ block.name }/${ suffix }`
+		),
 	},
 	{
 		name: 'blockName',
-		callable: block => block.name
+		callable: block => block.name,
 	},
 	{
 		name: 'attrHelp',
-		callable: getHelpInstance
-	}
+		callable: getHelpInstance,
+	},
 ] );

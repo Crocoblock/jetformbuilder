@@ -1,13 +1,13 @@
 /**
  * @param formula
- * @param root {Observable}
- * @constructor
+ * @param root    {Observable}
+ * @class
  */
 import applyFilters from './applyFilters';
 import getFilters from './getFilters';
 import attachConstNamespace from './attachConstNamespace';
 import InputData from '../inputs/InputData';
-import { __, sprintf } from "@wordpress/i18n";
+import { __, sprintf } from '@wordpress/i18n';
 
 const {
 	      applyFilters: wpFilters,
@@ -21,7 +21,7 @@ addFilter(
 );
 
 /**
- * @param root {InputData|Observable}
+ * @param root    {InputData|Observable}
  * @param options {{forceFunction: boolean}}
  */
 function CalculatedFormula(
@@ -72,7 +72,7 @@ CalculatedFormula.prototype = {
 	},
 	/**
 	 *
-	 * @param relatedInput {InputData}
+	 * @param  relatedInput {InputData}
 	 * @return {*}
 	 */
 	relatedCallback( relatedInput ) {
@@ -138,18 +138,20 @@ CalculatedFormula.prototype = {
 	/**
 	 * @param inputMatch {String}
 	 */
-	onMissingPart: function ( inputMatch ) {
+	onMissingPart( inputMatch ) {
 		this.parts.push( inputMatch );
 	},
 	/**
-	 * @param current {String}
+	 * @param  current {String}
 	 * @return {(function(): *)|*}
 	 */
+	// eslint-disable-next-line max-lines-per-function
 	observeMacro( current ) {
 		if ( null === this.formula ) {
 			this.formula = current;
 		}
 
+		// eslint-disable-next-line @wordpress/no-unused-vars-before-return
 		const [ name, ...filters ] = current.split( '|' );
 		const parsedName           = name.match( /[\w\-:]+/g );
 
@@ -167,6 +169,7 @@ CalculatedFormula.prototype = {
 			return false;
 		}
 
+		// eslint-disable-next-line @wordpress/no-unused-vars-before-return
 		const filtersList = getFilters( filters );
 
 		if ( fieldName.includes( '::' ) ) {
@@ -286,6 +289,7 @@ CalculatedFormula.prototype = {
 		this.relatedAttrs = [];
 		this.related      = [];
 	},
+	/* eslint-disable no-console */
 	showError( formula ) {
 		console.group(
 			__(
@@ -301,12 +305,14 @@ CalculatedFormula.prototype = {
 	showErrorDetails( formula ) {
 		console.error(
 			sprintf(
+				// translators: %s - initial formula
 				__( 'Initial: %s', 'jet-form-builder' ),
 				this.formula,
 			),
 		);
 		console.error(
 			sprintf(
+				// translators: %s - computed formula
 				__( 'Computed: %s', 'jet-form-builder' ),
 				formula,
 			),
@@ -319,6 +325,7 @@ CalculatedFormula.prototype = {
 		if ( this.input ) {
 			console.error(
 				sprintf(
+					// translators: %s - filed name
 					__( 'Field: %s', 'jet-form-builder' ),
 					this.input.path.join( '.' ),
 				),
@@ -331,6 +338,7 @@ CalculatedFormula.prototype = {
 
 		console.error(
 			sprintf(
+				// translators: %s - path to current field
 				__( 'Scope: %s', 'jet-form-builder' ),
 				[
 					...this.root.parent.path,
@@ -339,6 +347,7 @@ CalculatedFormula.prototype = {
 			),
 		);
 	},
+	/* eslint-enable no-console */
 };
 
 export default CalculatedFormula;

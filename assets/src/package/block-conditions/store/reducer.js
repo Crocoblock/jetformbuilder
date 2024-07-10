@@ -27,7 +27,7 @@ const DEFAULT_STATE = {
 	functions: [],
 	operators: [],
 	conditionReaders: {
-		default: function ( condition ) {
+		default ( condition ) {
 			const operatorOptions = select( 'jet-forms/block-conditions' ).
 				getOperator( condition?.operator );
 
@@ -47,7 +47,7 @@ const DEFAULT_STATE = {
 		},
 		empty: emptyCondition,
 		not_empty: emptyCondition,
-		render_state: function ( condition ) {
+		render_state ( condition ) {
 			const states = (
 				condition?.render_state ?? []
 			).map(

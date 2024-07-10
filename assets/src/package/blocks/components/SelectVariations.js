@@ -24,7 +24,7 @@ function SelectVariations( { value } ) {
 
 			const items         = getBlockVariations( name, 'block' );
 			const options       = [];
-			const rawVariations = {};
+			const variationsMap = {};
 
 			for ( const item of items ) {
 				options.push( {
@@ -34,15 +34,15 @@ function SelectVariations( { value } ) {
 						{ item.title }
 					</span>,
 				} );
-				rawVariations[ item.name ] = item;
+				variationsMap[ item.name ] = item;
 			}
 
 			return {
 				variations: options,
-				rawVariations,
+				rawVariations: variationsMap,
 			};
 		},
-		[],
+		[ name ],
 	);
 
 	if ( !variations.length ) {

@@ -29,10 +29,10 @@ function useUniqueNameOnDuplicate( customChangeNames = null ) {
 
 			const {
 				      hasChanged,
-				      names,
+				      names: uniqueNames,
 			      } = select( storeName ).getUniqueNames( clientId );
 
-			return hasChanged ? names : false;
+			return hasChanged ? uniqueNames : false;
 		},
 		[ clientId ],
 	);
@@ -51,6 +51,7 @@ function useUniqueNameOnDuplicate( customChangeNames = null ) {
 		setAttrs( {
 			name: names.split( '|' )[ 0 ],
 		} );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ names ] );
 }
 

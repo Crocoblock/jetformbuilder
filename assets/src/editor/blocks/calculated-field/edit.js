@@ -4,7 +4,6 @@ const {
 	      AdvancedFields,
 	      FieldWrapper,
 	      FieldSettingsWrapper,
-	      BaseHelp,
 	      ToolBarFields,
 	      BlockName,
 	      BlockDescription,
@@ -28,8 +27,6 @@ const {
 	      TextareaControl,
 	      ToggleControl,
 	      PanelBody,
-	      Button,
-	      Popover,
 	      SelectControl,
 	      __experimentalNumberControl,
       } = wp.components;
@@ -37,9 +34,11 @@ const {
 const NumberControl = __experimentalNumberControl;
 
 const help = {
-	calc_hidden: __( 'Check this to hide calculated field' ),
+	calc_hidden: __( 'Check this to hide calculated field',
+		'jet-form-builder' ),
 };
 
+// eslint-disable-next-line max-lines-per-function
 export default function EditCalculated( props ) {
 	const blockProps = useBlockProps();
 	useUniqueNameOnDuplicate();
@@ -97,7 +96,7 @@ export default function EditCalculated( props ) {
 					label={ __( 'Value type', 'jet-form-builder' ) }
 					labelPosition="top"
 					value={ attributes.value_type }
-					onChange={ value_type => setAttributes( { value_type } ) }
+					onChange={ val => setAttributes( { value_type: val } ) }
 					options={ [
 						{
 							value: 'number',
@@ -123,34 +122,41 @@ export default function EditCalculated( props ) {
 					/>
 					<TextControl
 						key="calc_separate_decimals"
-						label={ __( 'Decimals separator' ) }
+						label={ __( 'Decimals separator', 'jet-form-builder' ) }
 						value={ attributes.separate_decimals }
-						onChange={ separate_decimals => setAttributes(
-							{ separate_decimals } ) }
+						onChange={ val => setAttributes(
+							{ separate_decimals: val },
+						) }
 					/>
 					<TextControl
 						key="calc_separate_thousands"
-						label={ __( 'Thousands separator' ) }
+						label={ __( 'Thousands separator',
+							'jet-form-builder' ) }
 						value={ attributes.separate_thousands }
-						onChange={ separate_thousands => setAttributes(
-							{ separate_thousands } ) }
+						onChange={ val => setAttributes(
+							{ separate_thousands: val },
+						) }
 					/>
 					<TextControl
 						key="calc_prefix"
-						label={ __( 'Calculated Value Prefix' ) }
+						label={ __( 'Calculated Value Prefix',
+							'jet-form-builder' ) }
 						value={ attributes.calc_prefix }
 						help={ __(
-							'For space before or after text use: &nbsp;' ) }
+							'For space before or after text use: &nbsp;',
+							'jet-form-builder' ) }
 						onChange={ ( newValue ) => {
 							setAttributes( { calc_prefix: newValue } );
 						} }
 					/>
 					<TextControl
 						key="calc_suffix"
-						label={ __( 'Calculated Value Suffix' ) }
+						label={ __( 'Calculated Value Suffix',
+							'jet-form-builder' ) }
 						value={ attributes.calc_suffix }
 						help={ __(
-							'For space before or after text use: &nbsp;' ) }
+							'For space before or after text use: &nbsp;',
+							'jet-form-builder' ) }
 						onChange={ ( newValue ) => {
 							setAttributes( { calc_suffix: newValue } );
 						} }
@@ -158,7 +164,7 @@ export default function EditCalculated( props ) {
 				</> : null }
 				<ToggleControl
 					key={ 'calc_hidden' }
-					label={ __( 'Hidden' ) }
+					label={ __( 'Hidden', 'jet-form-builder' ) }
 					checked={ attributes.calc_hidden }
 					help={ help.calc_hidden }
 					onChange={ newVal => {

@@ -26,8 +26,7 @@ const {
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Insert Hidden field invisible on the frontend with 
-the assigned value to use it in calculations or for other purposes.`,
+		`Insert Hidden field invisible on the frontend with the assigned value to use it in calculations or for other purposes.`,
 		'jet-form-builder',
 	),
 	edit: HeadingEdit,

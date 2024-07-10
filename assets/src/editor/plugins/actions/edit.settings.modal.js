@@ -1,10 +1,12 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
-import { Icon } from '@wordpress/icons';
-import { styled } from '@linaria/react';
 import { Button, Flex } from '@wordpress/components';
 import { IconText, StickyModalActions } from 'jet-form-builder-components';
 import { useActionErrors } from 'jet-form-builder-actions';
+/* eslint-disable import/no-extraneous-dependencies */
+import { Icon } from '@wordpress/icons';
+import { styled } from '@linaria/react';
+/* eslint-enable import/no-extraneous-dependencies */
 
 const {
 	      ActionModal,
@@ -29,6 +31,7 @@ const ModalHeader = styled.div`
     background-color: #ffffffdb;
 `;
 
+// eslint-disable-next-line max-lines-per-function
 function EditSettingsModal() {
 	const ActionCallback                     = useActionCallback();
 	const updateAction                       = useUpdateCurrentActionMeta();
@@ -78,6 +81,7 @@ function EditSettingsModal() {
 				{ actionType.icon && <Icon icon={ actionType.icon }/> }
 				<h1 className="components-modal__header-heading">
 					{ sprintf(
+						// translators: %s - action type label
 						__( 'Edit %s', 'jet-form-builder' ),
 						actionType.label,
 					) }

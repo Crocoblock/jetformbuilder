@@ -3,7 +3,7 @@ import Restriction from './Restriction';
 function NativeRestriction() {
 	Restriction.call( this );
 
-	this.isSupported = function ( node, reporting ) {
+	this.isSupported = function ( node ) {
 		return !!node.checkValidity;
 	};
 

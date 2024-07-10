@@ -3,7 +3,7 @@ import AdvancedRestriction from './AdvancedRestriction';
 function NotUrl() {
 	AdvancedRestriction.call( this );
 
-	this.isSupported   = function ( node, reporting ) {
+	this.isSupported   = function ( node ) {
 		return 'url' === node.type;
 	};
 	this.validate      = function () {

@@ -10,6 +10,7 @@ const {
 	      doAction,
       } = JetPlugins.hooks;
 
+// eslint-disable-next-line max-lines-per-function
 function MultiStepState() {
 
 	/**
@@ -30,7 +31,7 @@ function MultiStepState() {
 
 	/**
 	 * Node elements of pages
-	 * @type {array<PageState>|*}
+	 * @type {Array<PageState> | *}
 	 */
 	this.elements = [];
 
@@ -111,7 +112,7 @@ function MultiStepState() {
 		return false;
 	};
 	/**
-	 * @returns {array<PageState>}
+	 * @return {Array<PageState>}
 	 */
 	this.getPages = function () {
 		return this.elements;
@@ -123,7 +124,7 @@ function MultiStepState() {
 		return this.block?.node ?? this.root.rootNode;
 	};
 	/**
-	 * @returns {Observable}
+	 * @return {Observable}
 	 */
 	this.getRoot = function () {
 		return this.block?.root ?? this.root;
@@ -139,8 +140,8 @@ function MultiStepState() {
 	/**
 	 * @since 3.0.5
 	 *
-	 * @param page
-	 * @returns {boolean}
+	 * @param  page
+	 * @return {boolean}
 	 */
 	this.isFirstPage = function ( page ) {
 		return this.elements[ 0 ] === page;

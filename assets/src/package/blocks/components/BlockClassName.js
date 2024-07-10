@@ -17,7 +17,7 @@ function BlockClassName( { label, help } ) {
 		label={ label ?? __( "CSS Class Name", 'jet-form-builder' ) }
 		value={ attributes.class_name }
 		help={ help ?? '' }
-		onChange={ class_name => setAttributes( { class_name } ) }
+		onChange={ val => setAttributes( { class_name: val } ) }
 	/>;
 }
 

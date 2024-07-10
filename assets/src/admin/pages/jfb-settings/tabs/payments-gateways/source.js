@@ -1,4 +1,4 @@
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 
 const label = {
 	use_gateways: __( 'Enable Gateways', 'jet-form-builder' ),
@@ -7,13 +7,11 @@ const label = {
 
 const help = {
 	enable_test_mode: __(
-		`This option takes precedence over the <code>jet-form-builder/gateways/paypal/sandbox-mode</code> filter. 
-		As of right now, works only for PayPal payment system`,
+		`This option takes precedence over the <code>jet-form-builder/gateways/paypal/sandbox-mode</code> filter. As of right now, works only for PayPal payment system`,
 		'jet-form-builder',
 	),
 	use_gateways: __(
-		`Activate payment gateways for the forms. This option takes precedence over the 
-		<code>jet-form-builder/allow-gateways</code> filter`,
+		`Activate payment gateways for the forms. This option takes precedence over the <code>jet-form-builder/allow-gateways</code> filter`,
 		'jet-form-builder',
 	),
 };

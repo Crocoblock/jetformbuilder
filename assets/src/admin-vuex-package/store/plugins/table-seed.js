@@ -1,9 +1,9 @@
 import { config, setTableSeed } from './functions';
 
 /**
- * @param source
- * @returns {function(*): void}
- * @constructor
+ * @param  source
+ * @return {function(*): void}
+ * @class
  */
 function TableSeedPlugin( source = false ) {
 	return store => {

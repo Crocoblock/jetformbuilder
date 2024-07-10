@@ -47,8 +47,9 @@ function SwitcherRenderStateControls( props ) {
 					label={ __( 'Switch state', 'jet-form-builder' ) }
 					value={ actionAttributes.switch_on }
 					suggestions={ customStates }
-					onChange={ switch_on => setActionAttributes(
-						{ switch_on } ) }
+					onChange={ switchOn => setActionAttributes(
+						{ switch_on: switchOn },
+					) }
 					tokenizeOnSpace
 					__experimentalExpandOnFocus
 				/>

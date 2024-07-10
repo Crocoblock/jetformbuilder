@@ -7,7 +7,9 @@ const {
 	      CheckboxControl,
       } = wp.components;
 
+// eslint-disable-next-line max-lines-per-function
 function RandomStringControls( DefaultComponent ) {
+	// eslint-disable-next-line max-lines-per-function
 	return props => {
 		const { attributes, setAttributes } = props;
 
@@ -20,8 +22,8 @@ function RandomStringControls( DefaultComponent ) {
 			length: undefined,
 		} ).filter( Boolean ).length;
 
-		const updateCheckbox = ( props ) => {
-			const [ name ] = Object.keys( props );
+		const updateCheckbox = ( checkboxProps ) => {
+			const [ name ] = Object.keys( checkboxProps );
 
 			if ( attributes.random[ name ] && 1 === countChecked ) {
 				return;
@@ -30,7 +32,7 @@ function RandomStringControls( DefaultComponent ) {
 			setAttributes( {
 				random: {
 					...attributes.random,
-					...props,
+					...checkboxProps,
 				},
 			} );
 		};

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import getItemByName from '../helpers/getItemByName';
 import { Flex, TextControl, Tooltip } from '@wordpress/components';
 import { Icon } from '@wordpress/icons';
@@ -40,10 +41,10 @@ function ValidationMetaMessage( {
 			id={ message.id }
 			help={ help ?? current?.help }
 			value={ value ?? current?.initial }
-			onChange={ value => update( prev => (
+			onChange={ messageText => update( prev => (
 				{
 					...prev,
-					[ message.id ]: value,
+					[ message.id ]: messageText,
 				}
 			) ) }
 			__nextHasNoMarginBottom

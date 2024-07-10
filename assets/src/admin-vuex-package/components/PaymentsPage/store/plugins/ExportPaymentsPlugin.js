@@ -3,7 +3,7 @@ import ExportPaymentsModule from '../modules/ExportPaymentsModule';
 function ExportPaymentsPlugin( store ) {
 	store.registerModule( 'exportPayments', ExportPaymentsModule );
 
-	store.subscribe( ( mutation, state ) => {
+	store.subscribe( ( mutation ) => {
 		const typeParts = mutation.type.split( '/' );
 
 		switch ( typeParts.at( -1 ) ) {

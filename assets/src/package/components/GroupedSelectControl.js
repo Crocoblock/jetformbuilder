@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { isEmpty } from '../tools';
 import { styled } from '@linaria/react';
 
@@ -10,7 +11,6 @@ const StyledSelect = styled.select`
 function GroupedSelectControl( {
 	id,
 	label,
-	multiple = false,
 	onChange,
 	options = [],
 	value,

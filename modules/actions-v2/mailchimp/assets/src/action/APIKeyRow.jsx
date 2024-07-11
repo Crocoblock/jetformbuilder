@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { useInstanceId } from '@wordpress/compose';
 import {
 	ControlWithErrorStyle, IconText,
@@ -21,6 +22,7 @@ const StyledTextControl = styled( TextControl )`
     flex: 1;
 `;
 
+// eslint-disable-next-line max-lines-per-function
 function APIKeyRow( { settings, onChangeSettingObj } ) {
 	const { fetchApiData } = useDispatch( STORE_NAME );
 

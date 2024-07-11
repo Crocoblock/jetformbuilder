@@ -6,6 +6,7 @@ import {
 import {
 	convertListToFieldsMap,
 	useActionValidatorProvider,
+	ActionMessages,
 } from 'jet-form-builder-actions';
 import { SelectControl, Flex } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -19,7 +20,6 @@ import {
 const {
 	      ActionFieldsMap,
 	      WrapperRequiredControl,
-	      ActionMessages,
 	      DynamicPropertySelect,
       } = JetFBComponents;
 

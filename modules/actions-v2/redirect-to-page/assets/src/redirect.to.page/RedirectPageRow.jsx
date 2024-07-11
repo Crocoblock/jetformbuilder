@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import {
 	ControlWithErrorStyle, IconText,
 	RequiredLabel,
@@ -54,8 +55,8 @@ function RedirectPageRow( { settings, onChangeSettingObj } ) {
 			<ComboboxControl
 				value={ settings.redirect_page }
 				options={ pagesList }
-				onChange={ redirect_page => onChangeSettingObj(
-					{ redirect_page },
+				onChange={ val => onChangeSettingObj(
+					{ redirect_page: val },
 				) }
 				onFilterValueChange={ setSearch }
 				__next40pxDefaultSize

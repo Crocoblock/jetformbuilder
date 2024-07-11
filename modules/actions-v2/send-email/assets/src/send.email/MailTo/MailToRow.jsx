@@ -42,7 +42,9 @@ function MailToRow( { settings, onChangeSettingObj } ) {
 					id={ id }
 					value={ settings.mail_to }
 					options={ emailOptions }
-					onChange={ mail_to => onChangeSettingObj( { mail_to } ) }
+					onChange={ mailTo => onChangeSettingObj(
+						{ mail_to: mailTo },
+					) }
 					onBlur={ () => setShowError( true ) }
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom

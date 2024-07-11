@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { cx } from '@linaria/core';
 import ControlWithErrorStyle from '../ControlWithErrorStyle';
 import RowControlEndStyle from './RowControlEndStyle';

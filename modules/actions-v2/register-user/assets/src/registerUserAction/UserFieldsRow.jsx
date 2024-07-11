@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { __ } from '@wordpress/i18n';
 import {
 	Label,

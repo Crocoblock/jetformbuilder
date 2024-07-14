@@ -9,7 +9,7 @@ use Jet_Form_Builder\Blocks\Module as LegacyBlocksModule;
 
 class Block_Asset implements Block_Asset_Interface {
 
-	const HANDLE               = 'jet-fb-repeater-field';
+	const HANDLE = 'jet-fb-repeater-field';
 
 	public function init_hooks() {
 		add_action(
@@ -59,7 +59,7 @@ class Block_Asset implements Block_Asset_Interface {
 	 * @throws Repository_Exception
 	 */
 	public function enqueue_editor_assets() {
-		$asset     = require_once $this->get_dir( '/assets/build/editor.asset.php' );
+		$asset = require_once $this->get_dir( '/assets/build/editor.asset.php' );
 
 		if ( true === $asset ) {
 			return;

@@ -96,6 +96,5 @@
 		"jet-forms/repeater-field--name": "name",
 		"jet-forms/repeater-field--manage-items": "manage_items_count"
 	},
-	"viewScript": "jet-fb-repeater-field",
 	"viewStyle": "jet-fb-repeater-field"
 }

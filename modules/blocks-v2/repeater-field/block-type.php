@@ -375,6 +375,8 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 		$this->set_calc_type();
 		$this->set_new_repeater_label();
 
+		wp_enqueue_script( Block_Asset::HANDLE );
+
 		return ( new Block_Render( $this ) )->render( $wp_block );
 	}
 

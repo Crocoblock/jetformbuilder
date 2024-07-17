@@ -16,14 +16,24 @@ class Post_Link_By_Id_Filter extends Base_Multiple_Filter {
 		return 'post_link_by_id';
 	}
 
+	public function callback_args(): array {
+		return array( '' );
+	}
+
 	protected function apply_item( $item, ...$args ): string {
-		/** @var Send_Email_Action $action */
-		$action = jet_fb_action_handler()->get_current_action();
+		list( $format ) = $args;
+
+		if ( ! $format && jet_fb_action_handler()->in_loop() ) {
+			/** @var Send_Email_Action $action */
+			$action = jet_fb_action_handler()->get_current_action();
+
+			$format = ( $action instanceof Send_Email_Action ) && $action->is_html() ? 'html' : 'plain';
+		}
 
 		$url   = get_permalink( $item );
 		$title = get_the_title( $item );
 
-		if ( ! $action->is_html() ) {
+		if ( 'html' !== $format ) {
 			return sprintf( '%1$s: %2$s', $title, $url );
 		}
 

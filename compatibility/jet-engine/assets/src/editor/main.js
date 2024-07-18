@@ -1,4 +1,4 @@
 import updateOptions from './update.options';
-import { dispatch } from '@wordpress/data';
+import { registerAction } from 'jet-form-builder-actions';
 
-dispatch( 'jet-forms/actions' ).registerAction( updateOptions );
+registerAction( updateOptions );

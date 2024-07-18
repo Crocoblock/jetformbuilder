@@ -11,6 +11,9 @@ createRoot( buttonDiv ).render( <UseFormButton/> );
  * @param observable {Observable}
  */
 function appendButton( observable ) {
+	if ( observable.parent ) {
+		return;
+	}
 	const root   = observable.rootNode.ownerDocument;
 	const header = root.querySelector(
 		'header.page-header, header.entry-header',

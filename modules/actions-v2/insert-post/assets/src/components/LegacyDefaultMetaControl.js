@@ -1,9 +1,5 @@
-const {
-	Button,
-	TextControl,
-} = wp.components;
-
-const { __ } = wp.i18n;
+import { Button, TextControl, FlexItem } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 class LegacyDefaultMetaControl extends wp.element.Component {
 
@@ -14,12 +10,11 @@ class LegacyDefaultMetaControl extends wp.element.Component {
 	}
 
 	getDefaultMeta() {
-		if ( ! this.props.defaultMeta ) {
+		if ( !this.props.defaultMeta ) {
 			return [];
 		}
 		return Array.from( this.props.defaultMeta );
 	}
-
 
 	addNewOption() {
 		const items = this.getDefaultMeta();
@@ -41,7 +36,7 @@ class LegacyDefaultMetaControl extends wp.element.Component {
 
 	onChangeValue( { value, name, id } ) {
 
-		const items = Array.from( this.props.defaultMeta );
+		const items         = Array.from( this.props.defaultMeta );
 		items[ id ][ name ] = value;
 
 		this.props.onChange( items );
@@ -56,48 +51,55 @@ class LegacyDefaultMetaControl extends wp.element.Component {
 					className="jet-user-meta__row"
 					key={ 'jet-form-builder-repeater-item-' + index }
 				>
-					<div className='repeater-item-column jet-margin-bottom-wrapper'>
+					<div
+						className="repeater-item-column jet-margin-bottom-wrapper">
 						<TextControl
-							key='meta_key'
+							key="meta_key"
 							label={ __( 'Meta Key', 'jet-form-builder' ) }
 							value={ currentItem.key }
 							onChange={ ( newValue ) => {
 								this.onChangeValue( {
 									value: newValue,
 									name: 'key',
-									id: index
+									id: index,
 								} );
 							} }
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
 						/>
 						<TextControl
-							key='meta_value'
+							key="meta_value"
 							label={ __( 'Meta Value', 'jet-form-builder' ) }
 							value={ currentItem.value }
 							onChange={ ( newValue ) => {
 								this.onChangeValue( {
 									value: newValue,
 									name: 'value',
-									id: index
+									id: index,
 								} );
 							} }
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
 						/>
 					</div>
-					<div className='repeater-item-column'>
+					<div className="repeater-item-column">
 						<Button
 							icon="dismiss"
 							label="Remove"
 							onClick={ () => this.removeOption( index ) }
 						/>
 					</div>
-				</div>
+				</div>;
 			} ) }
-			<Button
-				className='button-add-option'
-				isSecondary
-				onClick={ this.addNewOption }
-			>
-				{ __( 'Add New Option', 'jet-form-builder' ) }
-			</Button>
+			<FlexItem>
+				<Button
+					className="button-add-option"
+					isSecondary
+					onClick={ this.addNewOption }
+				>
+					{ __( 'Add New Option', 'jet-form-builder' ) }
+				</Button>
+			</FlexItem>
 		</>;
 	}
 }

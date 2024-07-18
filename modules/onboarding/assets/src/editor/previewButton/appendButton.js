@@ -8,8 +8,12 @@ buttonDiv.classList.add( 'jfb-preview-wrapper' );
 createRoot( buttonDiv ).render( <PreviewButton/> );
 
 const appendButton = function ( unsubscribeCallback ) {
+	/**
+	 * In 6.6 WordPress "edit-post-header__settings" css class
+	 * was renamed "editor-header__settings"
+	 */
 	const header = document.querySelector(
-		'.edit-post-header__settings',
+		'.edit-post-header__settings, .editor-header__settings',
 	);
 
 	if ( !header ) {

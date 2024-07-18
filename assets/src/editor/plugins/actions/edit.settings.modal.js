@@ -28,7 +28,7 @@ const ModalHeading = styled.div`
 `;
 
 const ModalHeader = styled.div`
-    background-color: #ffffffdb;
+    background-color: #ffffff;
 `;
 
 // eslint-disable-next-line max-lines-per-function

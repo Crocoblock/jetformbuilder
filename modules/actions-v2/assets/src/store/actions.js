@@ -38,15 +38,12 @@ export function clearCurrent() {
 	return { type: CLEAR_CURRENT };
 }
 
-export function setLoading( { actionId } ) {
-	return ( { dispatch, select } ) => {
-		const loadingState = {
-			id: actionId,
-			state: 'loading',
-			loading: true,
-		};
+export function setLoading( loadingState ) {
+	loadingState.loading ??= true;
+	loadingState.state ??= 'loading';
 
-		const actionIndex = select.getLoadingIndex( actionId );
+	return ( { dispatch, select } ) => {
+		const actionIndex = select.getLoadingIndex( loadingState.id );
 		const loading     = [ ...select.getAllLoading() ];
 
 		if ( actionIndex !== -1 ) {
@@ -64,15 +61,14 @@ export function setLoading( { actionId } ) {
 }
 
 export function setLoadingResult( item ) {
-	return {
-		type: SET_LOADING,
-		state: {
-			id: item.actionId,
+	return ( { dispatch } ) => {
+		dispatch.setLoading( {
+			id: item.id,
 			state: item.success ? 'is-valid' : 'is-invalid',
 			success: item.success,
 			response: item.response,
 			loading: false,
-		},
+		} );
 	};
 }
 

@@ -91,7 +91,11 @@ class Msg_Router {
 	}
 
 	public function query_actions_if_empty() {
-		if ( $this->actions && is_array( $this->actions ) ) {
+		if (
+			( $this->actions && is_array( $this->actions ) ) ||
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			empty( $_GET['status'] ?? '' )
+		) {
 			return true;
 		}
 

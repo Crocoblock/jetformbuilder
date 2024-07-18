@@ -9,6 +9,7 @@ export default [
 		icon: commentAuthorAvatar,
 		disabled: true,
 		category: 'user',
+		proActionLink: 'https://jetformbuilder.com/addons/user-login/'
 	},
 	{
 		type: 'redirect_to_woo_checkout',
@@ -24,5 +25,6 @@ export default [
 			</g>
 		</svg>,
 		disabled: true,
+		proActionLink: 'https://jetformbuilder.com/addons/woocommerce-cart-checkout-action/'
 	},
 ];

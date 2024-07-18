@@ -3,18 +3,18 @@ import { STORE_NAME } from '../store';
 function withDispatchActionLoading( dispatch ) {
 	return {
 		setLoading( actionId ) {
-			dispatch( STORE_NAME ).setLoading( { actionId } );
+			dispatch( STORE_NAME ).setLoading( { id: actionId } );
 		},
 		setResultSuccess( actionId, response ) {
 			dispatch( STORE_NAME ).setLoadingResult( {
-				actionId,
+				id: actionId,
 				success: true,
 				response,
 			} );
 		},
 		setResultFail( actionId ) {
 			dispatch( STORE_NAME ).setLoadingResult( {
-				actionId,
+				id: actionId,
 				success: false,
 				response: {},
 			} );

@@ -179,7 +179,12 @@ function AddActionButton() {
 					<ActionGridItem
 						key={ action.type }
 						action={ action }
-						onClick={ event => onAddAction( event, action ) }
+						onClick={ event => {
+							if ( action.disabled ) {
+								return;
+							}
+							onAddAction( event, action )
+						} }
 					/>
 				) ) }
 			</Grid>

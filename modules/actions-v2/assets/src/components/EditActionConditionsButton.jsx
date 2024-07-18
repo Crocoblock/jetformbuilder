@@ -33,7 +33,7 @@ function EditActionConditionsButton() {
 	return <StyledButton
 		size="small"
 		icon={ shuffle }
-		data-conditions-count={ +action?.conditions?.length }
+		data-conditions-count={ action?.conditions?.length ?? 0 }
 		label={ __(
 			'Edit Conditions & Events',
 			'jet-form-builder',

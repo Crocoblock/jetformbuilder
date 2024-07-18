@@ -38,6 +38,10 @@ function ContentRow( { settings, onChangeSettingObj } ) {
 					onChange={ content => onChangeSettingObj(
 						{ content },
 					) }
+					help={ __(
+						'Define the main body of the email. You can use form field macros to insert the values of form fields as part of the content. To add macros, use the wrench icon to the right of the current option name.',
+						'jet-form-builder',
+					) }
 					onBlur={ () => setShowError( true ) }
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom

@@ -1,4 +1,4 @@
-import SendEmailRender from './render';
+import SendEmailRender from './Edit';
 import { __ } from '@wordpress/i18n';
 import validators from './validators';
 

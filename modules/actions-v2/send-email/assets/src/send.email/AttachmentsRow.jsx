@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import { useFields } from 'jet-form-builder-blocks-to-actions';
 
 function AttachmentsRow( { settings, onChangeSettingObj } ) {
-	const formFields = useFields();
+	const formFields = useFields( { withInner: false } );
 
 	return <RowControl createId={ false }>
 		<Label>

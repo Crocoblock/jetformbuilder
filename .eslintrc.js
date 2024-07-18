@@ -17,6 +17,7 @@ module.exports = {
 	},
 	ignorePatterns: [ '**/build/*', '**/dist/*', '**/lib/*' ],
 	rules: {
+		'react/jsx-no-undef': 'off',
 		'prettier/prettier': 'off',
 		'jsdoc/require-param-type': 'off',
 		'jsdoc/require-returns-description': 'off',

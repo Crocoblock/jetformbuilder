@@ -10,17 +10,14 @@ import { Sortable } from 'jet-form-builder-components';
 import { Fragment } from '@wordpress/element';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { styled } from '@linaria/react';
-
-const {
-	      ActionsAfterNewButtonSlotFill,
-	      ActionListItemContext,
-	      ListActionItem,
-	      AllProActionsLink,
-	      AddActionButton,
-      } = JetFBComponents;
-const {
-	      useActions,
-      } = JetFBHooks;
+import {
+	AddActionButton,
+	AllProActionsLink,
+	ListActionItem,
+	ActionListItemContext,
+	ActionsAfterNewButtonSlotFill,
+	useActions,
+} from 'jet-form-builder-actions';
 
 const ListActionItemFiltered = withFilters( 'jet.fb.action.item' )(
 	ListActionItem,
@@ -91,7 +88,7 @@ function PluginActions() {
 				) }
 			</FlexSortable>
 			<ActionsAfterNewButtonSlotFill.Slot>
-				{ fills => <Flex wrap className="jfb-actions-panel--buttons">
+				{ fills => <Flex className="jfb-actions-panel--buttons">
 					<AddActionButton/>
 					{ fills }
 				</Flex> }

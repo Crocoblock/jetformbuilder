@@ -21,6 +21,8 @@ class Send_Email_Action extends Base {
 
 	private $content_type = '';
 	private $mail_to      = array();
+	private $cc           = array();
+	private $bcc          = array();
 	private $reply_to     = '';
 	private $from_email   = '';
 	private $content      = '';
@@ -181,6 +183,8 @@ class Send_Email_Action extends Base {
 		$this->set_from_address( $from_email );
 
 		$this->set_mail_to( $this->get_default_mail_to() );
+		$this->set_cc( $this->get_default_cc() );
+		$this->set_bcc( $this->get_default_bcc() );
 		$this->set_subject( $this->get_default_subject() );
 		$this->set_attachments( $this->get_default_attachments() );
 
@@ -291,6 +295,40 @@ class Send_Email_Action extends Base {
 		}
 	}
 
+	public function get_default_cc() {
+		$mail_to = ! empty( $this->settings['cc_from'] ) ? $this->settings['cc_from'] : 'admin';
+
+		switch ( $mail_to ) {
+			case 'form':
+				$field = $this->settings['cc_field'] ?? '';
+				$email = jet_fb_context()->get_value( $field );
+
+				return $email ?: '';
+			case 'custom':
+				return ! empty( $this->settings['cc_email'] ) ? $this->settings['cc_email'] : '';
+			case 'admin':
+			default:
+				return get_option( 'admin_email' );
+		}
+	}
+
+	public function get_default_bcc() {
+		$mail_to = ! empty( $this->settings['bcc_from'] ) ? $this->settings['bcc_from'] : 'admin';
+
+		switch ( $mail_to ) {
+			case 'form':
+				$field = $this->settings['bcc_field'] ?? '';
+				$email = jet_fb_context()->get_value( $field );
+
+				return $email ?: '';
+			case 'custom':
+				return ! empty( $this->settings['bcc_email'] ) ? $this->settings['bcc_email'] : '';
+			case 'admin':
+			default:
+				return get_option( 'admin_email' );
+		}
+	}
+
 	public function get_default_reply_to(): string {
 		$reply_to = ! empty( $this->settings['reply_to'] ) ? $this->settings['reply_to'] : 'form';
 
@@ -368,6 +406,16 @@ class Send_Email_Action extends Base {
 			"Content-Type: {$this->get_content_type()}; charset=utf-8",
 		);
 
+		$cc_emails  = $this->get_cc();
+		$bcc_emails = $this->get_bcc();
+
+		foreach ( $cc_emails as $cc_email ) {
+			$headers[] = 'Cc: ' . $cc_email;
+		}
+		foreach ( $bcc_emails as $bcc_email ) {
+			$headers[] = 'Bcc: ' . $bcc_email;
+		}
+
 		return implode( "\r\n", $headers );
 	}
 
@@ -379,6 +427,41 @@ class Send_Email_Action extends Base {
 			return;
 		}
 
+		$this->mail_to = $this->parse_email( $email );
+	}
+
+	/**
+	 * @param $email
+	 *
+	 * @return void
+	 */
+	public function set_cc( $email ): void {
+		if ( ! is_array( $email ) && ! is_string( $email ) ) {
+			return;
+		}
+
+		$this->cc = $this->parse_email( $email );
+	}
+
+	/**
+	 * @param $email
+	 *
+	 * @return void
+	 */
+	public function set_bcc( $email ): void {
+		if ( ! is_array( $email ) && ! is_string( $email ) ) {
+			return;
+		}
+
+		$this->bcc = $this->parse_email( $email );
+	}
+
+	/**
+	 * @param $email
+	 *
+	 * @return string[]
+	 */
+	private function parse_email( $email ): array {
 		if ( ! is_array( $email ) ) {
 			$email = explode( ',', $email );
 		}
@@ -387,7 +470,7 @@ class Send_Email_Action extends Base {
 			$value = trim( $value );
 		}
 
-		$this->mail_to = $email;
+		return $email;
 	}
 
 	public function set_reply_to( $email ) {
@@ -446,6 +529,20 @@ class Send_Email_Action extends Base {
 	 */
 	public function get_mail_to(): array {
 		return $this->mail_to;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_cc(): array {
+		return $this->cc;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_bcc(): array {
+		return $this->bcc;
 	}
 
 	/**

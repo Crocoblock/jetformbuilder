@@ -1,62 +1,78 @@
 import { __ } from '@wordpress/i18n';
 import { ToggleControl, Flex } from '@wordpress/components';
-import { ClearBaseControlStyle, WideLine } from 'jet-form-builder-components';
-import MailToRow from './MailTo/MailToRow';
-import CustomMailToRow from './MailTo/CustomMailToRow';
-import FromFieldMailToRow from './MailTo/FromFieldMailToRow';
-import ReplyToRow from './ReplyTo/ReplyToRow';
-import EmailReplyToRow from './ReplyTo/EmailReplyToRow';
-import FromFieldReplyToRow from './ReplyTo/FromFieldReplyToRow';
+import {
+	ClearBaseControlStyle,
+	WideLine,
+} from 'jet-form-builder-components';
+import EmailReplyToRow from './EmailReplyToRow';
 import SubjectRow from './SubjectRow';
 import FromNameRow from './FromNameRow';
 import FromAddressRow from './FromAddressRow';
-import ContentTypeRow from './ContentTypeRow';
 import ContentRow from './ContentRow';
 import AttachmentsRow from './AttachmentsRow';
+import { useFields } from 'jet-form-builder-blocks-to-actions';
+import {
+	ValidatedSelectControl,
+} from 'jet-form-builder-actions';
+import {
+	contentTypeHelp,
+	emailOptions,
+	formatOptions,
+	replyToHelp,
+} from './source';
+import MailToFields from './MailToFields';
+import CCFields from './CCFields';
 
 // eslint-disable-next-line max-lines-per-function
-function SendEmailRender( {
-	settings,
-	onChangeSettingObj,
-} ) {
+function SendEmailRender( props ) {
+
+	const {
+		      settings,
+		      onChangeSettingObj,
+	      } = props;
+
+	const formFields = useFields( {
+		withInner: false,
+		placeholder: '--',
+	} );
 
 	/* eslint-disable jsx-a11y/no-onchange */
 	return <Flex direction="column">
-		<MailToRow
-			settings={ settings }
-			onChangeSettingObj={ onChangeSettingObj }
+		<MailToFields { ...props }/>
+		<WideLine/>
+		<ToggleControl
+			className={ ClearBaseControlStyle }
+			label={ __( 'Use CC/BCC', 'jet-form-builder' ) }
+			checked={ settings.use_cc_bcc }
+			onChange={ val => onChangeSettingObj(
+				{ use_cc_bcc: val },
+			) }
 		/>
-		{ 'custom' === settings.mail_to && <>
+		{ settings.use_cc_bcc && <>
 			<WideLine/>
-			<CustomMailToRow
-				settings={ settings }
-				onChangeSettingObj={ onChangeSettingObj }
-			/>
-		</> }
-		{ 'form' === settings.mail_to && <>
-			<WideLine/>
-			<FromFieldMailToRow
-				settings={ settings }
-				onChangeSettingObj={ onChangeSettingObj }
-			/>
+			<CCFields { ...props }/>
 		</> }
 		<WideLine/>
-		<ReplyToRow
-			settings={ settings }
-			onChangeSettingObj={ onChangeSettingObj }
+		<ValidatedSelectControl
+			label={ __( 'Reply To', 'jet-form-builder' ) }
+			value={ settings.reply_to }
+			onChange={ val => onChangeSettingObj( { reply_to: val } ) }
+			options={ emailOptions }
+			help={ replyToHelp[ settings.reply_to ] ?? '' }
 		/>
 		{ 'custom' === settings.reply_to && <>
 			<WideLine/>
-			<EmailReplyToRow
-				settings={ settings }
-				onChangeSettingObj={ onChangeSettingObj }
-			/>
+			<EmailReplyToRow { ...props }/>
 		</> }
 		{ 'form' === settings.reply_to && <>
 			<WideLine/>
-			<FromFieldReplyToRow
-				settings={ settings }
-				onChangeSettingObj={ onChangeSettingObj }
+			<ValidatedSelectControl
+				label={ __( 'Reply To Email From Field', 'jet-form-builder' ) }
+				value={ settings.reply_from_field }
+				onChange={ val => onChangeSettingObj( {
+					reply_from_field: val,
+				} ) }
+				options={ formFields }
 			/>
 		</> }
 		<WideLine/>
@@ -75,9 +91,14 @@ function SendEmailRender( {
 			onChangeSettingObj={ onChangeSettingObj }
 		/>
 		<WideLine/>
-		<ContentTypeRow
-			settings={ settings }
-			onChangeSettingObj={ onChangeSettingObj }
+		<ValidatedSelectControl
+			label={ __( 'Content type', 'jet-form-builder' ) }
+			value={ settings.content_type }
+			onChange={ val => onChangeSettingObj( {
+				content_type: val,
+			} ) }
+			options={ formatOptions }
+			help={ contentTypeHelp[ settings.content_type ] ?? '' }
 		/>
 		{ Boolean(
 			!settings.content_type || 'text/html' === settings.content_type,

@@ -1,13 +1,14 @@
 import useLoopedAction from '../hooks/useLoopedAction';
 import useActionsEdit from '../hooks/useActionsEdit';
 import { Button } from '@wordpress/components';
-import { trash } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 import {
 	useTriggerPopover,
 	PopoverStandard,
 } from 'jet-form-builder-components';
+import { trash } from '@wordpress/icons';
 
+// eslint-disable-next-line max-lines-per-function
 function DeleteActionButton() {
 	const { index }        = useLoopedAction();
 	const { deleteAction } = useActionsEdit();
@@ -26,6 +27,7 @@ function DeleteActionButton() {
 			size="small"
 			icon={ trash }
 			label={ __( 'Delete action', 'jet-form-builder' ) }
+			tooltipPosition="top"
 			onClick={ () => setShowPopover( prev => !prev ) }
 		/>
 		{ showPopover && <PopoverStandard

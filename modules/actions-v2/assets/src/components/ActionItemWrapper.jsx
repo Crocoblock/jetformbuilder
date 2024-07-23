@@ -6,6 +6,7 @@ import { styled } from '@linaria/react';
 import { css, cx } from '@linaria/core';
 import useActionErrors from '../hooks/useActionErrors';
 import { __ } from '@wordpress/i18n';
+import { Fragment } from '@wordpress/element';
 
 const MarginLessCard = styled( Card )`
     margin-bottom: unset;
@@ -58,7 +59,14 @@ function ActionItemWrapper( { className = '', ...props } = {} ) {
 		: ''
 	);
 
-	return <Tooltip text={ errorText } delay={ 200 } placement="top">
+	const WrapperComponent = errorText ? Tooltip : Fragment;
+	const wrapperProps     = errorText ? {
+		text: errorText,
+		delay: 200,
+		placement: 'top',
+	} : {};
+
+	return <WrapperComponent { ...wrapperProps }>
 		<MarginLessCard
 			elevation={ 2 }
 			size={ 'extraSmall' }
@@ -72,7 +80,7 @@ function ActionItemWrapper( { className = '', ...props } = {} ) {
 			) }
 			{ ...props }
 		/>
-	</Tooltip>;
+	</WrapperComponent>;
 }
 
 // backward compatibility

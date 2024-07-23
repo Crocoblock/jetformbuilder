@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import useLoopedAction from '../hooks/useLoopedAction';
 import useActionsEdit from '../hooks/useActionsEdit';
 import { Button } from '@wordpress/components';
@@ -20,6 +21,7 @@ function ToggleActionExecutionButton() {
 		        ? __( 'Turn off', 'jet-form-builder' )
 		        : __( 'Turn on', 'jet-form-builder' ) }
 		onClick={ () => toggleExecute( action ) }
+		tooltipPosition="top"
 	/>;
 }
 

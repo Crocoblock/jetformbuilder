@@ -34,14 +34,15 @@ function EditActionConditionsButton() {
 		size="small"
 		icon={ shuffle }
 		data-conditions-count={ action?.conditions?.length ?? 0 }
-		label={ __(
-			'Edit Conditions & Events',
-			'jet-form-builder',
-		) }
 		onClick={ () => {
 			setCurrentAction( { ...action, index } );
 			setMeta( { index, modalType: 'conditions' } );
 		} }
+		label={ __(
+			'Edit Conditions & Events',
+			'jet-form-builder',
+		) }
+		tooltipPosition="top"
 	/>;
 }
 

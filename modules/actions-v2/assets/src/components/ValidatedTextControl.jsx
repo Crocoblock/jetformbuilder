@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import {
+	Label,
 	RequiredLabel,
 	RowControl,
 	RowControlEnd,
@@ -12,18 +13,21 @@ function ValidatedTextControl( {
 	onChange,
 	label,
 	help,
-	isErrorSupported = () => false
+	isErrorSupported = () => false,
+	required = false,
 } ) {
 
 	const { hasError, setShowError } = useActionValidatorProvider( {
 		isSupported: isErrorSupported,
 	} );
 
+	const LabelComponent = required ? RequiredLabel : Label;
+
 	return <RowControl>
 		{ ( { id } ) => <>
-			<RequiredLabel htmlFor={ id }>
+			<LabelComponent htmlFor={ id }>
 				{ label }
-			</RequiredLabel>
+			</LabelComponent>
 			<RowControlEnd hasError={ hasError }>
 				<TextControl
 					id={ id }

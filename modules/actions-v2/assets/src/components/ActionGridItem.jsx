@@ -3,6 +3,7 @@ import { styled } from '@linaria/react';
 import { Flex, ExternalLink } from '@wordpress/components';
 import { plugins, Icon } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
+import ProActionOverlay from './ProActionOverlay';
 
 const ActionTitle = styled.h3`
     margin: unset;
@@ -26,15 +27,16 @@ const Overlay = styled.div`
     text-align: center;
     color: #1d2327;
     font-weight: 600;
-	cursor: auto;
+    cursor: auto;
 `;
 
 const FlexWrapper = styled( Flex )`
     cursor: pointer;
-    padding: 1em;
+    padding: 1.5em;
     border-radius: 2px;
     border: 1px solid #ddd;
     position: relative;
+    color: #848485;
 
     &, & ${ ActionTitle }, & ${ Overlay } {
         transition: 0.2s ease-in-out;
@@ -67,36 +69,22 @@ const FlexWrapper = styled( Flex )`
 `;
 
 function ActionGridItem( { action, onClick } ) {
+	const ActionOverlay = action?.disabledOverlay ?? ProActionOverlay;
+
 	return <FlexWrapper
 		onClick={ onClick }
 		direction="column"
 		align="center"
+		justify="flex-start"
 		className={ action.disabled ? 'is-disabled' : '' }
 	>
+		<ColoredIcon icon={ action?.icon ?? plugins } size={ 32 }/>
 		<ActionTitle>{ action.label }</ActionTitle>
-		<ColoredIcon icon={ action?.icon ?? plugins } size={ 64 }/>
 		{ action?.docHref && <ExternalLink href={ action?.docHref }>
 			{ __( 'Documentation', 'jet-form-builder' ) }
 		</ExternalLink> }
 		{ action.disabled && <Overlay>
-			<Flex
-				direction="column"
-				justify="space-evenly"
-				align="center"
-			>
-				<span>{ __(
-					'This is paid addon. You can buy it here:',
-					'jet-form-builder',
-				) }</span>
-				<ExternalLink
-					href={ (
-						action.proActionLink ??
-						'https://jetformbuilder.com/pricing/'
-					) }
-				>
-					jetformbuilder.com
-				</ExternalLink>
-			</Flex>
+			<ActionOverlay action={ action }/>
 		</Overlay> }
 	</FlexWrapper>;
 }

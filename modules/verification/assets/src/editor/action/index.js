@@ -1,7 +1,9 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { ACTION, FAILED_EVENT, SUCCESS_EVENT } from '../constants';
 import VerificationRender from './VerificationRender';
 import { __ } from '@wordpress/i18n';
 import { key } from '@wordpress/icons';
+import DisabledOverlay from '@root/assets/src/editor/action/DisabledOverlay';
 
 export default {
 	type: ACTION,
@@ -13,4 +15,5 @@ export default {
 	fixed: true,
 	disableConditions: true,
 	category: 'user',
+	disabledOverlay: DisabledOverlay,
 };

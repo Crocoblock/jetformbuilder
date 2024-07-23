@@ -4,6 +4,7 @@ import {
 	Label,
 	IconText,
 	RowControl, ControlWithErrorStyle,
+	Help,
 } from 'jet-form-builder-components';
 import { Card, Flex, SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -19,6 +20,7 @@ const StyledFlex = styled( Flex )`
 function FieldsMapField( {
 	tag,
 	label,
+	help = '',
 	isRequired,
 	formFields,
 	value,
@@ -62,6 +64,9 @@ function FieldsMapField( {
 					__nextHasNoMarginBottom
 				/>
 			</RowControl>
+			{ Boolean( help ) && <Help>
+				{ help }
+			</Help> }
 		</StyledFlex>
 	</Card>;
 }

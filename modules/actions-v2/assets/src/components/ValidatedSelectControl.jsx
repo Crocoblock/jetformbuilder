@@ -8,7 +8,7 @@ import {
 import { SelectControl } from '@wordpress/components';
 import useActionValidatorProvider from '../hooks/useActionValidatorProvider';
 
-function ValidatedTextControl( {
+function ValidatedSelectControl( {
 	value,
 	onChange,
 	label,
@@ -45,4 +45,4 @@ function ValidatedTextControl( {
 	</RowControl>;
 }
 
-export default ValidatedTextControl;
+export default ValidatedSelectControl;

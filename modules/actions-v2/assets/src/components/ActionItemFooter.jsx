@@ -3,9 +3,10 @@ import EventsList from './EventsList';
 import { CardFooter } from '@wordpress/components';
 
 /**
- * @param children
- * @param props
- * @returns {boolean|JSX.Element}
+ * @param  children.children
+ * @param  children
+ * @param  props
+ * @return {boolean|JSX.Element}
  */
 function ActionItemFooter( { children, ...props } = {} ) {
 	const { action } = useLoopedAction();

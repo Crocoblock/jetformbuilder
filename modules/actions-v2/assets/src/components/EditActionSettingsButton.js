@@ -21,6 +21,7 @@ function EditActionSettingsButton() {
 		size="small"
 		icon={ edit }
 		label={ __( 'Edit Action', 'jet-form-builder' ) }
+		tooltipPosition="top"
 		onClick={ () => {
 			setCurrentAction( { ...action, index } );
 			setMeta( { index, modalType: 'settings' } );

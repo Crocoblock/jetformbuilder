@@ -104,9 +104,9 @@ function AddActionButton() {
 	), [] );
 
 	const onAddAction = ( event, action ) => {
-		if ( event.target?.classList?.contains?.(
-			'components-external-link' )
-		) {
+		const nodeClasses = Array.from( event.target?.classList );
+
+		if ( nodeClasses?.[ 0 ]?.includes?.( 'components-external-link' ) ) {
 			return;
 		}
 		const newAction = {
@@ -174,7 +174,7 @@ function AddActionButton() {
 					) }
 				</Button>
 			</StyledPlaceholder> }
-			<Grid columns={ 3 }>
+			<Grid columns={ 4 }>
 				{ actionTypes.map( action => (
 					<ActionGridItem
 						key={ action.type }
@@ -183,7 +183,7 @@ function AddActionButton() {
 							if ( action.disabled ) {
 								return;
 							}
-							onAddAction( event, action )
+							onAddAction( event, action );
 						} }
 					/>
 				) ) }

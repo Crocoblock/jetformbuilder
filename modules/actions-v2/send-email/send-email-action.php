@@ -296,6 +296,10 @@ class Send_Email_Action extends Base {
 	}
 
 	public function get_default_cc() {
+		if ( empty( $this->settings['use_cc_bcc'] ) ) {
+			return array();
+		}
+
 		$mail_to = ! empty( $this->settings['cc_from'] ) ? $this->settings['cc_from'] : 'admin';
 
 		switch ( $mail_to ) {
@@ -313,6 +317,10 @@ class Send_Email_Action extends Base {
 	}
 
 	public function get_default_bcc() {
+		if ( empty( $this->settings['use_cc_bcc'] ) ) {
+			return array();
+		}
+
 		$mail_to = ! empty( $this->settings['bcc_from'] ) ? $this->settings['bcc_from'] : 'admin';
 
 		switch ( $mail_to ) {

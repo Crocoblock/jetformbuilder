@@ -23,9 +23,10 @@ class Condition_Instance {
 	private $compare;
 	private $compare_value_format;
 
-	private function get_manager(): Condition_Manager {
-		return jet_fb_action_handler()->get_current_condition_manager();
-	}
+	/**
+	 * @var Condition_Manager
+	 */
+	private $manager;
 
 	/**
 	 * @param $condition
@@ -304,6 +305,20 @@ class Condition_Instance {
 	 */
 	public function error( ...$additional ) {
 		$this->end_condition( false, ...$additional );
+	}
+
+	/**
+	 * @param Condition_Manager $manager
+	 */
+	public function set_manager( Condition_Manager $manager ): void {
+		$this->manager = $manager;
+	}
+
+	/**
+	 * @return Condition_Manager
+	 */
+	public function get_manager(): Condition_Manager {
+		return $this->manager;
 	}
 
 

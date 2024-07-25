@@ -143,6 +143,7 @@ class Condition_Manager {
 
 	public function set_conditions( array $conditions ): Condition_Manager {
 		$instance = new Condition_Instance();
+		$instance->set_manager( $this );
 
 		foreach ( $conditions as $condition ) {
 			$this->conditions[] = ( clone $instance )->set_condition( $condition );

@@ -18,13 +18,18 @@ function ToggleControl( {
 	help = null,
 	flexLabelProps = {},
 	outsideLabel = null,
+	__nextHasNoMarginBottom = false,
+	...props
 } ) {
 	const Help = help;
 
 	const instanceId = useInstanceId( ToggleControl );
 	const id         = `inspector-jfb-toggle-control-${ instanceId }`;
 
-	return <BaseControl id={ id }>
+	return <BaseControl
+		id={ id }
+		__nextHasNoMarginBottom={ __nextHasNoMarginBottom }
+	>
 		<Flex direction="column">
 			<Flex
 				gap={ 3 }
@@ -37,6 +42,7 @@ function ToggleControl( {
 					checked={ checked }
 					onChange={ ( event ) => onChange( event.target.checked ) }
 					disabled={ disabled }
+					{ ...props }
 				/>
 				<label htmlFor={ id }>
 					{ children }

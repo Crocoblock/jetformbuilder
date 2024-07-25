@@ -61,6 +61,10 @@ const ActionsPanel = styled( PluginDocumentSettingPanel )`
     .components-panel__body-title:hover {
         background-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
         opacity: 0.7;
+
+        .components-button {
+            color: var(--wp-components-color-accent-inverted, #fff);
+        }
     }
 `;
 

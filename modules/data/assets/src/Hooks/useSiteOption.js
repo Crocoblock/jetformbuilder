@@ -3,7 +3,28 @@ import { useDispatch, useSelect } from '@wordpress/data';
 function useSiteOption( optionName ) {
 	const { editEntityRecord } = useDispatch( 'core' );
 
+	const { setting, isResolving } = useSelect(
+		select => {
+			const allSettings = select( 'core' ).getEditedEntityRecord(
+				'root',
+				'site',
+			);
+
+			return {
+				setting: allSettings[ optionName ],
+				isResolving: select( 'core' ).isResolving(
+					'getEditedEntityRecord',
+					[ 'root', 'site' ],
+				),
+			};
+		},
+		[ optionName ],
+	);
+
 	const onChangeSetting = value => {
+		if ( isResolving ) {
+			return;
+		}
 		editEntityRecord(
 			'root',
 			'site',
@@ -14,19 +35,11 @@ function useSiteOption( optionName ) {
 		);
 	};
 
-	const setting = useSelect(
-		select => {
-			const allSettings = select( 'core' ).getEditedEntityRecord(
-				'root',
-				'site',
-			);
-
-			return allSettings[ optionName ];
-		},
-		[ optionName ],
-	);
-
-	return [ setting, onChangeSetting ];
+	return {
+		value: setting,
+		onChange: onChangeSetting,
+		isResolving,
+	};
 }
 
 export default useSiteOption;

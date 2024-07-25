@@ -37,7 +37,10 @@ function APIKeyRow( { settings, onChangeSettingObj } ) {
 		isSupported: error => 'api_key' === error?.property,
 	} );
 
-	const [ globalSettings, setGlobalSettings ] = useSiteOptionJSON(
+	const {
+		      value: globalSettings,
+		      onChange: setGlobalSettings,
+	      } = useSiteOptionJSON(
 		'jet_form_builder_settings__get-response-tab',
 	);
 

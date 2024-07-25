@@ -1,7 +1,9 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { Button } from '@wordpress/components';
 import { external } from '@wordpress/icons';
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 function PreviewButton() {
 	const [ previewPage, setPreviewPage ] = useState( false );
@@ -41,13 +43,14 @@ function PreviewButton() {
 		}
 
 		autosave().then( () => {
-			setPreviewPage( window.open( JFBOnboardingConfig.previewURL ) );
+			setPreviewPage( window.open( window.JFBOnboardingConfig.previewURL ) );
 		} );
 	};
 
 	return <Button
 		icon={ external }
 		onClick={ openPreviewPage }
+		label={ __( 'Preview the form', 'jet-form-builder' ) }
 	/>;
 }
 

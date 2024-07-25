@@ -31,7 +31,7 @@ export {
 	default as ActionsAfterNewButtonSlotFill,
 } from './components/ActionsAfterNewButtonSlotFill';
 export { default as ActionTitle } from './components/ActionTitle';
-export { default as AddActionButton } from './components/AddActionButton';
+export { default as AddActionButton } from './components/AddAction/AddActionButton';
 export { default as AllProActionsLink } from './components/AllProActionsLink';
 export { default as DeleteActionButton } from './components/DeleteActionButton';
 export {

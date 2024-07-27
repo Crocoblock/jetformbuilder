@@ -3,11 +3,13 @@ import { styled } from '@linaria/react';
 import { Flex, ExternalLink } from '@wordpress/components';
 import { plugins, Icon } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import ProActionOverlay from './ProActionOverlay';
+import ProActionOverlay from '../ProActionOverlay';
 
-const ActionTitle = styled.h3`
+const ActionTitle = styled.h5`
     margin: unset;
     text-align: center;
+    font-size: 15px;
+    color: #1d2327;
 `;
 
 const ColoredIcon = styled( Icon )`

@@ -9,7 +9,7 @@ export { STORE_NAME } from './store';
  * Components
  */
 export { default as ActionFetchButton } from './components/ActionFetchButton';
-export { default as ActionGridItem } from './components/ActionGridItem';
+export { default as ActionGridItem } from './components/AddAction/ActionGridItem';
 export { default as ActionItemBody } from './components/ActionItemBody';
 export { default as ActionItemFooter } from './components/ActionItemFooter';
 export { default as ActionItemHeader } from './components/ActionItemHeader';

@@ -9,7 +9,7 @@ import {
 	TextControl,
 } from '@wordpress/components';
 import { closeSmall } from '@wordpress/icons';
-import ActionGridItem from '../ActionGridItem';
+import ActionGridItem from './ActionGridItem';
 import BaseAction from '../../abstract/BaseAction';
 import useActionsEdit from '../../hooks/useActionsEdit';
 import { useDispatch } from '@wordpress/data';

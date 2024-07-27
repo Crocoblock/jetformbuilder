@@ -28,7 +28,8 @@ function ActiveCampaignAction( props ) {
 		      setMapField,
 	      } = props;
 
-	const { isFetchLoading, hasLists, fields, hasError } = useSelect( select => (
+	const { isFetchLoading, hasLists, fields, hasError } = useSelect(
+		select => (
 			{
 				isFetchLoading: select( STORE_NAME ).isFetchLoading(),
 				hasError: Boolean( select( STORE_NAME ).getFetchError() ),
@@ -81,14 +82,24 @@ function ActiveCampaignAction( props ) {
 
 	}, [ isFetchLoading ] );
 
+	useEffect( () => {
+		if ( !settings.tags || Array.isArray( settings.tags ) ) {
+			return;
+		}
+		onChangeSettingObj( {
+			tags: settings.tags.split( ',' ).map( tag => tag.trim() ),
+		} );
+	}, [] );
+
 	/* eslint-disable jsx-a11y/no-onchange */
 	return <Flex direction="column">
 		<ToggleControl
 			className={ ClearBaseControlStyle }
 			checked={ settings.use_global }
-			onChange={
-				val => onChangeSettingObj( { use_global: Boolean( val ) } )
-			}
+			onChange={ val => (
+				onChangeSettingObj( { use_global: Boolean( val ) } )
+			) }
+			__nextHasNoMarginBottom
 		>
 			{ __( 'Use', 'jet-form-builder' ) + ' ' }
 			<a href={ JetFormEditorData.global_settings_url +

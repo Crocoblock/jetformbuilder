@@ -18,6 +18,7 @@ function APIDataFetchButton( { apiKey, apiUrl } ) {
 		isBusy={ isFetchLoading }
 		icon={ cloud }
 		variant="secondary"
+		__next40pxDefaultSize
 	>
 		{ __( 'Fetch', 'jet-form-builder' ) }
 	</Button>;

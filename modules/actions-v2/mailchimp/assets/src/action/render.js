@@ -6,11 +6,12 @@ import { __ } from '@wordpress/i18n';
 import { ClearBaseControlStyle, WideLine } from 'jet-form-builder-components';
 import APIKeyRow from './APIKeyRow';
 import SelectListRow from './SelectListRow';
-import GroupsSelectRow from './GroupsSelectRow';
+import GroupsSelectRow, { transformGroupsToArray } from './GroupsSelectRow';
 import TagsRow from './TagsRow';
 import FieldsMapRow from './FieldsMapRow';
 import { useSelect } from '@wordpress/data';
 import { STORE_NAME } from '../store';
+import { useEffect } from '@wordpress/element';
 
 const { ToggleControl } = JetFBComponents;
 
@@ -31,17 +32,38 @@ function MailChimpRender( props ) {
 		}
 	), [] );
 
+	useEffect( () => {
+		const newSettings = {};
+
+		if ( settings.tags && !Array.isArray( settings.tags ) ) {
+			newSettings.tags = settings.tags.split( ',' ).map(
+				tag => tag.trim(),
+			);
+		}
+
+		if ( settings.groups_ids && !Array.isArray( settings.groups_ids ) ) {
+			newSettings.groups_ids = transformGroupsToArray(
+				settings.groups_ids,
+			);
+		}
+
+		if ( !Object.values( newSettings )?.length ) {
+			return;
+		}
+
+		onChangeSettingObj( { ...newSettings } );
+	}, [] );
+
 	/* eslint-disable jsx-a11y/no-onchange */
 	return (
 		<Flex direction="column">
 			<ToggleControl
 				className={ ClearBaseControlStyle }
 				checked={ settings.use_global }
-				onChange={ val => {
-					onChangeSettingObj( {
-						use_global: Boolean( val ),
-					} );
-				} }
+				onChange={ val => (
+					onChangeSettingObj( { use_global: Boolean( val ) } )
+				) }
+				__nextHasNoMarginBottom
 			>
 				{ __( 'Use', 'jet-form-builder' ) + ' ' }
 				<a href={ JetFormEditorData.global_settings_url +

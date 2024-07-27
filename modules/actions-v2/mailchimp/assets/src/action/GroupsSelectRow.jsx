@@ -6,9 +6,8 @@ import {
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { STORE_NAME } from '../store';
-import { useEffect } from '@wordpress/element';
 
-function transformGroupsToArray( groups ) {
+export function transformGroupsToArray( groups ) {
 	const groupEntries = Object.entries( groups );
 	const result       = [];
 
@@ -28,15 +27,6 @@ function GroupsSelectRow( { settings, onChangeSettingObj, listId } ) {
 
 		return allGroups?.[ listId ] ?? [];
 	}, [ listId ] );
-
-	useEffect( () => {
-		if ( !settings.groups_ids || Array.isArray( settings.groups_ids ) ) {
-			return;
-		}
-		onChangeSettingObj( {
-			groups_ids: transformGroupsToArray( settings.groups_ids ),
-		} );
-	}, [] );
 
 	return <RowControl createId={ false }>
 		<Label>

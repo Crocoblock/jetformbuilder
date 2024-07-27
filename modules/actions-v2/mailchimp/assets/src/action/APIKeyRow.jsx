@@ -104,6 +104,7 @@ function APIKeyRow( { settings, onChangeSettingObj } ) {
 					isBusy={ isFetchLoading }
 					icon={ cloud }
 					variant="secondary"
+					__next40pxDefaultSize
 				>
 					{ __( 'Fetch', 'jet-form-builder' ) }
 				</Button>

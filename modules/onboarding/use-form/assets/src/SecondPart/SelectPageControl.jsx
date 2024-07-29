@@ -45,6 +45,7 @@ function SelectPageControl() {
 					onChange={ pageId => updateSettings( { pageId } ) }
 					onFilterValueChange={ setSearch }
 					__nextHasNoMarginBottom
+					__next40pxDefaultSize
 				/>
 			</FlexBlock>
 			<UseFormButton disabled={

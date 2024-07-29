@@ -103,6 +103,13 @@ final class Module implements
 			true
 		);
 
+		wp_enqueue_style(
+			$this->get_handle(),
+			$this->get_url( 'assets/build/editor.css' ),
+			array(),
+			$script_asset['version']
+		);
+
 		wp_localize_script(
 			$this->get_handle(),
 			'JetFormOptionFieldData',

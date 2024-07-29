@@ -50,6 +50,10 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 	}
 
 	public function jsm_controls() {
+		$wrapper_selector = (
+			'{{WRAPPER}} ' . $this->css_scheme['list-wrapper'] . ', {{WRAPPER}} ' . $this->css_scheme['list-wrapper'] .  ' .components-flex'
+		);
+
 		$this->controls_manager->start_section(
 			'style_controls',
 			array(
@@ -63,28 +67,42 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 			array(
 				'id'           => 'filters_position',
 				'type'         => 'choose',
-				'label'        => __( 'Filters Position', 'jet-form-builder' ),
+				'label'        => __( 'Options Position', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'options'      => array(
-					'inline-block' => array(
-						'shortcut' => __( 'Line', 'jet-form-builder' ),
-						'icon'     => 'dashicons-ellipsis',
-					),
-					'block'        => array(
+					'column'        => array(
 						'shortcut' => __( 'Column', 'jet-form-builder' ),
 						'icon'     => 'dashicons-menu-alt',
 					),
+					'row' => array(
+						'shortcut' => __( 'Line', 'jet-form-builder' ),
+						'icon'     => 'dashicons-ellipsis',
+					),
 				),
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['item']       => 'display: {{VALUE}};',
-					'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] => 'display: {{VALUE}};',
+					$wrapper_selector => 'flex-direction: {{VALUE}};',
 				),
 				'attributes'   => array(
 					'default' => array(
-						'value' => 'block',
+						'value' => 'column',
 					),
 				),
 			)
+		);
+
+		$alignment_options = array(
+			'flex-start'   => array(
+				'shortcut' => __( 'Start', 'jet-form-builder' ) ,
+				'icon'     => 'dashicons-editor-align' . ( is_rtl() ? 'right' : 'left' ),
+			),
+			'center' => array(
+				'shortcut' => __( 'Center', 'jet-form-builder' ),
+				'icon'     => 'dashicons-editor-aligncenter',
+			),
+			'flex-end'  => array(
+				'shortcut' => __( 'End', 'jet-form-builder' ) ,
+				'icon'     => 'dashicons-editor-align' . ( is_rtl() ? 'left' : 'right' ),
+			),
 		);
 
 		$this->controls_manager->add_control(
@@ -93,22 +111,28 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 				'type'         => 'choose',
 				'label'        => __( 'Alignment', 'jet-form-builder' ),
 				'separator'    => 'after',
-				'options'      => array(
-					'left'   => array(
-						'shortcut' => __( 'Left', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-alignleft',
-					),
-					'center' => array(
-						'shortcut' => __( 'Center', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-aligncenter',
-					),
-					'right'  => array(
-						'shortcut' => __( 'Right', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-alignright',
-					),
-				),
+				'options'      => $alignment_options,
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['list-wrapper'] => 'text-align: {{VALUE}};',
+					$wrapper_selector => 'align-items: {{VALUE}};',
+				),
+				'condition' => array(
+					'filters_position' => 'column',
+				),
+			)
+		);
+
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'items_alignment_row',
+				'type'         => 'choose',
+				'label'        => __( 'Alignment', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'options'      => $alignment_options,
+				'css_selector' => array(
+					$wrapper_selector => 'justify-content: {{VALUE}};',
+				),
+				'condition' => array(
+					'filters_position' => 'row',
 				),
 			)
 		);
@@ -118,7 +142,6 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 				'id'           => 'items_space_between',
 				'type'         => 'range',
 				'label'        => __( 'Space Between', 'jet-form-builder' ),
-				'separator'    => 'after',
 				'units'        => array(
 					array(
 						'value'     => 'px',
@@ -130,43 +153,11 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 					),
 				),
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:last-child)'        => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
-					'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:first-child)'       => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
-					'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
-					'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
+					$wrapper_selector => 'gap: {{VALUE}}{{UNIT}};',
 				),
 				'attributes'   => array(
 					'default' => array(
 						'value' => 10,
-					),
-				),
-			)
-		);
-
-		$this->controls_manager->add_control(
-			array(
-				'id'           => 'horisontal_layout_description',
-				'type'         => 'range',
-				'label'        => __( 'Horizontal Offset', 'jet-form-builder' ),
-				'help'         => __( 'Horizontal Offset control works only with Line Filters Position', 'jet-form-builder' ),
-				'separator'    => 'none',
-				'units'        => array(
-					array(
-						'value'     => 'px',
-						'intervals' => array(
-							'step' => 1,
-							'min'  => 0,
-							'max'  => 40,
-						),
-					),
-				),
-				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['item']       => 'margin-right: {{VALUE}}{{UNIT}}',
-					'{{WRAPPER}} ' . $this->css_scheme['front-wrap'] => 'margin-right: {{VALUE}}{{UNIT}}',
-				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => 0,
 					),
 				),
 			)

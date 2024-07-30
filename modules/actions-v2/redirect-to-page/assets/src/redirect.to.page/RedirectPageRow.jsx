@@ -52,7 +52,7 @@ function RedirectPageRow( { settings, onChangeSettingObj } ) {
 		</RequiredLabel>
 		<RowControlEnd hasError={ hasError }>
 			<ComboboxControl
-				value={ settings.redirect_page }
+				value={ +settings.redirect_page }
 				options={ (
 					selectedPage?.id
 					? [

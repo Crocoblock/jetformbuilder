@@ -61,6 +61,12 @@ class Get_From_Field extends Base {
 			}
 		}
 
+		if ( ! empty( $found_field ) && 'manual_bulk' === ( $found_field['options_source'] ?? '' ) ) {
+			return iterator_to_array(
+				$this->get_form_bulk_options( $found_field )
+			);
+		}
+
 		if ( empty( $found_field['options'] ) ) {
 			return $result;
 		}
@@ -73,6 +79,25 @@ class Get_From_Field extends Base {
 		}
 
 		return $result;
+	}
+
+	private function get_form_bulk_options( array $field ): \Generator {
+		$options = $field['bulk_options'] ?? '';
+
+		if ( ! $options ) {
+			return;
+		}
+
+		$options = explode("\n", $options );
+
+		foreach ( $options as $option ) {
+			$parts = explode( '::', $option );
+
+			yield array(
+				'value' => $parts[0],
+				'label' => $parts[1] ?? $parts[0],
+			);
+		}
 	}
 
 }

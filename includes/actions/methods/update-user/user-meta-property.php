@@ -22,13 +22,8 @@ class User_Meta_Property extends Base_Object_Property implements Object_Dynamic_
 	 */
 	const RESTRICT_META_KEYS = array(
 		'use_ssl',
-		'wp_capabilities',
-		'wp_user_level',
 		'dismissed_wp_pointers',
 		'session_tokens',
-		'wp_user-settings',
-		'wp_user-settings-time',
-		'wp_dashboard_quick_press_last_post_id',
 	);
 
 	protected $meta = array();
@@ -42,7 +37,7 @@ class User_Meta_Property extends Base_Object_Property implements Object_Dynamic_
 	}
 
 	public function is_supported( string $key, $value ): bool {
-		return ! in_array( $key, self::get_restricted_keys(), true );
+		return ! in_array( remove_accents( $key ), self::get_restricted_keys(), true );
 	}
 
 	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
@@ -69,9 +64,20 @@ class User_Meta_Property extends Base_Object_Property implements Object_Dynamic_
 			return self::$restricted_meta;
 		}
 
+		global $wpdb;
+
 		self::$restricted_meta = apply_filters(
 			'jet-form-builder/user-modifier/restricted-meta-keys',
-			self::RESTRICT_META_KEYS
+			array_merge(
+				array(
+					$wpdb->get_blog_prefix() . 'user_level',
+					$wpdb->get_blog_prefix() . 'capabilities',
+					$wpdb->prefix . 'user-settings',
+					$wpdb->prefix . 'user-settings-time',
+					$wpdb->prefix . 'dashboard_quick_press_last_post_id',
+				),
+				self::RESTRICT_META_KEYS
+			)
 		);
 
 		return self::$restricted_meta;

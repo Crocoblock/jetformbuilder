@@ -215,6 +215,11 @@ class Register_User extends Base {
 		if ( ! empty( $metafields_map ) ) {
 			foreach ( $metafields_map as $form_field => $meta_field ) {
 				/**
+				 * We need this because WordPress automatically use this on insert to the database
+				 */
+				$meta_field = remove_accents( $meta_field );
+
+				/**
 				 * @since 3.1.6
 				 */
 				if ( in_array( $meta_field, User_Meta_Property::get_restricted_keys(), true ) ) {

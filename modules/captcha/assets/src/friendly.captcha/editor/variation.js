@@ -9,8 +9,7 @@ const variation = {
 		blockAttributes.provider === variationAttributes.provider
 	),
 	description: __(
-		`Set the Friendly Captcha settings in the Captcha Container block to 
-add an anti-bot solution that generates a unique crypto puzzle for each visitor.`,
+		`Set the Friendly Captcha settings in the Captcha Container block to add an anti-bot solution that generates a unique crypto puzzle for each visitor.`,
 		'jet-form-builder',
 	),
 	icon: <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">

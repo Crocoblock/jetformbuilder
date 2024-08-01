@@ -1,3 +1,5 @@
+import { TextControl, ExternalLink } from '@wordpress/components';
+
 const {
 	      __,
       } = wp.i18n;
@@ -8,14 +10,6 @@ const {
 const {
 	      useCaptchaProvider,
       } = JetFBHooks;
-let {
-	    TextControl,
-	    NumberControl,
-	    __experimentalNumberControl,
-	    ExternalLink,
-    }   = wp.components;
-
-NumberControl = NumberControl || __experimentalNumberControl;
 
 const { globalTab } = JetFBActions;
 
@@ -35,8 +29,8 @@ function HCaptchaOptions() {
 	return <>
 		<ToggleControl
 			checked={ providerArgs.use_global }
-			onChange={ use_global => setProviderArgs(
-				{ use_global } ) }
+			onChange={ val => setProviderArgs(
+				{ use_global: val } ) }
 		>
 			{ __( 'Use', 'jet-form-builder' ) + ' ' }
 			<a href={ JetFormEditorData.global_settings_url +
@@ -67,10 +61,10 @@ function HCaptchaOptions() {
 		/>
 		<BaseHelp>
 			{ __(
-				`You can find it on the settings page,
-this will be the first field.`,
+				`You can find it on the settings page, this will be the first field.`,
 				'jet-form-builder',
-			) + ' ' }
+			) }
+			{ ' ' }
 			<ExternalLink href={ 'https://dashboard.hcaptcha.com/settings' }>
 				{ __( 'Go to the Settings page', 'jet-form-builder' ) }
 			</ExternalLink>

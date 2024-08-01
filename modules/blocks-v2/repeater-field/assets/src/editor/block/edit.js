@@ -40,7 +40,6 @@ const {
 	      PanelBody,
 	      Button,
 	      Popover,
-	      BaseControl,
 	      __experimentalNumberControl,
       } = wp.components;
 
@@ -50,6 +49,7 @@ if ( typeof NumberControl === 'undefined' ) {
 	NumberControl = __experimentalNumberControl;
 }
 
+// eslint-disable-next-line max-lines-per-function
 export default function RepeaterEdit( props ) {
 	const blockProps = useBlockProps();
 
@@ -122,7 +122,8 @@ export default function RepeaterEdit( props ) {
 			>
 				<SelectControl
 					key="manage_items_count"
-					label={ __( 'Manage repeater items count' ) }
+					label={ __( 'Manage repeater items count',
+						'jet-form-builder' ) }
 					labelPosition="top"
 					value={ attributes.manage_items_count }
 					onChange={ newValue => {
@@ -132,28 +133,29 @@ export default function RepeaterEdit( props ) {
 				/>
 				{ 'manually' === attributes.manage_items_count && <TextControl
 					key="new_item_label"
-					label={ __( 'Add New Item Label' ) }
+					label={ __( 'Add New Item Label', 'jet-form-builder' ) }
 					value={ attributes.new_item_label }
 					onChange={ ( newValue ) => {
 						props.setAttributes( { new_item_label: newValue } );
 					} }
 				/> }
 				{ 'dynamically' === attributes.manage_items_count &&
-				<SelectControl
-					key="manage_items_count_field"
-					label={ __( 'Field items count' ) }
-					labelPosition="top"
-					value={ attributes.manage_items_count_field }
-					onChange={ newValue => {
-						props.setAttributes(
-							{ manage_items_count_field: newValue } );
-					} }
-					options={ Tools.withPlaceholder( formFields ) }
-				/> }
+					<SelectControl
+						key="manage_items_count_field"
+						label={ __( 'Field items count', 'jet-form-builder' ) }
+						labelPosition="top"
+						value={ attributes.manage_items_count_field }
+						onChange={ newValue => {
+							props.setAttributes(
+								{ manage_items_count_field: newValue } );
+						} }
+						options={ Tools.withPlaceholder( formFields ) }
+					/> }
 
 				<SelectControl
 					key="repeater_calc_type"
-					label={ __( 'Calculate repeater row value' ) }
+					label={ __( 'Calculate repeater row value',
+						'jet-form-builder' ) }
 					labelPosition="top"
 					value={ attributes.repeater_calc_type }
 					onChange={ newValue => {
@@ -162,21 +164,21 @@ export default function RepeaterEdit( props ) {
 					options={ calcType }
 				/>
 				{ 'custom' === attributes.repeater_calc_type &&
-				<div className="jet-form-editor__row-notice">
-					{ __( 'Set math formula to calculate field value.',
-						'jet-form-builder' ) }<br/>
-					{ __( 'For example:', 'jet-form-builder' ) }<br/><br/>
-					%FIELD::quantity%*%META::price%<br/><br/>
-					{ __( 'Where:', 'jet-form-builder' ) }<br/>
-					-
-					{ __(
-						'%FIELD::quantity% - macro for form field value. "quantity" - is a field name to get value from',
-						'jet-form-builder' ) }<br/>
-					-
-					{ __(
-						'%META::price% - macro for current post meta value. "price" - is a meta key to get value from',
-						'jet-form-builder' ) }<br/><br/>
-				</div> }
+					<div className="jet-form-editor__row-notice">
+						{ __( 'Set math formula to calculate field value.',
+							'jet-form-builder' ) }<br/>
+						{ __( 'For example:', 'jet-form-builder' ) }<br/><br/>
+						%FIELD::quantity%*%META::price%<br/><br/>
+						{ __( 'Where:', 'jet-form-builder' ) }<br/>
+						-
+						{ __(
+							'%FIELD::quantity% - macro for form field value. "quantity" - is a field name to get value from',
+							'jet-form-builder' ) }<br/>
+						-
+						{ __(
+							'%META::price% - macro for current post meta value. "price" - is a meta key to get value from',
+							'jet-form-builder' ) }<br/><br/>
+					</div> }
 
 
 			</PanelBody>
@@ -187,19 +189,21 @@ export default function RepeaterEdit( props ) {
 		</InspectorControls>,
 		<div key={ uniqKey( 'Fragment' ) } { ...blockProps }>
 			{ 'custom' === attributes.repeater_calc_type &&
-			<div className="jet-forms__calc-formula-editor">
-				<div className="jet-form-editor__macros-wrap">
-					<TextareaControl
-						key="calc_formula"
-						value={ attributes.calc_formula }
-						label={ __( 'Calculation Formula for Repeater' ) }
+				<div className="jet-forms__calc-formula-editor">
+					<div className="jet-form-editor__macros-wrap">
+						<TextareaControl
+							key="calc_formula"
+							value={ attributes.calc_formula }
+							label={ __( 'Calculation Formula for Repeater',
+								'jet-form-builder' ) }
 
-						onChange={ ( newValue ) => {
-							props.setAttributes( { calc_formula: newValue } );
-						} }
-					/>
-				</div>
-			</div> }
+							onChange={ ( newValue ) => {
+								props.setAttributes(
+									{ calc_formula: newValue } );
+							} }
+						/>
+					</div>
+				</div> }
 			<FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
 				childrenPosition="bottom"
@@ -226,8 +230,9 @@ export default function RepeaterEdit( props ) {
 							placeholder="Add New"
 							allowedFormats={ [] }
 							value={ attributes.new_item_label }
-							onChange={ new_item_label => setAttributes(
-								{ new_item_label } ) }
+							onChange={ val => setAttributes(
+								{ new_item_label: val },
+							) }
 						/>
 					</Button>
 				</div>

@@ -3,6 +3,7 @@ import { useSelect } from '@wordpress/data';
 import { STORE_NAME } from '../../store';
 import { __ } from '@wordpress/i18n';
 
+// eslint-disable-next-line max-lines-per-function
 const useCategoriesAndActionTypes = () => {
 	const [ category, setCategory ] = useState( '' );
 	const [ search, setSearch ]     = useState( '' );

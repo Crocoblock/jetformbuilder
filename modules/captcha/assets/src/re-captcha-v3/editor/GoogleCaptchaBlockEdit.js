@@ -1,29 +1,22 @@
 import GoogleCaptchaOptions from './GoogleCaptchaOptions';
 import preview from './preview';
+import {
+	TextControl,
+	ExternalLink,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalNumberControl as NumberControl,
+} from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 
-const {
-	      __,
-      } = wp.i18n;
 const {
 	      useCaptchaProvider,
       } = JetFBHooks;
-const {
-	      InspectorControls,
-	      useBlockProps,
-      } = wp.blockEditor;
 
 const {
 	      ToggleControl,
 	      BaseHelp,
       } = JetFBComponents;
-
-let {
-	    TextControl,
-	    NumberControl,
-	    __experimentalNumberControl,
-    } = wp.components;
-
-NumberControl = NumberControl || __experimentalNumberControl;
 
 const { globalTab } = JetFBActions;
 
@@ -33,6 +26,7 @@ const currentTab = globalTab( {
 	empty: {},
 } );
 
+// eslint-disable-next-line max-lines-per-function
 function GoogleCaptchaBlockEdit( { isSelected, attributes } ) {
 	const blockProps = useBlockProps();
 
@@ -57,12 +51,13 @@ function GoogleCaptchaBlockEdit( { isSelected, attributes } ) {
 			  ? <div style={ { padding: '20px' } }>
 				  <ToggleControl
 					  checked={ providerArgs.use_global }
-					  onChange={ use_global => setProviderArgs(
-						  { use_global } ) }
+					  onChange={ val => setProviderArgs(
+						  { use_global: val },
+					  ) }
 				  >
 					  { __( 'Use', 'jet-form-builder' ) + ' ' }
 					  <a href={ JetFormEditorData.global_settings_url +
-					  '#captcha-tab__google' }>
+						  '#captcha-tab__google' }>
 						  { __( 'Global Settings', 'jet-form-builder' ) }
 					  </a>
 				  </ToggleControl>
@@ -92,23 +87,18 @@ function GoogleCaptchaBlockEdit( { isSelected, attributes } ) {
 				  />
 				  <BaseHelp>
 					  { __(
-						  `It should be a value between 0 and 1, default 0.5 
-(1.0 is very likely a good interaction, 0.0 is very likely a bot).`,
+						  `It should be a value between 0 and 1, default 0.5 (1.0 is very likely a good interaction, 0.0 is very likely a bot).`,
 						  'jet-form-builder',
 					  ) }
 					  <br/>
-					  <span>
+					  <ExternalLink
+						  href="https://www.google.com/recaptcha/admin/create"
+					  >
 						  { __(
-							  'Register reCAPTCHA v3 keys',
+							  'Register reCAPTCHA v3 keys here',
 							  'jet-form-builder',
-						  ) + ' ' }
-						  <a
-							  href="https://www.google.com/recaptcha/admin/create"
-							  target="_blank"
-						  >
-						  { __( 'here', 'jet-form-builder' ) }
-					  </a>
-				  </span>
+						  ) }
+					  </ExternalLink>
 				  </BaseHelp>
 			  </div>
 			  : preview }

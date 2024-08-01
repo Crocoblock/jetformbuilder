@@ -20,8 +20,7 @@ const {
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Insert the captcha for your form. Determine its location yourself 
-using the block, as is added before the submit button by default.`,
+		`Insert the captcha for your form. Determine its location yourself using the block, as is added before the submit button by default.`,
 		'jet-form-builder',
 	),
 	edit: EditCaptchaContainer,

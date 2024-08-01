@@ -5,12 +5,13 @@ const {
       } = window.JetFormBuilderAbstract;
 
 /**
- * @property {RepeaterData} input
+ * @property {RepeaterData} input Related input
  */
+// eslint-disable-next-line max-lines-per-function
 function SignalRepeater() {
 	BaseSignal.call( this );
 
-	this.isSupported = function ( node, inputData ) {
+	this.isSupported = function ( node ) {
 		return isRepeater( node );
 	};
 	this.runSignal   = function ( prevValue = [] ) {
@@ -40,7 +41,7 @@ function SignalRepeater() {
 		this.input.calcValue = calcValue;
 	};
 	/**
-	 * @param currentIndex {Number}
+	 * @param currentIndex    {Number}
 	 * @param shouldReObserve
 	 */
 	this.runItem = function ( currentIndex, shouldReObserve = false ) {

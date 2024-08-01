@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import {
 	fieldTypesList,
 	maskPlaceholdersList,
@@ -5,37 +6,37 @@ import {
 	maskVisibilitiesList,
 } from './options';
 import preview from './preview';
-import { __ } from "@wordpress/i18n";
+import { __ } from '@wordpress/i18n';
 import {
 	TextControl,
 	SelectControl,
 	ToggleControl,
 	PanelBody,
-} from "@wordpress/components";
-import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
-import { styled } from "@linaria/react";
-import { useState, useEffect, RawHTML } from "@wordpress/element";
+} from '@wordpress/components';
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import { styled } from '@linaria/react';
+import { useState, useEffect, RawHTML } from '@wordpress/element';
 
 const {
-	ToolBarFields,
-	BlockName,
-	BlockLabel,
-	BlockDescription,
-	AdvancedFields,
-	FieldWrapper,
-	FieldSettingsWrapper,
-	ValidationToggleGroup,
-	ValidationBlockMessage,
-	BlockAdvancedValue,
-	EditAdvancedRulesButton,
-	BaseHelp,
-	AdvancedInspectorControl,
-	AttributeHelp,
-} = JetFBComponents;
+	      ToolBarFields,
+	      BlockName,
+	      BlockLabel,
+	      BlockDescription,
+	      AdvancedFields,
+	      FieldWrapper,
+	      FieldSettingsWrapper,
+	      ValidationToggleGroup,
+	      ValidationBlockMessage,
+	      BlockAdvancedValue,
+	      EditAdvancedRulesButton,
+	      BaseHelp,
+	      AdvancedInspectorControl,
+	      AttributeHelp,
+      } = JetFBComponents;
 const {
-	useIsAdvancedValidation,
-	useUniqueNameOnDuplicate,
-} = JetFBHooks;
+	      useIsAdvancedValidation,
+	      useUniqueNameOnDuplicate,
+      } = JetFBHooks;
 
 const FullWidthInput = styled.input`
     width: 100%;
@@ -44,23 +45,24 @@ const FullWidthInput = styled.input`
 
 const { seenIcon, unSeenIcon } = JFBTextFieldConfig;
 
-
+// eslint-disable-next-line max-lines-per-function
 export default function TextEdit( props ) {
 	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		editProps: { uniqKey, attrHelp },
-	} = props;
+		      attributes,
+		      setAttributes,
+		      isSelected,
+		      editProps: { uniqKey, attrHelp },
+	      } = props;
 
-	const blockProps = useBlockProps();
+	const blockProps           = useBlockProps();
 	const isAdvancedValidation = useIsAdvancedValidation();
 
 	useUniqueNameOnDuplicate();
 
 	const [ showPassword, setShowPassword ] = useState( null );
 
-	useEffect( () => setShowPassword( false ), [ attributes.field_type, attributes.showEye ] );
+	useEffect( () => setShowPassword( false ),
+		[ attributes.field_type, attributes.showEye ] );
 
 	if ( attributes.isPreview ) {
 		return <div style={ {
@@ -91,7 +93,7 @@ export default function TextEdit( props ) {
 			<FieldSettingsWrapper { ...props }>
 				<SelectControl
 					key="field_type"
-					label={ __( 'Field Type' ) }
+					label={ __( 'Field Type', 'jet-form-builder' ) }
 					labelPosition="top"
 					value={ attributes.field_type }
 					onChange={ newValue => {
@@ -105,7 +107,7 @@ export default function TextEdit( props ) {
 						checked={ attributes.showEye }
 						help={ __(
 							'Enable to allow user control visibility of value in input',
-							'jet-form-builder'
+							'jet-form-builder',
 						) }
 						onChange={ showEye => setAttributes( { showEye } ) }
 					/>
@@ -143,10 +145,11 @@ export default function TextEdit( props ) {
 				<AttributeHelp name="maxlength"/>
 				<ToggleControl
 					key={ 'enable_input_mask' }
-					label={ __( 'Set Input Mask' ) }
+					label={ __( 'Set Input Mask', 'jet-form-builder' ) }
 					checked={ attributes.enable_input_mask }
 					help={ __(
-						'Check this to setup specific input format for the current field' ) }
+						'Check this to setup specific input format for the current field',
+						'jet-form-builder' ) }
 					onChange={ newVal => {
 						setAttributes( { enable_input_mask: newVal } );
 					} }
@@ -158,13 +161,13 @@ export default function TextEdit( props ) {
 							'jet-form-builder',
 						) }
 						checked={ attributes.clear_on_submit }
-						onChange={ clear_on_submit => setAttributes(
-							{ clear_on_submit },
+						onChange={ val => setAttributes(
+							{ clear_on_submit: val },
 						) }
 					/>
 					<SelectControl
 						key="mask_type"
-						label={ __( 'Mask type' ) }
+						label={ __( 'Mask type', 'jet-form-builder' ) }
 						labelPosition="top"
 						value={ attributes.mask_type }
 						onChange={ ( newValue ) => {
@@ -174,7 +177,7 @@ export default function TextEdit( props ) {
 					/>
 					<TextControl
 						key="input_mask"
-						label={ __( 'Input mask' ) }
+						label={ __( 'Input mask', 'jet-form-builder' ) }
 						value={ attributes.input_mask }
 						onChange={ ( newValue ) => {
 							setAttributes( { input_mask: newValue } );
@@ -193,14 +196,14 @@ export default function TextEdit( props ) {
 							mm/dd/yyyy<br/>
 							{ __( 'More info - ', 'jet-form-builder' ) }
 							<a href={ attrHelp( 'input_mask_datetime_link' ) }
-							   target="_blank">{ __( 'here',
+							   target="_blank" rel="noreferrer">{ __( 'here',
 								'jet-form-builder' ) }</a>
 						</BaseHelp>
 					) }
 
 					<SelectControl
 						key="mask_visibility"
-						label={ __( 'Mask visibility' ) }
+						label={ __( 'Mask visibility', 'jet-form-builder' ) }
 						labelPosition="top"
 						value={ attributes.mask_visibility }
 						onChange={ ( newValue ) => {
@@ -210,7 +213,7 @@ export default function TextEdit( props ) {
 					/>
 					<SelectControl
 						key="mask_placeholder"
-						label={ __( 'Mask placeholder' ) }
+						label={ __( 'Mask placeholder', 'jet-form-builder' ) }
 						labelPosition="top"
 						value={ attributes.mask_placeholder }
 						onChange={ ( newValue ) => {
@@ -255,8 +258,8 @@ export default function TextEdit( props ) {
 				{ ...props }
 			>
 				<div className={ [
-					"jet-form-builder__field-wrap",
-					attributes.showEye && 'has-eye-icon'
+					'jet-form-builder__field-wrap',
+					attributes.showEye && 'has-eye-icon',
 				].join( ' ' ) }>
 					<FullWidthInput
 						placeholder={ attributes.placeholder }
@@ -264,10 +267,14 @@ export default function TextEdit( props ) {
 						maxLength={ attributes.maxlength }
 						type={ showPassword ? 'text' : attributes.field_type }
 					/>
-					{ ( attributes.showEye && 'password' === attributes.field_type ) && <span
+					{ (
+						attributes.showEye && 'password' ===
+						attributes.field_type
+						// eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+					) && <span
 						className={ [
 							'jfb-eye-icon',
-							showPassword ? '' : 'seen'
+							showPassword ? '' : 'seen',
 						].join( ' ' ) }
 						onClick={ () => setShowPassword( prev => !prev ) }
 					>

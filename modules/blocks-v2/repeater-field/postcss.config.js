@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /** @type {import('postcss-load-config').Config} */
 const config = {
 	plugins: [

@@ -36,10 +36,10 @@ function observableHandle( observable ) {
 		observable,
 	);
 
-	const widgetID = turnstile.render( container, options );
+	const widgetID = window.turnstile.render( container, options );
 
 	observable.getSubmit().submitter?.status?.watch?.( () => {
-		turnstile.reset( widgetID );
+		window.turnstile.reset( widgetID );
 		token.onClear();
 	} );
 }

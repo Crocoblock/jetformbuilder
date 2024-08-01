@@ -3,7 +3,7 @@ const { BaseSignal } = JetFormBuilderAbstract;
 function SignalTextField() {
 	BaseSignal.call( this );
 
-	this.isSupported = function ( node, inputData ) {
+	this.isSupported = function () {
 		return true;
 	};
 	this.runSignal   = function () {

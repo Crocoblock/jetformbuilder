@@ -1,6 +1,11 @@
-const {
-	      __,
-      } = wp.i18n;
+import {
+	ExternalLink,
+	TextControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalNumberControl as NumberControl,
+} from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+
 const {
 	      ToggleControl,
 	      BaseHelp,
@@ -8,13 +13,6 @@ const {
 const {
 	      useCaptchaProvider,
       } = JetFBHooks;
-let {
-	    TextControl,
-	    NumberControl,
-	    __experimentalNumberControl,
-    }   = wp.components;
-
-NumberControl = NumberControl || __experimentalNumberControl;
 
 const { globalTab } = JetFBActions;
 
@@ -24,6 +22,7 @@ const currentTab = globalTab( {
 	empty: {},
 } );
 
+// eslint-disable-next-line max-lines-per-function
 function GoogleCaptchaOptions() {
 	const [ providerArgs, setProviderArgs ] = useCaptchaProvider();
 
@@ -34,12 +33,13 @@ function GoogleCaptchaOptions() {
 	return <>
 		<ToggleControl
 			checked={ providerArgs.use_global }
-			onChange={ use_global => setProviderArgs(
-				{ use_global } ) }
+			onChange={ val => setProviderArgs(
+				{ use_global: val },
+			) }
 		>
 			{ __( 'Use', 'jet-form-builder' ) + ' ' }
 			<a href={ JetFormEditorData.global_settings_url +
-			'#captcha-tab__google' }>
+				'#captcha-tab__google' }>
 				{ __( 'Global Settings', 'jet-form-builder' ) }
 			</a>
 		</ToggleControl>
@@ -71,19 +71,18 @@ function GoogleCaptchaOptions() {
 			style={ { marginTop: '-1em' } }
 		>
 			{ __(
-				`It should be a value between 0 and 1, default 0.5 
-(1.0 is very likely a good interaction, 0.0 is very likely a bot).`,
+				`It should be a value between 0 and 1, default 0.5 (1.0 is very likely a good interaction, 0.0 is very likely a bot).`,
 				'jet-form-builder',
 			) }
 		</BaseHelp>
-		<span>{ __( 'Register reCAPTCHA v3 keys', 'jet-form-builder' ) + ' ' }
-			<a
-				href="https://www.google.com/recaptcha/admin/create"
-				target="_blank"
-			>
-				{ __( 'here', 'jet-form-builder' ) }
-			</a>
-		</span>
+		<ExternalLink
+			href="https://www.google.com/recaptcha/admin/create"
+		>
+			{ __(
+				'Register reCAPTCHA v3 keys here',
+				'jet-form-builder',
+			) }
+		</ExternalLink>
 	</>;
 }
 

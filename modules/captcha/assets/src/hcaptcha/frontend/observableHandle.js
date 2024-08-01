@@ -36,10 +36,10 @@ function observableHandle( observable ) {
 		observable,
 	);
 
-	const widgetID = hcaptcha.render( container, options );
+	const widgetID = window.hcaptcha.render( container, options );
 
 	observable.getSubmit().submitter?.status?.watch?.( () => {
-		hcaptcha.reset( widgetID );
+		window.hcaptcha.reset( widgetID );
 		token.onClear();
 	} );
 }

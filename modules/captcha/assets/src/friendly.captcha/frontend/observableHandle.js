@@ -1,4 +1,5 @@
 const { applyFilters } = JetPlugins.hooks;
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { WidgetInstance } from 'friendly-challenge';
 
 /**

@@ -1,6 +1,6 @@
 /**
  *
- * @returns {Object[]}
+ * @return {Object[]}
  */
 function getCaptchaProviders() {
 	return window.JetFormEditorData[ 'captcha-tab-config' ] ?? [];

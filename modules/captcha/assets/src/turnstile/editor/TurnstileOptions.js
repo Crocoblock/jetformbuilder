@@ -1,6 +1,6 @@
-const {
-	      __,
-      } = wp.i18n;
+import { TextControl, ExternalLink } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+
 const {
 	      ToggleControl,
 	      BaseHelp,
@@ -8,14 +8,6 @@ const {
 const {
 	      useCaptchaProvider,
       } = JetFBHooks;
-let {
-	    TextControl,
-	    NumberControl,
-	    __experimentalNumberControl,
-	    ExternalLink,
-    }   = wp.components;
-
-NumberControl = NumberControl || __experimentalNumberControl;
 
 const currentTab = JetFBActions.globalTab( {
 	slug: 'captcha-tab',
@@ -33,12 +25,13 @@ function TurnstileOptions() {
 	return <>
 		<ToggleControl
 			checked={ providerArgs.use_global }
-			onChange={ use_global => setProviderArgs(
-				{ use_global } ) }
+			onChange={ val => setProviderArgs(
+				{ use_global: val },
+			) }
 		>
 			{ __( 'Use', 'jet-form-builder' ) + ' ' }
 			<a href={ JetFormEditorData.global_settings_url +
-			'#captcha-tab__turnstile' }>
+				'#captcha-tab__turnstile' }>
 				{ __( 'Global Settings', 'jet-form-builder' ) }
 			</a>
 		</ToggleControl>

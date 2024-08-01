@@ -5,7 +5,7 @@ const {
 function TextFieldData() {
 	InputData.call( this );
 
-	this.isSupported = function ( node ) {
+	this.isSupported = function () {
 		return true;
 	};
 
@@ -25,7 +25,7 @@ function TextFieldData() {
 
 		button.addEventListener( 'click', function () {
 			button.classList.toggle( 'seen' );
-			let isPressed = this.getAttribute( 'aria-pressed' ) === 'true';
+			const isPressed = this.getAttribute( 'aria-pressed' ) === 'true';
 			this.setAttribute( 'aria-pressed', !isPressed );
 
 			node.type = button.classList.contains( 'seen' )

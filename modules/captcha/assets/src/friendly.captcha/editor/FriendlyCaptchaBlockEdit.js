@@ -1,28 +1,6 @@
 import FriendlyCaptchaOptions from './FriendlyCaptchaOptions';
 import preview from './preview';
-
-const {
-	      __,
-      } = wp.i18n;
-const {
-	      ToggleControl,
-	      BaseHelp,
-      } = JetFBComponents;
-let {
-	    TextControl,
-	    NumberControl,
-	    __experimentalNumberControl,
-    }   = wp.components;
-
-const {
-	      InspectorControls,
-	      useBlockProps,
-      } = wp.blockEditor;
-
-NumberControl = NumberControl || __experimentalNumberControl;
-
-const { globalTab } = JetFBActions;
-
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 
 function FriendlyCaptchaBlockEdit( { isSelected, attributes } ) {
 	const blockProps = useBlockProps();

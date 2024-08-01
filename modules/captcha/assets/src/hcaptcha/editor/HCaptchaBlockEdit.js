@@ -1,34 +1,6 @@
 import HCaptchaOptions from './HCaptchaOptions';
 import preview from './preview';
-
-const {
-	      __,
-      } = wp.i18n;
-const {
-	      ToggleControl,
-	      BaseHelp,
-      } = JetFBComponents;
-const {
-	      useCaptchaProvider,
-      } = JetFBHooks;
-let {
-	    TextControl,
-	    NumberControl,
-	    __experimentalNumberControl,
-    }   = wp.components;
-
-const {
-	      InspectorControls,
-	      useBlockProps,
-      } = wp.blockEditor;
-
-NumberControl = NumberControl || __experimentalNumberControl;
-
-const currentTab = JetFBActions.globalTab( {
-	slug: 'captcha-tab',
-	element: 'hcaptcha',
-	empty: {},
-} );
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 
 function HCaptchaBlockEdit( { isSelected, attributes } ) {
 	const blockProps = useBlockProps();

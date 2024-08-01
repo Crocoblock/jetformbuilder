@@ -9,8 +9,7 @@ const variation = {
 		blockAttributes.provider === variationAttributes.provider
 	),
 	description: __(
-		`Set the Turnstile Captcha settings in the Captcha Container block 
-to make user verification via WordPress form possible.`,
+		`Set the Turnstile Captcha settings in the Captcha Container block to make user verification via WordPress form possible.`,
 		'jet-form-builder',
 	),
 	icon: <svg width="64" height="64" viewBox="0 0 64 64" fill="none"

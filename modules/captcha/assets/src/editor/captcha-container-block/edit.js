@@ -82,6 +82,7 @@ function Placeholder( props ) {
 	</div>;
 }
 
+// eslint-disable-next-line max-lines-per-function
 export default function EditCaptchaContainer( props ) {
 	const { attributes, setAttributes } = props;
 
@@ -95,6 +96,7 @@ export default function EditCaptchaContainer( props ) {
 		setProvider(
 			prev => attributes.provider !== prev ? attributes.provider : prev,
 		);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ attributes.provider ] );
 
 	useEffect( () => {
@@ -104,6 +106,7 @@ export default function EditCaptchaContainer( props ) {
 		setProvider(
 			prev => args.captcha !== prev ? args.captcha : prev,
 		);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ args.captcha ] );
 
 	useEffect( () => {
@@ -118,6 +121,7 @@ export default function EditCaptchaContainer( props ) {
 
 			return prev;
 		} );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ provider ] );
 
 	useEffect( () => {
@@ -127,6 +131,7 @@ export default function EditCaptchaContainer( props ) {
 		if ( provider !== attributes.provider ) {
 			setAttributes( { provider } );
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ provider ] );
 
 	return <>

@@ -10,7 +10,7 @@ AdvancedRestriction = AdvancedRestriction || Restriction;
 function RepeaterRestriction() {
 	AdvancedRestriction.call( this );
 
-	this.isSupported = function ( node, reporting ) {
+	this.isSupported = function ( node ) {
 		return isRepeater( node );
 	};
 

@@ -6,6 +6,7 @@ const {
 	      ReactiveVar,
       } = JetFormBuilderAbstract;
 
+// eslint-disable-next-line max-lines-per-function
 function RepeaterData() {
 	InputData.call( this );
 
@@ -72,6 +73,7 @@ function RepeaterData() {
 		const input = this.root.getInput( this.itemsField );
 
 		if ( !input ) {
+			// eslint-disable-next-line no-console
 			console.error(
 				`JetFormBuilder error: undefined input by name [${ this.itemsField }]`,
 			);
@@ -127,6 +129,7 @@ function RepeaterData() {
 
 		for ( const row of rows ) {
 			for ( const input of row.getInputs() ) {
+				// eslint-disable-next-line max-depth
 				if ( !input.reporting?.restrictions?.length ) {
 					continue;
 				}
@@ -196,7 +199,7 @@ RepeaterData.prototype.findIndex = function ( observableRow ) {
 };
 
 /**
- * @param node {Element}
+ * @param  node {Element}
  * @return {boolean|ObservableRow}
  */
 RepeaterData.prototype.closestRow = function ( node ) {

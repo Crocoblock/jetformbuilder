@@ -9,8 +9,7 @@ const variation = {
 		blockAttributes.provider === variationAttributes.provider
 	),
 	description: __(
-		`Set the reCaptcha settings in the Captcha Container block 
-to enable web hosts to distinguish between human and automated website access.`,
+		`Set the reCaptcha settings in the Captcha Container block to enable web hosts to distinguish between human and automated website access.`,
 		'jet-form-builder',
 	),
 	icon: <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">

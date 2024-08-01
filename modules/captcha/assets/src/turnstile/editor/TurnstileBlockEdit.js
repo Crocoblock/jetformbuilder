@@ -1,28 +1,6 @@
 import TurnstileOptions from './TurnstileOptions';
 import preview from './preview';
-
-const {
-	      __,
-      } = wp.i18n;
-const {
-	      ToggleControl,
-	      BaseHelp,
-      } = JetFBComponents;
-const {
-	      useCaptchaProvider,
-      } = JetFBHooks;
-let {
-	    TextControl,
-	    NumberControl,
-	    __experimentalNumberControl,
-    }   = wp.components;
-
-const {
-	      InspectorControls,
-	      useBlockProps,
-      } = wp.blockEditor;
-
-NumberControl = NumberControl || __experimentalNumberControl;
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 
 function TurnstileBlockEdit( { isSelected, attributes } ) {
 	const blockProps = useBlockProps();

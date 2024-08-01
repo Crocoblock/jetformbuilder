@@ -1,6 +1,6 @@
 (
 	function ( $ ) {
-		const CaptchaHandler = function ( formNode, { key }, resolve, reject ) {
+		const CaptchaHandler = function ( formNode, { key }, resolve ) {
 			let script         = document.querySelector(
 				'script#jet-form-builder-recaptcha-js',
 			);
@@ -11,7 +11,7 @@
 
 			function setFormToken() {
 				if ( window.grecaptcha ) {
-					grecaptcha.execute(
+					window.grecaptcha.execute(
 						key,
 						{
 							action: 'jet_form_builder_captcha__' + formID,

@@ -9,8 +9,7 @@ const variation = {
 		blockAttributes.provider === variationAttributes.provider
 	),
 	description: __(
-		`Set the hCaptcha settings in the Captcha Container 
-block to add anti-bot protection to your website.`,
+		`Set the hCaptcha settings in the Captcha Container block to add anti-bot protection to your website.`,
 		'jet-form-builder',
 	),
 	icon: <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -5,6 +5,7 @@ const {
 	InputData,
 } = JetFormBuilderAbstract;
 
+// eslint-disable-next-line max-lines-per-function
 function TextFieldMaskedData() {
 	InputData.call( this );
 

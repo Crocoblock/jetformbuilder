@@ -1,12 +1,9 @@
 import getCaptchaProviders from '../helpers/getCaptchaProviders';
+import { sprintf, __ } from '@wordpress/i18n';
 
 const {
 	      useMetaState,
       } = JetFBHooks;
-
-const {
-	      __,
-      } = wp.i18n;
 
 const {
 	      useMemo,
@@ -62,15 +59,14 @@ function CaptchaBlockTip() {
 		const container = createBlock( name, { provider: args.captcha } );
 
 		insertBlock( container );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ canAddBlock ] );
 
 	return <>
 		<div style={ { marginBottom: '1.5em' } }>
 			<Tip>
 				{ __(
-					`By default, the captcha is added before the submit 
-button of the form. However, you can determine its location 
-yourself using the block.`,
+					`By default, the captcha is added before the submit button of the form. However, you can determine its location yourself using the block.`,
 					'jet-form-builder',
 				) }
 			</Tip>
@@ -80,8 +76,11 @@ yourself using the block.`,
 			disabled={ !canAddBlock }
 			onClick={ insertCaptchaBlock }
 		>
-			{ __( `Add`, 'jet-form-builder' ) + ' ' }
-			{ `${ buttonLabel } ` + __( 'block', 'jet-form-builder' ) }
+			{ sprintf(
+				// translators: %s - selected captcha label
+				__( `Add %s block`, 'jet-form-builder' ),
+				buttonLabel
+			) }
 		</Button>
 	</>;
 }

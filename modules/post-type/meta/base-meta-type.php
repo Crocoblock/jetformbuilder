@@ -32,7 +32,8 @@ abstract class Base_Meta_Type implements
 		}
 		$form = get_post( $form_id );
 
-		if ( $form->post_parent ) {
+		// compatibility for preview the form
+		if ( $form && $form->post_parent ) {
 			$form_id = $form->post_parent;
 		}
 

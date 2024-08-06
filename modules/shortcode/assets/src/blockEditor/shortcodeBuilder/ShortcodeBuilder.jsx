@@ -8,22 +8,23 @@ import { styled } from '@linaria/react';
 import {
 	usePluginUseSettings,
 	BuilderHelpSlotFill,
-	Description
+	Description,
 } from 'jet-form-builder-use-form';
 
 const ShortCode = styled.code`
     overflow-x: auto;
     text-wrap: nowrap;
     padding: 3px 5px 2px;
-    background: rgba(0,0,0,.07);
+    background: rgba(0, 0, 0, .07);
     font-size: 13px;
     font-family: Consolas, Monaco, monospace;
+    flex: 1;
 `;
 
 function ShortcodeBuilder( { name } ) {
 	const [ settings, updateSettings ] = usePluginUseSettings();
 
-	const isActive = name === settings.builder;
+	const isActive      = name === settings.builder;
 	const shortcodeArgs = useShortcodeArgumentsString();
 
 	const shortcode = `[jet_fb_form ${ shortcodeArgs }]`;
@@ -65,7 +66,7 @@ function ShortcodeBuilder( { name } ) {
 			</Description>
 			<Flex justify="flex-start">
 				<ShortCode>{ shortcode }</ShortCode>
-				<Button ref={ copyButtonRef } variant="tertiary">
+				<Button ref={ copyButtonRef } variant="secondary">
 					{ __( 'Copy', 'jet-form-builder' ) }
 				</Button>
 			</Flex>

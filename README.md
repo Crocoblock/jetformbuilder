@@ -4,6 +4,9 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.3.4.2
+* FIX: Privilege escalation with administrator-level via the Register / Update User actions
+
 ## 3.3.4.1
 * FIX: Advanced Validation with Server-Side callback does not work on frontend
 * FIX: Honeypot protection breaks the form on frontend

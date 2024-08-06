@@ -3,7 +3,7 @@
 namespace JFB_Modules\Actions_V2\Register_User;
 
 use Jet_Form_Builder\Actions\Action_Handler;
-use Jet_Form_Builder\Actions\Methods\Update_User\User_Meta_Property;
+use JFB_Modules\Actions_V2\Update_User\Properties\User_Meta_Property;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;

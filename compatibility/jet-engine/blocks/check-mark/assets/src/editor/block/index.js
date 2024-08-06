@@ -15,6 +15,10 @@ metadata.attributes.isPreview = {
 const settings = {
 	...metadata,
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
+	description: __(
+		'A block for custom Listing Item templates. Set custom icons for the block\'s default and checked modes.',
+		'jet-form-builder',
+	),
 	edit: CheckMarkEdit,
 	example: {
 		attributes: {

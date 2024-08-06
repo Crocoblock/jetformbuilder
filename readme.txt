@@ -272,6 +272,15 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 
 == Changelog ==
 
+**3.4.0**
+- ADD: New UI for actions
+- ADD: Preview or quickly use a form
+- ADD: Check Mark block for JetEngine Listings
+- ADD: Autocomplete search input for the Map Field
+- ADD: CC & BCC options for Send Email action
+- FIX: Indexing repeater
+- FIX: Incorrect form update request in the editor
+
 **3.3.4.2**
 - FIX: Privilege escalation with administrator-level via the Register / Update User actions
 

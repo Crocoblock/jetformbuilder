@@ -55,27 +55,42 @@ class Block_Type extends Base implements Support_Option_Query_It {
 			array(
 				'id'           => 'filters_position',
 				'type'         => 'choose',
-				'label'        => __( 'Filters Position', 'jet-form-builder' ),
+				'label'        => __( 'Options Position', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'options'      => array(
-					'inline-block' => array(
-						'shortcut' => __( 'Line', 'jet-form-builder' ),
-						'icon'     => 'dashicons-ellipsis',
-					),
-					'block'        => array(
+					'column'        => array(
 						'shortcut' => __( 'Column', 'jet-form-builder' ),
 						'icon'     => 'dashicons-menu-alt',
 					),
+					'row' => array(
+						'shortcut' => __( 'Line', 'jet-form-builder' ),
+						'icon'     => 'dashicons-ellipsis',
+					),
 				),
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['item'] => 'display: {{VALUE}};',
+					'{{WRAPPER}} ' . $this->css_scheme['wrapper'] => 'flex-direction: {{VALUE}};',
 				),
 				'attributes'   => array(
 					'default' => array(
-						'value' => 'block',
+						'value' => 'column',
 					),
 				),
 			)
+		);
+
+		$alignment_options = array(
+			'flex-start'   => array(
+				'shortcut' => __( 'Start', 'jet-form-builder' ) ,
+				'icon'     => 'dashicons-editor-align' . ( is_rtl() ? 'right' : 'left' ),
+			),
+			'center' => array(
+				'shortcut' => __( 'Center', 'jet-form-builder' ),
+				'icon'     => 'dashicons-editor-aligncenter',
+			),
+			'flex-end'  => array(
+				'shortcut' => __( 'End', 'jet-form-builder' ) ,
+				'icon'     => 'dashicons-editor-align' . ( is_rtl() ? 'left' : 'right' ),
+			),
 		);
 
 		$this->controls_manager->add_control(
@@ -84,22 +99,28 @@ class Block_Type extends Base implements Support_Option_Query_It {
 				'type'         => 'choose',
 				'label'        => __( 'Alignment', 'jet-form-builder' ),
 				'separator'    => 'after',
-				'options'      => array(
-					'left'   => array(
-						'shortcut' => __( 'Left', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-alignleft',
-					),
-					'center' => array(
-						'shortcut' => __( 'Center', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-aligncenter',
-					),
-					'right'  => array(
-						'shortcut' => __( 'Right', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-alignright',
-					),
-				),
+				'options'      => $alignment_options,
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['wrapper'] => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} ' . $this->css_scheme['wrapper'] => 'align-items: {{VALUE}};',
+				),
+				'condition' => array(
+					'filters_position' => 'column',
+				),
+			)
+		);
+
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'items_alignment_row',
+				'type'         => 'choose',
+				'label'        => __( 'Alignment', 'jet-form-builder' ),
+				'separator'    => 'after',
+				'options'      => $alignment_options,
+				'css_selector' => array(
+					'{{WRAPPER}} ' . $this->css_scheme['wrapper'] => 'justify-content: {{VALUE}};',
+				),
+				'condition' => array(
+					'filters_position' => 'row',
 				),
 			)
 		);
@@ -109,7 +130,6 @@ class Block_Type extends Base implements Support_Option_Query_It {
 				'id'           => 'items_space_between',
 				'type'         => 'range',
 				'label'        => __( 'Space Between', 'jet-form-builder' ),
-				'separator'    => 'after',
 				'units'        => array(
 					array(
 						'value'     => 'px',
@@ -121,39 +141,11 @@ class Block_Type extends Base implements Support_Option_Query_It {
 					),
 				),
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:last-child)'  => 'margin-bottom: calc({{VALUE}}{{UNIT}}/2);',
-					'{{WRAPPER}} ' . $this->css_scheme['item'] . ':not(:first-child)' => 'padding-top: calc({{VALUE}}{{UNIT}}/2);',
+					'{{WRAPPER}} ' . $this->css_scheme['wrapper']  => 'gap: {{VALUE}}{{UNIT}};',
 				),
 				'attributes'   => array(
 					'default' => array(
 						'value' => 10,
-					),
-				),
-			)
-		);
-
-		$this->controls_manager->add_control(
-			array(
-				'id'           => 'horisontal_layout_description',
-				'type'         => 'range',
-				'label'        => __( 'Horizontal Offset', 'jet-form-builder' ),
-				'help'         => __( 'Horizontal Offset control works only with Line Filters Position', 'jet-form-builder' ),
-				'units'        => array(
-					array(
-						'value'     => 'px',
-						'intervals' => array(
-							'step' => 1,
-							'min'  => 0,
-							'max'  => 40,
-						),
-					),
-				),
-				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['item'] => 'margin-right: {{VALUE}}{{UNIT}};',
-				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => 0,
 					),
 				),
 			)

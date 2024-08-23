@@ -20,6 +20,7 @@ function CreatePageControl() {
 					value={ settings.pageTitle }
 					onChange={ pageTitle => updateSettings( { pageTitle } ) }
 					__nextHasNoMarginBottom
+					__next40pxDefaultSize
 				/>
 			</FlexBlock>
 			<UseFormButton

@@ -25,6 +25,20 @@ function appendButton( observable ) {
 		return;
 	}
 
+	// "24" theme compatibility
+	const title = root.querySelector( '.wp-block-post-title' );
+
+	if ( title ) {
+		const titleFlex = document.createElement( 'div' );
+		titleFlex.classList.add( 'jfb-use-form-container' );
+
+		title.parentElement.insertBefore( titleFlex, title );
+		titleFlex.append( title );
+		titleFlex.append( buttonDiv );
+
+		return;
+	}
+
 	observable.rootNode.parentElement.insertBefore(
 		buttonDiv,
 		observable.rootNode,

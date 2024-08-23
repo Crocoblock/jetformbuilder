@@ -1,17 +1,17 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import {
-	ControlWithErrorStyle, IconText,
 	RequiredLabel,
-	RowControlEndStyle,
+	RowControlEnd,
 	RowControl,
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { Flex, ComboboxControl } from '@wordpress/components';
-import { cx } from '@linaria/core';
+import { ComboboxControl } from '@wordpress/components';
 import { useDebouncedInput } from '@wordpress/compose';
 import { useEntityRecords } from '@wordpress/core-data';
 import { useActionValidatorProvider } from 'jet-form-builder-actions';
+import { useSelect } from '@wordpress/data';
 
+// eslint-disable-next-line max-lines-per-function
 function RedirectPageRow( { settings, onChangeSettingObj } ) {
 
 	const { hasError } = useActionValidatorProvider( {
@@ -19,6 +19,15 @@ function RedirectPageRow( { settings, onChangeSettingObj } ) {
 	} );
 
 	const [ , setSearch, lazySearch ] = useDebouncedInput( '' );
+
+	const selectedPage = useSelect( select => (
+		select( 'core' ).getEntityRecord(
+			'postType',
+			'page',
+			settings.redirect_page,
+		)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	), [] );
 
 	const pages     = useEntityRecords(
 		'postType',
@@ -28,7 +37,9 @@ function RedirectPageRow( { settings, onChangeSettingObj } ) {
 			search: lazySearch,
 		},
 	);
-	const pagesList = pages.records?.map?.( page => (
+	const pagesList = pages.records?.filter?.(
+		( { id } ) => id !== selectedPage?.id,
+	).map?.( page => (
 		{
 			value: page.id,
 			label: page.title.raw,
@@ -39,22 +50,20 @@ function RedirectPageRow( { settings, onChangeSettingObj } ) {
 		<RequiredLabel>
 			{ __( 'Select page', 'jet-form-builder' ) }
 		</RequiredLabel>
-		<Flex
-			className={ cx(
-				RowControlEndStyle,
-				hasError && ControlWithErrorStyle,
-			) }
-			direction="column"
-		>
-			{ hasError && <IconText>
-				{ __(
-					'Please fill this required field',
-					'jet-form-builder',
-				) }
-			</IconText> }
+		<RowControlEnd hasError={ hasError }>
 			<ComboboxControl
 				value={ settings.redirect_page }
-				options={ pagesList }
+				options={ (
+					selectedPage?.id
+					? [
+							{
+								value: selectedPage.id,
+								label: selectedPage.title.raw,
+							},
+							...pagesList,
+						]
+					: pagesList
+				) }
 				onChange={ val => onChangeSettingObj(
 					{ redirect_page: val },
 				) }
@@ -62,7 +71,7 @@ function RedirectPageRow( { settings, onChangeSettingObj } ) {
 				__next40pxDefaultSize
 				__nextHasNoMarginBottom
 			/>
-		</Flex>
+		</RowControlEnd>
 	</RowControl>;
 }
 

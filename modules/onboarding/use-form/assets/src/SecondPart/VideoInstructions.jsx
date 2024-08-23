@@ -6,9 +6,10 @@ import { useState } from '@wordpress/element';
 
 const VideoIframe = styled.iframe`
     border: 0;
-    width: 560px;
-    height: 315px;
     margin: 0 auto;
+	display: ${ ({ showVideo }) => showVideo ? 'block' : 'none' };
+    width: 100%;
+	aspect-ratio: 16 / 9;
 `;
 
 function VideoInstructions() {
@@ -39,9 +40,7 @@ function VideoInstructions() {
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 			referrerPolicy="strict-origin-when-cross-origin"
 			allowFullScreen
-			style={ {
-				display: showVideo ? 'block' : 'none',
-			} }
+			showVideo={ showVideo }
 		/>
 	</>;
 }

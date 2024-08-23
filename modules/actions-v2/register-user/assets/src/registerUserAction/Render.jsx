@@ -32,6 +32,7 @@ function RegisterUserRender( props ) {
 			onChange={ allow_register => onChangeSettingObj(
 				{ allow_register },
 			) }
+			__nextHasNoMarginBottom
 		/>
 		{ settings.allow_register && <>
 			<WideLine/>
@@ -56,6 +57,7 @@ function RegisterUserRender( props ) {
 			label={ __( 'Log In User after Register:', 'jet-form-builder' ) }
 			checked={ settings.log_in }
 			onChange={ log_in => onChangeSettingObj( { log_in } ) }
+			__nextHasNoMarginBottom
 		/>
 		{ settings.log_in && <>
 			<WideLine/>
@@ -69,11 +71,12 @@ function RegisterUserRender( props ) {
 			className={ ClearBaseControlStyle }
 			label={ __( 'Add User ID to form data:', 'jet-form-builder' ) }
 			checked={ settings.add_user_id }
-			onChange={ add_user_id => onChangeSettingObj( { add_user_id } ) }
+			onChange={ val => onChangeSettingObj( { add_user_id: val } ) }
 			help={ __(
-				'Registered user ID will be added to form data. If form is filled by logged in user - current user ID will be added to form data.',
+				'Registered user ID will be added to form data. Current user ID will be added to form data only if "Allow creating new users by existing users" option was disabled.',
 				'jet-form-builder',
 			) }
+			__nextHasNoMarginBottom
 		/>
 		<WideLine/>
 		<UserMetaRow

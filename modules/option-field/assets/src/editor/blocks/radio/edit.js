@@ -25,14 +25,8 @@ const {
 
 const {
 	      PanelBody,
-	      ToolbarButton,
 	      MenuItem,
       } = wp.components;
-
-const {
-	      SVG,
-	      Path,
-      } = wp.primitives;
 
 const {
 	      useUniqueNameOnDuplicate,

@@ -1,5 +1,6 @@
 import CheckboxEdit from './edit';
 import metadata from '@shared/blocks/checkbox/block.json';
+import './index.pcss';
 
 const { __ } = wp.i18n;
 

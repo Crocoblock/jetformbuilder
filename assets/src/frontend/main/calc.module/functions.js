@@ -11,35 +11,44 @@ function zerofill( number, count ) {
 }
 
 /**
- * @param date {Date}
+ * @param date  {Date}
+ * @param isUtc
  */
-function toDate( date ) {
+export function toDate( date, isUtc = true ) {
+	const month = isUtc ? date.getUTCMonth() : date.getMonth();
+	const day   = isUtc ? date.getUTCDate() : date.getDate();
+	const year  = isUtc ? date.getUTCFullYear() : date.getFullYear();
+
 	return [
-		date.getFullYear(),
-		zerofill( date.getMonth() + 1, 2 ),
-		zerofill( date.getDate(), 2 ),
+		year,
+		zerofill( month + 1, 2 ),
+		zerofill( day, 2 ),
 	].join( '-' );
 }
 
 /**
- * @param date {Date}
+ * @param date  {Date}
+ * @param isUtc
  */
-function toTime( date ) {
+export function toTime( date, isUtc = true ) {
+	const hours = isUtc ? date.getUTCHours() : date.getHours();
+	const mins  = isUtc ? date.getUTCMinutes() : date.getMinutes();
+
 	return [
-		zerofill( date.getHours(), 2 ),
-		zerofill( date.getMinutes(), 2 ),
+		zerofill( hours, 2 ),
+		zerofill( mins, 2 ),
 	].join( ':' );
 }
 
-function toDateTime( date ) {
-	return toDate( date ) + 'T' + toTime( date );
+export function toDateTime( date ) {
+	return toDate( date, false ) + 'T' + toTime( date, false );
 }
 
 /**
  * @param  timeOrDate {String|Number}
  * @return {{time: number, type: string}}
  */
-function getTimestamp( timeOrDate ) {
+export function getTimestamp( timeOrDate ) {
 	if ( !Number.isNaN( +timeOrDate ) ) {
 		return { time: +timeOrDate, type: 'number' };
 	}
@@ -50,10 +59,6 @@ function getTimestamp( timeOrDate ) {
 
 	if ( dateParts.length > 1 ) {
 		const date = new Date( timeOrDate );
-
-		if ( !timeOrDate.includes( 'T' ) ) {
-			date.setHours( 0, 0, 0 );
-		}
 
 		return {
 			time: date.getTime(),
@@ -86,5 +91,3 @@ function getTimestamp( timeOrDate ) {
 		type: 'time',
 	};
 }
-
-export { toDate, toTime, toDateTime, getTimestamp };

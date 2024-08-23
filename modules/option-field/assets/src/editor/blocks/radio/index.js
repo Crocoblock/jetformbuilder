@@ -1,5 +1,6 @@
 import RadioEdit from './edit';
 import metadata from '@shared/blocks/radio/block.json';
+import './index.pcss';
 
 const { __ } = wp.i18n;
 

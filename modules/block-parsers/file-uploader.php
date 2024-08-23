@@ -188,16 +188,19 @@ class File_Uploader {
 	}
 
 	public function get_max_size(): int {
-		$max_size       = wp_max_upload_size();
-		$field_max_size = $max_size;
+		$max_size = wp_max_upload_size();
 
-		if ( ! empty( $this->settings['max_size'] ) ) {
+		if ( empty( $this->settings['max_size'] ) ) {
+			return $max_size;
+		}
 
-			$field_max_size = intval( floatval( $this->settings['max_size'] ) * MB_IN_BYTES );
+		$field_max_size = floatval(
+			\JFB_Modules\Rich_Content\Module::rich( $this->settings['max_size'] ?? '' )
+		);
+		$field_max_size = intval( $field_max_size * MB_IN_BYTES );
 
-			if ( $field_max_size > $max_size ) {
-				$field_max_size = $max_size;
-			}
+		if ( $field_max_size > $max_size ) {
+			return $max_size;
 		}
 
 		return $field_max_size;
@@ -215,7 +218,9 @@ class File_Uploader {
 	}
 
 	public function get_max_files(): int {
-		$files = absint( $this->settings['max_files'] ?? 1 );
+		$files = absint(
+			\JFB_Modules\Rich_Content\Module::rich( $this->settings['max_files'] ?? '' )
+		);
 
 		return empty( $files ) ? 1 : $files;
 	}

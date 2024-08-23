@@ -4,6 +4,15 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.4.1
+* FIX: Timezone issue in calculated fields
+* FIX: Compatibility with JetEngine Bulk Options for meta-field
+* FIX: Register User UI. Description for `add_user_id` option
+* FIX: Apply rich content on `max_size` & `max_files` attributes in Media Field
+* FIX: Eye icon position in RTL
+* FIX: A layout option for radio block doesn't work
+* FIX: Incorrect saving groups in the Mailchimp action
+
 ## 3.4.0
 * ADD: New UI for actions
 * ADD: Preview or quickly use a form

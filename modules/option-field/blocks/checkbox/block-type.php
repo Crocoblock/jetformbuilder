@@ -80,7 +80,7 @@ class Block_Type extends Base implements Support_Option_Query_It {
 
 		$alignment_options = array(
 			'flex-start'   => array(
-				'shortcut' => __( 'Start', 'jet-form-builder' ) ,
+				'shortcut' => __( 'Start', 'jet-form-builder' ),
 				'icon'     => 'dashicons-editor-align' . ( is_rtl() ? 'right' : 'left' ),
 			),
 			'center' => array(
@@ -88,7 +88,7 @@ class Block_Type extends Base implements Support_Option_Query_It {
 				'icon'     => 'dashicons-editor-aligncenter',
 			),
 			'flex-end'  => array(
-				'shortcut' => __( 'End', 'jet-form-builder' ) ,
+				'shortcut' => __( 'End', 'jet-form-builder' ),
 				'icon'     => 'dashicons-editor-align' . ( is_rtl() ? 'left' : 'right' ),
 			),
 		);

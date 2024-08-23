@@ -51,7 +51,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 
 	public function jsm_controls() {
 		$wrapper_selector = (
-			'{{WRAPPER}} ' . $this->css_scheme['list-wrapper'] . ', {{WRAPPER}} ' . $this->css_scheme['list-wrapper'] .  ' .components-flex'
+			'{{WRAPPER}} ' . $this->css_scheme['list-wrapper'] . ', {{WRAPPER}} ' . $this->css_scheme['list-wrapper'] . ' .components-flex'
 		);
 
 		$this->controls_manager->start_section(
@@ -92,7 +92,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 
 		$alignment_options = array(
 			'flex-start'   => array(
-				'shortcut' => __( 'Start', 'jet-form-builder' ) ,
+				'shortcut' => __( 'Start', 'jet-form-builder' ),
 				'icon'     => 'dashicons-editor-align' . ( is_rtl() ? 'right' : 'left' ),
 			),
 			'center' => array(
@@ -100,7 +100,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 				'icon'     => 'dashicons-editor-aligncenter',
 			),
 			'flex-end'  => array(
-				'shortcut' => __( 'End', 'jet-form-builder' ) ,
+				'shortcut' => __( 'End', 'jet-form-builder' ),
 				'icon'     => 'dashicons-editor-align' . ( is_rtl() ? 'left' : 'right' ),
 			),
 		);

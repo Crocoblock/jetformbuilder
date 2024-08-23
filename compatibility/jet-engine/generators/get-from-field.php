@@ -88,7 +88,7 @@ class Get_From_Field extends Base {
 			return;
 		}
 
-		$options = explode("\n", $options );
+		$options = explode( "\n", $options );
 
 		foreach ( $options as $option ) {
 			$parts = explode( '::', $option );

@@ -119,8 +119,22 @@ InputData.prototype.isSupported = function ( node ) {
 InputData.prototype.addListeners = function () {
 	const [ node ] = this.nodes;
 
+	/**
+	 * Related to issue
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/9973#issuecomment-2182625396
+	 */
+	var timer = null;
+
 	node.addEventListener( 'input', event => {
 		this.value.current = event.target.value;
+
+		var _this = this;
+
+		clearTimeout( timer );
+
+		timer = setTimeout( function() {
+			_this.reportOnChange();
+		}, 450 );
 	} );
 
 	node.addEventListener( 'blur', () => {
@@ -173,6 +187,9 @@ InputData.prototype.report       = function () {
 	this.reporting.validateOnChange();
 };
 InputData.prototype.reportOnBlur = function () {
+	this.reporting.validateOnBlur();
+};
+InputData.prototype.reportOnChange = function () {
 	this.reporting.validateOnBlur();
 };
 /**

@@ -493,6 +493,7 @@ InputData.prototype.getParentPath = function () {
  */
 InputData.prototype.reQueryValue = function () {
 	this.setValue();
+	this.initNotifyValue();
 };
 
 /**

@@ -8,6 +8,7 @@ const DEFAULT_STATE = {
 	sanitizers: {
 		name: [
 			name => name.replace( /[^\w\-]/gi, '' ),
+			name => name === 'children' ? '_' + name : name,
 		],
 	},
 };

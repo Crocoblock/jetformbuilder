@@ -3,7 +3,7 @@ import { useEffect, useContext } from '@wordpress/element';
 import { CurrentActionEditContext } from 'jet-form-builder-actions';
 
 function useSanitizeFieldsMap( mapProperty = 'fields_map' ) {
-	const fields = useFields( { withInner: false }, [] );
+	const fields = useFields();
 
 	const {
 		      settings,

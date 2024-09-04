@@ -151,5 +151,6 @@
 		"jet-forms/repeater-row--default",
 		"jet-forms/repeater-row--current-index"
 	],
-	"viewStyle": "jet-fb-option-field-radio"
+	"viewStyle": "jet-fb-option-field-radio",
+	"style": "jet-fb-option-field-radio"
 }

@@ -1135,7 +1135,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				'default'     => '',
 				'label_block' => false,
 				'description' => __( 'Note: This will override the `Choose Form` field', 'jet-form-builder' ),
-				'dynamic'     => array( 'active' => true, ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 

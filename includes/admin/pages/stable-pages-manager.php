@@ -81,7 +81,10 @@ class Stable_Pages_Manager {
 			$utm->set_content( $utm->get_license_and_theme() );
 
 			$pages[] = array(
-				'title'      => __( 'Go PRO', 'jet-form-builder' ),
+				'title'      => apply_filters(
+					'jet-form-builder/admin/pages/go-pro-title',
+					__( 'Go PRO', 'jet-form-builder' )
+				),
 				'capability' => 'manage_options',
 				'slug'       => $utm->add_query( JET_FORM_BUILDER_SITE . '/pricing/' ),
 			);

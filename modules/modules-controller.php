@@ -60,6 +60,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Validation\Module(),
 			new Wysiwyg\Module(),
 			new Switcher\Module(),
+			new Promo_Banner\Module(),
 		);
 	}
 

@@ -26,7 +26,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		return 'promo-banner';
 	}
 
-	public function condition() : bool {
+	public function condition(): bool {
 		return ( is_admin() && current_user_can( 'manage_options' ) ) ? true : false;
 	}
 
@@ -85,12 +85,14 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	 */
 	public function process_banner_dismiss() {
 
-		if ( empty( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], $this->get_handle() ) ) {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( empty( $_REQUEST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_REQUEST['nonce'] ), $this->get_handle() ) ) {
 			wp_send_json_error(
 				esc_html__( 'The page is expired. Pleaser reload it and try again.', 'jet-form-builder' )
 			);
 		}
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		$hash = ! empty( $_REQUEST['hash'] ) ? sanitize_text_field( $_REQUEST['hash'] ) : false;
 
 		if ( ! $hash ) {
@@ -104,7 +106,6 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		}
 
 		wp_send_json_success();
-
 	}
 
 	/**
@@ -175,13 +176,16 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 			$addition_classes = 'has-screen-links';
 		}
 
-		wp_localize_script( $this->get_handle(), 'jfbPromoBanner', array(
-			'banner'  => $banner,
-			'hash'    => $hash,
-			'nonce'   => wp_create_nonce( $this->get_handle() ),
-			'action'  => $this->get_handle(),
-			'classes' => $addition_classes,
-		) );
-
+		wp_localize_script(
+			$this->get_handle(),
+			'jfbPromoBanner',
+			array(
+				'banner'  => $banner,
+				'hash'    => $hash,
+				'nonce'   => wp_create_nonce( $this->get_handle() ),
+				'action'  => $this->get_handle(),
+				'classes' => $addition_classes,
+			)
+		);
 	}
 }

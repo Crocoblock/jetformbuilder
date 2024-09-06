@@ -68,6 +68,7 @@ class Storage {
 
 	/**
 	 * Returns promo discount value with '%' sign in the end
+	 *
 	 * @return [type] [description]
 	 */
 	public function get_promo_value() {
@@ -102,8 +103,7 @@ class Storage {
 
 		set_transient( $this->get_storage_key(), $data, 6 * HOUR_IN_SECONDS );
 
-		return ! empty( $data ) && is_array( $data ) ? $data : [];
-
+		return ! empty( $data ) && is_array( $data ) ? $data : array();
 	}
 
 	/**
@@ -120,11 +120,10 @@ class Storage {
 		if ( $body && ! is_wp_error( $body ) ) {
 			$body = json_decode( $body, true );
 		} else {
-			$body = [];
+			$body = array();
 		}
 
-		return is_array( $body ) ? $body : [];
-
+		return is_array( $body ) ? $body : array();
 	}
 
 }

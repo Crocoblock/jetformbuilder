@@ -127,6 +127,10 @@ Options -Indexes
 
 # Hide the contents of directories
 IndexIgnore *
+
+<IfModule mod_headers.c>
+	Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>
 ';
 	}
 

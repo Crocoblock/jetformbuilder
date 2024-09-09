@@ -3,7 +3,7 @@
  * Plugin Name:         JetFormBuilder
  * Plugin URI:          https://jetformbuilder.com/
  * Description:         Advanced form builder plugin for WordPress block editor. Create forms from the ground up, customize the existing ones, and style them up – all in one editor.
- * Version:             3.4.1
+ * Version:             3.4.2
  * Author:              Crocoblock
  * Author URI:          https://crocoblock.com/
  * Text Domain:         jet-form-builder
@@ -18,7 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die();
 }
 
-const JET_FORM_BUILDER_VERSION = '3.4.1';
+const JET_FORM_BUILDER_VERSION = '3.4.2';
 
 const JET_FORM_BUILDER__FILE__ = __FILE__;
 const JET_FORM_BUILDER_SITE    = 'https://jetformbuilder.com';

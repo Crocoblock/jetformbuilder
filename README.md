@@ -4,6 +4,13 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.4.2
+* FIX: Sanitization of Form Field Names
+* FIX: Issue with saving values in Repeater Fields
+* FIX: Elementor editor styles for Checkbox & Radio Fields
+* FIX: Server-Side callback Validation
+* FIX: Issue with Calculated Fields and Select Fields
+
 ## 3.4.1
 * FIX: Timezone issue in calculated fields
 * FIX: Compatibility with JetEngine Bulk Options for meta-field

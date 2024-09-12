@@ -108,6 +108,11 @@ class Module implements
 				),
 			)
 		);
+
+		/**
+		 * Required to show styled AI form modal on the forms list page
+		 */
+		wp_enqueue_style( 'wp-components' );
 	}
 
 	public function editor_enqueue_assets() {

@@ -12,7 +12,6 @@ function AiFormButton() {
 			className="page-title-action"
 			onClick={ event => {
 				event.preventDefault();
-
 				setShowModal( prev => !prev );
 			} }
 		>

@@ -140,10 +140,13 @@ For troubleshooting, contact <a href="%2$s" target="_blank">Crocoblock support</
 
 		$url = $utm->add_query( JET_FORM_BUILDER_SITE . '/pricing/' );
 
-		$label = apply_filters(
-			'jet-form-builder/admin/go-pro-link-title',
-			__( 'Go Pro', 'jet-form-builder' )
-		);
+		$link = apply_filters( 'jet-form-builder/admin/go-pro-link', array(
+			'title' => __( 'Go Pro', 'jet-form-builder' ),
+			'href'  => $url,
+		), $utm );
+
+		$label = $link['title'];
+		$url   = $link['href'];
 
 		$links['go_pro'] = "<a href=\"{$url}\" target=\"_blank\" class=\"jet-fb-go-pro-link\">{$label}</a>";
 

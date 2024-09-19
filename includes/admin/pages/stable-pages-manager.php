@@ -80,14 +80,11 @@ class Stable_Pages_Manager {
 			$utm->set_campaign( 'go-pro-button' );
 			$utm->set_content( $utm->get_license_and_theme() );
 
-			$pages[] = array(
-				'title'      => apply_filters(
-					'jet-form-builder/admin/pages/go-pro-title',
-					__( 'Go PRO', 'jet-form-builder' )
-				),
+			$pages[] = apply_filters( 'jet-form-builder/admin/pages/go-pro-link', array(
+				'title'      => __( 'Go PRO', 'jet-form-builder' ),
 				'capability' => 'manage_options',
 				'slug'       => $utm->add_query( JET_FORM_BUILDER_SITE . '/pricing/' ),
-			);
+			), $utm );
 		}
 
 		foreach ( $pages as $page ) {

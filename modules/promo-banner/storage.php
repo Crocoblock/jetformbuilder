@@ -69,12 +69,23 @@ class Storage {
 	/**
 	 * Returns promo discount value with '%' sign in the end
 	 *
-	 * @return [type] [description]
+	 * @return string|bool
 	 */
 	public function get_promo_value() {
 
 		$promo_data = $this->get_promo_data();
 		return isset( $promo_data['promo'] ) ? $promo_data['promo'] : false;
+	}
+
+	/**
+	 * Returns promo discount value with '%' sign in the end
+	 *
+	 * @return array
+	 */
+	public function get_promo_utm() {
+
+		$promo_data = $this->get_promo_data();
+		return isset( $promo_data['utm'] ) ? $promo_data['utm'] : array();
 	}
 
 	/**

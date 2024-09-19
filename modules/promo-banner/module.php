@@ -35,8 +35,8 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_banner' ) );
 		add_action( 'wp_ajax_' . $this->get_handle(), array( $this, 'process_banner_dismiss' ) );
 
-		add_filter( 'jet-form-builder/admin/pages/go-pro-title', array( $this, 'add_promo_disounts' ) );
-		add_filter( 'jet-form-builder/admin/go-pro-link-title', array( $this, 'add_promo_disounts' ) );
+		add_filter( 'jet-form-builder/admin/pages/go-pro-link', array( $this, 'add_promo_disounts' ), 0, 2 );
+		add_filter( 'jet-form-builder/admin/go-pro-link', array( $this, 'add_promo_disounts' ), 0, 2 );
 	}
 
 	public function remove_hooks() {
@@ -44,8 +44,8 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		remove_action( 'admin_enqueue_scripts', array( $this, 'register_banner' ) );
 		remove_action( 'wp_ajax_' . $this->get_handle(), array( $this, 'process_banner_dismiss' ) );
 
-		remove_filter( 'jet-form-builder/admin/pages/go-pro-title', array( $this, 'add_promo_disounts' ) );
-		remove_filter( 'jet-form-builder/admin/go-pro-link-title', array( $this, 'add_promo_disounts' ) );
+		remove_filter( 'jet-form-builder/admin/pages/go-pro-link', array( $this, 'add_promo_disounts' ), 0, 2 );
+		remove_filter( 'jet-form-builder/admin/go-pro-link', array( $this, 'add_promo_disounts' ), 0, 2 );
 	}
 
 	/**
@@ -65,17 +65,29 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	/**
 	 * Add promo discount text
 	 *
-	 * @param string $text Default text.
+	 * @param  array   $link_data Array with link data title, and url (stored as href or slug parameter).
+	 * @param  Utm_Url $utm_link  UTM link handler.
+	 * @return array
 	 */
-	public function add_promo_disounts( $text ) {
+	public function add_promo_disounts( $link_data, $utm_link ) {
 
 		$promo_value = $this->get_storage()->get_promo_value();
+		$promo_utm   = $this->get_storage()->get_promo_utm();
 
 		if ( $promo_value ) {
-			$text .= ' - ' . $promo_value;
+			$link_data['title'] .= ' - ' . $promo_value;
 		}
 
-		return $text;
+		if ( ! empty( $promo_utm['campaign'] ) ) {
+
+			$utm_link->set_campaign( $promo_utm['campaign'] );
+			$url = $utm_link->add_query( JET_FORM_BUILDER_SITE . '/pricing/' );
+
+			$link_data['slug'] = $url;
+			$link_data['href'] = $url;
+		}
+
+		return $link_data;
 	}
 
 	/**

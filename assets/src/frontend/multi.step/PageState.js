@@ -237,7 +237,7 @@ PageState.prototype.changePage          = async function ( isBack ) {
 	}
 
 	if ( this.getLockState().current ) {
-		return;
+		await this.waitForUnlockState();
 	}
 
 	await this.updateStateAsync( false );
@@ -250,6 +250,18 @@ PageState.prototype.changePage          = async function ( isBack ) {
 
 	// eslint-disable-next-line no-unused-expressions
 	this.autoFocus && focusOnInvalidInput( this.getInputs() );
+};
+PageState.prototype.waitForUnlockState = function() {
+	return new Promise( resolve => {
+		const checkLockState = () => {
+			if ( !this.getLockState().current ) {
+				resolve();
+			} else {
+				setTimeout( checkLockState, 100 );
+			}
+		};
+		checkLockState();
+	} );
 };
 PageState.prototype.isNodeBelongThis    = function ( node ) {
 	const parentPage = node.closest( '.jet-form-builder-page' );

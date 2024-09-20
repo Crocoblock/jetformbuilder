@@ -104,6 +104,7 @@ function InputData() {
 	 * @type {boolean}
 	 */
 	this.isResetCalcValue = true;
+	this.validateTimer = false;
 }
 
 InputData.prototype.attrs = {};
@@ -125,6 +126,10 @@ InputData.prototype.addListeners = function () {
 
 	node.addEventListener( 'blur', () => {
 		this.reportOnBlur();
+	} );
+
+	node.addEventListener( 'input', () => {
+		this.debouncedReport();
 	} );
 
 	/**
@@ -175,6 +180,16 @@ InputData.prototype.report       = function () {
 InputData.prototype.reportOnBlur = function () {
 	this.reporting.validateOnBlur();
 };
+InputData.prototype.debouncedReport = function() {
+
+	if ( this.validateTimer ) {
+		clearTimeout( this.validateTimer );
+	}
+
+	this.validateTimer = setTimeout( () => {
+		this.reportOnBlur();
+	}, 450 );
+}
 /**
  * @param  callable
  * @return {(function(): *|*[])|*}
@@ -254,12 +269,19 @@ InputData.prototype.onObserve = function () {
 	this.getSubmit().submitter.watchReset( () => this.onClear() );
 };
 InputData.prototype.onChangeLoading = function () {
+
 	this.getSubmit().lockState.current = this.loading.current;
 
 	const [ node ] = this.nodes;
 	const wrapper  = node.closest( '.jet-form-builder-row' );
 
-	node.readOnly = this.loading.current;
+	/* eslint-disable @wordpress/no-global-active-element */
+	// Prevent setting readOnly for currently active element to avoid user distractions.
+	if ( node !== document.activeElement ) {
+		node.readOnly = this.loading.current;
+	}
+	/* eslint-enable */
+
 	wrapper.classList.toggle( 'is-loading', this.loading.current );
 };
 /**

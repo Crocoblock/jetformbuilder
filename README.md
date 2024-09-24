@@ -2,16 +2,20 @@
 
 Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up – all in one editor.
 
-# ChangeLog
+## How can I report security bugs?
 
-## 3.4.2
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
+
+## ChangeLog
+
+### 3.4.2
 * FIX: Sanitization of Form Field Names
 * FIX: Issue with saving values in Repeater Fields
 * FIX: Elementor editor styles for Checkbox & Radio Fields
 * FIX: Server-Side callback Validation
 * FIX: Issue with Calculated Fields and Select Fields
 
-## 3.4.1
+### 3.4.1
 * FIX: Timezone issue in calculated fields
 * FIX: Compatibility with JetEngine Bulk Options for meta-field
 * FIX: Register User UI. Description for `add_user_id` option
@@ -20,7 +24,7 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 * FIX: A layout option for radio block doesn't work
 * FIX: Incorrect saving groups in the Mailchimp action
 
-## 3.4.0
+### 3.4.0
 * ADD: New UI for actions
 * ADD: Preview or quickly use a form
 * ADD: Check Mark block for JetEngine Listings
@@ -29,16 +33,16 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 * FIX: Indexing repeater
 * FIX: Incorrect form update request in the editor
 
-## 3.3.4.2
+### 3.3.4.2
 * FIX: Privilege escalation with administrator-level via the Register / Update User actions
 
-## 3.3.4.1
+### 3.3.4.1
 * FIX: Advanced Validation with Server-Side callback does not work on frontend
 * FIX: Honeypot protection breaks the form on frontend
 * FIX: Incorrect value in Calculated Field after page loading
 * FIX: Compatibility with PHP version < 8.0 
 
-## 3.3.4
+### 3.3.4
 * ADD: Eye-icon for password field
 * ADD: Gap controls for Checkbox / Radio fields (props [@stijnvanouplines](https://github.com/stijnvanouplines))
 * ADD: PHP actions `jet-form-builder/before-field` & `jet-form-builder/after-field` (props [@stijnvanouplines](https://github.com/stijnvanouplines))
@@ -49,10 +53,10 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 * FIX: Error in the database when trying to send a form on a page without the current post
 * FIX: Compatibility with JetBooking & Calculated Field
 
-## 3.3.3.1
+### 3.3.3.1
 * Tweak: banner for admin-pages
 
-## 3.3.3
+### 3.3.3
 * UPD: The Update Post action will fail if you try to change the post type. Use this filter to allow post type change:
 `add_filter( 'jet-form-builder/action/insert-post/allow-change-post-type', '__return_true' );`
 * UPD: When you activate the plugin for new sites, the following options will be updated: 
@@ -66,12 +70,12 @@ from the tree DOM.
 * FIX: Form generation via AI on local servers
 * FIX: Captcha in a listing grid / query loop does not work correctly
 
-## 3.3.2
+### 3.3.2
 * FIX: Use macros in Send Email when verifying a submission or processing a gateway.
 * FIX: Apply advanced validation for optional field 
 * Tweak: Support for old namespaces for Radio, Select, Checkbox classes
 
-## 3.3.1
+### 3.3.1
 * ADD: Implementing rich content using the "jet-form-builder/rich-content" filter. It supports shortcodes, macros with 
 field names (usually used in action settings) and dynamic preset (JSON-style)
 * ADD: Many block attributes support rich content now. And also some settings in actions and notifications about 
@@ -84,7 +88,7 @@ the result of the form execution.
 * FIX: Switcher style is broken in JetFormBuilder widget (Bricks)
 * FIX: Select field on mobile, select arrow is on the wrong side RTL
 
-## 3.3.0
+### 3.3.0
 * ADD: Switcher Field
 * ADD: Welcome block with form patterns
 * ADD: Generate forms with Open AI
@@ -94,7 +98,7 @@ the result of the form execution.
 * UPD: Improved Server-Side validation
 * FIX: Compatibility with JetBooking on the frontend
 
-## 3.2.3
+### 3.2.3
 * UPD: Improve JetForm block in Block Editor with style controls for the most fields
 * UPD: Improve compatibility with the Check-In/Check-Out field (JetBooking)
 * FIX: Style controls of the JetForm widget in Elementor editor
@@ -102,14 +106,14 @@ the result of the form execution.
 * FIX: Custom template is not attached to the checkbox (or radio) field if there is "Generate dynamically" -> "Get values list from JetEngine Query" source
 * FIX: Convert each Woocommerce product into a simple product
 
-## 3.2.2
+### 3.2.2
 * ADD: Style-controls & options for the WYSIWYG field
 * UPD: UI/UX bulk options
 * FIX: Style controls for the Checkbox field in JetForm widget (Elementor)
 * FIX: Date fields not exported from form records to csv
 * FIX: Columns are not displayed correctly with elementor containers
 
-## 3.2.1
+### 3.2.1
 * ADD: Number-related sanitizers for fields
 * ADD: Now you can write `<div data-jfb-macro="field_name"></div>` instead of `<!--JFB_FIELD::field_name-->`
 * ADD: Random String option in Field Value for Hidden Field
@@ -121,7 +125,7 @@ the result of the form execution.
 * FIX: Advanced choices don't work with the Radio Field
 * FIX: Input mask saves the unmasked value on blur (lost focus)
 
-## 3.2.0
+### 3.2.0
 * ADD: Email Verification
 * ADD: Widget "JetForm" for Bricks editor
 * ADD: Register User with random password (use "Secure unique token" in the Fields Map)
@@ -131,19 +135,19 @@ the result of the form execution.
 * UPD: The Action Button block is divided into 4 separate variations (to improve UX in the editor)
 * FIX: Issue with default value if there was static text or macro
 
-## 3.1.9
+### 3.1.9
 * FIX: ActiveCampaign integration error when using custom fields
 * FIX: In Send Email action if there is a percentage symbol in the body of the letter
 * FIX: Elementor widget JetForm - fields width issue (props [@stijnvanouplines](https://github.com/stijnvanouplines))
 * FIX: Incorrect recognition of regular expression in advanced validation
 
-## 3.1.8
+### 3.1.8
 * FIX: Error in form fields in editor after release of WP 6.4. Inability to edit them
 * FIX: Prevent saving too long status in `*_jet_fb_records` table
 * FIX: Remove useless control in Elementor widget - JetForm
 * FIX: Save form progress (addon) not working for repeater fields
 
-## 3.1.7
+### 3.1.7
 * ADD: Support multiple emails in Reply-To (Send Email)
 * ADD: Added "Post Type" to Hidden Field Sources
 * FIX: Active Campaign. Cannot add a contact with an existing tag if there are many
@@ -155,20 +159,20 @@ the result of the form execution.
 * FIX: Compatibility with JetFormBuilder PayPal Subscriptions
 * FIX: REST-API security. Now only administrators can view one or more forms using standard WP REST routes
 
-## 3.1.6
+### 3.1.6
 * FIX: Minor vulnerability in Update User action
 * FIX: Invalid deletion of first element of repeater field
 * FIX: Form doesn't go to top of each step in some cases
 * FIX: Ignore the value 0 in the Select/Radio/Checkbox Fields
 * FIX: Minor compatibility with language plugins
 
-## 3.1.5
+### 3.1.5
 * ADD: Friendly notice in browser console about error in Calculated formula
 * FIX: Conditional Block with required field always throws Validation error
 * FIX: Displays html in the value of the fields on the single record page
 * FIX: Application of shortcodes inside the form when it is displayed by the shortcode
 
-## 3.1.4
+### 3.1.4
 * ADD: User Display Name in dynamic preset
 * FIX: Uncaught Exception: upload_mime_types
 * FIX: Booking form inside listing stopped working
@@ -177,19 +181,19 @@ the result of the form execution.
 * FIX: Compatibility with JetEngine Lazy load in the listing
 * FIX: Exporting form records, automatically fills in empty form fields
 
-## 3.1.3
+### 3.1.3
 * ADD: Color Scheme option for Input fields in Elementor widget
 * FIX: Remove unused files
 * FIX: `jet-form-builder/form-handler/after-send` hook, gets the wrong form result
 * FIX: Custom Listing Template not working properly with checkbox and generator
 
-## 3.1.2
+### 3.1.2
 * FIX: The operation of the preset in the Advanced Choices Field inside the repeater
 * FIX: Calculating a custom formula for each element of the repeater
 * FIX: Compatibility with WordPress 6.3 (Layout updates in the editor)
 * Tweak: Improved compatibility with [jfb-attributes-for-macros](https://github.com/giraffffee/jfb-attributes-for-macros) addon
 
-## 3.1.1
+### 3.1.1
 * FIX: An error in admin footer text filter
 * FIX: `term_titles_by_ids filter` return fatal error
 * FIX: An error in the console when the "Switch page on change" option is enabled in the Radio or Select field
@@ -197,10 +201,10 @@ the result of the form execution.
 * FIX: Forced conversion of the maximum file size in the Media field to an integer value
 * FIX: Wrong rendering of Repeater field with preset
 
-## 3.1.0.1
+### 3.1.0.1
 * FIX: Fatal error when sending email with attachments
 
-## 3.1.0
+### 3.1.0
 * UPD: Upgraded the minimum supported version of WordPress to 6.0
 * ADD: Turnstile support (JetForm -> Captcha Settings OR Turnstile block)
 * ADD: hCaptcha support (JetForm -> Captcha Settings OR hCaptcha block)
@@ -222,7 +226,7 @@ the result of the form execution.
 * FIX: An error occurred while importing the form
 * Tweak: Add listener not to radio/checkbox field but to the whole field
 
-## 3.0.9
+### 3.0.9
 * UPD: Now only administrators can edit/create/delete forms.
 * UPD: Starting frontend validation when losing focus on radio and checkbox fields
 * FIX: Multiple browser history changes
@@ -230,7 +234,7 @@ the result of the form execution.
 * FIX: An error occurred while importing the form
 * FIX: Compatibility with Appointment Provider field with custom listing template
 
-## 3.0.8
+### 3.0.8
 * UPD: Removed support for required attribute in Calculated Field
 * FIX: Forms are displayed on the front when their status is trash
 * FIX: WYSIWYG toolbar in JetPopup (by ajax)
@@ -239,7 +243,7 @@ the result of the form execution.
 * FIX: Changed the form selection control in the JetForm widget in Elementor due to a compatibility bug with Safari
 * FIX: Media Field and Firefox ESR browser compatibility
 
-## 3.0.7
+### 3.0.7
 * ADD: Support for custom css classes and anchors for the JetForm block
 * FIX: Additional security checks on export and duplicate forms.
 * FIX: Form doesn't scroll to the top on next page in popup
@@ -252,19 +256,19 @@ the result of the form execution.
 * FIX: Minor bug causing WooCommerce pages to look a little different
 * FIX: The value in the text field with the input mask was stored in the wrong sequence in the RTL direction
 
-## 3.0.6
+### 3.0.6
 * ADD: Ability to import multiple forms at the same time
 * UPD: The post title is used for the form export file instead of the post name
 * FIX: Shows an error if you just save without patching on Settings page
 * FIX: "Must not contain chars" in advanced validation
 
-## 3.0.5
+### 3.0.5
 * ADD: Ability to hide conditional blocks during form rendering to avoid layout shifts (see Advanced section in block settings)
 * FIX: Incorrect behavior of validation in step-by-step form
 * FIX: Compatibility of Calculated field with Repeater Field
 * FIX: Fatal error when using a preset with GET parameters that are missing
 
-## 3.0.4
+### 3.0.4
 * ADD: Save Record will not execute if captcha, wp nonce or csrf token validation failed. To return the saving of errors of this kind, it is necessary to manually enable the corresponding option in the action
 * UPD: Guests are allowed to add attachments 
   using the [`jet-form-builder/media-field/before-upload`](https://github.com/Crocoblock/jetformbuilder/wiki/PHP-Hooks#jet-form-buildermedia-fieldbefore-upload) hook
@@ -277,7 +281,7 @@ the result of the form execution.
 * FIX: Fatal error when setting the conditions for executing actions incorrectly
 * FIX: Back compatibility with Reusable Block
 
-## 3.0.3
+### 3.0.3
 * UPD: Loading css as early as possible on a single page
 * FIX: WP 6.2 compatibility (Editor error while editing action)
 * FIX: Loading css for all Gutenberg core blocks (compatibility with form display via shortcode in other page builders)
@@ -286,16 +290,16 @@ the result of the form execution.
 * Tweak: Backward compatibility for `jet.fb.submit.ajax.promises` hook
 * Tweak: added php-hook `jet-form-builder/send-email/send-before`
 
-## 3.0.2
+### 3.0.2
 * ADD: Option for Send Email "Disable Auto-Formatting"
 * FIX: Correct apply calculated value on page load
 * FIX: Importing/duplicating form in some cases
 * FIX: Captcha token verify
 
-## 3.0.1.1
+### 3.0.1.1
 * FIX: Captcha score validation
 
-## 3.0.1
+### 3.0.1
 * ADD: Captcha score threshold
 * ADD: Option for clear input mask before submit
 * ADD: Changing the field name to `[name]_copy` in the duplicate/copy fields block
@@ -310,13 +314,13 @@ the result of the form execution.
 * FIX: Save Progress compatibility
 * FIX: JS fatal error occurs while importing the form
 
-## 3.0.0.3
+### 3.0.0.3
 * UPD: Listen/trigger jQuery event when field value changes
 * UPD: Adding the default Send Email action to the new form only
 * FIX: Storing an incorrect value for a calculated field
 * FIX: The correct definition of the macro in the value of the Default option
 
-## 3.0.0.2
+### 3.0.0.2
 * FIX: Ignore required option in some cases
 * FIX: Dynamic populate repeater field on page load
 * FIX: Prevent submit/switch page on press enter in textarea field
@@ -327,12 +331,12 @@ the result of the form execution.
 * FIX: Save invalid number in Calculated field node element
 * FIX: Rounding number in Calculated Field
 
-## 3.0.0.1
+### 3.0.0.1
 * FIX: Calculated Field with empty separate thousands option 
 * FIX: reCaptcha validation error
 * FIX: Error when using `term_title_by_id` macro incorrectly
 
-## 3.0.0
+### 3.0.0
 * ADD: Self-reactivity is introduced & refactor frontend scripts
 * ADD: Ability to use the Calculated formula in Set Value (**Advanced Value**) logic
 * ADD: Support for multiple values to set in **Advanced Value**
@@ -355,32 +359,32 @@ the result of the form execution.
 * FIX: Custom listing template in Radio / Checkbox Fields & preset
 * Tweak: Added dependency on the `jet-plugins` script
 
-## 2.1.11
+### 2.1.11
 * ADD: Transaction column for payments
 * FIX: Freeze Drag n Drop all widgets in Elementor editor
 * FIX: Ignore caching source for global preset
 
-## 2.1.10
+### 2.1.10
 * ADD: Support macros for webhook url in Call Webhook action
 * Tweak: added php-filter `jet-form-builder/action/webhook/request-url`
 
-## 2.1.9
+### 2.1.9
 * UPD: Update Options action (add compat with stored type)
 * ADD: Option disable "next button"
 
-## 2.1.8
+### 2.1.8
 * ADD: Shortcodes compatibility (label, desc, etc.)
 * FIX: Change User email by Update user action
 * FIX: Same validation for next step & submit event.
 * FIX: Show all ActiveCampaign lists.
 * UPD: Preventing disabling next button
 
-## 2.1.7
+### 2.1.7
 * ADD: Toggle dev-mode from page Settings
 * FIX: Video uploading in media-field
 * FIX: Save long referrer by Save Record action 
 
-## 2.1.6
+### 2.1.6
 * ADD: The ability to get the queried user through a preset and compatibility with the JetEngine Profile Builder
 * ADD: Ability to edit the text of Media Field 'Maximum file size'
 * FIX: Most macro filters support multi-value fields in email content
@@ -392,7 +396,7 @@ the result of the form execution.
 * Tweak: Save request changes in database on non default events
 * Tweak: Decoding request on query from table
 
-## 2.1.5
+### 2.1.5
 * ADD: Support custom fields in ActiveCampaign action
 * ADD: Support for Insert/Update Product (WooCommerce)
 * ADD: Multiple recipients support for Send Email action (props [@stijnvanouplines](https://github.com/stijnvanouplines))
@@ -401,12 +405,12 @@ the result of the form execution.
 * Tweak: Sanitize fields map in Insert/Update Post & Update User
 * Tweak: Allow leave empty mime types option in Media Field
 
-## 2.1.4
+### 2.1.4
 * FIX: Action conditions with AND relation - only the last condition has counted
 * FIX: Conditional block with set value & without any show/hide logic
 * FIX: Calculated Field compatibility
 
-## 2.1.3
+### 2.1.3
 * ADD: Multiple Select support
 * ADD: JetEngine Map Field block
 * UPD: `post_link_by_id` macro support multiple values
@@ -418,14 +422,14 @@ the result of the form execution.
 * FIX: Calculated Field interprets number with leading zeros as number in Octal numeral system
 * FIX: Compatibility with Elementor 3.7
 
-## 2.1.2
+### 2.1.2
 * UPD: Allow using Term object properties as values for select, radio, checkbox fields
 * FIX: Validate action's events in gateways executor
 * FIX: Fatal error when media field format does not match the preset
 * Tweak: Additional args for filter `jet-form-builder/forms/generators/num-range/start-from`
 * Tweak: Description of events for actions in the modal window
 
-## 2.1.1
+### 2.1.1
 * ADD: Ordering files in media field
 * ADD: Compatibility with Reusable Block
 * FIX: Action conditions
@@ -436,7 +440,7 @@ the result of the form execution.
 * FIX: Upload zip / pdf files in Media Field
 * FIX: Get values list from JetEngine query with user
 
-## 2.1.0
+### 2.1.0
 * ADD: CSRF protection
 * ADD: Compatibility with **JetEngine Query Builder**
 * ADD: Ability to add attachments to emails in **Send Email** action
@@ -454,15 +458,15 @@ the result of the form execution.
 * FIX: Better sanitizing terms in the **Insert/Update Post** action 
 * Tweak: New Editor blocks category - **Jet Form Elements**
 
-## 2.0.6
+### 2.0.6
 * FIX: Condition "In the list" for checkbox field
 * FIX: Block controls for Calculated Field & Repeater Field
 * Tweak: Addons page banner
 
-## 2.0.5
+### 2.0.5
 * FIX: "Go PRO" link appears for all User Roles
 
-## 2.0.4
+### 2.0.4
 * FIX: Trigger JS event once, added event `jet-form-builder/after-init`
 * FIX: Paginate fields list in single form record
 * FIX: Disable reload after registration for forms with ajax submit type
@@ -470,7 +474,7 @@ the result of the form execution.
 * Tweak: JetStyleManager compatibility
 * Tweak: Add Mailchimp response for dev-mode logger
 
-## 2.0.3
+### 2.0.3
 * FIX: Recalculate fields before submit
 * FIX: An instant redirect on submit type reload
 * FIX: Add a placeholder to the Redirect to Page action for static page
@@ -478,33 +482,33 @@ the result of the form execution.
 * Tweak: add filter `jet-form-builder/table-engine`. Return string value with name of database engine. Ex.: MyISAM
 * Minor fixes & improvements for admin pages. 
 
-## 2.0.2
+### 2.0.2
 * FIX: Redirect to Page action with URL args
 
-## 2.0.1
+### 2.0.1
 * FIX: Rendering form in a shortcode
 * Tweak: Empty table notice
 
-## 2.0.0
+### 2.0.0
 * ADD: Really hidden fields. Which are not displayed in HTML
 * ADD: Form Record functionality. This includes a form action and admin view
 * UPD: PayPal Gateway functionality: admin view
 * Tweak: fixes and improvements
 
-## 1.5.5
+### 1.5.5
 * FIX: Fatal error when executing actions after passing a payment
 * FIX: Load preset for Options Page (JetEngine compatibility)
 
-## 1.5.4
+### 1.5.4
 * FIX: Correct Updating Post
 * FIX: Disabling select placeholder
 * FIX: Action Modal editor UI
 * FIX: Validation issues
 
-## 1.5.3
+### 1.5.3
 * FIX: Saving an inserted_post_id
 
-## 1.5.2
+### 1.5.2
 * ADD: Insert/Update Post statuses: `Move to Trash`, `Get from the form field`, `Keep current status`
 * ADD: Alignment for the Prev/Next Buttons in JetForm Elementor widget.
 * FIX: Using Options Pages, Post Terms in a preset.
@@ -512,38 +516,38 @@ the result of the form execution.
 * FIX: Compatibility with JetEngine 2.11.X
 * FIX: Compatibility with Full Site Editor (since Wordpress 5.9)
 
-## 1.5.1
+### 1.5.1
 * ADD: Remembering a user when logging in using the "Remember Me" field 
 * FIX: Form not submitted if re-captcha not enabled
 * FIX: Loading preset
 * Tweak: Improving `<!-- JFB_FIELD::name -->` macro usage
 * Tweak: Minor fixes
 
-## 1.5.0
+### 1.5.0
 * ADD: Transforming fields
 * ADD: New source for hidden-field: `Referer URL`
 * ADD: php filter `jet-form-builder/editor/hidden-field/config` for hidden-field config
 * FIX: Removing tags from existing members in Mailchimp.
 * Tweak: Fixes and improvements for better compatibility with PRO addons
 
-## 1.4.3
+### 1.4.3
 * ADD: Option "Fields label HTML tag"
 * FIX: Correct rendering media field in Elementor editor
 * FIX: PHP Warning on load repeater preset
 * FIX: Displaying correct links for the plugin
 * Tweak: add filter `jet.fb.macro.field.value`
 
-## 1.4.2
+### 1.4.2
 * FIX: Guaranteed css output in editors
 * FIX: Correct init macros if JetForm not rendered
 * FIX: Retrieve current post on doing ajax
 
-## 1.4.1
+### 1.4.1
 * FIX: Compatibility with iOS.
 * FIX: Execute reCaptcha token on submit form.
 * Tweak: Added JS filters `jet.fb.submit.reload.promises` & `jet.fb.submit.ajax.promises`
 
-## 1.4.0
+### 1.4.0
 * ADD: Submit Field migrated to **Action Button** with backward compatibility.
 * ADD: **Progress Bar** - new block. To display steps in multistep form.
 * ADD: Ability to use **Form Break** inside **Conditional Block**, in combination with **Progress Bar** and **Action Button**. 
@@ -561,11 +565,11 @@ the result of the form execution.
 * FIX: Enqueueing styles in Elementor editor.
 * UPD: Preset logic for the Repeater field.
 
-## 1.3.3
+### 1.3.3
 * FIX: Compatibility with add-ons
 * FIX: Insert post insteadof Update post
 
-## 1.3.2
+### 1.3.2
 * ADD: Getting the child field of the repeater for the "Get values list from JetEngine field options" generator
 * ADD: CSS Controls for JetForm Elementor widget for Heading Field
 * ADD: Add dynamic for custom url in Redirect to Page action
@@ -583,7 +587,7 @@ the result of the form execution.
 * Tweak: UI/UX Select, Radio, Checkbox fields 
 * Tweak: Added a placeholder for form block/widget attributes
 
-## 1.3.1
+### 1.3.1
 * ADD: Auto scrolling for multi-step form. 
 * ADD: Computed fields from actions (Register User, Insert Post) functionality  
 * ADD: Post Author to Insert/Update Post action
@@ -598,7 +602,7 @@ Through it you can change the size of the indent for auto scrolling
 Through it, you can add a custom html to the preview of the loaded image 
 through the Media Field
 
-## 1.3.0
+### 1.3.0
 * ADD: UI/UX improvements
 * ADD: Color Picker Field
 * ADD: Form Patterns **JetForms**
@@ -609,7 +613,7 @@ through the Media Field
 * FIX: Range Field UI in editor
 * FIX: reCaptcha Uncaught SyntaxError unexpected end of input
 
-## 1.2.7
+### 1.2.7
 * FIX: Initialize input mask for new repeater items
 * FIX: Preset Hidden Field
 * FIX: Upload attachments
@@ -619,7 +623,7 @@ through the Media Field
 * Tweak: Editor UI
 * Tweak: Media Field UI settings
 
-## 1.2.6
+### 1.2.6
 * UPD: Changed the logic for processing required fields inside the Conditional Block
 * ADD: Switch page on change Radio Field
 * ADD: Styles in gutenberg for Datetime Field
@@ -629,13 +633,13 @@ through the Media Field
 * FIX: Preset post-terms in checkbox
 * FIX: Loss of focus when editing a text field in the global preset
 
-## 1.2.5
+### 1.2.5
 * FIX: Console errors when trying to submit a form with the required checkbox || radio, inside a conditional block
 * FIX: Saving `max_size` attribute for media-field in float
 * FIX: UI compatibility with Gutenberg Editor in WP 5.8  
 * Tweak: added `jet-form-builder/preset/source-types` php filter 
 
-## 1.2.4
+### 1.2.4
 * ADD: JetEngine Glossaries compatible
 * ADD: New styling sections for the JetForm widget in Elementor
 * ADD: `jet-form-builder/render-choice/query-options/posts` & `jet-form-builder/render-choice/label/posts` php hooks and the same for terms, instead of 'posts' - 'terms'
@@ -646,7 +650,7 @@ through the Media Field
 * FIX: UI errors in editor
 * Tweak: Change Repeater component header icons
 
-## 1.2.3
+### 1.2.3
 * ADD: Go Pro banner & link
 * FIX: Redirect with GET args
 * FIX: Get calculated value from post meta
@@ -656,7 +660,7 @@ through the Media Field
 * Tweak: Add php filter `jet-form-builder/field-data/calculated-field`
 * Tweak: Add js filter `jet.fb.calculated.field.available.fields`
 
-## 1.2.2
+### 1.2.2
 * ADD: Addon management via Dashboard
 * ADD: Better parse macros in the Send Email action
 * ADD: Filter jet-form-builder/fields/wysiwyg-field/config for wysiwyg-field
@@ -670,10 +674,10 @@ through the Media Field
 * FIX: Duplicating form
 * FIX: Remove mask from empty input on submit the Form
 
-## 1.2.1
+### 1.2.1
 * FIX: Blocks initialization.
 
-## 1.2.0
+### 1.2.0
 * ADD: Examples (preview) for Jet Form Fields in Gutenberg
 * ADD: Global settings for actions, additional sidebar plugins, for example `reCAPTCHA v3`
 * ADD: The ability to use global settings in `Mailchimp`, `GetResponse` & `ActiveCampaign` actions
@@ -683,7 +687,7 @@ through the Media Field
 * ADD: JS hook `jet.fb.register.fields` for registering custom form fields
 * Updated: `apiVersion:2` of blocks registration in Gutenberg
 
-## 1.1.7
+### 1.1.7
 * ADD: RTL compatibility to Wysiwyg Field
 * ADD: Compatibility with JetStyleManager 1.2.0 and older versions
 * ADD: Styles for Form Progress circle
@@ -694,25 +698,25 @@ through the Media Field
 * FIX: Positioning of progress item label
 * FIX: Rendering last form-break field in form
 
-## 1.1.6
+### 1.1.6
 * ADD: `Label of progress` for Form Break Field
 * FIX: Errors when editing actions such as MailChimp, GetResponse
 
-## 1.1.5
+### 1.1.5
 * FIX: Trying to access array offset on value of type null on php 7.4
 * FIX: Rendering repeater attributes
 
-## 1.1.4
+### 1.1.4
 * FIX: CSS Compatibility with Twenty Twenty-One theme
 * FIX: Parsing form fields from content when processing a request 
 
-## 1.1.3
+### 1.1.3
 * FIX: Render Form Break button if there is no name for it, entering settings for Number Field with floating-point
 * FIX: Render CSS classes in fields
 * FIX: Initializing controls for widget Form in JetEngine
 * FIX: Minor fixes in the editor
 
-## 1.1.2
+### 1.1.2
 * FIX: Duplicating a plain preset in fields
 * FIX: Applying macros to a message after paying with PayPal
 * FIX: Retrieving form data after Paypal payment
@@ -721,11 +725,11 @@ through the Media Field
 * FIX: Compatibility with JetEngine on initializing the conditions
 * FIX: Saving character limitation in Text Field settings
 
-## 1.1.1
+### 1.1.1
 * FIX: Wordpress 5.7 compatibility
 * Improvement: Triggering conditional logic when typing in a text and textarea fields
  
-## 1.1.0
+### 1.1.0
 * ADD: Gutenberg blocks: **Conditional Block**, **Datetime Field** 
 * ADD: Elementor widget: **JetForm**
 * ADD: Form Progress with multiple pages
@@ -737,19 +741,19 @@ through the Media Field
 * Improvement: The form builder and the form block full-width in the editor
 
 
-## 1.0.4
+### 1.0.4
 * ADD: displaying a shortcode for each form
 
-## 1.0.3
+### 1.0.3
 * FIX: creating a user with administrator role.
 
-## 1.0.2
+### 1.0.2
 * Enhancement: added **`jet_fb_form`** shortcode. Example: 
 
 `[jet_fb_form form_id="4338" submit_type="ajax" required_mark="***" fields_layout="row"]`
 
-## 1.0.1
+### 1.0.1
 * FIX: render wysiwyg on front-end
 
-## 1.0.0
+### 1.0.0
 * Initial release

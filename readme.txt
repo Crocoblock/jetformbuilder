@@ -204,6 +204,10 @@ Learn every little thing about the JetFormBuilder WordPress plugin & put theory 
 - <a href="https://www.youtube.com/watch?v=WB0B3QLhZK0&list=PL26jaHWVtLFwcxXItL9J9qNJ8pWzKUuGg" target="_blank">JetFormBuilder tutorials</a>
 - <a href="https://jetformbuilder.com/features/overview/" target="_blank">JetFormBuilder documentation</a>
 
+== How can I report security bugs? ==
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
+
 == Screenshots ==
 1. Creating a form structure
 2. Adding new form fields

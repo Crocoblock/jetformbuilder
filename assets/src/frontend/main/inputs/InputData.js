@@ -124,9 +124,7 @@ InputData.prototype.addListeners = function () {
 		this.value.current = event.target.value;
 	} );
 
-	node.addEventListener( 'blur', () => {
-		this.reportOnBlur();
-	} );
+	node.addEventListener( 'blur', () => {} );
 
 	node.addEventListener( 'input', () => {
 		this.debouncedReport();
@@ -181,8 +179,10 @@ InputData.prototype.reportOnBlur = function () {
 	this.reporting.validateOnBlur();
 };
 InputData.prototype.debouncedReport = function() {
+	this.stopValidation = false;
 
 	if ( this.validateTimer ) {
+		this.stopValidation = true;
 		clearTimeout( this.validateTimer );
 	}
 

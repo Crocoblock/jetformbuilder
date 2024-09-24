@@ -109,7 +109,8 @@ ReportingInterface.prototype = {
 
 		if (
 			!this.hasChangedValue() &&
-			this.promisesCount === promises.length
+			this.promisesCount === promises.length &&
+			!this.input.stopValidation
 		) {
 			return this.errors ?? [];
 		}

@@ -104,7 +104,8 @@ function InputData() {
 	 * @type {boolean}
 	 */
 	this.isResetCalcValue = true;
-	this.validateTimer = false;
+	this.validateTimer    = false;
+	this.stopValidation   = false;
 }
 
 InputData.prototype.attrs = {};
@@ -179,8 +180,6 @@ InputData.prototype.reportOnBlur = function () {
 	this.reporting.validateOnBlur();
 };
 InputData.prototype.debouncedReport = function() {
-	this.stopValidation = false;
-
 	if ( this.validateTimer ) {
 		this.stopValidation = true;
 		clearTimeout( this.validateTimer );

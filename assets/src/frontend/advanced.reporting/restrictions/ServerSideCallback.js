@@ -10,7 +10,7 @@ function ServerSideCallback() {
 	this.isServerSide    = function () {
 		return true;
 	};
-	this.validatePromise = async function () {
+	this.validatePromise = async function ( signal = null ) {
 		const current = this.getValue();
 
 		if ( !current ) {
@@ -19,13 +19,18 @@ function ServerSideCallback() {
 
 		const body = this.getFormData();
 
-		const response = await apiFetch( {
-			path: '/jet-form-builder/v1/validate-field',
-			method: 'POST',
-			body,
-		} );
+		try {
+			const response = await apiFetch( {
+				path: '/jet-form-builder/v1/validate-field',
+				method: 'POST',
+				body,
+				signal
+			} );
 
-		return response?.result ? Promise.resolve() : Promise.reject();
+			return response?.result ? Promise.resolve() : Promise.reject();
+		} catch ( error ) {
+			throw error;
+		}
 	};
 
 	this.getFormData = function () {

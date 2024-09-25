@@ -62,12 +62,13 @@ AdvancedReporting.prototype.isSupported = function ( node, input ) {
 	return !!inherit?.length;
 };
 
-AdvancedReporting.prototype.getErrorsRaw = async function ( promises ) {
+AdvancedReporting.prototype.getErrorsRaw = async function ( promises, signal = null ) {
 	if ( this.hasServerSide ) {
 		this.input.loading.start();
 	}
 
-	const errors   = await allRejected( promises );
+	let errors = await allRejected( promises );
+
 	this.valuePrev = this.input.getValue();
 
 	if ( this.hasServerSide ) {
@@ -242,7 +243,7 @@ AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 	callback();
 };
 
-AdvancedReporting.prototype.validateOnBlur = function () {
+AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 	/**
 	 * @see https://github.com/Crocoblock/issues-tracker/issues/1766
 	 */
@@ -255,7 +256,7 @@ AdvancedReporting.prototype.validateOnBlur = function () {
 
 	this.input.getContext().setSilence( false );
 
-	this.validate().
+	this.validate( signal ).
 		then( () => {} ).
 		catch( () => {} ).
 		finally( () => {

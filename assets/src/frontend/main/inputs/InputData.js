@@ -106,6 +106,7 @@ function InputData() {
 	this.isResetCalcValue = true;
 	this.validateTimer    = false;
 	this.stopValidation   = false;
+	this.abortController  = null;
 }
 
 InputData.prototype.attrs = {};
@@ -176,17 +177,25 @@ InputData.prototype.onChange     = function ( prevValue ) {
 InputData.prototype.report       = function () {
 	this.reporting.validateOnChange();
 };
-InputData.prototype.reportOnBlur = function () {
-	this.reporting.validateOnBlur();
+InputData.prototype.reportOnBlur = function ( signal = null ) {
+	this.reporting.validateOnBlur( signal );
 };
 InputData.prototype.debouncedReport = function() {
 	if ( this.validateTimer ) {
 		this.stopValidation = true;
 		clearTimeout( this.validateTimer );
+
+		if ( this.abortController ) {
+            this.abortController.abort();
+        }
 	}
 
+	this.abortController = new AbortController();
+
+    let signal = this.abortController.signal;
+
 	this.validateTimer = setTimeout( () => {
-		this.reportOnBlur();
+		this.reportOnBlur( signal );
 	}, 450 );
 }
 /**

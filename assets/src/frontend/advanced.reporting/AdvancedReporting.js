@@ -75,6 +75,10 @@ AdvancedReporting.prototype.getErrorsRaw = async function ( promises, signal = n
 		this.input.loading.end();
 	}
 
+	if ( signal?.aborted ) {
+		errors = [];
+	}
+
 	return errors;
 };
 

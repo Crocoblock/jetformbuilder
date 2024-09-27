@@ -63,17 +63,9 @@ AdvancedReporting.prototype.isSupported = function ( node, input ) {
 };
 
 AdvancedReporting.prototype.getErrorsRaw = async function ( promises, signal = null ) {
-	if ( this.hasServerSide ) {
-		this.input.loading.start();
-	}
-
 	let errors = await allRejected( promises );
 
 	this.valuePrev = this.input.getValue();
-
-	if ( this.hasServerSide ) {
-		this.input.loading.end();
-	}
 
 	if ( signal?.aborted ) {
 		errors = [];
@@ -260,6 +252,8 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 
 	this.input.getContext().setSilence( false );
 
+	this.switchButtonsState( true );
+
 	this.validate( signal ).
 		then( () => {} ).
 		catch( () => {} ).
@@ -267,8 +261,31 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 			this.skipServerSide = true;
 			this.hasServerSide  = false;
 			this.isProcess      = null;
+
+			this.switchButtonsState();
 		} );
 };
+
+AdvancedReporting.prototype.switchButtonsState = function( force = false ) {
+	const switchButtons = this.input.root.rootNode.querySelectorAll(
+		'.jet-form-builder__next-page, .jet-form-builder__prev-page',
+	);
+
+	function isNodeBelongThis ( node ) {
+		const parentPage = node.closest( '.jet-form-builder-page' );
+
+		return parentPage ? !parentPage.classList.contains( 'jet-form-builder-page--hidden' ) : false;
+	};
+
+	for ( const switchButton of switchButtons ) {
+
+		if ( !isNodeBelongThis( switchButton ) ) {
+			continue;
+		}
+
+		switchButton.disabled = force === true || this.errors.length > 0;
+	}
+}
 
 AdvancedReporting.prototype.validateOnChangeState = function () {
 	if ( this.isProcess ) {

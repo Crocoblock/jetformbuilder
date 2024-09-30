@@ -38,7 +38,9 @@ function TextFieldMaskedData() {
 
 		this.clearOnSubmit = node.dataset.clearMaskOnSubmit ?? false;
 
-		const options = applyFilters( 'jet.fb.inputmask.options', {}, this );
+		const inputMaskOpts = this.clearOnSubmit ? { autoUnmask: true } : {};
+
+		const options = applyFilters( 'jet.fb.inputmask.options', inputMaskOpts, this );
 		jQuery( node ).inputmask( options );
 
 		this.beforeSubmit( this.removeMask.bind( this ) );
@@ -46,7 +48,7 @@ function TextFieldMaskedData() {
 	};
 	this.removeMask   = function ( resolve ) {
 		const $maskedField = jQuery( this.nodes[ 0 ] );
-		this.maskOptions   = $maskedField.inputmask.opts;
+		this.maskOptions   = $maskedField[0].inputmask.opts;
 
 		// Remove mask if empty value
 		if ( !this.value.current || this.clearOnSubmit ) {

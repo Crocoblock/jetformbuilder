@@ -202,6 +202,8 @@ AdvancedReporting.prototype.makeValid = function () {
 };
 
 AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
+	this.switchButtonsState( true );
+
 	const callback = () => {
 		this.input.getContext().setSilence( false );
 
@@ -252,8 +254,6 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 
 	this.input.getContext().setSilence( false );
 
-	this.switchButtonsState( true );
-
 	this.validate( signal ).
 		then( () => {} ).
 		catch( () => {} ).
@@ -271,20 +271,20 @@ AdvancedReporting.prototype.switchButtonsState = function( force = false ) {
 		'.jet-form-builder__next-page, .jet-form-builder__prev-page',
 	);
 
-	function isNodeBelongThis ( node ) {
-		const parentPage = node.closest( '.jet-form-builder-page' );
-
-		return parentPage ? !parentPage.classList.contains( 'jet-form-builder-page--hidden' ) : false;
-	};
-
 	for ( const switchButton of switchButtons ) {
 
-		if ( !isNodeBelongThis( switchButton ) ) {
+		if ( !this.isNodeBelongThis( switchButton ) ) {
 			continue;
 		}
 
 		switchButton.disabled = force === true || this.errors.length > 0;
 	}
+}
+
+AdvancedReporting.prototype.isNodeBelongThis = function( node ) {
+	const parentPage = node.closest( '.jet-form-builder-page' );
+
+	return parentPage ? !parentPage.classList.contains( 'jet-form-builder-page--hidden' ) : false;
 }
 
 AdvancedReporting.prototype.validateOnChangeState = function () {

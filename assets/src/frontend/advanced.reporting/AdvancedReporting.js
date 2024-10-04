@@ -273,7 +273,7 @@ AdvancedReporting.prototype.switchButtonsState = function( force = false ) {
 
 	for ( const switchButton of switchButtons ) {
 
-		if ( !this.isNodeBelongThis( switchButton ) ) {
+		if ( !switchButton.classList.contains('jet-form-builder__submit') && !this.isNodeBelongThis( switchButton ) ) {
 			continue;
 		}
 

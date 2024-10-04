@@ -268,7 +268,7 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 
 AdvancedReporting.prototype.switchButtonsState = function( force = false ) {
 	const switchButtons = this.input.root.rootNode.querySelectorAll(
-		'.jet-form-builder__next-page, .jet-form-builder__prev-page',
+		'.jet-form-builder__next-page, .jet-form-builder__prev-page, .jet-form-builder__action-button',
 	);
 
 	for ( const switchButton of switchButtons ) {
@@ -291,6 +291,11 @@ AdvancedReporting.prototype.validateOnChangeState = function () {
 	if ( this.isProcess ) {
 		return Promise.resolve();
 	}
+
+	this.switchButtonsState( true );
+
+	this.input.getContext().setSilence( false );
+
 	this.isProcess      = true;
 	this.skipServerSide = false;
 
@@ -300,6 +305,8 @@ AdvancedReporting.prototype.validateOnChangeState = function () {
 				this.skipServerSide = true;
 				this.hasServerSide  = false;
 				this.isProcess      = null;
+
+				this.switchButtonsState();
 			},
 		);
 	} );

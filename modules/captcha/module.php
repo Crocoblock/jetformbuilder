@@ -54,6 +54,7 @@ final class Module implements
 	use Repository_Pattern_Trait;
 
 	const PREFIX = 'jet_form_builder_captcha__';
+    const SPAM_EXCEPTION = 'captcha_failed';
 
 	/**
 	 * @var Base_Captcha[]
@@ -71,6 +72,14 @@ final class Module implements
 	public function rep_item_id() {
 		return 'captcha';
 	}
+
+    public function __construct() {
+        add_action( 'jet-form-builder/security/spam-statuses', array( $this, 'add_spam_statuses' ) );
+    }
+    public function add_spam_statuses($statuses){
+        $statuses[] = Module::SPAM_EXCEPTION;
+        return $statuses;
+    }
 
 	public function on_install() {
 		$this->rep_install();

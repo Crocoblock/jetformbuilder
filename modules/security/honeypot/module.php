@@ -25,6 +25,15 @@ class Module implements Base_Module_It {
 		return true;
 	}
 
+    const SPAM_EXCEPTION = 'honeypot';
+    public function __construct() {
+        add_filter('jet-form-builder/security/spam-statuses', array($this, 'add_spam_statuses'));
+    }
+    public function add_spam_statuses($statuses){
+        $statuses[] = self::SPAM_EXCEPTION;
+        return $statuses;
+    }
+
 	public function init_hooks() {
 		add_filter(
 			'jet-form-builder/after-start-form',
@@ -93,7 +102,7 @@ class Module implements Base_Module_It {
 		}
 
 		if ( ! empty( $request[ self::FIELD ] ) ) {
-			throw new Spam_Exception( 'honeypot' );
+			throw new Spam_Exception( self::SPAM_EXCEPTION );
 		}
 
 		unset( $request[ self::FIELD ] );
@@ -102,7 +111,7 @@ class Module implements Base_Module_It {
 	}
 
 	public function handle_global_messages( array $types ): array {
-		$types['honeypot'] = array(
+		$types[self::SPAM_EXCEPTION] = array(
 			'label' => __( 'Honeypot validation failed', 'jet-form-builder' ),
 			'value' => __( 'You are not allowed to fill in the honeypot field', 'jet-form-builder' ),
 		);

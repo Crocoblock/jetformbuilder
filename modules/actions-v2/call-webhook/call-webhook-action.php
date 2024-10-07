@@ -35,6 +35,7 @@ class Call_Webhook_Action extends Base {
 
 	public function do_action( array $request, Action_Handler $handler ) {
 		$webhook_url = ! empty( $this->settings['webhook_url'] ) ? trim( $this->settings['webhook_url'] ) : false;
+        $webhook_timeout = ! empty( $this->settings['webhook_timeout'] ) ? (int)$this->settings['webhook_timeout'] : false;
 
 		if ( ! $webhook_url ) {
 			throw new Action_Exception(
@@ -46,6 +47,10 @@ class Call_Webhook_Action extends Base {
 		$args = array(
 			'body' => $request,
 		);
+
+		if ( $webhook_timeout !== false ) {
+            $args['timeout'] = $webhook_timeout;
+        }
 
 		/**
 		 * Filter webhook arguments

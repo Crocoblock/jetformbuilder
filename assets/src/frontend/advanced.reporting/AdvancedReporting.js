@@ -63,9 +63,17 @@ AdvancedReporting.prototype.isSupported = function ( node, input ) {
 };
 
 AdvancedReporting.prototype.getErrorsRaw = async function ( promises, signal = null ) {
+	if ( this.hasServerSide ) {
+		this.input.loading.start();
+	}
+
 	let errors = await allRejected( promises );
 
 	this.valuePrev = this.input.getValue();
+
+	if ( this.hasServerSide ) {
+		this.input.loading.end();
+	}
 
 	if ( signal?.aborted ) {
 		errors = [];
@@ -262,7 +270,9 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 			this.hasServerSide  = false;
 			this.isProcess      = null;
 
-			this.switchButtonsState();
+			if ( !signal?.aborted ) {
+				this.switchButtonsState();
+			}
 		} );
 };
 

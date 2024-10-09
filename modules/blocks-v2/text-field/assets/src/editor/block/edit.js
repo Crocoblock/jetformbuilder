@@ -155,7 +155,7 @@ export default function TextEdit( props ) {
 					} }
 				/>
 				{ attributes.enable_input_mask && <React.Fragment>
-					<ToggleControl
+					{ 'datetime' != attributes.mask_type && <ToggleControl
 						label={ __(
 							'Clear mask before submit',
 							'jet-form-builder',
@@ -164,7 +164,7 @@ export default function TextEdit( props ) {
 						onChange={ val => setAttributes(
 							{ clear_on_submit: val },
 						) }
-					/>
+					/> }
 					<SelectControl
 						key="mask_type"
 						label={ __( 'Mask type', 'jet-form-builder' ) }

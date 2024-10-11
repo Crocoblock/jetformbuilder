@@ -173,7 +173,7 @@ CheckboxData.prototype.processValueFormSingleChoice = function ( node, value ) {
 CheckboxData.prototype.isArray = function () {
 	return (
 		Boolean( this.addNewButton ) ||
-		this.nodes.item( 0 )?.name?.includes?.( '[]' )
+		this.nodes.item && this.nodes.item( 0 )?.name?.includes?.( '[]' )
 	);
 };
 

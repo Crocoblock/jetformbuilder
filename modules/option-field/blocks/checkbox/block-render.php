@@ -15,9 +15,42 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Block_Render extends Base {
 
+    public bool $is_uniq_name = true;
+
 	public function get_name() {
 		return 'checkbox-field';
 	}
+
+    public function before_render( $args ) {
+        $this->check_for_uniq_name();
+    }
+
+    public function check_for_uniq_name() {
+        if ( !current_user_can( 'edit_jet_fb_form', $this->form_id ) ) {
+            return;
+        }
+
+        $checkboxFields = array_filter($this->live_form->blocks, function($block) {
+            return isset($block['blockName']) && $block['blockName'] === 'jet-forms/checkbox-field';
+        });
+
+        $i = 0;
+        foreach ($checkboxFields as $checkboxField) {
+            if (
+                // case when default checkbox name ('field_name')
+                $this->args['name'] === 'field_name' && !isset($checkboxField['attrs']['name']) ||
+                //case when custom checkbox name (not 'field_name')
+                isset($checkboxField['attrs']['name']) && $checkboxField['attrs']['name'] === $this->args['name']
+            ) {
+                $i++;
+            }
+        }
+
+        if ($i > 1) {
+            $this->is_uniq_name = false;
+        }
+
+    }
 
 	public function render_without_layout( $template = null, $args = array() ) {
 		parent::render_without_layout( $template, $args );
@@ -44,7 +77,11 @@ class Block_Render extends Base {
 			$html .= $this->render_custom_option();
 		}
 
-		$html .= '</div>';
+        $error_not_uniq_name_HTML = !$this->is_uniq_name
+            ? "<div class='uniq_name_error' style='color:red;font-size: 12px;'>You already have field < " . $this->args['name'] . " > in this form. Please rename current field to avoid form processing errors.</div>"
+            : '';
+
+        $html .= $error_not_uniq_name_HTML . '</div>';
 		$this->reset_attributes();
 
 		return $html;

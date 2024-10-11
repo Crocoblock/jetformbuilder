@@ -21,10 +21,19 @@ function TextFieldMaskedData() {
 	this.addListeners = function () {
 		const [ node ] = this.nodes;
 
+		node.addEventListener( 'blur', () => {
+			const { value } = node;
+
+			this.value.current = node.inputmask.unmaskedvalue();
+			this.reporting.validateOnBlur();
+
+			this.silenceSet( value );
+		} );
+
 		this.enterKey = new ReactiveHook();
 		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
 	};
-	this.maskValidation = async function() {
+	this.maskValidation = function() {
 		const [ node ] = this.nodes;
 		const { value } = node;
 

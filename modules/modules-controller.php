@@ -61,6 +61,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Wysiwyg\Module(),
 			new Switcher\Module(),
 			new Promo_Banner\Module(),
+            new Fields_Render_Validator\Module(),
 		);
 	}
 

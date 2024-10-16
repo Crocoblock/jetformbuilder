@@ -1,6 +1,5 @@
 <?php
 
-
 namespace JFB_Modules\Fields_Render_Validator;
 
 use JFB_Components\Module\Base_Module_Dir_It;
@@ -29,9 +28,6 @@ class Module implements
     use Base_Module_Url_Trait;
     use Base_Module_Dir_Trait;
 
-    protected $fields_stack = [];
-
-
     public function rep_item_id() {
         return 'fields-render-validator';
     }
@@ -40,10 +36,11 @@ class Module implements
         return current_user_can( 'manage_options' );
     }
 
+    protected $fields_stack = [];
+
     public function init_hooks() {
         add_filter( 'jet-form-builder/after-start-form', [ $this, 'reset_stack' ], 0 );
-        add_filter( 'jet-form-builder/after-render-field', [ $this, 'update_stack' ], 0, 6 );
-
+        add_filter( 'jet-form-builder/after-render-field', [ $this, 'update_stack' ], 0, 5 );
     }
 
     public function reset_stack( string $html ): string {
@@ -51,15 +48,22 @@ class Module implements
         return $html;
     }
 
-    public function update_stack( string $content, string $field_name, array $attrs ): string {
+    public function update_stack( $output, $field_name, $attrs, $content, $wp_block  ): string {
         if ( isset($attrs['name']) &&  $attrs['name'] !== 'undefined' ) {
-            if ( in_array( $attrs['name'], $this->fields_stack ) ) {
-                $content .= "<div class='jet-form-builder__uniq-name-error' style='color:red;font-size: 12px;'>You already have field < " . $attrs['name'] . " > in this form. Please rename current field to avoid form processing errors.</div>";
+            $name = $attrs['name'];
+            $context = isset($wp_block->context) && isset($wp_block->context['jet-forms/repeater-field--name']) ? $wp_block->context['jet-forms/repeater-field--name'] : '';
+
+            $name = $context ? $context . $name : $name;
+
+            if ( in_array( $name, $this->fields_stack ) ) {
+                $parent = $context ? 'repeater' : 'form';
+                $output .= "<div class='jet-form-builder__uniq-name-error' style='color:red;font-size: 12px;'>You already have field < " . esc_attr($attrs['name']) . " > in this ".$parent.". Please rename current field to avoid form processing errors.</div>";
+
             } else {
-                $this->fields_stack[] = $attrs['name'];
+                $this->fields_stack[] = $name;
             }
         }
-        return $content;
+        return $output;
     }
 
     public function on_install() {

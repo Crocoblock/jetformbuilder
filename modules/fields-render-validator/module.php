@@ -71,11 +71,7 @@ class Module implements
                 $this->fields_stack[] = $name;
             }
         }
-
-        echo '<pre>';
-        print_r($this->fields_stack);
-        echo '</pre>';
-
+        
         return $output;
     }
 

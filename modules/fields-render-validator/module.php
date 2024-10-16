@@ -49,11 +49,19 @@ class Module implements
     }
 
     public function update_stack( $output, $field_name, $attrs, $content, $wp_block  ): string {
-        if ( isset($attrs['name']) &&  $attrs['name'] !== 'undefined' ) {
-            $name = $attrs['name'];
-            $context = isset($wp_block->context) && isset($wp_block->context['jet-forms/repeater-field--name']) ? $wp_block->context['jet-forms/repeater-field--name'] : '';
 
-            $name = $context ? $context . $name : $name;
+        if ( isset($attrs['name']) &&  $attrs['name'] !== 'undefined' ) {            $name = $attrs['name'];
+
+            $name = $attrs['name'];
+
+            $context = $wp_block->context ?? '';
+            if ($context) {
+                $context_name = $context['jet-forms/repeater-field--name'] ?? '';
+                $context_index = $context['jet-forms/repeater-row--current-index'] ?? '';
+                if ($context_name !== '' && $context_index !== '') {
+                    $name = $context_name . $context_index . $name;
+                }
+            }
 
             if ( in_array( $name, $this->fields_stack ) ) {
                 $parent = $context ? 'repeater' : 'form';
@@ -63,6 +71,11 @@ class Module implements
                 $this->fields_stack[] = $name;
             }
         }
+
+        echo '<pre>';
+        print_r($this->fields_stack);
+        echo '</pre>';
+
         return $output;
     }
 

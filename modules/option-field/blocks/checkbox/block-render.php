@@ -14,9 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Define text field renderer class
  */
 class Block_Render extends Base {
-
-    public bool $is_uniq_name = true;
-
+    
 	public function get_name() {
 		return 'checkbox-field';
 	}

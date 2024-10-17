@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Define text field renderer class
  */
 class Block_Render extends Base {
-    
+
 	public function get_name() {
 		return 'checkbox-field';
 	}
@@ -44,7 +44,7 @@ class Block_Render extends Base {
 			$html .= $this->render_custom_option();
 		}
 
-        $html .= '</div>';
+		$html .= '</div>';
 		$this->reset_attributes();
 
 		return $html;

@@ -5,6 +5,12 @@ package-lock.json
 *.LICENSE.txt
 .nx
 
+
+/vendor/*
+!/vendor/composer/
+!/vendor/woocommerce/
+!/vendor/autoload.php
+
 /vendor/woocommerce/action-scheduler/changelog.txt
 /vendor/woocommerce/action-scheduler/readme.txt
 /vendor/woocommerce/action-scheduler/README.md

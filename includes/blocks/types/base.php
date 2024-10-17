@@ -303,7 +303,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			$this->get_name(),
 			$attrs,
 			$content,
-			$wp_block,
+			$wp_block
 		);
 	}
 

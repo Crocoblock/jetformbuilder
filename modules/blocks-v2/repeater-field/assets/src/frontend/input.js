@@ -162,7 +162,10 @@ function RepeaterData() {
 		const repeaterRows = this.value.current
 
 		repeaterRows.forEach( row => {
-			row.getInputs().forEach( input => input.setValue() );
+			row.getInputs().forEach( input => {
+				input.setValue();
+				input.initNotifyValue();
+			} );
 		} )
 	}
 }

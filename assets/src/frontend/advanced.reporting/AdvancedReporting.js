@@ -210,7 +210,6 @@ AdvancedReporting.prototype.makeValid = function () {
 };
 
 AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
-	this.switchButtonsState( true );
 
 	const callback = () => {
 		this.input.getContext().setSilence( false );
@@ -260,6 +259,10 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 	this.isProcess      = true;
 	this.skipServerSide = false;
 
+	if ( this.hasServerSide ) {
+		this.input.loading.start();
+	}
+
 	this.input.getContext().setSilence( false );
 
 	this.validate( signal ).
@@ -270,26 +273,13 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 			this.hasServerSide  = false;
 			this.isProcess      = null;
 
-			if ( !signal?.aborted ) {
-				this.switchButtonsState();
+			this.input.nodes[0].readOnly = false;
+
+			if ( this.hasServerSide ) {
+				this.input.loading.end();
 			}
 		} );
 };
-
-AdvancedReporting.prototype.switchButtonsState = function( force = false ) {
-	const switchButtons = this.input.root.rootNode.querySelectorAll(
-		'.jet-form-builder__next-page, .jet-form-builder__prev-page, .jet-form-builder__action-button',
-	);
-
-	for ( const switchButton of switchButtons ) {
-
-		if ( !switchButton.classList.contains('jet-form-builder__submit') && !this.isNodeBelongThis( switchButton ) ) {
-			continue;
-		}
-
-		switchButton.disabled = force === true || this.errors.length > 0;
-	}
-}
 
 AdvancedReporting.prototype.isNodeBelongThis = function( node ) {
 	const parentPage = node.closest( '.jet-form-builder-page' );
@@ -302,8 +292,6 @@ AdvancedReporting.prototype.validateOnChangeState = function () {
 		return Promise.resolve();
 	}
 
-	this.switchButtonsState( true );
-
 	this.input.getContext().setSilence( false );
 
 	this.isProcess      = true;
@@ -315,8 +303,6 @@ AdvancedReporting.prototype.validateOnChangeState = function () {
 				this.skipServerSide = true;
 				this.hasServerSide  = false;
 				this.isProcess      = null;
-
-				this.switchButtonsState();
 			},
 		);
 	} );

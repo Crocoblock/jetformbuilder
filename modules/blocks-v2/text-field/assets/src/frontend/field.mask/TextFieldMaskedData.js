@@ -21,15 +21,6 @@ function TextFieldMaskedData() {
 	this.addListeners = function () {
 		const [ node ] = this.nodes;
 
-		node.addEventListener( 'blur', () => {
-			const { value } = node;
-
-			this.value.current = node.inputmask.unmaskedvalue();
-			this.reporting.validateOnBlur();
-
-			this.silenceSet( value );
-		} );
-
 		this.enterKey = new ReactiveHook();
 		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
 	};
@@ -39,7 +30,7 @@ function TextFieldMaskedData() {
 
 		this.value.current = node.inputmask.unmaskedvalue();
 
-		this.debouncedReport();
+		this.reporting.validateOnBlur();
 
 		this.silenceSet( value );
 	};

@@ -16,6 +16,7 @@ function FormSubmit( observable ) {
 	this.lockState.make();
 	this.autoFocus = window.JetFormBuilderSettings?.auto_focus;
 
+	this.canSubmitForm = false;
 	/**
 	 * @param event {Event}
 	 */
@@ -26,17 +27,22 @@ function FormSubmit( observable ) {
 	};
 
 	this.submit = function () {
-		this.observable.inputsAreValid().then( () => {
-			this.clearErrors();
-			this.toggle();
+		if ( false === this.canSubmitForm ) {
+			this.canSubmitForm = true;
 
-			this.submitter.submit();
-		} ).catch( () => {
-			// eslint-disable-next-line no-unused-expressions
-			this.autoFocus && focusOnInvalidInput(
-				populateInputs( this.observable.getInputs() ),
-			);
-		} );
+			this.observable.inputsAreValid().then( () => {
+				this.clearErrors();
+				this.toggle();
+				this.submitter.submit();
+			} ).catch( () => {
+				// eslint-disable-next-line no-unused-expressions
+				this.autoFocus && focusOnInvalidInput(
+					populateInputs( this.observable.getInputs() ),
+				);
+			} ).finally( () => {
+				this.canSubmitForm = false;
+			} );
+		}
 	};
 
 	this.clearErrors = function () {

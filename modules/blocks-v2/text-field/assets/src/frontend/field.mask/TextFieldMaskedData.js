@@ -30,7 +30,9 @@ function TextFieldMaskedData() {
 
 		this.value.current = node.inputmask.unmaskedvalue();
 
-		this.reporting.validateOnBlur();
+		setTimeout( () => {
+			this.reporting.validateOnBlur();
+		}, 0 );
 
 		this.silenceSet( value );
 	};

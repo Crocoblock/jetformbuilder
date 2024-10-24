@@ -211,6 +211,8 @@ AdvancedReporting.prototype.makeValid = function () {
 
 AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 
+	this.switchButtonsState( true );
+
 	const callback = () => {
 		this.input.getContext().setSilence( false );
 
@@ -229,6 +231,8 @@ AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 
 				this.valuePrev = null;
 				queue.forEach( current => current() );
+
+				this.switchButtonsState();
 			} );
 	};
 
@@ -259,9 +263,7 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 	this.isProcess      = true;
 	this.skipServerSide = false;
 
-	if ( this.hasServerSide ) {
-		this.input.loading.start();
-	}
+	this.switchButtonsState( true );
 
 	this.input.getContext().setSilence( false );
 
@@ -275,11 +277,34 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 
 			this.input.nodes[0].readOnly = false;
 
-			if ( this.hasServerSide ) {
-				this.input.loading.end();
+			if ( !signal?.aborted ) {
+				this.switchButtonsState();
 			}
 		} );
 };
+
+AdvancedReporting.prototype.switchButtonsState = function( force = false ) {
+	const parentPage = this.input.nodes[0].closest( '.jet-form-builder-page' );
+
+	if ( parentPage ) {
+		const switchButtons = parentPage.querySelectorAll(
+			'.jet-form-builder__next-page, .jet-form-builder__prev-page, .jet-form-builder__action-button'
+		);
+
+		for ( const switchButton of switchButtons ) {
+
+			if ( !switchButton.classList.contains( 'jet-form-builder__submit' ) && !this.isNodeBelongThis( switchButton ) ) {
+				continue;
+			}
+
+			if ( !switchButton.classList.contains('jet-form-builder__prev-page') ) {
+				switchButton.disabled = force === true || !this.validityState.current;
+			} else {
+				switchButton.disabled = force;
+			}
+		}
+	}
+}
 
 AdvancedReporting.prototype.isNodeBelongThis = function( node ) {
 	const parentPage = node.closest( '.jet-form-builder-page' );
@@ -290,6 +315,14 @@ AdvancedReporting.prototype.isNodeBelongThis = function( node ) {
 AdvancedReporting.prototype.validateOnChangeState = function () {
 	if ( this.isProcess ) {
 		return Promise.resolve();
+	}
+
+	this.switchButtonsState( true );
+
+	//add field validation with mask on enter
+	if ( this.input.maskValidation ) {
+		this.validateOnChange();
+		this.input.maskValidation();
 	}
 
 	this.input.getContext().setSilence( false );
@@ -303,6 +336,10 @@ AdvancedReporting.prototype.validateOnChangeState = function () {
 				this.skipServerSide = true;
 				this.hasServerSide  = false;
 				this.isProcess      = null;
+
+				this.input.nodes[0].readOnly = false;
+
+				this.switchButtonsState();
 			},
 		);
 	} );

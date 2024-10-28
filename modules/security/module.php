@@ -40,22 +40,22 @@ class Module implements
 	}
 
 	public function on_install() {
-		$this->spam_statuses = apply_filters(
-			'jet-form-builder/security/spam-statuses',
-			array()
-		);
-
 		jet_form_builder()->get_modules()->install( new Csrf\Module() );
 		jet_form_builder()->get_modules()->install( new Honeypot\Module() );
 		jet_form_builder()->get_modules()->install( new Wp_Nonce\Module() );
+
+        $this->spam_statuses = apply_filters(
+            'jet-form-builder/security/spam-statuses',
+            array()
+        );
 	}
 
 	public function on_uninstall() {
-		$this->spam_statuses = array();
-
 		jet_form_builder()->get_modules()->uninstall( new Csrf\Module() );
 		jet_form_builder()->get_modules()->uninstall( new Honeypot\Module() );
 		jet_form_builder()->get_modules()->uninstall( new Wp_Nonce\Module() );
+
+        $this->spam_statuses = array();
 	}
 
 	public function condition(): bool {

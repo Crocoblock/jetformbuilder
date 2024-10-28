@@ -16,7 +16,7 @@ function WebhookTimeoutRow( { settings, onChangeSettingObj } ) {
 		<TextControl
 			id={ id }
 			type="number"
-			min={0}
+			min={0}  
 			value={ settings.webhook_timeout ?? 10}
 			onChange={ webhook_timeout => onChangeSettingObj(
 				{ webhook_timeout },

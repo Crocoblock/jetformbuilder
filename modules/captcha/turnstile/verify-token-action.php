@@ -40,7 +40,7 @@ class Verify_Token_Action extends Base_Gateway_Action implements
 		}
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
-		throw new Gateway_Exception( 'captcha_failed', $response, $this->get_request_args() );
+		throw new Gateway_Exception( Module::SPAM_EXCEPTION, $response, $this->get_request_args() );
 	}
 
 	/**
@@ -59,7 +59,7 @@ class Verify_Token_Action extends Base_Gateway_Action implements
 			return;
 		}
 
-		throw new Gateway_Exception( 'captcha_failed', 'Empty solution. Spammer detected' );
+		throw new Gateway_Exception( Module::SPAM_EXCEPTION, 'Empty solution. Spammer detected' );
 	}
 
 	public function set_secret( string $secret ): Verify_Token_Action {

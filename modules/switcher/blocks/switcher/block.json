@@ -96,6 +96,10 @@
 				"rich-no-preset": true
 			}
 		},
+		"class_name": {
+			"type": "string",
+			"default": ""
+		},
 		"className": {
 			"type": "string",
 			"default": ""

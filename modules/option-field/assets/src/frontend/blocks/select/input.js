@@ -6,11 +6,27 @@ const {
 function MultiSelectData() {
 	InputData.call( this );
 
+	function sanitizeValue( value ) {
+		if ( Array.isArray( value ) ) {
+
+			if ( value.length === 1 && value[0] && value[0].includes(',') ) {
+				value = value[0].split(',')
+			}
+			return value;
+		}
+
+		return [ value ].filter(
+			Boolean,
+		);
+	}
+
 	this.isSupported    = function ( node ) {
 		return 'select-multiple' === node?.type;
 	};
 	this.addListeners   = function () {
 		this.sanitize( value => Array.isArray( value ) ? value : [ value ] );
+
+		this.sanitize( sanitizeValue );
 
 		const [ node ] = this.nodes;
 

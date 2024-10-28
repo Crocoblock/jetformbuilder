@@ -11,10 +11,9 @@ const { getParsedName } = JetFormBuilderFunctions;
 function sanitizeValue( value ) {
 	if ( Array.isArray( value ) ) {
 
-		if ( value[0] && value[0].includes(',') ) {
+		if ( value.length === 1 && value[0] && value[0].includes(',') ) {
 			value = value[0].split(',')
 		}
-
 		return value;
 	}
 

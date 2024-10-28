@@ -11,9 +11,15 @@ const { getParsedName } = JetFormBuilderFunctions;
 function sanitizeValue( value ) {
 	if ( Array.isArray( value ) ) {
 
+		/**
+		 * convert string to array for setting dynamic multi value
+		 *
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/8509
+		 */
 		if ( value.length === 1 && value[0] && value[0].includes(',') ) {
 			value = value[0].split(',')
 		}
+
 		return value;
 	}
 

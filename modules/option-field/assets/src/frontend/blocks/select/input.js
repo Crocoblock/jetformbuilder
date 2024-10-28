@@ -26,6 +26,11 @@ function MultiSelectData() {
 	this.addListeners   = function () {
 		this.sanitize( value => Array.isArray( value ) ? value : [ value ] );
 
+		/**
+		 * convert string to array for setting dynamic multi value
+		 *
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/8509
+		 */
 		this.sanitize( sanitizeValue );
 
 		const [ node ] = this.nodes;

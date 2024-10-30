@@ -15,7 +15,7 @@ function FormSubmit( observable ) {
 	this.lockState  = new LoadingReactiveVar( false );
 	this.lockState.make();
 	this.autoFocus = window.JetFormBuilderSettings?.auto_focus;
-
+	this.canSubmitForm = true;
 	/**
 	 * @param event {Event}
 	 */
@@ -26,17 +26,23 @@ function FormSubmit( observable ) {
 	};
 
 	this.submit = function () {
-		this.observable.inputsAreValid().then( () => {
-			this.clearErrors();
-			this.toggle();
+		if ( true === this.canSubmitForm ) {
+			this.canSubmitForm         = false;
+			this.canTriggerEnterSubmit = false;
 
-			this.submitter.submit();
-		} ).catch( () => {
-			// eslint-disable-next-line no-unused-expressions
-			this.autoFocus && focusOnInvalidInput(
-				populateInputs( this.observable.getInputs() ),
-			);
-		} );
+			this.observable.inputsAreValid().then( () => {
+				this.clearErrors();
+				this.toggle();
+				this.submitter.submit();
+			} ).catch( () => {
+				// eslint-disable-next-line no-unused-expressions
+				this.autoFocus && focusOnInvalidInput(
+					populateInputs( this.observable.getInputs() ),
+				);
+			} ).finally( () => {
+				this.canTriggerEnterSubmit = true;
+			} );
+		}
 	};
 
 	this.clearErrors = function () {
@@ -68,6 +74,10 @@ function FormSubmit( observable ) {
 		this.lockState.watch( () => {
 			for ( const button of buttons ) {
 				button.disabled = this.lockState.current;
+			}
+
+			if ( false === this.lockState.current ) {
+				this.canSubmitForm = true;
 			}
 		} );
 	};

@@ -62,16 +62,21 @@ AdvancedReporting.prototype.isSupported = function ( node, input ) {
 	return !!inherit?.length;
 };
 
-AdvancedReporting.prototype.getErrorsRaw = async function ( promises ) {
+AdvancedReporting.prototype.getErrorsRaw = async function ( promises, signal = null ) {
 	if ( this.hasServerSide ) {
 		this.input.loading.start();
 	}
 
-	const errors   = await allRejected( promises );
+	let errors = await allRejected( promises );
+
 	this.valuePrev = this.input.getValue();
 
 	if ( this.hasServerSide ) {
 		this.input.loading.end();
+	}
+
+	if ( signal?.aborted ) {
+		errors = [];
 	}
 
 	return errors;
@@ -205,6 +210,9 @@ AdvancedReporting.prototype.makeValid = function () {
 };
 
 AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
+
+	this.switchButtonsState( true );
+
 	const callback = () => {
 		this.input.getContext().setSilence( false );
 
@@ -218,11 +226,14 @@ AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 				this.queue  = [];
 
 				if ( !queue.length ) {
+					this.switchButtonsState();
 					return;
 				}
 
 				this.valuePrev = null;
 				queue.forEach( current => current() );
+
+				this.switchButtonsState();
 			} );
 	};
 
@@ -242,7 +253,7 @@ AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 	callback();
 };
 
-AdvancedReporting.prototype.validateOnBlur = function () {
+AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 	/**
 	 * @see https://github.com/Crocoblock/issues-tracker/issues/1766
 	 */
@@ -253,22 +264,85 @@ AdvancedReporting.prototype.validateOnBlur = function () {
 	this.isProcess      = true;
 	this.skipServerSide = false;
 
+	this.switchButtonsState( true );
+	this.canSubmitForm( false );
+
 	this.input.getContext().setSilence( false );
 
-	this.validate().
+	this.validate( signal ).
 		then( () => {} ).
 		catch( () => {} ).
 		finally( () => {
 			this.skipServerSide = true;
 			this.hasServerSide  = false;
 			this.isProcess      = null;
+
+			this.input.nodes[0].readOnly = false;
+
+			if ( !signal?.aborted ) {
+				this.switchButtonsState();
+				this.canSubmitForm();
+			}
 		} );
 };
+
+AdvancedReporting.prototype.switchButtonsState = function( force = false ) {
+	const parentPage = this.input.nodes[0].closest( '.jet-form-builder-page' );
+
+	if ( parentPage ) {
+		const switchButtons = parentPage.querySelectorAll(
+			'.jet-form-builder__next-page, .jet-form-builder__prev-page, .jet-form-builder__action-button'
+		);
+
+		for ( const switchButton of switchButtons ) {
+
+			if ( !switchButton.classList.contains( 'jet-form-builder__submit' ) && !this.isNodeBelongThis( switchButton ) ) {
+				continue;
+			}
+
+			if ( !switchButton.classList.contains('jet-form-builder__prev-page') ) {
+				switchButton.disabled = force === true || !this.validityState.current;
+			} else {
+				switchButton.disabled = force;
+			}
+		}
+	}
+}
+
+AdvancedReporting.prototype.canTriggerEnterSubmit = function( canTrigger = true ) {
+	const form = this.input.root.form;
+
+	if ( form ) {
+		form.canTriggerEnterSubmit = canTrigger;
+	}
+}
+
+AdvancedReporting.prototype.canSubmitForm = function( canSubmit = true ) {
+	const form = this.input.root.form;
+
+	if ( form ) {
+		form.canSubmitForm = canSubmit;
+	}
+}
+
+AdvancedReporting.prototype.isNodeBelongThis = function( node ) {
+	const parentPage = node.closest( '.jet-form-builder-page' );
+
+	return parentPage ? !parentPage.classList.contains( 'jet-form-builder-page--hidden' ) : false;
+}
 
 AdvancedReporting.prototype.validateOnChangeState = function () {
 	if ( this.isProcess ) {
 		return Promise.resolve();
 	}
+
+	this.switchButtonsState( true );
+	this.canTriggerEnterSubmit( false );
+
+	if ( this.input.maskValidation ) {
+		this.input.changeStateMaskValidation();
+	}
+
 	this.isProcess      = true;
 	this.skipServerSide = false;
 
@@ -278,6 +352,11 @@ AdvancedReporting.prototype.validateOnChangeState = function () {
 				this.skipServerSide = true;
 				this.hasServerSide  = false;
 				this.isProcess      = null;
+
+				this.input.nodes[0].readOnly = false;
+
+				this.switchButtonsState();
+				this.canTriggerEnterSubmit();
 			},
 		);
 	} );

@@ -104,6 +104,9 @@ function InputData() {
 	 * @type {boolean}
 	 */
 	this.isResetCalcValue = true;
+	this.validateTimer    = false;
+	this.stopValidation   = false;
+	this.abortController  = null;
 }
 
 InputData.prototype.attrs = {};
@@ -119,26 +122,15 @@ InputData.prototype.isSupported = function ( node ) {
 InputData.prototype.addListeners = function () {
 	const [ node ] = this.nodes;
 
-	/**
-	 * Related to issue
-	 * @see https://github.com/Crocoblock/issues-tracker/issues/9973#issuecomment-2182625396
-	 */
-	var timer = null;
-
 	node.addEventListener( 'input', event => {
 		this.value.current = event.target.value;
-
-		var _this = this;
-
-		clearTimeout( timer );
-
-		timer = setTimeout( function() {
-			_this.reportOnChange();
-		}, 450 );
 	} );
 
-	node.addEventListener( 'blur', () => {
-		this.reportOnBlur();
+	node.addEventListener( 'blur', () => {} );
+
+	node.addEventListener( 'input', () => {
+		this.reporting.switchButtonsState( true );
+		this.debouncedReport();
 	} );
 
 	/**
@@ -186,12 +178,27 @@ InputData.prototype.onChange     = function ( prevValue ) {
 InputData.prototype.report       = function () {
 	this.reporting.validateOnChange();
 };
-InputData.prototype.reportOnBlur = function () {
-	this.reporting.validateOnBlur();
+InputData.prototype.reportOnBlur = function ( signal = null ) {
+	this.reporting.validateOnBlur( signal );
 };
-InputData.prototype.reportOnChange = function () {
-	this.reporting.validateOnBlur();
-};
+InputData.prototype.debouncedReport = function() {
+	if ( this.validateTimer ) {
+		this.stopValidation = true;
+		clearTimeout( this.validateTimer );
+
+		if ( this.abortController ) {
+            this.abortController.abort();
+        }
+	}
+
+	this.abortController = new AbortController();
+
+    let signal = this.abortController.signal;
+
+	this.validateTimer = setTimeout( () => {
+		this.reportOnBlur( signal );
+	}, 450 );
+}
 /**
  * @param  callable
  * @return {(function(): *|*[])|*}
@@ -271,12 +278,12 @@ InputData.prototype.onObserve = function () {
 	this.getSubmit().submitter.watchReset( () => this.onClear() );
 };
 InputData.prototype.onChangeLoading = function () {
+
 	this.getSubmit().lockState.current = this.loading.current;
 
 	const [ node ] = this.nodes;
 	const wrapper  = node.closest( '.jet-form-builder-row' );
 
-	node.readOnly = this.loading.current;
 	wrapper.classList.toggle( 'is-loading', this.loading.current );
 };
 /**
@@ -414,7 +421,11 @@ InputData.prototype.onEnterKey = function () {
 	const canSubmit = this.enterKey.applyFilters( true );
 
 	if ( canSubmit ) {
-		this.getSubmit().submit();
+		const canTriggerEnterSubmit = this.getSubmit().canTriggerEnterSubmit;
+
+		if ( true === canTriggerEnterSubmit ) {
+			this.getSubmit().submit();
+		}
 	}
 };
 

@@ -294,7 +294,15 @@ PageState.prototype.isFirst = function () {
  */
 PageState.prototype.handleInputEnter = function ( input ) {
 	input?.enterKey?.addFilter( () => {
-		this.changePage().then( () => {} ).catch( () => {} );
+		const form = input.root.form;
+
+		if ( form ) {
+			if ( true === form.canTriggerEnterSubmit ) {
+				this.changePage().then( () => {} ).catch( () => {} );
+			}
+		} else {
+			this.changePage().then( () => {} ).catch( () => {} );
+		}
 
 		// prevent submit
 		return false;

@@ -68,8 +68,8 @@ ReportingInterface.prototype = {
 	 *
 	 * @return {Promise<boolean>}
 	 */
-	async validate () {
-		const errors = await this.getErrors();
+	async validate ( signal = null ) {
+        const errors = await this.getErrors( signal );
 
 		this.validityState.current = !Boolean( errors.length );
 
@@ -96,7 +96,7 @@ ReportingInterface.prototype = {
 	/**
 	 * @return {Promise<Array | *[] | null>}
 	 */
-	async getErrors () {
+	async getErrors ( signal = null ) {
 		if (
 			this.input.loading.current ||
 			this.input?.callable?.lock?.current ||
@@ -105,11 +105,12 @@ ReportingInterface.prototype = {
 			return [];
 		}
 
-		const promises = this.getPromises();
+		const promises = this.getPromises( signal );
 
 		if (
 			!this.hasChangedValue() &&
-			this.promisesCount === promises.length
+			this.promisesCount === promises.length &&
+			!this.input.stopValidation
 		) {
 			return this.errors ?? [];
 		}
@@ -121,7 +122,7 @@ ReportingInterface.prototype = {
 			return this.errors;
 		}
 
-		this.errors = await this.getErrorsRaw( promises );
+		this.errors = await this.getErrorsRaw( promises, signal );
 
 		return this.errors;
 	},
@@ -149,7 +150,7 @@ ReportingInterface.prototype = {
 	clearReport () {
 		throw new Error( 'clearReport is empty' );
 	},
-	getPromises () {
+	getPromises ( signal = null) {
 		const promises = [];
 
 		for ( const restriction of this.restrictions ) {
@@ -159,7 +160,7 @@ ReportingInterface.prototype = {
 			this.beforeProcessRestriction( restriction );
 
 			promises.push( ( resolve, reject ) => {
-				restriction.validatePromise().
+				restriction.validatePromise( signal ).
 					then( () => resolve( restriction ) ).
 					catch( error => reject( [ restriction, error ] ) );
 			} );

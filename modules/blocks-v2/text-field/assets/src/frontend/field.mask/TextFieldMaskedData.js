@@ -21,17 +21,25 @@ function TextFieldMaskedData() {
 	this.addListeners = function () {
 		const [ node ] = this.nodes;
 
-		node.addEventListener( 'blur', () => {
-			const { value } = node;
-
-			this.value.current = node.inputmask.unmaskedvalue();
-			this.reporting.validateOnBlur();
-
-			this.silenceSet( value );
-		} );
-
 		this.enterKey = new ReactiveHook();
 		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
+	};
+	this.maskValidation = function() {
+		const [ node ] = this.nodes;
+		const { value } = node;
+
+		this.value.current = node.inputmask.unmaskedvalue();
+
+		setTimeout( () => {
+			this.reporting.validateOnBlur();
+		}, 0 );
+
+		this.silenceSet( value );
+	};
+	this.changeStateMaskValidation = function() {
+		const [ node ] = this.nodes;
+
+		this.value.current = node.inputmask.unmaskedvalue();
 	};
 	this.setNode      = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
@@ -40,7 +48,11 @@ function TextFieldMaskedData() {
 
 		const inputMaskOpts = this.clearOnSubmit ? { autoUnmask: true } : {};
 
+		inputMaskOpts.oncomplete   = this.maskValidation.bind( this );
+		inputMaskOpts.onincomplete = this.maskValidation.bind( this );
+
 		const options = applyFilters( 'jet.fb.inputmask.options', inputMaskOpts, this );
+
 		jQuery( node ).inputmask( options );
 
 		this.beforeSubmit( this.removeMask.bind( this ) );

@@ -226,6 +226,7 @@ AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
 				this.queue  = [];
 
 				if ( !queue.length ) {
+					this.switchButtonsState();
 					return;
 				}
 
@@ -306,6 +307,14 @@ AdvancedReporting.prototype.switchButtonsState = function( force = false ) {
 	}
 }
 
+AdvancedReporting.prototype.canTriggerEnterSubmit = function( canTrigger = true ) {
+	const form = this.input.root.form;
+
+	if ( form ) {
+		form.canTriggerEnterSubmit = canTrigger;
+	}
+}
+
 AdvancedReporting.prototype.isNodeBelongThis = function( node ) {
 	const parentPage = node.closest( '.jet-form-builder-page' );
 
@@ -318,14 +327,13 @@ AdvancedReporting.prototype.validateOnChangeState = function () {
 	}
 
 	this.switchButtonsState( true );
+	this.canTriggerEnterSubmit( false );
 
-	//add field validation with mask on enter
 	if ( this.input.maskValidation ) {
-		this.validateOnChange();
-		this.input.maskValidation();
+		this.input.changeStateMaskValidation();
 	}
 
-	this.input.getContext().setSilence( false );
+	//this.input.getContext().setSilence( false );
 
 	this.isProcess      = true;
 	this.skipServerSide = false;
@@ -340,6 +348,7 @@ AdvancedReporting.prototype.validateOnChangeState = function () {
 				this.input.nodes[0].readOnly = false;
 
 				this.switchButtonsState();
+				this.canTriggerEnterSubmit();
 			},
 		);
 	} );

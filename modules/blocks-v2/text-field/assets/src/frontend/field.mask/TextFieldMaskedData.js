@@ -36,6 +36,11 @@ function TextFieldMaskedData() {
 
 		this.silenceSet( value );
 	};
+	this.changeStateMaskValidation = function() {
+		const [ node ] = this.nodes;
+
+		this.value.current = node.inputmask.unmaskedvalue();
+	};
 	this.setNode      = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
 

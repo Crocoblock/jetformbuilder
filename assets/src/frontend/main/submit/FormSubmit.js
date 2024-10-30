@@ -28,7 +28,8 @@ function FormSubmit( observable ) {
 
 	this.submit = function () {
 		if ( false === this.canSubmitForm ) {
-			this.canSubmitForm = true;
+			this.canSubmitForm         = true;
+			this.canTriggerEnterSubmit = false;
 
 			this.observable.inputsAreValid().then( () => {
 				this.clearErrors();
@@ -40,7 +41,8 @@ function FormSubmit( observable ) {
 					populateInputs( this.observable.getInputs() ),
 				);
 			} ).finally( () => {
-				this.canSubmitForm = false;
+				this.canSubmitForm         = false;
+				this.canTriggerEnterSubmit = true;
 			} );
 		}
 	};

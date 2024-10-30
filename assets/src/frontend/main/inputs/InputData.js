@@ -428,7 +428,11 @@ InputData.prototype.onEnterKey = function () {
 	const canSubmit = this.enterKey.applyFilters( true );
 
 	if ( canSubmit ) {
-		this.getSubmit().submit();
+		const canTriggerEnterSubmit = this.getSubmit().canTriggerEnterSubmit;
+
+		if ( true === canTriggerEnterSubmit ) {
+			this.getSubmit().submit();
+		}
 	}
 };
 

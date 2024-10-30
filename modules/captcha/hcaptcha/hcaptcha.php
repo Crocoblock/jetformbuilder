@@ -33,7 +33,7 @@ class Hcaptcha extends Base_Captcha_From_Options implements
 			$action->send_request();
 		} catch ( Gateway_Exception $exception ) {
 			throw new Spam_Exception(
-                Module::SPAM_EXCEPTION,
+				Module::SPAM_EXCEPTION,
 				$exception->getMessage(), // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				...$exception->get_additional() // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			);

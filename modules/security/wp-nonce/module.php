@@ -15,15 +15,15 @@ class Module implements Base_Module_It {
 
 	const KEY               = '_wpnonce';
 	const NONCE_ACTION_PREF = 'jet-form-builder-wp-nonce-';
-    const SPAM_EXCEPTION = 'nonce_failed';
+	const SPAM_EXCEPTION    = 'nonce_failed';
 
-    public function __construct() {
-        add_filter('jet-form-builder/security/spam-statuses', array($this, 'add_spam_statuses'));
-    }
-    public function add_spam_statuses($statuses){
-        $statuses[] = self::SPAM_EXCEPTION;
-        return $statuses;
-    }
+	public function __construct() {
+		add_filter( 'jet-form-builder/security/spam-statuses', array( $this, 'add_spam_statuses' ) );
+	}
+	public function add_spam_statuses( $statuses ) {
+		$statuses[] = self::SPAM_EXCEPTION;
+		return $statuses;
+	}
 
 	public function rep_item_id() {
 		return 'wp-nonce';
@@ -102,7 +102,7 @@ class Module implements Base_Module_It {
 	}
 
 	public function handle_messages( array $messages ): array {
-		$messages[self::SPAM_EXCEPTION] = array(
+		$messages[ self::SPAM_EXCEPTION ] = array(
 			'label' => __( 'WP nonce validation failed', 'jet-form-builder' ),
 			'value' => __( 'Invalid nonce', 'jet-form-builder' ),
 		);

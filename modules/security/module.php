@@ -44,10 +44,10 @@ class Module implements
 		jet_form_builder()->get_modules()->install( new Honeypot\Module() );
 		jet_form_builder()->get_modules()->install( new Wp_Nonce\Module() );
 
-        $this->spam_statuses = apply_filters(
-            'jet-form-builder/security/spam-statuses',
-            array()
-        );
+		$this->spam_statuses = apply_filters(
+			'jet-form-builder/security/spam-statuses',
+			array()
+		);
 	}
 
 	public function on_uninstall() {
@@ -55,7 +55,7 @@ class Module implements
 		jet_form_builder()->get_modules()->uninstall( new Honeypot\Module() );
 		jet_form_builder()->get_modules()->uninstall( new Wp_Nonce\Module() );
 
-        $this->spam_statuses = array();
+		$this->spam_statuses = array();
 	}
 
 	public function condition(): bool {

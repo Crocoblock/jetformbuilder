@@ -31,14 +31,14 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		return 'csrf';
 	}
 
-    const SPAM_EXCEPTION = 'csrf_failed';
-    public function __construct() {
-        add_filter('jet-form-builder/security/spam-statuses', array($this, 'add_spam_statuses'));
-    }
-    public function add_spam_statuses($statuses){
-        $statuses[] = self::SPAM_EXCEPTION;
-        return $statuses;
-    }
+	const SPAM_EXCEPTION = 'csrf_failed';
+	public function __construct() {
+		add_filter( 'jet-form-builder/security/spam-statuses', array( $this, 'add_spam_statuses' ) );
+	}
+	public function add_spam_statuses( $statuses ) {
+		$statuses[] = self::SPAM_EXCEPTION;
+		return $statuses;
+	}
 
 	public function condition(): bool {
 		return true;
@@ -100,7 +100,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	}
 
 	public function handle_messages( array $messages ): array {
-		$messages[self::SPAM_EXCEPTION] = array(
+		$messages[ self::SPAM_EXCEPTION ] = array(
 			'label' => __( 'CSRF token validation failed', 'jet-form-builder' ),
 			'value' => __( 'Invalid token', 'jet-form-builder' ),
 		);

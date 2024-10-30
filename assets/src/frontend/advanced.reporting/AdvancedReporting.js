@@ -343,8 +343,6 @@ AdvancedReporting.prototype.validateOnChangeState = function () {
 		this.input.changeStateMaskValidation();
 	}
 
-	//this.input.getContext().setSilence( false );
-
 	this.isProcess      = true;
 	this.skipServerSide = false;
 

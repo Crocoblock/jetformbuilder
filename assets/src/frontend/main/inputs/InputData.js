@@ -284,13 +284,6 @@ InputData.prototype.onChangeLoading = function () {
 	const [ node ] = this.nodes;
 	const wrapper  = node.closest( '.jet-form-builder-row' );
 
-	/* eslint-disable @wordpress/no-global-active-element */
-	// Prevent setting readOnly for currently active element to avoid user distractions.
-	// if ( node !== document.activeElement ) {
-	// 	node.readOnly = this.loading.current;
-	// }
-	/* eslint-enable */
-
 	wrapper.classList.toggle( 'is-loading', this.loading.current );
 };
 /**

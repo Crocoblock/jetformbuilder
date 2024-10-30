@@ -15,8 +15,7 @@ function FormSubmit( observable ) {
 	this.lockState  = new LoadingReactiveVar( false );
 	this.lockState.make();
 	this.autoFocus = window.JetFormBuilderSettings?.auto_focus;
-
-	this.canSubmitForm = false;
+	this.canSubmitForm = true;
 	/**
 	 * @param event {Event}
 	 */
@@ -27,8 +26,8 @@ function FormSubmit( observable ) {
 	};
 
 	this.submit = function () {
-		if ( false === this.canSubmitForm ) {
-			this.canSubmitForm         = true;
+		if ( true === this.canSubmitForm ) {
+			this.canSubmitForm         = false;
 			this.canTriggerEnterSubmit = false;
 
 			this.observable.inputsAreValid().then( () => {
@@ -41,7 +40,6 @@ function FormSubmit( observable ) {
 					populateInputs( this.observable.getInputs() ),
 				);
 			} ).finally( () => {
-				this.canSubmitForm         = false;
 				this.canTriggerEnterSubmit = true;
 			} );
 		}
@@ -76,6 +74,10 @@ function FormSubmit( observable ) {
 		this.lockState.watch( () => {
 			for ( const button of buttons ) {
 				button.disabled = this.lockState.current;
+			}
+
+			if ( false === this.lockState.current ) {
+				this.canSubmitForm = true;
 			}
 		} );
 	};

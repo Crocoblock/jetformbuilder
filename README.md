@@ -4,6 +4,15 @@ Advanced form builder plugin for Gutenberg. Create forms from the ground up, cus
 
 # ChangeLog
 
+## 3.4.3
+* FIX: Server-side callback Validation
+* FIX: Dynamic value synchronization between two checkbox fields
+* FIX: Form records save when CAPTCHA fails with toggle disabled
+* FIX: `Remove mask on submit` option
+* FIX: Issue with removing repeater fields with preset when data becomes empty
+* FIX: Error when editing Mailchimp actions
+* ADD: Webhook `Timeout in seconds` setting
+
 ## 3.4.2
 * FIX: Sanitization of Form Field Names
 * FIX: Issue with saving values in Repeater Fields

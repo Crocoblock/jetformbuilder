@@ -266,6 +266,7 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 
 	this.switchButtonsState( true );
 	this.canSubmitForm( false );
+	this.canTriggerEnterSubmit( false );
 
 	this.input.getContext().setSilence( false );
 
@@ -282,6 +283,10 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 			if ( !signal?.aborted ) {
 				this.switchButtonsState();
 				this.canSubmitForm();
+
+				if ( this.validityState.current ) {
+					this.canTriggerEnterSubmit();
+				}
 			}
 		} );
 };

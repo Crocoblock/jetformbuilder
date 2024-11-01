@@ -289,7 +289,7 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 AdvancedReporting.prototype.switchButtonsState = function( force = false ) {
 	const parentPage = this.input.nodes[0].closest( '.jet-form-builder-page' );
 
-	if ( parentPage ) {
+	if ( parentPage && !this.input.getContext().silence ) {
 		const switchButtons = parentPage.querySelectorAll(
 			'.jet-form-builder__next-page, .jet-form-builder__prev-page, .jet-form-builder__action-button'
 		);

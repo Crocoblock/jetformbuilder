@@ -42,6 +42,7 @@ function FormSubmit( observable ) {
 				);
 			} ).finally( () => {
 				this.canTriggerEnterSubmit = true;
+				this.canSubmitForm         = true;
 			} );
 		}
 	};

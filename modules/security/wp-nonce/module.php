@@ -95,6 +95,7 @@ class Module implements Base_Module_It {
 		$nonce = $request[ self::KEY ] ?? '';
 
 		if ( ! $this->verify( $nonce ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Spam_Exception( self::SPAM_EXCEPTION );
 		}
 

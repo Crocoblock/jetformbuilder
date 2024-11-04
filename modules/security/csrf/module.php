@@ -82,6 +82,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 		Csrf_Token_Model::clear();
 
 		if ( ! Csrf_Tools::verify( $this->token, $this->client ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Spam_Exception( self::SPAM_EXCEPTION );
 		}
 

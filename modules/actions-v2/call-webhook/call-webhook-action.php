@@ -48,7 +48,7 @@ class Call_Webhook_Action extends Base {
 			'body' => $request,
 		);
 
-		if ( $webhook_timeout !== false ) {
+		if ( false !== $webhook_timeout ) {
 			$args['timeout'] = $webhook_timeout;
 		}
 

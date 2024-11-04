@@ -22,6 +22,7 @@ class Verify_Token_Action extends BaseVerify {
 			return $response;
 		}
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		throw new Gateway_Exception( Module::SPAM_EXCEPTION );
 	}
 

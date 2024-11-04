@@ -102,6 +102,7 @@ class Module implements Base_Module_It {
 		}
 
 		if ( ! empty( $request[ self::FIELD ] ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Spam_Exception( self::SPAM_EXCEPTION );
 		}
 

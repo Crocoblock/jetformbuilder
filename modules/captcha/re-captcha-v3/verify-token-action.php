@@ -55,6 +55,7 @@ class Verify_Token_Action extends Base_Gateway_Action implements
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		throw new Gateway_Exception( Module::SPAM_EXCEPTION, 'Empty token. Spammer detected' );
 	}
 

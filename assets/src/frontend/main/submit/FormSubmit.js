@@ -14,8 +14,9 @@ function FormSubmit( observable ) {
 	this.observable = observable;
 	this.lockState  = new LoadingReactiveVar( false );
 	this.lockState.make();
-	this.autoFocus = window.JetFormBuilderSettings?.auto_focus;
-	this.canSubmitForm = true;
+	this.autoFocus             = window.JetFormBuilderSettings?.auto_focus;
+	this.canSubmitForm         = true;
+	this.canTriggerEnterSubmit = true;
 	/**
 	 * @param event {Event}
 	 */

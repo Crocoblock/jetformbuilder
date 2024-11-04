@@ -129,7 +129,10 @@ InputData.prototype.addListeners = function () {
 	node.addEventListener( 'blur', () => {} );
 
 	node.addEventListener( 'input', () => {
-		this.reporting.switchButtonsState( true );
+		if ( this.reporting && 'function' === typeof this.reporting.switchButtonsState ) {
+			this.reporting.switchButtonsState( true );
+		}
+
 		this.debouncedReport();
 	} );
 

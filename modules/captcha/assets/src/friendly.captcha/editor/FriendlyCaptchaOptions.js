@@ -9,6 +9,10 @@ const {
 	      useCaptchaProvider,
       } = JetFBHooks;
 
+const {
+		useEffect,
+	  } = wp.element;
+
 const { globalTab } = JetFBActions;
 
 const currentTab = globalTab( {
@@ -23,6 +27,16 @@ function FriendlyCaptchaOptions() {
 	const currentArgs = providerArgs.use_global
 	                    ? currentTab
 	                    : providerArgs;
+
+	useEffect( () => {
+		setProviderArgs(
+			{
+				key: currentArgs.key,
+				secret: currentArgs.secret,
+				threshold: currentArgs.threshold
+			}
+		);
+	}, [ providerArgs.use_global ] );
 
 	return <>
 		<ToggleControl

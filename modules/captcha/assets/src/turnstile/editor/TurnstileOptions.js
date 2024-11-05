@@ -9,6 +9,10 @@ const {
 	      useCaptchaProvider,
       } = JetFBHooks;
 
+const {
+		useEffect,
+	  } = wp.element;
+
 const currentTab = JetFBActions.globalTab( {
 	slug: 'captcha-tab',
 	element: 'turnstile',
@@ -21,6 +25,16 @@ function TurnstileOptions() {
 	const currentArgs = providerArgs.use_global
 	                    ? currentTab
 	                    : providerArgs;
+
+	useEffect( () => {
+		setProviderArgs(
+			{
+				key: currentArgs.key,
+				secret: currentArgs.secret,
+				threshold: currentArgs.threshold
+			}
+		);
+	}, [ providerArgs.use_global ] );
 
 	return <>
 		<ToggleControl

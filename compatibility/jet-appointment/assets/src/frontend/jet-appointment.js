@@ -65,7 +65,13 @@ function AppointmentProvider() {
 	};
 
 	this.checkIsRequired = function () {
-		return this.providerArgs?.args_str?.includes( 'required' );
+		if ( this.providerArgs?.args_str ) {
+			return this.providerArgs?.args_str?.includes( 'required' );
+		} else {
+			const [ node ] = this.nodes;
+
+			return node.hasAttribute('required');
+		}
 	};
 
 	this.addListeners = function () {
@@ -116,6 +122,8 @@ function AppointmentProvider() {
 
 		this.callable = null;
 	};
+
+	this.reQueryValue = function () {};
 }
 
 AppointmentInput.prototype    = Object.create( InputData.prototype );

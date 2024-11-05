@@ -1,8 +1,12 @@
-# About
+## About
 
 Advanced form builder plugin for Gutenberg. Create forms from the ground up, customize the existing ones, and style them up – all in one editor.
 
-# ChangeLog
+## How can I report security bugs?
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
+
+## ChangeLog
 
 ## 3.4.3
 * FIX: Server-side callback Validation

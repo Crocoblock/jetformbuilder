@@ -95,6 +95,10 @@ class Form extends Base {
 	 * @return false|string [type]             [description]
 	 */
 	public function render_form( array $attrs, $content = null, $wp_block = null ) {
+		if ( ! empty( $attrs['form_id_custom'] ) ) {
+			$attrs['form_id'] = $attrs['form_id_custom'];
+		}
+
 		$form_id = absint( $attrs['form_id'] ?? 0 );
 
 		if ( ! $form_id ) {

@@ -54,7 +54,17 @@ class Module implements
 			$name = $attrs['name'];
 
 			$context = $wp_block->context ?? '';
+
 			if ( $context ) {
+
+                /**
+                 * do nothing if context is jet-forms/conditional-block--name
+                 * @link https://github.com/Crocoblock/issues-tracker/issues/12874
+                 */
+                if ( isset( $context['jet-forms/conditional-block--name'] ) ) {
+                    return $output;
+                }
+
 				$context_name = $context['jet-forms/repeater-field--name'] ?? '';
 				$context_index = $context['jet-forms/repeater-row--current-index'] ?? '';
 				if ( '' !== $context_name ) {
@@ -67,7 +77,7 @@ class Module implements
 				$output .= "<div class='jet-form-builder__uniq-name-error' style='color:red;font-size: 12px;'>You already have field < " . esc_attr( $attrs['name'] ) . ' > in this ' . $parent . '. Please rename current field to avoid form processing errors.</div>';
 
 			} else {
-				$this->fields_stack[] = $name;
+			    $this->fields_stack[] = $name;
 			}
 		}
 

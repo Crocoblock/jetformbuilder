@@ -112,6 +112,8 @@
 	"usesContext": [
 		"jet-forms/repeater-field--name",
 		"jet-forms/repeater-row--default",
-		"jet-forms/repeater-row--current-index"
+		"jet-forms/repeater-row--current-index",
+		"jet-forms/conditional-block--name",
+		"jet-forms/conditional-block--last_page_name"
 	]
 }

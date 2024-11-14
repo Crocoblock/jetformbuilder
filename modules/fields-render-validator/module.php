@@ -39,32 +39,33 @@ class Module implements
 	protected $fields_stack = array();
 
 	public function init_hooks() {
-	    add_filter( 'register_block_type_args', array($this, 'set_uses_context'), 10, 2);
+		add_filter( 'register_block_type_args', array( $this, 'set_uses_context' ), 10, 2 );
 
 		add_filter( 'jet-form-builder/after-start-form', array( $this, 'reset_stack' ), 0 );
 		add_filter( 'jet-form-builder/after-render-field', array( $this, 'update_stack' ), 0, 5 );
 	}
 
 
-    /**
-     * Set default context for all form elements jet-forms/conditional-block--name
-     * @link https://github.com/Crocoblock/issues-tracker/issues/12874
-     */
-	public function set_uses_context($args, $block_name) {
-	    if (
-	        false !== strpos( $block_name, 'jet-forms/' ) &&
-            $block_name !== 'jet-forms/conditional-block'
-        ) {
-	        if ( empty( $args['uses_context'] ) ) {
-	            $args['uses_context'] = [];
-            }
-	        $args['uses_context'] = array_merge(
-	            $args['uses_context'],
-                ['jet-forms/conditional-block--name','jet-forms/conditional-block--last_page_name']
-            );
-        }
-        return $args;
-    }
+	/**
+	 * Set default context for all form elements jet-forms/conditional-block--name
+	 *
+	 * @link https://github.com/Crocoblock/issues-tracker/issues/12874
+	 */
+	public function set_uses_context( $args, $block_name ) {
+		if (
+			false !== strpos( $block_name, 'jet-forms/' ) &&
+			'jet-forms/conditional-block' !== $block_name
+		) {
+			if ( empty( $args['uses_context'] ) ) {
+				$args['uses_context'] = array();
+			}
+			$args['uses_context'] = array_merge(
+				$args['uses_context'],
+				array( 'jet-forms/conditional-block--name', 'jet-forms/conditional-block--last_page_name' )
+			);
+		}
+		return $args;
+	}
 
 	public function reset_stack( string $html ): string {
 		$this->fields_stack = array();
@@ -78,22 +79,24 @@ class Module implements
 
 			$context = $wp_block->context ?? '';
 
-            /**
-             * do nothing if field_name is conditional-block
-             * @link https://github.com/Crocoblock/issues-tracker/issues/12874
-             */
-            if ( $field_name === 'conditional-block' ) {
-                return $output;
-            }
+			/**
+			 * do nothing if field_name is conditional-block
+			 *
+			 * @link https://github.com/Crocoblock/issues-tracker/issues/12874
+			 */
+			if ( 'conditional-block' === $field_name ) {
+				return $output;
+			}
 
 			if ( $context ) {
-                /**
-                 * do nothing if context is jet-forms/conditional-block--name
-                 * @link https://github.com/Crocoblock/issues-tracker/issues/12874
-                 */
-                if ( isset( $context['jet-forms/conditional-block--name'] ) ) {
-                    return $output;
-                }
+				/**
+				 * do nothing if context is jet-forms/conditional-block--name
+				 *
+				 * @link https://github.com/Crocoblock/issues-tracker/issues/12874
+				 */
+				if ( isset( $context['jet-forms/conditional-block--name'] ) ) {
+					return $output;
+				}
 				$context_name = $context['jet-forms/repeater-field--name'] ?? '';
 				$context_index = $context['jet-forms/repeater-row--current-index'] ?? '';
 				if ( '' !== $context_name ) {
@@ -105,9 +108,8 @@ class Module implements
 				$parent = $context ? 'repeater' : 'form';
 				$output .= "<div class='jet-form-builder__uniq-name-error' style='color:red;font-size: 12px;'>You already have field < " . esc_attr( $attrs['name'] ) . ' > in this ' . $parent . '. Please rename current field to avoid form processing errors.</div>';
 			} else {
-			    $this->fields_stack[] = $name;
+				$this->fields_stack[] = $name;
 			}
-
 		}
 
 		return $output;

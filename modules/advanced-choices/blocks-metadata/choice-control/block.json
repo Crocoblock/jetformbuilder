@@ -80,8 +80,6 @@
 		"jet-forms/choices-field--raw-name",
 		"jet-forms/choices-field--default",
 		"jet-forms/choice--value",
-		"jet-forms/choice--calc_value",
-		"jet-forms/conditional-block--name",
-		"jet-forms/conditional-block--last_page_name"
+		"jet-forms/choice--calc_value"
 	]
 }

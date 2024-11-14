@@ -58,8 +58,5 @@
 			"type": "string",
 			"default": ""
 		}
-	},
-	"usesContext": [
-		"jet-forms/conditional-block--name"
-	]
+	}
 }

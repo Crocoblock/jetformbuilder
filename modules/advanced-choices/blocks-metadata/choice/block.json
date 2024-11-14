@@ -77,8 +77,6 @@
 		"jet-forms/choices-field--required",
 		"jet-forms/choices-field--default",
 		"jet-forms/choices-field--name",
-		"jet-forms/choices-field--raw-name",
-		"jet-forms/conditional-block--name",
-		"jet-forms/conditional-block--last_page_name"
+		"jet-forms/choices-field--raw-name"
 	]
 }

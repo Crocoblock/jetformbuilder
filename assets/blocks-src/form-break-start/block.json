@@ -26,8 +26,5 @@
 			"type": "boolean",
 			"default": false
 		}
-	},
-	"usesContext": [
-		"jet-forms/conditional-block--name"
-	]
+	}
 }

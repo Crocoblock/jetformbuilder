@@ -33,6 +33,15 @@ class Conditional_Block extends Base {
 		return 'conditional-block';
 	}
 
+	public function __construct() {
+		/**
+		 * Set default context for all form elements jet-forms/conditional-block--name
+		 *
+		 * @link https://github.com/Crocoblock/issues-tracker/issues/12874
+		*/
+		add_filter( 'register_block_type_args', array( $this, 'set_uses_context' ), 10, 2 );
+	}
+
 	public function get_label_selector() {
 		return '__label';
 	}
@@ -223,5 +232,21 @@ class Conditional_Block extends Base {
 	 */
 	public function get_block_renderer( $wp_block = null ) {
 		return '';
+	}
+
+	public function set_uses_context( $args, $block_name ) {
+		if (
+			false !== strpos( $block_name, 'jet-forms/' ) &&
+			'jet-forms/conditional-block' !== $block_name
+		) {
+			if ( empty( $args['uses_context'] ) ) {
+				$args['uses_context'] = array();
+			}
+			$args['uses_context'] = array_merge(
+				$args['uses_context'],
+				array( 'jet-forms/conditional-block--name', 'jet-forms/conditional-block--last_page_name' )
+			);
+		}
+		return $args;
 	}
 }

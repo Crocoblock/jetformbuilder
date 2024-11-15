@@ -95,8 +95,17 @@ class Form extends Base {
 	 * @return false|string [type]             [description]
 	 */
 	public function render_form( array $attrs, $content = null, $wp_block = null ) {
-		if ( ! empty( $attrs['form_id_custom'] ) ) {
-			$attrs['form_id'] = $attrs['form_id_custom'];
+		if ( ( (int) $attrs['form_id'] <= 0 || 'manual_form_id' === $attrs['form_id'] ) && ! empty( $attrs['form_id_custom'] ) ) {
+			$form_id_custom = $attrs['form_id_custom'];
+
+			$contains_shortcode = Tools::contains_registered_shortcode( $form_id_custom );
+
+			if ( true === $contains_shortcode ) {
+				$shortcode_result = do_shortcode( $form_id_custom );
+				$attrs['form_id'] = $shortcode_result;
+			} else {
+				$attrs['form_id'] = $attrs['form_id_custom'];
+			}
 		}
 
 		$form_id = absint( $attrs['form_id'] ?? 0 );

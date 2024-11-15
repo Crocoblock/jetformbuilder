@@ -129,8 +129,8 @@ class Form extends Base {
 				'label'          => esc_html__( 'Form ID', 'jet-form-builder' ),
 				'type'           => 'text',
 				'default'        => '',
-				'description'    => esc_html__( 'Note: This will override the `Choose Form` field', 'jet-form-builder' ),
 				'hasDynamicData' => true,
+				'required'       => [ 'form_id', '=', 'manual_form_id' ],
 			)
 		);
 

@@ -1134,8 +1134,10 @@ class Form extends Widget_Base implements Widget_Base_It {
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '',
 				'label_block' => false,
-				'description' => __( 'Note: This will override the `Choose Form` field', 'jet-form-builder' ),
 				'dynamic'     => array( 'active' => true ),
+				'condition'   => array(
+					'form_id' => 'manual_form_id',
+				),
 			)
 		);
 

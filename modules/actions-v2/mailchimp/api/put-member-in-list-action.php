@@ -28,13 +28,19 @@ class Put_Member_In_List_Action extends Base_Api_Action implements Subscriber_In
 	}
 
 	public function action_body() {
-		return array(
+		$data = array(
 			'status'        => 'subscribed',
 			'email_address' => $this->get_email_address(),
 			'status_if_new' => $this->get_status_if_new(),
 			'merge_fields'  => $this->get_merge_fields(),
-			'interests'     => $this->get_interests(),
 		);
+
+		$interests = $this->get_interests();
+		if (!empty($interests)) {
+			$data['interests'] = $interests;
+		}
+
+		return $data;
 	}
 
 

@@ -1,3 +1,15 @@
+const waitForEditor = async () => {
+	return new Promise((resolve) => {
+		const interval = setInterval(() => {
+			const postType = wp.data.select('core/editor').getCurrentPostType();
+			if (postType) {
+				clearInterval(interval);
+				resolve();
+			}
+		}, 100);
+	});
+};
+
 const getMeta = () => {
 	const { select } = wp.data;
 	return select( 'core/editor' ).getEditedPostAttribute( 'meta' );
@@ -90,7 +102,9 @@ const migrate = ( gateways, actions ) => {
 	} );
 };
 
-const runEvent = () => {
+const runEvent = async () => {
+	await waitForEditor();
+
 	let gateways = {}, actions = [];
 
 	try {
@@ -112,4 +126,4 @@ const runEvent = () => {
 	editMeta( '_jf_actions', withConditions );
 };
 
-wp.domReady( () => setTimeout( runEvent, 0 ) );
+wp.domReady(() => runEvent());

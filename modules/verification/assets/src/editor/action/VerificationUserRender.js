@@ -237,7 +237,7 @@ provided in this field.`,
 			       help={ __(
 				       `If disabled, a standard verification email will be sent. 
 If enabled, you can create a custom verification email 
-with a separate Send Email action.`,
+with a separate Send Email action. Note: All password-type form fields will be hashed, and their hashed values will be displayed in the email.`,
 				       'jet-form-builder',
 			       ) }
 		       >

@@ -216,11 +216,20 @@ class Controller {
 			$saved = Record_Fields_View::get_request_list( $this->record_id );
 		}
 
+		$exclude_fields = array(
+			'__form_id',
+			'__refer',
+			'__is_ajax',
+			'_jfb_verification_token',
+			'_jfb_verification_url',
+			'_jfb_verification_token_id'
+		);
+
 		foreach ( jet_fb_context()->generate_request() as $field_name => $value ) {
 			if (
 				( empty( $this->settings['save_empty_fields'] ) && Tools::is_empty( $value ) ) ||
 				array_key_exists( $field_name, $saved ) ||
-				jet_fb_context()->is_secure( $field_name )
+				in_array( $field_name, $exclude_fields )
 			) {
 				continue;
 			}
@@ -228,6 +237,10 @@ class Controller {
 			$type          = jet_fb_context()->get_field_type( $field_name );
 			$current_attrs = jet_fb_context()->get_settings( $field_name );
 			$attrs_to_save = $this->get_attrs_by_field_type( $type, $current_attrs );
+
+			if ( 'password' === $current_attrs['field_type'] ) {
+				$value = wp_hash_password( $value );
+			}
 
 			if ( ! is_scalar( $value ) ) {
 				$value = Tools::encode_json( $value );

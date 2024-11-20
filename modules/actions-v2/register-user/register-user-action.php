@@ -135,10 +135,15 @@ class Register_User_Action extends Base {
 		}
 
 		if ( ! empty( $fields_map['confirm_password'] ) ) {
-			$confirm_password = ! empty( $request[ $fields_map['confirm_password'] ] ) ? $request[ $fields_map['confirm_password'] ] : false;
 
-			if ( $confirm_password !== $password ) {
-				throw new Action_Exception( 'password_mismatch' );
+			if ( Tools::is_wp_password_hash( $password ) ) {
+				$confirm_password = $password;
+			} else {
+				$confirm_password = ! empty( $request[ $fields_map['confirm_password'] ] ) ? $request[ $fields_map['confirm_password'] ] : false;
+
+				if ( $confirm_password !== $password ) {
+					throw new Action_Exception( 'password_mismatch' );
+				}
 			}
 		}
 		// password - ok
@@ -193,6 +198,18 @@ class Register_User_Action extends Base {
 		$user_id = wp_insert_user( $userarr );
 
 		if ( ! is_wp_error( $user_id ) ) {
+
+			if ( Tools::is_wp_password_hash( $password ) ) {
+				global $wpdb;
+
+				$wpdb->update(
+					$wpdb->users,
+					array( 'user_pass' => $password ),
+					array( 'ID' => $user_id ),
+					array( '%s' ),
+					array( '%d' )
+				);
+			}
 
 			if ( ! empty( $metadata ) ) {
 				foreach ( $metadata as $meta_key => $meta_value ) {

@@ -237,7 +237,7 @@ provided in this field.`,
 			       help={ __(
 				       `If disabled, a standard verification email will be sent. 
 If enabled, you can create a custom verification email 
-with a separate Send Email action. Note: All password-type form fields will be hashed, and their hashed values will be displayed in the email.`,
+with a separate Send Email action.`,
 				       'jet-form-builder',
 			       ) }
 		       >
@@ -262,7 +262,12 @@ with a separate Send Email action. Note: All password-type form fields will be h
 						       'jet-form-builder' ) }
 				       </Button> }
 			       </Flex>
-		       </ToggleControl> }
+		       </ToggleControl>}
+			   <Flex
+					justify="flex-start"
+					style={ { marginTop: '-2.5em', marginBottom: '1em' } }
+			   ><p style={ { fontSize: '12px', color: 'rgb(117, 117, 117)' } }><b>{ __( 'Note:', 'jet-form-builder' ) }</b> { __( 'All password fields will be hashed. If you include a password field in the email content, the hashed password will be displayed, not the actual value.', 'jet-form-builder' ) }</p>
+			   </Flex>
 		       <BaseControl
 			       label={ __( 'Success Page', 'jet-form-builder' ) }
 			       className="control-flex"

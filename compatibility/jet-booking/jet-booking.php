@@ -70,6 +70,10 @@ class Jet_Booking implements
 		$script_asset = require_once $this->get_dir( 'assets/build/frontend.asset.php' );
 		$deprecated   = jet_form_builder()->module( Deprecated\Module::class );
 
+		if ( true === $script_asset ) {
+			return;
+		}
+
 		array_push(
 			$script_asset['dependencies'],
 			Module::MAIN_SCRIPT_HANDLE,

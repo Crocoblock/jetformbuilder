@@ -225,7 +225,7 @@ class Tools {
 			$prepared_list_for_js = array_merge( $manual_form_option, $prepared_list_for_js );
 		}
 
-		return $prepared_list_for_js;//self::prepare_list_for_js( $posts, 'ID', 'post_title', $for_elementor );
+		return $prepared_list_for_js;
 	}
 
 	/**

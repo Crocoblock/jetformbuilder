@@ -41,9 +41,12 @@ class Fetch_Filters_Endpoint extends Rest_Api_Endpoint_Base {
 			)
 		);
 
-		$forms = array_filter( $forms, function ( $item ) {
-			return $item['value'] !== -1;
-		} );
+		$forms = array_filter(
+			$forms,
+			function ( $item ) {
+				return -1 !== $item['value'];
+			}
+		);
 
 		$forms = array_values( $forms );
 

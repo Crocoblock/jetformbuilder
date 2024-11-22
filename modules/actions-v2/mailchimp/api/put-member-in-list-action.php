@@ -36,7 +36,7 @@ class Put_Member_In_List_Action extends Base_Api_Action implements Subscriber_In
 		);
 
 		$interests = $this->get_interests();
-		if (!empty($interests)) {
+		if ( ! empty( $interests ) ) {
 			$data['interests'] = $interests;
 		}
 

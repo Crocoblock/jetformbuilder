@@ -130,7 +130,7 @@ class Form extends Base {
 				'type'           => 'text',
 				'default'        => '',
 				'hasDynamicData' => true,
-				'required'       => [ 'form_id', '=', 'manual_form_id' ],
+				'required'       => array( 'form_id', '=', 'manual_form_id' ),
 			)
 		);
 

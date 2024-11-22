@@ -222,7 +222,7 @@ class Controller {
 			'__is_ajax',
 			'_jfb_verification_token',
 			'_jfb_verification_url',
-			'_jfb_verification_token_id'
+			'_jfb_verification_token_id',
 		);
 
 		foreach ( jet_fb_context()->generate_request() as $field_name => $value ) {

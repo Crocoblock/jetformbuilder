@@ -660,4 +660,8 @@ class Tools {
 		return false;
 	}
 
+	public static function is_wp_password_hash( $hash ) {
+		return preg_match( '/^\$P\$[A-Za-z0-9\.\/]{31}$/', $hash );
+	}
+
 }

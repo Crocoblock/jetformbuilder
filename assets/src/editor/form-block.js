@@ -59,6 +59,17 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 					} }
 					options={ localize.forms_list }
 				/>
+				{ -1 === attributes.form_id && <>
+					<TextControl
+						label={ __( 'Form ID', 'jet-form-builder' ) }
+						help={ __( 'For a dynamic value, you can use a shortcode.',
+							'jet-form-builder' ) }
+						value={ attributes.form_id_custom }
+						onChange={ val => setAttributes(
+							{ form_id_custom: val },
+						) }
+					/>
+				</> }
 				{ Boolean( attributes.form_id ) && <>
 					<SelectControl
 						label={ __( 'Fields Layout', 'jet-form-builder' ) }

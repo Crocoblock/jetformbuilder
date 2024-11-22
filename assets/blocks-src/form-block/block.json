@@ -23,6 +23,10 @@
 			"type": "number",
 			"default": 0
 		},
+		"form_id_custom": {
+			"type": "string",
+			"default": ""
+		},
 		"submit_type": {
 			"type": "string",
 			"default": ""

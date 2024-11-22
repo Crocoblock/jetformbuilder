@@ -208,7 +208,24 @@ class Tools {
 			)
 		);
 
-		return self::prepare_list_for_js( $posts, 'ID', 'post_title', $for_elementor );
+		$prepared_list_for_js = self::prepare_list_for_js( $posts, 'ID', 'post_title', $for_elementor );
+
+		if ( true === $for_elementor ) {
+			$manual_form_option = array(
+				'manual_form_id' => __( 'Enter Form ID Manually / Dynamically', 'jet-form-builder' ),
+			);
+
+			$prepared_list_for_js = array_replace( $manual_form_option, $prepared_list_for_js );
+		} else {
+			$manual_form_option[] = array(
+				'value' => -1,
+				'label' => __( 'Enter Form ID Manually / Dynamically', 'jet-form-builder' ),
+			);
+
+			$prepared_list_for_js = array_merge( $manual_form_option, $prepared_list_for_js );
+		}
+
+		return $prepared_list_for_js;//self::prepare_list_for_js( $posts, 'ID', 'post_title', $for_elementor );
 	}
 
 	/**
@@ -629,6 +646,18 @@ class Tools {
 
 	public static function is_empty( $value ): bool {
 		return '0' !== $value && 0 !== $value && empty( $value );
+	}
+
+	public static function contains_registered_shortcode( $string ) {
+		global $shortcode_tags;
+
+		foreach ( array_keys( $shortcode_tags ) as $shortcode ) {
+			if ( strpos( $string, "[$shortcode" ) !== false ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

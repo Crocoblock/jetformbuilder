@@ -1128,6 +1128,20 @@ class Form extends Widget_Base implements Widget_Base_It {
 		);
 
 		$this->add_control(
+			'form_id_custom',
+			array(
+				'label'       => __( 'Form ID', 'jet-form-builder' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => '',
+				'label_block' => false,
+				'dynamic'     => array( 'active' => true ),
+				'condition'   => array(
+					'form_id' => 'manual_form_id',
+				),
+			)
+		);
+
+		$this->add_control(
 			'fields_layout',
 			array(
 				'label'   => __( 'Fields Layout', 'jet-form-builder' ),

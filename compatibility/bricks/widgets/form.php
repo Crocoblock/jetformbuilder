@@ -123,6 +123,18 @@ class Form extends Base {
 		);
 
 		$this->register_jet_control(
+			'form_id_custom',
+			array(
+				'tab'            => 'content',
+				'label'          => esc_html__( 'Form ID', 'jet-form-builder' ),
+				'type'           => 'text',
+				'default'        => '',
+				'hasDynamicData' => true,
+				'required'       => [ 'form_id', '=', 'manual_form_id' ],
+			)
+		);
+
+		$this->register_jet_control(
 			'fields_layout',
 			array(
 				'tab'     => 'content',
@@ -2594,7 +2606,7 @@ class Form extends Base {
 		$settings = $this->parse_jet_render_attributes( $this->get_jet_settings() );
 
 		// STEP: Form field is empty: Show placeholder text
-		if ( empty( $settings['form_id'] ) ) {
+		if ( empty( $settings['form_id'] ) && empty( $settings['form_id_custom'] ) ) {
 			return $this->render_element_placeholder(
 				array(
 					'title' => esc_html__( 'Please select form to show.', 'jet-form-builder' ),
@@ -2606,6 +2618,10 @@ class Form extends Base {
 
 		/** @var Blocks\Module $blocks */
 		$blocks = jet_form_builder()->module( \Jet_Form_Builder\Blocks\Module::class );
+
+		if ( ! empty( $settings['form_id_custom'] ) ) {
+			$settings['form_id_custom'] = bricks_render_dynamic_data( $settings['form_id_custom'] );
+		}
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo "<div {$this->render_attributes( '_root' )}>";

@@ -41,6 +41,12 @@ class Fetch_Filters_Endpoint extends Rest_Api_Endpoint_Base {
 			)
 		);
 
+		$forms = array_filter( $forms, function ( $item ) {
+			return $item['value'] !== -1;
+		} );
+
+		$forms = array_values( $forms );
+
 		return new \WP_REST_Response(
 			array(
 				'filters' => array(

@@ -64,6 +64,10 @@ class Jet_Appointment implements
 	public function register_scripts() {
 		$script_asset = require_once $this->get_dir( 'assets/build/frontend.asset.php' );
 
+		if ( true === $script_asset ) {
+			return;
+		}
+
 		array_push(
 			$script_asset['dependencies'],
 			Module::MAIN_SCRIPT_HANDLE,

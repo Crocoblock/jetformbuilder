@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 6.6.1
 Requires PHP: 7.0
-Stable tag: 3.4.3
+Stable tag: 3.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,17 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.4.4**
+- FIX: Fixed the empty "Interests" field when creating a user in Mailchimp
+- FIX: Save keys for CAPTCHA providers
+- FIX: Resolved the CSS class name issue in the "Switcher Field"
+- FIX: Validation issue in the `REST API Request` form action
+- FIX: Issues with the `Conditional Block` functionality
+- FIX: required option issue in the `Appointment Provider`
+- ADD: Added the `Form ID` сontrol to the JetForm widget
+- ADD: Save `password` type fields during form verification action
+- FIX: js issues
 
 **3.4.3**
 - FIX: Server-side callback Validation

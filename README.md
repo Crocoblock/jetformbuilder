@@ -8,6 +8,17 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.4.4
+* FIX: Fixed the empty "Interests" field when creating a user in Mailchimp
+* FIX: Save keys for CAPTCHA providers
+* FIX: Resolved the CSS class name issue in the "Switcher Field"
+* FIX: Validation issue in the `REST API Request` form action
+* FIX: Issues with the `Conditional Block` functionality
+* FIX: required option issue in the `Appointment Provider`
+* ADD: Added the `Form ID` сontrol to the JetForm widget
+* ADD: Save `password` type fields during form verification action
+* FIX: js issues
+
 ## 3.4.3
 * FIX: Server-side callback Validation
 * FIX: Dynamic value synchronization between two checkbox fields

@@ -623,11 +623,35 @@ class Form extends Base {
 				'label'   => esc_html__( 'Layout', 'jet-form-builder' ),
 				'type'    => 'select',
 				'options' => array(
-					'inline-block' => esc_html__( 'Horizontal', 'jet-form-builder' ),
-					'block'        => esc_html__( 'Vertical', 'jet-form-builder' ),
+					'row'     => esc_html__( 'Horizontal', 'jet-form-builder' ),
+					'columns' => esc_html__( 'Vertical', 'jet-form-builder' ),
 				),
-				'default' => 'block',
-				'css'     => array( array( 'property' => '--jfb-checkradio-d' ) ),
+				'default' => 'column',
+				'css'     => array(
+					array(
+						'property' => 'flex-direction',
+						'selector' => $this->css_selector( '__fields-group' ),
+					),
+				),
+			)
+		);
+
+		$this->register_jet_control(
+			'checkradio_fields_gaps',
+			array(
+				'tab'   => 'style',
+				'label' => esc_html__( 'Gaps', 'jet-form-builder' ),
+				'type'  => 'dimensions',
+				'directions' => array(
+					'row'    => esc_html__( 'Row', 'jet-form-builder' ),
+					'column' => esc_html__( 'Column', 'jet-form-builder' ),
+				),
+				'css'   => array(
+					array(
+						'property' => '{key}-gap',
+						'selector' => $this->css_selector( '__fields-group' ),
+					),
+				),
 			)
 		);
 
@@ -640,7 +664,12 @@ class Form extends Base {
 				'units' => true,
 				'min'   => 0,
 				'max'   => 50,
-				'css'   => array( array( 'property' => '--jfb-checkradio-mr' ) ),
+				'css'   => array(
+					array(
+						'property' => 'gap',
+						'selector' => $this->css_selector( '__field-wrap.checkradio-wrap span' ),
+					),
+				),
 			)
 		);
 

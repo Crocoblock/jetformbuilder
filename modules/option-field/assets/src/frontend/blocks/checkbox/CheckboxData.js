@@ -16,7 +16,7 @@ function sanitizeValue( value ) {
 		 *
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/8509
 		 */
-		if ( value.length === 1 && value[0] && value[0].includes(',') ) {
+		if ( value.length === 1 && value[0] && true != value[0] && value[0].includes(',') ) {
 			value = value[0].split(',')
 		}
 

@@ -60,6 +60,7 @@ class Block_Asset implements Block_Asset_Interface {
 
 		$asset_mask = require_once $blocks_v2->get_dir( 'text-field/assets/build/frontend/field.mask.asset.php' );
 
+		$asset_mask['dependencies'][] = LegacyBlocksModule::MAIN_SCRIPT_HANDLE;
 		$asset_mask['dependencies'][] = 'jet-form-builder-inputmask';
 
 		wp_register_script(

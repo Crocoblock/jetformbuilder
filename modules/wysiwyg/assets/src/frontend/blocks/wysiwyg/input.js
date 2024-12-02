@@ -30,11 +30,18 @@ function WysiwygData() {
 
 		const editor = () => window.tinymce.get( this.textArea.id );
 		editor()?.remove?.();
-
 		window.wp.editor.initialize( this.textArea.id, editorConfig );
-
 		this.editor    = editor();
 		this.getEditor = editor;
+
+		document.addEventListener('jet-form-builder/conditional-block/block-toggle', (event) => {
+			if (event.detail.block.contains(node)) {
+				editor()?.remove?.();
+				window.wp.editor.initialize(this.textArea.id, editorConfig);
+				this.editor = editor();
+				this.getEditor = editor;
+			}
+		});
 	};
 
 	this.addListeners = function () {

@@ -32,7 +32,21 @@ function sanitizeCheckbox( value, input ) {
 	 * @see processOption
 	 */
 	if ( customNodes.length && !copyValue.length ) {
-		return value;
+		const limit = Math.max( customNodes.length, copyValue.length );
+
+		for ( let i = limit - 1; i >= 0; i-- ) {
+			if ( customNodes[ i ] ) {
+				let currentNode    = customNodes[ i ];
+				const currentValue = copyValue[ i ];
+
+				// value has been removed
+				if ( undefined === currentValue ) {
+					currentNode.closest( '.custom-option' ).remove();
+				}
+			}
+		}
+
+		return;
 	}
 
 	const limit = Math.max( customNodes.length, copyValue.length );
@@ -42,8 +56,10 @@ function sanitizeCheckbox( value, input ) {
 		const currentValue = copyValue[ i ];
 
 		// value has been removed
-		if ( null === currentValue ) {
-			currentNode.closest( '.custom-option' ).remove();
+		if ( null === currentValue || undefined === currentValue ) {
+			if ( currentNode ) {
+				currentNode.closest( '.custom-option' ).remove();
+			}
 
 			continue;
 		}

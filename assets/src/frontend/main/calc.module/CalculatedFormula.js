@@ -161,6 +161,43 @@ CalculatedFormula.prototype = {
 
 		const [ fieldName, ...params ] = parsedName;
 
+		/**
+		 * Check if the specified node exists in the rootNode.
+		 * If the node does not exist, analyze the formula to determine an adjusted value
+		 * based on the operators surrounding the placeholder.
+		 * @since 3.4.5
+		 *
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/11786
+		 */
+		const existNode = this.root.rootNode[ fieldName ];
+
+		if ( undefined === existNode ) {
+			const regex = new RegExp( `%${fieldName}%`, 'g' );
+
+			let adjustedValue   = 0;
+			let adjustedFormula = this.formula;
+			let match;
+
+			while ( null !== ( match = regex.exec( this.formula ) ) ) {
+				const before = this.formula[ match.index - 1 ];
+				const after  = this.formula[ match.index + match[0].length ];
+
+				if ( '*' === before || '/' === before || '*' === after || '/' === after ) {
+					if ( '/' === after ) {
+						adjustedValue = 0;
+					} else {
+						adjustedValue = 1;
+					}
+
+					adjustedFormula = adjustedFormula.replace( match[0], adjustedValue );
+				}
+			}
+
+			this.formula = adjustedFormula;
+
+			return 0;
+		}
+
 		const relatedInput = fieldName !== 'this'
 		                     ? this.root.getInput( fieldName )
 		                     : this.input;

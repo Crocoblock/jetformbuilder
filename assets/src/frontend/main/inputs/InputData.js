@@ -535,4 +535,15 @@ InputData.prototype.revertValue = function ( value ) {
 	this.value.current = value;
 };
 
+/**
+ * Recalculate the formula based on the current input data.
+ * @since 3.4.5
+ *
+ * @see https://github.com/Crocoblock/issues-tracker/issues/11786
+ */
+InputData.prototype.reCalculateFormula = function() {
+	this.setValue();
+	this.initNotifyValue();
+};
+
 export default InputData;

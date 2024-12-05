@@ -190,12 +190,14 @@ CalculatedFormula.prototype = {
 					}
 
 					adjustedFormula = adjustedFormula.replace( match[0], adjustedValue );
+
+					break;
 				}
 			}
 
 			this.formula = adjustedFormula;
 
-			return 0;
+			return adjustedValue;
 		}
 
 		const relatedInput = fieldName !== 'this'

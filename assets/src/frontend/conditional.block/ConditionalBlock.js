@@ -152,6 +152,14 @@ ConditionalBlock.prototype = {
 		if ( this.settings?.dom ) {
 			this.showBlockDom( result );
 
+			const event = new CustomEvent('jet-form-builder/conditional-block/block-toggle', {
+				detail: {
+					block: this.node,
+					result
+				},
+			});
+			document.dispatchEvent(event);
+
 			return;
 		}
 		this.node.style.display = result ? 'block' : 'none';
@@ -168,7 +176,6 @@ ConditionalBlock.prototype = {
 
 			return;
 		}
-
 		this.comment.parentElement.insertBefore( this.node, this.comment );
 
 		Object.keys( inputsList ).forEach( key => {

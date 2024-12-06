@@ -170,7 +170,6 @@ ConditionalBlock.prototype = {
 
 			return;
 		}
-
 		this.comment.parentElement.insertBefore( this.node, this.comment );
 	},
 	disableBlock( result ) {

@@ -25,6 +25,7 @@ function WysiwygData() {
 		this.textArea      = node.querySelector( '.wp-editor-area' );
 		const editorConfig = JSON.parse( node.dataset.editor );
 
+
 		this.rawName = editorConfig.textarea_name;
 		this.name    = getParsedName( this.rawName );
 
@@ -34,8 +35,10 @@ function WysiwygData() {
 		this.editor    = editor();
 		this.getEditor = editor;
 
+		let initFlag = false;
 		document.addEventListener('jet-form-builder/conditional-block/block-toggle', (event) => {
-			if (event.detail.block.contains(node)) {
+			if (event.detail.block.contains(node) && event.detail.result || !initFlag ) {
+				initFlag = true;
 				editor()?.remove?.();
 				window.wp.editor.initialize(this.textArea.id, editorConfig);
 				this.editor = editor();

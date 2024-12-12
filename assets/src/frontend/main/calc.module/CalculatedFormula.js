@@ -169,7 +169,7 @@ CalculatedFormula.prototype = {
 		 *
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/11786
 		 */
-		const existNode = this.root.rootNode[ fieldName ];
+		const existNode = this.root.rootNode[ fieldName ] || this.root.rootNode[ fieldName + '[]' ];
 
 		if ( undefined === existNode ) {
 			const regex = new RegExp( `%${fieldName}%`, 'g' );
@@ -183,12 +183,17 @@ CalculatedFormula.prototype = {
 				const after  = this.formula[ match.index + match[0].length ];
 
 				if ( '*' === before || '/' === before || '*' === after || '/' === after ) {
-					if ( '/' === after ) {
-						adjustedValue = 0;
-					} else {
+					if ( '/' === before || ( '*' === before && '*' === after ) ) {
 						adjustedValue = 1;
+					} else {
+						adjustedValue = 0;
 					}
 
+					adjustedFormula = adjustedFormula.replace( match[0], adjustedValue );
+
+					break;
+				} else {
+					adjustedValue   = 0;
 					adjustedFormula = adjustedFormula.replace( match[0], adjustedValue );
 
 					break;

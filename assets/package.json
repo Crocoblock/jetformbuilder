@@ -11,9 +11,12 @@
 		"lint": "eslint --fix ./"
 	},
 	"dependencies": {
-		"jet-form-builder-components": "*",
-		"jet-form-builder-data": "*",
 		"jet-form-builder-actions": "*",
-		"jet-form-builder-blocks-to-actions": "*"
+		"jet-form-builder-blocks-to-actions": "*",
+		"jet-form-builder-components": "*",
+		"jet-form-builder-data": "*"
+	},
+	"devDependencies": {
+		"webpack-cli": "^5.1.4"
 	}
 }

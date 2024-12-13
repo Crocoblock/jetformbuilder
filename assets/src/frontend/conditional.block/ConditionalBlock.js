@@ -151,11 +151,10 @@ ConditionalBlock.prototype = {
 
 		if ( this.settings?.dom ) {
 			this.showBlockDom( result );
-
-			const event = new CustomEvent('jet-form-builder/conditional-block/block-toggle', {
+			const event = new CustomEvent('jet-form-builder/conditional-block/block-toggle-hidden-dom', {
 				detail: {
 					block: this.node,
-					result
+					result: result
 				},
 			});
 			document.dispatchEvent(event);

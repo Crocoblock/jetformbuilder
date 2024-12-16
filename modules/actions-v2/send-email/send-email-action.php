@@ -300,7 +300,7 @@ class Send_Email_Action extends Base {
 			return array();
 		}
 
-		$mail_to = ! empty( $this->settings['cc_from'] ) ? $this->settings['cc_from'] : 'admin';
+		$mail_to = ! empty( $this->settings['cc_from'] ) ? $this->settings['cc_from'] : '';
 
 		switch ( $mail_to ) {
 			case 'form':
@@ -311,8 +311,9 @@ class Send_Email_Action extends Base {
 			case 'custom':
 				return ! empty( $this->settings['cc_email'] ) ? $this->settings['cc_email'] : '';
 			case 'admin':
-			default:
 				return get_option( 'admin_email' );
+			default:
+				return '';
 		}
 	}
 
@@ -321,7 +322,7 @@ class Send_Email_Action extends Base {
 			return array();
 		}
 
-		$mail_to = ! empty( $this->settings['bcc_from'] ) ? $this->settings['bcc_from'] : 'admin';
+		$mail_to = ! empty( $this->settings['bcc_from'] ) ? $this->settings['bcc_from'] : '';
 
 		switch ( $mail_to ) {
 			case 'form':
@@ -332,8 +333,9 @@ class Send_Email_Action extends Base {
 			case 'custom':
 				return ! empty( $this->settings['bcc_email'] ) ? $this->settings['bcc_email'] : '';
 			case 'admin':
-			default:
 				return get_option( 'admin_email' );
+			default:
+				return '';
 		}
 	}
 

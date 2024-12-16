@@ -1187,8 +1187,8 @@ class Form extends Widget_Base implements Widget_Base_It {
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => __( 'Yes', 'jet-form-builder' ),
 				'label_off'    => __( 'No', 'jet-form-builder' ),
-				'return_value' => true,
-				'default'      => false,
+				'return_value' => 'yes',
+				'default'      => 'yes',
 			)
 		);
 
@@ -1199,8 +1199,8 @@ class Form extends Widget_Base implements Widget_Base_It {
 				'type'         => Controls_Manager::SWITCHER,
 				'label_on'     => __( 'Yes', 'jet-form-builder' ),
 				'label_off'    => __( 'No', 'jet-form-builder' ),
-				'return_value' => true,
-				'default'      => false,
+				'return_value' => 'yes',
+				'default'      => 'yes',
 			)
 		);
 

@@ -25,16 +25,36 @@ function WysiwygData() {
 		this.textArea      = node.querySelector( '.wp-editor-area' );
 		const editorConfig = JSON.parse( node.dataset.editor );
 
+
 		this.rawName = editorConfig.textarea_name;
 		this.name    = getParsedName( this.rawName );
 
 		const editor = () => window.tinymce.get( this.textArea.id );
 		editor()?.remove?.();
-
 		window.wp.editor.initialize( this.textArea.id, editorConfig );
-
 		this.editor    = editor();
 		this.getEditor = editor;
+
+		document.addEventListener('jet-form-builder/conditional-block/block-toggle-hidden-dom', (event) => {
+			if (event.detail.block.contains(node)) {
+				const block = event.detail.block;
+				if (block.contains(node)) {
+					if (!block.__initialized) {
+						editor()?.remove?.();
+						window.wp.editor.initialize(this.textArea.id, editorConfig);
+						this.editor = editor();
+						this.getEditor = editor;
+						block.__initialized = true;
+					} else if (event.detail.result) {
+						editor()?.remove?.();
+						window.wp.editor.initialize(this.textArea.id, editorConfig);
+						this.editor = editor();
+						this.getEditor = editor;
+					}
+				}
+			}
+		});
+
 	};
 
 	this.addListeners = function () {

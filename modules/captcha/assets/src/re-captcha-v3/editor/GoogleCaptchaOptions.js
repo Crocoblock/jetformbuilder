@@ -82,7 +82,7 @@ function GoogleCaptchaOptions() {
 				{ threshold } ) }
 		/>
 		<BaseHelp
-			style={ { marginTop: '-1em' } }
+			style={ { margin: '1em 0' } }
 		>
 			{ __(
 				`It should be a value between 0 and 1, default 0.5 (1.0 is very likely a good interaction, 0.0 is very likely a bot).`,

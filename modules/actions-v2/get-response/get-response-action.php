@@ -53,12 +53,11 @@ class Get_Response_Action extends Base {
 
 		$fields_map = $this->settings['fields_map'] ?? array();
 
-
 		foreach ( $fields_map as $param => $field ) {
 			if ( ! $field || empty( $request[ $field ] ) ) {
 				continue;
 			}
-			if ( 'name' !== $param  && 'email' !== $param ) {
+			if ( 'name' !== $param && 'email' !== $param ) {
 				$contact->add_custom_field( $param, $request[ $field ] );
 			}
 		}

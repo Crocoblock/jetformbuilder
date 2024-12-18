@@ -63,6 +63,11 @@ class Block_Asset implements Block_Asset_Interface {
 			'blocks/map-field/assets/build/frontend/autocomplete.asset.php'
 		);
 
+		array_push(
+			$script_asset['dependencies'],
+			Module::MAIN_SCRIPT_HANDLE
+		);
+
 		wp_register_script(
 			$handle . '-autocomplete',
 			$compat->get_url( 'blocks/map-field/assets/build/frontend/autocomplete.js' ),

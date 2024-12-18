@@ -8,7 +8,6 @@ addFilter(
 	'jet-form-builder/wysiwyg-field',
 	function ( inputs ) {
 		inputs = [ WysiwygData, ...inputs ];
-
 		return inputs;
 	},
 );

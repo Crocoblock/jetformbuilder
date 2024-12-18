@@ -57,7 +57,9 @@ class Get_Response_Action extends Base {
 			if ( ! $field || empty( $request[ $field ] ) ) {
 				continue;
 			}
-			$contact->add_custom_field( $param, $request[ $field ] );
+			if ( 'name' !== $param && 'email' !== $param ) {
+				$contact->add_custom_field( $param, $request[ $field ] );
+			}
 		}
 
 		try {

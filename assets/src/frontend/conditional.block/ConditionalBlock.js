@@ -151,19 +151,35 @@ ConditionalBlock.prototype = {
 
 		if ( this.settings?.dom ) {
 			this.showBlockDom( result );
+			const event = new CustomEvent('jet-form-builder/conditional-block/block-toggle-hidden-dom', {
+				detail: {
+					block: this.node,
+					result: result
+				},
+			});
+			document.dispatchEvent(event);
 
 			return;
 		}
 		this.node.style.display = result ? 'block' : 'none';
 	},
 	showBlockDom( result ) {
+		const inputsList = this.root.dataInputs;
+
 		if ( !result ) {
 			this.node.remove();
 
+			Object.keys( inputsList ).forEach( key => {
+				inputsList[key].reCalculateFormula();
+			} );
+
 			return;
 		}
-
 		this.comment.parentElement.insertBefore( this.node, this.comment );
+
+		Object.keys( inputsList ).forEach( key => {
+			inputsList[key].reCalculateFormula();
+		} );
 	},
 	disableBlock( result ) {
 		this.node.disabled = result;

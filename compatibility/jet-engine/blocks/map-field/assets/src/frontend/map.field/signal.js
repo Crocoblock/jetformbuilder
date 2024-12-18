@@ -282,7 +282,6 @@ SignalMapField.prototype.setMarker = function ( { lat, lng } ) {
 
 	const provider = getProvider();
 
-	this.removeMarker();
 	this.marker = provider.addMarker( {
 		...this.markerDefaults,
 		position: this.input.value.current,

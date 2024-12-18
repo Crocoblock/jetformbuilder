@@ -8,6 +8,19 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.4.5
+* FIX: Bricks builder checkbox & radio fields style in the JetForm widget
+* FIX: Resolved an issue with Calculated Field recalculation when using a Conditional Block
+* FIX: Getresponce action error with default fields
+* FIX: JetForm widget disables the Enable Form Progress toggle
+* FIX: Resolved an issue with saving map meta fields when using the search autocomplete option in Map Field
+* FIX: Google reCAPTCHA Score Threshold option description styles
+* FIX: Wysiwyg not clickable in conditional block if Remove hidden elements from page HTML is turned on
+* FIX: CC/BCC address from options default emails in the 'Send Email' form action
+* FIX: Custom options for checkbox
+* FIX: Issue with input mask
+* FIX: Js issues
+
 ## 3.4.4
 * FIX: Fixed the empty "Interests" field when creating a user in Mailchimp
 * FIX: Save keys for CAPTCHA providers

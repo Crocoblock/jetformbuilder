@@ -51,6 +51,25 @@ addFilter(
 	},
 );
 
+/**
+ * @see   https://github.com/Crocoblock/issues-tracker/issues/13730
+ * @since 3.4.5.1
+ */
+addFilter(
+	'jet.fb.formula.node.exists',
+	'jet-form-builder/booking-compatibility',
+	function ( nodeExists, fieldName, formula ) {
+
+		const matches = fieldName.match( /ADVANCED_PRICE::([\w\-]+)/ );
+
+		if ( matches && matches?.length ) {
+			nodeExists = formula.root.rootNode[ matches[1] ];
+		}
+
+		return nodeExists;
+	}
+);
+
 addFilter(
 	'jet.fb.onCalculate.part',
 	'jet-form-builder/booking-compatibility',
@@ -60,6 +79,11 @@ addFilter(
 	 * @return {*}
 	 */
 	function ( macroPart, formula ) {
+
+		if ( 'string' !== typeof macroPart ) {
+			return macroPart;
+		}
+
 		const matches = macroPart.match( /ADVANCED_PRICE::([\w\-]+)/ );
 
 		if ( !matches?.length || !formula?.input ) {

@@ -16,6 +16,8 @@ function RepeaterData() {
 	this.lastObserved = new ReactiveVar();
 	this.lastObserved.make();
 
+	this.addEventAttached = false;
+
 	this.isSupported  = function ( node ) {
 		return isRepeater( node );
 	};
@@ -65,7 +67,10 @@ function RepeaterData() {
 		}
 
 		if ( this.isManualCount ) {
-			this.buttonNode.addEventListener( 'click', () => this.addNew() );
+			if ( ! this.addEventAttached ) {
+				this.buttonNode.addEventListener( 'click', () => this.addNew() );
+				this.addEventAttached = true;
+			}
 
 			return;
 		}

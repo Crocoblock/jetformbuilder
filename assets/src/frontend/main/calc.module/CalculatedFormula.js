@@ -142,6 +142,42 @@ CalculatedFormula.prototype = {
 		this.parts.push( inputMatch );
 	},
 	/**
+	 * @param fieldName {String}
+	 */
+	isFieldNodeExists( fieldName ) {
+
+		/**
+		 * Check if the specified node exists in the rootNode.
+		 * If the node does not exist, analyze the formula to determine an adjusted value
+		 * based on the operators surrounding the placeholder.
+		 * @since 3.4.5
+		 *
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/11786
+		 */
+		let existNode = this.root.rootNode[ fieldName ]
+						|| this.root.rootNode[ fieldName + '[]' ]
+						|| this.root.rootNode.querySelectorAll( '[data-field-name="' + fieldName + '"]');
+
+		/**
+		 * When we call querySelectorAll it returns empty NodeList array if the element not found, so we need to reset it
+		 */
+		if ( existNode && 0 === existNode.length ) {
+			existNode = undefined;
+		}
+		/**
+		 * @see   https://github.com/Crocoblock/issues-tracker/issues/13730
+		 * @since 3.4.5.1
+		 */
+		existNode = wpFilters(
+			'jet.fb.formula.node.exists',
+			existNode,
+			fieldName,
+			this
+		);
+
+		return existNode;
+	},
+	/**
 	 * @param  current {String}
 	 * @return {(function(): *)|*}
 	 */
@@ -162,14 +198,10 @@ CalculatedFormula.prototype = {
 		const [ fieldName, ...params ] = parsedName;
 
 		/**
-		 * Check if the specified node exists in the rootNode.
-		 * If the node does not exist, analyze the formula to determine an adjusted value
-		 * based on the operators surrounding the placeholder.
-		 * @since 3.4.5
-		 *
-		 * @see https://github.com/Crocoblock/issues-tracker/issues/11786
+		 * @see   https://github.com/Crocoblock/issues-tracker/issues/13730
+		 * @since 3.4.5.1 (moved to a method and added additional checks)
 		 */
-		const existNode = this.root.rootNode[ fieldName ] || this.root.rootNode[ fieldName + '[]' ];
+		const existNode = this.isFieldNodeExists( fieldName );
 
 		if ( undefined === existNode ) {
 			const regex = new RegExp( `%${fieldName}%`, 'g' );
@@ -179,6 +211,7 @@ CalculatedFormula.prototype = {
 			let match;
 
 			while ( null !== ( match = regex.exec( this.formula ) ) ) {
+
 				const before = this.formula[ match.index - 1 ];
 				const after  = this.formula[ match.index + match[0].length ];
 
@@ -282,14 +315,20 @@ CalculatedFormula.prototype = {
 
 		return this.parts.map( current => {
 			if ( 'function' !== typeof current ) {
-				if ( !this.input?.nodes || false === deprecatedApplyFilters ) {
+
+				if ( !this.input?.nodes
+					|| false === deprecatedApplyFilters
+					|| 'string' !== typeof current
+				) {
 					return current;
 				}
+
 				current = wpFilters(
 					'jet.fb.onCalculate.part',
 					current,
 					this,
 				);
+
 				return deprecatedApplyFilters(
 					'forms/calculated-formula-before-value',
 					current,
@@ -312,6 +351,7 @@ CalculatedFormula.prototype = {
 		if ( !this.parts.length && !this.forceFunction ) {
 			return this.formula;
 		}
+
 		const formula = this.calculateString();
 
 		try {

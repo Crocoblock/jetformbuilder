@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.4.5.1
+* FIX: Calculated field issues after 3.4.5 update.
+
 ## 3.4.5
 * FIX: Bricks builder checkbox & radio fields style in the JetForm widget
 * FIX: Resolved an issue with Calculated Field recalculation when using a Conditional Block

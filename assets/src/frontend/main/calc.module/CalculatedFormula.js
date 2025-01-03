@@ -146,6 +146,12 @@ CalculatedFormula.prototype = {
 	 */
 	isFieldNodeExists( fieldName ) {
 
+		const isFieldNode = this.root.dataInputs[ fieldName ];
+
+		if ( undefined === isFieldNode ) {
+			return false;
+		}
+
 		/**
 		 * Check if the specified node exists in the rootNode.
 		 * If the node does not exist, analyze the formula to determine an adjusted value
@@ -222,16 +228,15 @@ CalculatedFormula.prototype = {
 						adjustedValue = 0;
 					}
 
-					adjustedFormula = adjustedFormula.replace( match[0], adjustedValue );
-
 					break;
 				} else {
-					adjustedValue   = 0;
-					adjustedFormula = adjustedFormula.replace( match[0], adjustedValue );
+					adjustedValue = 0;
 
 					break;
 				}
 			}
+
+			adjustedFormula = adjustedFormula.replace( match[0], adjustedValue );
 
 			this.formula = adjustedFormula;
 

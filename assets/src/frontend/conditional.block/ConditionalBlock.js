@@ -170,7 +170,9 @@ ConditionalBlock.prototype = {
 			this.node.remove();
 
 			Object.keys( inputsList ).forEach( key => {
-				inputsList[key].reCalculateFormula();
+				if ( inputsList[key].formula ) {
+					inputsList[key].reCalculateFormula();
+				}
 			} );
 
 			return;
@@ -178,7 +180,9 @@ ConditionalBlock.prototype = {
 		this.comment.parentElement.insertBefore( this.node, this.comment );
 
 		Object.keys( inputsList ).forEach( key => {
-			inputsList[key].reCalculateFormula();
+			if ( inputsList[key].formula ) {
+				inputsList[key].reCalculateFormula();
+			}
 		} );
 	},
 	disableBlock( result ) {

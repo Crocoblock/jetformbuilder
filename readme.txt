@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 3.4.5.1
+Stable tag: 3.4.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,10 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.4.5.2**
+- FIX: Calculated field issues after 3.4.5 update
+- FIX: Issue with the Date field when the default value is set as macros
 
 **3.4.5.1**
 - FIX: Calculated field issues after 3.4.5 update

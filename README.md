@@ -8,6 +8,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.4.5.2
+* FIX: Calculated field issues after 3.4.5 update
+* FIX: Issue with the Date field when the default value is set as macros
+
 ## 3.4.5.1
 * FIX: Calculated field issues after 3.4.5 update.
 

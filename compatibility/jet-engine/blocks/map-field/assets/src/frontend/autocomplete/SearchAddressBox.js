@@ -24,12 +24,11 @@ SearchAddressBox.prototype.initHooks = function () {
 			} );
 		}
 		else {
-			this.geocodeSearch();
+			this.geocodeSearch( selectedNode.textContent );
 		}
 	} );
 
 	this.getSearchInput().loading.watch( () => {
-		console.log( this.getSearchInput().loading.current );
 		this.getLoaderNode().classList.toggle(
 			'show',
 			this.getSearchInput().loading.current,
@@ -100,11 +99,14 @@ SearchAddressBox.prototype.getMapInput = function () {
 	return this.input;
 };
 
-SearchAddressBox.prototype.geocodeSearch = function () {
+SearchAddressBox.prototype.geocodeSearch = function ( query ) {
+
+	query = query || this.getSearchInput().search.current;
+
 	const path = addQueryArgs(
 		JetMapFieldsSettings.apiLocation,
 		{
-			address: this.getSearchInput().search.current,
+			address: query,
 		},
 	);
 

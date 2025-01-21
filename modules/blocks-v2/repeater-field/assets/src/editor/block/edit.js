@@ -209,16 +209,17 @@ export default function RepeaterEdit( props ) {
 				childrenPosition="bottom"
 				{ ...props }
 			>
-				<InnerBlocks
-					key={ uniqKey( 'repeater-fields' ) }
-				/>
-				<Button
-					className={ 'jet-form-builder-repeater__remove' }
-					isSecondary
-					onClick={ () => {
-					} }
-				>&times;</Button>
-				<div style={ { width: '100%', height: '0.7em' } }/>
+				<div className="jet-form-builder-repeater__row">
+					<InnerBlocks
+						key={ uniqKey( 'repeater-fields' ) }
+					/>
+					<Button
+						className={ 'jet-form-builder-repeater__remove' }
+						isSecondary
+						onClick={ () => {
+						} }
+					>&times;</Button>
+				</div>
 				<div className="jet-form-builder-repeater__actions">
 					<Button
 						className={ 'jet-form-builder-repeater__new' }

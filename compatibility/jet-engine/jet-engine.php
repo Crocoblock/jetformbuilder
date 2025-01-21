@@ -156,6 +156,11 @@ class Jet_Engine implements
 		if ( jet_form_builder()->has_compat( 'bricks' ) ) {
 			$this->bricks->init_hooks();
 		}
+
+		/**
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/12555
+		 */
+		add_action( 'jet-engine/rest-api/init-endpoints', array( $this, 'rewrite_map_location_data_endpoint' ), 99 );
 	}
 
 	public function remove_hooks() {
@@ -213,6 +218,24 @@ class Jet_Engine implements
 		}
 
 		$this->option_query->remove_hooks();
+
+		/**
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/12555
+		 */
+		remove_action( 'jet-engine/rest-api/init-endpoints', array( $this, 'rewrite_map_location_data_endpoint' ), 99 );
+	}
+
+	/**
+	 * If map fields endpoint are regsitered - rewrite location data endpoint permission_callback.
+	 * This is required to make it public to use with map field search autocomplete.
+	 *
+	 * @see https://github.com/Crocoblock/issues-tracker/issues/12555
+	 */
+	public function rewrite_map_location_data_endpoint( $api_manager ) {
+		if ( class_exists( '\Jet_Engine\Modules\Maps_Listings\Get_Map_Location_Data' ) ) {
+			require_once $this->get_dir( 'map-field/get-map-location-data-endpoint.php' );
+			$api_manager->register_endpoint( new Map_Field\Get_Map_Location_Data_Endpoint() );
+		}
 	}
 
 	public function register_scripts() {

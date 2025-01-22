@@ -9,7 +9,14 @@ import { CardFooter } from '@wordpress/components';
  * @return {boolean|JSX.Element}
  */
 function ActionItemFooter( { children, ...props } = {} ) {
-	const { action } = useLoopedAction();
+	const { action }     = useLoopedAction();
+	const excludedEvents = window.JetFormEditorData.actionConditionExcludeEvents;
+
+	if ( excludedEvents[ action.type ] ) {
+		if ( action.events?.length ) {
+			action.events = action.events.filter( item => !excludedEvents[ action.type ].includes( item ) );
+		}
+	}
 
 	return Boolean( action.events?.length ) && <CardFooter
 		style={ {

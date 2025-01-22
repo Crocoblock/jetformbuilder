@@ -54,6 +54,8 @@ const operators = [
 	},
 ];
 
+const excludedEvents = window.JetFormEditorData.actionConditionExcludeEvents;
+
 function getConditionOptionFrom( from, value ) {
 	const option = conditionSettings[ from ].find(
 		item => item.value === value );
@@ -153,6 +155,16 @@ function EditEvents( { events } ) {
 		select => select( 'jet-forms/events' ).getHelpMap(),
 	);
 
+	if ( excludedEvents[ currentAction.type ] ) {
+		if ( currentAction.events.length ) {
+			currentAction.events = currentAction.events.filter( item => !excludedEvents[ currentAction.type ].includes( item ) );
+
+			setCurrentAction(
+				{ ...currentAction, events: currentAction.events }
+			)
+		}
+	}
+	console.log('currentAction.events after', currentAction.events);
 	return <>
 		<FormTokenField
 			label={ __( 'Add event', 'jet-form-builder' ) }
@@ -224,7 +236,12 @@ function EditFields() {
 }
 
 function EditConditions() {
-	const provideEvents = useRequestEvents();
+	let provideEvents       = useRequestEvents();
+	const { currentAction } = useCurrentAction();
+
+	if ( excludedEvents[ currentAction.type ] ) {
+		provideEvents = provideEvents.filter( item => !excludedEvents[ currentAction.type ].includes( item ) );
+	}
 
 	if ( 1 === provideEvents.length ) {
 		return <EditFields/>;

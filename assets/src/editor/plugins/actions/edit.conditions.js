@@ -155,16 +155,25 @@ function EditEvents( { events } ) {
 		select => select( 'jet-forms/events' ).getHelpMap(),
 	);
 
-	if ( excludedEvents[ currentAction.type ] ) {
-		if ( currentAction.events.length ) {
-			currentAction.events = currentAction.events.filter( item => !excludedEvents[ currentAction.type ].includes( item ) );
+	useEffect( () => {
+		if ( excludedEvents[currentAction.type] && currentAction.events.length ) {
+			const newCurrentActionEvents = currentAction.events.filter(
+				( item ) => !excludedEvents[currentAction.type].includes( item )
+			);
 
-			setCurrentAction(
-				{ ...currentAction, events: currentAction.events }
-			)
+			if (
+				currentAction.events.some(
+					(item) => !newCurrentActionEvents.includes( item )
+				)
+			) {
+				setCurrentAction( {
+					...currentAction,
+					events: newCurrentActionEvents,
+				} );
+			}
 		}
-	}
-	console.log('currentAction.events after', currentAction.events);
+	}, [currentAction, setCurrentAction] );
+
 	return <>
 		<FormTokenField
 			label={ __( 'Add event', 'jet-form-builder' ) }
@@ -181,7 +190,8 @@ function EditEvents( { events } ) {
 				'jet-form-builder' ) + ' ' }
 			{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */ }
 			<a
-				href="javascript:void(0)"
+				href="#"
+				role="button"
 				onClick={ () => setShowDetails( prev => !prev ) }
 			>
 				{ showDetails

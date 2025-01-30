@@ -1188,7 +1188,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				'label_on'     => __( 'Yes', 'jet-form-builder' ),
 				'label_off'    => __( 'No', 'jet-form-builder' ),
 				'return_value' => 'yes',
-				'default'      => 'no',
+				'default'      => '',
 			)
 		);
 
@@ -1200,7 +1200,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				'label_on'     => __( 'Yes', 'jet-form-builder' ),
 				'label_off'    => __( 'No', 'jet-form-builder' ),
 				'return_value' => 'yes',
-				'default'      => 'no',
+				'default'      => '',
 			)
 		);
 

@@ -114,6 +114,8 @@ class Redirect_To_Page_Action extends Base {
 
 		$to_url = $this->get_completed_redirect_url( $to_url );
 
+		$handler->response_data['open_in_new_tab'] = ! empty( $this->settings['open_in_new_tab'] );
+
 		$handler->response_data['redirect'] = $to_url;
 	}
 

@@ -3,6 +3,8 @@ import RepeaterItemContext from '../../repeater/context/repeater.item';
 import BaseHelp from '../../components/BaseHelp';
 import AdvancedModalControl from '../../components/AdvancedModalControl';
 import ChooseRelatedField from './ChooseRelatedField';
+import { Notice } from '@wordpress/components';
+import {useActions} from "jet-form-builder-actions";
 
 const {
 	      SelectControl,
@@ -87,6 +89,10 @@ addFilter(
 		const { currentItem, changeCurrentItem } = props;
 		const [ showDetails, setShowDetails ]    = useState( false );
 
+		const [ actions ] = useActions();
+
+		const hasSaveRecord = actions.some(current => current.type === 'save_record') ? 'success' : 'error';
+
 		if ( 'ssr' !== currentItem.type ) {
 			return <DefaultControls { ...props } />;
 		}
@@ -104,6 +110,11 @@ addFilter(
 				value={ currentItem.value }
 				onChange={ value => changeCurrentItem( { value } ) }
 			/>
+			{ 'is_field_value_unique' === currentItem.value && (
+				<Notice status={ hasSaveRecord } isDismissible={ false }>
+					{ __( 'This callback requires the Save Form Record action to work correctly.', 'jet-form-builder' ) }
+				</Notice>
+			)}
 			{ !ssrCallbacksKeys.includes( currentItem.value ) && <>
 				<TextControl
 					label={ __( 'Function name', 'jet-form-builder' ) }

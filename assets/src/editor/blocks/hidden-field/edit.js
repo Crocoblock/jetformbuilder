@@ -27,7 +27,6 @@ const {
       } = wp.blockEditor;
 
 const {
-	      //Card,
 	      CardHeader,
 	      CardBody,
 	      PanelBody,
@@ -99,7 +98,7 @@ export default function HiddenEdit( props ) {
 			break;
 	}
 
-	const isBuddypress = document.body.classList.contains( 'wp-admin' );
+	const isBuddypress = document.body.classList.contains( 'buddypress' );
 
 	return [
 		isSelected && (

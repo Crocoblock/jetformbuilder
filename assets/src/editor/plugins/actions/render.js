@@ -70,14 +70,14 @@ const ActionsPanel = styled( PluginDocumentSettingPanel )`
 
 const StyledFlex = styled(Flex)`
 	&.buddypress-active {
-		heigt: auto;
+		height: auto;
 	}
 `;
 
 function PluginActions() {
 	const [ actions, setActions ] = useActions();
 
-	const isBuddypress = document.body.classList.contains( 'wp-admin' ); //buddypress
+	const isBuddypress = document.body.classList.contains( 'buddypress' );
 
 	return <ActionsPanel
 		title={ __( 'Post Submit Actions', 'jet-form-builder' ) }

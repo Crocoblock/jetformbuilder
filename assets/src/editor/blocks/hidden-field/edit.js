@@ -1,6 +1,9 @@
 import FieldSettings from './FieldSettings';
 import preview from './preview';
-
+import {
+	Card,
+} from '@wordpress/components';
+import { styled } from '@linaria/react';
 const { __ } = wp.i18n;
 
 const {
@@ -24,7 +27,7 @@ const {
       } = wp.blockEditor;
 
 const {
-	      Card,
+	      //Card,
 	      CardHeader,
 	      CardBody,
 	      PanelBody,
@@ -33,6 +36,12 @@ const {
 const {
 	      useEffect,
       } = wp.element;
+
+const StyledCard = styled( Card )`
+	&.buddypress-active > div {
+		height: auto;
+	}
+`;
 
 // eslint-disable-next-line max-lines-per-function
 export default function HiddenEdit( props ) {
@@ -90,6 +99,8 @@ export default function HiddenEdit( props ) {
 			break;
 	}
 
+	const isBuddypress = document.body.classList.contains( 'wp-admin' );
+
 	return [
 		isSelected && (
 			<InspectorControls
@@ -110,7 +121,7 @@ export default function HiddenEdit( props ) {
 			</InspectorControls>
 		),
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
-			<Card elevation={ 2 }>
+			<StyledCard elevation={ 2 } className={ `${isBuddypress ? 'buddypress-active' : ''}` }>
 				<CardHeader>
 					<RichText
 						placeholder="hidden_field_name..."
@@ -123,7 +134,7 @@ export default function HiddenEdit( props ) {
 					{ isSelected && <FieldSettings/> }
 					{ !isSelected && resultLabel.join( ': ' ) }
 				</CardBody>
-			</Card>
+			</StyledCard>
 		</div>,
 	];
 };

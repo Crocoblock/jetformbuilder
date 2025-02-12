@@ -3117,6 +3117,16 @@ class Form extends Widget_Base implements Widget_Base_It {
 			)
 		);
 
+		$this->add_control(
+			'form_break_notice',
+			array(
+				'type'        => 'notice',
+				'notice_type' => 'info',
+				'dismissible' => false,
+				'content'     => esc_html__( 'Styles from this tab apply to the Next Page and Prev Page controls added through the Form Page Break block.', 'jet-form-builder' ),
+			)
+		);
+
 		$this->add_responsive_control(
 			'form_break_gap',
 			array(
@@ -3172,6 +3182,16 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label' => __( 'Form Break Buttons', 'jet-form-builder' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+
+		$this->add_control(
+			'form_break_next_notice',
+			array(
+				'type'        => 'notice',
+				'notice_type' => 'info',
+				'dismissible' => false,
+				'content'     => esc_html__( 'The styles from this tab apply to the Next Page and Prev Page added as separate blocks in the form.', 'jet-form-builder' ),
 			)
 		);
 

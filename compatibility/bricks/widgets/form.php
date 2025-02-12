@@ -1813,6 +1813,15 @@ class Form extends Base {
 		$this->start_jet_control_group( 'section_form_break_style' );
 
 		$this->register_jet_control(
+			'form_break_notice',
+			array(
+				'tab'     => 'content',
+				'content' => esc_html__( 'Styles from this tab apply to the Next Page and Prev Page controls added through the Form Page Break block.', 'jet-form-builder' ),
+				'type'    => 'info',
+			)
+		);
+
+		$this->register_jet_control(
 			'form_break_alignment',
 			array(
 				'tab'   => 'style',
@@ -1875,6 +1884,15 @@ class Form extends Base {
 		$css_selectors = array(
 			'prev' => $this->css_selector( '__prev-page' ),
 			'next' => $this->css_selector( '__next-page' ),
+		);
+
+		$this->register_jet_control(
+			'form_break_next_notice',
+			array(
+				'tab'     => 'content',
+				'content' => esc_html__( 'The styles from this tab apply to the Next Page and Prev Page added as separate blocks in the form.', 'jet-form-builder' ),
+				'type'    => 'info',
+			)
 		);
 
 		$this->register_jet_control(

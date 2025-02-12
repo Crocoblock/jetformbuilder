@@ -82,7 +82,7 @@ function CalculatedData() {
 
 	this.setNode      = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
-		this.reQueryValue = () => {};
+		InputData.prototype.reQueryValue = () => {};
 
 		const {
 			      formula,

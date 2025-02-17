@@ -168,7 +168,12 @@ trait Repository_Pattern_Trait {
 
 	// phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
 	private function _rep_get_item( $slug ) {
-		return $this->__repository[ $slug ];
+		
+		if ( isset( $this->__repository[ $slug ] ) ) {
+			return $this->__repository[ $slug ];
+		} else {
+			throw new Repository_Exception( "Item with slug '{$slug}' does not exist in the repository." );
+		}
 	}
 
 	/**

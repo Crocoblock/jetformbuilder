@@ -382,6 +382,9 @@ class Editor {
 		);
 
 		$conditions_settings = ( new Action_Condition_Manager() )->get_settings();
+		$exclude_events      = array(
+			'redirect_to_page' => array( 'WC.ORDER.COMPLETE', 'WC.CHECKOUT.COMPLETE' )
+		);
 
 		/** @var Module $post_type */
 		/** @noinspection PhpUnhandledExceptionInspection */
@@ -400,15 +403,16 @@ class Editor {
 			apply_filters(
 				'jet-form-builder/editor/config',
 				array(
-					'presetConfig'            => $this->get_preset_config(),
-					'messagesDefault'         => $post_type->get_messages(),
-					'helpForRepeaters'        => $this->get_help_for_repeaters(),
-					'global_settings'         => Tab_Handler_Manager::instance()->all(),
-					'global_settings_url'     => Pages_Manager::instance()->get_stable_url( 'jfb-settings' ),
-					'jetEngineVersion'        => Tools::get_jet_engine_version(),
-					'actionConditionSettings' => $conditions_settings,
-					'argumentsSource'         => Form_Arguments::get_options(),
-					'utmLinks'                => array(
+					'presetConfig'                 => $this->get_preset_config(),
+					'messagesDefault'              => $post_type->get_messages(),
+					'helpForRepeaters'             => $this->get_help_for_repeaters(),
+					'global_settings'              => Tab_Handler_Manager::instance()->all(),
+					'global_settings_url'          => Pages_Manager::instance()->get_stable_url( 'jfb-settings' ),
+					'jetEngineVersion'             => Tools::get_jet_engine_version(),
+					'actionConditionSettings'      => $conditions_settings,
+					'actionConditionExcludeEvents' => $exclude_events,
+					'argumentsSource'              => Form_Arguments::get_options(),
+					'utmLinks'                     => array(
 						'allProActions'    => $utm->set_campaign( 'jetform-settings/pro-actions' )->add_query( $addons ),
 						'limitResponses'   => $utm->set_campaign( 'jetform-settings/limit-form-responses' )->add_query( $pricing ),
 						'scheduleForm'     => $utm->set_campaign( 'jetform-settings/schedule-forms' )->add_query( $pricing ),

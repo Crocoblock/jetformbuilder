@@ -14,7 +14,9 @@ function ValidatedTextControl( {
 	label,
 	help,
 	isErrorSupported = () => false,
+	errorText = "",
 	required = false,
+	disabled = false
 } ) {
 
 	const { hasError, setShowError } = useActionValidatorProvider( {
@@ -28,7 +30,7 @@ function ValidatedTextControl( {
 			<LabelComponent htmlFor={ id }>
 				{ label }
 			</LabelComponent>
-			<RowControlEnd hasError={ hasError }>
+			<RowControlEnd hasError={ hasError } errorText={ errorText }>
 				<TextControl
 					id={ id }
 					value={ value }
@@ -37,6 +39,7 @@ function ValidatedTextControl( {
 					help={ help }
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom
+					disabled={ disabled }
 				/>
 			</RowControlEnd>
 		</> }

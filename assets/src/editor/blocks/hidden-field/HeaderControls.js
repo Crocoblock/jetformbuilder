@@ -23,7 +23,7 @@ let HeaderControls = function () {
 			onChange={ render => setAttributes(
 				{ render: Boolean( render ) } ) }
 		/> }
-		<ToggleControl
+		<ToggleControl  
 			label={ __( 'Return the raw value', 'jet-form-builder' ) }
 			help={ __( `If this option is enabled, the value of the field will be JSON-encoded if the value is an array or object`,
 				'jet-form-builder',

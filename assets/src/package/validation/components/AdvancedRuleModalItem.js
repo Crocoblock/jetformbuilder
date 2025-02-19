@@ -91,7 +91,9 @@ addFilter(
 
 		const [ actions ] = useActions();
 
-		const hasSaveRecord = actions.some(current => current.type === 'save_record') ? 'success' : 'error';
+		const hasSaveRecord = actions.some(current =>
+			current.type === 'save_record' && (current.is_execute === undefined || current.is_execute === true)
+		) ? 'success' : 'error';
 
 		if ( 'ssr' !== currentItem.type ) {
 			return <DefaultControls { ...props } />;

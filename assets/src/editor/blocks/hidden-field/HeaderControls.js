@@ -9,7 +9,7 @@ const {
 	      useBlockAttributes,
       } = JetFBHooks;
 
-let HeaderControls = function () {
+let HeaderControls = function () { 
 	const [ attributes, setAttributes ] = useBlockAttributes();
 
 	return <>

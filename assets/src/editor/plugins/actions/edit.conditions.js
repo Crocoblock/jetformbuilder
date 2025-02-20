@@ -54,6 +54,8 @@ const operators = [
 	},
 ];
 
+const excludedEvents = window.JetFormEditorData.actionConditionExcludeEvents;
+
 function getConditionOptionFrom( from, value ) {
 	const option = conditionSettings[ from ].find(
 		item => item.value === value );
@@ -153,6 +155,25 @@ function EditEvents( { events } ) {
 		select => select( 'jet-forms/events' ).getHelpMap(),
 	);
 
+	useEffect( () => {
+		if ( excludedEvents[currentAction.type] && currentAction.events.length ) {
+			const newCurrentActionEvents = currentAction.events.filter(
+				( item ) => !excludedEvents[currentAction.type].includes( item )
+			);
+
+			if (
+				currentAction.events.some(
+					(item) => !newCurrentActionEvents.includes( item )
+				)
+			) {
+				setCurrentAction( {
+					...currentAction,
+					events: newCurrentActionEvents,
+				} );
+			}
+		}
+	}, [currentAction, setCurrentAction] );
+
 	return <>
 		<FormTokenField
 			label={ __( 'Add event', 'jet-form-builder' ) }
@@ -169,7 +190,8 @@ function EditEvents( { events } ) {
 				'jet-form-builder' ) + ' ' }
 			{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */ }
 			<a
-				href="javascript:void(0)"
+				href="#"
+				role="button"
 				onClick={ () => setShowDetails( prev => !prev ) }
 			>
 				{ showDetails
@@ -224,7 +246,12 @@ function EditFields() {
 }
 
 function EditConditions() {
-	const provideEvents = useRequestEvents();
+	let provideEvents       = useRequestEvents();
+	const { currentAction } = useCurrentAction();
+
+	if ( excludedEvents[ currentAction.type ] ) {
+		provideEvents = provideEvents.filter( item => !excludedEvents[ currentAction.type ].includes( item ) );
+	}
 
 	if ( 1 === provideEvents.length ) {
 		return <EditFields/>;

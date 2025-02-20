@@ -87,7 +87,11 @@ function AjaxSubmit( form ) {
 		this.status.current = response.status;
 
 		if ( response.redirect ) {
-			window.location = response.redirect;
+			if ( response.open_in_new_tab ) {
+				window.open( response.redirect, '_blank' );
+			} else {
+				window.location = response.redirect;
+			}
 		}
 		else if ( response.reload ) {
 			window.location.reload();

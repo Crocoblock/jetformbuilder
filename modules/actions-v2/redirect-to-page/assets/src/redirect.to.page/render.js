@@ -7,6 +7,7 @@ import RedirectPageRow from './RedirectPageRow';
 import RedirectCustomUrl from './RedirectCustomUrl';
 import RedirectArgsRow from './RedirectArgsRow';
 import RedirectHashRow from './RedirectHashRow';
+import RedirectNewTabRow from './RedirectNewTabRow';
 
 function RedirectToPageRender( props ) {
 
@@ -42,6 +43,11 @@ function RedirectToPageRender( props ) {
 		/>
 		<WideLine/>
 		<RedirectHashRow
+			settings={ settings }
+			onChangeSettingObj={ onChangeSettingObj }
+		/>
+		<WideLine/>
+		<RedirectNewTabRow
 			settings={ settings }
 			onChangeSettingObj={ onChangeSettingObj }
 		/>

@@ -57,6 +57,8 @@ abstract class Base_Event implements
 	public function is_valid_action( Base $action ): bool {
 		$unsupported = $action->unsupported_events();
 
+		$unsupported = apply_filters( 'jet-form-builder/events/base-unsupported-events', $unsupported, $action->get_id(), $this->get_id() );
+
 		if ( ! empty( $unsupported ) && in_array( static::class, $unsupported, true ) ) {
 			return false;
 		}

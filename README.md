@@ -8,6 +8,20 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.4.6
+* FIX: Resolved an issue with search autocomplete in the Map field
+* FIX: Fixed case sensitivity for the `use autocomplete` option in `Select Field` when loading via AJAX
+* FIX: [Crocoblock/jetformbuilder#497](https://github.com/Crocoblock/jetformbuilder/issues/497)
+* FIX: Improved compatibility with the `JetFormBuilder Hubspot Action` addon
+* FIX: Improved compatibility with the `JetFormBuilder Woocommerce Cart & Checkout Action` addon
+* FIX: Fixed incorrect calculation in the `Calculated Field` when using Dynamic Value
+* FIX: Resolved a critical error in hCaptcha when no keys are inserted
+* FIX: Fixed an issue where the input mask prevented the form from being submitted
+* FIX: Fixed an issue with `Enable form pages progress` and `Clear data on success submit` options on Elementor pages
+* ADD: Added the `Is field value unique` callback for the `Advanced Validation` option with the `Server-Side Callback` type
+* ADD: Added the `Open in New Tab` option to the `Redirect to Page` action
+* FIX: Minor fixes in the editor
+
 ## 3.4.5.2
 * FIX: Calculated field issues after 3.4.5 update
 * FIX: Issue with the Date field when the default value is set as macros

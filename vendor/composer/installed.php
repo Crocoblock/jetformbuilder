@@ -3,7 +3,7 @@
         'name' => 'crocoblock/jetformbuilder',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '4ef9c48f8cca18b82fefe601da4be6be08c57ab0',
+        'reference' => '2b1ea125d3b83a75054100b596c14e6698183995',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'crocoblock/jetformbuilder' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '4ef9c48f8cca18b82fefe601da4be6be08c57ab0',
+            'reference' => '2b1ea125d3b83a75054100b596c14e6698183995',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -46,7 +46,7 @@ class Is_Field_Value_Unique extends Base_Validation_Callback {
 
 			$params = array_merge( $record_ids, array( $field_name, $value ) );
 
-			$exists = $wpdb->get_var( $wpdb->prepare( $sql, $params ) );
+			$exists = $wpdb->get_var( $wpdb->prepare( $sql, $params ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 			if ( $exists ) {
 				return false;

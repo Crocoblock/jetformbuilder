@@ -43,7 +43,7 @@ class Is_Field_Value_Unique extends Base_Validation_Callback {
 					WHERE record_id IN (' . $placeholders . ') 
 					AND field_name = %s 
 					AND field_value = %s',
-					array_merge( $record_ids, [ $field_name, $value ] )
+					array_merge( $record_ids, array( $field_name, $value ) )
 				)
 			);
 

@@ -35,17 +35,18 @@ class Is_Field_Value_Unique extends Base_Validation_Callback {
 		);
 
 		if ( ! empty( $record_ids ) ) {
-			$placeholders = implode( ', ', array_fill( 0, count( $record_ids ), '%d' ) );
-
-			$exists = $wpdb->get_var(
-				$wpdb->prepare(
-					'SELECT COUNT(*) FROM ' . $wpdb->prefix . 'jet_fb_records_fields 
-					WHERE record_id IN (' . $placeholders . ') 
-					AND field_name = %s 
-					AND field_value = %s',
-					array_merge( $record_ids, [ $field_name, $value ] )
-				)
+			$placeholders = array_fill( 0, count( $record_ids ), '%d' );
+			$sql = sprintf(
+				'SELECT COUNT(*) FROM ' . $wpdb->prefix . 'jet_fb_records_fields 
+				WHERE record_id IN (%s) 
+				AND field_name = %%s 
+				AND field_value = %%s',
+				implode( ', ', $placeholders )
 			);
+
+			$params = array_merge( $record_ids, array( $field_name, $value ) );
+
+			$exists = $wpdb->get_var( $wpdb->prepare( $sql, $params ) );
 
 			if ( $exists ) {
 				return false;

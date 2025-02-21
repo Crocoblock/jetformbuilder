@@ -167,6 +167,24 @@ body.post-type-jet-form-builder {
 		.components-card__body {
 			padding: 10px 15px;
 			font-size: 14px;
+			.components-base-control {
+				margin: 0;
+				&:last-child {
+					padding-bottom: 5px;
+				}
+				.components-base-control__label {
+					margin-bottom: 4px;
+				}
+				& + .components-base-control {
+					margin-top: 10px;
+				}
+			}
+			.components-select-control {
+				gap: 4px;
+			}
+			.components-base-control__help {
+				margin-top: 4px;
+			}
 		}
 		.components-card__body,
 		.components-elevation {

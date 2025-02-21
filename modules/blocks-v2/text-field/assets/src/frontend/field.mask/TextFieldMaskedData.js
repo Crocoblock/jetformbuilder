@@ -23,6 +23,13 @@ function TextFieldMaskedData() {
 
 		this.enterKey = new ReactiveHook();
 		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
+		node.addEventListener('input', this.handleAutofill.bind(this, node));
+	};
+	this.handleAutofill = function(node) {
+		if (node && node.inputmask) { 
+			node.inputmask.setValue(node.value);
+			this.maskValidation();
+		}
 	};
 	this.maskValidation = function() {
 		const [ node ] = this.nodes;
@@ -54,6 +61,20 @@ function TextFieldMaskedData() {
 		const options = applyFilters( 'jet.fb.inputmask.options', inputMaskOpts, this );
 
 		jQuery( node ).inputmask( options );
+
+		// Restore the input value when navigating back to the form page.
+		// Inputmask may visually retain the value, but the actual input field remains empty.
+		if (node.inputmask) {
+			setTimeout(() => {
+				const savedValue = node.inputmask._valueGet();
+				const emptyMask  = node.inputmask.getemptymask();
+				if (savedValue && savedValue !== emptyMask) {
+					node.value = savedValue;
+					jQuery(node).trigger('input');
+				}
+			}, 0);
+		}
+
 
 		this.beforeSubmit( this.removeMask.bind( this ) );
 		this.getSubmit().onEndSubmit( this.revertMask.bind( this ) );

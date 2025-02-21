@@ -10,9 +10,24 @@ function RowControlEnd( {
 	children,
 	hasError = false,
 	showDefaultNotice = true,
+	errorText="",
 	className,
 	...props
 } ) {
+
+	const defaultErrorText = __(
+		'Please fill this required field',
+		'jet-form-builder',
+	)
+
+	let newErrorText = '';
+
+	if ( errorText.length ) {
+		newErrorText = __(
+			errorText,
+			'jet-form-builder',
+		)
+	}
 
 	return <Flex
 		className={ cx(
@@ -24,10 +39,7 @@ function RowControlEnd( {
 		{ ...props }
 	>
 		{ hasError && showDefaultNotice && <IconText>
-			{ __(
-				'Please fill this required field',
-				'jet-form-builder',
-			) }
+			{ newErrorText.length ? newErrorText : defaultErrorText }
 		</IconText> }
 		{ children }
 	</Flex>;

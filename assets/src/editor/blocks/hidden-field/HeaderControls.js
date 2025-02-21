@@ -9,7 +9,7 @@ const {
 	      useBlockAttributes,
       } = JetFBHooks;
 
-let HeaderControls = function () {
+let HeaderControls = function () { 
 	const [ attributes, setAttributes ] = useBlockAttributes();
 
 	return <>
@@ -23,9 +23,9 @@ let HeaderControls = function () {
 			onChange={ render => setAttributes(
 				{ render: Boolean( render ) } ) }
 		/> }
-		<ToggleControl
+		<ToggleControl  
 			label={ __( 'Return the raw value', 'jet-form-builder' ) }
-			help={ __( `If this option is enabled, the value of the will be JSON-encoded if the value is an array or object`,
+			help={ __( `If this option is enabled, the value of the field will be JSON-encoded if the value is an array or object`,
 				'jet-form-builder',
 			) }
 			checked={ attributes.return_raw }

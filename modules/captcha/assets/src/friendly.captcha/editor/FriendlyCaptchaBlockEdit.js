@@ -18,7 +18,7 @@ function FriendlyCaptchaBlockEdit( { isSelected, attributes } ) {
 	return <>
 		<div { ...blockProps }>
 			{ isSelected
-			  ? <div style={ { padding: '20px' } }>
+			  ? <div>
 				  <FriendlyCaptchaOptions/>
 			  </div>
 			  : preview }

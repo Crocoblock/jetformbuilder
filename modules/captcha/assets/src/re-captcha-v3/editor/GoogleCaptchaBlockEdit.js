@@ -48,7 +48,7 @@ function GoogleCaptchaBlockEdit( { isSelected, attributes } ) {
 	return <>
 		<div { ...blockProps }>
 			{ isSelected
-			  ? <div style={ { padding: '20px' } }>
+			  ? <div>
 				  <ToggleControl
 					  checked={ providerArgs.use_global }
 					  onChange={ val => setProviderArgs(

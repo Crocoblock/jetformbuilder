@@ -18,7 +18,7 @@ function TurnstileBlockEdit( { isSelected, attributes } ) {
 	return <>
 		<div { ...blockProps }>
 			{ isSelected
-			  ? <div style={ { padding: '20px' } }>
+			  ? <div>
 				  <TurnstileOptions/>
 			  </div>
 			  : preview }

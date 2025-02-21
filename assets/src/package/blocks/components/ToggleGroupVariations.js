@@ -79,7 +79,7 @@ function ToggleGroupVariationsBase( { value } ) {
 		return null;
 	}
 
-	return <ToggleGroupControl
+	return <div className="jfb-variations-toolbar-toggle"><ToggleGroupControl
 		hideLabelFromVision
 		onChange={ varName => setAttributes( {
 			...variations.find(
@@ -93,7 +93,7 @@ function ToggleGroupVariationsBase( { value } ) {
 			components,
 			cloneElement,
 		) }
-	</ToggleGroupControl>;
+	</ToggleGroupControl></div>;
 }
 
 function ToggleGroupVariations( props ) {

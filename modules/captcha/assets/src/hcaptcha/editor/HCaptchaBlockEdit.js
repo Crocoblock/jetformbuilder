@@ -18,7 +18,7 @@ function HCaptchaBlockEdit( { isSelected, attributes } ) {
 	return <>
 		<div { ...blockProps }>
 			{ isSelected
-			  ? <div style={ { padding: '20px' } }>
+			  ? <div>
 				  <HCaptchaOptions/>
 			  </div>
 			  : preview }

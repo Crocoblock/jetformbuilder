@@ -110,7 +110,7 @@ function AddActionModal() {
 				) }
 			</Button>
 		</StyledPlaceholder> }
-		<Grid columns={ 4 }>
+		<Grid columns={ 4 } className="jfb-actions-grid">
 			{ actionTypes.map( action => (
 				<ActionGridItem
 					key={ action.type }

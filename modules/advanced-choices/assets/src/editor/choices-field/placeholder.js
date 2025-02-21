@@ -51,7 +51,7 @@ function Placeholder() {
 		allowSkip
 		label={ __( 'Select choices layout', 'jet-form-builder' ) }
 		instructions={ __(
-			'You can select one of predefined layout, or build custom',
+			'You can select one of predefined layout, or skip this step and build custom from scratch',
 			'jet-form-builder',
 		) }
 		variations={ variations }

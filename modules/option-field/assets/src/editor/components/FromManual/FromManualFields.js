@@ -46,9 +46,6 @@ function FromManualFields() {
 			isSecondary
 			onClick={ toggleModal }
 			icon="admin-tools"
-			style={ {
-				marginBottom: '15px',
-			} }
 		>
 			{ __( 'Manage items', 'jet-form-builder' ) }
 		</Button>

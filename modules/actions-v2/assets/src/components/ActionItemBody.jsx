@@ -57,7 +57,7 @@ function ActionItemBody() {
 	), [ action.type ] );
 
 	return <ActionCardBody>
-		<Flex align="center" justify="flex-start">
+		<Flex align="center" justify="flex-start" gap={ 1 }>
 			<CursoredIcon
 				className={ 'jfb-action-handle' }
 				icon={ dragHandle }

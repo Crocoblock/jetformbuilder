@@ -28,6 +28,8 @@ export default function EditAdvancedChoice( props ) {
 	const className = classnames( {
 		'jet-form-builder-choice--item': true,
 		'is-checked': isChecked,
+		'jfb-collapse-block-margin': true,
+		'jfb-collapse-block-border': true,
 	} );
 
 	const allowedBlocks = useAllowedBlocks();
@@ -68,7 +70,7 @@ export default function EditAdvancedChoice( props ) {
 						'jet-form-builder',
 					) }
 					help={ __(
-						`This value will be used for calculations 
+						`This value will be used for calculations
 in the Calculated Field.`,
 						'jet-form-builder',
 					) }

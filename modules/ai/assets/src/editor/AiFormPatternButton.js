@@ -13,11 +13,7 @@ function AiFormPatternButton( { pattern } ) {
 
 	return <>
 		<FlexItem
-			style={ {
-				height: 'calc( 32px + 3em )',
-				margin: '0.6em',
-				alignSelf: 'center',
-			} }
+			className="block-editor-block-variation-picker__or"
 		>
 			{ __( 'or', 'jet-form-builder' ) }
 		</FlexItem>

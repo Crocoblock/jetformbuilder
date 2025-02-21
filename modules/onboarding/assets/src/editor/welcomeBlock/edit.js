@@ -69,6 +69,8 @@ function WelcomeBlockEdit( { attributes } ) {
 		</div>;
 	}
 
+	console.log( elements );
+
 	return <div { ...blockProps } >
 		<Placeholder
 			icon={ 'admin-tools' }
@@ -114,29 +116,31 @@ function WelcomeBlockEdit( { attributes } ) {
 						) }
 					</ExternalLink>
 				</Flex>
-				<ToggleControl
-					checked={ saveRecord }
-					onChange={ saveRecord => updateSettings( {
-						saveRecord,
-					} ) }
-					flexLabelProps={ {
-						align: 'center',
-					} }
-				>
-					<Flex>
-						{ __( 'Save form records', 'jet-form-builder' ) }
-						<Tooltip
-							text={ __(
-								`Adds "Save Form Record" action to store 
-all form submissions into database`,
-								'jet-form-builder',
-							) }
-							delay={ 200 }
-						>
-							{ HelpIcon }
-						</Tooltip>
-					</Flex>
-				</ToggleControl>
+				<div className="jfb-block-variation-picker-toggle">
+					<ToggleControl
+						checked={ saveRecord }
+						onChange={ saveRecord => updateSettings( {
+							saveRecord,
+						} ) }
+						flexLabelProps={ {
+							align: 'center',
+						} }
+					>
+						<Flex>
+							{ __( 'Save form records', 'jet-form-builder' ) }
+							<Tooltip
+								text={ __(
+									`Adds "Save Form Record" action to store
+	all form submissions into database`,
+									'jet-form-builder',
+								) }
+								delay={ 200 }
+							>
+								{ HelpIcon }
+							</Tooltip>
+						</Flex>
+					</ToggleControl>
+				</div>
 			</Flex>
 		</Placeholder>
 	</div>;

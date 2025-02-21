@@ -78,7 +78,7 @@ function ActionGridItem( { action, onClick } ) {
 		direction="column"
 		align="center"
 		justify="flex-start"
-		className={ action.disabled ? 'is-disabled' : '' }
+		className={ action.disabled ? 'jfb-action-grid-item is-disabled' : 'jfb-action-grid-item' }
 	>
 		<ColoredIcon icon={ action?.icon ?? plugins } size={ 32 }/>
 		<ActionTitle>{ action.label }</ActionTitle>

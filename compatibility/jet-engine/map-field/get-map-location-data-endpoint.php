@@ -28,9 +28,12 @@ class Get_Map_Location_Data_Endpoint extends \Jet_Engine\Modules\Maps_Listings\G
 			return false;
 		}
 
-		$cookie = $request->get_header( 'cookie' );
+		/**
+		 * @see https://github.com/Crocoblock/jetformbuilder/issues/521
+		 */
+		$referer = $request->get_header( 'referer' );
 
-		if ( ! $cookie || false === strpos( $cookie, 'wordpress_test_cookie' ) ) {
+		if ( ! $referer || false === strpos( $referer, home_url('/') ) ) {
 			return false;
 		}
 

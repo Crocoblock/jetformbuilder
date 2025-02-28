@@ -71,7 +71,7 @@ function GenerateFormModal( {
 			{ __( 'Generate Form with AI', 'jet-form-builder' ) }
 			<span className="badge">
 				{ __(
-					'Beta. Limited 10 requests per month',
+					'Limited 15 requests per month',
 					'jet-form-builder',
 				) }
 			</span>

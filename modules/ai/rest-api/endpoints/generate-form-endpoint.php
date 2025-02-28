@@ -78,6 +78,14 @@ class Generate_Form_Endpoint extends Rest_Api_Endpoint_Base {
 			}
 		}
 
+		/**
+		 * Add unique site suffix from LOGGED_IN_SALT
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/14825
+		 */
+		if ( defined( 'LOGGED_IN_SALT' ) ) {
+			$server_ip .= LOGGED_IN_SALT;
+		}
+
 		return md5( $server_ip ); // It's not a local IP address
 	}
 }

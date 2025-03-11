@@ -2655,7 +2655,8 @@ class Form extends Base {
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo "<div {$this->render_attributes( '_root' )}>";
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $blocks->get_form_class()->render_callback_field( $settings );
+		$content = do_shortcode( $blocks->get_form_class()->render_callback_field( $settings ) );
+		echo $content;
 		echo '</div>';
 	}
 

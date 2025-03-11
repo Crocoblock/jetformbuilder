@@ -15,6 +15,10 @@ const label = {
 		'Automatic focus',
 		'jet-form-builder',
 	),
+	ssr_validation_method: __(
+		'Server side validation method',
+		'jet-form-builder',
+	),
 };
 
 const help = {
@@ -36,6 +40,10 @@ const help = {
 	),
 	auto_focus: __(
 		`Indicates invalid field and prevents the user from going to the next page or submitting the form unless filled.`,
+		'jet-form-builder',
+	),
+	ssr_validation_method: __(
+		'Server side validation method',
 		'jet-form-builder',
 	),
 };

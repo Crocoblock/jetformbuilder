@@ -18,6 +18,17 @@
 			:disabled="isLoading"
 			@input="changeVal( 'clear_on_uninstall', $event )"
 		></cx-vui-switcher>
+    <cx-vui-select
+        name="ssr_validation_method"
+        :wrapper-css="[ 'equalwidth' ]"
+        :size="'fullwidth'"
+        :label="loading.ssr_validation_method ? `${label.ssr_validation_method} (loading...)` : label.ssr_validation_method"
+        :description="help.ssr_validation_method"
+        :value="storage.hasOwnProperty( 'ssr_validation_method' ) ? storage.ssr_validation_method : 'rest'"
+        :options-list="selectOptions"
+        :disabled="isLoading"
+        @input="changeVal( 'ssr_validation_method', $event )"
+    ></cx-vui-select>
 		<cx-vui-component-wrapper
 			:label="__( 'Form Accessibility', 'jet-form-builder' )"
 			:wrapper-css="[ 'equalwidth' ]"
@@ -61,6 +72,7 @@ import {
 	label,
 } from './source';
 
+
 const { SaveTabByAjax, i18n } = window.JetFBMixins;
 
 export default {
@@ -77,7 +89,12 @@ export default {
 			label, help,
 			storage: JSON.parse( JSON.stringify( this.incoming ) ),
 			isLoading: false,
-			loading: {},
+      loading: {},
+      selectOptions: [
+        { value: 'rest', label: ( 'Rest API' ) },
+        { value: 'admin_ajax', label: ( 'Admin Ajax' ) },
+        { value: 'self', label: ( 'Self' ) },
+      ],
 		};
 	},
 	created() {

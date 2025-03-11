@@ -16,6 +16,7 @@ class Options_Handler extends Base_Handler {
 		'disable_next_button' => true,
 		'scroll_on_next'      => false,
 		'auto_focus'          => false,
+		'ssr_validation_method' => 'rest',
 	);
 
 	public function slug() {
@@ -30,14 +31,17 @@ class Options_Handler extends Base_Handler {
 			if ( ! array_key_exists( $name, $_POST ) ) {
 				continue;
 			}
-
-			$options[ $name ] = filter_var(
-				sanitize_key( $_POST[ $name ] ),
-				defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN
-			);
-
+			if ( is_bool( $default ) ) {
+				$options[ $name ] = filter_var(
+					sanitize_key( $_POST[ $name ] ),
+					defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN
+				);
+			} else {
+				$options[ $name ] = sanitize_text_field( wp_unslash( $_POST[ $name ] ?? '' ));
+			}
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
+
 
 		$result = $this->update_options( $options );
 		$this->send_response( $result );

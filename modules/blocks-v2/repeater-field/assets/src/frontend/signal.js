@@ -66,8 +66,39 @@ function SignalRepeater() {
 			currentIndex,
 		);
 
+		/**
+		 * Reset input values for a new row
+		 *
+		 * @since 3.4.7
+		 */
+		const newRow = template.content.firstElementChild;
+		const inputs = newRow.querySelectorAll( "input, select, textarea, output" );
+
+		inputs.forEach( ( input ) => {
+			switch ( input.type ) {
+				case "checkbox":
+				case "radio":
+					input.checked = false;
+					break;
+				case "select-one":
+				case "select-multiple":
+					input.selectedIndex = -1;
+					break;
+				case "file":
+					input.value = "";
+					break;
+				case "range":
+					input.value = input.defaultValue || "";
+					break;
+				default:
+					input.value = "";
+					break;
+			}
+		} );
+
 		template.content.firstChild.dataset.index = '' + currentIndex;
-		this.input.container.append( template.content.firstChild );
+
+		this.input.container.append( newRow );
 
 		const appended = this.input.container.lastChild;
 

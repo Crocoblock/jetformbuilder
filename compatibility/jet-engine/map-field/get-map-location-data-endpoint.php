@@ -33,7 +33,7 @@ class Get_Map_Location_Data_Endpoint extends \Jet_Engine\Modules\Maps_Listings\G
 		 */
 		$referer = $request->get_header( 'referer' );
 
-		if ( ! $referer || false === strpos( $referer, home_url('/') ) ) {
+		if ( ! $referer || false === strpos( $referer, home_url( '/' ) ) ) {
 			return false;
 		}
 

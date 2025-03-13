@@ -52,11 +52,8 @@ export default function ConditionalBlockEdit( props ) {
 	      } = props;
 
 	useEffect( () => {
-		if ( !attributes.name ) {
-			setAttributes( { name: clientId } );
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [ attributes.name, clientId ] );
+        setAttributes( { name: clientId } );
+    }, [ clientId, setAttributes ] );
 
 	const blocks     = getCurrentInnerBlocks();
 	const blockNames = blocks.reduce(

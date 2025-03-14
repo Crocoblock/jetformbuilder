@@ -43,7 +43,7 @@ const help = {
 		'jet-form-builder',
 	),
 	ssr_validation_method: __(
-		'Server side validation method',
+		'Select how the server-side validation request will be made – via WP REST API, admin-ajax.php, or through the URL of the current page.',
 		'jet-form-builder',
 	),
 };

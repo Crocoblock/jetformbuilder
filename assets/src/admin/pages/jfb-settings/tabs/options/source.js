@@ -15,6 +15,10 @@ const label = {
 		'Automatic focus',
 		'jet-form-builder',
 	),
+	form_records_access_capability: __(
+		'Form Records Access Capability',
+		'jet-form-builder',
+	),
 };
 
 const help = {
@@ -36,6 +40,10 @@ const help = {
 	),
 	auto_focus: __(
 		`Indicates invalid field and prevents the user from going to the next page or submitting the form unless filled.`,
+		'jet-form-builder',
+	),
+	form_records_access_capability: __(
+		'By default any Form Records available only for users with `manage_options` capability. Here you can overwrite it with any capability you want. More about capabilities <a href="https://wordpress.org/support/article/roles-and-capabilities/" target="_blank">here</a>',
 		'jet-form-builder',
 	),
 };

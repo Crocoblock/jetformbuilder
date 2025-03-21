@@ -20,8 +20,16 @@ function fromBulkRow( source ) {
 
 	let [ label, value, calculate ] = parts;
 
-	label     = label.trim();
-	value     = 'function' === typeof value.trim
+	label = label.trim();
+
+	if ( 1 === parts.length ) {
+		return {
+			label,
+			value: '',
+		};
+	}
+
+	value     = 'function' === typeof value?.trim
 	            ? value.trim()
 	            : false;
 	calculate = 'function' === typeof calculate?.trim

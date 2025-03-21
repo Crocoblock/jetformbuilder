@@ -27,8 +27,7 @@ const baseBulk = window.JetFBBulkOptions.sources[
 
 const StyledFlex = styled( Flex )`
     justify-content: flex-start !important;
-	padding: 8px 0;
-	border-top: 1px solid #ddd;
+	padding: 0 0 13px 0;
 
 	.jet-form-edit-modal & {
 		.components-base-control__field  {

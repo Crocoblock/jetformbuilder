@@ -173,6 +173,7 @@ export default function DateEdit( props ) {
 				<TextControl
 					onChange={ () => {
 					} }
+					className="jet-form-builder__field-preview"
 					key={ `place_holder_block_${ blockName }` }
 					placeholder={ 'Input type="date"' }
 				/>

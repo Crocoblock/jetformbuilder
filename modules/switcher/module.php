@@ -46,6 +46,7 @@ class Module implements
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_admin_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'preview_styles' ) );
 	}
 
 	public function remove_hooks() {
@@ -61,7 +62,20 @@ class Module implements
 		return $types;
 	}
 
+	public function preview_styles() {
+
+		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+
+		wp_enqueue_style(
+			$this->get_handle(),
+			$this->get_url( 'assets/build/switcher.css' ),
+			array(),
+			$script_asset['version']
+		);
+	}
+
 	public function enqueue_admin_assets() {
+
 		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
 
 		wp_enqueue_script(

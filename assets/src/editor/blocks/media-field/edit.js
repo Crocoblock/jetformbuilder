@@ -216,6 +216,7 @@ export default function MediaEdit( props ) {
 				<InputControl
 					key={ uniqKey( 'place_holder_block_new' ) }
 					type={ 'file' }
+					className="jet-form-builder__field-preview"
 					disabled={ true }
 				/>
 			</FieldWrapper>

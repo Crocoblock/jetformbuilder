@@ -36,6 +36,24 @@ abstract class Base_Source {
 	}
 
 	/**
+	 * Field args getter
+	 *
+	 * @return array
+	 */
+	public function get_field_args() {
+		return $this->field_args;
+	}
+
+	/**
+	 * Fields map getter
+	 *
+	 * @return array
+	 */
+	public function get_fields_map() {
+		return $this->fields_map;
+	}
+
+	/**
 	 * @param $fields_map
 	 * @param $preset_data
 	 * @param $args
@@ -88,7 +106,7 @@ abstract class Base_Source {
 	 * @return mixed
 	 * @throws Preset_Exception
 	 */
-	protected function get_field_data() {
+	public function get_field_data() {
 		if ( $this->has_field_in_map() ) {
 			return $this->fields_map[ $this->field ];
 		}
@@ -171,6 +189,15 @@ abstract class Base_Source {
 	}
 
 	/**
+	 * Public prop getter
+	 *
+	 * @return string
+	 */
+	public function get_prop_name() {
+		return $this->prop;
+	}
+
+	/**
 	 * @return false|mixed
 	 * @throws Preset_Exception
 	 */
@@ -208,10 +235,16 @@ abstract class Base_Source {
 		$func_name = self::FUNC_PREFIX . $this->prop;
 
 		if ( is_callable( array( $this, $func_name ) ) ) {
-			return call_user_func( array( $this, $func_name ) );
+			$result = call_user_func( array( $this, $func_name ) );
+		} else {
+			$result = $this->default_prop( $this->prop );
 		}
 
-		return $this->default_prop( $this->prop );
+		return apply_filters(
+			'jet-form-builder/preset/source/value',
+			$result,
+			$this
+		);
 	}
 
 	private function get_extra_fields(): array {

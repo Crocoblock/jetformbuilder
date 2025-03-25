@@ -64,7 +64,7 @@ class Module implements
 
 	public function preview_styles() {
 
-		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+		$script_asset = require $this->get_dir( 'assets/build/editor.asset.php' );
 
 		wp_enqueue_style(
 			$this->get_handle(),
@@ -76,7 +76,7 @@ class Module implements
 
 	public function enqueue_admin_assets() {
 
-		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+		$script_asset = require $this->get_dir( 'assets/build/editor.asset.php' );
 
 		wp_enqueue_script(
 			$this->get_handle(),

@@ -64,12 +64,10 @@ let DynamicPreset = function ( {
 				'jet-form-builder',
 			) }
 			checked={ stateValue.restricted ?? true }
-			onChange={ restricted => onChange( prev => JSON.stringify(
-				{
-					...prev,
-					restricted: restricted ? undefined : restricted,
-				},
-			) ) }
+			onChange={ ( restricted ) => {
+				let newResticted = restricted ? undefined : restricted;
+				onChangeValue( newResticted, 'restricted' );
+			} }
 		/> }
 	</Flex>;
 };

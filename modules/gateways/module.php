@@ -81,7 +81,8 @@ class Module implements
 
 		$gateways = Tab_Handler_Manager::get_options( self::OPTION_NAME );
 
-		return isset( $gateways['use_gateways'] ) ? boolval( $gateways['use_gateways'] ) : $allow;
+		$use_gateways = isset( $gateways['use_gateways'] ) ? boolval( $gateways['use_gateways'] ) : $allow;
+		return apply_filters( 'jet-form-builder/use-gateways', $use_gateways );
 	}
 
 	public function init_hooks() {

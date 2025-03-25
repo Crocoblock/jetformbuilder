@@ -8,6 +8,21 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.4.7
+* FIX: Editor styles compatibility with BuddyBoss theme
+* FIX: Reset input values in the Repeater field when adding a new row
+* FIX: Init of the Check Mark block
+* FIX: Check mark widget icon for checkbox
+* FIX: Issue with Conditional Block duplication
+* ADD: style controls notices
+* ADD: `jet-form-builder/ajax/on-fail` JS trigger
+* FIX: Input mask DateTime documentation link
+* FIX: [Crocoblock/jetformbuilder#521](https://github.com/Crocoblock/jetformbuilder/issues/521)
+* FIX: [Crocoblock/suggestions#7878](https://github.com/Crocoblock/suggestions/issues/7878)
+* FIX: `Generate with AI` limit error on local sites
+* FIX: Errors on the `Payments` admin page when the `Enable Gateways` option is disabled
+* FIX: Disabled "Next page" button when select field is empty
+
 ## 3.4.6
 * FIX: Resolved an issue with search autocomplete in the Map field
 * FIX: Fixed case sensitivity for the `use autocomplete` option in `Select Field` when loading via AJAX

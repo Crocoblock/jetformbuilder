@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 3.4.6
+Stable tag: 3.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,21 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.4.7**
+- FIX: Editor styles compatibility with BuddyBoss theme
+- FIX: Reset input values in the Repeater field when adding a new row
+- FIX: Init of the Check Mark block
+- FIX: Check mark widget icon for checkbox
+- FIX: Issue with Conditional Block duplication
+- ADD: style controls notices
+- ADD: `jet-form-builder/ajax/on-fail` JS trigger
+- FIX: Input mask DateTime documentation link
+- FIX: [Crocoblock/jetformbuilder#521](https://github.com/Crocoblock/jetformbuilder/issues/521)
+- FIX: [Crocoblock/suggestions#7878](https://github.com/Crocoblock/suggestions/issues/7878)
+- FIX: `Generate with AI` limit error on local sites
+- FIX: Errors on the `Payments` admin page when the `Enable Gateways` option is disabled
+- FIX: Disabled "Next page" button when select field is empty
 
 **3.4.6**
 - FIX: Resolved an issue with search autocomplete in the Map field

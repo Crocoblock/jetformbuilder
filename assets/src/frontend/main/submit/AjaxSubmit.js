@@ -103,6 +103,14 @@ function AjaxSubmit( form ) {
 		this.form.toggle();
 		this.status.current = false;
 
+		const { rootNode } = this.form.observable;
+		const $form        = jQuery( rootNode );
+
+		jQuery( document ).trigger(
+			'jet-form-builder/ajax/on-fail',
+			[ jqXHR, textStatus, errorThrown, $form ]
+		);
+
 		// eslint-disable-next-line no-console
 		console.error( jqXHR.responseText, errorThrown );
 	};

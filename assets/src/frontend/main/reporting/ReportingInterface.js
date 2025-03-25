@@ -110,7 +110,9 @@ ReportingInterface.prototype = {
 		if (
 			!this.hasChangedValue() &&
 			this.promisesCount === promises.length &&
-			!this.input.stopValidation
+			!this.input.stopValidation &&
+			// Refresh all selects because their state might have changed
+			this.input.inputType !== 'hr-select-level'
 		) {
 			return this.errors ?? [];
 		}
@@ -123,10 +125,10 @@ ReportingInterface.prototype = {
 		}
 
 		this.errors = await this.getErrorsRaw( promises, signal );
-
 		return this.errors;
 	},
 	report ( validationErrors ) {
+
 		if ( this.input.getContext().reportedFirst ) {
 			this.reportRaw( validationErrors );
 

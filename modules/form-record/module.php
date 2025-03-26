@@ -268,9 +268,7 @@ final class Module implements
 
 	public function form_records_access_capability($submenu_data, $page) {
 		if ( $page->slug() === 'jfb-records' ) {
-			$options_tab = Tab_Handler_Manager::instance()->tab( 'options-tab' );
-			$options     = $options_tab->get_options();
-			$submenu_data['capability'] = $options['form_records_access_capability'] ?? 'manage_options';
+			$submenu_data['capability'] = Tab_Handler_Manager::get_form_records_access_capability();
 		}
 		return $submenu_data;
 	}

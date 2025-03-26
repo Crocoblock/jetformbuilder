@@ -102,6 +102,8 @@ class Module implements
 
 		add_filter( 'post_row_actions', array( $this->get_post_actions(), 'base_add_action_links' ), 10, 2 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'import_form_js' ) );
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'hide_url' ) );
 	}
 
 	public function remove_hooks() {
@@ -120,6 +122,24 @@ class Module implements
 
 		remove_filter( 'post_row_actions', array( $this->get_post_actions(), 'base_add_action_links' ) );
 		remove_action( 'admin_enqueue_scripts', array( $this, 'import_form_js' ) );
+
+		remove_action( 'admin_enqueue_scripts', array( $this, 'hide_url' ), 999 );
+	}
+
+	public function hide_url() {
+		if ( !current_user_can( 'manage_options' ) ) {
+		?>
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				document.querySelectorAll('a.jet-plugin').forEach(menuItem => {
+					if (menuItem.getAttribute('href')?.includes('admin.php?page=jfb-records')) {
+						menuItem.setAttribute('href', '#');
+					}
+				});
+			});
+		</script>
+		<?php
+		}
 	}
 
 	public function set_current_screen() {

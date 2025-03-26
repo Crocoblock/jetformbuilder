@@ -34,7 +34,7 @@ class Form_Link_Column extends Column_Advanced_Base {
 		if ( !current_user_can( 'manage_options' ) ) {
 			return array(
 				'text'  => Post_Tools::get_title( $form ),
-				'href'  => '',
+				'href'  => null,
 				'title' => __( '', 'jet-form-builder' ),
 				'type'  => '',
 			);

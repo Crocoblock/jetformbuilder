@@ -17,10 +17,6 @@ const {
 		  useOnUpdateModal
       } = JetFBHooks;
 
-const {
-	      ActionModalFooterSlotFill,
-      } = JetFBComponents;
-
 const baseBulk = window.JetFBBulkOptions.sources[
 	Object.keys( window.JetFBBulkOptions.sources )[ 0 ]
 	];
@@ -66,8 +62,9 @@ function BulkOptions( { setModalContent } ) {
 		setRealAttributes,
 	} = useScopedAttributesContext();
 
-	const [ bulkSelect, setBulkSelect ]   = useState( 'base' );
-	const [ optionsList, setOptionsList ] = useState( window.JetFBBulkOptions.list || [] );
+	const [ bulkSelect, setBulkSelect ]         = useState( 'base' );
+	const [ optionsList, setOptionsList ]       = useState( window.JetFBBulkOptions.list || [] );
+	const [ currentOptions, setCurrentOptions ] = useState( [] );
 
 	const bulkSource = window.JetFBBulkOptions.sources;
 
@@ -78,6 +75,7 @@ function BulkOptions( { setModalContent } ) {
 	useEffect( () => {
         if ( attributes.field_options?.length ) {
             setOptionsList( [ { label: 'Select...', value: 'jfb_current_select' } ].concat( optionsList ) );
+			setCurrentOptions( optionsToBulk( attributes.field_options ) );
             setBulkSelect( 'jfb_current_select' );
         }
     }, [] );
@@ -86,7 +84,7 @@ function BulkOptions( { setModalContent } ) {
         if ( 'jfb_current_select' !== bulkSelect ) {
             setBulk( toBulk( bulkSource[bulkSelect] ) );
         } else  {
-			setBulk( optionsToBulk( attributes.field_options ) );
+			setBulk( currentOptions );
 		}
     }, [ bulkSelect ] );
 
@@ -96,6 +94,19 @@ function BulkOptions( { setModalContent } ) {
 				...fromBulk( val ),
 			],
 		} );
+	};
+
+	const handleSelectChange = ( value ) => {
+		setBulkSelect( value );
+
+		if ( 'jfb_current_select' === value ) {
+			setBulk( currentOptions );
+			replaceOptions( currentOptions );
+		} else {
+			const newBulk = toBulk( bulkSource[value] );
+			setBulk( newBulk );
+			replaceOptions( newBulk );
+		}
 	};
 
 	useOnUpdateModal( () => {
@@ -109,7 +120,7 @@ function BulkOptions( { setModalContent } ) {
 			<label>{ __( 'Options preset:', 'jet-form-builder' ) }</label>
 			<SelectControl
 				value={ bulkSelect }
-				onChange={ setBulkSelect }
+				onChange={ handleSelectChange }
 				options={ optionsList }
 			/>
 		</StyledFlex>

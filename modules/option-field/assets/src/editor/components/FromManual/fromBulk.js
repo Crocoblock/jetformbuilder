@@ -12,6 +12,10 @@ function fromBulk( source ) {
 }
 
 function fromBulkRow( source ) {
+	if ( !source.trim() ) {
+        return false;
+    }
+
 	const parts = source.split( ':' );
 
 	if ( !parts.length ) {

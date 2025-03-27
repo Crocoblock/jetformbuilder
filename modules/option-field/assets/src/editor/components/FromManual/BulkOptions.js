@@ -17,10 +17,6 @@ const {
 		  useOnUpdateModal
       } = JetFBHooks;
 
-const baseBulk = window.JetFBBulkOptions.sources[
-	Object.keys( window.JetFBBulkOptions.sources )[ 0 ]
-	];
-
 const StyledFlex = styled( Flex )`
     justify-content: flex-start !important;
 	padding: 0 0 13px 0;
@@ -62,31 +58,22 @@ function BulkOptions( { setModalContent } ) {
 		setRealAttributes,
 	} = useScopedAttributesContext();
 
-	const [ bulkSelect, setBulkSelect ]         = useState( 'base' );
-	const [ optionsList, setOptionsList ]       = useState( window.JetFBBulkOptions.list || [] );
+	const [ bulkSelect, setBulkSelect ]         = useState( 'jfb_current_select' );
 	const [ currentOptions, setCurrentOptions ] = useState( [] );
 
-	const bulkSource = window.JetFBBulkOptions.sources;
+	const optionsList  = [ { label: 'Select...', value: 'jfb_current_select' } ].concat( window.JetFBBulkOptions.list ) || [];
+	const bulkSource   = window.JetFBBulkOptions.sources;
 
 	const [ bulk, setBulk ] = useState(
-		() => toBulk( baseBulk ),
+		() => toBulk( attributes.field_options )
 	);
 
 	useEffect( () => {
         if ( attributes.field_options?.length ) {
-            setOptionsList( [ { label: 'Select...', value: 'jfb_current_select' } ].concat( optionsList ) );
 			setCurrentOptions( optionsToBulk( attributes.field_options ) );
-            setBulkSelect( 'jfb_current_select' );
+			setBulk( toBulk( attributes.field_options ) );
         }
     }, [] );
-
-    useEffect( () => {
-        if ( 'jfb_current_select' !== bulkSelect ) {
-            setBulk( toBulk( bulkSource[bulkSelect] ) );
-        } else  {
-			setBulk( currentOptions );
-		}
-    }, [ bulkSelect ] );
 
 	const replaceOptions = ( val = bulk ) => {
 		setAttributes( {

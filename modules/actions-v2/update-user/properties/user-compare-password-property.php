@@ -32,7 +32,15 @@ class User_Compare_Password_Property extends Base_Object_Property {
 	 * @throws Action_Exception
 	 */
 	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
-		$user = get_user_by( 'ID', $modifier->get_value( 'ID' ) );
+		$id      = $modifier->get_value( 'ID' );
+		$user_id = $modifier->get_value( 'user_id' );
+
+		if ( false === $id && false === $user_id ) {
+			throw new Action_Exception( 'internal_error' );
+		}
+
+		$user_id = $id ?: $user_id;
+		$user    = get_user_by( 'ID', $user_id );
 
 		if ( ! is_a( $user, \WP_User::class ) ) {
 			throw new Action_Exception( 'internal_error', $user, $value );

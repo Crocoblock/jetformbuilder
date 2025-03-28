@@ -221,6 +221,8 @@ abstract class Base_Source {
 			return array();
 		}
 
+		$extra = apply_filters( 'jet-form-builder/preset/extra-fields', $extra, $this );
+
 		$parser = ( new Macros_Parser() )->set_replacements(
 			array(
 				'key'  => $this->field_data['key'] ?? '',

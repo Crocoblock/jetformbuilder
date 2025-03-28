@@ -88,7 +88,7 @@ abstract class Base_Source {
 	 * @return mixed
 	 * @throws Preset_Exception
 	 */
-	protected function get_field_data() {
+	public function get_field_data() {
 		if ( $this->has_field_in_map() ) {
 			return $this->fields_map[ $this->field ];
 		}

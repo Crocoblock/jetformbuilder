@@ -36,8 +36,8 @@ class Module implements Base_Module_It {
 
 	public function init_hooks() {
 		add_filter(
-			'jet-form-builder/after-start-form',
-			array( $this, 'on_render_form' )
+			'jet-form-builder/before-render-field',
+			array( $this, 'on_render_field' ),10,3
 		);
 		add_filter(
 			'jet-form-builder/request-handler/request',
@@ -51,8 +51,8 @@ class Module implements Base_Module_It {
 
 	public function remove_hooks() {
 		remove_filter(
-			'jet-form-builder/after-start-form',
-			array( $this, 'on_render_form' )
+			'jet-form-builder/before-render-field',
+			array( $this, 'on_render_field' )
 		);
 		remove_filter(
 			'jet-form-builder/request-handler/request',
@@ -64,28 +64,54 @@ class Module implements Base_Module_It {
 		);
 	}
 
-	public function on_render_form( string $content ): string {
-		$args = jet_form_builder()->post_type->get_args();
+	public function on_render_field( string $content, string $field_name, array $attrs ): string {
+		$type = $attrs['action_type'] ?? '';
+		if ( 'submit-field' !== $field_name || 'submit' !== $type ) {
+			return $content;
+		}
 
+		$args = jet_form_builder()->post_type->get_args();
 		if ( empty( $args['use_honeypot'] ) ) {
 			return $content;
+		}
+
+		$blocks = Live_Form::instance()->blocks;
+		$has_email = false;
+		$has__email = false;
+		$name = 'email';
+		foreach ($blocks as $block) {
+			$block_name = isset($block['attrs']) && isset($block['attrs']['name']) ? $block['attrs']['name'] : '';
+			if ( $block_name === 'email' ) {
+				$has_email = true;
+			}
+			if ( $block_name === '_email' ) {
+				$has__email = true;
+			}
+		}
+
+		if ($has_email) {
+			$name = '_email';
+			if ($has__email) {
+				$name = self::FIELD;
+			}
 		}
 
 		$field = Live_Form::force_render_field(
 			'text-field',
 			array(
 				'field_type'   => 'email',
-				'name'         => self::FIELD,
-				'autocomplete' => 'nope',
+				'name'         => $name,
+				'autocomplete' => 'off',
 			)
 		);
 
 		$content .= sprintf(
-			'<div style="transform: scale(0); position: absolute;">%s</div>',
+			'<div class="jfb-visually-hidden" tabindex="-1">%s</div>',
 			$field
 		);
 
 		return $content;
+
 	}
 
 	/**

@@ -7,7 +7,8 @@ const {
 function LengthFilter() {
 	BaseFilter.call( this );
 
-	this.fullName     = () => 'length';
+	this.label        = () => __( 'length', 'jet-form-builder' );
+	this.fullName     = () => '|length';
 	this.isClientSide = true;
 
 	this.help = __(

@@ -10,6 +10,7 @@ import ConditionItem from '../../block-conditions/components/ConditionItem';
 import ClientSideMacros from '../../macros.button/components/ClientSideMacros';
 import ConditionsRepeaterContextProvider
 	from '../../block-conditions/components/ConditionsRepeaterContextProvider';
+//import { useRef } from 'react';
 
 const {
 	      __,
@@ -19,6 +20,7 @@ const {
 	      useContext,
 	      Fragment,
 	      useEffect,
+		  useRef,
       } = wp.element;
 const {
 	      SelectControl,
@@ -33,7 +35,7 @@ const help = [
 		key: 'commas',
 		render: () => <li>
 			{ __(
-				`If this field supports multiple values, you can separate them with commas`,
+				`If this field supports multiple values, you can separate them with commas. If a string value is expected, wrap it in single quotes. Example: '2025-01-01' or '%value_field%'`,
 				'jet-form-builder',
 			) }
 		</li>,
@@ -89,6 +91,8 @@ function DynamicItemBody() {
 
 	const [ current, setCurrent ] = useState( () => currentValue );
 
+	const textareaRef = useRef( null );
+
 	const [ currentHelp, setCurrentHelp ] = useState(
 		() => getHelp( current.frequency ),
 	);
@@ -104,6 +108,24 @@ function DynamicItemBody() {
 				...settings,
 			}
 		) );
+	};
+
+	const insertAtCursor = ( text ) => {
+		const textarea = textareaRef.current;
+
+		if ( textarea ) {
+			const start        = textarea.selectionStart;
+			const end          = textarea.selectionEnd;
+			const currentValue = current.to_set || '';
+			const newValue     = currentValue.slice( 0, start ) + text + currentValue.slice( end );
+
+			updateCurrent( { to_set: `${ newValue }` } );
+
+			setTimeout( () => {
+				textarea.focus();
+				textarea.selectionStart = textarea.selectionEnd = start + text.length;
+			}, 0 );
+		}
 	};
 
 	const updateConditions = conditions => {
@@ -134,9 +156,7 @@ function DynamicItemBody() {
 					/>
 					<ClientSideMacros withThis>
 						<MacrosFields
-							onClick={ name => updateCurrent( {
-								to_set: `${ current.to_set ?? '' }${ name }`,
-							} ) }
+							onClick={ name => insertAtCursor( name ) }
 						/>
 					</ClientSideMacros>
 				</Flex>
@@ -154,6 +174,7 @@ function DynamicItemBody() {
 					hideLabelFromVision
 					value={ current.to_set ?? '' }
 					onChange={ val => updateCurrent( { to_set: val } ) }
+					ref={ textareaRef }
 				/>
 			</FlexItem>
 		</Flex>

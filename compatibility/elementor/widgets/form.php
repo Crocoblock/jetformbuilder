@@ -1160,13 +1160,14 @@ class Form extends Widget_Base implements Widget_Base_It {
 			)
 		);
 
+
 		$this->add_control(
 			'fields_label_tag',
 			array(
 				'label'   => __( 'Fields label HTML tag', 'jet-form-builder' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => '',
-				'options' => $options['fields_label_tag'],
+				'options' => ['' => 'Default'] + $options['fields_label_tag'],
 			)
 		);
 

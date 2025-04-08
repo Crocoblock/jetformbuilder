@@ -243,7 +243,6 @@ class Form_Arguments implements Arrayable {
 		);
 
 		$label_tag = array(
-			''      => 'Default',
 			'div'   => __( 'DIV', 'jet-form-builder' ),
 			'label' => __( 'LABEL', 'jet-form-builder' ),
 		);

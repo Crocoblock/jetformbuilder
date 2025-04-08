@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 const {
 	      useMetaState,
       } = JetFBHooks;
@@ -15,6 +17,21 @@ const source = window.JetFormEditorData.argumentsSource || {};
 export default function PluginArgs() {
 
 	const [ args, setArgs ] = useMetaState( '_jf_args' );
+
+	const isNewPost = window.location.href.includes('post-new.php');
+	let default_fields_label_tag = 'label';
+	if (!isNewPost) {
+		default_fields_label_tag = args?.fields_label_tag ?? 'div';
+	}
+
+	useEffect(() => {
+		if (!args?.fields_label_tag) {
+			setArgs((prevArgs) => ({
+				...prevArgs,
+				fields_label_tag: default_fields_label_tag,
+			}));
+		}
+	}, [args, default_fields_label_tag, setArgs]);
 
 	return <>
 		<SelectControl
@@ -45,7 +62,7 @@ export default function PluginArgs() {
 
 		<SelectControl
 			label={ __( 'Fields label HTML tag', 'jet-form-builder' ) }
-			value={ args?.fields_label_tag ?? '' }
+			value={ args?.fields_label_tag ?? default_fields_label_tag }
 			options={ source.fields_label_tag }
 			onChange={ newVal => {
 				setArgs( ( prevArgs ) => (

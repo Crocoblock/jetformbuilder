@@ -102,6 +102,8 @@ class Module implements
 
 		add_filter( 'post_row_actions', array( $this->get_post_actions(), 'base_add_action_links' ), 10, 2 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'import_form_js' ) );
+
+		require_once $this->get_dir( 'actions/set-default-args.php' );
 	}
 
 	public function remove_hooks() {

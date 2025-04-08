@@ -62,7 +62,7 @@ function ColorPickerEdit( props ) {
 				{ ...props }
 			>
 				<InputControl
-					className="jet-form-builder__field-wrap"
+					className="jet-form-builder__field-wrap jet-form-builder__field-preview"
 					type="color"
 					key={ 'color_picker_place_holder_block' }
 					onChange={ () => {

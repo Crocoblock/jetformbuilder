@@ -164,7 +164,7 @@ export function SelectRadioCheckPlaceholder( props ) {
 		key={ 'jet-form-builder-field-wrapper' }
 		{ ...props }
 	>
-		<div className={ 'jet-form-builder__fields-group' }>
+		<div className={ 'jet-form-builder__fields-group jet-form-builder__field-preview' }>
 			{ (
 				'manual_input' !== attributes.field_options_from ||
 				!attributes.field_options.length

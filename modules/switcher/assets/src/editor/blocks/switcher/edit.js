@@ -88,7 +88,7 @@ export default function SwitcherEdit( props ) {
 				>
 					<BlockDefaultValue
 						help={ __(
-							`If the default value is not empty or 
+							`If the default value is not empty or
 does not equal the string "false" - the switch will be turned on.`,
 							'jet-form-builder',
 						) }
@@ -187,11 +187,13 @@ does not equal the string "false" - the switch will be turned on.`,
 				key={ uniqKey( 'FieldWrapper' ) }
 				{ ...props }
 			>
-				<input
-					type="checkbox"
-					role="switch"
-					className="jet-form-builder__field"
-				/>
+				<div className="jet-form-builder__field-preview">
+					<input
+						type="checkbox"
+						role="switch"
+						className="jet-form-builder__field"
+					/>
+				</div>
 			</FieldWrapper>
 		</div>
 	</>;

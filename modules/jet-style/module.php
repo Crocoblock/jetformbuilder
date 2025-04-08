@@ -117,6 +117,7 @@ class Module implements
 	}
 
 	public function apply_support( \WP_Block_Type $block_type, array $block_attributes ): array {
+
 		if ( ! is_array( $block_type->supports ) ) {
 			return array();
 		}

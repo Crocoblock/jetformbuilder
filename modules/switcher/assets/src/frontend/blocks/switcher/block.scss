@@ -14,7 +14,7 @@
 	}
 
 	input.jet-form-builder__field {
-		padding: var(--track-padding);
+		padding: var(--c-track-padding, var(--track-padding) );
 		inline-size: var(--track-size);
 		block-size: var(--thumb-size);
 		border-radius: var(--track-size);

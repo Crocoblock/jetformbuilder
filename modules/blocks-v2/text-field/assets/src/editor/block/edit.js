@@ -258,7 +258,7 @@ export default function TextEdit( props ) {
 				{ ...props }
 			>
 				<div className={ [
-					'jet-form-builder__field-wrap',
+					'jet-form-builder__field-wrap jet-form-builder__field-preview',
 					attributes.showEye && 'has-eye-icon',
 				].join( ' ' ) }>
 					<FullWidthInput

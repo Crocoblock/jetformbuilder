@@ -179,6 +179,7 @@ export default function DateTimeEdit( props ) {
 				<TextControl
 					onChange={ () => {
 					} }
+					className="jet-form-builder__field-preview"
 					key={ uniqKey( 'place_holder_block' ) }
 					placeholder={ 'Input type="datetime-local"' }
 				/>

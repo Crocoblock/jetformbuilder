@@ -147,6 +147,7 @@ export default function NumberEdit( props ) {
 			>
 				<NumberControl
 					placeholder={ attributes.placeholder }
+					className="jet-form-builder__field-preview"
 					key={ uniqKey( 'place_holder_block' ) }
 					min={ attributes.min || 0 }
 					max={ attributes.max || 1000 }

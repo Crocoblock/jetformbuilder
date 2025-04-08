@@ -41,15 +41,23 @@
     }
 }
 
-
 .jet-form-builder__field-template {
     &:hover {
         :not(:disabled):not(:checked) + span::before {
             border-color: #b3d7ff;
         }
     }
-}
 
+    &--checked {
+        .jet-fb-check-mark {
+            input[type="checkbox"] {
+                & + span::before {
+                    content: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23000000"><path d="M9 16.17l-4.17-4.17-1.41 1.41L9 19l10-10-1.41-1.41z"/></svg>');
+                }
+            }
+        }
+    }
+}
 
 .jet-fb-check-mark {
 

@@ -247,7 +247,7 @@ class Manager {
 
 		if ( $to_update && array_key_exists( $plugin_file, $to_update ) ) {
 			return $to_update[ $plugin_file ]->new_version;
-		} elseif ( ! empty( $no_update ) && array_key_exists( $plugin_file, $no_update ) ) {
+		} elseif ( ! empty( $no_update ) && array_key_exists( $plugin_file, $no_update ) && isset( $no_update[ $plugin_file ]->new_version ) ) {
 			return $no_update[ $plugin_file ]->new_version;
 		} elseif ( array_key_exists( $plugin_file, $this->user_installed_plugins ) ) {
 			return $this->user_installed_plugins[ $plugin_file ]['Version'];

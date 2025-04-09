@@ -35,7 +35,7 @@ const help = [
 		key: 'commas',
 		render: () => <li>
 			{ __(
-				`If this field supports multiple values, you can separate them with commas. If a string value is expected, wrap it in single quotes. Example: '2025-01-01' or '%value_field%'`,
+				`If this field supports multiple values, you can separate them with commas. If a string value is expected, wrap it in single quotes like '%value_field%'.`,
 				'jet-form-builder',
 			) }
 		</li>,

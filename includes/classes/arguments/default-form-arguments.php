@@ -19,6 +19,7 @@ class Default_Form_Arguments extends Form_Arguments {
 		$this->set_enable_progress( false );
 		$this->set_clear( false );
 		$this->set_fields_label_tag( 'div' );
+		$this->set_markup_type( 'div' );
 	}
 
 	public function to_array(): array {

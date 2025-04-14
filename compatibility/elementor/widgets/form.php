@@ -1172,6 +1172,16 @@ class Form extends Widget_Base implements Widget_Base_It {
 		);
 
 		$this->add_control(
+			'markup_type',
+			array(
+				'label'   => __( 'Markup type', 'jet-form-builder' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => '',
+				'options' => ['' => 'Default'] + $options['markup_type'],
+			)
+		);
+
+		$this->add_control(
 			'submit_type',
 			array(
 				'label'   => __( 'Submit Type', 'jet-form-builder' ),

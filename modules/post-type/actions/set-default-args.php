@@ -19,9 +19,17 @@ add_action( 'save_post_jet-form', function( $post_id, $post, $update ) {
 		$args = [];
 	}
 
-	if ( empty( $args['fields_label_tag'] ) ) {
-		$args['fields_label_tag'] = 'label';
-		update_post_meta( $post_id, '_jf_args', wp_json_encode( $args ) );
+	$defaults = [
+		'fields_label_tag' => 'label',
+		'markup_type'      => 'div',
+	];
+
+	foreach ( $defaults as $key => $value ) {
+		if ( empty( $args[ $key ] ) ) {
+			$args[ $key ] = $value;
+		}
 	}
+
+	update_post_meta( $post_id, '_jf_args', wp_json_encode( $args ) );
 
 }, 10, 3 );

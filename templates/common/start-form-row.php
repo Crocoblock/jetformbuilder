@@ -25,5 +25,14 @@ if ( $this instanceof Native_Block_Wrapper_Attributes ) {
 	$this->add_attribute( 'class', 'field-type-' . $this->get_name() );
 }
 
+
+$is_group_type = in_array( $this->get_name(), array( 'checkbox-field', 'radio-field' ), true );
+$tag = ( $is_group_type && jet_fb_live_args()->markup_type === 'fieldset' ) ? 'fieldset' : 'div';
 // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-printf( '<div %1$s %2$s>', $this->get_attributes_string(), $attrs );
+printf(
+	'<%3$s %1$s %2$s>',
+	$this->get_attributes_string(),
+	$attrs,
+	esc_attr( $tag )
+);
+

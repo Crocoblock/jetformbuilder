@@ -19,9 +19,12 @@ export default function PluginArgs() {
 	const [ args, setArgs ] = useMetaState( '_jf_args' );
 
 	const isNewPost = window.location.href.includes('post-new.php');
+
 	let default_fields_label_tag = 'label';
+	let default_markup_type = 'fieldset';
 	if (!isNewPost) {
 		default_fields_label_tag = args?.fields_label_tag ?? 'div';
+		default_markup_type = args?.markup_type ?? 'div';
 	}
 
 	useEffect(() => {
@@ -32,6 +35,15 @@ export default function PluginArgs() {
 			}));
 		}
 	}, [args, default_fields_label_tag, setArgs]);
+
+	useEffect(() => {
+		if (!args?.markup_type) {
+			setArgs((prevArgs) => ({
+				...prevArgs,
+				markup_type: default_markup_type,
+			}));
+		}
+	}, [args, default_markup_type, setArgs]);
 
 	return <>
 		<SelectControl
@@ -69,6 +81,20 @@ export default function PluginArgs() {
 					{
 						...prevArgs,
 						fields_label_tag: newVal,
+					}
+				) );
+			} }
+		/>
+
+		<SelectControl
+			label={ __( 'Markup type', 'jet-form-builder' ) }
+			value={ args?.markup_type ?? default_markup_type }
+			options={ source.markup_type }
+			onChange={ newVal => {
+				setArgs( ( prevArgs ) => (
+					{
+						...prevArgs,
+						markup_type: newVal,
 					}
 				) );
 			} }

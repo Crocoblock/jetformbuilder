@@ -153,14 +153,17 @@ class Calculated_Field extends Base {
 						* MMMM — full month name (January–December)<br/>
 						* DD   — day of month with leading zero (01–31)<br/>
 						* D    — day of month without leading zero (1–31)<br/>
-						* HH   — hours with leading zero (00–23)<br/>
-						* H    — hours without leading zero (0–23)<br/>
+						* HH   — hours with leading zero (00–23) in 24-hour format<br/>
+						* H    — hours without leading zero (0–23) in 24-hour format<br/>
+						* hh   — hours with leading zero (01–12) in 12-hour format<br/>
+						* h    — hours without leading zero (1–12) in 12-hour format<br/>
 						* mm   — minutes with leading zero (00–59)<br/>
 						* m    — minutes without leading zero (0–59)<br/>
 						* ss   — seconds with leading zero (00–59)<br/>
 						* s    — seconds without leading zero (0–59)<br/>
 						* dddd — full day of week name (Monday–Sunday)<br/>
 						* ddd  — abbreviated day of week name (Mon–Sun)<br/>
+						* A    — AM/PM designation<br/>
 					',
 						'jet-form-builder'
 					),

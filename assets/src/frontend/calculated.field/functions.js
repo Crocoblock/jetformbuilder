@@ -23,14 +23,17 @@ function isCalculated( node ) {
  * MMMM — full month name (January–December)
  * DD   — day of month with leading zero (01–31)
  * D    — day of month without leading zero (1–31)
- * HH   — hours with leading zero (00–23)
- * H    — hours without leading zero (0–23)
+ * HH   — hours with leading zero (00–23) in 24-hour format
+ * H    — hours without leading zero (0–23) in 24-hour format
+ * hh   — hours with leading zero (01–12) in 12-hour format
+ * h    — hours without leading zero (1–12) in 12-hour format
  * mm   — minutes with leading zero (00–59)
  * m    — minutes without leading zero (0–59)
  * ss   — seconds with leading zero (00–59)
  * s    — seconds without leading zero (0–59)
  * dddd — full day of week name (Monday–Sunday)
  * ddd  — abbreviated day of week name (Mon–Sun)
+ * A    — AM/PM designation
  *
  * @param {number|string} millisInput — milliseconds
  * @param {string} format — format string
@@ -57,6 +60,9 @@ function convertMillisToDateString( millisInput, format = 'YYYY-MM-DD' ) {
 
 	const daysShort = daysFull.map( d => d.slice( 0, 3 ) );
 
+	const hours12 = date.getHours() % 12 || 12; // Convert 0 to 12 for 12-hour format
+	const ampm    = date.getHours() >= 12 ? 'PM' : 'AM';
+
 	const map = {
 		YYYY: date.getFullYear(),
 		MM: String( date.getMonth() + 1 ).padStart( 2, '0' ),
@@ -67,12 +73,15 @@ function convertMillisToDateString( millisInput, format = 'YYYY-MM-DD' ) {
 		D: date.getDate(),
 		HH: String( date.getHours() ).padStart( 2, '0' ),
 		H: date.getHours(),
+		hh: String( hours12 ).padStart( 2, '0' ), // 12-hour format with leading zero
+		h: hours12, // 12-hour format without leading zero
 		mm: String( date.getMinutes() ).padStart( 2, '0' ),
 		m: date.getMinutes(),
 		ss: String( date.getSeconds() ).padStart( 2, '0' ),
 		s: date.getSeconds(),
 		dddd: daysFull[ date.getDay() ],
 		ddd: daysShort[ date.getDay() ],
+		A: ampm, // AM/PM
 	};
 
 	const sortedKeys = Object.keys( map ).sort( ( a, b ) => b.length - a.length );

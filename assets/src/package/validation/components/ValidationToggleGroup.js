@@ -28,14 +28,14 @@ function ValidationToggleGroup( { excludeBrowser = false } ) {
 				},
 			}
 		) ) }
-		value={ attributes.validation?.type ?? '' }
+		value={ attributes.validation?.type ?? 'inherit' }
 		label={ __( 'Validation type', 'jet-form-builder' ) }
 		isBlock={ true }
 		isAdaptiveWidth={ false }
 	>
 		<ToggleGroupControlOption
 			label={ __( 'Inherit', 'jet-form-builder' ) }
-			value={ '' }
+			value={ 'inherit' }
 			aria-label={ __( 'Inherit from form\'s args', 'jet-form-builder' ) }
 			showTooltip
 		/>

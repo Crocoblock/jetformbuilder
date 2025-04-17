@@ -9,6 +9,7 @@ module.exports = {
 	context: path.resolve( __dirname, 'assets/src' ),
 	entry: {
 		'parser': './index.js',
+		'admin-ui': '../../admin/index.js',
 	},
 	output: {
 		path: path.resolve( __dirname, 'assets/build' ),

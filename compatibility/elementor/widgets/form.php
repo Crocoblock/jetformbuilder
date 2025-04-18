@@ -1177,7 +1177,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				'label'   => __( 'Markup type', 'jet-form-builder' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => '',
-				'options' => ['' => 'Default'] + $options['markup_type'],
+				'options' => ['' => 'Default'] + ( $options['markup_type'] ?? [] ),
 			)
 		);
 

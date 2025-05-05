@@ -13,17 +13,18 @@
 		<template v-if="storage.enable_user_journey">
 			<cx-vui-select
 				name="storage_type"
+				class="user-journey-select"
 				:label="loading.storage_type ? `${label.storage_type} (loading...)` : label.storage_type"
 				:description="help.storage_type"
 				:wrapper-css="[ 'equalwidth' ]"
 				:options-list="[
 					{
 						value: 'local',
-						label: 'Local Storage (persists between browser sessions)'
+						label: 'Local Storage'
 					},
 					{
 						value: 'session',
-						label: 'Session Storage (cleared when browser is closed)'
+						label: 'Session Storage'
 					}
 				]"
 				:value="storage.hasOwnProperty( 'storage_type' ) ? storage.storage_type : 'local'"
@@ -32,12 +33,13 @@
 			></cx-vui-select>
 			<cx-vui-component-wrapper >
 				<div class="cx-vui-component__label">Please note!</div>
-				<div class="cx-vui-component__desc"><b>Session Storage:</b> Data is accessible only within the same browser tab or window and cannot be shared with other tabs or windows, even if they are on the same origin.</div>
-				<div class="cx-vui-component__desc"><b>Local Storage:</b> Data is shared across all tabs and windows of the same origin, allowing any page on that domain to read and write the stored values.</div>
+				<div><b>Session Storage:</b> The information is kept only while this tab or window is open. Reloading the page is fine, but as soon as you close the tab, the data disappears. Other tabs or windows of the site can’t see it.</div>
+				<div><b>Local Storage:</b> The information stays much longer—every tab or window of this site can use it, and it remains even after you close and reopen the browser, until you clear it yourself.</div>
 			</cx-vui-component-wrapper>
 
 			<cx-vui-select
 				name="clear_after_submit"
+				class="user-journey-select"
 				:label="loading.clear_after_submit ? `${label.clear_after_submit} (loading...)` : label.clear_after_submit"
 				:description="help.clear_after_submit"
 				:wrapper-css="[ 'equalwidth' ]"
@@ -118,3 +120,8 @@ export default {
 };
 
 </script>
+<style>
+.user-journey-select select.cx-vui-select {
+	padding: 6px 24px 6px 12px;
+}
+</style>

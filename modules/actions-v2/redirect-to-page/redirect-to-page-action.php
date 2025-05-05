@@ -85,6 +85,8 @@ class Redirect_To_Page_Action extends Base {
 			$redirect_args[ $arg ] = ! empty( $value ) ? $value : 0;
 		}
 
+		$redirect_args = apply_filters( 'jet-form-builder/actions/redirect-to-page/redirect-args', $redirect_args, $this );
+
 		return add_query_arg( urlencode_deep( $redirect_args ), $url );
 	}
 

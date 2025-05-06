@@ -7,7 +7,8 @@ const {
 function FallbackFilter() {
 	BaseFilter.call( this );
 
-	this.fullName     = () => 'ifEmpty';
+	this.label        = () => __( 'ifEmpty', 'jet-form-builder' );
+	this.fullName     = () => '|ifEmpty';
 	this.docArgument  = 'any';
 	this.isClientSide = true;
 

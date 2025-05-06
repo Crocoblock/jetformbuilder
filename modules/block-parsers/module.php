@@ -79,6 +79,7 @@ final class Module implements
 	}
 
 	public function rep_instances(): array {
+
 		return apply_filters(
 			'jet-form-builder/parsers-request/register',
 			array(
@@ -98,6 +99,9 @@ final class Module implements
 	 * @throws Action_Exception|Request_Exception
 	 */
 	public function init_request() {
+
+		do_action( 'jet-form-builder/request-handler/before-init', $this );
+
 		Live_Form::instance()
 				->set_form_id( jet_fb_handler()->get_form_id() )
 				->set_specific_data_for_render();

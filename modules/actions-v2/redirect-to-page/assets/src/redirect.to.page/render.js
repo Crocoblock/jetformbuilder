@@ -8,6 +8,13 @@ import RedirectCustomUrl from './RedirectCustomUrl';
 import RedirectArgsRow from './RedirectArgsRow';
 import RedirectHashRow from './RedirectHashRow';
 import RedirectNewTabRow from './RedirectNewTabRow';
+import { styled } from '@linaria/react';
+
+const StyledFlex = styled(Flex)`
+	&.buddypress-active {
+		width: 100%;
+	}
+`;
 
 function RedirectToPageRender( props ) {
 
@@ -16,8 +23,10 @@ function RedirectToPageRender( props ) {
 		      onChangeSettingObj,
 	      } = props;
 
+	const isBuddypress = document.body.classList.contains( 'buddypress' );
+
 	/* eslint-disable jsx-a11y/no-onchange */
-	return <Flex direction="column">
+	return <StyledFlex direction="column" className={ `${isBuddypress ? 'buddypress-active' : ''}` }>
 		<RedirectTypeRow
 			settings={ settings }
 			onChangeSettingObj={ onChangeSettingObj }
@@ -51,7 +60,7 @@ function RedirectToPageRender( props ) {
 			settings={ settings }
 			onChangeSettingObj={ onChangeSettingObj }
 		/>
-	</Flex>;
+	</StyledFlex>;
 	/* eslint-enable jsx-a11y/no-onchange */
 }
 

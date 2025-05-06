@@ -7,7 +7,8 @@ const {
 function SubtractMonthFilter() {
 	BaseFilter.call( this );
 
-	this.fullName     = () => 'subMonth';
+	this.label        = () => __( 'subMonth', 'jet-form-builder' );
+	this.fullName     = () => '|subMonth';
 	this.docArgument  = Number;
 	this.isClientSide = true;
 

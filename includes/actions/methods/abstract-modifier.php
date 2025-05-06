@@ -38,6 +38,15 @@ abstract class Abstract_Modifier {
 	}
 
 	public function run() {
+
+		/**
+		 * Fires before run modifier.
+		 * Allows to put custom data into the fields_map before propeties are attached.
+		 *
+		 * @param Abstract_Modifier $this
+		 */
+		do_action( 'jet-form-builder/modifier/before-run', $this );
+
 		foreach ( $this->request as $key => $value ) {
 			$this->attach_item( $key, $value );
 		}
@@ -49,6 +58,14 @@ abstract class Abstract_Modifier {
 		foreach ( $this->properties as $property ) {
 			$property->do_after( $this );
 		}
+
+		/**
+		 * Fires after run modifier.
+		 * Allows to do additional modifications.
+		 *
+		 * @param Abstract_Modifier $this
+		 */
+		do_action( 'jet-form-builder/modifier/after-run', $this );
 	}
 
 	protected function attach_item( $field_name, $value ) {
@@ -96,6 +113,7 @@ abstract class Abstract_Modifier {
 	}
 
 	protected function do_action() {
+
 		$this->action = $this->get_action();
 
 		$this->action->set_modifier( $this );
@@ -185,6 +203,15 @@ abstract class Abstract_Modifier {
 		$this->request = array_merge( $this->request, $request );
 
 		return $this;
+	}
+
+	/**
+	 * Get current request array.
+	 *
+	 * @return array
+	 */
+	public function get_request(): array {
+		return $this->request;
 	}
 
 	/**

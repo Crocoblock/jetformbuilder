@@ -29,7 +29,7 @@ class Glossary_Query implements Option_Query_It {
 
 		foreach ( $glossary['fields'] as $field ) {
 			if ( $this->has_query( 'search' ) &&
-				false === strpos( $field['label'], $this->get_query( 'search' ) )
+				false === stripos( $field['label'], $this->get_query( 'search' ) )
 			) {
 				continue;
 			}

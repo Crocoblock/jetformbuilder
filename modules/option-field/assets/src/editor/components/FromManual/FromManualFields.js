@@ -26,10 +26,17 @@ const showBulkIcon = <svg width="24" height="24" viewBox="0 0 24 24"
 		fill="currentColor"/>
 </svg>;
 
-const hideBulkIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                          width="36" height="36" aria-hidden="true"
-                          focusable="false">
-	<path d="M20 11.2H6.8l3.7-3.7-1-1L3.9 12l5.6 5.5 1-1-3.7-3.7H20z"/>
+const hideBulkIcon = <svg
+	width="24"
+	height="24"
+	viewBox="0 0 24 24"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+	>
+	<path
+		d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63L18.37 3.29C17.98 2.9 17.35 2.9 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04Z"
+		fill="currentColor"
+	/>
 </svg>;
 
 function FromManualFields() {
@@ -51,7 +58,7 @@ function FromManualFields() {
 		</Button>
 		{ showManualModal && <ActionModal
 			title={ <Flex align="center">
-				{ __( 'Edit Manual Options', 'jet-form-builder' ) }
+				{ __( 'Edit Options', 'jet-form-builder' ) }
 				<Button
 					onClick={
 						() => setModalContent( prev => prev ? '' : 'bulk' )
@@ -60,8 +67,8 @@ function FromManualFields() {
 					variant="tertiary"
 				>
 					{ modalContent
-					  ? __( 'Back to options manager', 'jet-form-builder' )
-					  : __( 'Show bulk options', 'jet-form-builder' ) }
+					  ? __( 'Switch to manual editor', 'jet-form-builder' )
+					  : __( 'Switch to bulk editor', 'jet-form-builder' ) }
 				</Button>
 			</Flex> }
 			onRequestClose={ toggleModal }

@@ -7,7 +7,8 @@ const {
 function AddMonthFilter() {
 	BaseFilter.call( this );
 
-	this.fullName     = () => 'addMonth';
+	this.label        = () => __( 'addMonth', 'jet-form-builder' );
+	this.fullName     = () => '|addMonth';
 	this.docArgument  = Number;
 	this.isClientSide = true;
 

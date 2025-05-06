@@ -7,7 +7,8 @@ const {
 function AddDayFilter() {
 	BaseFilter.call( this );
 
-	this.fullName     = () => 'addDay';
+	this.label        = () => __( 'addDay', 'jet-form-builder' );
+	this.fullName     = () => '|addDay';
 	this.docArgument  = Number;
 	this.isClientSide = true;
 

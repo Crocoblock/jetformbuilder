@@ -23,6 +23,7 @@ class User_Modifier extends Abstract_Modifier {
 				new User_Email_Property(),
 				new User_Password_Property(),
 				new User_Confirm_Password_Property(),
+				new User_Compare_Password_Property(),
 				new First_Name_Property(),
 				new Last_Name_Property(),
 				new User_Url_Property(),

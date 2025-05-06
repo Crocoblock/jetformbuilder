@@ -7,7 +7,8 @@ const {
 function SubtractYearFilter() {
 	BaseFilter.call( this );
 
-	this.fullName     = () => 'subYear';
+	this.label        = () => __( 'subYear', 'jet-form-builder' );
+	this.fullName     = () => '|subYear';
 	this.docArgument  = Number;
 	this.isClientSide = true;
 

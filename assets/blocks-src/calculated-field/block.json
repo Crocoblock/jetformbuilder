@@ -25,6 +25,10 @@
 			"type": "string",
 			"default": "number"
 		},
+		"date_format": {
+			"type": "string",
+			"default": "YYYY-MM-DD"
+		},
 		"separate_decimals": {
 			"type": "string",
 			"default": "."

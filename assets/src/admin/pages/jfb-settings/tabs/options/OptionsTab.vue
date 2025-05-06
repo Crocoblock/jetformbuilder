@@ -18,6 +18,16 @@
 			:disabled="isLoading"
 			@input="changeVal( 'clear_on_uninstall', $event )"
 		></cx-vui-switcher>
+    <cx-vui-input
+        name="form_records_access_capability"
+        :wrapper-css="[ 'equalwidth' ]"
+        :size="'fullwidth'"
+        :label="loading.form_records_access_capability ? `${label.form_records_access_capability} (loading...)` : label.form_records_access_capability"
+        :description="help.form_records_access_capability"
+        :value="storage.hasOwnProperty( 'form_records_access_capability' ) ? storage.form_records_access_capability : 'manage_options'"
+        :disabled="isLoading"
+        @input="changeVal( 'form_records_access_capability', $event )"
+    />
 		<cx-vui-component-wrapper
 			:label="__( 'Form Accessibility', 'jet-form-builder' )"
 			:wrapper-css="[ 'equalwidth' ]"

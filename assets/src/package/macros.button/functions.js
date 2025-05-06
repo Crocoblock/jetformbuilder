@@ -9,6 +9,10 @@ function insertMacro( initial, name, nodeElement ) {
 
 	initial = initial ?? '';
 
+	if ( ! initial.length ) {
+		name = `'${ name }'`;
+	}
+
 	let startString = initial.slice( 0, start );
 	const endString = initial.slice( end );
 

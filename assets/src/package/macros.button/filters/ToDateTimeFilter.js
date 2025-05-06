@@ -7,7 +7,8 @@ const {
 function ToDateTimeFilter() {
 	BaseFilter.call( this );
 
-	this.fullName     = () => 'toDateTime';
+	this.label        = () => __( 'toDateTime', 'jet-form-builder' );
+	this.fullName     = () => '|toDateTime';
 	this.isClientSide = true;
 
 	this.help = () => <>

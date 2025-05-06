@@ -117,6 +117,11 @@ addFilter(
 					{ __( 'This callback requires the Save Form Record action to work correctly.', 'jet-form-builder' ) }
 				</Notice>
 			)}
+			{ 'is_user_password_valid' === currentItem.value && (
+				<Notice status={ 'success' } isDismissible={ false }>
+					{ __( 'Works only for logged users.', 'jet-form-builder' ) }
+				</Notice>
+			)}
 			{ !ssrCallbacksKeys.includes( currentItem.value ) && <>
 				<TextControl
 					label={ __( 'Function name', 'jet-form-builder' ) }

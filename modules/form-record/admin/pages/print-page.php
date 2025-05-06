@@ -8,6 +8,7 @@ use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_List_Box;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Boxes\Base_Table_Box;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use JFB_Modules\Form_Record\Admin\View_Columns\Form_Link_Column;
 use JFB_Modules\Form_Record\Admin\View_Columns\Referrer_Link_Column;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -36,7 +37,8 @@ class Print_Page implements Action_Page_It {
 	}
 
 	public function check_permission(): bool {
-		return current_user_can( 'manage_options' );
+		$capability = Tab_Handler_Manager::get_form_records_access_capability();
+		return current_user_can( 'manage_options' ) || current_user_can( $capability );
 	}
 
 	public function render_page() {

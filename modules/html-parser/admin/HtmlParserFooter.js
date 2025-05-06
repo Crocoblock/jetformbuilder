@@ -5,10 +5,9 @@ import serialize from './serialize';
 
 const { parseHTMLtoBlocks } = JetFormBuilderParser;
 
-function getPostEditUrl( id ) {
-	const url = new URL( window.location.origin + '/wp-admin/post.php' );
+const getPostEditUrl = id => {
+	const url = new URL( JetFormBuilderAdmin.edit_url );
 	url.searchParams.set( 'post', id );
-	url.searchParams.set( 'action', 'edit' );
 	return url.href;
 }
 

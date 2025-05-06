@@ -80,6 +80,7 @@
 		"@wordpress/url": "^4.0.0",
 		"friendly-challenge": "^0.9.11",
 		"react-sortablejs": "^6.1.4",
+		"sanitize-html": "^2.16.0",
 		"semver": "^7.6.0",
 		"v-click-outside-x": "^4.1.3"
 	},

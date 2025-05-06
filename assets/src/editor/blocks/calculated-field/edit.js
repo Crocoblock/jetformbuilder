@@ -1,4 +1,5 @@
 import preview from './preview';
+import { useRef } from 'react';
 
 const {
 	      AdvancedFields,
@@ -50,10 +51,26 @@ export default function EditCalculated( props ) {
 		      editProps: { uniqKey },
 	      } = props;
 
+	const textareaRef = useRef( null );
+
 	const insertMacros = ( macros ) => {
-		setAttributes( {
-			calc_formula: `${ attributes.calc_formula || '' }${ macros }`,
-		} );
+
+		const currentValue = attributes.calc_formula || '';
+
+		const textarea = textareaRef.current;
+
+		if ( textarea ) {
+			const start    = textarea.selectionStart;
+			const end      = textarea.selectionEnd;
+			const newValue = currentValue.slice( 0, start ) + macros + currentValue.slice( end );
+
+			setAttributes( { calc_formula: newValue } );
+
+			setTimeout( () => {
+				textarea.focus();
+				textarea.selectionStart = textarea.selectionEnd = start + macros.length;
+			} );
+		}
 	};
 
 	if ( attributes.isPreview ) {
@@ -87,11 +104,13 @@ export default function EditCalculated( props ) {
 				<BlockDescription/>
 			</PanelBody>
 			<FieldSettingsWrapper { ...props }>
-				<p
-					className={ 'components-base-control__help' }
-					style={ { marginTop: '0px', color: 'rgb(117, 117, 117)' } }
-					dangerouslySetInnerHTML={ { __html: JetFormCalculatedField.field_desc } }
-				/>
+				{ 'date' !== attributes.value_type ? <>
+					<p
+						className={ 'components-base-control__help' }
+						style={ { marginTop: '0px', color: 'rgb(117, 117, 117)' } }
+						dangerouslySetInnerHTML={ { __html: JetFormCalculatedField.field_desc } }
+					/>
+				</> : null }
 				<SelectControl
 					label={ __( 'Value type', 'jet-form-builder' ) }
 					labelPosition="top"
@@ -106,8 +125,27 @@ export default function EditCalculated( props ) {
 							value: 'string',
 							label: __( 'as String', 'jet-form-builder' ),
 						},
+						{
+							value: 'date',
+							label: __( 'as Date', 'jet-form-builder' ),
+						}
 					] }
 				/>
+				{ 'date' === attributes.value_type ? <>
+					<TextControl
+						key="calc_date_format"
+						label={ __( 'Date Format', 'jet-form-builder' ) }
+						value={ attributes.date_format }
+						onChange={ val => setAttributes(
+							{ date_format: val },
+						) }
+					/>
+					<p
+					className={ 'components-base-control__help' }
+					style={ { marginTop: '0px', color: 'rgb(117, 117, 117)' } }
+						dangerouslySetInnerHTML={ { __html: JetFormCalculatedField.date_format } }
+					/>
+				</> : null }
 				{ 'number' === attributes.value_type ? <>
 					<NumberControl
 						label={ __( 'Decimal Places Number',
@@ -199,6 +237,7 @@ export default function EditCalculated( props ) {
 						onChange={ ( newValue ) => {
 							setAttributes( { calc_formula: newValue } );
 						} }
+						ref={ textareaRef }
 					/>
 					<div className={ 'jet-form-builder__calculated-field_info' }>
 					{ __( 'You may use JavaScript\'s built-in ', 'jet-form-builder' ) }

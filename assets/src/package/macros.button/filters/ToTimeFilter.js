@@ -7,7 +7,8 @@ const {
 function ToTimeFilter() {
 	BaseFilter.call( this );
 
-	this.fullName     = () => 'toTime';
+	this.label        = () => __( 'toTime', 'jet-form-builder' );
+	this.fullName     = () => '|toTime';
 	this.isClientSide = true;
 
 	this.help = () => <>

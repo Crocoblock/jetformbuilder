@@ -7,7 +7,8 @@ const {
 function SubtractDayFilter() {
 	BaseFilter.call( this );
 
-	this.fullName     = () => 'subDay';
+	this.label        = () => __( 'subDay', 'jet-form-builder' );
+	this.fullName     = () => '|subDay';
 	this.docArgument  = Number;
 	this.isClientSide = true;
 

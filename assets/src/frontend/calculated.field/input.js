@@ -1,4 +1,4 @@
-import { getCalculatedWrapper, isCalculated } from './functions';
+import { getCalculatedWrapper, isCalculated, convertMillisToDateString } from './functions';
 
 const {
 	      InputData,
@@ -31,7 +31,12 @@ function CalculatedData() {
 
 		formula.observe( this.formula );
 		formula.setResult       = () => {
-			this.value.current = formula.calculate();
+			if ( 'date' === this.valueTypeProp ) {
+				const date_formula = formula.calculate();
+				this.value.current = convertMillisToDateString( date_formula, this.dateFormat );
+			} else {
+				this.value.current = formula.calculate();
+			}
 		};
 		formula.relatedCallback = ( input ) => {
 			const value = applyFilters(
@@ -90,6 +95,7 @@ function CalculatedData() {
 			      sepDecimal,
 			      valueType,
 			      sepThousands,
+			      dateFormat,
 		      } = getCalculatedWrapper( node ).dataset;
 
 		this.formula        = formula;
@@ -98,8 +104,8 @@ function CalculatedData() {
 		this.sepThousands   = sepThousands ?? '';
 		this.visibleValNode = node.nextElementSibling;
 		this.valueTypeProp  = valueType;
-
-		this.inputType = 'calculated';
+		this.dateFormat     = dateFormat;
+		this.inputType      = 'calculated';
 	};
 	this.addListeners = function () {
 		// silence is golden

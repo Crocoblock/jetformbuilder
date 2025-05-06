@@ -96,6 +96,16 @@ function FormEdit( { attributes, setAttributes, isSelected } ) {
 						) }
 					/>
 					<SelectControl
+						label={ __( 'Markup type',
+							'jet-form-builder' ) }
+						value={ attributes.markup_type }
+						options={ localize.markup_type }
+						onChange={ val => setAttributes(
+							{ markup_type: val },
+						) }
+					/>
+
+					<SelectControl
 						label={ __( 'Submit Type', 'jet-form-builder' ) }
 						value={ attributes.submit_type }
 						options={ localize.submit_type }

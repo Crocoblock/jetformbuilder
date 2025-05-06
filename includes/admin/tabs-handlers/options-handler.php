@@ -16,6 +16,7 @@ class Options_Handler extends Base_Handler {
 		'disable_next_button' => true,
 		'scroll_on_next'      => false,
 		'auto_focus'          => false,
+		'form_records_access_capability' => 'manage_options',
 	);
 
 	public function slug() {
@@ -31,10 +32,14 @@ class Options_Handler extends Base_Handler {
 				continue;
 			}
 
-			$options[ $name ] = filter_var(
-				sanitize_key( $_POST[ $name ] ),
-				defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN
-			);
+			if ( is_bool( $default ) ) {
+				$options[ $name ] = filter_var(
+					sanitize_key( $_POST[ $name ] ),
+					defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN
+				);
+			} else {
+				$options[ $name ] = sanitize_text_field( wp_unslash( $_POST[ $name ] ?? '' ));
+			}
 
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Missing

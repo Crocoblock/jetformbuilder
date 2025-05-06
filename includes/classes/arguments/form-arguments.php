@@ -19,6 +19,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @property string fields_layout
  * @property bool enable_progress
  * @property string fields_label_tag
+ * @property string markup_type
  * @property string load_nonce
  * @property bool use_csrf
  * @property string validation_type
@@ -38,6 +39,7 @@ class Form_Arguments implements Arrayable {
 		'fields_layout'    => '',
 		'enable_progress'  => null,
 		'fields_label_tag' => '',
+		'markup_type'      => '',
 		'load_nonce'       => '',
 		'use_csrf'         => '',
 		'validation_type'  => '',
@@ -128,6 +130,14 @@ class Form_Arguments implements Arrayable {
 		$this->fields_label_tag = $fields_label_tag;
 	}
 
+	public function set_markup_type( $markup_type ) {
+		$markup_type = strtolower( $markup_type );
+		if ( ! in_array( $markup_type, array( 'div', 'fieldset' ), true ) ) {
+			return;
+		}
+		$this->markup_type = $markup_type;
+	}
+
 	/**
 	 * @param mixed $fields_layout
 	 */
@@ -181,6 +191,7 @@ class Form_Arguments implements Arrayable {
 			'required_mark'    => $this->required_mark,
 			'fields_layout'    => $this->fields_layout,
 			'fields_label_tag' => $this->fields_label_tag,
+			'markup_type' 	   => $this->markup_type,
 			'enable_progress'  => $this->enable_progress,
 			'clear'            => $this->clear,
 		);
@@ -243,9 +254,13 @@ class Form_Arguments implements Arrayable {
 		);
 
 		$label_tag = array(
-			''      => 'Default',
-			'div'   => __( 'DIV', 'jet-form-builder' ),
-			'label' => __( 'LABEL', 'jet-form-builder' ),
+			'div'   => __( 'div', 'jet-form-builder' ),
+			'label' => __( 'label', 'jet-form-builder' ),
+		);
+
+		$markup_type = array(
+			'div'   => __( 'div', 'jet-form-builder' ),
+			'fieldset' => __( 'fieldset', 'jet-form-builder' ),
 		);
 
 		$load_nonce = array(
@@ -258,6 +273,7 @@ class Form_Arguments implements Arrayable {
 			$submit_type   = Tools::prepare_list_for_js( $submit_type );
 			$fields_layout = Tools::prepare_list_for_js( $fields_layout );
 			$label_tag     = Tools::prepare_list_for_js( $label_tag );
+			$markup_type   = Tools::prepare_list_for_js( $markup_type );
 			$load_nonce    = Tools::prepare_list_for_js( $load_nonce );
 		}
 
@@ -265,6 +281,7 @@ class Form_Arguments implements Arrayable {
 			'submit_type'      => $submit_type,
 			'fields_layout'    => $fields_layout,
 			'fields_label_tag' => $label_tag,
+			'markup_type' 	   => $markup_type,
 			'load_nonce'       => $load_nonce,
 		);
 	}

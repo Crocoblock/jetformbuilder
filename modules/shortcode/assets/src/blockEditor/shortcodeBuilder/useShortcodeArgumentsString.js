@@ -10,6 +10,7 @@ function useShortcodeArgumentsString() {
 		required_mark: args?.required_mark ?? '*',
 		fields_layout: args?.fields_layout ?? 'column',
 		fields_label_tag: args?.fields_label_tag ?? 'div',
+		markup_type: args?.markup_type ?? 'div',
 		enable_progress: Number( args?.enable_progress ?? '' ),
 		clear: Number( args?.clear ?? '' ),
 	} );

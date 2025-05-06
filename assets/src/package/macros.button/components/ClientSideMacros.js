@@ -22,9 +22,14 @@ function ClientSideMacros( { children, withThis = false } ) {
 		[],
 	);
 
+	const filters = useSelect(
+		( select ) => select( 'jet-forms/macros' ).getClientFilters(),
+		[],
+	);
+
 	const value = withThis
-	              ? { extra, afterFields: [ thisMacro ] }
-	              : { extra };
+	              ? { extra, afterFields: [ thisMacro ], filters }
+	              : { extra, filters };
 
 	return <ExtraMacroContext.Provider value={ value }>
 		{ children }

@@ -1,8 +1,6 @@
 import toBulk from './toBulk';
 import fromBulk from './fromBulk';
 import {
-	useTriggerPopover,
-	PopoverStandard,
 	Help,
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
@@ -10,83 +8,116 @@ import { useState, useEffect } from '@wordpress/element';
 import {
 	TextareaControl,
 	SelectControl,
-	ButtonGroup,
-	Button,
 	Flex,
 } from '@wordpress/components';
+import { styled } from '@linaria/react';
 
 const {
 	      useScopedAttributesContext,
+		  useOnUpdateModal
       } = JetFBHooks;
 
-const {
-	      ActionModalFooterSlotFill,
-      } = JetFBComponents;
+const StyledFlex = styled( Flex )`
+    justify-content: flex-start !important;
+	padding: 0 0 13px 0;
 
-const {
-	      Fill: ModalFooterFill,
-      } = ActionModalFooterSlotFill;
+	.jet-form-edit-modal & {
+		.components-base-control__field  {
+			padding: 0;
+			margin: 0;
+			border-top: none;
+		}
+	}
+`;
 
-const baseBulk = window.JetFBBulkOptions.sources[
-	Object.keys( window.JetFBBulkOptions.sources )[ 0 ]
-	];
+function optionsToBulk( options ) {
+	if ( options?.length ) {
+		return options
+			.map( option => {
+				const parts = [];
+
+				parts.push( option.label || '' );
+				parts.push( option.value || '' );
+
+				if ( option.calculate ) {
+					parts.push( option.calculate );
+				}
+
+				return parts.join(' : ');
+			} )
+			.join( '\n' );
+	}
+
+	return [];
+}
 
 function BulkOptions( { setModalContent } ) {
+	const {
+		attributes,
+		setAttributes,
+		setRealAttributes,
+	} = useScopedAttributesContext();
+
+	const [ bulkSelect, setBulkSelect ]         = useState( 'jfb_current_select' );
+	const [ currentOptions, setCurrentOptions ] = useState( [] );
+
+	const optionsList  = [ { label: 'Select...', value: 'jfb_current_select' } ].concat( window.JetFBBulkOptions.list ) || [];
+	const bulkSource   = window.JetFBBulkOptions.sources;
+
 	const [ bulk, setBulk ] = useState(
-		() => toBulk( baseBulk ),
+		() => toBulk( attributes.field_options )
 	);
 
-	const [ bulkSelect, setBulkSelect ] = useState( 'base' );
-	const { attributes, setAttributes } = useScopedAttributesContext();
+	useEffect( () => {
+        if ( attributes.field_options?.length ) {
+			setCurrentOptions( optionsToBulk( attributes.field_options ) );
+			setBulk( toBulk( attributes.field_options ) );
+        }
+    }, [] );
 
-	const {
-		      ref: refAdd,
-		      showPopover: showPopoverAdd,
-		      setShowPopover: setShowPopoverAdd,
-		      popoverProps: popoverPropsAdd,
-	      } = useTriggerPopover();
-
-	const {
-		      ref: refReplace,
-		      showPopover: showPopoverReplace,
-		      setShowPopover: setShowPopoverReplace,
-		      popoverProps: popoverPropsReplace,
-	      } = useTriggerPopover();
-
-	useEffect(
-		() => {
-			setBulk( toBulk( window.JetFBBulkOptions.sources[ bulkSelect ] ) );
-		},
-		[ bulkSelect ],
-	);
-
-	const addOptions = () => {
+	const replaceOptions = ( val = bulk ) => {
 		setAttributes( {
 			field_options: [
-				...attributes.field_options,
-				...fromBulk( bulk ),
+				...fromBulk( val ),
 			],
 		} );
 	};
 
-	const replaceOptions = () => {
-		setAttributes( {
-			field_options: [
-				...fromBulk( bulk ),
-			],
-		} );
+	const handleSelectChange = ( value ) => {
+		setBulkSelect( value );
+
+		if ( 'jfb_current_select' === value ) {
+			setBulk( currentOptions );
+			replaceOptions( currentOptions );
+		} else {
+			const newBulk = toBulk( bulkSource[value] );
+			setBulk( newBulk );
+			replaceOptions( newBulk );
+		}
 	};
+
+	useOnUpdateModal( () => {
+			setRealAttributes( attributes );
+			setModalContent( false );
+		}
+	);
 
 	return <>
-		<SelectControl
-			value={ bulkSelect }
-			onChange={ setBulkSelect }
-			options={ window.JetFBBulkOptions.list }
-		/>
+		<StyledFlex>
+			<label>{ __( 'Options preset:', 'jet-form-builder' ) }</label>
+			<SelectControl
+				value={ bulkSelect }
+				onChange={ handleSelectChange }
+				options={ optionsList }
+			/>
+		</StyledFlex>
 		<TextareaControl
 			className="jet-control-clear"
 			value={ bulk }
-			onChange={ val => setBulk( toBulk( val ) ) }
+			onChange={ ( val ) => {
+				setBulk(toBulk( val ));
+				replaceOptions( val );
+			}}
 			rows={ 16 }
 		/>
 		<Help>
@@ -99,104 +130,6 @@ for the calculator field by separating them with a colon character`,
 			<br/>
 			Book #1 : book_1 : 100
 		</Help>
-		<ModalFooterFill>
-			<ButtonGroup
-				className="jet-form-edit-modal__actions"
-			>
-				<Button
-					ref={ refAdd }
-					isPrimary
-					onClick={ () => {
-						setShowPopoverAdd( prev => !prev );
-						setShowPopoverReplace( false );
-					} }
-				>
-					{ __( 'Add to the options', 'jet-form-builder' ) }
-				</Button>
-				<Button
-					ref={ refReplace }
-					isSecondary
-					style={ {
-						margin: '0 0 0 10px',
-					} }
-					onClick={ () => {
-						setShowPopoverReplace( prev => !prev );
-						setShowPopoverAdd( false );
-					} }
-				>
-					{ __(
-						'Replace existing options with these',
-						'jet-form-builder',
-					) }
-				</Button>
-			</ButtonGroup>
-		</ModalFooterFill>
-		{ showPopoverAdd && (
-			<PopoverStandard
-				position={ 'top-start' }
-				noArrow={ false }
-				isAlternate
-				{ ...popoverPropsAdd }
-			>
-				<span>{ __(
-					'Are you sure you want to add new options?',
-					'jet-form-builder',
-				) }</span>
-				<Flex justify="center" gap={ 1 }>
-					<Button
-						isLink
-						onClick={ () => {
-							addOptions();
-							setModalContent( false );
-						} }
-					>
-						{ __( 'Yes', 'jet-form-builder' ) }
-					</Button>
-					{ ' / ' }
-					<Button
-						isLink
-						isDestructive
-						onClick={ () => setShowPopoverAdd( false ) }
-					>
-						{ __( 'No', 'jet-form-builder' ) }
-					</Button>
-				</Flex>
-			</PopoverStandard>
-		) }
-		{ showPopoverReplace && (
-			<PopoverStandard
-				position={ 'top-start' }
-				noArrow={ false }
-				isAlternate
-				{ ...popoverPropsReplace }
-			>
-
-					<span>{ __(
-						`Are you sure you want to replace the old options 
-with new ones?`,
-						'jet-form-builder',
-					) }</span>
-				<Flex justify="center" gap={ 1 }>
-					<Button
-						isLink
-						onClick={ () => {
-							replaceOptions();
-							setModalContent( false );
-						} }
-					>
-						{ __( 'Yes', 'jet-form-builder' ) }
-					</Button>
-					{ ' / ' }
-					<Button
-						isLink
-						onClick={ () => setShowPopoverReplace( false ) }
-						isDestructive
-					>
-						{ __( 'No', 'jet-form-builder' ) }
-					</Button>
-				</Flex>
-			</PopoverStandard>
-		) }
 	</>;
 }
 

@@ -166,6 +166,16 @@ class Form extends Base {
 		);
 
 		$this->register_jet_control(
+			'markup_type',
+			array(
+				'tab'     => 'content',
+				'label'   => esc_html__( 'Markup type', 'jet-form-builder' ),
+				'type'    => 'select',
+				'options' => $options['markup_type'],
+			)
+		);
+
+		$this->register_jet_control(
 			'submit_type',
 			array(
 				'tab'     => 'content',

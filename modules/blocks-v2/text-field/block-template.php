@@ -26,7 +26,13 @@ $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'minlength', $this->args['minlength'] ?? '' );
 $this->add_attribute( 'maxlength', $this->args['maxlength'] ?? '' );
 $this->add_attribute( 'data-jfb-sync' );
-$this->add_attribute( 'autocomplete', $this->args['autocomplete'] ?? '' );
+
+$this->add_attribute(
+	'autocomplete',
+	$this->args['autocomplete'] === 'off'
+		? 'off_' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8)
+		: $this->args['autocomplete']
+);
 
 
 if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {

@@ -34,6 +34,7 @@ $this->add_attribute( 'data-precision', $precision );
 $this->add_attribute( 'data-sep-decimal', $args['separate_decimals'] );
 $this->add_attribute( 'data-sep-thousands', $args['separate_thousands'] );
 $this->add_attribute( 'data-value-type', $this->args['value_type'] );
+$this->add_attribute( 'data-date-format', ! empty( $args['date_format'] ) ? $args['date_format'] : 'YYYY-MM-DD' );
 
 $this->add_attribute( 'class', 'jet-form-builder__calculated-field' );
 $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field--hidden' : '' );

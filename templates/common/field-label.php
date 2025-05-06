@@ -17,9 +17,11 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+$is_group_type = in_array( $this->get_name(), array( 'checkbox-field', 'radio-field' ), true );
+$tag = ( $is_group_type && jet_fb_live_args()->markup_type === 'fieldset' ) ? 'legend' : $label_text_tag;
 
 printf( "<div %s>\r\n", $label_wrapper->get_attributes_string() );
-printf( '<%s %s>', $label_text_tag, $label_text->get_attributes_string() );
+printf( '<%s %s>', $tag, $label_text->get_attributes_string() );
 
 echo wp_kses_post( $args['label'] );
 
@@ -32,6 +34,6 @@ if ( $this->block_type->get_required_val() && ! empty( $mark ) ) {
 	);
 }
 
-echo "</{$label_text_tag}>";
+echo "</{$tag}>";
 require $this->get_global_template( 'common/prev-page-button.php' );
 echo '</div>';

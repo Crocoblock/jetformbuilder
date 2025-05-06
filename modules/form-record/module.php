@@ -7,6 +7,7 @@ use Jet_Form_Builder\Actions\Manager;
 use Jet_Form_Builder\Admin\Single_Pages\Base_Single_Page;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Base_Meta_Container;
 use Jet_Form_Builder\Admin\Single_Pages\Meta_Containers\Side_Meta_Container;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Classes\Post\Post_Tools;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
@@ -111,6 +112,13 @@ final class Module implements
 			array( $this, 'editor_assets' ),
 			0
 		);
+		add_action(
+			'jet-form-builder/admin/form-records-access-capability',
+			array( $this, 'form_records_access_capability' ),
+			10,
+			2
+		);
+
 	}
 
 	public function remove_hooks() {
@@ -153,6 +161,10 @@ final class Module implements
 			'jet-form-builder/editor-assets/before',
 			array( $this, 'editor_assets' ),
 			0
+		);
+		remove_action(
+			'jet-form-builder/admin/form-records-access-capability',
+			array( $this, 'form_records_access_capability' ),
 		);
 	}
 
@@ -252,6 +264,13 @@ final class Module implements
 
 	public function get_rest(): Records_Rest_Controller {
 		return $this->rest;
+	}
+
+	public function form_records_access_capability($submenu_data, $page) {
+		if ( $page->slug() === 'jfb-records' ) {
+			$submenu_data['capability'] = Tab_Handler_Manager::get_form_records_access_capability();
+		}
+		return $submenu_data;
 	}
 
 }

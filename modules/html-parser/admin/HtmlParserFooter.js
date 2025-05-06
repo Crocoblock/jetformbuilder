@@ -1,6 +1,7 @@
 import { Button, Flex } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
+import { useState } from '@wordpress/element';
 import serialize from './serialize';
 
 const { parseHTMLtoBlocks } = JetFormBuilderParser;
@@ -13,12 +14,15 @@ const getPostEditUrl = id => {
 };
 
 export default function HtmlParserFooter( { clearHTML, rawHTML, setShowModal } ) {
+	const [ isBusy, setIsBusy ] = useState( false );
 	const createForm = async () => {
+		setIsBusy( true );
 		try {
 			const blocks = parseHTMLtoBlocks( rawHTML );
 
 			if ( !blocks.length ) {
 				console.error( __( 'JFB: Could not parse blocks', 'jet-form-builder' ), rawHTML );
+				setIsBusy( false );
 				return;
 			}
 
@@ -38,6 +42,7 @@ export default function HtmlParserFooter( { clearHTML, rawHTML, setShowModal } )
 
 		} catch ( error ) {
 			console.error( 'Failed to create form:', error );
+			setIsBusy( false );
 		}
 	};
 
@@ -52,6 +57,8 @@ export default function HtmlParserFooter( { clearHTML, rawHTML, setShowModal } )
 			<Button
 				variant="primary"
 				onClick={ createForm }
+				isBusy={ isBusy }
+				disabled={ isBusy }
 			>
 				{ __( 'Create Form', 'jet-form-builder' ) }
 			</Button>

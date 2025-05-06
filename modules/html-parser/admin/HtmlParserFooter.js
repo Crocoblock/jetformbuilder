@@ -8,8 +8,9 @@ const { parseHTMLtoBlocks } = JetFormBuilderParser;
 const getPostEditUrl = id => {
 	const url = new URL( JetFormBuilderAdmin.edit_url );
 	url.searchParams.set( 'post', id );
+
 	return url.href;
-}
+};
 
 export default function HtmlParserFooter( { clearHTML, rawHTML, setShowModal } ) {
 	const createForm = async () => {

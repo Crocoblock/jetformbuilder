@@ -103,6 +103,24 @@ export default function HtmlParserModal( {setShowModal} ) {
 						rows={ 7 }
 					/>
 
+					<ul style={ {
+						listStyle: 'disc',
+						paddingInlineStart: '1em',
+					} }>
+						<li>{ __(
+							'You can use any HTML code that contains form elements, but only headings, form controls, and buttons will be parsed.',
+							'jet-form-builder',
+						) }</li>
+						<li>{ __(
+							`All the code you paste here will be parsed into a single Form, even if it contains more than one <form> tag.`,
+							'jet-form-builder',
+						) }</li>
+						<li>{ __(
+							`The parser can only understand form elements and structure; it can't parse styling or behavior.`,
+							'jet-form-builder',
+						) }</li>
+					</ul>
+
 					<Flex justify="flex-end" style={ { marginTop: '1em' } }>
 						<Button
 							isPrimary

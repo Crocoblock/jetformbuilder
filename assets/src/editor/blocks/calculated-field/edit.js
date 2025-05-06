@@ -200,8 +200,56 @@ export default function EditCalculated( props ) {
 							setAttributes( { calc_formula: newValue } );
 						} }
 					/>
+					<div className={ 'jet-form-builder__calculated-field_info' }>
+					{ __( 'You may use JavaScript\'s built-in ', 'jet-form-builder' ) }
+						<a
+							href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{ __( 'Math', 'jet-form-builder' ) }
+						</a>
+						{ __( ' object (e.g., Math.sqrt(16) returns 4) to perform more sophisticated operations.', 'jet-form-builder' ) }
+						<br />
+						{ __( 'You can also explore', 'jet-form-builder' ) }&nbsp;
+						<a
+							href="https://github.com/Crocoblock/jetformbuilder/wiki/Frontend-Macros---Filters"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{ __( 'Filters', 'jet-form-builder' ) }
+						</a>,&nbsp;
+						<a
+							href="https://github.com/Crocoblock/jetformbuilder/wiki/Frontend-Macros---External-Macros"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{ __( 'External Macros', 'jet-form-builder' ) }
+						</a>&nbsp;
+						{ __( 'and', 'jet-form-builder' ) }&nbsp;
+						<a
+							href="https://github.com/Crocoblock/jetformbuilder/wiki/Frontend-Macros---Field-Attributes"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{ __( 'Field Attributes', 'jet-form-builder' ) }
+						</a>
+						&nbsp;
+						{ __( 'for deeper customization.', 'jet-form-builder' ) }
+						<br />
+						{ __( 'Additionally, you can use the ternary operator (?:) for conditional calculations. For example: ((%field_one% + %field_two%) > 20) ? 10 : 5', 'jet-form-builder' ) }
+						<br />
+						{ __( 'For more details on using calculated fields, check out the Block Field section or read our in-depth guide', 'jet-form-builder' ) }&nbsp;
+						<a
+							href="https://jetformbuilder.com/features/calculated-field"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{ __( 'here', 'jet-form-builder' ) }
+						</a>.
+					</div>
 				</> }
-			</FieldWrapper>
-		</div>,
+				</FieldWrapper>
+			</div>,
 	];
 }

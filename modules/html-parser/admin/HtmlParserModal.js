@@ -28,24 +28,39 @@ export default function HtmlParserModal( {setShowModal} ) {
 			const innerHTML = getFormInnerFields( html );
 
 			const styledHTML = `
-			<style>
-				textarea, input:not([type="checkbox"]):not([type="radio"]) {
-					display: block;
-					margin-bottom: 20px;
-				}
-				label {
-					display:block;
-					margin-bottom:5px;
-				}
-				br {
-					display:none;
-				}
-				input[type="submit"], button {
-					display:block;
-				}
-			</style>
-			${innerHTML}
-		`;
+			<div class="jet-form-builder-html-parser-preview">
+				<style>
+					.jet-form-builder-html-parser-preview {
+						pointer-events: none;
+					}
+					.jet-form-builder-html-parser-preview textarea,
+					.jet-form-builder-html-parser-preview input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]),
+					.jet-form-builder-html-parser-preview select {
+						display: block;
+						width: 100% !important;
+						max-width: 100% !important;
+						margin-bottom: 10px;
+					}
+					.jet-form-builder-html-parser-preview label {
+						display:block;
+						margin-bottom:5px;
+					}
+					.jet-form-builder-html-parser-preview br {
+						display:none;
+					}
+					.jet-form-builder-html-parser-preview input[type="submit"],
+					.jet-form-builder-html-parser-preview button {
+						display:block;
+						border: none;
+						background-color: #0071a1;
+						color: #fff;
+						padding: 10px 20px;
+						cursor: pointer;
+					}
+				</style>
+				${innerHTML}
+			</div>
+			`;
 
 			setFormHTML( styledHTML );
 		} catch ( err ) {

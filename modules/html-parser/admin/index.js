@@ -11,6 +11,7 @@ domReady( () => {
 
 	const container = document.createElement( 'div' );
 	container.style.display = 'inline-flex';
+	container.style.marginLeft = '4px';
 
 	target.after( container );
 	createRoot( container ).render(

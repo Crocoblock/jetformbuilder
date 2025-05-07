@@ -32,7 +32,7 @@ export default function HtmlParserFooter( { clearHTML, rawHTML, setShowModal } )
 				method: 'POST',
 				path: '/wp/v2/jet-form-builder',
 				data: {
-					title: __( 'Imported HTML Form', 'jet-form-builder' ),
+					title: __( 'Imported HTML Form', 'jet-form-builder' ) + ' ' + new Date().toLocaleString('sv-SE').replace('T', ' '),
 					content: serialized,
 					status: 'publish',
 				},

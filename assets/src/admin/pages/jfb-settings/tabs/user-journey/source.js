@@ -8,7 +8,7 @@ const label = {
 
 const help = {
 	enable_user_journey: __(
-		'Track user journey across the website and store it in browser storage',
+		'Track the user’s journey across the website and save it in the browser.',
 		'jet-form-builder'
 	),
 	storage_type: __(

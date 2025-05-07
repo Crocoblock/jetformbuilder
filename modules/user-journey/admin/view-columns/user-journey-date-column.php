@@ -17,10 +17,6 @@ class User_Journey_Date_Column extends Column_Advanced_Base {
 	}
 
 	public function get_value( array $record = array() ) {
-		if ( isset( $record['is_separator'] ) && $record['is_separator'] ) {
-			return $record['formatted_date'];
-		}
-
 		$timestamp = $record['timestamp'] ?? 0;
 
 		if ( $timestamp ) {

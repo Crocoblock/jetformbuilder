@@ -17,10 +17,6 @@ class User_Journey_Duration_Column extends Column_Advanced_Base {
 	}
 
 	public function get_value( array $record = array() ) {
-		if ( isset( $record['is_separator'] ) && $record['is_separator'] ) {
-			return '';
-		}
-
 		$duration = $record['duration'] ?? 0;
 
 		if ( $duration ) {

@@ -22,10 +22,6 @@ class User_Journey_Url_Column extends Column_Advanced_Base {
 	public function get_value( array $record = array() ) {
 		$journey_url = isset( $record['journey_url'] ) ? $record['journey_url'] : '';
 
-		if ( isset( $record['is_separator'] ) && $record['is_separator'] ) {
-			return '';
-		}
-
 		$wp_page_data = Tools::get_wp_page_data_by_url( $journey_url );
 
 		if ( '/' === $journey_url ) {

@@ -23,6 +23,20 @@ class Tools {
 	 * @return array|false An array of page data or false if not found.
 	 */
 	public static function get_wp_page_data_by_url( string $url ) {
+		if ( function_exists( 'wc_get_page_id' ) && function_exists( 'get_permalink' ) ) {
+			$shop_page_id  = wc_get_page_id( 'shop' );
+			$shop_url      = get_permalink( $shop_page_id );
+			$shop_url_path = wp_parse_url( $shop_url, PHP_URL_PATH );
+
+			if ( $shop_url_path === $url ) {
+				return array(
+					'ID'        => $shop_page_id,
+					'title'     => get_the_title( $shop_page_id ),
+					'permalink' => $shop_url,
+				);
+			}
+		}
+
 		if ( '/' === $url ) {
 			$post_id = get_option( 'page_on_front' );
 		} else {

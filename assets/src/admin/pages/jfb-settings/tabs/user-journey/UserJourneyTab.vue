@@ -33,7 +33,7 @@
 			></cx-vui-select>
 			<cx-vui-component-wrapper >
 				<div class="cx-vui-component__label">Please note!</div>
-				<div><b>Session Storage:</b> The information is kept only while this tab or window is open. Reloading the page is fine, but as soon as you close the tab, the data disappears. Other tabs or windows of the site can’t see it.</div>
+				<div><b>Session Storage:</b> The information is kept only while this tab or window is open. Reloading the page is fine, but as soon as you close the tab, the data disappears. Other tabs or windows of the site can’t see it. You can still get it back by pressing Ctrl + Shift + T (“Reopen Closed Tab”)</div>
 				<div><b>Local Storage:</b> The information stays much longer—every tab or window of this site can use it, and it remains even after you close and reopen the browser, until you clear it yourself.</div>
 			</cx-vui-component-wrapper>
 

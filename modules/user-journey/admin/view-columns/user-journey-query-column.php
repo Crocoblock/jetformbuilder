@@ -18,10 +18,6 @@ class User_Journey_Query_Column extends Column_Advanced_Base {
 	public function get_value( array $record = array() ) {
 		$journey_query = $record['journey_query'] ?? '';
 
-		if ( isset( $record['is_separator'] ) && $record['is_separator'] ) {
-			return '';
-		}
-
 		return $journey_query;
 	}
 }

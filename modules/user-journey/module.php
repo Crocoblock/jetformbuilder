@@ -41,7 +41,7 @@ class Module implements
     use Base_Module_Static_Instance_Trait;
 
     private $rest;
-
+    private $forms;
     /**
      * Returns the instance ID for the module.
      *
@@ -86,6 +86,13 @@ class Module implements
             add_filter(
                 'jet-form-builder/actions/redirect-to-page/redirect-args',
                 array( $this, 'add_redirect_to_page_action_query_args' ),
+                10,
+                2
+            );
+
+            add_filter(
+                'jet-fb/response-handler/query-args',
+                array( $this, 'add_gateway_query_args' ),
                 10,
                 2
             );
@@ -170,6 +177,7 @@ class Module implements
      */
     public function on_install() {
         $this->rest = new User_Journey_Rest_Controller();
+        $this->set_forms();
 
         Tab_Handler_Manager::instance()->install( new Tab_Handlers\User_Journey_Handler() );
     }
@@ -181,8 +189,50 @@ class Module implements
         Tab_Handler_Manager::instance()->uninstall( new Tab_Handlers\User_Journey_Handler() );
     }
 
-    public function add_redirect_to_page_action_query_args( $args, $handler ) {
+    public function set_forms() {
+        if ( ! \JFB_Modules\Post_Type\Module::class ) {
+            return array();
+        }
 
+        $this->forms = get_posts( array(
+            'post_type'      => \JFB_Modules\Post_Type\Module::SLUG,
+            'posts_per_page' => -1,
+        ) );
+    }
+
+    public function get_forms() {
+        return $this->forms;
+    }
+
+    public function add_gateway_query_args( $args, $response ) {
+        if ( ! \JFB_Modules\Post_Type\Module::class ) {
+            return $args;
+        }
+
+        if ( isset( $response->args['form_id'] ) && isset( $response->args['status'] ) ) {
+            if ( false === strpos( $args['status'], '%7C' ) && false === strpos( $args['status'], '|' ) ) {
+                return $args;
+            } else if ( false !== strpos( $args['status'], '%7C' ) ) {
+                $status = explode( '%7C', $args['status'] )[0];
+            } else {
+                $status = explode( '|', $args['status'] )[0];
+            }
+
+            $jet_fb_user_journey_settings = $this->get_journey_settings();
+
+            if ( 'success' === $jet_fb_user_journey_settings['clear_after_submit'] ) {
+                if ( 'dsuccess' === $status ) {
+                    $args['jfb_clear_journey'] = $response->args['form_id'];
+                }
+            } else if ( 'always' === $jet_fb_user_journey_settings['clear_after_submit'] ) {
+                $args['jfb_clear_journey'] = $response->args['form_id'];
+            }
+        }
+
+        return $args;
+    }
+
+    public function add_redirect_to_page_action_query_args( $args, $handler ) {
         if ( ! \JFB_Modules\Post_Type\Module::class ) {
             return $args;
         }
@@ -190,19 +240,14 @@ class Module implements
         $post_type_module = \Jet_Form_Builder\Plugin::instance()->module(\JFB_Modules\Post_Type\Module::class);
         $journey_form_ids = $this->get_form_ids_with_save_user_journey();
 
-        $forms = get_posts( array(
-            'post_type'      => \JFB_Modules\Post_Type\Module::SLUG,
-            'posts_per_page' => -1,
-        ) );
+        $forms = $this->get_forms();
 
         foreach ( $forms as $form ) {
             $actions = $post_type_module->get_actions( $form->ID );
             foreach ( $actions as $action ) {
                 if ( ( $action['type'] ?? '' ) === 'redirect_to_page' ) {
-                    if ( in_array( $form->ID, $journey_form_ids ) && $action['id'] === $handler->_id ) {
-                        $action_args = $action['settings']['redirect_to_page']['redirect_args'] ?? false;
-
-                        if ( $action_args ) {
+                    if ( isset( $handler->_id ) ) {
+                        if ( in_array( $form->ID, $journey_form_ids ) && $action['id'] === $handler->_id ) {
                             $args['jfb_clear_journey'] = $form->ID;
                         }
                     }
@@ -218,10 +263,7 @@ class Module implements
         $post_type_module = \Jet_Form_Builder\Plugin::instance()->module( \JFB_Modules\Post_Type\Module::class );
         $matched_form_ids = [];
 
-        $forms = get_posts( array(
-            'post_type'      => \JFB_Modules\Post_Type\Module::SLUG,
-            'posts_per_page' => -1,
-        ) );
+        $forms = $this->get_forms();
 
         foreach ( $forms as $form ) {
             $actions = $post_type_module->get_actions( $form->ID );
@@ -318,6 +360,10 @@ class Module implements
                     var status = params.get('status') ?? 'unknown',
                         formId = params.get('jfb_clear_journey');
 
+                    if ( status.includes('|') ) {
+                        status = status.split('|')[0];
+                    }
+
                     params.delete('jfb_clear_journey');
 
                     var newSearch = params.toString();
@@ -329,8 +375,8 @@ class Module implements
 
                     window.history.replaceState( null, document.title, newUrl );
 
-                    if ( ( ( 'success' === settings.clear_after_submit || 'always' === settings.clear_after_submit ) && 'success' === status
-                ) || 'always' === settings.clear_after_submit || 'unknown' === status )
+                    if ( ( 'success' === settings.clear_after_submit && ( 'success' === status || 'dsuccess' === status ) )
+                        || 'always' === settings.clear_after_submit || 'unknown' === status )
                     {
                         const raw  = storage.getItem( storageKey );
 
@@ -364,7 +410,7 @@ class Module implements
             const storageKey  = 'jet_fb_user_journey';
             const storage     = settings.storage_type === 'local' ? localStorage : sessionStorage;
             const currentUrl  = window.location.pathname;
-            const queryString = window.location.search;
+            const queryString = decodeURIComponent( window.location.search );
             const formIds     = new Set( ( settings.form_ids_with_save_user_journey || [] ).map( Number ) );
 
             let journeys;
@@ -596,7 +642,7 @@ class Module implements
                 'record_id'     => $record_id,
                 'journey_step'  => $step,
                 'journey_url'   => sanitize_text_field( $item['url'] ),
-                'journey_query' => sanitize_text_field( $item['query'] ?? '' ),
+                'journey_query' => urldecode( $item['query'] ?? '' ),
                 'timestamp'     => $item['timestamp'],
             );
         }

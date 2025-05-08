@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.4.7.1
+* FIX: Compatibility with WordPress 6.8 (resolves visual issue with block validation type)
+
 ## 3.4.7
 * FIX: Editor styles compatibility with BuddyBoss theme
 * FIX: Reset input values in the Repeater field when adding a new row

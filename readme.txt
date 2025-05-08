@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 3.4.7.1
+Stable tag: 3.5.0-alpha1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,18 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.5.0**
+- ADD: Calculated Field usage info with references and examples.
+- ADD: User Journey functionality.
+- ADD: Implemented visibility controls for Form Records, restricting access for unprivileged users.
+- ADD: Added date/time calculation support to Calculated Field, including new date/time filters.
+- ADD: input validation against the current user’s password.
+- ADD: new admin UI
+- UPD: synchronize manual and bulk editors
+- ADD: `Server side validation method` option
+- ADD: `Import from HTML` feature
+- FIX: Accessibility Improvements
 
 **3.4.7.1**
 - FIX: Compatibility with WordPress 6.8 (resolves visual issue with block validation type)

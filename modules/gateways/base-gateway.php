@@ -350,6 +350,9 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 
 	public function send_response( $args = array() ) {
 		$redirect = jet_fb_action_handler()->response_data['redirect'] ?? '';
+		$form_id  = jet_fb_action_handler()->get_form_id();
+
+		$args['form_id'] = $form_id;
 
 		if ( ! empty( $redirect ) ) {
 			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect

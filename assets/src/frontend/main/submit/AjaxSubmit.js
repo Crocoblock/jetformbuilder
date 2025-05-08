@@ -80,6 +80,12 @@ function AjaxSubmit( form ) {
 					[ response, $form ],
 				);
 				break;
+			default:
+				jQuery( document ).trigger(
+					'jet-form-builder/ajax/on-success/not-success-status',
+					[ response, $form ]
+				);
+				break;
 		}
 		/**
 		 * Run status watchers

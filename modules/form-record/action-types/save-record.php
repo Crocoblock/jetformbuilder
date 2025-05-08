@@ -11,7 +11,6 @@ use JFB_Modules\Form_Record;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Manager;
 use JFB_Modules\Security\Module;
-
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -68,12 +67,15 @@ class Save_Record extends Base {
 		$record_id = ( new Form_Record\Controller() )
 			->set_settings(
 				array(
-					'save_errors'    => Manager::instance()->active(),
-					'save_user_data' => $this->settings['save_user_data'] ?? false,
+					'save_errors'       => Manager::instance()->active(),
+					'save_user_data'    => $this->settings['save_user_data'] ?? false,
+					'save_user_journey' => $this->settings['save_user_journey'] ?? false,
 				)
 			)
 			->save()
 			->get_record_id();
+
+		do_action( 'jet-form-builder/form-record/save-record-action', $record_id, $request );
 
 		$this->add_context_once(
 			array( 'id' => $record_id )
@@ -82,11 +84,12 @@ class Save_Record extends Base {
 
 	public function editor_labels() {
 		return array(
-			'save_user_data' => __( 'Store the IP address and other request headers', 'jet-form-builder' ),
-			'save_spam'      => __(
+			'save_user_data'    => __( 'Store the IP address and other request headers', 'jet-form-builder' ),
+			'save_spam'         => __(
 				'Keep form records that have not passed spam or captcha protection.',
 				'jet-form-builder'
 			),
+			'save_user_journey' => __( 'Save User Journey', 'jet-form-builder' ),
 		);
 	}
 

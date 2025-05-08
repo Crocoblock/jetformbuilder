@@ -55,6 +55,7 @@ import * as mailchimp from './tabs/mailchimp';
 import * as getResponse from './tabs/getresponse';
 import * as paymentGateways from './tabs/payments-gateways';
 import * as options from './tabs/options';
+import * as userJourney from './tabs/user-journey';
 import SettingsSideBar from './sidebar/SettingsSideBar';
 
 const { applyFilters, doAction } = wp.hooks;
@@ -76,6 +77,7 @@ window.jfbEventBus = window.jfbEventBus || new Vue( {} );
 
 const settingTabs = applyFilters( 'jet.fb.register.settings-page.tabs', [
 	options,
+	userJourney,
 	paymentGateways,
 	captcha,
 	mailchimp,

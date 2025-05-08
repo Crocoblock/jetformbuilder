@@ -59,14 +59,18 @@ class Stable_Pages_Manager {
 
 		/** @var Base_Page $page */
 		foreach ( $this->rep_get_items() as $page ) {
-			$submenu_data = apply_filters( 'jet-form-builder/admin/form-records-access-capability', [
-				'parent'    => $parent,
-				'title'     => $page->title(),
-				'menu_title'=> $page->title(),
-				'capability'=> 'manage_options',
-				'slug'      => $page->slug(),
-				'callback'  => [ $page, 'render' ],
-			], $page );
+			$submenu_data = apply_filters(
+				'jet-form-builder/admin/form-records-access-capability',
+				array(
+					'parent'    => $parent,
+					'title'     => $page->title(),
+					'menu_title' => $page->title(),
+					'capability' => 'manage_options',
+					'slug'      => $page->slug(),
+					'callback'  => array( $page, 'render' ),
+				),
+				$page
+			);
 
 			add_submenu_page(
 				$submenu_data['parent'],

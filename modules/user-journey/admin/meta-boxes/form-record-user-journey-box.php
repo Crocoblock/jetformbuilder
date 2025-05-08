@@ -138,49 +138,7 @@ class Form_Record_User_Journey_Box extends Base_Table_Box {
 		}
 	}
 
-	/**
-	 * Add date separators to user journey list
-	 *
-	 * @param array $journey_items List of user journey items
-	 * @return array Modified list with date separators
-	 */
-	// function add_date_separators_to_journey( $journey_items ) {
-	// 	if ( empty( $journey_items ) ) {
-	// 		return array();
-	// 	}
-
-	// 	$result       = array();
-	// 	$current_date = null;
-
-	// 	foreach ($journey_items as $index => $item) {
-	// 		$timestamp = $item['timestamp'] ?? 0;
-	// 		$timestamp = ( int ) ( $timestamp / 1000 );
-
-	// 		$timezone = new \DateTimeZone( wp_timezone_string() );
-	// 		$date     = new \DateTime();
-	// 		$date->setTimestamp($timestamp);
-	// 		$date->setTimezone($timezone);
-
-	// 		$item_date = $date->format('Y-m-d');
-
-	// 		if ( $item_date !== $current_date ) {
-	// 			$result[] = array(
-	// 				'is_separator'   => true,
-	// 				'formatted_date' => $date->format( 'F j, Y' ),
-	// 			);
-
-	// 			$this->date_separators++;
-
-	// 			$current_date = $item_date;
-	// 		}
-
-	// 		$result[] = $item;
-	// 	}
-
-	// 	return $result;
-	// }
-
-	function add_journey_durations_to_journey( $journey_items, string $record_created_at ) {
+	public function add_journey_durations_to_journey( $journey_items, string $record_created_at ) {
 		if ( empty( $journey_items ) ) {
 			return array();
 		}
@@ -191,7 +149,7 @@ class Form_Record_User_Journey_Box extends Base_Table_Box {
 			if ( isset( $journey_items[ $index + 1 ] ) ) {
 				$current_timestamp = $item['timestamp'] ?? 0;
 				$next_timestamp    = $journey_items[ $index + 1 ]['timestamp'] ?? 0;
-				$duration          = (int)( ( $next_timestamp - $current_timestamp ) / 1000 );
+				$duration          = (int) ( ( $next_timestamp - $current_timestamp ) / 1000 );
 
 				$item['duration'] = $duration;
 			} else {
@@ -203,9 +161,9 @@ class Form_Record_User_Journey_Box extends Base_Table_Box {
 					$timezone
 				);
 
-				$record_timestamp  = (int) $record_created_at_dt->format('U') * 1000;
+				$record_timestamp  = (int) $record_created_at_dt->format( 'U' ) * 1000;
 				$current_timestamp = $item['timestamp'] ?? 0;
-				$duration          = (int)( ( $record_timestamp - $current_timestamp ) / 1000 );
+				$duration          = (int) ( ( $record_timestamp - $current_timestamp ) / 1000 );
 				$item['duration']  = $duration;
 			}
 

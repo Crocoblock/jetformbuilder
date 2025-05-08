@@ -27,12 +27,11 @@ if ( $this instanceof Native_Block_Wrapper_Attributes ) {
 
 
 $is_group_type = in_array( $this->get_name(), array( 'checkbox-field', 'radio-field' ), true );
-$tag = ( $is_group_type && jet_fb_live_args()->markup_type === 'fieldset' ) ? 'fieldset' : 'div';
+$tag = ( $is_group_type && jet_fb_live_args()->markup_type === 'fieldset' ) ? 'fieldset' : 'div'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 printf(
 	'<%3$s %1$s %2$s>',
-	$this->get_attributes_string(),
-	$attrs,
+	$this->get_attributes_string(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	$attrs, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	esc_attr( $tag )
 );
-

@@ -29,8 +29,8 @@ $this->add_attribute( 'data-jfb-sync' );
 
 $this->add_attribute(
 	'autocomplete',
-	$this->args['autocomplete'] === 'off'
-		? 'off_' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8)
+	'off' === $this->args['autocomplete']
+		? 'off_' . substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' ), 0, 8 )
 		: $this->args['autocomplete']
 );
 

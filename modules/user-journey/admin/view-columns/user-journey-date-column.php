@@ -20,7 +20,7 @@ class User_Journey_Date_Column extends Column_Advanced_Base {
 		$timestamp = $record['timestamp'] ?? 0;
 
 		if ( $timestamp ) {
-			$timestamp = ( int )( $timestamp / 1000 );
+			$timestamp = (int) ( $timestamp / 1000 );
 			$timezone  = new \DateTimeZone( wp_timezone_string() );
 			$date      = new \DateTime();
 

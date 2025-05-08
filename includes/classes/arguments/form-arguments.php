@@ -191,7 +191,7 @@ class Form_Arguments implements Arrayable {
 			'required_mark'    => $this->required_mark,
 			'fields_layout'    => $this->fields_layout,
 			'fields_label_tag' => $this->fields_label_tag,
-			'markup_type' 	   => $this->markup_type,
+			'markup_type'      => $this->markup_type,
 			'enable_progress'  => $this->enable_progress,
 			'clear'            => $this->clear,
 		);
@@ -281,7 +281,7 @@ class Form_Arguments implements Arrayable {
 			'submit_type'      => $submit_type,
 			'fields_layout'    => $fields_layout,
 			'fields_label_tag' => $label_tag,
-			'markup_type' 	   => $markup_type,
+			'markup_type'      => $markup_type,
 			'load_nonce'       => $load_nonce,
 		);
 	}

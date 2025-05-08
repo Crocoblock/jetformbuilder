@@ -18,7 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 $is_group_type = in_array( $this->get_name(), array( 'checkbox-field', 'radio-field' ), true );
-$tag = ( $is_group_type && jet_fb_live_args()->markup_type === 'fieldset' ) ? 'legend' : $label_text_tag;
+$tag = ( $is_group_type && jet_fb_live_args()->markup_type === 'fieldset' ) ? 'legend' : $label_text_tag; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 printf( "<div %s>\r\n", $label_wrapper->get_attributes_string() );
 printf( '<%s %s>', $tag, $label_text->get_attributes_string() );

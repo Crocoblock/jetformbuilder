@@ -25,7 +25,7 @@ class User_Journey_Url_Column extends Column_Advanced_Base {
 		$wp_page_data = Tools::get_wp_page_data_by_url( $journey_url );
 
 		if ( '/' === $journey_url ) {
-			$journey_url = $journey_url . " (" .__( 'Home Page', 'jet-form-builder' ) . ")";
+			$journey_url = $journey_url . ' (' . __( 'Home Page', 'jet-form-builder' ) . ')';
 		}
 
 		if ( $wp_page_data ) {

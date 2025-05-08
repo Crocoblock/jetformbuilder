@@ -37,7 +37,9 @@ class Module implements Base_Module_It {
 	public function init_hooks() {
 		add_filter(
 			'jet-form-builder/before-render-field',
-			array( $this, 'on_render_field' ),10,3
+			array( $this, 'on_render_field' ),
+			10,
+			3
 		);
 		add_filter(
 			'jet-form-builder/request-handler/request',
@@ -64,44 +66,44 @@ class Module implements Base_Module_It {
 		);
 	}
 
-    private function find_email_field_name( array $blocks ): string {
-        $result = [
-            'has_email'    => false,
-            'has__email'   => false,
-        ];
+	private function find_email_field_name( array $blocks ): string {
+		$result = array(
+			'has_email'    => false,
+			'has__email'   => false,
+		);
 
-        $this->walk_blocks_for_email( $blocks, $result );
+		$this->walk_blocks_for_email( $blocks, $result );
 
-        if ( $result['has_email'] ) {
-            if ( $result['has__email'] ) {
-                return self::FIELD;
-            }
-            return '_email';
-        }
+		if ( $result['has_email'] ) {
+			if ( $result['has__email'] ) {
+				return self::FIELD;
+			}
+			return '_email';
+		}
 
-        return 'email';
-    }
+		return 'email';
+	}
 
-    private function walk_blocks_for_email( array $blocks, array &$result ) {
-        foreach ( $blocks as $block ) {
-            if ( ! is_array( $block ) ) {
-                continue;
-            }
+	private function walk_blocks_for_email( array $blocks, array &$result ) {
+		foreach ( $blocks as $block ) {
+			if ( ! is_array( $block ) ) {
+				continue;
+			}
 
-            if ( isset( $block['attrs']['name'] ) ) {
-                if ( $block['attrs']['name'] === 'email' ) {
-                    $result['has_email'] = true;
-                }
-                if ( $block['attrs']['name'] === '_email' ) {
-                    $result['has__email'] = true;
-                }
-            }
+			if ( isset( $block['attrs']['name'] ) ) {
+				if ( 'email' === $block['attrs']['name'] ) {
+					$result['has_email'] = true;
+				}
+				if ( '_email' === $block['attrs']['name'] ) {
+					$result['has__email'] = true;
+				}
+			}
 
-            if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
-                $this->walk_blocks_for_email( $block['innerBlocks'], $result );
-            }
-        }
-    }
+			if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+				$this->walk_blocks_for_email( $block['innerBlocks'], $result );
+			}
+		}
+	}
 
 	public function on_render_field( string $content, string $field_name, array $attrs ): string {
 		$type = $attrs['action_type'] ?? '';
@@ -114,7 +116,7 @@ class Module implements Base_Module_It {
 			return $content;
 		}
 
-        $name = $this->find_email_field_name(Live_Form::instance()->blocks);
+		$name = $this->find_email_field_name( Live_Form::instance()->blocks );
 
 		$field = Live_Form::force_render_field(
 			'text-field',
@@ -131,7 +133,6 @@ class Module implements Base_Module_It {
 		);
 
 		return $content;
-
 	}
 
 	/**

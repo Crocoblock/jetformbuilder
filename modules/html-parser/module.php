@@ -35,7 +35,6 @@ class Module implements
 	}
 
 	public function init_hooks() {
-
 	}
 
 	public function remove_hooks() {
@@ -75,26 +74,24 @@ class Module implements
 			)
 		);
 
+		$ui_asset = require $this->get_dir( 'assets/build/admin-ui.asset.php' );
+		wp_register_script(
+			'jfb-html-parser-admin-ui',
+			$this->get_url( 'assets/build/admin-ui.js' ),
+			$ui_asset['dependencies'],
+			$ui_asset['version'],
+			true
+		);
 
-        $ui_asset = require $this->get_dir( 'assets/build/admin-ui.asset.php' );
-        wp_register_script(
-            'jfb-html-parser-admin-ui',
-            $this->get_url( 'assets/build/admin-ui.js' ),
-            $ui_asset['dependencies'],
-            $ui_asset['version'],
-            true
-        );
-
-        if (
-            is_admin()
-            && isset( $_GET['post_type'] )
-            && 'jet-form-builder' === $_GET['post_type']
-            && isset( $_SERVER['REQUEST_URI'] )
-            && false !== strpos( $_SERVER['REQUEST_URI'], 'edit.php' )
-        ) {
-            wp_enqueue_script( $this->get_handle() );
-            wp_enqueue_script( 'jfb-html-parser-admin-ui' );
-        }
-
+		if (
+			is_admin()
+			&& isset( $_GET['post_type'] )
+			&& 'jet-form-builder' === $_GET['post_type']
+			&& isset( $_SERVER['REQUEST_URI'] )
+			&& false !== strpos( $_SERVER['REQUEST_URI'], 'edit.php' ) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		) {
+			wp_enqueue_script( $this->get_handle() );
+			wp_enqueue_script( 'jfb-html-parser-admin-ui' );
+		}
 	}
 }

@@ -118,7 +118,6 @@ final class Module implements
 			10,
 			2
 		);
-
 	}
 
 	public function remove_hooks() {
@@ -164,7 +163,7 @@ final class Module implements
 		);
 		remove_action(
 			'jet-form-builder/admin/form-records-access-capability',
-			array( $this, 'form_records_access_capability' ),
+			array( $this, 'form_records_access_capability' )
 		);
 	}
 
@@ -266,7 +265,7 @@ final class Module implements
 		return $this->rest;
 	}
 
-	public function form_records_access_capability($submenu_data, $page) {
+	public function form_records_access_capability( $submenu_data, $page ) {
 		if ( $page->slug() === 'jfb-records' ) {
 			$submenu_data['capability'] = Tab_Handler_Manager::get_form_records_access_capability();
 		}

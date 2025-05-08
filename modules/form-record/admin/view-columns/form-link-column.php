@@ -33,7 +33,7 @@ class Form_Link_Column extends Column_Advanced_Base {
 		$form_id = parent::get_value( $record );
 		$form    = get_post( $form_id );
 
-		if ( !current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			$href = null;
 			$capabilities = Module::CAPABILITIES;
 			$has_all_capabilities = true;
@@ -44,12 +44,12 @@ class Form_Link_Column extends Column_Advanced_Base {
 				}
 			}
 			if ( $has_all_capabilities ) {
-				$href = admin_url("post.php?post={$form_id}&action=edit");
+				$href = admin_url( "post.php?post={$form_id}&action=edit" );
 			}
 			return array(
 				'text'  => Post_Tools::get_title( $form ),
 				'href'  => $href,
-				'title' => __( '', 'jet-form-builder' ),
+				'title' => __( '', 'jet-form-builder' ), //phpcs:ignore WordPress.WP.I18n.NoEmptyStrings
 				'type'  => '',
 			);
 		}

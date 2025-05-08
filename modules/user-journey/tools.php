@@ -13,7 +13,6 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * This file provides utility functions for the User Journey module.
  */
-
 class Tools {
 	/**
 	 * Retrieves WordPress page data by URL.

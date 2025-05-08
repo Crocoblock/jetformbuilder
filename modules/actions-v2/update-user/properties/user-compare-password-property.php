@@ -43,6 +43,7 @@ class User_Compare_Password_Property extends Base_Object_Property {
 		$user    = get_user_by( 'ID', $user_id );
 
 		if ( ! is_a( $user, \WP_User::class ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Action_Exception( 'internal_error', $user, $value );
 		}
 

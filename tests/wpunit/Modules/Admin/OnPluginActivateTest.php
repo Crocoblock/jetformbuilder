@@ -25,9 +25,10 @@ class OnPluginActivateTest extends \Codeception\TestCase\WPTestCase {
 
 		$this->assertEquals(
 			array(
-				'disable_next_button' => false,
-				'scroll_on_next'      => true,
-				'auto_focus'          => true,
+				'disable_next_button'            => false,
+				'scroll_on_next'                 => true,
+				'auto_focus'                     => true,
+				'form_records_access_capability' => 'manage_options',
 			),
 			$options
 		);
@@ -48,9 +49,10 @@ class OnPluginActivateTest extends \Codeception\TestCase\WPTestCase {
 
 		$this->assertEquals(
 			array(
-				'disable_next_button' => true,
-				'scroll_on_next'      => true,
-				'auto_focus'          => true,
+				'disable_next_button'            => true,
+				'scroll_on_next'                 => true,
+				'auto_focus'                     => true,
+				'form_records_access_capability' => 'manage_options',
 			),
 			$options
 		);
@@ -71,9 +73,10 @@ class OnPluginActivateTest extends \Codeception\TestCase\WPTestCase {
 
 		$this->assertEquals(
 			array(
-				'disable_next_button' => false,
-				'scroll_on_next'      => false,
-				'auto_focus'          => true,
+				'disable_next_button'            => false,
+				'scroll_on_next'                 => false,
+				'auto_focus'                     => true,
+				'form_records_access_capability' => 'manage_options',
 			),
 			$options
 		);
@@ -94,9 +97,10 @@ class OnPluginActivateTest extends \Codeception\TestCase\WPTestCase {
 
 		$this->assertEquals(
 			array(
-				'disable_next_button' => false,
-				'scroll_on_next'      => true,
-				'auto_focus'          => false,
+				'disable_next_button'            => false,
+				'scroll_on_next'                 => true,
+				'auto_focus'                     => false,
+				'form_records_access_capability' => 'manage_options',
 			),
 			$options
 		);
@@ -109,6 +113,7 @@ class OnPluginActivateTest extends \Codeception\TestCase\WPTestCase {
 			array(
 				'enable_dev'       => true,
 				'clear_on_install' => true,
+				'form_records_access_capability' => 'edit_posts',
 			)
 		);
 
@@ -118,11 +123,12 @@ class OnPluginActivateTest extends \Codeception\TestCase\WPTestCase {
 
 		$this->assertEquals(
 			array(
-				'enable_dev'          => true,
-				'clear_on_install'    => true,
-				'disable_next_button' => false,
-				'scroll_on_next'      => true,
-				'auto_focus'          => true,
+				'enable_dev'                     => true,
+				'clear_on_install'               => true,
+				'form_records_access_capability' => 'edit_posts',
+				'disable_next_button'            => false,
+				'scroll_on_next'                 => true,
+				'auto_focus'                     => true,
 			),
 			$options
 		);

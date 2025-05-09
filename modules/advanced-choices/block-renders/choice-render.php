@@ -47,13 +47,11 @@ class Choice_Render extends Base {
 		$this->set_choice_check( $wp_block );
 		$is_checked = $this->block_type->is_checked_current();
 
-		$accessibility_attrs = $this->has_choice_input()
-			? array()
-			: array(
-				'aria-checked' => $is_checked ? 'true' : 'false',
-				'role'         => $this->block_type->is_allowed_multiple() ? 'checkbox' : 'radio',
-				'tabindex'     => '0',
-			);
+		$accessibility_attrs =  array(
+			'aria-checked' => $is_checked ? 'true' : 'false',
+			'role'         => $this->block_type->is_allowed_multiple() ? 'checkbox' : 'radio',
+			'tabindex'     => '0',
+		);
 
 		$attrs = get_block_wrapper_attributes(
 			array_merge(

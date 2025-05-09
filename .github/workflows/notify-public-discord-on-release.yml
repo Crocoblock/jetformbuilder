@@ -1,0 +1,36 @@
+name: Notify Discord on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  discord_notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send release info to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          VERSION="${{ github.event.release.tag_name }}"
+          CHANGELOG="${{ github.event.release.body }}"
+          PLUGIN_NAME="JetFormBuilder"
+          TITLE="🚀 $PLUGIN_NAME $VERSION"
+
+          JSON=$(jq -n \
+            --arg title "$TITLE" \
+            --arg description "$CHANGELOG" \
+            '{
+              embeds: [
+                {
+                  title: $title,
+                  description: $description,
+                  color: 5814783
+                }
+              ]
+            }')
+
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d "$JSON" \
+               "$DISCORD_WEBHOOK_URL"

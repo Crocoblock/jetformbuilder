@@ -665,6 +665,9 @@ class Tools {
 	}
 
 	public static function get_main_user_role_by_priority( array $roles ): string {
+		if ( is_string( $roles ) ) {
+			$roles = [ $roles ];
+		}
 		$wp_roles_priority = [
 			'editor'        => 4,
 			'author'        => 3,

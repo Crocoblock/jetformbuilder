@@ -53,10 +53,6 @@ class Update_User_Action extends Base {
 		$user_roles = $this->settings['user_role'] ?? [];
 
 		if ( ! empty( $user_roles ) ) {
-			if ( is_string( $user_roles ) ) {
-				$user_roles = [ $user_roles ];
-			}
-
 			$main_role = Tools::get_main_user_role_by_priority( $user_roles );
 
 			if ( ! empty( $main_role ) ) {

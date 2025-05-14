@@ -46,11 +46,29 @@ class Update_User_Action extends Base {
 	 * @throws Action_Exception
 	 */
 	public function do_action( array $request, Action_Handler $handler ) {
-		( new User_Modifier() )
+		$modifier = ( new User_Modifier() )
 			->set_request( $request )
-			->set_fields_map( $this->settings['fields_map'] ?? array() )
-			->set( 'role', $this->settings['user_role'] ?? false )
-			->run();
+			->set_fields_map( $this->settings['fields_map'] ?? array() );
+
+		$user_roles = $this->settings['user_role'] ?? [];
+
+		if ( ! empty( $user_roles ) ) {
+			if ( is_string( $user_roles ) ) {
+				$user_roles = [ $user_roles ];
+			}
+
+			$main_role = Tools::get_main_user_role_by_priority( $user_roles );
+
+			if ( ! empty( $main_role ) ) {
+				$additional_roles = array_filter( $user_roles, fn( $r ) => $r !== $main_role );
+
+				$roles = array_merge( [ $main_role ], $additional_roles );
+
+				$modifier->set( 'role', $roles );
+			}
+		}
+
+		$modifier->run();
 	}
 
 	public function self_script_name() {

@@ -73,6 +73,7 @@ function UpdateUserRender( props ) {
 						{ __( 'User role', 'jet-form-builder' ) }
 					</Label>
 					<SelectControl
+						multiple
 						id={ id }
 						value={ settings.user_role }
 						options={ source.userRoles }

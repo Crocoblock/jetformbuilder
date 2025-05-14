@@ -191,13 +191,30 @@ class Register_User_Action extends Base {
 			'user_url'   => $user_url,
 		);
 
-		if ( ! empty( $this->settings['user_role'] ) && 'administrator' !== $this->settings['user_role'] ) {
-			$userarr['role'] = $this->settings['user_role'];
+
+		$user_roles = $this->settings['user_role'] ?? [];
+		if ( ! empty( $user_roles ) ) {
+			if ( is_string( $user_roles ) ) {
+				$user_roles = [ $user_roles ];
+			}
+			$main_role = Tools::get_main_user_role_by_priority( $user_roles );
+			if ( ! empty( $main_role ) ) {
+				$userarr['role'] = $main_role;
+			}
 		}
 
 		$user_id = wp_insert_user( $userarr );
 
 		if ( ! is_wp_error( $user_id ) ) {
+
+			if (! empty( $user_roles )) {
+				$user = new \WP_User( $user_id );
+				foreach ( $user_roles as $role ) {
+					if ( $role !== $main_role && $role !== 'administrator' ) {
+						$user->add_role( $role );
+					}
+				}
+			}
 
 			if ( Tools::is_wp_password_hash( $password ) ) {
 				global $wpdb;
@@ -263,5 +280,7 @@ class Register_User_Action extends Base {
 			throw new Action_Exception( 'failed', $userarr );
 		}
 	}
+
+
 
 }

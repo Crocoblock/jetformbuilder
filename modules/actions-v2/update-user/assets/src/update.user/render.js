@@ -81,6 +81,7 @@ function UpdateUserRender( props ) {
 							'user_role' ) }
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
+						help={ __( 'Hold Ctrl (Windows) or Command (Mac) to select multiple roles.', 'jet-form-builder' ) }
 					/>
 				</> }
 			</RowControl>

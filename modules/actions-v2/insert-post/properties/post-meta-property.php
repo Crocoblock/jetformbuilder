@@ -48,6 +48,10 @@ class Post_Meta_Property extends Base_Object_Property implements
 				$key => Tools::prepare_repeater_value( $value, $modifier->fields_map ),
 			)
 		);
+
+		if ( class_exists( 'Cherry_X_Post_Meta' ) ) {
+			$_POST[ $key ] = Tools::prepare_repeater_value( $value, $modifier->fields_map );
+		}
 	}
 
 	public function do_after( Abstract_Modifier $modifier ) {

@@ -148,12 +148,14 @@ class Module implements Base_Module_It {
 			return $request;
 		}
 
-		if ( ! empty( $request[ self::FIELD ] ) ) {
+        $honeypot_name = $this->find_email_field_name( jet_form_builder()->form_handler->request_handler->_fields );
+
+		if ( ! empty( $request[ $honeypot_name ] ) ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Spam_Exception( self::SPAM_EXCEPTION );
 		}
 
-		unset( $request[ self::FIELD ] );
+		unset( $request[ $honeypot_name ] );
 
 		return $request;
 	}

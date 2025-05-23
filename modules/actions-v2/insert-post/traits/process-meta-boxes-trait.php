@@ -32,6 +32,7 @@ trait Process_Meta_Boxes_Trait {
             return;
         }
 
+        $post            = get_post( $post_id );
         $post_type       = get_post_type( $post_id );
         $fields_map      = $modifier->fields_map;
         $all_meta_fields = jet_engine()->meta_boxes->get_registered_fields();
@@ -45,6 +46,11 @@ trait Process_Meta_Boxes_Trait {
 
             $meta = new \Cherry_X_Post_Meta( $args );
             $meta->save_meta_option( $post_id );
+
+            if ( class_exists( 'Jet_Smart_Filters_Indexer_Manager' ) ) {
+                $indexer = new \Jet_Smart_Filters_Indexer_Manager();
+                $indexer->post_updated( $post_id, $post );
+            }
         }
     }
 

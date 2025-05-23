@@ -40,7 +40,7 @@ class Trash_Action extends Base_Post_Action {
 			$this->modifier->source_arr['ID'] ?? 0
 		);
 
-		$this->process_meta_boxes( $this->modifier->source_arr['ID'] ?? 0 );
+		$this->process_meta_boxes( $this->modifier->source_arr['ID'] ?? 0, $this->modifier );
 
 		if ( ! is_a( $post, \WP_Post::class ) ) {
 			throw new Action_Exception( 'failed' );

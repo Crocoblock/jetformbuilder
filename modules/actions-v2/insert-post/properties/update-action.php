@@ -34,7 +34,7 @@ class Update_Action extends Base_Post_Action {
 
 		$this->inserted_id = wp_update_post( $this->modifier->source_arr, true );
 
-		$this->process_meta_boxes( $this->inserted_id );
+		$this->process_meta_boxes( $this->inserted_id, $this->modifier );
 
 		if ( ! is_wp_error( $this->inserted_id ) ) {
 			return;

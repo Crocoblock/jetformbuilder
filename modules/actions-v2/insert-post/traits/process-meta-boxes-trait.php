@@ -19,8 +19,12 @@ trait Process_Meta_Boxes_Trait {
      * @param int $post_id Post ID
      * @return void
      */
-    protected function process_meta_boxes( $post_id ) {
-        if ( ! class_exists( 'Cherry_X_Post_Meta' ) ) {
+    protected function process_meta_boxes( $post_id, $modifier ) {
+        if ( ! class_exists( 'Cherry_X_Post_Meta' ) || ! function_exists( 'jet_engine' ) ) {
+            return;
+        }
+
+        if ( ! $modifier || empty( $modifier->fields_map ) ) {
             return;
         }
 
@@ -28,44 +32,55 @@ trait Process_Meta_Boxes_Trait {
             return;
         }
 
-        $post_id = apply_filters( 'jet-form-builder/action/process-meta-boxes/post-id', $post_id, $this );
+        $post_type       = get_post_type( $post_id );
+        $fields_map      = $modifier->fields_map;
+        $all_meta_fields = jet_engine()->meta_boxes->get_registered_fields();
+        $found_fields    = $all_meta_fields[ $post_type ] ?? array();
 
-        $post_type  = get_post_type( $post_id );
-        $data       = new \Jet_Engine_Meta_Boxes_Data( $post_type );
-        $meta_boxes = $data->get_raw();
-        $meta_boxes = apply_filters( 'jet-form-builder/action/process-meta-boxes/boxes', $meta_boxes, $post_id, $this );
+        if ( ! empty( $found_fields ) ) {
+            $args = array(
+                'page'   => array( $post_type ),
+                'fields' => $this->convert_repeater_structure( $found_fields, $fields_map )
+            );
 
-        foreach ( $meta_boxes as $box ) {
-            if ( 'post' === $box['args']['object_type'] && ! empty( $box['meta_fields'] ) ) {
-                $args = array(
-                    'page'   => array( $post_type ),
-                    'fields' => array(),
-                );
+            $meta = new \Cherry_X_Post_Meta( $args );
+            $meta->save_meta_option( $post_id );
+        }
+    }
 
-                foreach ( $box['meta_fields'] as $field ) {
-                    $args['fields'][ $field['name'] ] = $field;
-                    $args['fields'][ $field['name'] ]['fields'] = ! empty( $field['repeater-fields'] ) ? $field['repeater-fields'] : array();
-                    unset( $args['fields'][ $field['name'] ]['repeater-fields'] );
+    public function convert_repeater_structure( $repeater_fields, $fields_map ) {
+        $result = array();
 
-                    if ( ! empty( $args['fields'][ $field['name'] ]['fields'] ) ) {
-                        $new_fields = array();
-                        foreach ( $args['fields'][ $field['name'] ]['fields'] as $repeater_field ) {
-                            $new_fields[ $repeater_field['name'] ] = $repeater_field;
-                        }
-                        $args['fields'][ $field['name'] ]['fields'] = $new_fields;
-                    }
-
-                    if ( isset( $args['fields'][ $field['name'] ]['repeater_save_separate'] ) ) {
-                        $args['fields'][ $field['name'] ]['save_separate'] = $args['fields'][ $field['name'] ]['repeater_save_separate'];
-                        unset( $args['fields'][ $field['name'] ]['repeater_save_separate'] );
-                    }
+        foreach ( $repeater_fields as $key => $repeater_field ) {
+            if ( in_array( $repeater_field['name'], $fields_map ) ) {
+                if ( ! isset( $repeater_field['repeater_save_separate'] ) || ! filter_var( $repeater_field['repeater_save_separate'], FILTER_VALIDATE_BOOLEAN ) ) {
+                    continue;
                 }
 
-                $args = apply_filters( 'jet-form-builder/action/process-meta-boxes/args', $args, $box, $post_id, $this );
+                $result[ $repeater_field['name'] ] = $repeater_field;
 
-                $meta = new \Cherry_X_Post_Meta( $args );
-                $meta->save_meta_option( $post_id );
+                if ( 'repeater' === $repeater_field['type'] ) {
+                    if ( isset( $result[ $repeater_field['name'] ]['repeater-fields'] ) ) {
+                        $result[ $repeater_field['name'] ]['fields'] = $result[ $repeater_field['name'] ]['repeater-fields'];
+                        unset( $result[ $repeater_field['name'] ]['repeater-fields'] );
+                    }
+
+                    if ( isset( $result[ $repeater_field['name'] ]['repeater_save_separate'] ) ) {
+                        $result[ $repeater_field['name'] ]['save_separate'] = $result[ $repeater_field['name'] ]['repeater_save_separate'];
+                        unset( $result[ $repeater_field['name'] ]['repeater_save_separate'] );
+                    }
+
+                    if ( ! empty( $result[ $repeater_field['name'] ]['fields'] ) ) {
+                        $new_fields = array();
+                        foreach ( $result[ $repeater_field['name'] ]['fields'] as $nested_field ) {
+                            $new_fields[ $nested_field['name'] ] = $nested_field;
+                        }
+                        $result[ $repeater_field['name'] ]['fields'] = $new_fields;
+                    }
+                }
             }
         }
+
+        return $result;
     }
 }

@@ -20,20 +20,42 @@ if ( ! defined( 'WPINC' ) ) {
 $is_group_type = in_array( $this->get_name(), array( 'checkbox-field', 'radio-field' ), true );
 $tag = ( $is_group_type && jet_fb_live_args()->markup_type === 'fieldset' ) ? 'legend' : $label_text_tag; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
-printf( "<div %s>\r\n", $label_wrapper->get_attributes_string() );
-printf( '<%s %s>', $tag, $label_text->get_attributes_string() );
+if ( $tag === 'legend' ) {
+    printf( '<%s %s>', $tag, $label_wrapper->get_attributes_string() );
 
-echo wp_kses_post( $args['label'] );
+    printf( '<span %s>', $label_text->get_attributes_string() );
+    echo wp_kses_post( $args['label'] );
 
-$mark = jet_fb_live_args()->required_mark;
+    $mark = jet_fb_live_args()->required_mark;
+    if ( $this->block_type->get_required_val() && ! empty( $mark ) ) {
+        printf(
+            ' <span class="jet-form-builder__required">%s</span>',
+            wp_kses_post( $mark )
+        );
+    }
 
-if ( $this->block_type->get_required_val() && ! empty( $mark ) ) {
-	printf(
-		' <span class="jet-form-builder__required">%s</span>',
-		wp_kses_post( $mark )
-	);
+    echo '</span>';
+
+    require $this->get_global_template( 'common/prev-page-button.php' );
+    echo "</{$tag}>";
+} else {
+    printf( "<div %s>\r\n", $label_wrapper->get_attributes_string() );
+    printf( '<%s %s>', $tag, $label_text->get_attributes_string() );
+
+    echo wp_kses_post( $args['label'] );
+
+    $mark = jet_fb_live_args()->required_mark;
+
+    if ( $this->block_type->get_required_val() && ! empty( $mark ) ) {
+        printf(
+            ' <span class="jet-form-builder__required">%s</span>',
+            wp_kses_post( $mark )
+        );
+    }
+
+    echo "</{$tag}>";
+    require $this->get_global_template( 'common/prev-page-button.php' );
+    echo '</div>';
 }
 
-echo "</{$tag}>";
-require $this->get_global_template( 'common/prev-page-button.php' );
-echo '</div>';
+

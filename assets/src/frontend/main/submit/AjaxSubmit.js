@@ -82,7 +82,7 @@ function AjaxSubmit( form ) {
 				break;
 			default:
 				jQuery( document ).trigger(
-					'jet-form-builder/ajax/on-success/not-success-status',
+					'jet-form-builder/ajax/processing-error',
 					[ response, $form ]
 				);
 				break;

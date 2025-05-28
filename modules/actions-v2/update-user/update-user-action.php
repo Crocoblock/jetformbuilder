@@ -50,7 +50,7 @@ class Update_User_Action extends Base {
 			->set_request( $request )
 			->set_fields_map( $this->settings['fields_map'] ?? array() );
 
-		$user_roles = $this->settings['user_role'] ?? [];
+		$user_roles = $this->settings['user_role'] ?? array();
 
 		if ( ! empty( $user_roles ) ) {
 			$main_role = Tools::get_main_user_role_by_priority( $user_roles );
@@ -58,7 +58,7 @@ class Update_User_Action extends Base {
 			if ( ! empty( $main_role ) ) {
 				$additional_roles = array_filter( $user_roles, fn( $r ) => $r !== $main_role );
 
-				$roles = array_merge( [ $main_role ], $additional_roles );
+				$roles = array_merge( array( $main_role ), $additional_roles );
 
 				$modifier->set( 'role', $roles );
 			}

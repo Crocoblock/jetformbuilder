@@ -191,8 +191,7 @@ class Register_User_Action extends Base {
 			'user_url'   => $user_url,
 		);
 
-
-		$user_roles = $this->settings['user_role'] ?? [];
+		$user_roles = $this->settings['user_role'] ?? array();
 		if ( ! empty( $user_roles ) ) {
 			$main_role = Tools::get_main_user_role_by_priority( $user_roles );
 			if ( ! empty( $main_role ) ) {
@@ -204,10 +203,10 @@ class Register_User_Action extends Base {
 
 		if ( ! is_wp_error( $user_id ) ) {
 
-			if (! empty( $user_roles )) {
+			if ( ! empty( $user_roles ) ) {
 				$user = new \WP_User( $user_id );
 				foreach ( $user_roles as $role ) {
-					if ( $role !== $main_role && $role !== 'administrator' ) {
+					if ( $role !== $main_role && 'administrator' !== $role ) {
 						$user->add_role( $role );
 					}
 				}

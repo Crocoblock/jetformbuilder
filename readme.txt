@@ -276,9 +276,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 == Changelog ==
 
 **3.5.1**
-- FIX: Ensure post-meta insertion and updates work with the `Insert/Update Post` action when using meta repeaters saved as separate fields.
-- ADD: Multiple Assignable Roles with Register/Update User actions
-- FIX: Save repeater data after removing items
+- FIX: Ensure post-meta insertion and updates work with the `Insert/Update Post` action when using meta repeaters saved as separate fields [Crocoblock/suggestions#7876](https://github.com/Crocoblock/suggestions/issues/7876)
+- ADD: Multiple Assignable Roles with Register/Update User actions [Crocoblock/suggestions#7942](https://github.com/Crocoblock/suggestions/issues/7942)
+- FIX: Save repeater data after removing items [Crocoblock/jetformbuilder#528](https://github.com/Crocoblock/jetformbuilder/issues/528)
 - ADD: `jet-form-builder/ajax/processing-error` JS trigger
 - FIX: Copilhost.fr breaks POST request in form
 - FIX: Honeypot protection not preventing submission if honeypot field not empty

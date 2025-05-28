@@ -42,12 +42,12 @@ class User_Role_Property extends Base_Object_Property {
 
 		$main_role = array_shift( $this->value );
 
-		if ( $main_role !== 'administrator' ) {
-			$id->user->set_role($main_role);
+		if ( 'administrator' !== $main_role ) {
+			$id->user->set_role( $main_role );
 		}
 
 		foreach ( $this->value as $role ) {
-			if ( $role !== 'administrator' ) {
+			if ( 'administrator' !== $role ) {
 				$id->user->add_role( $role );
 			}
 		}

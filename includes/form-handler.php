@@ -398,14 +398,14 @@ class Form_Handler {
 		}
 	}
 
-	public function set_gfb_request_args(){
+	public function set_gfb_request_args() {
 		$options_handler = new Options_Handler();
 		$options_handler->set_gfb_request_args();
 		$options = Tab_Handler_Manager::get_options( 'options-tab' );
-		if ( isset($options['gfb_request_args_key']) ) {
+		if ( isset( $options['gfb_request_args_key'] ) ) {
 			$this->hook_key = $options['gfb_request_args_key'];
 		}
-		if ( isset($options['gfb_request_args_value']) ) {
+		if ( isset( $options['gfb_request_args_value'] ) ) {
 			$this->hook_val = $options['gfb_request_args_value'];
 		}
 	}

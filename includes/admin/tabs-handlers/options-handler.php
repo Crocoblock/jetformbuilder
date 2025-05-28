@@ -16,7 +16,7 @@ class Options_Handler extends Base_Handler {
 		'auto_focus'            => false,
 		'form_records_access_capability' => 'manage_options',
 		'gfb_request_args_key'  => '',
-		'gfb_request_args_value'=> '',
+		'gfb_request_args_value' => '',
 	);
 
 	public function slug() {
@@ -55,7 +55,7 @@ class Options_Handler extends Base_Handler {
 
 	public function set_gfb_request_args() {
 		$options     = $this->get_options();
-		$update_data = [];
+		$update_data = array();
 
 		if ( empty( $options['gfb_request_args_key'] ) ) {
 			$update_data['gfb_request_args_key'] = wp_generate_password( 6, false, false );

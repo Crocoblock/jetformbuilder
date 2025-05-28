@@ -65,6 +65,7 @@ class Post_Meta_Property extends Base_Object_Property implements
 		$meta_box_fields = $this->get_meta_box_fields( $id, $modifier );
 		$prepared_value  = $this->normalize_checkboxes( $meta_box_fields, $this->value );
 
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		$_POST = array_merge( $_POST, $prepared_value );
 
 		foreach ( $this->value as $key => $value ) {

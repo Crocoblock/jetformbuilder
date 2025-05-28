@@ -32,10 +32,29 @@ ObservableRow.prototype.observe = function ( root ) {
 };
 
 ObservableRow.prototype.removeManually = function () {
+	const otherRows   = this.parent.value.current.filter( row => row !== this );
+	const otherValues = otherRows.map( row => ( {
+		node: row.rootNode,
+		values: { ...row.value.current }
+	} ) );
+
 	this.remove();
 
 	this.parent.remove( this );
 	this.rootNode.remove();
+
+	otherRows.forEach( ( row, index ) => {
+		if ( otherValues[index] ) {
+			Object.assign( row.value.current, otherValues[index].values );
+
+			const inputs = row.getInputs();
+			inputs.forEach( input => {
+				if ( input.value.current !== undefined ) {
+					input.reQueryValue();
+				}
+			} );
+		}
+	} );
 };
 
 ObservableRow.prototype.initCalc = function () {

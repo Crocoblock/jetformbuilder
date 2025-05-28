@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 3.5.0
+Stable tag: 3.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,15 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.5.1**
+- FIX: Ensure post-meta insertion and updates work with the `Insert/Update Post` action when using meta repeaters saved as separate fields.
+- ADD: Multiple Assignable Roles with Register/Update User actions
+- FIX: Save repeater data after removing items
+- ADD: `jet-form-builder/ajax/processing-error` JS trigger
+- FIX: Copilhost.fr breaks POST request in form
+- FIX: Honeypot protection not preventing submission if honeypot field not empty
+- FIX: Accessibility Improvements
 
 **3.5.0**
 - ADD: Calculated Field usage info with references and examples.

@@ -8,6 +8,15 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.5.1
+* FIX: Ensure post-meta insertion and updates work with the `Insert/Update Post` action when using meta repeaters saved as separate fields.
+* ADD: Multiple Assignable Roles with Register/Update User actions
+* FIX: Save repeater data after removing items
+* ADD: `jet-form-builder/ajax/processing-error` JS trigger
+* FIX: Copilhost.fr breaks POST request in form
+* FIX: Honeypot protection not preventing submission if honeypot field not empty
+* FIX: Accessibility Improvements
+
 ## 3.5.0
 * ADD: Calculated Field usage info with references and examples.
 * ADD: User Journey functionality.

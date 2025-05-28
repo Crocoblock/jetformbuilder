@@ -8,6 +8,7 @@ use Jet_Form_Builder\Actions\Methods\Object_Dynamic_Property;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
+use JFB_Modules\Actions_V2\Insert_Post\Traits\Process_Meta_Boxes_Trait;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -16,6 +17,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Post_Meta_Property extends Base_Object_Property implements
 	Object_Dynamic_Property {
+
+	use Process_Meta_Boxes_Trait;
 
 	public function get_id(): string {
 		return 'meta_input';
@@ -59,9 +62,16 @@ class Post_Meta_Property extends Base_Object_Property implements
 			return;
 		}
 
+		$meta_box_fields = $this->get_meta_box_fields( $id, $modifier );
+		$prepared_value  = $this->normalize_checkboxes( $meta_box_fields, $this->value );
+
+		$_POST = array_merge( $_POST, $prepared_value );
+
 		foreach ( $this->value as $key => $value ) {
 			update_post_meta( $id, $key, $value );
 		}
+
+		$this->process_meta_boxes( $id, $modifier );
 	}
 
 	public function set_meta( array $meta ) {

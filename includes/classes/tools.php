@@ -664,4 +664,25 @@ class Tools {
 		return preg_match( '/^\$P\$[A-Za-z0-9\.\/]{31}$/', $hash );
 	}
 
+	public static function get_main_user_role_by_priority( array $roles ): string {
+		if ( is_string( $roles ) ) {
+			$roles = [ $roles ];
+		}
+		$wp_roles_priority = [
+			'editor'        => 4,
+			'author'        => 3,
+			'contributor'   => 2,
+			'subscriber'    => 1,
+		];
+
+		$wp_roles     = array_intersect( $roles, array_keys( $wp_roles_priority ) );
+		$custom_roles = array_diff( $roles, array_keys( $wp_roles_priority ) );
+
+		usort( $wp_roles, function( $a, $b ) use ( $wp_roles_priority ) {
+			return ( $wp_roles_priority[ $b ] ?? 0 ) <=> ( $wp_roles_priority[ $a ] ?? 0 );
+		} );
+
+		return $wp_roles[0] ?? $custom_roles[0] ?? '';
+	}
+
 }

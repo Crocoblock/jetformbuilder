@@ -73,6 +73,7 @@ function UpdateUserRender( props ) {
 						{ __( 'User role', 'jet-form-builder' ) }
 					</Label>
 					<SelectControl
+						multiple
 						id={ id }
 						value={ settings.user_role }
 						options={ source.userRoles }
@@ -80,6 +81,7 @@ function UpdateUserRender( props ) {
 							'user_role' ) }
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
+						help={ __( 'Hold Ctrl (Windows) or Command (Mac) to select multiple roles.', 'jet-form-builder' ) }
 					/>
 				</> }
 			</RowControl>

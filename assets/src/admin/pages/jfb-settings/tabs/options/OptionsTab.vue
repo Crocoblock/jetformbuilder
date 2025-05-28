@@ -61,6 +61,32 @@
 				@input="changeVal( 'auto_focus', $event )"
 			></cx-vui-switcher>
 		</div>
+
+    <cx-vui-component-wrapper
+        :label="__( 'Form Request Args', 'jet-form-builder' )"
+        :wrapper-css="[ 'equalwidth' ]"
+    />
+    <cx-vui-input
+        name="gfb_request_args_key"
+        :wrapper-css="[ 'equalwidth' ]"
+        :size="'fullwidth'"
+        :label="'Request key'"
+        :description="'Unique form parameter (key)'"
+        :value="storage.hasOwnProperty( 'gfb_request_args_key' ) ? storage.gfb_request_args_key : '1111'"
+        :disabled="isLoading"
+        @input="changeVal( 'gfb_request_args_key', $event )"
+    />
+
+    <cx-vui-input
+        name="gfb_request_args_value"
+        :wrapper-css="[ 'equalwidth' ]"
+        :size="'fullwidth'"
+        :label="'Request value'"
+        :description="'Unique form parameter (value)'"
+        :value="storage.hasOwnProperty( 'gfb_request_args_value' ) ? storage.gfb_request_args_value : '2222'"
+        :disabled="isLoading"
+        @input="changeVal( 'gfb_request_args_value', $event )"
+    />
 	</div>
 </template>
 

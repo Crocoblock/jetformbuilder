@@ -5,6 +5,8 @@ namespace Jet_Form_Builder;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
 use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Options_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
@@ -59,6 +61,7 @@ class Form_Handler {
 	 * Constructor for the class
 	 */
 	public function __construct() {
+		$this->set_gfb_request_args();
 		$this->action_handler  = new Action_Handler();
 		$this->request_handler = new Request_Handler();
 	}
@@ -392,6 +395,18 @@ class Form_Handler {
 				return $rich->get_parser();
 			default:
 				return null;
+		}
+	}
+
+	public function set_gfb_request_args(){
+		$options_handler = new Options_Handler();
+		$options_handler->set_gfb_request_args();
+		$options = Tab_Handler_Manager::get_options( 'options-tab' );
+		if ( isset($options['gfb_request_args_key']) ) {
+			$this->hook_key = $options['gfb_request_args_key'];
+		}
+		if ( isset($options['gfb_request_args_value']) ) {
+			$this->hook_val = $options['gfb_request_args_value'];
 		}
 	}
 

@@ -595,7 +595,7 @@ class Module implements
 					clearJourney( form );
 				} );
 
-				jQuery( document ).on('jet-form-builder/ajax/on-success/not-success-status', function( event, response, form ) {
+				jQuery( document ).on('jet-form-builder/ajax/processing-error', function( event, response, form ) {
 					clearJourney( form, false );
 				} );
 

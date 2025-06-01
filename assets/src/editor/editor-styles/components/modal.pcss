@@ -178,3 +178,21 @@
         padding: 0.5em;
     }
 }
+
+body.wp-admin {
+    &.buddypress,
+    &.theme-buddyboss-theme {
+        .jet-form-edit-modal__content {
+            padding: 5em 0 2em 0;
+            display: flex;
+
+            .components-flex {
+                min-height: auto;
+
+                > * {
+                    min-height: auto;
+                }
+            }
+        }
+    }
+}

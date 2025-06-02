@@ -14,6 +14,8 @@ interface Media_Block_Value {
 
 	public function get_attachment_url(): string;
 
+	public function get_attachment_ids(): array;
+
 	public function get_attachment_both(): array;
 
 }

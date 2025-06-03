@@ -664,11 +664,11 @@ class Tools {
 		return preg_match( '/^\$P\$[A-Za-z0-9\.\/]{31}$/', $hash );
 	}
 
-	public static function get_array_of_user_roles($settings) {
+	public static function get_array_of_user_roles( $settings ) {
 		$user_roles = $settings ?? array();
 		if ( ! empty( $user_roles ) ) {
-			if (is_string($user_roles)) {
-				$user_roles = array($user_roles);
+			if ( is_string( $user_roles ) ) {
+				$user_roles = array( $user_roles );
 			}
 		}
 		return $user_roles;

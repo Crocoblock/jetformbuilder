@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.5.1.1
+* FIX: Fatal error if the user role is empty after plugin update/user role is not chosen after update
+
 ## 3.5.1
 * FIX: Ensure post-meta insertion and updates work with the `Insert/Update Post` action when using meta repeaters saved as separate fields [Crocoblock/suggestions#7876](https://github.com/Crocoblock/suggestions/issues/7876)
 * ADD: Multiple Assignable Roles with Register/Update User actions [Crocoblock/suggestions#7942](https://github.com/Crocoblock/suggestions/issues/7942)

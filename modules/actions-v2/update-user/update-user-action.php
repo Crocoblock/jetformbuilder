@@ -50,7 +50,7 @@ class Update_User_Action extends Base {
 			->set_request( $request )
 			->set_fields_map( $this->settings['fields_map'] ?? array() );
 
-		$user_roles = Tools::get_array_of_user_roles($this->settings['user_role']);
+		$user_roles = isset($this->settings['user_role']) ? Tools::get_array_of_user_roles($this->settings['user_role']) : '';
 
 		if ( ! empty( $user_roles ) ) {
 			$main_role = Tools::get_main_user_role_by_priority( $user_roles );

@@ -191,7 +191,7 @@ class Register_User_Action extends Base {
 			'user_url'   => $user_url,
 		);
 
-		$user_roles = $this->settings['user_role'] ?? array();
+		$user_roles = Tools::get_array_of_user_roles($this->settings['user_role']);		
 		if ( ! empty( $user_roles ) ) {
 			$main_role = Tools::get_main_user_role_by_priority( $user_roles );
 			if ( ! empty( $main_role ) ) {

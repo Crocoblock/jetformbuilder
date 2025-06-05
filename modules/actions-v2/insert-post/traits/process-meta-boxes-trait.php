@@ -66,14 +66,16 @@ trait Process_Meta_Boxes_Trait {
 			return array();
 		}
 
-		$post_type       = get_post_type( $post_id );
-		$fields_map      = $modifier->fields_map;
-		$all_meta_fields = jet_engine()->meta_boxes->get_registered_fields();
-		$found_fields    = $all_meta_fields[ $post_type ] ?? array();
-		$result          = array();
+		$post_type        = get_post_type( $post_id );
+		$fields_map       = $modifier->fields_map;
+		$all_meta_fields  = jet_engine()->meta_boxes->get_registered_fields();
+		$found_fields     = $all_meta_fields[ $post_type ] ?? array();
+		$result           = array();
+		$post_meta        = new \Jet_Engine_CPT_Meta( $post_type, $found_fields );
+		$post_meta_fields = $post_meta->prepare_meta_fields( $found_fields );
 
 		if ( ! empty( $found_fields ) ) {
-			$result = $this->convert_meta_fields_structure( $found_fields, $fields_map );
+			$result = $this->convert_meta_fields_structure( $post_meta_fields, $fields_map );
 		}
 
 		return $result;
@@ -85,82 +87,6 @@ trait Process_Meta_Boxes_Trait {
 		foreach ( $meta_fields as $key => $meta_field ) {
 			if ( in_array( $meta_field['name'], $fields_map ) ) {
 				$result[ $meta_field['name'] ] = $meta_field;
-
-				switch ( $meta_field['type'] ) {
-					case 'repeater':
-						if ( ! isset( $meta_field['repeater_save_separate'] ) || ! filter_var( $meta_field['repeater_save_separate'], FILTER_VALIDATE_BOOLEAN ) ) {
-							continue 2;
-						}
-
-						if ( isset( $result[ $meta_field['name'] ]['repeater-fields'] ) ) {
-							$result[ $meta_field['name'] ]['fields'] = $result[ $meta_field['name'] ]['repeater-fields'];
-							unset( $result[ $meta_field['name'] ]['repeater-fields'] );
-						}
-
-						if ( isset( $result[ $meta_field['name'] ]['repeater_save_separate'] ) ) {
-							$result[ $meta_field['name'] ]['save_separate'] = $result[ $meta_field['name'] ]['repeater_save_separate'];
-							unset( $result[ $meta_field['name'] ]['repeater_save_separate'] );
-						}
-
-						if ( ! empty( $result[ $meta_field['name'] ]['fields'] ) ) {
-							$new_fields = array();
-
-							foreach ( $result[ $meta_field['name'] ]['fields'] as $nested_field ) {
-								if ( isset( $nested_field['name'] ) ) {
-									$glossary_id = $nested_field['glossary_id'] ?? null;
-
-									if ( class_exists( 'Jet_Engine\Glossaries\Meta_Fields' ) && $glossary_id ) {
-										$meta_fields = new Meta_Fields();
-
-										if ( $glossary_id ) {
-											$glossary = $meta_fields->get_glossary_for_field( $glossary_id );
-											unset( $nested_field['options'] );
-											if ( $glossary ) {
-												foreach ( $glossary as $item ) {
-													$nested_field['options'][ $item['value'] ] = $item['label'];
-												}
-											}
-										}
-									}
-								}
-
-								$new_fields[ $nested_field['name'] ] = $nested_field;
-							}
-
-							$result[ $meta_field['name'] ]['fields'] = $new_fields;
-						}
-						break;
-					case 'checkbox':
-						$result[ $meta_field['name'] ] = $meta_field;
-						$new_fields = array();
-
-						$glossary_id = $meta_field['glossary_id'] ?? null;
-
-						if ( class_exists( 'Jet_Engine\Glossaries\Meta_Fields' ) && $glossary_id ) {
-							$meta_fields = new Meta_Fields();
-
-							if ( $glossary_id ) {
-								$glossary = $meta_fields->get_glossary_for_field( $glossary_id );
-								unset( $meta_field['options'] );
-								if ( $glossary ) {
-									foreach ( $glossary as $item ) {
-										$meta_field['options'][ $item['value'] ] = $item['label'];
-									}
-								}
-							}
-						}
-						$result[ $meta_field['name'] ] = $meta_field;
-						break;
-					case 'textarea':
-						$result[ $meta_field['name'] ]['sanitize_callback'] = 'jet_engine_sanitize_textarea';
-						break;
-					case 'wysiwyg':
-						$result[ $meta_field['name'] ]['sanitize_callback'] = 'jet_engine_sanitize_wysiwyg';
-						break;
-					case 'text':
-						$result[ $meta_field['name'] ]['sanitize_callback'] = 'wp_kses_post';
-						break;
-				}
 			}
 		}
 

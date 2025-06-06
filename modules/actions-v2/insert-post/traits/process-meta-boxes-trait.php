@@ -88,7 +88,7 @@ trait Process_Meta_Boxes_Trait {
 			if ( isset( $meta_field['name'] ) && in_array( $meta_field['name'], $fields_map ) ) {
 				$result[ $meta_field['name'] ] = $meta_field;
 
-				if ( isset( $meta_field['type'] ) && 'text' === $meta_field['type'] && ( isset( $meta_field['input_type'] ) && ( 'datetime-local' === $meta_field['input_type'] || 'date' === $meta_field['input_type']  || 'time' === $meta_field['input_type'] ) ) ) {
+				if ( isset( $meta_field['type'] ) && 'text' === $meta_field['type'] && ( isset( $meta_field['input_type'] ) && ( 'datetime-local' === $meta_field['input_type'] || 'date' === $meta_field['input_type'] || 'time' === $meta_field['input_type'] ) ) ) {
 					$result[ $meta_field['name'] ]['is_timestamp'] = 2;
 				}
 

@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.5.1.2
+* FIX: Meta fields update in `Insert/Update Post` action
+
 ## 3.5.1.1
 * FIX: Fatal error if the user role is empty after plugin update/user role is not chosen after update
 

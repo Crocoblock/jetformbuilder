@@ -15,16 +15,6 @@ if ( ! defined( 'WPINC' ) ) {
  * @package JFB_Modules\Actions_V2\Insert_Post\Traits
  */
 trait Process_Meta_Boxes_Trait {
-
-	/**
-	 * Check if wp_date used instead fo date to process data
-	 *
-	 * @return [type] [description]
-	 */
-	public function use_wp_date() {
-		return apply_filters( 'jet-engine/datetime/use-wp-date', false );
-	}
-
 	/**
 	 * Process meta boxes for the post.
 	 *
@@ -98,14 +88,12 @@ trait Process_Meta_Boxes_Trait {
 			if ( isset( $meta_field['name'] ) && in_array( $meta_field['name'], $fields_map ) ) {
 				$result[ $meta_field['name'] ] = $meta_field;
 
-				if ( $this->use_wp_date() ) {
-					if ( isset( $meta_field['type'] ) && 'text' === $meta_field['type'] && ( isset( $meta_field['input_type'] ) && ( 'datetime-local' === $meta_field['input_type'] || 'date' === $meta_field['input_type']  || 'time' === $meta_field['input_type'] ) ) ) {
-						$result[ $meta_field['name'] ]['is_timestamp'] = 2;
-					}
+				if ( isset( $meta_field['type'] ) && 'text' === $meta_field['type'] && ( isset( $meta_field['input_type'] ) && ( 'datetime-local' === $meta_field['input_type'] || 'date' === $meta_field['input_type']  || 'time' === $meta_field['input_type'] ) ) ) {
+					$result[ $meta_field['name'] ]['is_timestamp'] = 2;
+				}
 
-					if ( isset( $meta_field['fields'] ) && is_array( $meta_field['fields'] ) ) {
-						$result[ $meta_field['name'] ]['fields'] = $this->convert_meta_fields_structure( $meta_field['fields'], $fields_map );
-					}
+				if ( isset( $meta_field['fields'] ) && is_array( $meta_field['fields'] ) ) {
+					$result[ $meta_field['name'] ]['fields'] = $this->convert_meta_fields_structure( $meta_field['fields'], $fields_map );
 				}
 			}
 		}

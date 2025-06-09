@@ -36,6 +36,7 @@ final class Module implements
 		return array(
 			new Send_Email\Send_Email(),
 			new Insert_Post\Insert_Post(),
+			new Insert_Term\Insert_Term(),
 			new Register_User\Register_User(),
 			new Update_User\Update_User(),
 			new Redirect_To_Page\Redirect_To_Page(),

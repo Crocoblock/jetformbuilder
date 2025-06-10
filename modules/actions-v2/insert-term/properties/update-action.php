@@ -28,11 +28,11 @@ class Update_Action extends Base_Term_Action {
 			return;
 		}
 
-		$term_id   = $this->modifier->source_arr['term_id'] ?? 0;
-		$taxonomy  = $this->modifier->source_arr['taxonomy'] ?? '';
-		$parent_id = $this->modifier->source_arr['parent'] ?? 0;
-		$name      = $this->modifier->source_arr['name'] ?? '';
-		$slug      = $this->modifier->source_arr['slug'] ?? '';
+		$term_id   = absint( $this->modifier->source_arr['term_id'] ?? 0 );
+		$taxonomy  = sanitize_text_field( $this->modifier->source_arr['taxonomy'] ?? '' );
+		$parent_id = absint( $this->modifier->source_arr['parent'] ?? 0 );
+		$name      = sanitize_text_field( $this->modifier->source_arr['name'] ?? '' );
+		$slug      = sanitize_title( $this->modifier->source_arr['slug'] ?? '' );
 		$args      = array();
 
 		if ( 0 === $term_id || '' === $taxonomy ) {
@@ -42,10 +42,12 @@ class Update_Action extends Base_Term_Action {
 			);
 		}
 
-		$args = array(
-			'name' => $name,
-			'slug' => $slug,
-		);
+		if ( ! empty( $name ) ) {
+			$args['name'] = $name;
+		}
+		if ( ! empty( $slug ) ) {
+			$args['slug'] = $slug;
+		}
 
 		if ( is_taxonomy_hierarchical( $taxonomy ) && ! empty( $parent_id ) && 0 !== (int) $parent_id ) {
 			$parent_term = get_term( $parent_id, $taxonomy );

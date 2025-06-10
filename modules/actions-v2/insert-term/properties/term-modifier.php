@@ -36,7 +36,7 @@ class Term_Modifier extends Abstract_Term_Modifier {
 					new Term_Taxonomy_Property(),
 					new Term_Name_Property(),
 					new Term_Slug_Property(),
-					new Term_Parent_Property(),
+					new Term_Parent_ID_Property(),
 					new Term_Meta_Property(),
 				)
 			)

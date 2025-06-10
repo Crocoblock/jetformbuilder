@@ -11,7 +11,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Term_Parent_Property extends Base_Object_Property {
+class Term_Parent_ID_Property extends Base_Object_Property {
 
 	protected $is_empty = false;
 
@@ -20,7 +20,7 @@ class Term_Parent_Property extends Base_Object_Property {
 	}
 
 	public function get_label(): string {
-		return __( 'Term Parent', 'jet-form-builder' );
+		return __( 'Term Parent ID', 'jet-form-builder' );
 	}
 
 	public function get_value( Abstract_Modifier $modifier ) {

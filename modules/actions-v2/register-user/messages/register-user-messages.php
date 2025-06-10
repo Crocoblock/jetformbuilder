@@ -21,8 +21,8 @@ class Register_User_Messages extends Base_Action_Messages {
 	protected function messages(): array {
 		return array(
 			'username_exists'   => array(
-				'label' => __( 'Username exists', 'jet-form-builder' ),
-				'value' => 'This username already taken.',
+				'label' => __( 'User login exists', 'jet-form-builder' ),
+				'value' => 'This user login already taken.',
 			),
 			'empty_password'    => array(
 				'label' => __( 'Empty password', 'jet-form-builder' ),

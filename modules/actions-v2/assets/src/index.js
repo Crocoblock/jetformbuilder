@@ -58,12 +58,9 @@ export {
 } from './components/ValidateButtonWithStore';
 export { default as ValidatorProvider } from './components/ValidatorProvider';
 export { default as FieldsMapField } from './components/FieldsMapField';
-export {
-	default as ValidatedTextControl,
-} from './components/ValidatedTextControl';
-export {
-	default as ValidatedSelectControl,
-} from './components/ValidatedSelectControl';
+export { default as ValidatedTextControl, } from './components/ValidatedTextControl';
+export { default as ValidatedSelectControl, } from './components/ValidatedSelectControl';
+export { default as TableList, } from './components/TableList';
 
 /**
  * Hooks

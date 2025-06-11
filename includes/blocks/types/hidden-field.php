@@ -317,6 +317,13 @@ class Hidden_Field extends Base {
 		return $this->get_author_meta( 'display_name' );
 	}
 
+	private function current_object_id( $params = array() ) {
+		if ( function_exists( 'jet_engine' ) ) {
+			return jet_engine()->listings->data->get_current_object_id();
+		}
+		return null;
+	}
+
 	/**
 	 * @param array $params
 	 *
@@ -402,89 +409,101 @@ class Hidden_Field extends Base {
 		return ( '' === $value || is_null( $value ) || false === $value );
 	}
 
+	private function get_sources() {
+		return array(
+			array(
+				'value' => 'post_id',
+				'label' => __( 'Current Post ID', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'post_title',
+				'label' => __( 'Current Post Title', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'post_url',
+				'label' => __( 'Current Post/Page URL', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'post_type',
+				'label' => __( 'Current Post Type', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'post_meta',
+				'label' => __( 'Current Post Meta', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'author_id',
+				'label' => __( 'Current Post Author ID', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'author_email',
+				'label' => __( 'Current Post Author Email', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'author_name',
+				'label' => __( 'Current Post Author Name', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'term_url',
+				'label' => __( 'Current Term URL', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'user_id',
+				'label' => __( 'Current User ID', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'user_email',
+				'label' => __( 'Current User Email', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'user_name',
+				'label' => __( 'Current User Name', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'user_meta',
+				'label' => __( 'Current User Meta', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'query_var',
+				'label' => __( 'URL Query Variable', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'referer_url',
+				'label' => __( 'Referer URL', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'current_date',
+				'label' => __( 'Current Date', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'random_string',
+				'label' => __( 'Random string', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'manual_input',
+				'label' => __( 'Manual Input', 'jet-form-builder' ),
+			),
+		);
+	}
+
 	public function block_data( $editor, $handle ) {
+
+		$sources = $this->get_sources();
+
+		if ( function_exists( 'jet_engine' ) ) {
+			$sources[] = array(
+				'value' => 'current_object_id',
+				'label' => __( 'Current Object ID', 'jet-form-builder' ),
+			);
+		}
+
 		wp_localize_script(
 			$handle,
 			'JetFormHiddenField',
 			apply_filters(
 				'jet-form-builder/editor/hidden-field/config',
 				array(
-					'sources' => Tools::with_placeholder(
-						array(
-							array(
-								'value' => 'post_id',
-								'label' => __( 'Current Post ID', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'post_title',
-								'label' => __( 'Current Post Title', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'post_url',
-								'label' => __( 'Current Post/Page URL', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'post_type',
-								'label' => __( 'Current Post Type', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'post_meta',
-								'label' => __( 'Current Post Meta', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'author_id',
-								'label' => __( 'Current Post Author ID', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'author_email',
-								'label' => __( 'Current Post Author Email', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'author_name',
-								'label' => __( 'Current Post Author Name', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'term_url',
-								'label' => __( 'Current Term URL', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'user_id',
-								'label' => __( 'Current User ID', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'user_email',
-								'label' => __( 'Current User Email', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'user_name',
-								'label' => __( 'Current User Name', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'user_meta',
-								'label' => __( 'Current User Meta', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'query_var',
-								'label' => __( 'URL Query Variable', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'referer_url',
-								'label' => __( 'Referer URL', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'current_date',
-								'label' => __( 'Current Date', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'random_string',
-								'label' => __( 'Random string', 'jet-form-builder' ),
-							),
-							array(
-								'value' => 'manual_input',
-								'label' => __( 'Manual Input', 'jet-form-builder' ),
-							),
-						)
-					),
+					'sources' => Tools::with_placeholder( $sources ),
 				)
 			)
 		);

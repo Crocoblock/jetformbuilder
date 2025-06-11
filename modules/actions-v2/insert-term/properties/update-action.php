@@ -49,6 +49,10 @@ class Update_Action extends Base_Term_Action {
 			$args['slug'] = $slug;
 		}
 
+		if ( empty( $parent_id ) ) {
+			$args['parent'] = 0;
+		}
+
 		if ( is_taxonomy_hierarchical( $taxonomy ) && ! empty( $parent_id ) && 0 !== (int) $parent_id ) {
 			$parent_term = get_term( $parent_id, $taxonomy );
 

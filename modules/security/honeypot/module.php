@@ -36,8 +36,10 @@ class Module implements Base_Module_It {
 
 	public function init_hooks() {
 		add_filter(
-			'jet-form-builder/after-start-form',
-			array( $this, 'on_render_form' )
+			'jet-form-builder/before-render-field',
+			array( $this, 'on_render_field' ),
+			10,
+			3
 		);
 		add_filter(
 			'jet-form-builder/request-handler/request',
@@ -51,8 +53,8 @@ class Module implements Base_Module_It {
 
 	public function remove_hooks() {
 		remove_filter(
-			'jet-form-builder/after-start-form',
-			array( $this, 'on_render_form' )
+			'jet-form-builder/before-render-field',
+			array( $this, 'on_render_field' )
 		);
 		remove_filter(
 			'jet-form-builder/request-handler/request',
@@ -64,24 +66,69 @@ class Module implements Base_Module_It {
 		);
 	}
 
-	public function on_render_form( string $content ): string {
-		$args = jet_form_builder()->post_type->get_args();
+	private function find_email_field_name( array $blocks ): string {
+		$result = array(
+			'has_email'    => false,
+			'has__email'   => false,
+		);
 
+		$this->walk_blocks_for_email( $blocks, $result );
+
+		if ( $result['has_email'] ) {
+			if ( $result['has__email'] ) {
+				return self::FIELD;
+			}
+			return '_email';
+		}
+
+		return 'email';
+	}
+
+	private function walk_blocks_for_email( array $blocks, array &$result ) {
+		foreach ( $blocks as $block ) {
+			if ( ! is_array( $block ) ) {
+				continue;
+			}
+
+			if ( isset( $block['attrs']['name'] ) ) {
+				if ( 'email' === $block['attrs']['name'] ) {
+					$result['has_email'] = true;
+				}
+				if ( '_email' === $block['attrs']['name'] ) {
+					$result['has__email'] = true;
+				}
+			}
+
+			if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+				$this->walk_blocks_for_email( $block['innerBlocks'], $result );
+			}
+		}
+	}
+
+	public function on_render_field( string $content, string $field_name, array $attrs ): string {
+		$type = $attrs['action_type'] ?? '';
+		if ( 'submit-field' !== $field_name || 'submit' !== $type ) {
+			return $content;
+		}
+
+		$args = jet_form_builder()->post_type->get_args();
 		if ( empty( $args['use_honeypot'] ) ) {
 			return $content;
 		}
+
+		$name = $this->find_email_field_name( Live_Form::instance()->blocks );
 
 		$field = Live_Form::force_render_field(
 			'text-field',
 			array(
 				'field_type'   => 'email',
-				'name'         => self::FIELD,
-				'autocomplete' => 'nope',
+				'name'         => $name,
+				'autocomplete' => 'off',
 			)
 		);
 
 		$content .= sprintf(
-			'<div style="transform: scale(0); position: absolute;">%s</div>',
+			'<div class="jfb-visually-hidden" tabindex="-1">%s</div>',
 			$field
 		);
 
@@ -101,12 +148,14 @@ class Module implements Base_Module_It {
 			return $request;
 		}
 
-		if ( ! empty( $request[ self::FIELD ] ) ) {
+		$honeypot_name = $this->find_email_field_name( jet_form_builder()->form_handler->request_handler->_fields );
+
+		if ( ! empty( $request[ $honeypot_name ] ) ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Spam_Exception( self::SPAM_EXCEPTION );
 		}
 
-		unset( $request[ self::FIELD ] );
+		unset( $request[ $honeypot_name ] );
 
 		return $request;
 	}

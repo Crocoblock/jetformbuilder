@@ -169,7 +169,7 @@ export default function RangeEdit( props ) {
 				] }
 				{ ...props }
 			>
-				<div className="range-flex-wrap">
+				<div className="range-flex-wrap jet-form-builder__field-preview">
 					<InputControl
 						key={ uniqKey( 'placeholder_block' ) }
 						type={ 'range' }

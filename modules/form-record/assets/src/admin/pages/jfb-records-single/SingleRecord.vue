@@ -7,6 +7,11 @@
 					scope="form-fields"
 				/>
 			</template>
+			<template #after-user-journey>
+				<TablePagination
+					scope="user-journey"
+				/>
+			</template>
 		</PostBoxGrid>
 	</FormBuilderPage>
 </template>

@@ -28,7 +28,6 @@ function GlobalFieldPreset( {
 							onChangeValue( newVal, data.name )
 						} }
 						__next40pxDefaultSize
-						__nextHasNoMarginBottom
 					/>
 				</div>
 			);
@@ -47,7 +46,6 @@ function GlobalFieldPreset( {
 							onChangeValue( newVal, data.name )
 						} }
 						__next40pxDefaultSize
-						__nextHasNoMarginBottom
 					/>
 				</div>
 			);

@@ -74,6 +74,14 @@ export default function DateTimeEdit( props ) {
 			href="https://github.com/Crocoblock/jetformbuilder/wiki/Frontend-Macros---External-Macros#ctcurrentdate"
 		>
 			{ __( 'macros', 'jet-form-builder' ) }
+		</ExternalLink>
+		&nbsp;
+		{ __( 'and', 'jet-form-builder' ) }
+		&nbsp;
+		<ExternalLink
+			href="https://github.com/Crocoblock/jetformbuilder/wiki/Frontend-Macros---Filters"
+		>
+			{ __( 'filters', 'jet-form-builder' ) }
 		</ExternalLink>.
 	</>;
 
@@ -171,6 +179,7 @@ export default function DateTimeEdit( props ) {
 				<TextControl
 					onChange={ () => {
 					} }
+					className="jet-form-builder__field-preview"
 					key={ uniqKey( 'place_holder_block' ) }
 					placeholder={ 'Input type="datetime-local"' }
 				/>

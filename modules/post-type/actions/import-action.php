@@ -22,7 +22,7 @@ class Import_Action extends Base_Form_Action {
 	}
 
 	public function get_title() {
-		return __( 'Import Form', 'jet-form-builder' );
+		return __( 'Import from JSON', 'jet-form-builder' );
 	}
 
 	public function display_action_link() {

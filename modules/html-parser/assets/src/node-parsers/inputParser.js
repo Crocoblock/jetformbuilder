@@ -169,6 +169,9 @@ function* checkboxParser( input ) {
 			value: optionNode.value,
 			label: resolveOptionLabel( optionNode ),
 		} );
+		if ( optionNode.checked ) {
+			attributes.default = optionNode.value;
+		}
 	}
 
 	yield {

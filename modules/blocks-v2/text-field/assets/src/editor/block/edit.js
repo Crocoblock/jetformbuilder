@@ -112,6 +112,19 @@ export default function TextEdit( props ) {
 						onChange={ showEye => setAttributes( { showEye } ) }
 					/>
 				</> }
+				<SelectControl
+					key="autocomplete"
+					label={ __( 'Autocomplete', 'jet-form-builder' ) }
+					labelPosition="top"
+					value={ attributes.autocomplete || 'off' }
+					onChange={ newValue => {
+						setAttributes( { autocomplete: newValue } );
+					} }
+					options={ [
+						{ label: __( 'Off', 'jet-form-builder' ), value: 'off' },
+						{ label: __( 'On', 'jet-form-builder' ), value: 'on' },
+					] }
+				/>
 				<AdvancedInspectorControl
 					value={ attributes.minlength }
 					label={ __( 'Min length (symbols)', 'jet-form-builder' ) }
@@ -258,7 +271,7 @@ export default function TextEdit( props ) {
 				{ ...props }
 			>
 				<div className={ [
-					'jet-form-builder__field-wrap',
+					'jet-form-builder__field-wrap jet-form-builder__field-preview',
 					attributes.showEye && 'has-eye-icon',
 				].join( ' ' ) }>
 					<FullWidthInput

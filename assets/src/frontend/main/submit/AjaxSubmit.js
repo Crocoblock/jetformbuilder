@@ -80,6 +80,12 @@ function AjaxSubmit( form ) {
 					[ response, $form ],
 				);
 				break;
+			default:
+				jQuery( document ).trigger(
+					'jet-form-builder/ajax/processing-error',
+					[ response, $form ]
+				);
+				break;
 		}
 		/**
 		 * Run status watchers
@@ -102,6 +108,14 @@ function AjaxSubmit( form ) {
 	this.onFail        = function ( jqXHR, textStatus, errorThrown ) {
 		this.form.toggle();
 		this.status.current = false;
+
+		const { rootNode } = this.form.observable;
+		const $form        = jQuery( rootNode );
+
+		jQuery( document ).trigger(
+			'jet-form-builder/ajax/on-fail',
+			[ jqXHR, textStatus, errorThrown, $form ]
+		);
 
 		// eslint-disable-next-line no-console
 		console.error( jqXHR.responseText, errorThrown );

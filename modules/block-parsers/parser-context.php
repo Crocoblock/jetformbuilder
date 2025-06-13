@@ -312,6 +312,18 @@ class Parser_Context {
 	}
 
 	/**
+	 * Allow to replace value of raw_request,
+	 * because looks like it can't be replaces in any other way from Parser_Context
+	 *
+	 * @param  string $name  Field name to update.
+	 * @param  mixed  $value A new value.
+	 * @return void
+	 */
+	public function update_request_value( $name, $value ) {
+		$this->raw_request[ $name ] = $value;
+	}
+
+	/**
 	 * @param string $name
 	 *
 	 * @return array|bool

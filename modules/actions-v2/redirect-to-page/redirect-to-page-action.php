@@ -74,16 +74,17 @@ class Redirect_To_Page_Action extends Base {
 	}
 
 	public function get_url_with_args( $url ) {
-		if ( empty( $this->settings['redirect_args'] ) ) {
-			return $url;
-		}
 		$redirect_args = array();
 
-		foreach ( $this->settings['redirect_args'] as $arg ) {
-			$value = jet_fb_context()->get_value( $arg );
+		if ( ! empty( $this->settings['redirect_args'] ) ) {
+			foreach ( $this->settings['redirect_args'] as $arg ) {
+				$value = jet_fb_context()->get_value( $arg );
 
-			$redirect_args[ $arg ] = ! empty( $value ) ? $value : 0;
+				$redirect_args[ $arg ] = ! empty( $value ) ? $value : 0;
+			}
 		}
+
+		$redirect_args = apply_filters( 'jet-form-builder/actions/redirect-to-page/redirect-args', $redirect_args, $this );
 
 		return add_query_arg( urlencode_deep( $redirect_args ), $url );
 	}

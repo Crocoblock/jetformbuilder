@@ -36,9 +36,11 @@ body.post-type-jet-form-builder {
 		.jet-form-builder__desc--wrapper {
 			padding-top: 5px;
 		}
-		.jet-form-builder__field-wrap {
+		.jet-form-builder__field-preview {
+			label,
 			input,
-			selects {
+			textarea,
+			select {
 				pointer-events: none;
 				opacity: .6;
 				&[type="file"] {
@@ -79,7 +81,9 @@ body.post-type-jet-form-builder {
 				background: #fff;
 			}
 		}
-
+		svg {
+			max-width: 100%;
+		}
 		.components-placeholder {
 			border: none;
 			box-shadow: none;
@@ -224,7 +228,7 @@ body.post-type-jet-form-builder {
 				.wp-block {
 					margin-top: 0;
 					margin-bottom: 0;
-					+ .wp-block {
+					+ .wp-block:not(.wp-block-column) {
 						margin-top: 28px;
 					}
 				}

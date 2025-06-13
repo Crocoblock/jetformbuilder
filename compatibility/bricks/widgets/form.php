@@ -166,6 +166,16 @@ class Form extends Base {
 		);
 
 		$this->register_jet_control(
+			'markup_type',
+			array(
+				'tab'     => 'content',
+				'label'   => esc_html__( 'Markup type', 'jet-form-builder' ),
+				'type'    => 'select',
+				'options' => $options['markup_type'],
+			)
+		);
+
+		$this->register_jet_control(
 			'submit_type',
 			array(
 				'tab'     => 'content',
@@ -1813,6 +1823,15 @@ class Form extends Base {
 		$this->start_jet_control_group( 'section_form_break_style' );
 
 		$this->register_jet_control(
+			'form_break_notice',
+			array(
+				'tab'     => 'content',
+				'content' => esc_html__( 'Styles from this tab apply to the Next Page and Prev Page controls added through the Form Page Break block.', 'jet-form-builder' ),
+				'type'    => 'info',
+			)
+		);
+
+		$this->register_jet_control(
 			'form_break_alignment',
 			array(
 				'tab'   => 'style',
@@ -1875,6 +1894,15 @@ class Form extends Base {
 		$css_selectors = array(
 			'prev' => $this->css_selector( '__prev-page' ),
 			'next' => $this->css_selector( '__next-page' ),
+		);
+
+		$this->register_jet_control(
+			'form_break_next_notice',
+			array(
+				'tab'     => 'content',
+				'content' => esc_html__( 'The styles from this tab apply to the Next Page and Prev Page added as separate blocks in the form.', 'jet-form-builder' ),
+				'type'    => 'info',
+			)
 		);
 
 		$this->register_jet_control(
@@ -2654,8 +2682,9 @@ class Form extends Base {
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo "<div {$this->render_attributes( '_root' )}>";
+		$content = do_shortcode( $blocks->get_form_class()->render_callback_field( $settings ) );
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $blocks->get_form_class()->render_callback_field( $settings );
+		echo $content;
 		echo '</div>';
 	}
 

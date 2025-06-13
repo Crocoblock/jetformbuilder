@@ -68,13 +68,21 @@ const ActionsPanel = styled( PluginDocumentSettingPanel )`
     }
 `;
 
+const StyledFlex = styled(Flex)`
+	&.buddypress-active {
+		height: auto;
+	}
+`;
+
 function PluginActions() {
 	const [ actions, setActions ] = useActions();
+
+	const isBuddypress = document.body.classList.contains( 'buddypress' );
 
 	return <ActionsPanel
 		title={ __( 'Post Submit Actions', 'jet-form-builder' ) }
 	>
-		<Flex direction="column" gap={ 3 }>
+		<StyledFlex direction="column" gap={ 3 } className={ `${isBuddypress ? 'buddypress-active' : ''}` }>
 			<FlexSortable
 				list={ actions }
 				setList={ setActions }
@@ -97,7 +105,7 @@ function PluginActions() {
 					{ fills }
 				</Flex> }
 			</ActionsAfterNewButtonSlotFill.Slot>
-		</Flex>
+		</StyledFlex>
 		<AllProActionsLink/>
 		<EditSettingsModal/>
 		<EditConditionsModal/>

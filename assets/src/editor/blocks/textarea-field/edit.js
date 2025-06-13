@@ -138,6 +138,7 @@ export default function TextareaEdit( props ) {
 				{ ...props }
 			>
 				<TextareaControl
+					className="jet-form-builder__field-preview"
 					key={ uniqKey( 'place_holder_block' ) }
 					placeholder={ attributes.placeholder }
 					onChange={ () => {

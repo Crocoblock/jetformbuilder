@@ -32,8 +32,24 @@ class User_Role_Property extends Base_Object_Property {
 		/** @var User_Id_Property $id */
 		$id = $modifier->get( 'ID' );
 
-		if ( ! empty( $this->value ) ) {
-			$id->user->set_role( $this->value );
+		if ( empty( $this->value ) ) {
+			return;
+		}
+
+		if ( ! is_array( $this->value ) ) {
+			$this->value = array( $this->value );
+		}
+
+		$main_role = array_shift( $this->value );
+
+		if ( 'administrator' !== $main_role ) {
+			$id->user->set_role( $main_role );
+		}
+
+		foreach ( $this->value as $role ) {
+			if ( 'administrator' !== $role ) {
+				$id->user->add_role( $role );
+			}
 		}
 	}
 

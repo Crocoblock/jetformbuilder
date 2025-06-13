@@ -128,5 +128,10 @@ final class Tab_Handler_Manager {
 		$this->rep_remove( $item );
 	}
 
+	public static function get_form_records_access_capability() {
+		$capability = self::get_options( 'options-tab' )['form_records_access_capability'] ?? '';
+		return ! empty( $capability ) ? $capability : 'manage_options';
+	}
+
 
 }

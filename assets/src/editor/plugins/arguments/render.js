@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 const {
 	      useMetaState,
       } = JetFBHooks;
@@ -15,6 +17,33 @@ const source = window.JetFormEditorData.argumentsSource || {};
 export default function PluginArgs() {
 
 	const [ args, setArgs ] = useMetaState( '_jf_args' );
+
+	const isNewPost = window.location.href.includes('post-new.php');
+
+	let default_fields_label_tag = 'label';
+	let default_markup_type = 'fieldset';
+	if (!isNewPost) {
+		default_fields_label_tag = args?.fields_label_tag ?? 'div';
+		default_markup_type = args?.markup_type ?? 'div';
+	}
+
+	useEffect(() => {
+		if (!args?.fields_label_tag) {
+			setArgs((prevArgs) => ({
+				...prevArgs,
+				fields_label_tag: default_fields_label_tag,
+			}));
+		}
+	}, [args, default_fields_label_tag, setArgs]);
+
+	useEffect(() => {
+		if (!args?.markup_type) {
+			setArgs((prevArgs) => ({
+				...prevArgs,
+				markup_type: default_markup_type,
+			}));
+		}
+	}, [args, default_markup_type, setArgs]);
 
 	return <>
 		<SelectControl
@@ -45,13 +74,27 @@ export default function PluginArgs() {
 
 		<SelectControl
 			label={ __( 'Fields label HTML tag', 'jet-form-builder' ) }
-			value={ args?.fields_label_tag ?? '' }
+			value={ args?.fields_label_tag ?? default_fields_label_tag }
 			options={ source.fields_label_tag }
 			onChange={ newVal => {
 				setArgs( ( prevArgs ) => (
 					{
 						...prevArgs,
 						fields_label_tag: newVal,
+					}
+				) );
+			} }
+		/>
+
+		<SelectControl
+			label={ __( 'Markup type', 'jet-form-builder' ) }
+			value={ args?.markup_type ?? default_markup_type }
+			options={ source.markup_type }
+			onChange={ newVal => {
+				setArgs( ( prevArgs ) => (
+					{
+						...prevArgs,
+						markup_type: newVal,
 					}
 				) );
 			} }

@@ -8,6 +8,51 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.5.1.2
+* FIX: Meta fields update in `Insert/Update Post` action
+
+## 3.5.1.1
+* FIX: Fatal error if the user role is empty after plugin update/user role is not chosen after update
+
+## 3.5.1
+* FIX: Ensure post-meta insertion and updates work with the `Insert/Update Post` action when using meta repeaters saved as separate fields [Crocoblock/suggestions#7876](https://github.com/Crocoblock/suggestions/issues/7876)
+* ADD: Multiple Assignable Roles with Register/Update User actions [Crocoblock/suggestions#7942](https://github.com/Crocoblock/suggestions/issues/7942)
+* FIX: Save repeater data after removing items [Crocoblock/jetformbuilder#528](https://github.com/Crocoblock/jetformbuilder/issues/528)
+* ADD: `jet-form-builder/ajax/processing-error` JS trigger
+* FIX: Copilhost.fr breaks POST request in form
+* FIX: Honeypot protection not preventing submission if honeypot field not empty
+* FIX: Accessibility Improvements
+
+## 3.5.0
+* ADD: Calculated Field usage info with references and examples.
+* ADD: User Journey functionality.
+* ADD: Implemented visibility controls for Form Records, restricting access for unprivileged users.
+* ADD: Added date/time calculation support to Calculated Field, including new date/time filters.
+* ADD: input validation against the current user’s password.
+* ADD: new admin UI
+* UPD: synchronize manual and bulk editors
+* ADD: `Server side validation method` option
+* ADD: `Import from HTML` feature
+* FIX: Accessibility Improvements
+
+## 3.4.7.1
+* FIX: Compatibility with WordPress 6.8 (resolves visual issue with block validation type)
+
+## 3.4.7
+* FIX: Editor styles compatibility with BuddyBoss theme
+* FIX: Reset input values in the Repeater field when adding a new row
+* FIX: Init of the Check Mark block
+* FIX: Check mark widget icon for checkbox
+* FIX: Issue with Conditional Block duplication
+* ADD: style controls notices
+* ADD: `jet-form-builder/ajax/on-fail` JS trigger
+* FIX: Input mask DateTime documentation link
+* FIX: [Crocoblock/jetformbuilder#521](https://github.com/Crocoblock/jetformbuilder/issues/521)
+* FIX: [Crocoblock/suggestions#7878](https://github.com/Crocoblock/suggestions/issues/7878)
+* FIX: `Generate with AI` limit error on local sites
+* FIX: Errors on the `Payments` admin page when the `Enable Gateways` option is disabled
+* FIX: Disabled "Next page" button when select field is empty
+
 ## 3.4.6
 * FIX: Resolved an issue with search autocomplete in the Map field
 * FIX: Fixed case sensitivity for the `use autocomplete` option in `Select Field` when loading via AJAX

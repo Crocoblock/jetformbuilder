@@ -116,7 +116,7 @@ class Jet_Engine implements
 			0
 		);
 		add_action(
-			'jet-engine/blocks-views/register-block-types',
+			'init',
 			array( $this, 'register_listing_related_blocks' )
 		);
 		add_filter(

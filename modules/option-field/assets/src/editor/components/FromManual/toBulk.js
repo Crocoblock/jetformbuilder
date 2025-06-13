@@ -5,9 +5,10 @@ const {
 const JSON_PROPERTIES = [ 'label', 'value', 'calculate' ];
 
 function toBulk( source ) {
-	if ( isEmpty( source ) ) {
-		return '';
-	}
+	if ( isEmpty( source ) || ( typeof 'string' === source && !source.trim() ) ) {
+        return '';
+    }
+
 	if ( 'object' === typeof source ) {
 		return arrayToBulk( source );
 	}

@@ -15,6 +15,15 @@ abstract class Base_Post_Action extends Base_Modifier_Action {
 
 	protected $inserted_id = 0;
 
+	/**
+	 * Inserted ID getter.
+	 *
+	 * @return integer
+	 */
+	public function get_inserted_id(): int {
+		return $this->inserted_id;
+	}
+
 	public function do_after() {
 		if ( ! $this->inserted_id ) {
 			return;
@@ -28,7 +37,8 @@ abstract class Base_Post_Action extends Base_Modifier_Action {
 		do_action(
 			'jet-form-builder/action/after-post-' . $this->get_id(),
 			jet_fb_action_handler()->get_current_action(),
-			jet_fb_action_handler()
+			jet_fb_action_handler(),
+			$this
 		);
 	}
 

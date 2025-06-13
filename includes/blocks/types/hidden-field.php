@@ -324,6 +324,16 @@ class Hidden_Field extends Base {
 		return null;
 	}
 
+	private function current_term_id( $params = array() ) {
+		$term = get_queried_object();
+
+		if ( $term instanceof \WP_Term ) {
+			return $term->term_id;
+		}
+
+		return null;
+	}
+
 	/**
 	 * @param array $params
 	 *
@@ -462,6 +472,10 @@ class Hidden_Field extends Base {
 			array(
 				'value' => 'user_meta',
 				'label' => __( 'Current User Meta', 'jet-form-builder' ),
+			),
+			array(
+				'value' => 'current_term_id',
+				'label' => __( 'Current Term ID', 'jet-form-builder' ),
 			),
 			array(
 				'value' => 'query_var',

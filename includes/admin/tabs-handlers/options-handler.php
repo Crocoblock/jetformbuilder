@@ -17,6 +17,7 @@ class Options_Handler extends Base_Handler {
 		'form_records_access_capability' => 'manage_options',
 		'gfb_request_args_key'  => '',
 		'gfb_request_args_value' => '',
+		'ssr_validation_method' => 'rest',
 	);
 
 	public function slug() {
@@ -32,28 +33,28 @@ class Options_Handler extends Base_Handler {
 			if ( ! array_key_exists( $name, $_POST ) ) {
 				continue;
 			}
-
 			if ( is_bool( $default ) ) {
 				$options[ $name ] = filter_var(
 					sanitize_key( $_POST[ $name ] ),
 					defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN
 				);
 			} else {
-				$options[ $name ] = sanitize_text_field( wp_unslash( $_POST[ $name ] ?? '' ) );
+				$options[ $name ] = sanitize_text_field( wp_unslash( $_POST[ $name ] ?? '' ));
 			}
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 		$result = $this->update_options( $options );
 
+
 		$this->send_response( $result );
 	}
 
 	public function on_load() {
-		$this->set_gfb_request_args();
+		$this->set_jfb_request_args();
 		return $this->get_options();
 	}
 
-	public function set_gfb_request_args() {
+	public function set_jfb_request_args() {
 		$options     = $this->get_options();
 		$update_data = array();
 

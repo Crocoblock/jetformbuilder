@@ -32,7 +32,7 @@ class Term_Slug_Property extends Base_Object_Property {
 			return parent::get_value( $modifier );
 		}
 
-		$this->value    = '(empty)';
+		$this->value    = '';
 		$this->is_empty = true;
 
 		return parent::get_value( $modifier );

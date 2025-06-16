@@ -34,9 +34,15 @@ class Insert_Action extends Base_Term_Action {
 		$slug      = $this->modifier->source_arr['slug'] ?? '';
 		$args      = array();
 
+		if ( empty( $name ) ) {
+			throw new Action_Exception(
+				esc_html( 'Term name is required' )
+			);
+		}
+
 		if ( '' === $taxonomy ) {
 			throw new Action_Exception(
-				esc_html( ' Taxonomy are required' )
+				esc_html( 'Taxonomy are required' )
 			);
 		}
 

@@ -44,9 +44,16 @@ class Update_Action extends Base_Term_Action {
 
 		if ( ! empty( $name ) ) {
 			$args['name'] = $name;
+		} else {
+			throw new Action_Exception(
+				esc_html( 'Term name is required' )
+			);
 		}
+
 		if ( ! empty( $slug ) ) {
 			$args['slug'] = $slug;
+		} else {
+			$args['slug'] = $name;
 		}
 
 		if ( empty( $parent_id ) ) {

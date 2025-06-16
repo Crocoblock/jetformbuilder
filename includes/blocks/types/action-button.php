@@ -228,7 +228,7 @@ class Action_Button extends Base {
 			array(
 				'id'           => 'submit_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( '__action-button' ) => 'background-color: {{VALUE}}',
 				),
@@ -261,7 +261,7 @@ class Action_Button extends Base {
 			array(
 				'id'           => 'submit_hover_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( '__action-button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),

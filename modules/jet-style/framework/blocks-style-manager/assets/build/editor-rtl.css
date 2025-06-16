@@ -1,0 +1,164 @@
+/*!***********************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./assets/src/editor.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************/
+:root {
+  --csm-border-color: #e0e0e0;
+  --csm-border-dark-color: #757575;
+  --csm-accent-color: #0073aa;
+}
+
+.crocoblock-style-manager__inline-control > .components-base-control__field {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+}
+.crocoblock-style-manager__inline-control > .components-base-control__field > .components-base-control__label {
+  margin: 0;
+  line-height: 20px;
+}
+.crocoblock-style-manager__color-indicator {
+  cursor: pointer;
+  display: flex;
+  gap: 5px;
+}
+.crocoblock-style-manager__color-indicator-label {
+  font-size: 12px;
+}
+.crocoblock-style-manager__usage-marker {
+  position: absolute;
+  top: 7px;
+  right: -10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.is-control--dimensions .crocoblock-style-manager__usage-marker {
+  top: 11px;
+}
+.is-control--choose .crocoblock-style-manager__usage-marker, .is-control--range .crocoblock-style-manager__usage-marker, .is-control--border .crocoblock-style-manager__usage-marker {
+  top: 4px;
+}
+.crocoblock-style-manager__usage-marker.is-used {
+  background-color: var(--csm-accent-color);
+}
+.crocoblock-style-manager__usage-marker.is-inherited {
+  background-color: var(--csm-border-color);
+}
+.crocoblock-style-manager__control, .crocoblock-style-manager__with-spacing {
+  position: relative;
+  padding: 0 0 25px;
+}
+.crocoblock-style-manager__control .components-input-control, .crocoblock-style-manager__with-spacing .components-input-control {
+  margin: 0;
+}
+.crocoblock-style-manager__control > div[data-wp-component=Grid], .crocoblock-style-manager__with-spacing > div[data-wp-component=Grid] {
+  align-items: center;
+}
+.crocoblock-style-manager__control > div[data-wp-component=Grid] .components-base-control__label, .crocoblock-style-manager__with-spacing > div[data-wp-component=Grid] .components-base-control__label {
+  margin: 0;
+}
+.crocoblock-style-manager__control > div[data-wp-component=Grid] div[data-wp-component=HStack], .crocoblock-style-manager__with-spacing > div[data-wp-component=Grid] div[data-wp-component=HStack] {
+  gap: 16px;
+}
+.crocoblock-style-manager__control .components-border-radius-control, .crocoblock-style-manager__with-spacing .components-border-radius-control {
+  margin: 0;
+}
+.crocoblock-style-manager__border-control, .crocoblock-style-manager__dimensions-control {
+  margin: 0;
+}
+.crocoblock-style-manager__color-palette-item {
+  width: 28px;
+  height: 28px;
+}
+.crocoblock-style-manager__color-palette-item-indicator {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.crocoblock-style-manager__color-palette-item-indicator--active {
+  outline: 2px solid var(--csm-border-dark-color);
+  outline-offset: 1px;
+}
+.crocoblock-style-manager__typography-controls {
+  min-width: 300px;
+}
+.crocoblock-style-manager__controls-tabs {
+  margin: 0 -16px;
+  border-top: 1px solid var(--csm-border-color);
+  border-bottom: 1px solid var(--csm-border-color);
+}
+.crocoblock-style-manager__controls-tabs-navigation {
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid var(--csm-border-color);
+  background-color: #efefef;
+  padding: 8px 16px;
+}
+.crocoblock-style-manager__controls-tabs-navigation button.crocoblock-style-manager__controls-tabs-button {
+  flex: 1;
+  text-align: center;
+  border: none;
+  background: transparent;
+  padding: 8px 0;
+  cursor: pointer;
+}
+.crocoblock-style-manager__controls-tabs-navigation button.crocoblock-style-manager__controls-tabs-button.is-active {
+  background-color: #1e1e1e;
+  color: #fff;
+}
+.crocoblock-style-manager__controls-tabs-content {
+  padding: 15px 16px 0;
+}
+.crocoblock-style-manager__popover {
+  min-width: 250px;
+}
+.crocoblock-style-manager__popover-content {
+  padding: 20px;
+}
+.crocoblock-style-manager__popover-content .components-input-control__container {
+  width: 100%;
+}
+.crocoblock-style-manager__popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--csm-border-color);
+  padding: 10px 20px;
+  font-weight: bold;
+  line-height: 24px;
+}
+.crocoblock-style-manager__popover-header button.crocoblock-style-manager__popover-close {
+  width: 24px;
+  height: 24px;
+  min-width: 0;
+  padding: 0;
+}
+.crocoblock-style-manager__popover-trigger {
+  cursor: pointer;
+  border: 1px solid var(--csm-border-color);
+  padding: 5px;
+  border-radius: 3px;
+  margin-top: -3px;
+}
+.crocoblock-style-manager__popover-trigger svg {
+  width: 16px;
+  height: 16pxr;
+  display: block;
+}
+.crocoblock-style-manager__popover-trigger svg path {
+  fill: currentColor;
+}
+.crocoblock-style-manager__popover-control {
+  padding-bottom: 10px;
+}
+.crocoblock-style-manager__popover-controls-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+.crocoblock-style-manager__popover-controls-row .w-50 {
+  width: calc(50% - 5px);
+  flex: 0 0 calc(50% - 5px);
+}

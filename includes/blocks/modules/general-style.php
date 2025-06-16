@@ -244,7 +244,7 @@ trait General_Style {
 			array(
 				'id'           => 'field_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'wrap' ) => 'background-color: {{VALUE}}',
 				),
@@ -342,7 +342,7 @@ trait General_Style {
 			array(
 				'id'           => 'label_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'label' ) => 'background-color: {{VALUE}}',
 				),
@@ -440,7 +440,7 @@ trait General_Style {
 			array(
 				'id'           => 'description_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'description' ) => 'background-color: {{VALUE}}',
 				),
@@ -493,7 +493,7 @@ trait General_Style {
 			array(
 				'id'           => 'required_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'required' ) => 'background-color: {{VALUE}}',
 				),
@@ -594,7 +594,7 @@ trait General_Style {
 			array(
 				'id'           => 'input_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'input' ) => 'background-color: {{VALUE}}',
 				),

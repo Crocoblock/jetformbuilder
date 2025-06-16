@@ -202,7 +202,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 			array(
 				'id'    => 'item_normal_background_color',
 				'type'  => 'color-picker',
-				'label' => __( 'Background Color', 'jet-form-builder' ),
+				'label' => __( 'Background', 'jet-form-builder' ),
 
 				'css_selector' => array(
 					// editor
@@ -304,7 +304,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 			array(
 				'id'           => 'radio_normal_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'attributes'   => array(
 					'default' => array(
 						'value' => '#FFFFFF',
@@ -346,7 +346,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 			array(
 				'id'           => 'radio_checked_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'attributes'   => array(
 					'default' => array(
 						'value' => '#398ffc',

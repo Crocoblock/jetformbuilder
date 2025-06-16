@@ -291,7 +291,7 @@ class Form extends Base {
 			'label_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-label-bgc' ) ),
 			)
@@ -405,7 +405,7 @@ class Form extends Base {
 			'description_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-desc-bgc' ) ),
 			)
@@ -506,7 +506,7 @@ class Form extends Base {
 			'input_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array(
 					array(
@@ -751,7 +751,7 @@ class Form extends Base {
 			'checkradio_fields_box_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-checkradio-input-bgc' ) ),
 			)
@@ -770,7 +770,7 @@ class Form extends Base {
 			'checkradio_fields_box_checked_bg',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-checkradio-input-checked-bgc' ) ),
 			)
@@ -899,7 +899,7 @@ class Form extends Base {
 			'calc_fields_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-calc-bgc' ) ),
 			)
@@ -1197,7 +1197,7 @@ class Form extends Base {
 			'heading_label_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-heading-bgc' ) ),
 			)
@@ -1276,7 +1276,7 @@ class Form extends Base {
 			'heading_desc_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-heading-desc-bgc' ) ),
 			)
@@ -1418,7 +1418,7 @@ class Form extends Base {
 			'booking_form_repeater_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array(
 					array(
@@ -1525,7 +1525,7 @@ class Form extends Base {
 			'booking_form_repeater_rem_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-repeater-rem-button-bgc' ) ),
 			)
@@ -1613,7 +1613,7 @@ class Form extends Base {
 			'conditional_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-conditional-bgc' ) ),
 			)
@@ -1733,7 +1733,7 @@ class Form extends Base {
 			'booking_form_submit_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array(
 					array(
@@ -1928,7 +1928,7 @@ class Form extends Base {
 			'form_break_button_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array(
 					array(
@@ -2039,7 +2039,7 @@ class Form extends Base {
 			'form_break_message_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-break-message-bgc' ) ),
 			)
@@ -2112,7 +2112,7 @@ class Form extends Base {
 			'jet_fb_progress_wrapper_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-progress-wrapper-bgc' ) ),
 			)
@@ -2210,7 +2210,7 @@ class Form extends Base {
 			'jet_fb_progress_pages_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-progress-default-page-bgc' ) ),
 			)
@@ -2327,7 +2327,7 @@ class Form extends Base {
 			'jet_fb_progress_passed_page_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-progress-passed-page-bgc' ) ),
 			)
@@ -2414,7 +2414,7 @@ class Form extends Base {
 			'jet_fb_progress_active_page_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-progress-active-page-bgc' ) ),
 			)
@@ -2562,7 +2562,7 @@ class Form extends Base {
 			'message_success_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-message-success-bgc' ) ),
 			)
@@ -2611,7 +2611,7 @@ class Form extends Base {
 			'message_error_bg_color',
 			array(
 				'tab'   => 'style',
-				'label' => esc_html__( 'Background color', 'jet-form-builder' ),
+				'label' => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'  => 'color',
 				'css'   => array( array( 'property' => '--jfb-message-error-bgc' ) ),
 			)

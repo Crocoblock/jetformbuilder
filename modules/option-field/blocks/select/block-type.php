@@ -135,7 +135,7 @@ class Block_Type extends Base implements
 			array(
 				'id'           => 'item_normal_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['select'] => 'background-color: {{VALUE}}',
 				),

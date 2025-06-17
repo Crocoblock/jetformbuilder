@@ -13,29 +13,24 @@ import {
 import { cx } from '@linaria/core';
 import { styled } from '@linaria/react';
 import { useInstanceId } from '@wordpress/compose';
+import { TableListRow, TableListContainer } from 'jet-form-builder-actions';
 
 function ActionMessageRow( props ) {
 	const {
-		      type,
-		      label,
-		      value,
-		      onChange,
-	      } = props;
+		type,
+		label,
+		value,
+		onChange,
+	} = props;
 
 	const { Slot: RowSlot } = useMemo( () => ActionMessagesSlotFills[ type ],
 		[ type ] );
 
-	const htmlId = useInstanceId( ActionMessageRow, 'jfb-message-item' );
-
-	return <Flex direction="column" gap={ 3 } className={TableListStyle.Td}>
-		<RowControl
-			createId={ false }
-			controlSize={ 1 }
-
+	return <TableListRow
+			tag="jfb-message-item"
+			label={ label }
 		>
-			<Label htmlFor={ htmlId } className={TableListStyle.WhiteSpaceNormal}>
-				{ label }
-			</Label>
+		{ ( { htmlId } ) => (
 			<RowSlot fillProps={ { ...props, id: htmlId } }>
 				{ ( fills ) => (
 					Boolean( fills?.length ) ? fills :
@@ -48,8 +43,8 @@ function ActionMessageRow( props ) {
 					/>
 				) }
 			</RowSlot>
-		</RowControl>
-	</Flex>;
+		) }
+	</TableListRow>;
 }
 
 function ActionMessages( props ) {
@@ -98,23 +93,17 @@ function ActionMessages( props ) {
 		<Help className={TableListStyle.WhiteSpaceNormal}>
 			Change error message according to USER LOGIN form field; it can be username or email.
 		</Help>
-		<Card className={TableListStyle.Card}>
-			<Flex
-				className={ cx( RowControlEndStyle ) }
-				direction="column"
-				gap={ 4 }
-			>
-				{ settings.messages && Object.entries( settings.messages ).
-					map( ( [ type ] ) => <ActionMessageRow
-							key={ 'message_' + type }
-							type={ type }
-							label={ messages( type ).label }
-							value={ getMessage( type ) }
-							onChange={ newValue => setMessage( newValue, type ) }
-						/>,
-					) }
-			</Flex>
-		</Card>
+		<TableListContainer>
+			{ settings.messages && Object.entries( settings.messages ).
+				map( ( [ type ] ) => <ActionMessageRow
+						key={ 'message_' + type }
+						type={ type }
+						label={ messages( type ).label }
+						value={ getMessage( type ) }
+						onChange={ newValue => setMessage( newValue, type ) }
+					/>,
+			) }
+		</TableListContainer>
 	</div>;
 }
 

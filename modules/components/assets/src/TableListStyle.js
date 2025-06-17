@@ -1,6 +1,12 @@
 import { css } from '@linaria/core';
 
 const TableListStyle = {
+	Container: css`
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+		padding: 1em;
+	`,
 	Wrap: css`
 		width: calc(100% - 2px);
 		position: relative;

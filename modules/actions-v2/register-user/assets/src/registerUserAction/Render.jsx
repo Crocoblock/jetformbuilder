@@ -48,7 +48,6 @@ function RegisterUserRender( props ) {
 			/>
 		</> }
 		<WideLine/>
-
 		<UserFieldsRow
 			getMapField={ getMapField }
 			setMapField={ setMapField }

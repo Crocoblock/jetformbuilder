@@ -7,25 +7,31 @@ import {
 	Help,
 	TableListStyle,
 } from 'jet-form-builder-components';
-import { Flex, SelectControl } from '@wordpress/components';
+import { Flex, FlexItem, Card } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { cx } from '@linaria/core';
 import { useInstanceId } from '@wordpress/compose';
 import { styled } from '@linaria/react';
 import useActionValidatorProvider from '../hooks/useActionValidatorProvider';
+import ValidatorProvider from './ValidatorProvider';
+import { isValidElement, cloneElement } from '@wordpress/element';
 
 const StyledFlex = styled( Flex )`
     padding: 1em;
 `;
 
-function TableList( {
+function TableListContainer( { children } ) {
+	return <Card className={TableListStyle.Card}>
+		{ children }
+	</Card>;
+}
+
+function TableListRowContent( {
 	tag,
 	label,
 	help,
 	isRequired,
-	formFields,
-	value,
-	onChange,
+	children
 } ) {
 	const LabelComponent = isRequired ? RequiredLabel : Label;
 
@@ -35,7 +41,7 @@ function TableList( {
 		),
 	} );
 
-	const htmlId = useInstanceId( TableList, 'jfb-field-map' );
+	const htmlId = useInstanceId( TableListRowContent, tag );
 
 	return <StyledFlex className={TableListStyle.Td} direction="column" gap={ 3 }>
 		{ hasError && <IconText>
@@ -60,19 +66,59 @@ function TableList( {
 				</Help> }
 			</div>
 
-			<SelectControl
-				className={TableListStyle.TdItem}
-				id={ htmlId }
-				value={ value }
-				onChange={ onChange }
-				onBlur={ () => setShowError( true ) }
-				options={ formFields }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
-			/>
+			<div className={TableListStyle.TdItem}>
+				{ typeof children === 'function'
+					? children( { setShowError, htmlId } )
+					: isValidElement( children )
+						? cloneElement( children, { setShowError } )
+						: children
+				}
+			</div>
 		</RowControl>
-
 	</StyledFlex>;
 }
 
-export default TableList;
+function TableListRow( {
+	tag,
+	label,
+	help = '',
+	isRequired,
+	children
+} ) {
+
+	return <ValidatorProvider
+		isSupported={ error => {
+			return `field_${ tag }` === error?.property
+		} }
+	>
+		{ ( { hasError, setShowError } ) => <TableListRowContent
+			tag={ tag }
+			label={ label }
+			help={ help }
+			isRequired={ isRequired }
+		>
+			{ children }
+		</TableListRowContent> }
+	</ValidatorProvider>;
+}
+
+function TableListHead( { columns } ) {
+	return (
+		<Flex className={TableListStyle.Th}>
+			{ columns.map( ( column, index ) => (
+				<FlexItem
+					key={ `col_${index}` }
+					className={TableListStyle.ThItem}
+				>
+					{ column }
+				</FlexItem>
+			) ) }
+		</Flex>
+	);
+}
+
+export {
+	TableListContainer,
+	TableListRow,
+	TableListHead
+};

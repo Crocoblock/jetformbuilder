@@ -60,7 +60,7 @@ export { default as ValidatorProvider } from './components/ValidatorProvider';
 export { default as FieldsMapField } from './components/FieldsMapField';
 export { default as ValidatedTextControl, } from './components/ValidatedTextControl';
 export { default as ValidatedSelectControl, } from './components/ValidatedSelectControl';
-export { default as TableList, } from './components/TableList';
+export { TableListRow, TableListContainer, TableListHead } from './components/TableList';
 
 /**
  * Hooks

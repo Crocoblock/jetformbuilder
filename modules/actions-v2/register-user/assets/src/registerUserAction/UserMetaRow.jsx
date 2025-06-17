@@ -2,14 +2,12 @@ import { __ } from '@wordpress/i18n';
 import {
 	Help,
 	Label,
-	RowControl,
-	RowControlEndStyle,
 	TableListStyle,
 } from 'jet-form-builder-components';
-import {Card, Flex, FlexItem} from '@wordpress/components';
-import { cx } from '@linaria/core';
+import { TextControl } from '@wordpress/components';
 import { useFields } from 'jet-form-builder-blocks-to-actions';
-import UserMetaRowItem from './UserMetaRowItem';
+import { TableListContainer, TableListHead, TableListRow } from 'jet-form-builder-actions';
+
 
 function UserFieldsRow( { getMapField, setMapField,  } ) {
 
@@ -22,29 +20,37 @@ function UserFieldsRow( { getMapField, setMapField,  } ) {
 		<Help className={TableListStyle.WhiteSpaceNormal}>
 			Map form fields to custom user meta fields (e.g., "Phone") not included in WordPress by default.
 		</Help>
-		<Card className={TableListStyle.Card}>
-			<Flex className={TableListStyle.Th}>
-				<FlexItem className={TableListStyle.ThItem}>
-					{ __( `User Meta Fields`, 'jet-form-builder' ) }
-				</FlexItem>
-				<FlexItem className={TableListStyle.ThItem}>
-					{ __( `Form Fields`, 'jet-form-builder' ) }
-				</FlexItem>
-			</Flex>
-			{ formFields.map( ( field ) => <UserMetaRowItem
+		<TableListContainer>
+			<TableListHead
+				columns={ [
+					__( `User Meta Fields`, 'jet-form-builder' ),
+					__( `Form Fields`, 'jet-form-builder' )
+				] }
+			/>
+			{ formFields.map( ( field ) => <TableListRow
 				key={ field.value }
+				tag={ field.value }
 				label={ field.label }
-				value={ getMapField( {
-					source: 'meta_fields_map',
-					name: field.value,
-				} ) }
-				onChange={ newVal => setMapField( {
-					nameField: field.value,
-					value: newVal,
-					source: 'meta_fields_map',
-				} ) }
-			/> ) }
-		</Card>
+			>
+				{ ( { htmlId } ) => (
+					<TextControl
+						placeholder="User meta field/key"
+						id={ htmlId }
+						value={ getMapField( {
+							source: 'meta_fields_map',
+							name: field.value,
+						} ) }
+						onChange={ newVal => setMapField( {
+							nameField: field.value,
+							value: newVal,
+							source: 'meta_fields_map',
+						} ) }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+					/>
+				) }
+			</TableListRow> ) }
+		</TableListContainer>
 	</div>;
 }
 

@@ -23,8 +23,8 @@ function UserFieldsRow( { getMapField, setMapField,  } ) {
 		<TableListContainer>
 			<TableListHead
 				columns={ [
-					__( `User Meta Fields`, 'jet-form-builder' ),
-					__( `Form Fields`, 'jet-form-builder' )
+					__( `Form Fields`, 'jet-form-builder' ),
+					__( `User Meta Fields`, 'jet-form-builder' )
 				] }
 			/>
 			{ formFields.map( ( field ) => <TableListRow

@@ -36,7 +36,7 @@ function RegisterUserRender( props ) {
 			) }
 			__nextHasNoMarginBottom
 			help={ __(
-				'If this option is enabled, logged-in users with the Administrator role will be able to add new users using this form. If disabled, only non-logged-in users will be able to register themselves.',
+				'If this option is enabled, logged-in users with the selected role will be able to add new users using this form. If disabled, only non-logged-in users will be able to register themselves.',
 				'jet-form-builder',
 			) }
 		/>

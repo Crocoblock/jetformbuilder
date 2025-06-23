@@ -51,4 +51,15 @@ abstract class Base_Term_Action extends Base_Modifier_Action {
 		return $this->inserted_id;
 	}
 
+	public function user_can_manage_taxonomy_terms( $taxonomy ) {
+		$taxonomy_object = get_taxonomy( $taxonomy );
+
+		if ( ! $taxonomy_object ) {
+			return false;
+		}
+
+		$capability = $taxonomy_object->cap->edit_terms;
+
+		return current_user_can( $capability );
+	}
 }

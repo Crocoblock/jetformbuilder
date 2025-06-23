@@ -19,6 +19,28 @@ class Preset_Source_Term extends Base_Source {
         return 'term';
     }
 
+	public function on_sanitize(): bool {
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		$term_taxonomy = ! empty( $this->preset_data['term_taxonomy'] ) ? $this->preset_data['term_taxonomy'] : 'category';
+
+		if ( ! $this->user_can_manage_taxonomy_terms( $term_taxonomy ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	protected function can_get_preset() {
+		$term_taxonomy = ! empty( $this->preset_data['term_taxonomy'] ) ? $this->preset_data['term_taxonomy'] : 'category';
+
+		return ( parent::can_get_preset() &&
+				$this->user_can_manage_taxonomy_terms( $term_taxonomy )
+		);
+	}
+
     /**
      * Query the source term based on preset data.
      *
@@ -64,5 +86,17 @@ class Preset_Source_Term extends Base_Source {
 	public function source__parent_term() {
 		$term = $this->query_source();
 		return get_term( $term->parent, $term->taxonomy );
+	}
+
+	public function user_can_manage_taxonomy_terms( $taxonomy ) {
+		$taxonomy_object = get_taxonomy( $taxonomy );
+
+		if ( ! $taxonomy_object ) {
+			return false;
+		}
+
+		$capability = $taxonomy_object->cap->edit_terms;
+
+		return current_user_can( $capability );
 	}
 }

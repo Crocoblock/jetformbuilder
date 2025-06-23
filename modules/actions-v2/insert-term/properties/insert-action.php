@@ -28,10 +28,18 @@ class Insert_Action extends Base_Term_Action {
 			return;
 		}
 
-		$taxonomy  = $this->modifier->source_arr['taxonomy'] ?? '';
-		$parent_id = $this->modifier->source_arr['parent'] ?? 0;
-		$name      = $this->modifier->source_arr['name'] ?? '';
-		$slug      = $this->modifier->source_arr['slug'] ?? '';
+		$taxonomy = sanitize_text_field( $this->modifier->source_arr['taxonomy'] ?? '' );
+
+		if ( ! $this->user_can_manage_taxonomy_terms( $taxonomy ) ) {
+			throw new Action_Exception(
+				'failed',
+				esc_html( 'You are not allowed to manage this taxonomy' )
+			);
+		}
+
+		$parent_id = absint( $this->modifier->source_arr['parent'] ?? 0 );
+		$name      = sanitize_text_field( $this->modifier->source_arr['name'] ?? '' );
+		$slug      = sanitize_title( $this->modifier->source_arr['slug'] ?? '' );
 		$args      = array();
 
 		if ( empty( $name ) ) {

@@ -118,6 +118,10 @@ export default function MediaEdit( props ) {
 									{ value_format: newValue } );
 							} }
 							options={ valueFormats }
+							help={ __(
+								'If you\'re using this field for an ACF Gallery, always select **Array of attachment IDs**. For JetEngine, match the format used in the corresponding JetEngine meta field.',
+								'jet-form-builder'
+							) }
 						/> }
 					</> }
 					<AdvancedInspectorControl

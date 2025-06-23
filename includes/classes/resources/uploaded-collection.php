@@ -35,6 +35,16 @@ class Uploaded_Collection implements Media_Block_Value, Uploaded_File_Path {
 		return implode( ',', $ids );
 	}
 
+	public function get_attachment_ids(): array {
+		$ids = array();
+
+		foreach ( $this->uploads as $upload ) {
+			$ids[] = $upload->get_attachment_id();
+		}
+
+		return $ids;
+	}
+
 	/**
 	 * @return string
 	 */

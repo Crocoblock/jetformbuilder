@@ -1,5 +1,8 @@
 import {
 	ToggleControl,
+	Flex,
+	FlexItem,
+	Card,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { ActionMessages } from 'jet-form-builder-actions';
@@ -31,6 +34,10 @@ function RegisterUserRender( props ) {
 			onChange={ allow_register => onChangeSettingObj(
 				{ allow_register },
 			) }
+			help={ __(
+				'If this option is enabled, logged-in users with the selected role will be able to add new users using this form. If disabled, only non-logged-in users will be able to register themselves.',
+				'jet-form-builder',
+			) }
 		/>
 		{ settings.allow_register && <>
 			<WideLine/>
@@ -55,6 +62,10 @@ function RegisterUserRender( props ) {
 			label={ __( 'Log In User after Register:', 'jet-form-builder' ) }
 			checked={ settings.log_in }
 			onChange={ log_in => onChangeSettingObj( { log_in } ) }
+			help={ __(
+				'To use the "Remember me" option, first add a checkbox, radio button, or switcher field to your form with a value of 1, and label it "Remember me" or similar. Then, select it here.',
+				'jet-form-builder',
+			) }
 		/>
 		{ settings.log_in && <>
 			<WideLine/>
@@ -80,7 +91,9 @@ function RegisterUserRender( props ) {
 			setMapField={ setMapField }
 		/>
 		<WideLine/>
-		<ActionMessages { ...props } />
+		<ActionMessages
+			{ ...props }
+		/>
 	</StyledFlexControl>;
 }
 

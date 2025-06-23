@@ -19,6 +19,10 @@ const label = {
 		'Form Records Access Capability',
 		'jet-form-builder',
 	),
+	ssr_validation_method: __(
+		'Server side validation method',
+		'jet-form-builder',
+	),
 };
 
 const help = {
@@ -44,6 +48,10 @@ const help = {
 	),
 	form_records_access_capability: __(
 		'By default any Form Records available only for users with `manage_options` capability. Here you can overwrite it with any capability you want. More about capabilities <a href="https://wordpress.org/support/article/roles-and-capabilities/" target="_blank">here</a>',
+		'jet-form-builder',
+	),
+	ssr_validation_method: __(
+		'Select how the server-side validation request will be made – via WP REST API, admin-ajax.php, or through the URL of the current page.',
 		'jet-form-builder',
 	),
 };

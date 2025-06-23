@@ -39,12 +39,12 @@ class User_Specific_Messages extends Base_Action_Messages {
 				'value' => 'This email address is already used.',
 			),
 			'sanitize_user'     => array(
-				'label' => __( 'Incorrect username', 'jet-form-builder' ),
-				'value' => 'Username contains not allowed characters.',
+				'label' => __( 'Incorrect user login', 'jet-form-builder' ),
+				'value' => 'User login contains not allowed characters.',
 			),
 			'empty_username'    => array(
-				'label' => __( 'Empty username', 'jet-form-builder' ),
-				'value' => 'Please set username.',
+				'label' => __( 'Empty user login', 'jet-form-builder' ),
+				'value' => 'Please set user login.',
 			),
 			'empty_email'       => array(
 				'label' => __( 'Empty email', 'jet-form-builder' ),

@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Blocks\Module;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Attributes_Trait;
@@ -144,6 +145,12 @@ class Form_Builder {
 		$this->add_attribute( 'data-validation-type', jet_fb_live_args()->validation_type );
 		$this->add_attribute( 'data-clear', jet_fb_live_args()->clear ? 1 : '' );
 		$this->add_attribute( 'novalidate' );
+
+		$options_tab = Tab_Handler_Manager::instance()->tab( 'options-tab' );
+		$options     = $options_tab->get_options();
+		$method = $options['ssr_validation_method'] ?? 'rest';
+		$this->add_attribute( 'ssr_validation_method', $method );
+
 
 		/**
 		 * Backward compatibility.

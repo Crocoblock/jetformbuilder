@@ -77,7 +77,7 @@ const StyledFlex = styled(Flex)`
 function PluginActions() {
 	const [ actions, setActions ] = useActions();
 
-	const isBuddypress = document.body.classList.contains( 'buddypress' );
+	const isBuddypress = document.body.classList.contains( 'wp-admin' ) && ( document.body.classList.contains( 'buddypress' ) || document.body.classList.contains( 'theme-buddyboss-theme' ) );
 
 	return <ActionsPanel
 		title={ __( 'Post Submit Actions', 'jet-form-builder' ) }

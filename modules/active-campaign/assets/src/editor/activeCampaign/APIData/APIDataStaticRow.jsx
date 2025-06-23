@@ -1,10 +1,11 @@
-import { TextControl, Flex, FlexItem } from '@wordpress/components';
+import { Flex, FlexItem } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import {
 	RowControl,
 	Label,
 	RowControlEndStyle, IconText,
 	RequiredLabel, ControlWithErrorStyle,
+	StyledTextControl
 } from 'jet-form-builder-components';
 import { useSelect } from '@wordpress/data';
 import { STORE_NAME } from '../../store';
@@ -66,7 +67,7 @@ function APIDataStaticRow( { settings, onChangeSettingObj } ) {
 					'jet-form-builder',
 				) }
 			</IconText> }
-			<TextControl
+			<StyledTextControl
 				id={ urlId }
 				value={ settings.api_url }
 				onChange={ api_url => onChangeSettingObj( {
@@ -74,8 +75,6 @@ function APIDataStaticRow( { settings, onChangeSettingObj } ) {
 				} ) }
 				onBlur={ () => setShowErrorUrl( true ) }
 				className={ hasErrorUrl && ControlWithErrorStyle }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
 			/>
 			<RequiredLabel htmlFor={ keyId }>
 				{ __( 'API Key', 'jet-form-builder' ) }
@@ -86,7 +85,7 @@ function APIDataStaticRow( { settings, onChangeSettingObj } ) {
 					'jet-form-builder',
 				) }
 			</IconText> }
-			<TextControl
+			<StyledTextControl
 				id={ keyId }
 				value={ settings.api_key }
 				onChange={ api_key => onChangeSettingObj( {
@@ -94,8 +93,6 @@ function APIDataStaticRow( { settings, onChangeSettingObj } ) {
 				} ) }
 				onBlur={ () => setShowErrorKey( true ) }
 				className={ hasErrorKey && ControlWithErrorStyle }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
 			/>
 			<FlexItem>
 				<APIDataFetchButton

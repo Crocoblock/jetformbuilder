@@ -1,14 +1,17 @@
 import GroupedSelectControl from '../../components/GroupedSelectControl';
 import { Fragment } from '@wordpress/element';
 
-const {
-	      TextControl,
-	      SelectControl,
-	      CustomSelectControl,
-	      Card,
-	      CardBody,
-	      CardHeader,
-      } = wp.components;
+import {
+	CustomSelectControl,
+	Card,
+	CardHeader,
+} from '@wordpress/components';
+
+import {
+	StyledSelectControl,
+	StyledTextControl,
+	StyledCardBodyControl,
+} from 'jet-form-builder-components';
 
 // eslint-disable-next-line max-lines-per-function
 function AvailableMapFieldPreset( {
@@ -40,12 +43,12 @@ function AvailableMapFieldPreset( {
 		<CardHeader>
 			<span className='jet-label-overflow'>{ fieldLocal }</span>
 		</CardHeader>
-		<CardBody
+		<StyledCardBodyControl
 			key={ fieldLocal + name + indexLocal + fIndex }
 			className={ 'jet-form-preset__fields-map-item' }
 		>
 			{ children }
-		</CardBody>
+		</StyledCardBodyControl>
 	</Card>;
 
 	function AvailableFieldWrapperFunc( { field: fieldLocal, name, index: indexLocal, fIndex }, children ) {
@@ -57,12 +60,12 @@ function AvailableMapFieldPreset( {
 			<CardHeader>
 				<span className='jet-label-overflow'>{ fieldLocal }</span>
 			</CardHeader>
-			<CardBody
+			<StyledCardBodyControl
 				key={ fieldLocal + name + indexLocal + fIndex }
 				className={ 'jet-form-preset__fields-map-item' }
 			>
 				{ children }
-			</CardBody>
+			</StyledCardBodyControl>
 		</Card>;
 	}
 
@@ -77,7 +80,7 @@ function AvailableMapFieldPreset( {
 			switch ( data.type ) {
 				case 'text':
 					return ( isMapFieldVisible( value, data, field ) &&
-						AvailableFieldWrapperFunc( props, <TextControl
+						AvailableFieldWrapperFunc( props, <StyledTextControl
 							key={ uniqKey + 'TextControl' }
 							placeholder={ data.label }
 							value={ currentVal[ data.name ] }
@@ -88,14 +91,12 @@ function AvailableMapFieldPreset( {
 									[ field ]: currentVal,
 								}, 'fields_map' );
 							} }
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
 						/> )
 					);
 				case 'select':
 					return ( isMapFieldVisible( value, data, field ) &&
 						<AvailableFieldWrapper { ...props } key={ uniqKey }>
-							<SelectControl
+							<StyledSelectControl
 								options={ data.options }
 								value={ currentVal[ data.name ] }
 								onChange={ newVal => {
@@ -105,8 +106,6 @@ function AvailableMapFieldPreset( {
 										[ field ]: currentVal,
 									}, 'fields_map' );
 								} }
-								__next40pxDefaultSize
-								__nextHasNoMarginBottom
 							/>
 						</AvailableFieldWrapper>
 					);

@@ -1,5 +1,6 @@
-import { Button, TextControl, FlexItem } from '@wordpress/components';
+import { Button, FlexItem } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { StyledTextControl } from 'jet-form-builder-components';
 
 class LegacyDefaultMetaControl extends wp.element.Component {
 
@@ -53,7 +54,7 @@ class LegacyDefaultMetaControl extends wp.element.Component {
 				>
 					<div
 						className="repeater-item-column jet-margin-bottom-wrapper">
-						<TextControl
+						<StyledTextControl
 							key="meta_key"
 							label={ __( 'Meta Key', 'jet-form-builder' ) }
 							value={ currentItem.key }
@@ -64,10 +65,8 @@ class LegacyDefaultMetaControl extends wp.element.Component {
 									id: index,
 								} );
 							} }
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
 						/>
-						<TextControl
+						<StyledTextControl
 							key="meta_value"
 							label={ __( 'Meta Value', 'jet-form-builder' ) }
 							value={ currentItem.value }
@@ -78,8 +77,6 @@ class LegacyDefaultMetaControl extends wp.element.Component {
 									id: index,
 								} );
 							} }
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
 						/>
 					</div>
 					<div className="repeater-item-column">

@@ -45,7 +45,7 @@ function BlockName( { label, help } ) {
 			) && <Tooltip
 				text={ message }
 				delay={ 200 }
-				position={ 'top center' }
+				placement="top"
 			>
 				<Icon
 					icon={ 'warning' }

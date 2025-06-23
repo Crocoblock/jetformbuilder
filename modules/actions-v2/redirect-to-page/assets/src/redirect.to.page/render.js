@@ -14,6 +14,10 @@ const StyledFlex = styled(Flex)`
 	&.buddypress-active {
 		width: 100%;
 	}
+
+	.components-base-control {
+		margin-bottom: 0;
+	}
 `;
 
 function RedirectToPageRender( props ) {

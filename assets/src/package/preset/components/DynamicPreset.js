@@ -4,8 +4,9 @@ import MapFieldPreset from './MapFieldPreset';
 import ControlPresetRestrictionContext
 	from '../context/ControlPresetRestrictionContext';
 import { useContext } from '@wordpress/element';
-import { ToggleControl, Flex } from '@wordpress/components';
+import { ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { StyledFlexControl } from 'jet-form-builder-components';
 
 // eslint-disable-next-line max-lines-per-function
 let DynamicPreset = function ( {
@@ -28,7 +29,7 @@ let DynamicPreset = function ( {
 		) );
 	};
 
-	return <Flex direction="column" gap={ 4 }>
+	return <StyledFlexControl direction="column" gap={ 4 }>
 		{ window.JetFormEditorData.presetConfig.global_fields.map(
 			( data, index ) => <GlobalFieldPreset
 				key={ `current_field_${ data.name }_${ index }` }
@@ -69,7 +70,7 @@ let DynamicPreset = function ( {
 				onChangeValue( newResticted, 'restricted' );
 			} }
 		/> }
-	</Flex>;
+	</StyledFlexControl>;
 };
 
 DynamicPreset = withPreset( DynamicPreset );

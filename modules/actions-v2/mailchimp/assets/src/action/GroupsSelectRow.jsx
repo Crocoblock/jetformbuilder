@@ -44,8 +44,6 @@ function GroupsSelectRow( { settings, onChangeSettingObj, listId } ) {
 			) }
 			__experimentalExpandOnFocus
 			__experimentalShowHowTo={ false }
-			__next40pxDefaultSize
-			__nextHasNoMarginBottom
 		/>
 	</RowControl>;
 }

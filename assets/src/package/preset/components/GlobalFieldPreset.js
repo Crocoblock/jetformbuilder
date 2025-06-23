@@ -1,7 +1,4 @@
-const {
-	      TextControl,
-	      SelectControl,
-      } = wp.components;
+import { StyledSelectControl, StyledTextControl } from 'jet-form-builder-components';
 
 function GlobalFieldPreset( {
 	data,
@@ -20,14 +17,13 @@ function GlobalFieldPreset( {
 					key={ 'field_' + data.name + index }
 					className={ 'jet-form-preset__row' }
 				>
-					<TextControl
+					<StyledTextControl
 						key={ data.name + index }
 						label={ data.label }
 						value={ value[ data.name ] }
 						onChange={ newVal => {
 							onChangeValue( newVal, data.name )
 						} }
-						__next40pxDefaultSize
 					/>
 				</div>
 			);
@@ -37,7 +33,7 @@ function GlobalFieldPreset( {
 					key={ 'field_' + data.name + index }
 					className={ 'jet-form-preset__row' }
 				>
-					<SelectControl
+					<StyledSelectControl
 						key={ data.name + index }
 						options={ excludeOptions( data.options ) }
 						label={ data.label }
@@ -45,7 +41,6 @@ function GlobalFieldPreset( {
 						onChange={ newVal => {
 							onChangeValue( newVal, data.name )
 						} }
-						__next40pxDefaultSize
 					/>
 				</div>
 			);

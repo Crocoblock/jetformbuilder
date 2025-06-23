@@ -3,9 +3,10 @@ import {
 	RequiredLabel,
 	RowControlEndStyle,
 	RowControl,
+	StyledSelectControl
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { Flex, SelectControl } from '@wordpress/components';
+import { Flex } from '@wordpress/components';
 import { cx } from '@linaria/core';
 import useRedirectTypes
 	from './useRedirectTypes';
@@ -39,7 +40,7 @@ function RedirectTypeRow( { settings, onChangeSettingObj } ) {
 					'jet-form-builder',
 				) }
 			</IconText> }
-			<SelectControl
+			<StyledSelectControl
 				id={ id }
 				value={ settings.redirect_type }
 				options={ [
@@ -54,8 +55,6 @@ function RedirectTypeRow( { settings, onChangeSettingObj } ) {
 					{ redirect_type },
 				) }
 				onBlur={ () => setShowError( true ) }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
 			/>
 		</Flex>
 	</RowControl>;

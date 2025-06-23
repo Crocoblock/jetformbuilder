@@ -15,7 +15,7 @@ import {
 	getPlugin,
 	unregisterPlugin,
 } from '@wordpress/plugins';
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 
 const withPluginProps = ( settings, base ) => {
 	const PluginRender = settings.render;

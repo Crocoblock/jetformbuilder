@@ -82,8 +82,6 @@ function APIKeyRow( { settings, onChangeSettingObj } ) {
 						{ api_key },
 					) }
 					onBlur={ () => setShowError( true ) }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 				/> : <StyledTextControl
 					  id={ id }
 					  value={ settings.api_key }
@@ -91,8 +89,6 @@ function APIKeyRow( { settings, onChangeSettingObj } ) {
 						  { api_key },
 					  ) }
 					  onBlur={ () => setShowError( true ) }
-					  __next40pxDefaultSize
-					  __nextHasNoMarginBottom
 				  /> }
 				<Button
 					onClick={ () => fetchApiData(
@@ -104,7 +100,6 @@ function APIKeyRow( { settings, onChangeSettingObj } ) {
 					isBusy={ isFetchLoading }
 					icon={ cloud }
 					variant="secondary"
-					__next40pxDefaultSize
 				>
 					{ __( 'Fetch', 'jet-form-builder' ) }
 				</Button>

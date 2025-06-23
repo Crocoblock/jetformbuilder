@@ -8,7 +8,7 @@ import { useEntityRecords } from '@wordpress/core-data';
 import UseFormButton from './UseFormButton';
 import { useDebouncedInput } from '@wordpress/compose';
 import usePluginUseSettings from '../hooks/usePluginUseSettings';
-import { Label } from 'jet-form-builder-components';
+import { Label, StyledComboboxControl, StyledFlexControl } from 'jet-form-builder-components';
 
 function SelectPageControl() {
 	const [ settings, updateSettings ] = usePluginUseSettings();
@@ -37,22 +37,20 @@ function SelectPageControl() {
 				'jet-form-builder',
 			) }
 		</Label>
-		<Flex align="flex-start">
+		<StyledFlexControl align="flex-start">
 			<FlexBlock>
-				<ComboboxControl
+				<StyledComboboxControl
 					options={ pagesList }
 					value={ settings.pageId }
 					onChange={ pageId => updateSettings( { pageId } ) }
 					onFilterValueChange={ setSearch }
-					__nextHasNoMarginBottom
-					__next40pxDefaultSize
 				/>
 			</FlexBlock>
 			<UseFormButton disabled={
 				!Boolean( search.length ) &&
 				!settings.pageId
 			}/>
-		</Flex>
+		</StyledFlexControl>
 	</>;
 }
 

@@ -4,7 +4,7 @@ import {
 	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalGrid as Grid,
 	Button,
-	Flex, Modal,
+	Modal,
 	SelectControl,
 	TextControl,
 } from '@wordpress/components';
@@ -17,6 +17,7 @@ import { STORE_NAME } from '../../store';
 import { styled } from '@linaria/react';
 import useCategoriesAndActionTypes from './useCategoriesAndActionTypes';
 import { useEffect } from '@wordpress/element';
+import { StyledFlexControl } from 'jet-form-builder-components';
 
 const StyledPlaceholder = styled.div`
     text-align: center;
@@ -73,7 +74,7 @@ function AddActionModal() {
 		size="large"
 		title={ __( 'Add new action', 'jet-form-builder' ) }
 		onRequestClose={ () => showActionsInserterModal( false ) }
-		headerActions={ <Flex expanded={ false }>
+		headerActions={ <StyledFlexControl expanded={ false }>
 			<TextControl
 				placeholder={ __(
 					'Search action by name…',
@@ -81,15 +82,13 @@ function AddActionModal() {
 				) }
 				value={ search }
 				onChange={ setSearch }
-				__nextHasNoMarginBottom
 			/>
 			<SelectControl
 				value={ category }
 				onChange={ setCategory }
 				options={ categories }
-				__nextHasNoMarginBottom
 			/>
-		</Flex> }
+		</StyledFlexControl> }
 	>
 		{ !Boolean( actionTypes?.length ) && <StyledPlaceholder>
 			<h3>{ __(

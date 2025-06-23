@@ -28,7 +28,6 @@ function ToggleControl( {
 
 	return <BaseControl
 		id={ id }
-		__nextHasNoMarginBottom={ __nextHasNoMarginBottom }
 	>
 		<Flex direction="column">
 			<Flex

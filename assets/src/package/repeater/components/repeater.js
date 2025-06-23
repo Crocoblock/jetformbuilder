@@ -7,12 +7,13 @@ import MacrosButtonTemplate
 	from '../../macros.button/components/MacrosButtonTemplate';
 import PopoverContext from '../../macros.button/context/PopoverContext';
 
-const {
+let {
 	      Card,
-	      ButtonGroup,
 	      Button,
 	      CardHeader,
 	      CardBody,
+		  ToggleGroupControl,
+		__experimentalToggleGroupControl,
       } = wp.components;
 const {
 	      useContext,
@@ -20,6 +21,10 @@ const {
 const {
 	      __,
       } = wp.i18n;
+
+ToggleGroupControl = (
+	ToggleGroupControl || __experimentalToggleGroupControl
+);
 
 /**
  * @param  props {{ items, onSetState, functions, children }}
@@ -89,7 +94,7 @@ function Repeater( props ) {
 		>
 			<CardHeader className={ 'repeater__item__header' }>
 				<div className="repeater-item__left-heading">
-					<ButtonGroup className={ 'repeater-action-buttons' }>
+					<ToggleGroupControl className={ 'repeater-action-buttons jet-fb-toggle-group-control' } hideLabelFromVision={ true }>
 						{ (
 							!supportEdit || supportEdit( currentItem )
 						) && <Button
@@ -123,13 +128,13 @@ function Repeater( props ) {
 							onClick={ () => moveDown( index ) }
 							className={ 'repeater-action-button jet-fb-is-thick' }
 						/> }
-					</ButtonGroup>
+					</ToggleGroupControl>
 					<RepeaterHeader
 						currentItem={ currentItem }
 						index={ index }
 					/>
 				</div>
-				<ButtonGroup>
+				<ToggleGroupControl className={ 'jet-fb-toggle-group-control' } hideLabelFromVision={ true }>
 					{ (
 						!supportClone || supportClone( currentItem )
 					) && <Button
@@ -175,7 +180,7 @@ function Repeater( props ) {
 							</div> }
 						</PopoverContext.Consumer>
 					</MacrosButtonTemplate> }
-				</ButtonGroup>
+				</ToggleGroupControl>
 			</CardHeader>
 			{ currentItem.__visible && <CardBody
 				className={ 'repeater-item__content' }

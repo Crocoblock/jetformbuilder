@@ -4,4 +4,32 @@
 			fill: currentColor;
 		}
 	}
+
+	&.jfb-toggle-group-control {
+		&:hover,
+		&:focus,
+		&:focus-within {
+			border-color: transparent;
+			box-shadow: none;
+		}
+
+		&--no-gap {
+			.components-button {
+				border-radius: 0;
+
+				& + .components-button {
+					box-shadow:
+						/* Top border */
+						inset 0 1px 0 0 var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)),
+						/* Right border */
+						inset -1px 0 0 0 var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)),
+						/* Bottom border */
+						inset 0 -1px 0 0 var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)),
+						/* Optional outside focus ring or accent */
+						0 0 0 currentColor;
+				}
+			}
+		}
+
+	}
 }

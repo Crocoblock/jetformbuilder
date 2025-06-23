@@ -3,9 +3,10 @@ import {
 	RequiredLabel,
 	RowControl,
 	RowControlEndStyle,
+	StyledSelectControl
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { SelectControl, Flex } from '@wordpress/components';
+import { Flex } from '@wordpress/components';
 import { useActionValidatorProvider } from 'jet-form-builder-actions';
 import { cx } from '@linaria/core';
 
@@ -33,7 +34,7 @@ function RoleCanRegisterRow( { settings, onChangeSettingObj } ) {
 						'jet-form-builder',
 					) }
 				</IconText> }
-				<SelectControl
+				<StyledSelectControl
 					id={ id }
 					value={ settings.role_can_register }
 					options={ JetFBRegisterAction.allUserRoles }
@@ -41,8 +42,6 @@ function RoleCanRegisterRow( { settings, onChangeSettingObj } ) {
 						{ role_can_register },
 					) }
 					onBlur={ () => setShowError( true ) }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 				/>
 			</Flex>
 		</> }

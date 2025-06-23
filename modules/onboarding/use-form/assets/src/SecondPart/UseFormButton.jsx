@@ -21,7 +21,6 @@ function UseFormButton( { disabled = false } ) {
 		onClick={ () => useForm( { formId, shouldUpdateForm } ) }
 		isBusy={ isExecuting }
 		disabled={ isExecuting || disabled }
-		__next40pxDefaultSize
 	>
 		{ __( 'Use the form', 'jet-form-builder' ) }
 	</Button>;

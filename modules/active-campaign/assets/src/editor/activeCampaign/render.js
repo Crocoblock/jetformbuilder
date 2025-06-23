@@ -99,7 +99,6 @@ function ActiveCampaignAction( props ) {
 			onChange={ val => (
 				onChangeSettingObj( { use_global: Boolean( val ) } )
 			) }
-			__nextHasNoMarginBottom
 		>
 			{ __( 'Use', 'jet-form-builder' ) + ' ' }
 			<a href={ JetFormEditorData.global_settings_url +

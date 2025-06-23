@@ -1,5 +1,5 @@
-import { FormTokenField } from '@wordpress/components';
 import { useMemo } from '@wordpress/element';
+import { StyledFormTokenFieldControl } from 'jet-form-builder-components';
 
 function FormLabeledTokenField( {
 	suggestions = [],
@@ -34,7 +34,7 @@ function FormLabeledTokenField( {
 		[ value ],
 	);
 
-	return <FormTokenField
+	return <StyledFormTokenFieldControl
 		displayTransform={ countrySlug => (
 			valueToLabel[ countrySlug ] ?? countrySlug
 		) }

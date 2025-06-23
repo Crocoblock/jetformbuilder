@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-	Flex,
 	ToggleControl as CoreToggleControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -13,7 +12,7 @@ import FieldsMapRow from './FieldsMapRow';
 import { useSelect } from '@wordpress/data';
 import { STORE_NAME } from '../store';
 import { useEffect } from '@wordpress/element';
-
+import { StyledFlexControl } from 'jet-form-builder-components';
 const { ToggleControl } = JetFBComponents;
 
 // eslint-disable-next-line max-lines-per-function
@@ -58,14 +57,13 @@ function MailChimpRender( props ) {
 
 	/* eslint-disable jsx-a11y/no-onchange */
 	return (
-		<Flex direction="column">
+		<StyledFlexControl direction="column">
 			<ToggleControl
 				className={ ClearBaseControlStyle }
 				checked={ settings.use_global }
 				onChange={ val => (
 					onChangeSettingObj( { use_global: Boolean( val ) } )
 				) }
-				__nextHasNoMarginBottom
 			>
 				{ __( 'Use', 'jet-form-builder' ) + ' ' }
 				<a href={ JetFormEditorData.global_settings_url +
@@ -115,7 +113,7 @@ function MailChimpRender( props ) {
 					/>
 				</> }
 			</> }
-		</Flex>
+		</StyledFlexControl>
 	);
 	/* eslint-enable jsx-a11y/no-onchange */
 }

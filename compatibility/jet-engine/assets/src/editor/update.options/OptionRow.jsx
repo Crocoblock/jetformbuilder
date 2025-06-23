@@ -2,8 +2,9 @@
 import {
 	Label,
 	RowControl,
+	StyledTextControl,
 } from 'jet-form-builder-components';
-import { Card, Flex, TextControl } from '@wordpress/components';
+import { Card, Flex } from '@wordpress/components';
 import { styled } from '@linaria/react';
 
 const StyledFlex = styled( Flex )`
@@ -23,12 +24,10 @@ function OptionRow( {
 					<Label htmlFor={ id }>
 						{ label }
 					</Label>
-					<TextControl
+					<StyledTextControl
 						id={ id }
 						value={ value }
 						onChange={ onChange }
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
 					/>
 				</> }
 			</RowControl>

@@ -9,7 +9,7 @@ function useSiteOptionJSON( optionName ) {
 	const { value, onChange, ...otherProps } = useSiteOption( optionName );
 
 	return {
-		value: otherProps.isResolving ? {} : JSON.parse( value ),
+		value: otherProps.isResolving ? {} : ( value ? JSON.parse( value ) : {} ),
 		onChange: props => onChange( JSON.stringify( { ...props } ) ),
 		...otherProps,
 	};

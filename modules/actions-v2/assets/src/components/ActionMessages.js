@@ -1,12 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import ActionMessagesSlotFills from './ActionMessagesSlotFills';
-import { TextControl, Card, Flex } from '@wordpress/components';
+import { Card, Flex } from '@wordpress/components';
 import { useMemo, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	Label,
 	RowControl,
 	RowControlEndStyle,
+	StyledTextControl,
 } from 'jet-form-builder-components';
 import { cx } from '@linaria/core';
 import { styled } from '@linaria/react';
@@ -40,12 +41,10 @@ function ActionMessageRow( props ) {
 			<RowSlot fillProps={ { ...props, id: htmlId } }>
 				{ ( fills ) => (
 					Boolean( fills?.length ) ? fills :
-					<TextControl
+					<StyledTextControl
 						id={ htmlId }
 						value={ value }
 						onChange={ onChange }
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
 					/>
 				) }
 			</RowSlot>

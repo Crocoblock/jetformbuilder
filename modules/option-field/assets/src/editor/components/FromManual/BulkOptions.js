@@ -10,7 +10,6 @@ import { useState, useEffect } from '@wordpress/element';
 import {
 	TextareaControl,
 	SelectControl,
-	ButtonGroup,
 	Button,
 	Flex,
 } from '@wordpress/components';
@@ -22,6 +21,15 @@ const {
 const {
 	      ActionModalFooterSlotFill,
       } = JetFBComponents;
+
+let {
+	ToggleGroupControl,
+	__experimentalToggleGroupControl,
+} = wp.components;
+
+ToggleGroupControl = (
+	ToggleGroupControl || __experimentalToggleGroupControl
+);
 
 const {
 	      Fill: ModalFooterFill,
@@ -100,8 +108,9 @@ for the calculator field by separating them with a colon character`,
 			Book #1 : book_1 : 100
 		</Help>
 		<ModalFooterFill>
-			<ButtonGroup
-				className="jet-form-edit-modal__actions"
+			<ToggleGroupControl
+				className="jet-form-edit-modal__actions jfb-toggle-group-control"
+				hideLabelFromVision={ true }
 			>
 				<Button
 					ref={ refAdd }
@@ -129,7 +138,7 @@ for the calculator field by separating them with a colon character`,
 						'jet-form-builder',
 					) }
 				</Button>
-			</ButtonGroup>
+			</ToggleGroupControl>
 		</ModalFooterFill>
 		{ showPopoverAdd && (
 			<PopoverStandard

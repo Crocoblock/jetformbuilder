@@ -1,8 +1,9 @@
 import {
 	Label,
 	RowControl,
+	StyledTextControl
 } from 'jet-form-builder-components';
-import { Card, TextControl } from '@wordpress/components';
+import { Card } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
 import { styled } from '@linaria/react';
 
@@ -26,12 +27,10 @@ function UserMetaRowItem( {
 			<Label htmlFor={ htmlId }>
 				{ label }
 			</Label>
-			<TextControl
+			<StyledTextControl
 				id={ htmlId }
 				value={ value }
 				onChange={ onChange }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
 			/>
 		</RowControl>
 	</StyledCard>;

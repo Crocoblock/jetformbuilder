@@ -1,9 +1,10 @@
-import { Flex, SelectControl } from '@wordpress/components';
+import { Flex } from '@wordpress/components';
 import {
 	ControlWithErrorStyle, IconText,
 	RequiredLabel,
 	RowControl,
 	RowControlEndStyle,
+	StyledSelectControl
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
@@ -39,7 +40,7 @@ function ListsRow( { settings, onChangeSettingObj } ) {
 						'jet-form-builder',
 					) }
 				</IconText> }
-				<SelectControl
+				<StyledSelectControl
 					id={ id }
 					value={ settings.list_id }
 					onChange={ list_id => onChangeSettingObj(
@@ -56,8 +57,6 @@ function ListsRow( { settings, onChangeSettingObj } ) {
 						},
 						...lists,
 					] }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 				/>
 			</Flex>
 		</> }

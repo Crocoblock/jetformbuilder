@@ -1,9 +1,9 @@
 import {
 	Label,
 	RowControl,
+	StyledTextControl
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { TextControl } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
 
 function RedirectHashRow( { settings, onChangeSettingObj } ) {
@@ -13,14 +13,12 @@ function RedirectHashRow( { settings, onChangeSettingObj } ) {
 		<Label htmlFor={ id }>
 			{ __( 'URL Hash', 'jet-form-builder' ) }
 		</Label>
-		<TextControl
+		<StyledTextControl
 			id={ id }
 			value={ settings.redirect_hash }
 			onChange={ redirect_hash => onChangeSettingObj(
 				{ redirect_hash },
 			) }
-			__next40pxDefaultSize
-			__nextHasNoMarginBottom
 		/>
 	</RowControl>;
 }

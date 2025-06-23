@@ -1,4 +1,4 @@
-import { TextControl, Flex, FlexItem } from '@wordpress/components';
+import { Flex, FlexItem } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import {
 	RowControl,
@@ -6,6 +6,7 @@ import {
 	RowControlEndStyle, IconText,
 	RequiredLabel,
 	ControlWithErrorStyle,
+	StyledTextControl
 } from 'jet-form-builder-components';
 import { useSiteOptionJSON } from 'jet-form-builder-data';
 import { useSelect } from '@wordpress/data';
@@ -50,26 +51,22 @@ function APIDataGlobalRow() {
 			<RequiredLabel htmlFor={ urlId }>
 				{ __( 'API URL', 'jet-form-builder' ) }
 			</RequiredLabel>
-			<TextControl
+			<StyledTextControl
 				id={ urlId }
 				value={ globalSettings.api_url }
 				onChange={ api_url => setGlobalSettings( {
 					...globalSettings, api_url,
 				} ) }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
 			/>
 			<RequiredLabel htmlFor={ keyId }>
 				{ __( 'API Key', 'jet-form-builder' ) }
 			</RequiredLabel>
-			<TextControl
+			<StyledTextControl
 				id={ keyId }
 				value={ globalSettings.api_key }
 				onChange={ api_key => setGlobalSettings( {
 					...globalSettings, api_key,
 				} ) }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
 			/>
 			<FlexItem>
 				<APIDataFetchButton

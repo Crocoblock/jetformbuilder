@@ -5,7 +5,7 @@ import {
 	withFilters,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { Sortable } from 'jet-form-builder-components';
 import { Fragment } from '@wordpress/element';
 // eslint-disable-next-line import/no-extraneous-dependencies

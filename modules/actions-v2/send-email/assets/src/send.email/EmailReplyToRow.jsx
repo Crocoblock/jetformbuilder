@@ -1,9 +1,9 @@
 import {
 	Label, LabelWithActions,
 	RowControl,
+	StyledTextControl
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { TextControl } from '@wordpress/components';
 
 const {
 	      MacrosFields,
@@ -25,14 +25,12 @@ function EmailReplyToRow( { settings, onChangeSettingObj } ) {
 					withCurrent
 				/>
 			</LabelWithActions>
-			<TextControl
+			<StyledTextControl
 				id={ id }
 				value={ settings.reply_to_email }
 				onChange={ reply_to_email => onChangeSettingObj(
 					{ reply_to_email },
 				) }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
 			/>
 		</> }
 	</RowControl>;

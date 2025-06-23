@@ -27,6 +27,9 @@ export { default as WideLine } from './WideLine';
 export { default as IconText } from './IconText';
 export { default as FormLabeledTokenField } from './FormLabeledTokenField';
 
+//Table styles
+export { default as TableListStyle } from './TableListStyle';
+
 export {
 	default as useTriggerPopover,
 } from './Popover/Hooks/useTriggerPopover';

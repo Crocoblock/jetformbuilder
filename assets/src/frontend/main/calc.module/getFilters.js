@@ -19,7 +19,12 @@ import SubtractDayFilter from './filters/SubtractDayFilter';
 import SubtractMinFilter from './filters/SubtractMinFilter';
 import SubtractMonthFilter from './filters/SubtractMonthFilter';
 import SubtractYearFilter from './filters/SubtractYearFilter';
-
+import ToDayInMsFilter from './filters/ToDayInMsFilter';
+import ToMonthInMsFilter from './filters/ToMonthInMsFilter';
+import ToYearInMsFilter from './filters/ToYearInMsFilter';
+import ToHourInMsFilter from './filters/ToHourInMsFilter';
+import ToMinuteInMsFilter from './filters/ToMinuteInMsFilter';
+import ToWeekInMsFilter from './filters/ToWeekInMsFilter';
 const { applyFilters } = JetPlugins.hooks;
 
 /**
@@ -51,6 +56,12 @@ const getFilterItems = () => applyFilters(
 		ToTimeFilter,
 		ToDateTimeFilter,
 		TimestampFilter,
+		ToDayInMsFilter,
+		ToMonthInMsFilter,
+		ToYearInMsFilter,
+		ToHourInMsFilter,
+		ToMinuteInMsFilter,
+		ToWeekInMsFilter,
 	],
 );
 let response         = [];

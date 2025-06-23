@@ -74,11 +74,13 @@ function UpdateUserRender( props ) {
 						{ __( 'User role', 'jet-form-builder' ) }
 					</Label>
 					<StyledSelectControl
+						multiple
 						id={ id }
 						value={ settings.user_role }
 						options={ source.userRoles }
 						onChange={ newValue => onChangeSetting( newValue,
 							'user_role' ) }
+						help={ __( 'Hold Ctrl (Windows) or Command (Mac) to select multiple roles.', 'jet-form-builder' ) }
 					/>
 				</> }
 			</RowControl>

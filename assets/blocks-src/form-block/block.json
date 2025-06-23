@@ -47,6 +47,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"markup_type": {
+			"type": "string",
+			"default": "div"
+		},
 		"clear": {
 			"type": "boolean",
 			"default": false

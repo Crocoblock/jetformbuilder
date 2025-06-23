@@ -80,6 +80,12 @@ function AjaxSubmit( form ) {
 					[ response, $form ],
 				);
 				break;
+			default:
+				jQuery( document ).trigger(
+					'jet-form-builder/ajax/processing-error',
+					[ response, $form ]
+				);
+				break;
 		}
 		/**
 		 * Run status watchers

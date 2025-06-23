@@ -35,6 +35,10 @@
 			"type": "string",
 			"default": "text"
 		},
+		"autocomplete": {
+			"type": "string",
+			"default": "off"
+		},
 		"enable_input_mask": {
 			"type": "boolean",
 			"default": false

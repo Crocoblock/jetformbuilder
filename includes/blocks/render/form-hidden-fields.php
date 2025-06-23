@@ -8,6 +8,7 @@ use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Classes\Security\Csrf_Tools;
 use JFB_Modules\Security\Wp_Nonce;
 use Jet_Form_Builder\Live_Form;
+use JFB_Modules\User_Journey\Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -41,6 +42,16 @@ class Form_Hidden_Fields {
 				'name'        => jet_fb_handler()->post_id_key,
 			)
 		);
+
+		if ( Module::instance()->is_user_journey_enabled() ) {
+			$fields .= Live_Form::force_render_field(
+				'hidden-field',
+				array(
+					'field_value' => array(),
+					'name'        => jet_fb_handler()->user_journey_key,
+				)
+			);
+		}
 
 		return $fields;
 	}

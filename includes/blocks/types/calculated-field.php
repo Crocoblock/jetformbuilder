@@ -130,13 +130,41 @@ class Calculated_Field extends Base {
 				array(
 					'field_desc' => __(
 						'
-            Set math formula to calculate field value.<br/>
-            For example:<br/><br/>
-            %quantity% * %META::price%<br/><br/>
-            Where:<br/>
-            - %quantity% - macro for form field value. "quantity" - is a field name to get value from<br/>
-            - %META::price% - macro for current post meta value. "price" - is a meta key to get value from<br/><br/>
-        ',
+							Set math formula to calculate field value.<br/>
+							For example:<br/><br/>
+							%quantity% * %META::price%<br/><br/>
+							Where:<br/>
+							- %quantity% - macro for form field value. "quantity" - is a field name to get value from<br/>
+							- %META::price% - macro for current post meta value. "price" - is a meta key to get value from<br/><br/>
+						',
+						'jet-form-builder'
+					),
+					'date_format' => __(
+						'Note: if calculated result is used for dynamic value for another date, date-time or time field, you must use the following formats:<br/>
+						* YYYY-MM-DD ( date field )<br/>
+						* YYYY-MM-DD HH:mm ( date-time field )<br/>
+						* HH:mm ( time field )<br/>
+						<br/>
+						Set date format to calculate field value.<br/>
+						* YYYY — 4-digit year (2024)<br/>
+						* MM   — month with leading zero (01–12)<br/>
+						* M    — month without leading zero (1–12)<br/>
+						* MMM  — abbreviated month name (Jan–Dec)<br/>
+						* MMMM — full month name (January–December)<br/>
+						* DD   — day of month with leading zero (01–31)<br/>
+						* D    — day of month without leading zero (1–31)<br/>
+						* HH   — hours with leading zero (00–23) in 24-hour format<br/>
+						* H    — hours without leading zero (0–23) in 24-hour format<br/>
+						* hh   — hours with leading zero (01–12) in 12-hour format<br/>
+						* h    — hours without leading zero (1–12) in 12-hour format<br/>
+						* mm   — minutes with leading zero (00–59)<br/>
+						* m    — minutes without leading zero (0–59)<br/>
+						* ss   — seconds with leading zero (00–59)<br/>
+						* s    — seconds without leading zero (0–59)<br/>
+						* dddd — full day of week name (Monday–Sunday)<br/>
+						* ddd  — abbreviated day of week name (Mon–Sun)<br/>
+						* A    — AM/PM designation<br/>
+					',
 						'jet-form-builder'
 					),
 				)

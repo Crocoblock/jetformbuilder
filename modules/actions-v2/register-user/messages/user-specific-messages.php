@@ -50,6 +50,10 @@ class User_Specific_Messages extends Base_Action_Messages {
 				'label' => __( 'Empty email', 'jet-form-builder' ),
 				'value' => 'Please set user email.',
 			),
+			'incorrect_old_password' => array(
+				'label' => __( 'Incorrect old password', 'jet-form-builder' ),
+				'value' => 'The old password you entered is incorrect.',
+			),
 		);
 	}
 }

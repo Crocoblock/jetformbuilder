@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Form_Record\Admin\Pages;
 
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use JFB_Components\Admin\Page\Interfaces\Action_Page_It;
 use JFB_Components\Admin\Page\Traits\Action_Page_Trait;
 use JFB_Components\Export\Export_Tools;
@@ -31,7 +32,8 @@ class Export_Page implements Action_Page_It, Wp_Nonce_It {
 	}
 
 	public function check_permission(): bool {
-		return $this->get_wp_nonce()->verify() && current_user_can( 'manage_options' );
+		$capability = Tab_Handler_Manager::get_form_records_access_capability();
+		return $this->get_wp_nonce()->verify() && ( current_user_can( 'manage_options' ) || current_user_can( $capability ) );
 	}
 
 	public function render_page() {

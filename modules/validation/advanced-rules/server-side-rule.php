@@ -42,6 +42,7 @@ class Server_Side_Rule extends Rule {
 				new Ssr\Is_User_Login_Unique(),
 				new Ssr\Is_User_Email_Unique(),
 				new Ssr\Is_Field_Value_Unique(),
+				new Ssr\Is_User_Password_Valid(),
 			)
 		);
 	}

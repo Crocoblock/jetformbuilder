@@ -7,7 +7,8 @@ const {
 function AddYearFilter() {
 	BaseFilter.call( this );
 
-	this.fullName     = () => 'addYear';
+	this.label        = () => __( 'addYear', 'jet-form-builder' );
+	this.fullName     = () => '|addYear';
 	this.docArgument  = Number;
 	this.isClientSide = true;
 

@@ -1,7 +1,5 @@
 function* buttonParser( button ) {
-	button.type = button.type || 'submit';
-
-	if ( 'submit' !== button ) {
+	if (!button.type || button.type && button.type !== 'submit') {
 		return;
 	}
 

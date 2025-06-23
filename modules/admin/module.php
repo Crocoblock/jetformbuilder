@@ -84,6 +84,10 @@ class Module implements
 			$new_options['auto_focus'] = true;
 		}
 
+		if ( ! isset( $options['form_records_access_capability'] ) ) {
+			$new_options['form_records_access_capability'] = 'manage_options';
+		}
+
 		if ( ! $new_options ) {
 			return;
 		}

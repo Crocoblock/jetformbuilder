@@ -24,7 +24,7 @@ class View_Related_Form extends Link_Single_Action {
 	}
 
 	public function get_href( array $record ): string {
-		return get_edit_post_link( $this->form, false );
+		return get_edit_post_link( $this->form, false ) ?: '';
 	}
 
 	public function show_in_header(): bool {
@@ -34,6 +34,10 @@ class View_Related_Form extends Link_Single_Action {
 	public function show_in_row( array $record ): bool {
 		$this->form = get_post( $record['form_id'] ?? 0 );
 
-		return ( $this->form instanceof \WP_Post );
+		if ( ! ( $this->form instanceof \WP_Post ) ) {
+			return false;
+		}
+
+		return ! empty( $this->get_href( $record ) );
 	}
 }

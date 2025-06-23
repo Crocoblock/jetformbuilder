@@ -5,6 +5,8 @@ namespace Jet_Form_Builder;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
 use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Options_Handler;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
@@ -29,13 +31,14 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Form_Handler {
 
-	public $hook_key      = 'jet_form_builder_submit';
-	public $hook_val      = 'submit';
-	public $form_data     = array();
-	public $response_data = array();
-	public $is_ajax       = false;
-	public $is_success    = false;
-	public $response_args = array();
+	public $hook_key          = 'jet_form_builder_submit';
+	public $hook_val          = 'submit';
+	public $form_data         = array();
+	public $response_data     = array();
+	public $is_ajax           = false;
+	public $is_success        = false;
+	public $response_args     = array();
+	public $user_journey_data = array();
 
 	public $form_id;
 	public $refer;
@@ -44,9 +47,10 @@ class Form_Handler {
 	/** @var Action_Handler */
 	public $action_handler;
 
-	public $form_key    = '_jet_engine_booking_form_id';
-	public $refer_key   = '_jet_engine_refer';
-	public $post_id_key = '__queried_post_id';
+	public $form_key         = '_jet_engine_booking_form_id';
+	public $refer_key        = '_jet_engine_refer';
+	public $post_id_key      = '__queried_post_id';
+	public $user_journey_key = '_user_journey';
 	/**
 	 * @var Request_Handler
 	 */
@@ -57,6 +61,7 @@ class Form_Handler {
 	 * Constructor for the class
 	 */
 	public function __construct() {
+		$this->set_gfb_request_args();
 		$this->action_handler  = new Action_Handler();
 		$this->request_handler = new Request_Handler();
 	}
@@ -97,6 +102,9 @@ class Form_Handler {
 				$this->post_id_key => array(
 					'callback' => array( Tools::class, 'set_current_post' ),
 				),
+				$this->user_journey_key => array(
+					'callback' => array( $this, 'set_user_journey_data' ),
+				),
 			)
 		);
 	}
@@ -113,6 +121,14 @@ class Form_Handler {
 			jet_fb_context()->update_request( $value, $name );
 			jet_fb_context()->make_secure( $name );
 		}
+	}
+
+	public function set_user_journey_data( $data ) {
+		$this->user_journey_data = $data;
+	}
+
+	public function get_user_journey_data() {
+		return $this->user_journey_data;
 	}
 
 
@@ -379,6 +395,18 @@ class Form_Handler {
 				return $rich->get_parser();
 			default:
 				return null;
+		}
+	}
+
+	public function set_gfb_request_args() {
+		$options_handler = new Options_Handler();
+		$options_handler->set_gfb_request_args();
+		$options = Tab_Handler_Manager::get_options( 'options-tab' );
+		if ( isset( $options['gfb_request_args_key'] ) ) {
+			$this->hook_key = $options['gfb_request_args_key'];
+		}
+		if ( isset( $options['gfb_request_args_value'] ) ) {
+			$this->hook_val = $options['gfb_request_args_value'];
 		}
 	}
 

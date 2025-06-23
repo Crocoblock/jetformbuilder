@@ -9,16 +9,18 @@ function UserRoleRow( { settings, onChangeSettingObj } ) {
 
 	return <RowControl>
 		{ ( { id } ) => <>
-			<Label htmlFor={ id }>
+			<Label htmlFor={ id } >
 				{ __( 'User Role', 'jet-form-builder' ) }
 			</Label>
 			<StyledSelectControl
+				multiple
 				id={ id }
 				value={ settings.user_role }
 				options={ JetFBRegisterAction.userRoles }
 				onChange={ user_role => onChangeSettingObj(
 					{ user_role },
 				) }
+				help={ __( 'Hold Ctrl (Windows) or Command (Mac) to select multiple roles.', 'jet-form-builder' ) }
 			/>
 		</> }
 

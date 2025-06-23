@@ -9,6 +9,7 @@ module.exports = {
 	context: path.resolve( __dirname, 'assets/src' ),
 	entry: {
 		'parser': './index.js',
+		'admin-ui': '../../admin/index.js',
 	},
 	output: {
 		path: path.resolve( __dirname, 'assets/build' ),
@@ -16,7 +17,7 @@ module.exports = {
 	},
 	devtool: devMode ? 'inline-cheap-module-source-map' : false,
 	resolve: {
-		extensions: [ '.js' ],
+		extensions: [ '.js', '.jsx' ],
 	},
 	module: {
 		rules: [

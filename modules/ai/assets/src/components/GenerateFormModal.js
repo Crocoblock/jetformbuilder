@@ -92,14 +92,45 @@ function GenerateFormModal( {
 			</Flex>
 		</Notice> }
 		{ Boolean( formHTML.length ) ? <>
-			<div
-				dangerouslySetInnerHTML={ { __html: formHTML } }
-				style={ {
-					padding: '2em 1em',
-					backgroundColor: '#f6f7f7',
-					marginBottom: '1em',
-				} }
-			/>
+			<div className="jet-form-builder-html-parser-preview">
+				<style>{`
+					.jet-form-builder-html-parser-preview {
+						pointer-events: none;
+					}
+					.jet-form-builder-html-parser-preview textarea,
+					.jet-form-builder-html-parser-preview input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]),
+					.jet-form-builder-html-parser-preview select {
+						display: block;
+						width: 100% !important;
+						max-width: 100% !important;
+						margin-bottom: 10px;
+					}
+					.jet-form-builder-html-parser-preview label {
+						display:block;
+						margin-bottom:5px;
+					}
+					.jet-form-builder-html-parser-preview br {
+						display:none;
+					}
+					.jet-form-builder-html-parser-preview input[type="submit"],
+					.jet-form-builder-html-parser-preview button {
+						display:block;
+						border: none;
+						background-color: #0071a1;
+						color: #fff;
+						padding: 10px 20px;
+						cursor: pointer;
+					}
+				` }</style>
+				<div
+					dangerouslySetInnerHTML={ { __html: formHTML } }
+					style={ {
+						padding: '2em 1em',
+						backgroundColor: '#f6f7f7',
+						marginBottom: '1em',
+					} }
+				/>
+			</div>
 			<Footer
 				clearHTML={ () => setFormHTML( '' ) }
 				formHTML={ formHTML }

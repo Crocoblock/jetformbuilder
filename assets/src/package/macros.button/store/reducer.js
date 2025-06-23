@@ -15,7 +15,13 @@ import ToTimeFilter from '../filters/ToTimeFilter';
 import SubtractDayFilter from '../filters/SubtractDayFilter';
 import SubtractMonthFilter from '../filters/SubtractMonthFilter';
 import SubtractYearFilter from '../filters/SubtractYearFilter';
-
+import ToDayInMsFilter from '../filters/ToDayInMsFilter';
+import ToHourInMsFilter from '../filters/ToHourInMsFilter';
+import ToMinuteInMsFilter from '../filters/ToMinuteInMsFilter';
+import ToMonthInMsFilter from '../filters/ToMonthInMsFilter';
+import ToWeekInMsFilter from '../filters/ToWeekInMsFilter';
+import ToYearInMsFilter from '../filters/ToYearInMsFilter';
+import TimestampFilter from '../filters/TimestampFilter';
 /**
  *
  * @type {{
@@ -33,6 +39,7 @@ const DEFAULT_STATE = {
 	],
 	filters: [
 		new FallbackFilter(),
+		new TimestampFilter(),
 		new LengthFilter(),
 		new AddDayFilter(),
 		new AddMonthFilter(),
@@ -43,6 +50,12 @@ const DEFAULT_STATE = {
 		new ToDateFilter(),
 		new ToDateTimeFilter(),
 		new ToTimeFilter(),
+		new ToMinuteInMsFilter(),
+		new ToHourInMsFilter(),
+		new ToDayInMsFilter(),
+		new ToWeekInMsFilter(),
+		new ToMonthInMsFilter(),
+		new ToYearInMsFilter(),
 	],
 };
 

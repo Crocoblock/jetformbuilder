@@ -14,11 +14,13 @@ function MacroFieldItem( { onClick } ) {
 	              ? field.fullName()
 	              : `%${ field.value }%`;
 
+	const label = typeof field.label === 'function' ? field.label() : value;
+
 	return <Button
 		isLink
 		onClick={ () => onClick( value ) }
 	>
-		{ value }
+		{ label }
 	</Button>;
 }
 

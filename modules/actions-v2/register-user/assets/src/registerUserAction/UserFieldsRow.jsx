@@ -4,8 +4,8 @@ import {
 	Help,
 	Label,
 	TableListStyle,
+	StyledSelectControl,
 } from 'jet-form-builder-components';
-import {SelectControl} from '@wordpress/components';
 import { useFields } from 'jet-form-builder-blocks-to-actions';
 import { TableListContainer, TableListHead, TableListRow } from 'jet-form-builder-actions';
 import userFields from './userFields';
@@ -39,7 +39,7 @@ function UserFieldsRow( { getMapField, setMapField } ) {
 				help={ field.help }
 				isRequired={ field.required }
 			>
-				{ ( { setShowError, htmlId } ) => ( <SelectControl
+				{ ( { setShowError, htmlId } ) => ( <StyledSelectControl
 					id={ htmlId }
 					onBlur={ () => setShowError( true ) }
 					options={ formFields }
@@ -48,8 +48,6 @@ function UserFieldsRow( { getMapField, setMapField } ) {
 					onChange={ value => setMapField(
 						{ nameField: field.value, value },
 					) }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 				/> ) }
 			</TableListRow> ) }
 		</TableListContainer>

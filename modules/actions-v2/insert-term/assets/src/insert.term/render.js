@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import TermPropertySelect from '../components/TermPropertySelect';
-import { SelectControl, Flex } from '@wordpress/components';
+import { Flex } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import {
@@ -10,6 +10,7 @@ import {
 	RowControl,
 	RowControlEndStyle,
 	WideLine,
+	StyledSelectControl,
 } from 'jet-form-builder-components';
 import { cx } from '@linaria/core';
 import { __ } from '@wordpress/i18n';
@@ -91,7 +92,7 @@ function InsertTermRender( props ) {
 	useSanitizeFieldsMap();
 
 	/* eslint-disable jsx-a11y/no-onchange */
-console.log(properties);
+
 	return (
 		<Flex direction="column">
 			<RowControl>
@@ -115,7 +116,7 @@ console.log(properties);
 									'jet-form-builder',
 								) }
 							</IconText> }
-							<SelectControl
+							<StyledSelectControl
 								id={ id }
 								value={ settings.taxonomy }
 								options={ source.taxonomies }
@@ -124,8 +125,6 @@ console.log(properties);
 									{ taxonomy: val },
 								) }
 								onBlur={ () => setShowError( true ) }
-								__next40pxDefaultSize
-								__nextHasNoMarginBottom
 							/>
 						</Flex>
 					</> }

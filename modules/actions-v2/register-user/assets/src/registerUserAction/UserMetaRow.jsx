@@ -3,8 +3,8 @@ import {
 	Help,
 	Label,
 	TableListStyle,
+	StyledTextControl,
 } from 'jet-form-builder-components';
-import { TextControl } from '@wordpress/components';
 import { useFields } from 'jet-form-builder-blocks-to-actions';
 import { TableListContainer, TableListHead, TableListRow } from 'jet-form-builder-actions';
 
@@ -33,7 +33,7 @@ function UserFieldsRow( { getMapField, setMapField,  } ) {
 				label={ field.label }
 			>
 				{ ( { htmlId } ) => (
-					<TextControl
+					<StyledTextControl
 						placeholder="User meta field/key"
 						id={ htmlId }
 						value={ getMapField( {
@@ -45,8 +45,6 @@ function UserFieldsRow( { getMapField, setMapField,  } ) {
 							value: newVal,
 							source: 'meta_fields_map',
 						} ) }
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
 					/>
 				) }
 			</TableListRow> ) }

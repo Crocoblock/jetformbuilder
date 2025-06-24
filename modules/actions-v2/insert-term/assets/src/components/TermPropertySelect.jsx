@@ -1,7 +1,6 @@
-import { SelectControl, TextControl } from '@wordpress/components';
 import { useContext } from '@wordpress/element';
 import { CurrentActionEditContext } from 'jet-form-builder-actions';
-
+import { StyledTextControl } from 'jet-form-builder-components';
 const {
 	      ActionFieldsMapContext,
 	      CurrentPropertyMapContext,
@@ -30,14 +29,12 @@ function TermPropertySelect() {
 				className="components-base-control jet-margin-bottom-wrapper"
 			>
 				{ FieldSelect }
-				<TextControl
+				<StyledTextControl
 					key={ name + index + '_text' }
 					value={ getMapField( { name } ) }
 					onChange={ value => setMapField(
 						{ nameField: name, value },
 					) }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 				/>
 			</div>;
 		default:

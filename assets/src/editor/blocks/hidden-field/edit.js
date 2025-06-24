@@ -78,7 +78,7 @@ export default function HiddenEdit( props ) {
 
 	const { label = 'Please set `Field Value`' } = JetFormHiddenField.sources.find(
 		option => option.value === attributes.field_value,
-	);
+	) || { label: '--', value: '' };
 
 	const resultLabel = [ label ];
 

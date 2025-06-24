@@ -34,6 +34,7 @@ class Preset_Manager {
 		'post_from'  => 'current_post',
 		'user_from'  => 'current_user',
 		'query_var'  => '_post_id',
+		'term_from'  => 'current_term',
 		'fields_map' => array(),
 	);
 
@@ -119,6 +120,7 @@ class Preset_Manager {
 				new Sources\Preset_Source_Post(),
 				new Sources\Preset_Source_User(),
 				new Sources\Preset_Source_Query_Var(),
+				new Sources\Preset_Source_Term(),
 			)
 		);
 

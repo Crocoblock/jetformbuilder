@@ -32,6 +32,8 @@ ObservableRow.prototype.observe = function ( root ) {
 };
 
 ObservableRow.prototype.removeManually = function () {
+	this.parent.reQueryValue();
+
 	const otherRows   = this.parent.value.current.filter( row => row !== this );
 	const otherValues = otherRows.map( row => ( {
 		node: row.rootNode,

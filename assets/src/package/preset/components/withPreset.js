@@ -43,6 +43,7 @@ function withPreset( WrappedComponent ) {
 						return (
 							( 'post' === currentState.from && 'query_var' === currentState.post_from )
 							|| ( 'user' === currentState.from && 'query_var' === currentState.user_from )
+							|| ( 'term' === currentState.from && 'query_var' === currentState.term_from )
 							|| ( 'query_var' === currentState.from )
 						);
 					default:

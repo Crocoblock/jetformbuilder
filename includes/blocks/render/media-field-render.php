@@ -47,7 +47,7 @@ class Media_Field_Render extends Base {
 
 	protected function render_previews(): string {
 		$files = $this->block_type->block_attrs['default'];
-		
+
 		if ( empty( $files ) ) {
 			return '';
 		}
@@ -58,13 +58,13 @@ class Media_Field_Render extends Base {
 		foreach ( $files as $file ) {
 
 			if (
-				empty($file['url']) &&
-				isset($file['id']) &&
-				is_array($file['id'])
+				empty( $file['url'] ) &&
+				isset( $file['id'] ) &&
+				is_array( $file['id'] )
 			) {
 				$file = $file['id'];
 			}
-			$file_url = isset($file['url']) ? $file['url'] : wp_get_attachment_url($file);
+			$file_url = isset( $file['url'] ) ? $file['url'] : wp_get_attachment_url( $file );
 			$updated = str_replace( '%file_url%', $file_url, $preview );
 			$updated = str_replace(
 				'%file_name%',

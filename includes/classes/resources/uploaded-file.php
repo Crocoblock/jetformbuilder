@@ -170,7 +170,7 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 	}
 
 	public function get_attachment_ids(): array {
-		return array($this->get_attachment_id());
+		return array( $this->get_attachment_id() );
 	}
 
 	/*

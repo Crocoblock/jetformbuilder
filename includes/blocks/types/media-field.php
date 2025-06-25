@@ -61,7 +61,7 @@ class Media_Field extends Base {
 		if ( ! $this->is_both_format() ) {
 			// is value format wrong
 			if ( ! is_string( $preset ) && ! is_numeric( $preset ) ) {
-				if ( is_array($preset) ) {
+				if ( is_array( $preset ) ) {
 					return $preset;
 				}
 				return array();
@@ -85,8 +85,6 @@ class Media_Field extends Base {
 		$preset = parent::get_default_from_preset( $attributes );
 		$value  = $this->parse_preset( $preset );
 		$files  = array();
-
-
 
 		foreach ( $value as $item ) {
 
@@ -121,7 +119,6 @@ class Media_Field extends Base {
 					break;
 			}
 		}
-
 
 		return $files;
 	}

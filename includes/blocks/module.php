@@ -235,7 +235,7 @@ final class Module implements Base_Module_It {
 						'ajaxurl'      => Http_Tools::get_form_action_url(
 							array( 'method' => 'ajax' )
 						),
-						'adminajaxurl' => admin_url('admin-ajax.php'),
+						'adminajaxurl' => admin_url( 'admin-ajax.php' ),
 						'devmode'      => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
 						'replaceAttrs' => array(
 							'href',

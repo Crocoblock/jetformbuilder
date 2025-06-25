@@ -43,8 +43,8 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 	 */
 	public function run_callback( \WP_REST_Request $request ) {
 		$body = $request->get_body_params();
-		$result = Validation_Handler::validate($body);
-		return new WP_REST_Response($result);
+		$result = Validation_Handler::validate( $body );
+		return new WP_REST_Response( $result );
 	}
 
 	/**
@@ -61,7 +61,6 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 
 		$form_id = $body[ jet_fb_handler()->form_key ] ?? false;
 
-
 		jet_fb_handler()->set_form_id( $form_id );
 
 		jet_fb_context()->set_request( $body );
@@ -75,7 +74,7 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 		return jet_fb_context()->resolve_parser( $path );
 	}
 
-	public function get_parser_public(\WP_REST_Request $request) {
-		return $this->get_parser($request);
+	public function get_parser_public( \WP_REST_Request $request ) {
+		return $this->get_parser( $request );
 	}
 }

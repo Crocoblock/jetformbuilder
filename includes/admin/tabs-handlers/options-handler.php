@@ -39,12 +39,11 @@ class Options_Handler extends Base_Handler {
 					defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN
 				);
 			} else {
-				$options[ $name ] = sanitize_text_field( wp_unslash( $_POST[ $name ] ?? '' ));
+				$options[ $name ] = sanitize_text_field( wp_unslash( $_POST[ $name ] ?? '' ) );
 			}
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 		$result = $this->update_options( $options );
-
 
 		$this->send_response( $result );
 	}

@@ -151,7 +151,6 @@ class Form_Builder {
 		$method = $options['ssr_validation_method'] ?? 'rest';
 		$this->add_attribute( 'ssr_validation_method', $method );
 
-
 		/**
 		 * Backward compatibility.
 		 * We leave only the basic ones in the classes, because the value

@@ -68,7 +68,6 @@ final class Module implements
 			}
 		}
 
-
 		/** @var \JFB_Modules\Post_Type\Module $post_type */
 		$post_type = jet_form_builder()->module( 'post-type' );
 		$post_type->get_meta()->install( new Post_Type\Validation_Meta() );

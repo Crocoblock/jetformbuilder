@@ -275,6 +275,18 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+**3.5.2**
+- FIX: Media field better compatibility with ACF [Crocoblock/jetformbuilder#487](https://github.com/Crocoblock/jetformbuilder/issues/487)
+- ADD: Create terms if missing when a post is inserted/updated via 'Insert/Update Post' action [Crocoblock/suggestions#3654](https://github.com/Crocoblock/suggestions/issues/3654)
+- ADD: 'Insert/Update Term' action
+- FIX: Fixed the issue with triggering the Send Email action after verification by the admin [Crocoblock/suggestions#7946](https://github.com/Crocoblock/suggestions/issues/7946)
+- FIX: Repeater items triplicate inside Elementor Tabs
+- FIX: Editor styles compatibility with BuddyBoss theme
+- FIX: Login & registration texts and UX enhancements
+- FIX: Resetting input values in the Repeater field when deleting a row
+- FIX: Moved 'Enable custom option' from block settings menu to toolbar
+- FIX: Deprecations and minor issues
+
 **3.5.1.2**
 - FIX: Meta fields update in `Insert/Update Post` action
 

@@ -33,21 +33,24 @@ trait Import_Form_Trait {
 		$form_data['post_content'] = wp_slash( $form_data['post_content'] );
 
 		if ( isset( $form_data['meta_input'] ) && is_array( $form_data['meta_input'] ) ) {
-			$allowed_meta = apply_filters( 'jet-form-builder/import-form/allowed-meta', array(
-				'_jf_args',
-				'_jf_messages',
-				'_jf_preset',
-				'_jf_recaptcha',
-				'_jf_actions',
-				'_jf_validation',
-				'_jf_gateways',
-				'_jf_wc_details',
-				'_jf_address_autocomplete',
-				'_jf_limit_responses',
-				'_jf_limit_responses_counters',
-				'_jf_save_progress',
-				'_jf_schedule_form',
-			) );
+			$allowed_meta = apply_filters(
+				'jet-form-builder/import-form/allowed-meta',
+				array(
+					'_jf_args',
+					'_jf_messages',
+					'_jf_preset',
+					'_jf_recaptcha',
+					'_jf_actions',
+					'_jf_validation',
+					'_jf_gateways',
+					'_jf_wc_details',
+					'_jf_address_autocomplete',
+					'_jf_limit_responses',
+					'_jf_limit_responses_counters',
+					'_jf_save_progress',
+					'_jf_schedule_form',
+				)
+			);
 
 			$safe_meta_input = array();
 

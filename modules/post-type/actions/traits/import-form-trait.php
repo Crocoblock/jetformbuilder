@@ -33,15 +33,43 @@ trait Import_Form_Trait {
 		$form_data['post_content'] = wp_slash( $form_data['post_content'] );
 
 		if ( isset( $form_data['meta_input'] ) && is_array( $form_data['meta_input'] ) ) {
-			foreach ( $form_data['meta_input'] as &$meta_value ) {
-				$unserialized = maybe_unserialize( $meta_value );
+			$allowed_meta = apply_filters( 'jet-form-builder/import-form/allowed-meta', array(
+				'_jf_args',
+				'_jf_messages',
+				'_jf_preset',
+				'_jf_recaptcha',
+				'_jf_actions',
+				'_jf_validation',
+				'_jf_gateways',
+				'_jf_wc_details',
+				'_jf_address_autocomplete',
+				'_jf_limit_responses',
+				'_jf_limit_responses_counters',
+				'_jf_save_progress',
+				'_jf_schedule_form',
+			) );
 
-				if ( $unserialized !== $meta_value ) {
-					$meta_value = $unserialized;
+			$safe_meta_input = array();
+
+			foreach ( $form_data['meta_input'] as $meta_key => $meta_value ) {
+				if ( ! in_array( $meta_key, $allowed_meta, true ) ) {
 					continue;
 				}
-				$meta_value = wp_slash( $meta_value );
+
+				if ( ! is_string( $meta_value ) ) {
+					continue;
+				}
+
+				json_decode( $meta_value );
+
+				if ( json_last_error() !== JSON_ERROR_NONE ) {
+					continue;
+				}
+
+				$safe_meta_input[ $meta_key ] = wp_slash( $meta_value );
 			}
+
+			$form_data['meta_input'] = $safe_meta_input;
 		}
 
 		$post_id = wp_insert_post(

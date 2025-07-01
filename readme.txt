@@ -286,6 +286,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 - FIX: Resetting input values in the Repeater field when deleting a row
 - FIX: Moved 'Enable custom option' from block settings menu to toolbar
 - FIX: Deprecations and minor issues
+- FIX: PHP Object Injection vulnerability
 
 **3.5.1.2**
 - FIX: Meta fields update in `Insert/Update Post` action

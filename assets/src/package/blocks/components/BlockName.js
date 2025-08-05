@@ -60,7 +60,7 @@ function BlockName( { label, help } ) {
 			id={ instanceId }
 			value={ attributes.name }
 			help={ help ?? __(
-				'Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case',
+				'Should contain only lowercase Latin letters, numbers, “-”, or “_”. No spaces allowed.',
 				'jet-form-builder',
 			) }
 			onChange={ name => setAttributes( { name } ) }

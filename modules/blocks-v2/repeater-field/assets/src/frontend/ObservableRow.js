@@ -32,31 +32,53 @@ ObservableRow.prototype.observe = function ( root ) {
 };
 
 ObservableRow.prototype.removeManually = function () {
-	this.parent.reQueryValue();
+	if ( this._isRemoving ) {
+		return;
+	}
 
-	const otherRows   = this.parent.value.current.filter( row => row !== this );
-	const otherValues = otherRows.map( row => ( {
-		node: row.rootNode,
-		values: { ...row.value.current }
-	} ) );
+	this._isRemoving = true;
 
-	this.remove();
+	const otherRows = this.parent.value.current.filter( row => row !== this && !row._isRemoving );
 
-	this.parent.remove( this );
-	this.rootNode.remove();
+	const otherValues = otherRows.map( row => {
+		const deepCopyValues = {};
+		for ( const [key, value] of Object.entries( row.value.current ) ) {
+			if ( Array.isArray( value ) ) {
+				deepCopyValues[key] = [...value];
+			} else {
+				deepCopyValues[key] = value;
+			}
+		}
+
+		return {
+			node: row.rootNode,
+			values: deepCopyValues
+		};
+	} );
 
 	otherRows.forEach( ( row, index ) => {
 		if ( otherValues[index] ) {
-			Object.assign( row.value.current, otherValues[index].values );
+			const valuesToRestore = otherValues[index].values;
 
-			const inputs = row.getInputs();
-			inputs.forEach( input => {
-				if ( input.value.current !== undefined ) {
-					input.reQueryValue();
-				}
-			} );
+			for ( const [key, value] of Object.entries( valuesToRestore ) ) {
+				row.value.current[key] = value;
+			}
+
+			setTimeout( () => {
+				const inputs = row.getInputs();
+
+				inputs.forEach( input => {
+					if ( input.updatePreviews && typeof input.updatePreviews === 'function' ) {
+						input.updatePreviews();
+					}
+				} );
+			}, 50 );
 		}
 	} );
+
+	this.remove();
+	this.parent.remove( this );
+	this.rootNode.remove();
 };
 
 ObservableRow.prototype.initCalc = function () {

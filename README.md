@@ -8,6 +8,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.5.2.1
+* ADD: Support for multiple input formats for post thumbnail in `Insert/Update Post` action
+* FIX: Resetting input values in the `Repeater field` when deleting a row
+* FIX: Controls descriptions
+* FIX: Compatibility with the `JetFormBuilder Drag and Drop File Upload` addon
 
 ## 3.5.2
 * FIX: Media field better compatibility with ACF [Crocoblock/jetformbuilder#487](https://github.com/Crocoblock/jetformbuilder/issues/487)

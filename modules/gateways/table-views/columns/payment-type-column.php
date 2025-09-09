@@ -21,7 +21,7 @@ class Payment_Type_Column extends Column_Advanced_Base {
 	}
 
 	public function get_type_name( array $record ): string {
-		if ($record['initial_transaction_id']) {
+		if ( $record['initial_transaction_id'] ) {
 			return __( 'Renewal payment', 'jet-form-builder' );
 		}
 		return __( 'Initial payment', 'jet-form-builder' );

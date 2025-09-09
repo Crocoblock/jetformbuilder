@@ -22,7 +22,7 @@ class Post_Thumbnail_Property extends Base_Object_Property {
 	}
 
 	public function get_help(): string {
-		return __( 'Accepts attachment ID', 'jet-form-builder' );
+		return __( 'Accepts an attachment ID or array of IDs, a URL, an array of attachment IDs with their URLs.', 'jet-form-builder' );
 	}
 
 	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {

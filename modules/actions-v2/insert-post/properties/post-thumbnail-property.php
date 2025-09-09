@@ -52,12 +52,9 @@ class Post_Thumbnail_Property extends Base_Object_Property {
 					$id = $item['id'];
 
 					if ( is_numeric( $id ) ) {
-						// Check if it's an image by ID
 						if ( $this->is_image_attachment( $id ) ) {
 							$result[] = $id;
-						}
-						// Also check by URL if available
-						elseif ( isset( $item['url'] ) && $this->is_image_by_url( $item['url'] ) ) {
+						} elseif ( isset( $item['url'] ) && $this->is_image_by_url( $item['url'] ) ) {
 							$result[] = $id;
 						}
 					}
@@ -82,12 +79,12 @@ class Post_Thumbnail_Property extends Base_Object_Property {
 	 */
 	private function is_image_attachment( $attachment_id ) {
 		$attachment = get_post( $attachment_id );
-		if ( ! $attachment || $attachment->post_type !== 'attachment' ) {
+		if ( ! $attachment || 'attachment' !== $attachment->post_type ) {
 			return false;
 		}
 
 		$mime_type = get_post_mime_type( $attachment_id );
-		return strpos( $mime_type, 'image/' ) === 0;
+		return 0 === strpos( $mime_type, 'image/' );
 	}
 
 	/**
@@ -98,6 +95,6 @@ class Post_Thumbnail_Property extends Base_Object_Property {
 	 */
 	private function is_image_by_url( $url ) {
 		$filetype = wp_check_filetype( $url );
-		return $filetype['type'] && strpos( $filetype['type'], 'image/' ) === 0;
+		return $filetype['type'] && 0 === strpos( $filetype['type'], 'image/' );
 	}
 }

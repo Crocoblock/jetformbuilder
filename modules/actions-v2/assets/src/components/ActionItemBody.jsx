@@ -57,7 +57,10 @@ function ActionItemBody() {
 	), [ action.type ] );
 
 	return <ActionCardBody>
-		{ undefined === actionType && <small>Action <b>"{ action.type }"</b> is not supported</small> }
+		{ undefined === actionType && <Flex align="center" justify="space-between">
+			<small>Action <b>"{ action.type }"</b> is not supported</small>
+			<DeleteActionButton/>
+		</Flex> }
 		{ undefined !== actionType && <>
 			<Flex align="center" justify="flex-start" gap={ 1 }>
 				<CursoredIcon

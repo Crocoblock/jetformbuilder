@@ -78,7 +78,9 @@ function SignalRepeater() {
 			switch ( input.type ) {
 				case "checkbox":
 				case "radio":
-					input.checked = false;
+					// Preserve default checked state for checkbox/radio fields
+					// Check if the input has defaultChecked attribute (from HTML)
+					input.checked = input.defaultChecked || false;
 					break;
 				case "select-one":
 				case "select-multiple":

@@ -84,7 +84,10 @@ function SignalRepeater() {
 					break;
 				case "select-one":
 				case "select-multiple":
-					input.selectedIndex = -1;
+					const options = input.querySelectorAll( 'option' );
+					options.forEach( option => {
+						option.selected = option.defaultSelected || false;
+					} );
 					break;
 				case "file":
 					input.value = "";
@@ -93,7 +96,7 @@ function SignalRepeater() {
 					input.value = input.defaultValue || "";
 					break;
 				default:
-					input.value = "";
+					input.value = input.defaultValue || "";
 					break;
 			}
 		} );

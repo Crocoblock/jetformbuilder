@@ -503,6 +503,17 @@ class Query_Conditions_Builder {
 				: sprintf( "'%s'", sanitize_key( $in_item ) );
 		}
 
+		// Fix: Return FALSE condition when IN list is empty to prevent SQL error
+		if ( empty( $in_list ) ) {
+			$column_name = Db_Tools::sanitize_column( $column_name );
+			try {
+				$column_name = $this->view()->column( $column_name );
+			} catch ( Query_Builder_Exception $exception ) {
+				// silence
+			}
+			return "{$column_name} IN (NULL)";
+		}
+
 		$right_part  = implode( ', ', $in_list );
 		$column_name = Db_Tools::sanitize_column( $column_name );
 

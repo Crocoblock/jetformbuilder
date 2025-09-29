@@ -18,7 +18,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die();
 }
 
-const JET_FORM_BUILDER_VERSION = '3.5.2.1';
+const JET_FORM_BUILDER_VERSION = '3.5.2.11';
 
 const JET_FORM_BUILDER__FILE__ = __FILE__;
 const JET_FORM_BUILDER_SITE    = 'https://jetformbuilder.com';

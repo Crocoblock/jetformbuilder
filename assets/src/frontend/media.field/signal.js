@@ -1,7 +1,7 @@
 import { appendNodes, createFile, createFileList, isFile } from './functions';
 
 const { BaseSignal } = window.JetFormBuilderAbstract;
-console.log(123);
+
 /**
  * @property {FileData} input Related input
  */

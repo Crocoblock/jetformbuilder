@@ -58,6 +58,8 @@ class Post_Thumbnail_Property extends Base_Object_Property {
 							$result[] = $id;
 						}
 					}
+				} elseif ( is_string( $item ) && $this->is_image_by_url( $item ) ) {
+					$result[] = attachment_url_to_postid( $item );
 				}
 			}
 		}

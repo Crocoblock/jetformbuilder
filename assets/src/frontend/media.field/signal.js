@@ -18,7 +18,7 @@ function SignalFile() {
 		const [ node ]    = this.input.nodes;
 		const previews    = [];
 		const { current } = this.input.value;
-		const files       = current ?? [];
+		const files       = uniqueByName( current ?? [] );
 
 		for ( const file of files ) {
 			previews.push( this.getPreview( file ) );
@@ -26,7 +26,7 @@ function SignalFile() {
 
 		appendNodes( this.input.previewsContainer, previews );
 
-		node.files           = createFileList( [ ...files ] );
+		node.files           = createFileList( files );
 		this.input.prevFiles = files;
 
 		this.sortable();
@@ -71,8 +71,11 @@ SignalFile.prototype.loadFiles = function () {
 	) ) ).then( values => {
 		const newFiles = values.map( ( { value } ) => value );
 
+
+		const unique   = uniqueByName( newFiles );
+
 		this.lock.current = false;
-		this.input.silenceSet( createFileList( newFiles ) );
+		this.input.silenceSet( createFileList( unique ) );
 	} ).catch( () => {
 		this.lock.current = false;
 	} );
@@ -194,3 +197,18 @@ SignalFile.prototype.getFileNode = function ( fileName ) {
 	return removeBtn.closest( '.jet-form-builder-file-upload__file' );
 };
 export default SignalFile;
+
+function uniqueByName( files ) {
+	const seen   = new Set();
+	const result = [];
+
+	for ( const file of files ) {
+		if ( seen.has( file.name ) ) {
+			continue;
+		}
+		seen.add( file.name );
+		result.push( file );
+	}
+
+	return result;
+}

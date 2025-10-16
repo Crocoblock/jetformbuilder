@@ -13,7 +13,7 @@ addAction(
 	function ( page ) {
 		// Handle click events for radio inputs to allow re-selection
 		page.node.addEventListener( 'click', ( event ) => {
-			// Check if this is a radio input that might be connected to check-mark
+			// Check if this is a radio input
 			if ( event.target.type === 'radio' ) {
 				// Check if there's a check-mark-control in the same wrapper
 				const wrapper = event.target.closest( '.jet-form-builder__field-wrap' );
@@ -21,6 +21,14 @@ addAction(
 					if ( event.target.checked ) {
 						page.changePage( false ).then( () => {} ).catch( () => {} );
 					}
+				} else {
+					// For regular radio inputs without check-mark, also handle clicks
+					// Small delay to ensure the value is updated
+					setTimeout( () => {
+						if ( event.target.checked ) {
+							page.changePage( false ).then( () => {} ).catch( () => {} );
+						}
+					}, 10 );
 				}
 			}
 		} );
@@ -47,26 +55,6 @@ addAction(
 				}
 				page.changePage( false ).then( () => {} ).catch( () => {} );
 			} );
-
-			// Handle click events for radio buttons to allow re-selection
-			if ( node.type === 'radio' ) {
-				node.addEventListener( 'click', () => {
-					if ( !isEmpty( node.jfbSync.getValue() ) ) {
-						page.changePage( false ).then( () => {} ).catch( () => {} );
-					}
-				} );
-			}
-
-			// Handle click events for check-mark elements
-			const checkMarkControl = wrapper.querySelector( '.check-mark-control' );
-
-			if ( checkMarkControl && node !== checkMarkControl ) {
-				checkMarkControl.addEventListener( 'click', () => {
-					if ( !isEmpty( node.jfbSync.getValue() ) ) {
-						page.changePage( false ).then( () => {} ).catch( () => {} );
-					}
-				} );
-			}
 		}
 	},
 );

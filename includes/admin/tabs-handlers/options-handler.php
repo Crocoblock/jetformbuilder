@@ -62,7 +62,7 @@ class Options_Handler extends Base_Handler {
 		}
 
 		if ( empty( $options['gfb_request_args_value'] ) || ctype_digit( (string) $options['gfb_request_args_value'] ) ) {
-			$update_data['gfb_request_args_value'] = $this->jfb_generate_str().$this->jfb_generate_str();
+			$update_data['gfb_request_args_value'] = $this->jfb_generate_str() . $this->jfb_generate_str();
 		}
 
 		if ( ! empty( $update_data ) ) {
@@ -73,23 +73,23 @@ class Options_Handler extends Base_Handler {
 		return $options;
 	}
 
-    function jfb_generate_str() {
-        $letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $digits  = '0123456789';
+	public function jfb_generate_str() {
+		$letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$digits  = '0123456789';
 
-        $l = '';
-        for ( $i = 0; $i < 3; $i++ ) {
-            $l .= $letters[ wp_rand( 0, strlen( $letters ) - 1 ) ];
-        }
+		$l = '';
+		for ( $i = 0; $i < 3; $i++ ) {
+			$l .= $letters[ wp_rand( 0, strlen( $letters ) - 1 ) ];
+		}
 
-        $d = '';
-        for ( $i = 0; $i < 3; $i++ ) {
-            $d .= $digits[ wp_rand( 0, strlen( $digits ) - 1 ) ];
-        }
+		$d = '';
+		for ( $i = 0; $i < 3; $i++ ) {
+			$d .= $digits[ wp_rand( 0, strlen( $digits ) - 1 ) ];
+		}
 
-        $key_arr = str_split( $l . $d );
-        shuffle( $key_arr );
+		$key_arr = str_split( $l . $d );
+		shuffle( $key_arr );
 
-        return implode( '', $key_arr );
-    }
+		return implode( '', $key_arr );
+	}
 }

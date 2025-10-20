@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 3.5.2.1
+Stable tag: 3.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,17 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.5.3**
+- FIX: `Calculated field` not updating after repeater row deletion
+- FIX: Default value issue in the `Repeater field`
+- FIX: SQL syntax error in form records admin on fresh installations
+- ADD: Delete button for unsupported actions
+- FIX: Form submission fails when `Request Key` is numeric only [Crocoblock/jetformbuilder#560](https://github.com/Crocoblock/jetformbuilder/issues/560)
+- FIX: `Switcher field` styles overridden by JetForm styles
+- FIX: `Media field` upload file count
+- FIX: Form step not advancing when reselecting the same radio option [Crocoblock/jetformbuilder#565](https://github.com/Crocoblock/jetformbuilder/issues/565)
+- FIX: `Insert/Update Post` action post thumbnail not set when attachment added via WP Library in the `Drag and Drop File Upload` field
 
 **3.5.2.1**
 - ADD: Support for multiple input formats for post thumbnail in `Insert/Update Post` action

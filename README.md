@@ -8,6 +8,17 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.5.3
+* FIX: `Calculated field` not updating after repeater row deletion
+* FIX: Default value issue in the `Repeater field`
+* FIX: SQL syntax error in form records admin on fresh installations
+* ADD: Delete button for unsupported actions
+* FIX: Form submission fails when `Request Key` is numeric only [Crocoblock/jetformbuilder#560](https://github.com/Crocoblock/jetformbuilder/issues/560)
+* FIX: `Switcher field` styles overridden by JetForm styles
+* FIX: `Media field` upload file count
+* FIX: Form step not advancing when reselecting the same radio option [Crocoblock/jetformbuilder#565](https://github.com/Crocoblock/jetformbuilder/issues/565)
+* FIX: `Insert/Update Post` action post thumbnail not set when attachment added via WP Library in the `Drag and Drop File Upload` field
+
 ## 3.5.2.1
 * ADD: Support for multiple input formats for post thumbnail in `Insert/Update Post` action
 * FIX: Resetting input values in the `Repeater field` when deleting a row

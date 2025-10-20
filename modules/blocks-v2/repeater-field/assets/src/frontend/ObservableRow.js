@@ -72,6 +72,10 @@ ObservableRow.prototype.removeManually = function () {
 						input.updatePreviews();
 					}
 				} );
+
+				// Reinitialize row formula after reindexing
+				row.initedCalc = false; // Reset the flag to allow re-initialization
+				row.initCalc(); // Re-initialize the formula with new field names
 			}, 50 );
 		}
 	} );

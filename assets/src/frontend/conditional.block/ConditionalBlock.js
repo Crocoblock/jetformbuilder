@@ -10,6 +10,8 @@ const {
 	      validateInputsAll,
       } = JetFormBuilderFunctions;
 
+const __reInited = new WeakSet();
+
 function ConditionalBlock( node, observable ) {
 	this.node           = node;
 	node.jfbConditional = this;
@@ -151,6 +153,9 @@ ConditionalBlock.prototype = {
 
 		if ( this.settings?.dom ) {
 			this.showBlockDom( result );
+			if (result) {
+				requestAnimationFrame(() => this.reinitChildren());
+			}
 			const event = new CustomEvent('jet-form-builder/conditional-block/block-toggle-hidden-dom', {
 				detail: {
 					block: this.node,
@@ -162,6 +167,10 @@ ConditionalBlock.prototype = {
 			return;
 		}
 		this.node.style.display = result ? 'block' : 'none';
+
+		if (result) {
+			requestAnimationFrame(() => this.reinitChildren());
+		}
 	},
 	showBlockDom( result ) {
 		const inputsList = this.root.dataInputs;
@@ -202,6 +211,27 @@ ConditionalBlock.prototype = {
 
 		this.function = name;
 		this.settings = settings;
+	},
+	reinitChildren() {
+		const root = this.root;
+		const scope = this.node;
+
+		const nodes = scope.querySelectorAll('[data-jfb-conditional][data-jfb-func]');
+		nodes.forEach((node) => {
+			if (node.jfbConditional || __reInited.has(node)) {
+				return;
+			}
+			try {
+				const child = new ConditionalBlock(node, root);
+				child.observe();
+				child.isRight.current = child.list.getResult();
+				__reInited.add(node);
+			} catch (e) {
+				if (console && console.warn) {
+					console.warn('reinitChildren: init failed', e, node);
+				}
+			}
+		});
 	},
 };
 

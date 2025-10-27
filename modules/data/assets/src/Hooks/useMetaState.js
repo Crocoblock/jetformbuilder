@@ -1,16 +1,33 @@
 import { useSelect, useDispatch } from '@wordpress/data';
+import { useMemo, useRef } from '@wordpress/element';
 
 function useMetaState(
 	key,
 	ifEmpty      = '{}',
 	dependencies = [],
 ) {
-	const meta = useSelect( ( select ) => {
+	const rawMetaString = useSelect( ( select ) => {
 		const rawMeta = select( 'core/editor' ).
 			getEditedPostAttribute( 'meta' ) || {};
 
-		return JSON.parse( rawMeta[ key ] || ifEmpty );
+		return rawMeta[ key ] || ifEmpty;
 	}, dependencies );
+
+	const prevMetaRef       = useRef( null );
+	const prevMetaStringRef = useRef( null );
+
+	const meta = useMemo( () => {
+		if ( prevMetaStringRef.current === rawMetaString ) {
+			return prevMetaRef.current;
+		}
+
+		const parsedMeta = JSON.parse( rawMetaString );
+
+		prevMetaRef.current       = parsedMeta;
+		prevMetaStringRef.current = rawMetaString;
+
+		return parsedMeta;
+	}, [ rawMetaString ] );
 
 	const { editPost } = useDispatch( 'core/editor' );
 

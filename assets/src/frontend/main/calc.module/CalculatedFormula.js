@@ -83,6 +83,7 @@ CalculatedFormula.prototype = {
 	 * @param value
 	 */
 	observe( value ) {
+
 		this.formula = value;
 
 		if ( !Array.isArray( value ) ) {
@@ -100,6 +101,7 @@ CalculatedFormula.prototype = {
 	 * @param value {String}
 	 */
 	observeItem( value ) {
+
 		let match;
 		let prevIndex = 0;
 
@@ -160,9 +162,10 @@ CalculatedFormula.prototype = {
 		 *
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/11786
 		 */
-		let existNode = this.root.rootNode[ fieldName ]
-						|| this.root.rootNode[ fieldName + '[]' ]
-						|| this.root.rootNode.querySelectorAll( '[data-field-name="' + fieldName + '"]');
+		let existNode =
+			this.root.rootNode[ fieldName ]
+			|| this.root.rootNode[ fieldName + '[]' ]
+			|| this.root.rootNode.querySelectorAll( '[data-field-name="' + fieldName + '"]' );
 
 		/**
 		 * When we call querySelectorAll it returns empty NodeList array if the element not found, so we need to reset it
@@ -170,6 +173,25 @@ CalculatedFormula.prototype = {
 		if ( existNode && 0 === existNode.length ) {
 			existNode = undefined;
 		}
+
+		/**
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/14544
+		 */
+		if ( undefined === existNode ) {
+			const esc = s => s.replace(/([\\^$*+?.()|{}\[\]])/g, '\\$1');
+			const f = esc( fieldName );
+
+			const selector =
+				`[name$="[${f}]"],` +
+				`[name$="[${f}][]"],` +
+				`[name*="[${f}]["]`;
+
+			const found = this.root.rootNode.querySelectorAll( selector );
+			if ( found && found.length ) {
+				existNode = found;
+			}
+		}
+
 		/**
 		 * @see   https://github.com/Crocoblock/issues-tracker/issues/13730
 		 * @since 3.4.5.1
@@ -177,18 +199,21 @@ CalculatedFormula.prototype = {
 		existNode = wpFilters(
 			'jet.fb.formula.node.exists',
 			existNode,
-			fieldName,
+			fieldName, 
 			this
 		);
 
 		return existNode;
 	},
+
+
 	/**
 	 * @param  current {String}
 	 * @return {(function(): *)|*}
 	 */
 	// eslint-disable-next-line max-lines-per-function
 	observeMacro( current ) {
+
 		if ( null === this.formula ) {
 			this.formula = current;
 		}
@@ -196,6 +221,8 @@ CalculatedFormula.prototype = {
 		// eslint-disable-next-line @wordpress/no-unused-vars-before-return
 		const [ name, ...filters ] = current.split( '|' );
 		const parsedName           = name.match( /[\w\-:]+/g );
+
+
 
 		if ( !parsedName ) {
 			return false;
@@ -209,7 +236,8 @@ CalculatedFormula.prototype = {
 		 */
 		const existNode = this.isFieldNodeExists( fieldName );
 
-		if ( undefined === existNode ) {
+
+		if ( existNode === undefined) {
 			const regex = new RegExp( `%${fieldName}%`, 'g' );
 
 			let adjustedValue   = 0;

@@ -27,6 +27,13 @@ function observableHandle( observable ) {
 	token.isVisible = () => true;
 
 	options.callback = ( responseHash ) => {
+		if ( token?.nodes?.length ) {
+			token.nodes.forEach( node => {
+				if ( node && node.name === '_captcha_token' ) {
+					node.value = responseHash;
+				}
+			});
+		}
 		token.value.current = responseHash;
 	};
 
@@ -40,8 +47,15 @@ function observableHandle( observable ) {
 
 	observable.getSubmit().submitter?.status?.watch?.( () => {
 		window.turnstile.reset( widgetID );
+		if ( token?.nodes?.length ) {
+			token.nodes.forEach( node => {
+				if ( node && node.name === '_captcha_token' ) {
+					node.value = '';
+				}
+			});
+		}
 		token.onClear();
-	} );
+	} );  
 }
 
 export default observableHandle;

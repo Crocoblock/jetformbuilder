@@ -30,7 +30,7 @@ export function toDate( date, isUtc = true ) {
  * @param date  {Date}
  * @param isUtc
  */
-export function toTime( date, isUtc = false ) {
+export function toTime( date, isUtc = true ) {
 	const hours = isUtc ? date.getUTCHours() : date.getHours();
 	const mins  = isUtc ? date.getUTCMinutes() : date.getMinutes();
 
@@ -40,8 +40,8 @@ export function toTime( date, isUtc = false ) {
 	].join( ':' );
 }
 
-export function toDateTime( date ) {
-	return toDate( date, false ) + 'T' + toTime( date, false );
+export function toDateTime( date, isUtc = false ) {
+	return toDate( date, isUtc ) + 'T' + toTime( date, isUtc );
 }
 
 /**

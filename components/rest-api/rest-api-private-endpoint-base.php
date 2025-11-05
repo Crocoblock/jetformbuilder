@@ -31,4 +31,3 @@ abstract class Rest_Api_Private_Endpoint_Base extends Rest_Api_Endpoint_Base {
 	}
 
 }
-

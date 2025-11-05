@@ -40,8 +40,8 @@ export function toTime( date, isUtc = true ) {
 	].join( ':' );
 }
 
-export function toDateTime( date ) {
-	return toDate( date, false ) + 'T' + toTime( date, false );
+export function toDateTime( date, isUtc = false ) {
+	return toDate( date, isUtc ) + 'T' + toTime( date, isUtc );
 }
 
 /**

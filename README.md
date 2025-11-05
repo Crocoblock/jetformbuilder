@@ -8,6 +8,19 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.5.4
+* ADD: Timezone argument support for `toDate`, `toDateTime`, and `toTime` filters
+* FIX: Line breaks not displayed in the WYSIWYG field
+* FIX: Calculated field not working with Advanced Choice
+* FIX: Nested conditional blocks not working when parent had `Remove hidden elements from page HTML` option enabled
+* FIX: Conditional block fields recalculation logic
+* FIX: Disable field validation on form init for Advanced Validation type
+* FIX: Turnstile captcha throws an error if the form has more than one Action Button
+* FIX: Incorrect date format output in the Calculated field
+* FIX: Auto-closing dropdown issue in select fields within the preset settings
+* FIX: Broken Access Control vulnerability
+* FIX: Added column existence check to prevent duplicate column name error for `on_event` when migration runs on form submission
+
 ## 3.5.3
 * FIX: `Calculated field` not updating after repeater row deletion
 * FIX: Default value issue in the `Repeater field`

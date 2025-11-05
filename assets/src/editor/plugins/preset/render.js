@@ -1,4 +1,5 @@
 import GeneralPreset from '@components/presets/general-preset';
+import { useMemo } from '@wordpress/element';
 
 const { useMetaState }       = JetFBHooks;
 const { getAvailableFields } = JetFBActions;
@@ -15,9 +16,10 @@ function PluginPreset() {
 	      } = wp.components;
 
 	const [ args, setArgs ] = useMetaState( '_jf_preset' );
-	const formFields        = args.enabled
-	                          ? getAvailableFields( [], 'preset' )
-	                          : [];
+
+	const formFields = useMemo( () => {
+		return args.enabled ? getAvailableFields( [], 'preset' ) : [];
+	}, [ args.enabled ] );
 
 	return <>
 		<ToggleControl

@@ -14,7 +14,7 @@ function ToDateFilter() {
 
 	this.help = () => <>
 		{ __(
-			`Gets the timestamp from the macro and formats it according to the format of the Date Field.`,
+			`Formats the timestamp according to the Date Field format.`,
 			'jet-form-builder',
 		) }
 		<hr/>

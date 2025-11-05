@@ -14,10 +14,12 @@ function ToTimeFilter() {
 
 	this.help = () => <>
 		{ __(
-			`Gets the timestamp from the macro and formats it according to the format of the Time Field.`,
+			`Formats the timestamp according to the Time Field format.`,
 			'jet-form-builder',
 		) }
 		<hr/>
+		{ __( 'Example:', 'jet-form-builder' ) + ' ' }
+		<code>04:25</code>
 		<hr/>
 		{ __( `Optionally accepts `, 'jet-form-builder' ) }
 		<code>false</code>

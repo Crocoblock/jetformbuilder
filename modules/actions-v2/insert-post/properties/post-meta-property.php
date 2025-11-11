@@ -64,7 +64,7 @@ class Post_Meta_Property extends Base_Object_Property implements
 		}
 
 		$checked_keys = array_keys( array_filter(
-			$modifier->single_checkbox_as_array,
+			$modifier->single_value_as_array,
 			fn( $val ) => (bool) $val
 		) );
 

@@ -29,8 +29,8 @@ abstract class Abstract_Post_Modifier extends Abstract_Modifier {
 		/** @var Post_Meta_Property $meta */
 		$meta = $this->get( 'meta_input' );
 
-		$single_checkbox_as_array        = $action->settings['single_checkbox_as_array'] ?? array();
-		$this->single_checkbox_as_array  = is_array( $single_checkbox_as_array ) ? $single_checkbox_as_array : array();
+		$single_value_as_array        = $action->settings['single_value_as_array'] ?? array();
+		$this->single_value_as_array  = is_array( $single_value_as_array ) ? $single_value_as_array : array();
 
 		$meta->set_meta( Post_Meta_Property::prepare_meta( $default_meta ) );
 

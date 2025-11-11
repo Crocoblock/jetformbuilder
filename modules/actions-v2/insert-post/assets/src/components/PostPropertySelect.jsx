@@ -8,7 +8,7 @@ const {
 	CurrentPropertyMapContext,
 } = JetFBComponents;
 
-const FLAGS_SOURCE = 'single_checkbox_as_array';
+const FLAGS_SOURCE = 'single_value_as_array'; 
 
 function PostPropertySelect() {
 	const { FieldSelect, property } = useContext( CurrentPropertyMapContext );
@@ -33,7 +33,7 @@ function PostPropertySelect() {
 					/>
 					<ToggleControl
 						className="jet-margin-top-xs"
-						label="Toggle (для этого поля)"
+						label="Save single value as array"
 						checked={ flagValue }
 						onChange={ setFlagValue }
 					/>
@@ -49,12 +49,6 @@ function PostPropertySelect() {
 						value={ mapValue }
 						onChange={ setMapValue }
 						options={ source.taxonomies }
-					/>
-					<ToggleControl
-						className="jet-margin-top-xs"
-						label="Toggle (для этого поля)"
-						checked={ flagValue }
-						onChange={ setFlagValue }
 					/>
 				</div>
 			);

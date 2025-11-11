@@ -58,10 +58,23 @@ class Post_Meta_Property extends Base_Object_Property implements
 		$action = $modifier->get_action();
 		$id     = $action->get_inserted();
 
+
 		if ( ! $id ) {
 			return;
 		}
 
+		$checked_keys = array_keys( array_filter(
+			$modifier->single_checkbox_as_array,
+			fn( $val ) => (bool) $val
+		) );
+
+		$checkboxes_to_array = array_values(
+			array_intersect_key(
+				$modifier->fields_map,
+				array_flip( $checked_keys )
+			)
+		);
+		
 		$meta_box_fields = $this->get_meta_box_fields( $id, $modifier );
 		$prepared_value  = $this->normalize_checkboxes( $meta_box_fields, $this->value );
 
@@ -69,6 +82,11 @@ class Post_Meta_Property extends Base_Object_Property implements
 		$_POST = array_merge( $_POST, $prepared_value );
 
 		foreach ( $this->value as $key => $value ) {
+			if ( in_array( $key, $checkboxes_to_array, true ) ) {
+				$to_save = is_array( $value ) ? array_values( $value ) : [ $value ];
+				update_post_meta( $id, $key, $to_save );
+				continue;
+			}
 			update_post_meta( $id, $key, $value );
 		}
 

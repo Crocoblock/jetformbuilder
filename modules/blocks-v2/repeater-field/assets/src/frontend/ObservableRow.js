@@ -41,12 +41,29 @@ ObservableRow.prototype.removeManually = function () {
 	const otherRows = this.parent.value.current.filter( row => row !== this && !row._isRemoving );
 
 	const otherValues = otherRows.map( row => {
+		// Try to get values from dataInputs if value.current is empty
 		const deepCopyValues = {};
-		for ( const [key, value] of Object.entries( row.value.current ) ) {
+
+		// First, try from value.current
+		for ( const [key, value] of Object.entries( row.value.current || {} ) ) {
 			if ( Array.isArray( value ) ) {
 				deepCopyValues[key] = [...value];
 			} else {
 				deepCopyValues[key] = value;
+			}
+		}
+
+		// If value.current is empty, try to get from dataInputs
+		if ( 0 === Object.keys( deepCopyValues ).length && row.dataInputs ) {
+			for ( const [key, input] of Object.entries( row.dataInputs ) ) {
+				if ( input && input.getValue ) {
+					const inputValue = input.getValue();
+					if ( Array.isArray( inputValue ) ) {
+						deepCopyValues[key] = [...inputValue];
+					} else {
+						deepCopyValues[key] = inputValue;
+					}
+				}
 			}
 		}
 

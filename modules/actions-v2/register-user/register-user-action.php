@@ -135,19 +135,26 @@ class Register_User_Action extends Base {
 		}
 
 		if ( ! empty( $fields_map['confirm_password'] ) ) {
+			// Skip password validation for GATEWAY.SUCCESS event - passwords were already validated during form submission
+			$is_gateway_success = jet_fb_events()->is_current( 'GATEWAY.SUCCESS' );
+			$is_gateway_failed  = jet_fb_events()->is_current( 'GATEWAY.FAILED' );
 
-			if ( Tools::is_wp_password_hash( $password ) ) {
+			if ( $is_gateway_success || $is_gateway_failed ) {
+				// Use password as confirm_password for gateway success event
 				$confirm_password = $password;
 			} else {
-				$confirm_password = ! empty( $request[ $fields_map['confirm_password'] ] ) ? $request[ $fields_map['confirm_password'] ] : false;
+				if ( Tools::is_wp_password_hash( $password ) ) {
+					$confirm_password = $password;
+				} else {
+					$confirm_password = ! empty( $request[ $fields_map['confirm_password'] ] ) ? $request[ $fields_map['confirm_password'] ] : false;
 
-				if ( $confirm_password !== $password ) {
-					throw new Action_Exception( 'password_mismatch' );
+					if ( $confirm_password !== $password ) {
+						throw new Action_Exception( 'password_mismatch' );
+					}
 				}
 			}
 		}
 		// password - ok
-
 		if ( ! empty( $fields_map['first_name'] ) ) {
 			$fname = ! empty( $request[ $fields_map['first_name'] ] ) ? $request[ $fields_map['first_name'] ] : false;
 		}

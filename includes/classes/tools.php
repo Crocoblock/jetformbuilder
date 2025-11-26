@@ -660,8 +660,31 @@ class Tools {
 		return false;
 	}
 
+	/**
+	 * Check if string is a WordPress password hash
+	 * Supports all WordPress hash formats:
+	 * - Old Portable Hash: $P$...
+	 * - Bcrypt: $2a$, $2y$...
+	 *
+	 * @param string $hash Password hash to check
+	 * @return bool
+	 */
 	public static function is_wp_password_hash( $hash ) {
-		return preg_match( '/^\$P\$[A-Za-z0-9\.\/]{31}$/', $hash );
+		if ( ! is_string( $hash ) || empty( $hash ) ) {
+			return false;
+		}
+
+		// Old Portable Hash format: $P$[A-Za-z0-9./]{31}
+		if ( preg_match( '/^\$P\$[A-Za-z0-9\.\/]{31}$/', $hash ) ) {
+			return true;
+		}
+
+		// Bcrypt format: $2a$, $2x$, $2y$ followed by cost and hash
+		if ( preg_match( '/^\$2[axy]\$\d{2}\$[A-Za-z0-9\.\/]{53}$/', $hash ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public static function get_array_of_user_roles( $settings ) {

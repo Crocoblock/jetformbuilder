@@ -469,6 +469,7 @@ class Editor {
 		$conditions_settings = ( new Action_Condition_Manager() )->get_settings();
 		$exclude_events      = array(
 			'redirect_to_page' => array( 'WC.ORDER.COMPLETE', 'WC.CHECKOUT.COMPLETE' ),
+			'register_user'    => array( 'GATEWAY.SUCCESS', 'GATEWAY.FAILED' ),
 		);
 
 		/** @var Module $post_type */

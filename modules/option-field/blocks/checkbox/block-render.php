@@ -56,31 +56,37 @@ class Block_Render extends Base {
 		if ( is_array( $option ) ) {
 			$val   = $option['value'] ?? $value;
 			$label = $option['label'] ?? $val;
+			$keep_commas = ! empty( $option['keep_commas'] );
 		} else {
 			$val   = $value;
 			$label = $option;
+			$keep_commas = false;
 		}
 
 		$html = '<div class="jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap">';
 
+		$attrs = array(
+			array( 'type', 'checkbox' ),
+			array( 'name', esc_attr( $this->block_type->get_field_name() . $this->get_name_suffix() ) ),
+			array( 'value', esc_attr( $val ) ),
+			array( 'data-field-name', esc_attr( $this->args['name'] ) ),
+			array( 'checked', in_array( (string) $val, $default, true ) ? 'checked' : '' ),
+			array(
+				'data-calculate',
+				( is_array( $option ) && isset( $option['calculate'] ) && '' !== $option['calculate'] )
+					? esc_attr( $option['calculate'] )
+					: '',
+			),
+		);
+
+		if ( $keep_commas ) {
+			$attrs[] = array( 'data-keep-commas', '1' );
+		}
+
 		$item = sprintf(
 			'<label class="jet-form-builder__field-label for-checkbox">
-<input %1$s %2$s><span>%3$s</span></label>',
-			Builder_Helper::attrs(
-				array(
-					array( 'type', 'checkbox' ),
-					array( 'name', esc_attr( $this->block_type->get_field_name() . $this->get_name_suffix() ) ),
-					array( 'value', esc_attr( $val ) ),
-					array( 'data-field-name', esc_attr( $this->args['name'] ) ),
-					array( 'checked', in_array( (string) $val, $default, true ) ? 'checked' : '' ),
-					array(
-						'data-calculate',
-						( is_array( $option ) && isset( $option['calculate'] ) && '' !== $option['calculate'] )
-							? esc_attr( $option['calculate'] )
-							: '',
-					),
-				)
-			),
+			<input %1$s %2$s><span>%3$s</span></label>',
+			Builder_Helper::attrs( $attrs ),
 			$this->get_attributes_string_save(),
 			wp_kses_post( $label )
 		);

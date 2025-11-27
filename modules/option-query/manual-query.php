@@ -35,6 +35,10 @@ class Manual_Query implements Option_Query_It {
 				$item['calculate'] = $option['calculate'];
 			}
 
+			if ( isset( $option['keep_commas'] ) ) {
+				$item['keep_commas'] = (bool) $option['keep_commas'];
+			}
+
 			$item['label'] = $option['label'] ?? $item['value'];
 
 			if ( $this->has_query( 'search' ) &&

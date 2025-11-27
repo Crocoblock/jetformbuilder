@@ -2,22 +2,34 @@ import getCustomCheckboxInput from './functions/getCustomCheckboxInput';
 import sanitizeCheckbox from './functions/sanitizeCheckbox';
 
 const {
-	      InputData,
-	      ReactiveHook,
-      } = JetFormBuilderAbstract;
+	InputData,
+	ReactiveHook,
+} = JetFormBuilderAbstract;
 
 const { getParsedName } = JetFormBuilderFunctions;
 
-function sanitizeValue( value ) {
+function sanitizeValue( value, ctx ) {
 	if ( Array.isArray( value ) ) {
+
+		/**
+		 * @see https://github.com/Crocoblock/jetformbuilder/issues/569
+		 */
+		const keepCommas = !!ctx?.keepCommas;
 
 		/**
 		 * convert string to array for setting dynamic multi value
 		 *
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/8509
 		 */
-		if ( value.length === 1 && value[0] && true != value[0] && value[0].includes(',') ) {
-			value = value[0].split(',');
+
+		if (
+			!keepCommas &&
+			value.length === 1 &&
+			value[0] &&
+			true != value[0] &&
+			String( value[0] ).includes( ',' )
+		) {
+			value = String( value[0] ).split(',');
 
 			value = value.map( item => {
 				if ( 'true' === item ) return '';
@@ -25,13 +37,10 @@ function sanitizeValue( value ) {
 				return item;
 			} );
 		}
-
 		return value;
 	}
 
-	return [ value ].filter(
-		Boolean,
-	);
+	return [ value ].filter( Boolean );
 }
 
 /**
@@ -95,7 +104,9 @@ CheckboxData.prototype.addListeners = function () {
 		} );
 	}
 
-	this.isArray() && this.sanitize( sanitizeValue );
+	if ( this.isArray() ) {
+		this.sanitize( value => sanitizeValue( value, this ) );
+	}
 
 	/**
 	 * Use Sanitizer instead of BaseSignal prototype.
@@ -137,11 +148,18 @@ CheckboxData.prototype.setNode = function ( node ) {
 	);
 };
 
+
 CheckboxData.prototype.getActiveValue = function () {
 	const value = [];
 
-	// iterate checkboxes
+	this.keepCommas = false;
+
 	for ( const node of this.nodes ) {
+
+		if ( node.checked && node.dataset.keepCommas === '1' ) {
+			this.keepCommas = true;
+		}
+
 		this.processValueFormSingleChoice( node, value );
 	}
 

@@ -13,6 +13,14 @@ function resolveRestUrl( restUrl, props ) {
 	}
 
 	for ( let [ name, value ] of Object.entries( props ) ) {
+		// Try new format first: {name} (WPML compatible)
+		const placeholderPattern = new RegExp( `\\{${name}\\}`, 'g' );
+		if ( restUrl.match( placeholderPattern ) ) {
+			restUrl = restUrl.replace( placeholderPattern, String( value ) );
+			continue;
+		}
+
+		// Fallback to old format: (?P<name>pattern) (backward compatibility)
 		const regexp = new RegExp( `\\(\\?P<${name}>(.*?)\\)` );
 		const parts  = restUrl.match( regexp );
 

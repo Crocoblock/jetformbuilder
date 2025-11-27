@@ -62,18 +62,19 @@ class Post_Meta_Property extends Base_Object_Property implements
 			return;
 		}
 
-
 		/**
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/16657
 		 */
 
 		// 1. Fields with "single_value_as_array" flag enabled
-		$single_as_array_fields = array_keys( array_filter(
-			$modifier->single_value_as_array ?? array(),
-			static function ( $val ) {
-				return (bool) $val;
-			}
-		) );
+		$single_as_array_fields = array_keys(
+			array_filter(
+				$modifier->single_value_as_array ?? array(),
+				static function ( $val ) {
+					return (bool) $val;
+				}
+			)
+		);
 
 		// 2. Resolve meta keys for these fields
 		$checkboxes_to_array = array();
@@ -119,7 +120,7 @@ class Post_Meta_Property extends Base_Object_Property implements
 		}
 
 		// Push processed values into $_POST (JetEngine reads from here)
-		$_POST = array_merge( $_POST, $prepared_value );
+		$_POST = array_merge( $_POST, $prepared_value ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		// 5. Save meta normally (now $this->value already normalized)
 		foreach ( $this->value as $key => $value ) {

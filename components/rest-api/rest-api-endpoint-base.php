@@ -46,11 +46,11 @@ abstract class Rest_Api_Endpoint_Base implements Rest_Fetch_Endpoint {
 
 	public static function rest_url( $scheme = 'rest' ) {
 		$rest_base = static::get_rest_base();
-		
+
 		// Remove regex patterns for URL generation (WPML compatibility)
 		// Replace (?P<name>pattern) with {name} placeholder
 		$rest_base = preg_replace( '/\(\?P<([^>]+)>[^)]+\)/', '{$1}', $rest_base );
-		
+
 		return rest_url( '/' . static::get_namespace() . '/' . $rest_base, $scheme );
 	}
 

@@ -62,18 +62,79 @@ class Post_Meta_Property extends Base_Object_Property implements
 			return;
 		}
 
-		$meta_box_fields = $this->get_meta_box_fields( $id, $modifier );
-		$prepared_value  = $this->normalize_checkboxes( $meta_box_fields, $this->value );
 
-		// phpcs:disable WordPress.Security.NonceVerification.Missing
+		/**
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/16657
+		 */
+
+		// 1. Fields with "single_value_as_array" flag enabled
+		$single_as_array_fields = array_keys( array_filter(
+			$modifier->single_value_as_array ?? array(),
+			static function ( $val ) {
+				return (bool) $val;
+			}
+		) );
+
+		// 2. Resolve meta keys for these fields
+		$checkboxes_to_array = array();
+		if ( ! empty( $single_as_array_fields ) && ! empty( $modifier->fields_map ) ) {
+			$checkboxes_to_array = array_values(
+				array_intersect_key(
+					$modifier->fields_map,
+					array_flip( $single_as_array_fields )
+				)
+			);
+		}
+
+		$meta_box_fields = $this->get_meta_box_fields( $id, $modifier );
+
+		// 3. Convert $this->value entries to arrays for required meta keys
+		foreach ( $this->value as $meta_key => $value ) {
+			if ( in_array( $meta_key, $checkboxes_to_array, true )
+				&& ! is_array( $value ) ) {
+				$this->value[ $meta_key ] = array( $value );
+			}
+		}
+
+		$prepared_value = $this->normalize_checkboxes( $meta_box_fields, $this->value );
+
+		// 4. Ensure $_POST also contains arrays (JetEngine / Cherry_X_Post_Meta)
+		foreach ( $single_as_array_fields as $field_name ) {
+
+			// by form field name
+			if ( isset( $prepared_value[ $field_name ] )
+				&& ! is_array( $prepared_value[ $field_name ] ) ) {
+				$prepared_value[ $field_name ] = array( $prepared_value[ $field_name ] );
+			}
+
+			// by meta key (fallback)
+			if ( isset( $modifier->fields_map[ $field_name ] ) ) {
+				$meta_key = $modifier->fields_map[ $field_name ];
+
+				if ( isset( $prepared_value[ $meta_key ] )
+					&& ! is_array( $prepared_value[ $meta_key ] ) ) {
+					$prepared_value[ $meta_key ] = array( $prepared_value[ $meta_key ] );
+				}
+			}
+		}
+
+		// Push processed values into $_POST (JetEngine reads from here)
 		$_POST = array_merge( $_POST, $prepared_value );
 
+		// 5. Save meta normally (now $this->value already normalized)
 		foreach ( $this->value as $key => $value ) {
+			if ( in_array( $key, $checkboxes_to_array, true ) ) {
+				update_post_meta( $id, $key, array_values( (array) $value ) );
+				continue;
+			}
 			update_post_meta( $id, $key, $value );
 		}
 
+		// JetEngine meta boxes processing
 		$this->process_meta_boxes( $id, $modifier );
 	}
+
+
 
 	public function set_meta( array $meta ) {
 		if ( ! is_array( $this->value ) ) {

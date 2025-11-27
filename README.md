@@ -8,6 +8,16 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.5.5
+* FIX: Register User action password validation for GATEWAY.SUCCESS,GATEWAY.FAILED events
+* FIX: User login after registration in the Register User action
+* FIX: Checkboxes preview
+* FIX: Checkbox field not saving data to the post meta field
+* FIX: Form records export compatibility with WPML
+* FIX: Checkbox value with comma breaks selection
+* FIX: Saving repeater values before row deletion
+* FIX: PHP warnings
+
 ## 3.5.4
 * ADD: Timezone argument support for `toDate`, `toDateTime`, and `toTime` filters
 * FIX: Line breaks not displayed in the WYSIWYG field

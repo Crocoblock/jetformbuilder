@@ -128,7 +128,7 @@ class Multiple_Controller extends Base_Export_Controller {
 		$fields = array_map( 'sanitize_key', (array) ( $_GET['fields'] ?? array() ) );
 
 		foreach ( jet_fb_context()->iterate_parsers() as $name => $parser ) {
-			if ( in_array( $name, $fields, true ) ) {
+			if ( in_array( sanitize_key( $name ), $fields, true ) ) {
 				continue;
 			}
 			$parser->get_context()->remove( $parser->get_name() );

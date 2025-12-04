@@ -54,6 +54,7 @@ class Bricks implements
 	public function init_hooks() {
 		add_action( 'init', array( $this, 'register_elements' ), 10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'editor_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ), 20 );
 
 		$this->get_onboarding_builder()->init_hooks();
 	}
@@ -61,6 +62,7 @@ class Bricks implements
 	public function remove_hooks() {
 		remove_action( 'init', array( $this, 'register_elements' ) );
 		remove_action( 'wp_enqueue_scripts', array( $this, 'editor_styles' ) );
+		remove_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ), 20 );
 	}
 
 	public function register_elements() {
@@ -80,6 +82,55 @@ class Bricks implements
 				Plugin::instance()->get_version()
 			);
 		}
+	}
+
+	/**
+	 * Enqueue frontend scripts for AJAX popup support
+	 *
+	 * @since 3.5.6
+	 */
+	public function frontend_scripts() {
+		// Only enqueue on frontend, not in editor
+		if ( Tools::is_editor() ) {
+			return;
+		}
+
+		$asset_file = $this->get_dir( 'assets/build/frontend.asset.php' );
+
+		if ( file_exists( $asset_file ) ) {
+			$asset = require $asset_file;
+		} else {
+			$asset = array(
+				'dependencies' => array(),
+				'version'     => Plugin::instance()->get_version(),
+			);
+		}
+
+		// Start with dependencies from asset file
+		$dependencies = $asset['dependencies'] ?? array();
+
+		$script_url    = $this->get_url( 'assets/build/frontend.js' );
+		$script_handle = $this->get_handle( 'frontend' );
+		$script_path   = $this->get_dir( 'assets/build/frontend.js' );
+
+		// Check if file exists
+		if ( ! file_exists( $script_path ) ) {
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( sprintf( 
+					'[JFB Bricks] ERROR: Script file does not exist: %s', 
+					$script_path
+				) );
+			}
+			return;
+		}
+
+		wp_enqueue_script(
+			$script_handle,
+			$script_url,
+			$dependencies,
+			$asset['version'] ?? Plugin::instance()->get_version(),
+			true
+		);
 	}
 
 	/**

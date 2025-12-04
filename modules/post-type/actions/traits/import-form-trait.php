@@ -4,6 +4,7 @@
 namespace JFB_Modules\Post_Type\Actions\Traits;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use JFB_Modules\Post_Type\Module;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -75,6 +76,8 @@ trait Import_Form_Trait {
 			$form_data['meta_input'] = $safe_meta_input;
 		}
 
+		$this->sync_render_states_from_actions( $form_data );
+
 		$post_id = wp_insert_post(
 			array_merge(
 				$form_data,
@@ -90,6 +93,76 @@ trait Import_Form_Trait {
 		}
 
 		return $post_id;
+	}
+
+	private function sync_render_states_from_actions( array $form_data ) {
+
+		if (
+			empty( $form_data['meta_input'] )
+			|| ! is_array( $form_data['meta_input'] )
+			|| empty( $form_data['meta_input']['_jf_actions'] )
+			|| ! is_string( $form_data['meta_input']['_jf_actions'] )
+		) {
+			return;
+		}
+
+		$actions_raw = $form_data['meta_input']['_jf_actions'] ?? '';
+
+		$actions = json_decode( wp_unslash( $actions_raw ), true );
+
+
+
+		if ( ! is_array( $actions ) ) {
+			return;
+		}
+
+		$slugs = array();
+
+		foreach ( $actions as $action ) {
+			if ( empty( $action['events'] ) || ! is_array( $action['events'] ) ) {
+				continue;
+			}
+
+			foreach ( $action['events'] as $event ) {
+				if ( ! is_string( $event ) ) {
+					continue;
+				}
+
+				if ( 0 !== strpos( $event, 'ON.' ) ) {
+					continue;
+				}
+
+				$slug = substr( $event, 3 );
+
+				if ( $slug ) {
+					$slugs[] = $slug;
+				}
+			}
+		}
+
+		$slugs = array_unique( $slugs );
+
+		if ( ! $slugs ) {
+			return;
+		}
+		
+		$render         = Render_State::instance();
+		$current_states = $render->get_states(); 
+		$existing       = wp_list_pluck( $current_states, 'value' );
+
+		foreach ( $slugs as $slug ) {
+			if ( in_array( $slug, $existing, true ) ) {
+				continue;
+			}
+
+			$current_states[] = array(
+				'value'           => $slug,
+				'label'           => $slug,
+				'can_be_switched' => true,
+			);
+		}
+
+		Render_State::update_states( $current_states );
 	}
 
 }

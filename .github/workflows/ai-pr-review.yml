@@ -1,0 +1,39 @@
+name: AI PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  ai_pr_review:
+    runs-on: ubuntu-latest
+
+    # Job-level environment
+    env:
+      AI_REVIEW_MODEL: gpt-4.1-mini
+
+    permissions:
+      contents: read           # to read the repo
+      pull-requests: write     # to post comments on PRs
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install OpenAI SDK (CI-only)
+        run: |
+          npm install openai@latest
+
+      - name: Run AI PR review
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # AI_REVIEW_MODEL comes from the job-level env above
+        run: node .github/scripts/ai-pr-review.mjs

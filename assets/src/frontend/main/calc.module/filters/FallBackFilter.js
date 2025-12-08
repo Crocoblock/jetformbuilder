@@ -8,7 +8,7 @@ function FallBackFilter() {
 		return 'ifEmpty';
 	};
 	this.apply   = function ( value, fallback ) {
-		return isEmpty( value ) ? value : fallback;
+		return ( isEmpty(value) || Number.isNaN(value) ) ? fallback : value;
 	};
 }
 

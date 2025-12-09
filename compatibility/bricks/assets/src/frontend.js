@@ -37,8 +37,6 @@
 				return;
 			}
 
-			const $scope = jQuery( container );
-
 			// Find form element
 			const form = container.querySelector( 'form.jet-form-builder' ) || 
 			             ( container.tagName === 'FORM' && container.classList.contains( 'jet-form-builder' ) ? container : null );
@@ -59,56 +57,11 @@
 				}
 			}
 
+			jQuery( () => JetPlugins.init() );
+
 			// Mark as initialized to prevent double initialization
 			container.dataset.jfbInitialized = 'true';
-
-			initFormManually( $scope );
 		} );
-	}
-
-	/**
-	 * Manually initialize a form using Observable pattern
-	 *
-	 * @param {jQuery} $scope - jQuery scope containing the form
-	 */
-	function initFormManually( $scope ) {
-		const form = $scope[0]?.querySelector( 'form.jet-form-builder' ) || $scope[0];
-
-		if ( !form || !form.classList.contains('jet-form-builder') ) {
-			return;
-		}
-
-		// Check if Observable is available
-		if (typeof window.JetFormBuilderAbstract === 'undefined' || 
-			typeof window.JetFormBuilderAbstract.Observable === 'undefined') {
-
-			return;
-		}
-
-		const Observable = window.JetFormBuilderAbstract.Observable;
-		const formId     = form.dataset?.formId;
-
-		if ( !formId ) {
-			return;
-		}
-
-		try {
-			// Initialize Observable
-			window.JetFormBuilder = window.JetFormBuilder || {};
-			const observable = new Observable();
-			window.JetFormBuilder[formId] = observable;
-
-			// Trigger init event
-			jQuery( document ).trigger( 'jet-form-builder/init', [$scope, observable] );
-
-			// Start observing the form
-			observable.observe( form );
-
-			// Trigger after-init event
-			jQuery( document ).trigger('jet-form-builder/after-init', [$scope, observable]);
-		} catch ( error ) {
-			// Silently fail
-		}
 	}
 
 	// Listen for Bricks AJAX popup loaded event
@@ -116,7 +69,6 @@
 		const popupElement = event.detail?.popupElement;
 
 		if ( popupElement ) {
-			//waitAndInit(popupElement);
 			initFormsInScope( popupElement );
 		}
 	} );

@@ -60,8 +60,6 @@ class Update_Action extends Base_Term_Action {
 
 		if ( ! empty( $slug ) ) {
 			$args['slug'] = $slug;
-		} else {
-			$args['slug'] = $name;
 		}
 
 		if ( empty( $parent_id ) ) {

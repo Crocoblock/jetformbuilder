@@ -72,17 +72,10 @@ class Insert_Term_Action extends Base {
 
 	public function editor_labels() {
 		return array(
-			'taxonomy'    => __( 'Taxonomy:', 'jet-form-builder' ),
-			'fields_map'   => __( 'Fields Map:', 'jet-form-builder' ),
+			'taxonomy'   => __( 'Taxonomy:', 'jet-form-builder' ),
+			'fields_map' => __( 'Fields Map:', 'jet-form-builder' ),
 		);
 	}
-
-	// public function editor_labels_help() {
-	// return array(
-	// 'fields_map'   => __( 'Set meta fields names or term properties to save appropriate form fields into', 'jet-form-builder' ),
-	// 'default_meta' => __( 'Set default meta values which should be set on term insert/update', 'jet-form-builder' ),
-	// );
-	// }
 
 	/**
 	 * Regsiter custom action data for the editor
@@ -100,8 +93,8 @@ class Insert_Term_Action extends Base {
 		}
 
 		return array(
-			'taxonomies'   => Tools::get_taxonomies_for_modify(),
-			'properties'   => $properties,
+			'taxonomies' => Tools::get_taxonomies_for_modify(),
+			'properties' => $properties,
 		);
 	}
 
@@ -121,43 +114,4 @@ class Insert_Term_Action extends Base {
 			)
 		);
 	}
-
-	/**
-	 * Returns post statuses list for the options
-	 *
-	 * @return array
-	 */
-	// public function get_post_statuses_for_options() {
-
-	// $statuses = get_post_statuses();
-	// $result   = array();
-
-	// foreach ( $statuses as $name => $label ) {
-	// $result[] = array(
-	// 'value' => $name,
-	// 'label' => $label,
-	// );
-	// }
-
-	// $result = array_merge(
-	// $result,
-	// array(
-	// array(
-	// 'value' => 'trash',
-	// 'label' => __( 'Move to Trash', 'jet-form-builder' ),
-	// ),
-	// array(
-	// 'value' => 'from-field',
-	// 'label' => __( 'Get from the form field', 'jet-form-builder' ),
-	// ),
-	// array(
-	// 'value' => 'keep-current',
-	// 'label' => __( 'Keep current status (when updating post)', 'jet-form-builder' ),
-	// ),
-	// )
-	// );
-
-	// return Tools::with_placeholder( apply_filters( 'jet-form-builder/actions/insert-post/allowed-post-statuses', $result ) );
-	// }
-
 }

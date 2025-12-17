@@ -15,8 +15,6 @@ class Insert_Term implements Action_Integration_Interface {
 	}
 
 	public function init_hooks() {
-		// require_once $this->get_dir( 'traits/process-meta-boxes-trait.php' );
-
 		add_action(
 			'jet-form-builder/editor-assets/after',
 			array( $this, 'editor_assets' )

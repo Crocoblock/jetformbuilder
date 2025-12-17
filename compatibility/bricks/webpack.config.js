@@ -11,7 +11,7 @@ const devMode = !process.argv.join( ':' ).
 module.exports = {
 	context: path.resolve( __dirname, 'assets/src' ),
 	entry: {
-		'frontend': './frontend.pcss',
+		'frontend': [ './frontend.pcss', './frontend.js' ],
 		'block.editor': './blockEditor/index',
 	},
 	output: {

@@ -8,6 +8,15 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.5.6
+* ADD: Bricks builder ajax popup compatibility
+* ADD: Added aria-label to hidden input in advanced choices block for better accessibility
+* FIX: CSV export now correctly includes fields with capital letters in their names
+* FIX: Corrected ifEmpty filter behavior - now returns the default value only for empty fields and includes an isNaN check
+* FIX: Missing render states after form import
+* FIX: Insert/Update Term action no longer updates the term slug when only the name is changed
+* FIX: Update User action — correctly extract user_id and add helper text in user-compare-password property
+
 ## 3.5.5
 * FIX: Register User action password validation for GATEWAY.SUCCESS,GATEWAY.FAILED events
 * FIX: User login after registration in the Register User action

@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 3.5.5
+Stable tag: 3.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,15 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.5.6**
+- ADD: Bricks builder ajax popup compatibility
+- ADD: Added aria-label to hidden input in advanced choices block for better accessibility
+- FIX: CSV export now correctly includes fields with capital letters in their names
+- FIX: Corrected ifEmpty filter behavior - now returns the default value only for empty fields and includes an isNaN check
+- FIX: Missing render states after form import
+- FIX: Insert/Update Term action no longer updates the term slug when only the name is changed
+- FIX: Update User action correctly extract user_id and add helper text in user-compare-password property
 
 **3.5.5**
 - FIX: Register User action password validation for GATEWAY.SUCCESS,GATEWAY.FAILED events

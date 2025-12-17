@@ -83,6 +83,7 @@ class Choice_Render extends Base {
 			$this->block_type,
 			array(
 				array( 'style', 'display:none;' ),
+				array( 'aria-label', 'advanced choice hidden input' ),
 			)
 		);
 	}

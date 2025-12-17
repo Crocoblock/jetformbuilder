@@ -32,15 +32,14 @@ class User_Compare_Password_Property extends Base_Object_Property {
 	 * @throws Action_Exception
 	 */
 	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
-		$id      = $modifier->get_value( 'ID' );
-		$user_id = $modifier->get_value( 'user_id' );
+		$id      = $modifier->get( 'ID' );
+		$user_id = $id->value;
 
 		if ( false === $id && false === $user_id ) {
 			throw new Action_Exception( 'internal_error' );
 		}
 
-		$user_id = $id ?: $user_id;
-		$user    = get_user_by( 'ID', $user_id );
+		$user = get_user_by( 'ID', $user_id );
 
 		if ( ! is_a( $user, \WP_User::class ) ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
@@ -54,5 +53,9 @@ class User_Compare_Password_Property extends Base_Object_Property {
 
 	public function get_related(): array {
 		return array( 'ID' );
+	}
+
+	public function get_help(): string {
+		return __( 'Password comparison works correctly with the DEFAULT.PROCESS event.', 'jet-form-builder' );
 	}
 }

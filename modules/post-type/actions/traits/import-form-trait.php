@@ -110,8 +110,6 @@ trait Import_Form_Trait {
 
 		$actions = json_decode( wp_unslash( $actions_raw ), true );
 
-
-
 		if ( ! is_array( $actions ) ) {
 			return;
 		}
@@ -145,9 +143,9 @@ trait Import_Form_Trait {
 		if ( ! $slugs ) {
 			return;
 		}
-		
+
 		$render         = Render_State::instance();
-		$current_states = $render->get_states(); 
+		$current_states = $render->get_states();
 		$existing       = wp_list_pluck( $current_states, 'value' );
 
 		foreach ( $slugs as $slug ) {

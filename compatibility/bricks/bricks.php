@@ -111,18 +111,6 @@ class Bricks implements
 
 		$script_url    = $this->get_url( 'assets/build/frontend.js' );
 		$script_handle = $this->get_handle( 'frontend' );
-		$script_path   = $this->get_dir( 'assets/build/frontend.js' );
-
-		// Check if file exists
-		if ( ! file_exists( $script_path ) ) {
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( sprintf( 
-					'[JFB Bricks] ERROR: Script file does not exist: %s', 
-					$script_path
-				) );
-			}
-			return;
-		}
 
 		wp_enqueue_script(
 			$script_handle,

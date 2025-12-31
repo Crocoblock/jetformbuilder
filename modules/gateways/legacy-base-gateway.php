@@ -354,6 +354,9 @@ abstract class Legacy_Base_Gateway {
 	 * @param array $request
 	 */
 	public function set_form_data( array $request ) {
+		if ( ! is_array( $this->data ) ) {
+			$this->data = array();
+		}
 		$this->data['form_data'] = $request;
 	}
 

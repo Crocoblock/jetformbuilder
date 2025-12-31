@@ -67,11 +67,11 @@ function RepeaterData() {
 		}
 
 		if ( this.isManualCount ) {
-			if ( ! this.addEventAttached ) {
+			if ( ! this.addEventAttached && ! this.buttonNode.hasListener) {
 				this.buttonNode.addEventListener( 'click', () => this.addNew() );
 				this.addEventAttached = true;
+				this.buttonNode.hasListener = true;
 			}
-
 			return;
 		}
 

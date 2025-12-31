@@ -5,8 +5,9 @@ import {
 	IconText,
 	RowControl, ControlWithErrorStyle,
 	Help,
+	StyledSelectControl
 } from 'jet-form-builder-components';
-import { Card, Flex, SelectControl } from '@wordpress/components';
+import { Card, Flex } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { cx } from '@linaria/core';
 import { useInstanceId } from '@wordpress/compose';
@@ -54,14 +55,12 @@ function FieldsMapField( {
 				<LabelComponent htmlFor={ htmlId }>
 					{ label }
 				</LabelComponent>
-				<SelectControl
+				<StyledSelectControl
 					id={ htmlId }
 					value={ value }
 					onChange={ onChange }
 					onBlur={ () => setShowError( true ) }
 					options={ formFields }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 				/>
 			</RowControl>
 			{ Boolean( help ) && <Help>

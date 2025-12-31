@@ -210,6 +210,16 @@ AdvancedReporting.prototype.makeValid = function () {
 };
 
 AdvancedReporting.prototype.validateOnChange = function ( addToQueue = false ) {
+	// Don't validate on initial load if field is empty
+	const currentValue = this.input.getValue();
+	
+	if ( !currentValue || currentValue === '' ) {
+		// Only skip validation if this is the initial load (valuePrev is null)
+		// and the field is empty AND we're in silence mode (not form submission)
+		if ( this.valuePrev === null && this.input.getContext().silence ) {
+			return;
+		}
+	}
 
 	this.switchButtonsState( true );
 
@@ -259,6 +269,17 @@ AdvancedReporting.prototype.validateOnBlur = function ( signal = null ) {
 	 */
 	if ( this.isProcess ) {
 		return;
+	}
+
+	// Don't validate on initial load if field is empty
+	const currentValue = this.input.getValue();
+	
+	if ( !currentValue || currentValue === '' ) {
+		// Only skip validation if this is the initial load (valuePrev is null)
+		// and the field is empty AND we're in silence mode (not form submission)
+		if ( this.valuePrev === null && this.input.getContext().silence ) {
+			return;
+		}
 	}
 
 	this.isProcess      = true;
@@ -339,6 +360,17 @@ AdvancedReporting.prototype.isNodeBelongThis = function( node ) {
 AdvancedReporting.prototype.validateOnChangeState = function () {
 	if ( this.isProcess ) {
 		return Promise.resolve();
+	}
+
+	// Don't validate on initial load if field is empty
+	const currentValue = this.input.getValue();
+	
+	if ( !currentValue || currentValue === '' ) {
+		// Only skip validation if this is the initial load (valuePrev is null)
+		// and the field is empty AND we're in silence mode (not form submission)
+		if ( this.valuePrev === null && this.input.getContext().silence ) {
+			return Promise.resolve();
+		}
 	}
 
 	this.switchButtonsState( true );

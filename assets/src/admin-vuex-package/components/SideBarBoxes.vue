@@ -15,7 +15,7 @@
 			</DashboardPanel>
 			<DashboardBanner
 				:config="box"
-				:key="index"
+				:key="'banner-' + index"
 				v-else-if="'banner' === box.type"
 			>
 			</DashboardBanner>

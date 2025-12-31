@@ -30,10 +30,10 @@ function MacrosButtonTemplate( {
 		/>
 		{ showPopover && (
 			<Popover
-				anchorRef={ buttonRef.current }
+				anchor={ buttonRef.current }
 				position={ 'top-start' }
 				noArrow={ false }
-				isAlternate
+				variant={ 'toolbar' }
 				onFocusOutside={ event => {
 					/**
 					 * We should skip handling if focused node it's not equals

@@ -4,9 +4,10 @@ import {
 	RequiredLabel,
 	RowControl,
 	RowControlEndStyle,
+	StyledSelectControl
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { Flex, SelectControl } from '@wordpress/components';
+import { Flex } from '@wordpress/components';
 import { cx } from '@linaria/core';
 import { useSelect } from '@wordpress/data';
 import { STORE_NAME } from '../store';
@@ -40,7 +41,7 @@ function SelectListRow( { settings, onChangeSettingObj } ) {
 					'jet-form-builder',
 				) }
 			</IconText> }
-			<SelectControl
+			<StyledSelectControl
 				id={ id }
 				value={ settings.list_id }
 				onChange={ list_id => onChangeSettingObj(
@@ -57,8 +58,6 @@ function SelectListRow( { settings, onChangeSettingObj } ) {
 					},
 					...lists,
 				] }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
 			/>
 		</Flex>
 	</RowControl>;

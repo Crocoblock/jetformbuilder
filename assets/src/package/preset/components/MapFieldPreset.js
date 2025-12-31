@@ -1,11 +1,8 @@
 import GroupedSelectControl from '../../components/GroupedSelectControl';
 import {
-	TextControl,
-	SelectControl,
 	CustomSelectControl,
 } from '@wordpress/components';
-import { Label } from 'jet-form-builder-components';
-
+import { Label, StyledSelectControl, StyledTextControl } from 'jet-form-builder-components';
 
 // eslint-disable-next-line max-lines-per-function
 function MapFieldPreset( {
@@ -25,7 +22,7 @@ function MapFieldPreset( {
 					key={ data.name + index }
 					className={ 'jet-form-preset__row' }
 				>
-					<TextControl
+					<StyledTextControl
 						key={ 'control_' + data.name + index }
 						placeholder={ data.label }
 						value={ value }
@@ -33,8 +30,6 @@ function MapFieldPreset( {
 							onChangeValue( newVal,
 								'current_field_' + data.name );
 						} }
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
 					/>
 				</div>
 			);
@@ -45,7 +40,7 @@ function MapFieldPreset( {
 					key={ data.name + index }
 					className={ 'jet-form-preset__row' }
 				>
-					<SelectControl
+					<StyledSelectControl
 						key={ 'control_' + data.name + index }
 						options={ data.options }
 						label={ data.label }
@@ -54,8 +49,6 @@ function MapFieldPreset( {
 							onChangeValue( newVal,
 								'current_field_' + data.name );
 						} }
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
 					/>
 				</div>
 			);

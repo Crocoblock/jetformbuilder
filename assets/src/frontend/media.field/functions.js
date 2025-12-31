@@ -51,7 +51,11 @@ function createFile( blob, fileName ) {
  * @return {boolean}
  */
 function isFile( node ) {
-	return 'file' === node.type;
+	if ( node.classList.contains('jet-form-builder-file-upload__input' ) ) {
+		return 'file' === node.type;
+	}
+
+	return false;
 }
 
 export { appendNodes, createFileList, isFile, createFile };

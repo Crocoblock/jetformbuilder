@@ -87,6 +87,10 @@ class Editor {
 									'value' => 'query_var',
 									'label' => __( 'URL Query Variable', 'jet-form-builder' ),
 								),
+								array(
+									'value' => 'term',
+									'label' => __( 'Term', 'jet-form-builder' ),
+								),
 							)
 						),
 					),
@@ -134,6 +138,41 @@ class Editor {
 						'condition' => array(
 							'field' => 'from',
 							'value' => 'user',
+						),
+					),
+					array(
+						'name'      => 'term_from',
+						'label'     => __( 'Get term from:', 'jet-form-builder' ),
+						'type'      => 'select',
+						'options'   => Tools::with_placeholder(
+							array(
+								array(
+									'value' => 'current_term',
+									'label' => __( 'Current term', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'query_var',
+									'label' => __( 'URL Query Variable', 'jet-form-builder' ),
+								),
+							)
+						),
+						'condition' => array(
+							'field' => 'from',
+							'value' => 'term',
+						),
+					),
+					array(
+						'name'             => 'term_taxonomy',
+						'label'            => __( 'Term taxonomy', 'jet-form-builder' ),
+						'type'             => 'select',
+						'options'          => Tools::with_placeholder( $this->get_taxonomies_list() ),
+						'parent_condition' => array(
+							'field' => 'from',
+							'value' => 'term',
+						),
+						'condition'        => array(
+							'field' => 'term_from',
+							'value' => 'query_var',
 						),
 					),
 					array(
@@ -299,6 +338,52 @@ class Editor {
 						'condition'        => array(
 							'field' => 'prop',
 							'value' => 'user_meta',
+						),
+					),
+					array(
+						'name'             => 'prop',
+						'label'            => __( 'Term property', 'jet-form-builder' ),
+						'type'             => 'select',
+						'options'          => Tools::with_placeholder(
+							array(
+								array(
+									'value' => 'term_id',
+									'label' => __( 'Term ID', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'name',
+									'label' => __( 'Name', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'slug',
+									'label' => __( 'Slug', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'parent',
+									'label' => __( 'Parent', 'jet-form-builder' ),
+								),
+								array(
+									'value' => 'term_meta',
+									'label' => __( 'Term Meta', 'jet-form-builder' ),
+								),
+							)
+						),
+						'parent_condition' => array(
+							'field' => 'from',
+							'value' => 'term',
+						),
+					),
+					array(
+						'name'             => 'key',
+						'label'            => __( 'Meta field key', 'jet-form-builder' ),
+						'type'             => 'text',
+						'parent_condition' => array(
+							'field' => 'from',
+							'value' => 'term',
+						),
+						'condition'        => array(
+							'field' => 'prop',
+							'value' => 'term_meta',
 						),
 					),
 				),

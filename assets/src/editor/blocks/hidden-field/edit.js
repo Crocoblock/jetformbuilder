@@ -78,7 +78,7 @@ export default function HiddenEdit( props ) {
 
 	const { label = 'Please set `Field Value`' } = JetFormHiddenField.sources.find(
 		option => option.value === attributes.field_value,
-	);
+	) || { label: '--', value: '' };
 
 	const resultLabel = [ label ];
 
@@ -98,7 +98,7 @@ export default function HiddenEdit( props ) {
 			break;
 	}
 
-	const isBuddypress = document.body.classList.contains( 'buddypress' );
+	const isBuddypress = document.body.classList.contains( 'wp-admin' ) && ( document.body.classList.contains( 'buddypress' ) || document.body.classList.contains( 'theme-buddyboss-theme' ) );
 
 	return [
 		isSelected && (

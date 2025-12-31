@@ -3,8 +3,8 @@ import {
 	RowControl,
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { TextControl } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
+import { StyledTextControl } from 'jet-form-builder-components';
 
 function WebhookTimeoutRow( { settings, onChangeSettingObj } ) {
 	const id = useInstanceId( RowControl, 'jfb-control' );
@@ -13,7 +13,7 @@ function WebhookTimeoutRow( { settings, onChangeSettingObj } ) {
 		<Label htmlFor={ id }>
 			{ __( 'Timeout in seconds', 'jet-form-builder' ) }
 		</Label>
-		<TextControl
+		<StyledTextControl
 			id={ id }
 			type="number"
 			min={0}  

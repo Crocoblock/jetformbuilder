@@ -52,7 +52,7 @@ function PluginVerification() {
 				'jet-form-builder',
 			) }
 			delay={ 200 }
-			position={ 'top center' }
+			placement="top"
 		>
 			<Button
 				onClick={ onAddVerification }

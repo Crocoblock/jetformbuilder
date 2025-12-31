@@ -17,6 +17,7 @@ class Options_Handler extends Base_Handler {
 		'form_records_access_capability' => 'manage_options',
 		'gfb_request_args_key'  => '',
 		'gfb_request_args_value' => '',
+		'ssr_validation_method' => 'rest',
 	);
 
 	public function slug() {
@@ -32,7 +33,6 @@ class Options_Handler extends Base_Handler {
 			if ( ! array_key_exists( $name, $_POST ) ) {
 				continue;
 			}
-
 			if ( is_bool( $default ) ) {
 				$options[ $name ] = filter_var(
 					sanitize_key( $_POST[ $name ] ),
@@ -49,20 +49,20 @@ class Options_Handler extends Base_Handler {
 	}
 
 	public function on_load() {
-		$this->set_gfb_request_args();
+		$this->set_jfb_request_args();
 		return $this->get_options();
 	}
 
-	public function set_gfb_request_args() {
+	public function set_jfb_request_args() {
 		$options     = $this->get_options();
 		$update_data = array();
 
-		if ( empty( $options['gfb_request_args_key'] ) ) {
-			$update_data['gfb_request_args_key'] = wp_generate_password( 6, false, false );
+		if ( empty( $options['gfb_request_args_key'] ) || ctype_digit( (string) $options['gfb_request_args_key'] ) ) {
+			$update_data['gfb_request_args_key'] = $this->jfb_generate_str();
 		}
 
-		if ( empty( $options['gfb_request_args_value'] ) ) {
-			$update_data['gfb_request_args_value'] = wp_generate_password( 10, false, false );
+		if ( empty( $options['gfb_request_args_value'] ) || ctype_digit( (string) $options['gfb_request_args_value'] ) ) {
+			$update_data['gfb_request_args_value'] = $this->jfb_generate_str() . $this->jfb_generate_str();
 		}
 
 		if ( ! empty( $update_data ) ) {
@@ -71,5 +71,25 @@ class Options_Handler extends Base_Handler {
 		}
 
 		return $options;
+	}
+
+	public function jfb_generate_str() {
+		$letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$digits  = '0123456789';
+
+		$l = '';
+		for ( $i = 0; $i < 3; $i++ ) {
+			$l .= $letters[ wp_rand( 0, strlen( $letters ) - 1 ) ];
+		}
+
+		$d = '';
+		for ( $i = 0; $i < 3; $i++ ) {
+			$d .= $digits[ wp_rand( 0, strlen( $digits ) - 1 ) ];
+		}
+
+		$key_arr = str_split( $l . $d );
+		shuffle( $key_arr );
+
+		return implode( '', $key_arr );
 	}
 }

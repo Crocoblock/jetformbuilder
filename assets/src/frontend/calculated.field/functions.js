@@ -86,9 +86,26 @@ function convertMillisToDateString( millisInput, format = 'YYYY-MM-DD' ) {
 
 	const sortedKeys = Object.keys( map ).sort( ( a, b ) => b.length - a.length );
 
+	// Use temporary placeholders to prevent conflicts
 	let formatted = format;
-	for ( const key of sortedKeys ) {
-		formatted = formatted.replace( new RegExp( key, 'g' ), map[key] );
+	const placeholders = {};
+
+	// First pass: replace format tokens with unique placeholders
+	sortedKeys.forEach( ( key, index ) => {
+		const placeholder = `\x00${index}\x00`; // Use index-based unique identifier
+		placeholders[placeholder] = String( map[key] );
+
+		// Use word boundaries for single-letter tokens to avoid replacing letters in text
+		const pattern = key.length <= 2 && /^[a-zA-Z]+$/.test( key )
+			? new RegExp( `\\b${key}\\b`, 'g' )
+			: new RegExp( key, 'g' );
+
+		formatted = formatted.replace( pattern, placeholder );
+	} );
+
+	// Second pass: replace placeholders with actual values
+	for ( const [placeholder, value] of Object.entries( placeholders ) ) {
+		formatted = formatted.split( placeholder ).join( value );
 	}
 
 	return formatted;

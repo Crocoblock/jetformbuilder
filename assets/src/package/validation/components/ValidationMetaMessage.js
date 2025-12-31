@@ -1,9 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import getItemByName from '../helpers/getItemByName';
-import { Flex, TextControl, Tooltip } from '@wordpress/components';
+import { Flex, Tooltip } from '@wordpress/components';
 import { Icon } from '@wordpress/icons';
 import { styled } from '@linaria/react';
-import { Label, ClearBaseControlStyle } from 'jet-form-builder-components';
+import {
+	Label,
+	ClearBaseControlStyle,
+	StyledTextControl,
+	StyledFlexControl,
+} from 'jet-form-builder-components';
 
 const StyledIcon = styled( Icon )`
     svg {
@@ -20,7 +25,7 @@ function ValidationMetaMessage( {
 } ) {
 	const current = getItemByName( message.id );
 
-	return <Flex direction="column">
+	return <StyledFlexControl direction="column">
 		<Flex>
 			<Label htmlFor={ message.id }>{ current.label }</Label>
 			<Flex style={ { width: 'auto' } }>
@@ -29,14 +34,14 @@ function ValidationMetaMessage( {
 						key={ 'message_block_item' + block.title }
 						text={ block.title }
 						delay={ 200 }
-						position={ 'top center' }
+						placement="top"
 					>
 						<StyledIcon icon={ block.icon }/>
 					</Tooltip>
 				) ) }
 			</Flex>
 		</Flex>
-		<TextControl
+		<StyledTextControl
 			className={ ClearBaseControlStyle }
 			id={ message.id }
 			help={ help ?? current?.help }
@@ -47,10 +52,8 @@ function ValidationMetaMessage( {
 					[ message.id ]: messageText,
 				}
 			) ) }
-			__nextHasNoMarginBottom
-			__next40pxDefaultSize
 		/>
-	</Flex>;
+	</StyledFlexControl>;
 }
 
 export default ValidationMetaMessage;

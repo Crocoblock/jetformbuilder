@@ -473,8 +473,7 @@ class Form extends Base {
 
 	public function controls_input_style() {
 		$repeater_class = $this->css_selector( '-repeater' );
-		$css_selector   = $this->css_selector( "__field:not(.checkradio-field):not(.range-field):not($repeater_class):not(.wysiwyg-field)" );
-
+		$css_selector   = $this->css_selector( "__field:not(.checkradio-field):not(.range-field):not($repeater_class):not(.wysiwyg-field):not([role=\"switch\"])" );
 		$this->start_jet_control_group( 'section_input_style' );
 
 		$this->register_jet_control(

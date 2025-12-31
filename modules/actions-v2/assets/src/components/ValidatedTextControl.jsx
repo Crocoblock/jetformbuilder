@@ -5,7 +5,7 @@ import {
 	RowControl,
 	RowControlEnd,
 } from 'jet-form-builder-components';
-import { TextControl } from '@wordpress/components';
+import { StyledTextControl } from 'jet-form-builder-components';
 import useActionValidatorProvider from '../hooks/useActionValidatorProvider';
 
 function ValidatedTextControl( {
@@ -31,14 +31,12 @@ function ValidatedTextControl( {
 				{ label }
 			</LabelComponent>
 			<RowControlEnd hasError={ hasError } errorText={ errorText }>
-				<TextControl
+				<StyledTextControl
 					id={ id }
 					value={ value }
 					onChange={ onChange }
 					onBlur={ () => setShowError( true ) }
 					help={ help }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 					disabled={ disabled }
 				/>
 			</RowControlEnd>

@@ -61,6 +61,9 @@ class Media_Field extends Base {
 		if ( ! $this->is_both_format() ) {
 			// is value format wrong
 			if ( ! is_string( $preset ) && ! is_numeric( $preset ) ) {
+				if ( is_array( $preset ) ) {
+					return $preset;
+				}
 				return array();
 			}
 			$preset = (string) $preset;
@@ -84,6 +87,7 @@ class Media_Field extends Base {
 		$files  = array();
 
 		foreach ( $value as $item ) {
+
 			switch ( $this->get_value_format() ) {
 				case 'id':
 					$files[] = array(
@@ -100,6 +104,14 @@ class Media_Field extends Base {
 						);
 					}
 					break;
+
+				case 'ids':
+					$files[] = array(
+						'url' => wp_get_attachment_url( $item ),
+						'id'  => $item,
+					);
+					break;
+
 				default:
 					$files[] = array(
 						'url' => $item,

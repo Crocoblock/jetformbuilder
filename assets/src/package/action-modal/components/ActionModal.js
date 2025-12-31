@@ -1,12 +1,21 @@
 import ActionModalContext from '../context/ActionModalContext';
 import ActionModalFooterSlotFill from './ActionModalFooterSlotFill';
-import { Modal, Button, ButtonGroup } from '@wordpress/components';
+import { Modal, Button } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 const {
 	      Slot: FooterSlot,
       } = ActionModalFooterSlotFill;
+
+let {
+	ToggleGroupControl,
+	__experimentalToggleGroupControl,
+} = wp.components;
+
+ToggleGroupControl = (
+	ToggleGroupControl || __experimentalToggleGroupControl
+);
 
 // eslint-disable-next-line max-lines-per-function
 function ActionModal( {
@@ -74,8 +83,9 @@ function ActionModal( {
 			<FooterSlot fillProps={ { updateClick, cancelClick } }>
 				{ ( fills ) => (
 					Boolean( fills?.length )
-					? fills : <ButtonGroup
-						className="jet-form-edit-modal__actions"
+					? fills : <ToggleGroupControl
+						className="jet-form-edit-modal__actions jfb-toggle-group-control"
+						hideLabelFromVision={ true }
 					>
 						<Button
 							isPrimary
@@ -90,7 +100,7 @@ function ActionModal( {
 							onClick={ cancelClick }
 							{ ...cancelBtnProps }
 						>{ cancelBtnLabel }</Button>
-					</ButtonGroup>
+					</ToggleGroupControl>
 				) }
 			</FooterSlot>
 		</> }

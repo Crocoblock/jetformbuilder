@@ -14,6 +14,10 @@ const StyledFlex = styled(Flex)`
 	&.buddypress-active {
 		width: 100%;
 	}
+
+	.components-base-control {
+		margin-bottom: 0;
+	}
 `;
 
 function RedirectToPageRender( props ) {
@@ -23,7 +27,7 @@ function RedirectToPageRender( props ) {
 		      onChangeSettingObj,
 	      } = props;
 
-	const isBuddypress = document.body.classList.contains( 'buddypress' );
+	const isBuddypress = document.body.classList.contains( 'wp-admin' ) && ( document.body.classList.contains( 'buddypress' ) || document.body.classList.contains( 'theme-buddyboss-theme' ) );
 
 	/* eslint-disable jsx-a11y/no-onchange */
 	return <StyledFlex direction="column" className={ `${isBuddypress ? 'buddypress-active' : ''}` }>

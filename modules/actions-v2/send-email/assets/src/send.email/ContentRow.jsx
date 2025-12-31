@@ -6,6 +6,13 @@ import {
 import { __ } from '@wordpress/i18n';
 import { TextareaControl } from '@wordpress/components';
 import { useActionValidatorProvider } from 'jet-form-builder-actions';
+import { styled } from '@linaria/react';
+
+const StyledTextareaControl = styled(TextareaControl)`
+	.components-base-control__field {
+		margin-bottom: 0;
+	}
+`;
 
 const {
 	      MacrosFields,
@@ -32,7 +39,7 @@ function ContentRow( { settings, onChangeSettingObj } ) {
 				/>
 			</LabelWithActions>
 			<RowControlEnd hasError={ hasError }>
-				<TextareaControl
+				<StyledTextareaControl
 					id={ id }
 					value={ settings.content }
 					onChange={ content => onChangeSettingObj(
@@ -43,8 +50,6 @@ function ContentRow( { settings, onChangeSettingObj } ) {
 						'jet-form-builder',
 					) }
 					onBlur={ () => setShowError( true ) }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 				/>
 			</RowControlEnd>
 		</> }

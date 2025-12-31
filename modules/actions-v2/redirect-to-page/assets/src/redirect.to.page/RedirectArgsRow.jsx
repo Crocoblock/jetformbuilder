@@ -1,9 +1,9 @@
 import {
 	Label,
 	RowControl,
+	StyledFormTokenFieldControl
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { FormTokenField } from '@wordpress/components';
 
 const { useFields } = JetFBHooks;
 
@@ -17,7 +17,7 @@ function RedirectArgsRow( { settings, onChangeSettingObj } ) {
 		<Label>
 			{ __( 'URL Query arguments', 'jet-form-builder' ) }
 		</Label>
-		<FormTokenField
+		<StyledFormTokenFieldControl
 			label={ __( 'Add field', 'jet-form-builder' ) }
 			value={ settings.redirect_args }
 			suggestions={ fields }
@@ -25,8 +25,6 @@ function RedirectArgsRow( { settings, onChangeSettingObj } ) {
 				{ redirect_args },
 			) }
 			__experimentalExpandOnFocus
-			__next40pxDefaultSize
-			__nextHasNoMarginBottom
 		/>
 	</RowControl>;
 }

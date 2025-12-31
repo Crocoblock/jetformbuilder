@@ -4,8 +4,8 @@ import {
 } from 'jet-form-builder-components';
 import { css } from '@linaria/core';
 import { __ } from '@wordpress/i18n';
-import { ToggleControl } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
+import { ToggleControl } from '@wordpress/components';
 
 const helpStyle = css`
     .components-toggle-control__help {
@@ -21,15 +21,14 @@ function RedirectNewTabRow( { settings, onChangeSettingObj } ) {
 			{ __( 'Open in New Tab', 'jet-form-builder' ) }
 		</Label>
 		<ToggleControl
-				id={ id }
-				className={ helpStyle }
-				help="Works with AJAX submit type only."
-				checked={ settings.open_in_new_tab || false }
-				onChange={
-					open_in_new_tab => onChangeSettingObj( { open_in_new_tab } )
-				}
-				__nextHasNoMarginBottom
-			/>
+			id={ id }
+			className={ helpStyle }
+			help="Works with AJAX submit type only."
+			checked={ settings.open_in_new_tab || false }
+			onChange={
+				open_in_new_tab => onChangeSettingObj( { open_in_new_tab } )
+			}
+		/>
 	</RowControl>;
 }
 

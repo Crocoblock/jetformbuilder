@@ -61,7 +61,7 @@ class Form_Handler {
 	 * Constructor for the class
 	 */
 	public function __construct() {
-		$this->set_gfb_request_args();
+		$this->set_jfb_request_args();
 		$this->action_handler  = new Action_Handler();
 		$this->request_handler = new Request_Handler();
 	}
@@ -398,9 +398,9 @@ class Form_Handler {
 		}
 	}
 
-	public function set_gfb_request_args() {
+	public function set_jfb_request_args() {
 		$options_handler = new Options_Handler();
-		$options_handler->set_gfb_request_args();
+		$options_handler->set_jfb_request_args();
 		$options = Tab_Handler_Manager::get_options( 'options-tab' );
 		if ( isset( $options['gfb_request_args_key'] ) ) {
 			$this->hook_key = $options['gfb_request_args_key'];

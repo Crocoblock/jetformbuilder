@@ -14,6 +14,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Post_Modifier extends Abstract_Post_Modifier {
 
+	public $single_value_as_array = array();
+
 	public function is_supported( Insert_Post_Action $action ): bool {
 		return true;
 	}

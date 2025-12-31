@@ -186,7 +186,7 @@ function EditEvents( { events } ) {
 			__experimentalShowHowTo={ '' }
 		/>
 		<BaseHelp>
-			{ __( 'Separate with commas or the Enter key.',
+			{ __( 'Separate with commas, spaces, or press Enter.',
 				'jet-form-builder' ) + ' ' }
 			{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */ }
 			<a

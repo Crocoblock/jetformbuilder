@@ -407,3 +407,16 @@ body.post-type-jet-form-builder {
 .jet-form-builder__field-wrap.range-wrap .components-input-control__backdrop[aria-hidden="true"] {
 	border-width: 0;
 }
+
+body.wp-admin {
+    &.buddypress,
+    &.theme-buddyboss-theme {
+		.block-editor-block-list__block.wp-block[data-type*="jet-forms/"] {
+			.components-card {
+				> div {
+					height: auto;
+				}
+			}
+		}
+	}
+}

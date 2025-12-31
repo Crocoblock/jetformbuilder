@@ -8,14 +8,15 @@ import {
 	useActionValidatorProvider,
 	ActionMessages,
 } from 'jet-form-builder-actions';
-import { SelectControl, Flex } from '@wordpress/components';
+import { Flex } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import {
 	IconText,
 	Label,
 	RowControl,
 	WideLine,
-} from 'jet-form-builder-components';
+	StyledSelectControl
+	} from 'jet-form-builder-components';
 
 const {
 	      ActionFieldsMap,
@@ -72,15 +73,13 @@ function UpdateUserRender( props ) {
 					<Label htmlFor={ id }>
 						{ __( 'User role', 'jet-form-builder' ) }
 					</Label>
-					<SelectControl
+					<StyledSelectControl
 						multiple
 						id={ id }
 						value={ settings.user_role }
 						options={ source.userRoles }
 						onChange={ newValue => onChangeSetting( newValue,
 							'user_role' ) }
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
 						help={ __( 'Hold Ctrl (Windows) or Command (Mac) to select multiple roles.', 'jet-form-builder' ) }
 					/>
 				</> }

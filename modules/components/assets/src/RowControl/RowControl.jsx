@@ -45,6 +45,10 @@ const RowControl = styled( UnStyledRowControl )`
     & > .components-form-token-field {
         flex: ${ ( { controlSize = 3 } ) => controlSize };
     }
+
+	.components-base-control__field {
+		margin-bottom: 0;
+	}
 `;
 
 export default RowControl;

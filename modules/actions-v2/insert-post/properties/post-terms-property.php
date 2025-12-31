@@ -75,12 +75,31 @@ class Post_Terms_Property extends Base_Object_Property implements Object_Dynamic
 	}
 
 	protected function sanitize_term( $term, $tax ) {
-		if (
-			is_taxonomy_hierarchical( $tax ) ||
-			(
-				is_numeric( $term ) && absint( $term ) === (int) $term
-			)
-		) {
+		if ( ! empty( $term ) && ! is_numeric( $term ) ) {
+			$term_obj = get_term_by( 'name', $term, $tax );
+
+			if ( $term_obj && ! is_wp_error( $term_obj ) ) {
+				return $term_obj->term_id;
+			} else {
+				$result = wp_insert_term( $term, $tax );
+
+				if ( ! is_wp_error( $result ) ) {
+					return $result['term_id'];
+				} else {
+					return $term;
+				}
+			}
+		}
+
+		if ( is_taxonomy_hierarchical( $tax ) || ( is_numeric( $term ) && absint( $term ) === (int) $term ) ) {
+			if ( ! term_exists( $term, $tax ) && ! get_term_by( 'name', $term, $tax ) && ! get_term_by( 'id', $term, $tax ) ) {
+				$result = wp_insert_term( $term, $tax );
+
+				if ( ! is_wp_error( $result ) ) {
+					return $result['term_id'];
+				}
+			}
+
 			return absint( $term );
 		}
 

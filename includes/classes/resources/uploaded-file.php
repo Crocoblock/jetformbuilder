@@ -105,6 +105,7 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 			$this->type = $upload['type'];
 		}
 		if ( isset( $upload['id'] ) ) {
+
 			$this->set_attachment_id( (string) $upload['id'] );
 		}
 
@@ -166,6 +167,10 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 			'id'  => $this->get_attachment_id(),
 			'url' => $this->get_attachment_url(),
 		);
+	}
+
+	public function get_attachment_ids(): array {
+		return array( $this->get_attachment_id() );
 	}
 
 	/*

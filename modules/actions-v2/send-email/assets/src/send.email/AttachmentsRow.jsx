@@ -20,8 +20,6 @@ function AttachmentsRow( { settings, onChangeSettingObj } ) {
 			onChange={ tokens => onChangeSettingObj(
 				{ attachments: [ ...new Set( tokens ) ] } ) }
 			__experimentalExpandOnFocus
-			__next40pxDefaultSize
-			__nextHasNoMarginBottom
 		/>
 	</RowControl>;
 }

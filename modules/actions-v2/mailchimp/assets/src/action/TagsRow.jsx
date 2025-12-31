@@ -1,9 +1,9 @@
 import {
 	RowControl,
 	Label,
+	StyledFormTokenFieldControl
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { FormTokenField } from '@wordpress/components';
 
 function TagsRow( { settings, onChangeSettingObj } ) {
 
@@ -16,13 +16,11 @@ function TagsRow( { settings, onChangeSettingObj } ) {
 		<Label>
 			{ __( 'Tags', 'jet-form-builder' ) }
 		</Label>
-		<FormTokenField
+		<StyledFormTokenFieldControl
 			value={ tagsValue }
 			onChange={ tags => onChangeSettingObj(
 				{ tags },
 			) }
-			__next40pxDefaultSize
-			__nextHasNoMarginBottom
 		/>
 	</RowControl>;
 }

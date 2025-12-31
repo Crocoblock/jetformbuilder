@@ -1,61 +1,58 @@
-import { SelectControl, TextControl } from '@wordpress/components';
 import { useContext } from '@wordpress/element';
+import { ToggleControl } from '@wordpress/components';
 import { CurrentActionEditContext } from 'jet-form-builder-actions';
+import { StyledSelectControl, StyledTextControl } from 'jet-form-builder-components';
 
 const {
-	      ActionFieldsMapContext,
-	      CurrentPropertyMapContext,
-      } = JetFBComponents;
+	ActionFieldsMapContext,
+	CurrentPropertyMapContext,
+} = JetFBComponents;
+
+const FLAGS_SOURCE = 'single_value_as_array'; 
 
 function PostPropertySelect() {
-	// context with action props
-	const {
-		      FieldSelect,
-		      property,
-	      } = useContext( CurrentPropertyMapContext );
-	const {
-		      source,
-		      setMapField,
-		      getMapField,
-	      } = useContext( CurrentActionEditContext );
-	// context with current field in fields map
-	const {
-		      name,
-		      index,
-	      } = useContext( ActionFieldsMapContext );
+	const { FieldSelect, property } = useContext( CurrentPropertyMapContext );
+	const { source, setMapField, getMapField } = useContext( CurrentActionEditContext );
+	const { name, index } = useContext( ActionFieldsMapContext );
+
+	const mapValue   = getMapField({ name }) ?? '';
+	const flagValue  = !!getMapField({ source: FLAGS_SOURCE, name });
+
+	const setMapValue  = (value) => setMapField({ nameField: name, value });
+	const setFlagValue = (value) => setMapField({ source: FLAGS_SOURCE, nameField: name, value: !!value });
 
 	switch ( property ) {
 		case 'meta_input':
-			return <div
-				className="components-base-control jet-margin-bottom-wrapper"
-			>
-				{ FieldSelect }
-				<TextControl
-					key={ name + index + '_text' }
-					value={ getMapField( { name } ) }
-					onChange={ value => setMapField(
-						{ nameField: name, value },
-					) }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
-				/>
-			</div>;
+			return (
+				<div className="components-base-control jet-margin-bottom-wrapper">
+					{ FieldSelect }
+					<StyledTextControl
+						key={ name + index + '_text' }
+						value={ mapValue }
+						onChange={ setMapValue }
+					/>
+					<ToggleControl
+						className="jet-margin-top-xs"
+						label="Save single value as array"
+						checked={ flagValue }
+						onChange={ setFlagValue }
+					/>
+				</div>
+			);
+
 		case 'post_terms':
-			return <div
-				className="components-base-control jet-margin-bottom-wrapper"
-			>
-				{ FieldSelect }
-				<SelectControl
-					key={ name + index + '_select' }
-					value={ getMapField( { name } ) }
-					onChange={ value => setMapField(
-						{ nameField: name, value },
-					) }
-					options={ source.taxonomies }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
-				/>
-			</div>;
+			return (
+				<div className="components-base-control jet-margin-bottom-wrapper">
+					{ FieldSelect }
+					<StyledSelectControl
+						key={ name + index + '_select' }
+						value={ mapValue }
+						onChange={ setMapValue }
+						options={ source.taxonomies }
+					/>
+				</div>
+			);
+
 		default:
 			return FieldSelect;
 	}

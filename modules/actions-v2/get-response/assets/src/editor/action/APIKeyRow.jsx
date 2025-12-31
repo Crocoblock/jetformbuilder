@@ -15,9 +15,16 @@ import APIKeyHelp from './APIKeyHelp';
 import { styled } from '@linaria/react';
 import { useSiteOptionJSON } from 'jet-form-builder-data';
 import { useActionValidatorProvider } from 'jet-form-builder-actions';
+import { StyledFlexControl } from 'jet-form-builder-components';
 
 const StyledTextControl = styled( TextControl )`
     flex: 1;
+
+	.components-base-control__field {
+		input.components-text-control__input {
+			height: 40px;
+		}
+	}
 `;
 
 function APIKeyRow( { settings, onChangeSettingObj } ) {
@@ -71,7 +78,7 @@ function APIKeyRow( { settings, onChangeSettingObj } ) {
 					'jet-form-builder',
 				) }
 			</IconText> }
-			<Flex>
+			<StyledFlexControl>
 				{ settings.use_global ? <StyledTextControl
 					id={ id }
 					value={ globalSettings.api_key }
@@ -79,8 +86,6 @@ function APIKeyRow( { settings, onChangeSettingObj } ) {
 						{ api_key },
 					) }
 					onBlur={ () => setShowError( true ) }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 				/> : <StyledTextControl
 					  id={ id }
 					  value={ settings.api_key }
@@ -88,8 +93,6 @@ function APIKeyRow( { settings, onChangeSettingObj } ) {
 						  { api_key },
 					  ) }
 					  onBlur={ () => setShowError( true ) }
-					  __next40pxDefaultSize
-					  __nextHasNoMarginBottom
 				  /> }
 				<Button
 					onClick={ () => fetchApiData(
@@ -104,7 +107,7 @@ function APIKeyRow( { settings, onChangeSettingObj } ) {
 				>
 					{ __( 'Fetch', 'jet-form-builder' ) }
 				</Button>
-			</Flex>
+			</StyledFlexControl>
 			<APIKeyHelp/>
 		</Flex>
 	</RowControl>;

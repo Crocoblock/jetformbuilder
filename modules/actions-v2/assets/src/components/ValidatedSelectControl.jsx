@@ -5,7 +5,7 @@ import {
 	RowControl,
 	RowControlEnd,
 } from 'jet-form-builder-components';
-import { SelectControl } from '@wordpress/components';
+import { StyledSelectControl } from 'jet-form-builder-components';
 import useActionValidatorProvider from '../hooks/useActionValidatorProvider';
 
 function ValidatedSelectControl( {
@@ -30,15 +30,13 @@ function ValidatedSelectControl( {
 				{ label }
 			</LabelComponent>
 			<RowControlEnd hasError={ hasError }>
-				<SelectControl
+				<StyledSelectControl
 					id={ id }
 					value={ value }
 					onChange={ onChange }
 					onBlur={ () => setShowError( true ) }
 					help={ help }
 					options={ options }
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
 				/>
 			</RowControlEnd>
 		</> }

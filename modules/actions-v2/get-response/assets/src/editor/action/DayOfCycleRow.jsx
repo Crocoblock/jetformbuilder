@@ -3,7 +3,7 @@ import {
 	Label,
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { TextControl } from '@wordpress/components';
+import { StyledTextControl } from 'jet-form-builder-components';
 
 function DayOfCycleRow( { settings, onChangeSettingObj } ) {
 	return <RowControl>
@@ -11,15 +11,13 @@ function DayOfCycleRow( { settings, onChangeSettingObj } ) {
 			<Label htmlFor={ id }>
 				{ __( 'Day Of Cycle', 'jet-form-builder' ) }
 			</Label>
-			<TextControl
+			<StyledTextControl
 				id={ id }
 				type="number"
 				onChange={ day_of_cycle => onChangeSettingObj(
 					{ day_of_cycle },
 				) }
 				value={ settings.day_of_cycle }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
 			/>
 		</> }
 	</RowControl>;

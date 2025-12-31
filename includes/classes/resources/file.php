@@ -187,6 +187,13 @@ class File implements Arrayable, Media_Block_Value, Has_Error_File {
 		return array();
 	}
 
+	/**
+	 * @return array
+	 */
+	public function get_attachment_ids(): array {
+		return array();
+	}
+
 	public function has_error(): bool {
 		return 0 < $this->get_error();
 	}

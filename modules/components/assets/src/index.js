@@ -17,6 +17,13 @@ export { default as RowControlEndStyle } from './RowControl/RowControlEndStyle';
 // Control styles
 export { default as ClearBaseControlStyle } from './ClearBaseControlStyle';
 export { default as ControlWithErrorStyle } from './ControlWithErrorStyle';
+export { default as StyledSelectControl } from './StyledSelectControl';
+export { default as StyledFlexControl } from './StyledFlexControl';
+export { default as StyledTextControl } from './StyledTextControl';
+export { default as StyledComboboxControl } from './StyledComboboxControl';
+export { default as StyledCardBodyControl } from './StyledCardBodyControl';
+export { default as StyledButtonControl } from './StyledButtonControl';
+export { default as StyledFormTokenFieldControl } from './StyledFormTokenFieldControl';
 
 // Modal
 export { default as StickyModalActions } from './Modal/StickyModalActions';
@@ -26,6 +33,9 @@ export { default as ModalFooterStyle } from './Modal/ModalFooterStyle';
 export { default as WideLine } from './WideLine';
 export { default as IconText } from './IconText';
 export { default as FormLabeledTokenField } from './FormLabeledTokenField';
+
+//Table styles
+export { default as TableListStyle } from './TableListStyle';
 
 export {
 	default as useTriggerPopover,

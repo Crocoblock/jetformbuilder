@@ -64,6 +64,8 @@ class Media_Field_Parser extends Field_Data_Parser {
 				return $uploads->get_attachment_id();
 			case 'both':
 				return $uploads->get_attachment_both();
+			case 'ids':
+				return $uploads->get_attachment_ids();
 			default:
 				return $uploads->get_attachment_url();
 		}

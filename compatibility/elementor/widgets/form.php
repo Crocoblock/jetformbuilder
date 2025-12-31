@@ -1737,7 +1737,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 	}
 
 	private function section_form_input_fields() {
-		$simple_input = '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater):not(.wysiwyg-field)';
+		$simple_input = '__field:not(.checkradio-field):not(.range-field):not(.%s-repeater):not(.wysiwyg-field):not([role="switch"])';
 
 		$this->start_controls_section(
 			'section_form_input_fields',

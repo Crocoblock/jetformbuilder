@@ -9,16 +9,26 @@ function ToTimeFilter() {
 
 	this.label        = () => __( 'toTime', 'jet-form-builder' );
 	this.fullName     = () => '|toTime';
+	this.docArgument  = Boolean;
 	this.isClientSide = true;
 
 	this.help = () => <>
 		{ __(
-			`Gets the timestamp from the macro and formats it according to the format of the Time Field.`,
+			`Formats the timestamp according to the Time Field format.`,
 			'jet-form-builder',
 		) }
 		<hr/>
 		{ __( 'Example:', 'jet-form-builder' ) + ' ' }
 		<code>04:25</code>
+		<hr/>
+		{ __( `Optionally accepts `, 'jet-form-builder' ) }
+		<code>false</code>
+		{ __( ` to use the user’s local timezone instead of UTC (default: `, 'jet-form-builder' ) }
+		<code>true</code>
+		{ __( `).`, 'jet-form-builder' ) }
+		<hr/>
+		{ __( 'Example:', 'jet-form-builder' ) + ' ' }
+		<code style={{ fontSize: '12px' }}>toTime(false)</code>
 	</>;
 }
 

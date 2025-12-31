@@ -24,6 +24,10 @@ class Count_Payments_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 		return \WP_REST_Server::READABLE;
 	}
 
+	public function check_permission(): bool {
+		return current_user_can( 'manage_options' );
+	}
+
 	public function run_callback( \WP_REST_Request $request ) {
 		$args = View_Base::get_paginated_args( $this->get_paginate_args( $request ) );
 

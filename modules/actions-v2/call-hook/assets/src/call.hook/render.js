@@ -1,10 +1,11 @@
 import { __ } from '@wordpress/i18n';
-import { TextControl, Flex } from '@wordpress/components';
+import { Flex } from '@wordpress/components';
 import {
 	RequiredLabel,
 	RowControl,
 	RowControlEnd,
 	WideLine,
+	StyledTextControl
 } from 'jet-form-builder-components';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ValidatorProvider } from 'jet-form-builder-actions';
@@ -23,7 +24,7 @@ function CallHookRender( {
 						{ __( 'Hook Name', 'jet-form-builder' ) }
 					</RequiredLabel>
 					<RowControlEnd hasError={ hasError }>
-						<TextControl
+						<StyledTextControl
 							id={ id }
 							value={ settings.hook_name }
 							onChange={ val => onChangeSettingObj( {
@@ -31,8 +32,6 @@ function CallHookRender( {
 									replace( /[^\w\-]/g, '' ),
 							} ) }
 							onBlur={ () => setShowError( true ) }
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
 						/>
 					</RowControlEnd>
 				</> }

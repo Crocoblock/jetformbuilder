@@ -134,9 +134,14 @@ class Register_User_Action extends Base {
 			throw new Action_Exception( 'empty_password' );
 		}
 
-		if ( ! empty( $fields_map['confirm_password'] ) ) {
+		$is_password_hashed = Tools::is_wp_password_hash( $password );
 
-			if ( Tools::is_wp_password_hash( $password ) ) {
+		if ( ! empty( $fields_map['confirm_password'] ) ) {
+			// Skip password validation for GATEWAY.SUCCESS event - passwords were already validated during form submission
+			$is_gateway_success = jet_fb_events()->is_current( 'GATEWAY.SUCCESS' );
+			$is_gateway_failed  = jet_fb_events()->is_current( 'GATEWAY.FAILED' );
+
+			if ( $is_gateway_success || $is_gateway_failed || $is_password_hashed ) {
 				$confirm_password = $password;
 			} else {
 				$confirm_password = ! empty( $request[ $fields_map['confirm_password'] ] ) ? $request[ $fields_map['confirm_password'] ] : false;
@@ -147,7 +152,6 @@ class Register_User_Action extends Base {
 			}
 		}
 		// password - ok
-
 		if ( ! empty( $fields_map['first_name'] ) ) {
 			$fname = ! empty( $request[ $fields_map['first_name'] ] ) ? $request[ $fields_map['first_name'] ] : false;
 		}
@@ -213,7 +217,7 @@ class Register_User_Action extends Base {
 				}
 			}
 
-			if ( Tools::is_wp_password_hash( $password ) ) {
+			if ( $is_password_hashed ) {
 				global $wpdb;
 
 				$wpdb->update(
@@ -255,16 +259,33 @@ class Register_User_Action extends Base {
 
 			if ( ! empty( $this->settings['log_in'] ) ) {
 
-				$user = wp_signon(
-					array(
-						'user_login'    => $username,
-						'user_password' => $password,
-						'remember'      => $is_remember,
-					)
-				);
+				if ( $is_password_hashed ) {
+					// Clear user cache to ensure fresh data
+					clean_user_cache( $user_id );
 
-				if ( ! is_wp_error( $user ) ) {
-					wp_set_current_user( $user->ID );
+					// Get fresh user object
+					$user_obj = get_userdata( $user_id );
+
+					if ( $user_obj ) {
+						// Set current user first
+						wp_set_current_user( $user_id, $user_obj->user_login );
+
+						wp_set_auth_cookie( $user_id, $is_remember, is_ssl() );
+						// Trigger wp_login action for compatibility with other plugins
+						do_action( 'wp_login', $user_obj->user_login, $user_obj );
+					}
+				} else {
+					$user = wp_signon(
+						array(
+							'user_login'    => $username,
+							'user_password' => $password,
+							'remember'      => $is_remember,
+						)
+					);
+
+					if ( ! is_wp_error( $user ) ) {
+						wp_set_current_user( $user->ID );
+					}
 				}
 			}
 

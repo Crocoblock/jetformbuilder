@@ -4,9 +4,10 @@ import {
 	RequiredLabel,
 	RowControl,
 	RowControlEndStyle,
+	StyledTextControl
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { Flex, TextControl } from '@wordpress/components';
+import { Flex } from '@wordpress/components';
 import { cx } from '@linaria/core';
 import { useActionValidatorProvider } from 'jet-form-builder-actions';
 
@@ -56,15 +57,13 @@ function RedirectCustomUrl( { settings, onChangeSettingObj } ) {
 					'jet-form-builder',
 				) }
 			</IconText> }
-			<TextControl
+			<StyledTextControl
 				id={ id }
 				value={ settings.redirect_url }
 				onChange={ redirect_url => onChangeSettingObj(
 					{ redirect_url },
 				) }
 				onBlur={ () => setShowError( true ) }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
 			/>
 		</Flex>
 	</RowControl>;

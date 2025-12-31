@@ -1,15 +1,9 @@
 import { CurrentActionEditContext } from 'jet-form-builder-actions';
 import ActionFieldsMapContext from '../context/ActionFieldsMapContext';
 import CurrentPropertyMapContext from '../context/CurrentPropertyMapContext';
+import { useState, useContext } from '@wordpress/element';
+import { StyledSelectControl } from 'jet-form-builder-components';
 
-const {
-	      useState,
-	      useContext,
-      } = wp.element;
-
-const {
-	      SelectControl,
-      } = wp.components;
 
 // eslint-disable-next-line max-lines-per-function
 function DynamicPropertySelect( {
@@ -63,7 +57,7 @@ function DynamicPropertySelect( {
 	};
 
 	const FieldSelect = (
-		<SelectControl
+		<StyledSelectControl
 			key={ name + index }
 			value={ currentProp }
 			options={ properties }
@@ -77,8 +71,6 @@ function DynamicPropertySelect( {
 					value: dynamic.includes( value ) ? '' : value,
 				} );
 			} }
-			__next40pxDefaultSize
-			__nextHasNoMarginBottom
 		/>
 	);
 

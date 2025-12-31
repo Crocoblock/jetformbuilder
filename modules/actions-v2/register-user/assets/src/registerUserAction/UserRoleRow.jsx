@@ -1,9 +1,9 @@
 import {
 	Label,
 	RowControl,
+	StyledSelectControl
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { SelectControl } from '@wordpress/components';
 
 function UserRoleRow( { settings, onChangeSettingObj } ) {
 
@@ -12,7 +12,7 @@ function UserRoleRow( { settings, onChangeSettingObj } ) {
 			<Label htmlFor={ id } >
 				{ __( 'User Role', 'jet-form-builder' ) }
 			</Label>
-			<SelectControl
+			<StyledSelectControl
 				multiple
 				id={ id }
 				value={ settings.user_role }
@@ -20,8 +20,6 @@ function UserRoleRow( { settings, onChangeSettingObj } ) {
 				onChange={ user_role => onChangeSettingObj(
 					{ user_role },
 				) }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
 				help={ __( 'Hold Ctrl (Windows) or Command (Mac) to select multiple roles.', 'jet-form-builder' ) }
 			/>
 		</> }

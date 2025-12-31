@@ -18,6 +18,7 @@ use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
+use JFB_Modules\Validation\Class_Validation_Handlers;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -59,6 +60,14 @@ final class Module implements
 	 * @throws Repository_Exception
 	 */
 	public function on_install() {
+		$handlers = new Class_Validation_Handlers();
+
+		foreach ( $handlers->get_handlers() as $handler ) {
+			if ( method_exists( $handler, 'init' ) ) {
+				$handler->init();
+			}
+		}
+
 		/** @var \JFB_Modules\Post_Type\Module $post_type */
 		$post_type = jet_form_builder()->module( 'post-type' );
 		$post_type->get_meta()->install( new Post_Type\Validation_Meta() );

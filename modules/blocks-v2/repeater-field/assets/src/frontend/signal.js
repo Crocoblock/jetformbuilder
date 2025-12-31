@@ -78,11 +78,16 @@ function SignalRepeater() {
 			switch ( input.type ) {
 				case "checkbox":
 				case "radio":
-					input.checked = false;
+					// Preserve default checked state for checkbox/radio fields
+					// Check if the input has defaultChecked attribute (from HTML)
+					input.checked = input.defaultChecked || false;
 					break;
 				case "select-one":
 				case "select-multiple":
-					input.selectedIndex = -1;
+					const options = input.querySelectorAll( 'option' );
+					options.forEach( option => {
+						option.selected = option.defaultSelected || false;
+					} );
 					break;
 				case "file":
 					input.value = "";
@@ -91,7 +96,7 @@ function SignalRepeater() {
 					input.value = input.defaultValue || "";
 					break;
 				default:
-					input.value = "";
+					input.value = input.defaultValue || "";
 					break;
 			}
 		} );

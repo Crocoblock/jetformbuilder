@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import PostPropertySelect from '../components/PostPropertySelect';
-import { SelectControl, Flex } from '@wordpress/components';
+import { Flex } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import {
@@ -9,6 +9,8 @@ import {
 	Label,
 	RowControl, RowControlEnd, RowControlEndStyle,
 	WideLine,
+	StyledSelectControl,
+	StyledFlexControl,
 } from 'jet-form-builder-components';
 import { cx } from '@linaria/core';
 import { __ } from '@wordpress/i18n';
@@ -102,7 +104,7 @@ function InsertPostRender( props ) {
 						<RequiredLabel htmlFor={ id }>
 							{ __( 'Post type', 'jet-form-builder' ) }
 						</RequiredLabel>
-						<Flex
+						<StyledFlexControl
 							className={ cx(
 								RowControlEndStyle,
 								hasError && ControlWithErrorStyle,
@@ -115,7 +117,7 @@ function InsertPostRender( props ) {
 									'jet-form-builder',
 								) }
 							</IconText> }
-							<SelectControl
+							<StyledSelectControl
 								id={ id }
 								value={ settings.post_type }
 								options={ source.postTypes }
@@ -124,10 +126,8 @@ function InsertPostRender( props ) {
 									{ post_type: val },
 								) }
 								onBlur={ () => setShowError( true ) }
-								__next40pxDefaultSize
-								__nextHasNoMarginBottom
 							/>
-						</Flex>
+						</StyledFlexControl>
 					</> }
 				</ValidatorProvider> }
 			</RowControl>
@@ -137,7 +137,7 @@ function InsertPostRender( props ) {
 					<Label htmlFor={ id }>
 						{ label( 'post_status' ) }
 					</Label>
-					<SelectControl
+					<StyledSelectControl
 						id={ id }
 						value={ settings.post_status }
 						options={ source.postStatuses }
@@ -145,8 +145,6 @@ function InsertPostRender( props ) {
 						onChange={ val => onChangeSettingObj(
 							{ post_status: val },
 						) }
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
 					/>
 				</> }
 			</RowControl>

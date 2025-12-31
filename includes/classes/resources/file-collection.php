@@ -73,4 +73,11 @@ class File_Collection extends Collection implements Media_Block_Value, Has_Error
 	public function get_attachment_both(): array {
 		return array();
 	}
+
+	/**
+	 * @return array
+	 */
+	public function get_attachment_ids(): array {
+		return array();
+	}
 }

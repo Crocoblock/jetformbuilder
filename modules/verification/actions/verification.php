@@ -104,35 +104,37 @@ class Verification extends Base {
 	public function send_default_email() {
 		if (
 			! empty( $this->settings['custom_email'] ) ||
-			empty( $this->settings['mail_to'] ) ||
-			'admin' === ( $this->settings['who_can'] ?? '' )
+			empty( $this->settings['mail_to'] )
 		) {
 			return;
 		}
 
-		/** @var Module $module */
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$module = jet_form_builder()->module( Module::class );
+		if ( 'admin' != ( $this->settings['who_can'] ?? '' ) ) {
+			/** @var Module $module */
+			/** @noinspection PhpUnhandledExceptionInspection */
+			$module = jet_form_builder()->module( Module::class );
 
-		$generator = Actions_Tools::get_flow(
-			$module->get_dir( 'actions/send.email.flow.json' )
-		);
+			$generator = Actions_Tools::get_flow(
+				$module->get_dir( 'actions/send.email.flow.json' )
+			);
 
-		/**
-		 * @var Base $action
-		 * @var array $props
-		 */
-		foreach ( $generator as list( $action, $props ) ) {
-			$action->settings['mail_to']    = 'form';
-			$action->settings['from_field'] = $this->settings['mail_to'];
-
-			jet_fb_action_handler()->add( $action, $props );
 			/**
-			 * Execute action immediately, because is should run on the same event.
-			 * If it would be with ON.DEFAULT.STATE - we may not use it line of the code
-			 * But we couldn't be sure, that current process runs with DEFAULT.STATE render-state
+			 * @var Base $action
+			 * @var array $props
 			 */
-			jet_fb_action_handler()->process_single_action( $action );
+
+			foreach ( $generator as list( $action, $props ) ) {
+				$action->settings['mail_to']    = 'form';
+				$action->settings['from_field'] = $this->settings['mail_to'];
+
+				jet_fb_action_handler()->add( $action, $props );
+				/**
+				 * Execute action immediately, because is should run on the same event.
+				 * If it would be with ON.DEFAULT.STATE - we may not use it line of the code
+				 * But we couldn't be sure, that current process runs with DEFAULT.STATE render-state
+				 */
+				jet_fb_action_handler()->process_single_action( $action );
+			}
 		}
 
 		/**

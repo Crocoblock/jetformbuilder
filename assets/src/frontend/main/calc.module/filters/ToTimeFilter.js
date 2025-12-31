@@ -7,8 +7,19 @@ function ToTimeFilter() {
 	this.getSlug = function () {
 		return 'toTime';
 	};
-	this.apply   = function ( value ) {
-		return toTime( new Date( value ) );
+	this.apply   = function ( value, isUTC = true ) {
+		// Convert string 'true'/'false' to boolean
+		if ( typeof isUTC === 'string' ) {
+			// Remove quotes and trim
+			const cleaned = isUTC.trim().replace( /^['"]|['"]$/g, '' );
+			const lower   = cleaned.toLowerCase();
+
+			isUTC = lower !== 'false';
+		} else {
+			isUTC = Boolean( isUTC );
+		}
+
+		return toTime( new Date( value ), isUTC );
 	};
 }
 

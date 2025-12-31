@@ -18,6 +18,12 @@
 			align-items: center;
 		}
 
+		.components-base-control__field {
+			margin: 0;
+			padding: 0;
+			border-top: none;
+		}
+
 		.repeater-action-button {
 			margin-right: 1em;
 		}
@@ -27,6 +33,17 @@
 			font-style: italic;
 			color: #8e8e8e;
 		}
-	}
 
+		.jet-fb-toggle-group-control {
+			min-height: auto;
+			height: auto;
+
+			&:hover,
+			&:focus,
+			&:focus-within {
+				border-color: transparent;
+				box-shadow: none;
+			}
+		}
+	}
 }

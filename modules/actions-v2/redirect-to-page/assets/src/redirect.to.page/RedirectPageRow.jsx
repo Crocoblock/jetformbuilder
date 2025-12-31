@@ -3,9 +3,9 @@ import {
 	RequiredLabel,
 	RowControlEnd,
 	RowControl,
+	StyledComboboxControl
 } from 'jet-form-builder-components';
 import { __ } from '@wordpress/i18n';
-import { ComboboxControl } from '@wordpress/components';
 import { useDebouncedInput } from '@wordpress/compose';
 import { useEntityRecords } from '@wordpress/core-data';
 import { useActionValidatorProvider } from 'jet-form-builder-actions';
@@ -51,7 +51,7 @@ function RedirectPageRow( { settings, onChangeSettingObj } ) {
 			{ __( 'Select page', 'jet-form-builder' ) }
 		</RequiredLabel>
 		<RowControlEnd hasError={ hasError }>
-			<ComboboxControl
+			<StyledComboboxControl
 				value={ +settings.redirect_page }
 				options={ (
 					selectedPage?.id
@@ -68,8 +68,6 @@ function RedirectPageRow( { settings, onChangeSettingObj } ) {
 					{ redirect_page: val },
 				) }
 				onFilterValueChange={ setSearch }
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
 			/>
 		</RowControlEnd>
 	</RowControl>;

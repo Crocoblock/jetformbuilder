@@ -10,10 +10,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
-use JFB_Components\Rest_Api\Rest_Api_Endpoint_Base;
+use JFB_Components\Rest_Api\Rest_Api_Private_Endpoint_Base;
 use JFB_Modules\Ai\External_Api\Generate_Form_Action;
 
-class Generate_Form_Endpoint extends Rest_Api_Endpoint_Base {
+class Generate_Form_Endpoint extends Rest_Api_Private_Endpoint_Base {
 
 	public static function get_rest_base() {
 		return 'ai/generate';

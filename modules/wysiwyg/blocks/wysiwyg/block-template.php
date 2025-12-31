@@ -27,6 +27,7 @@ $editor    = apply_filters(
 		'quicktags'     => false,
 		'tinymce'       => array(
 			'plugins'                       => 'lists,paste,tabfocus,wplink,wordpress',
+			'wpautop'                       => '', // https://github.com/Crocoblock/issues-tracker/issues/13811
 			'paste_as_text'                 => ! $keep_format,
 			'paste_auto_cleanup_on_paste'   => ! $keep_format,
 			'paste_remove_spans'            => ! $keep_format,

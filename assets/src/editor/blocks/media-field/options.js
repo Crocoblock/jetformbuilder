@@ -31,7 +31,11 @@ const valueFormats = Tools.withPlaceholder( [
 	{
 		"value": "both",
 		"label": "Array with attachment ID and URL"
-	}
+	},
+	{
+		"value": "ids",
+		"label": "Array of attachment IDs"
+	},
 ] );
 
 export {

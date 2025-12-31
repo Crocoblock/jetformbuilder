@@ -5,7 +5,7 @@ import {
 	withFilters,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { Sortable } from 'jet-form-builder-components';
 import { Fragment } from '@wordpress/element';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -77,7 +77,7 @@ const StyledFlex = styled(Flex)`
 function PluginActions() {
 	const [ actions, setActions ] = useActions();
 
-	const isBuddypress = document.body.classList.contains( 'buddypress' );
+	const isBuddypress = document.body.classList.contains( 'wp-admin' ) && ( document.body.classList.contains( 'buddypress' ) || document.body.classList.contains( 'theme-buddyboss-theme' ) );
 
 	return <ActionsPanel
 		title={ __( 'Post Submit Actions', 'jet-form-builder' ) }

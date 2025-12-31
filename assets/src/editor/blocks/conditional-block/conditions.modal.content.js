@@ -16,11 +16,12 @@ const {
 	      useUniqKey,
 	      useOnUpdateModal,
       } = JetFBHooks;
-const {
+let {
 	      SelectControl,
-	      ButtonGroup,
 	      withFilters,
 	      Button,
+		  ToggleGroupControl,
+		  __experimentalToggleGroupControl,
       } = wp.components;
 const {
 	      __,
@@ -29,6 +30,10 @@ const {
 const {
 	      addFilter,
       } = wp.hooks;
+
+ToggleGroupControl = (
+	ToggleGroupControl || __experimentalToggleGroupControl
+);
 
 const getFuncSettings = current => {
 	if (
@@ -135,10 +140,12 @@ export default function () {
 			</Repeater>
 		</ConditionsRepeaterContextProvider>
 		<RepeaterState state={ updateConditions }>
-			<ButtonGroup
+			<ToggleGroupControl
 				style={ {
 					display: 'flex',
 				} }
+				hideLabelFromVision={ true }
+				className="jfb-toggle-group-control jfb-toggle-group-control--no-gap"
 			>
 				<RepeaterAddNew>
 					{ __( 'Add Condition', 'jet-form-builder' ) }
@@ -148,7 +155,7 @@ export default function () {
 						{ __( 'Add OR Operator', 'jet-form-builder' ) }
 					</RepeaterAddOrOperator>
 				) }
-			</ButtonGroup>
+			</ToggleGroupControl>
 		</RepeaterState>
 	</>;
 }

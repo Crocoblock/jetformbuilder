@@ -255,9 +255,10 @@ class Style_Engine {
 
 		return Field_Handlers\Base::replace_data(
 			$selector,
-			array(
+			apply_filters( 'crocoblock/style-manager/css-selector-macros', array(
 				'wrapper' => '.' . $this->class_name,
-			)
+				'id'      => $this->class_name,
+			), $this )
 		);
 	}
 

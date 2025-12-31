@@ -55,10 +55,44 @@ class Registry {
 	 */
 	public function register_block( $block_name, $args = array() ) {
 
+		add_filter(
+			'register_block_type_args',
+			function( $block_args, $block_type ) use ( $block_name, $args ) {
+
+				if ( $block_type !== $block_name ) {
+					return $block_args;
+				}
+
+				if ( empty( $block_args['supports'] ) ) {
+					$block_args['supports'] = array();
+				}
+
+				$block_args['supports'][ $this->get_support_name() ] = true;
+
+				// Ensure attributes array exists.
+				if ( empty( $block_args['attributes'] ) ) {
+					$block_args['attributes'] = array();
+				}
+
+				if ( empty( $block_args['attributes'][ $this->get_support_name() ] ) ) {
+					$defaults = array(
+						'_uniqueClassName' => '',
+					);
+
+					$block_args['attributes'][ $this->get_support_name() ] = array(
+						'type'    => 'object',
+						'default' => $defaults,
+					);
+				}
+
+				return $block_args;
+			},
+			10, 2
+		);
+
 		if ( ! class_exists( 'Crocoblock\Blocks_Style\Block' ) ) {
 			require_once $this->get_path( 'style-cache.php' );
 			require_once $this->get_path( 'style-engine.php' );
-			require_once $this->get_path( 'style-inserter.php' );
 			require_once $this->get_path( 'block.php' );
 		}
 
@@ -72,17 +106,13 @@ class Registry {
 			}
 
 			Editor::instance()->set_url( $this->url )->init();
-
-			$this->register_global_block_support();
 		}
 
 		if ( ! isset( $this->registry[ $block_name ] ) ) {
 			$this->registry[ $block_name ] = new Block( $block_name, $args );
 		} else {
-			$this->registry[ $block_name ]->set_args( $args );
+			$this->registry[ $block_name ]->set_attributes( $args );
 		}
-
-
 
 		return $this->registry[ $block_name ];
 	}
@@ -94,60 +124,6 @@ class Registry {
 	 */
 	public function get_support_name() {
 		return 'crocoblock_styles';
-	}
-
-	/**
-	 * Register 'crocoblock_styles' for block supports.
-	 *
-	 * @return void
-	 */
-	public function register_global_block_support() {
-
-		\WP_Block_Supports::get_instance()->register(
-			$this->get_support_name(),
-			array(
-				'apply' => array( $this, 'apply_support' ),
-			)
-		);
-
-		add_action( 'wp_loaded', array( $this, 'add_blocks_support' ), 999 );
-	}
-
-	/**
-	 * Add 'crocoblock_styles' support for all registered blocks
-	 *
-	 * @return void
-	 */
-	public function add_blocks_support() {
-
-		$blocks_names = array_keys( $this->registry );
-		$block_type_registry = \WP_Block_Type_Registry::get_instance();
-
-		foreach ( $blocks_names as $block_name ) {
-
-			$block_type = $block_type_registry->get_registered( $block_name );
-
-			if ( ! $block_type ) {
-				continue;
-			}
-
-			if ( ! block_has_support( $block_type, array( $this->get_support_name() ) ) ) {
-
-				if ( ! isset( $block_type->supports ) ) {
-					$block_type->supports = array();
-				}
-
-				$block_type->supports[ $this->get_support_name() ] = true;
-
-				if ( ! isset( $block_type->attributes ) ) {
-					$block_type->attributes = array();
-				}
-
-				$block_type->attributes[ $this->get_support_name() ] = array(
-					'type' => 'object',
-				);
-			}
-		}
 	}
 
 	/**

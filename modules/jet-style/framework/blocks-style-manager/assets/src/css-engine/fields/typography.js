@@ -13,7 +13,7 @@ export default class Typography extends BaseField {
 			transform: this.rawValue.transform || 'inherit',
 			style: this.rawValue.style || 'inherit',
 			decoration: this.rawValue.decoration || 'inherit',
-			lineheight: this.rawValue.lineheight || 'inherit',
+			lineheight: this.rawValue.lineheight || this.rawValue.lineHeight || 'inherit',
 			lh_unit: '', // legacy from old SM for style decorations consisitency
 			letterspacing: this.rawValue.letterSpacing || 'inherit',
 			ls_unit: '', // legacy from old SM for style decorations consisitency

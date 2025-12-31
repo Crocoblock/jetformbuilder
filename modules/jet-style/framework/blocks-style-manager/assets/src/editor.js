@@ -1,14 +1,15 @@
 import './editor.scss';
 import { addFilter } from '@wordpress/hooks';
 import { withStylesControls } from './hoc-wrappers/with-styles-controls';
-import { withBlockUniqueClass, generateUniqueClassName } from './hoc-wrappers/with-block-class';
+import { withBlockUniqueClass } from './hoc-wrappers/with-block-class';
 
 class CrocoBlockStyleEditor {
 
 	init() {
 
 		this.blocks = window?.crocoStyleEditorData?.blocks_supports || {};
-		this.supportName = window.crocoStyleEditorData.support_name;
+		this.supportName = window?.crocoStyleEditorData?.support_name;
+		this.defaults = window?.crocoStyleEditorData?.defaults || {};
 		this.usedClasses = {};
 
 		addFilter(
@@ -26,7 +27,8 @@ class CrocoBlockStyleEditor {
 		addFilter(
 			'editor.BlockListBlock',
 			'crocoblock-style-manager/with-crocoblock-editor-class',
-			withBlockUniqueClass
+			withBlockUniqueClass,
+			0
 		);
 	}
 
@@ -67,11 +69,22 @@ class CrocoBlockStyleEditor {
 		const attributes = settings.attributes || {};
 
 		if ( ! attributes[ this.supportName ] ) {
+
+			let defaults = {
+				_uniqueClassName: '',
+			};
+
+			if ( this.defaults[ name ] ) {
+				defaults = {
+					...defaults,
+					...this.defaults[ name ],
+				};
+			}
+
 			attributes[ this.supportName ] = {
 				type: 'object',
-				default: {
-					_uniqueClassName: generateUniqueClassName(),
-				},
+				default: defaults,
+				style: true,
 			};
 		}
 

@@ -2,7 +2,7 @@
 /**
  * Blocks Style Manager
  *
- * Version: 2.0.0
+ * Version: 2.1.11
  */
 namespace Crocoblock\Blocks_Style;
 
@@ -31,7 +31,11 @@ class Manager {
 	 *
 	 * @var string
 	 */
-	protected $version = '2.0.0';
+	protected $version = '2.1.11';
+
+	public static $migrator_registered = false;
+
+	public static $requires_migration = false;
 
 	/**
 	 * Constructor
@@ -39,9 +43,29 @@ class Manager {
 	 * @param array $args Arguments.
 	 */
 	public function __construct( $args = array() ) {
+
 		$this->path = $args['path'];
 		$this->url  = $args['url'];
 		require_once $this->path . 'path-url-trait.php';
+
+		if ( $this->is_migrator_enabled() ) {
+
+			if ( ! class_exists( '\Crocoblock\Blocks_Style\Migrator\UI' ) ) {
+				require_once $this->path . 'migrator/ui.php';
+			}
+
+			new Migrator\UI();
+			self::$migrator_registered = true;
+		}
+	}
+
+	/**
+	 * Check if migrator is enabled.
+	 *
+	 * @return bool
+	 */
+	public function is_migrator_enabled() {
+		return ! self::$migrator_registered && self::$requires_migration;
 	}
 
 	/**
@@ -69,6 +93,41 @@ class Manager {
 
 		$this->ensure_block_registry();
 		Registry::instance()->register_block( $block_name, $args );
+	}
+
+	/**
+	 * Start collecting styles for the given blocks set.
+	 * Collected styles could be get/printed at once.
+	 *
+	 * @param string $name
+	 * @return void
+	 */
+	public function start_collection( $name ) {
+		$this->ensure_block_registry();
+		Style_Inserter::set_collection( $name );
+	}
+
+	/**
+	 * Start collecting styles for the given blocks set.
+	 * Collected styles could be get/printed at once.
+	 *
+	 * @param string $name
+	 * @return void
+	 */
+	public function stop_current_collection() {
+		$this->ensure_block_registry();
+		Style_Inserter::set_collection( null );
+	}
+
+	/**
+	 * Get styles collection by name.
+	 *
+	 * @param string|null $name
+	 * @return string
+	 */
+	public function get_styles_collection( $name = null ) {
+		$this->ensure_block_registry();
+		return Style_Inserter::get_styles_collection( $name );
 	}
 
 	/**
@@ -131,6 +190,8 @@ class Manager {
 	protected function ensure_block_registry() {
 		if ( ! class_exists( '\Crocoblock\Blocks_Style\Registry' ) ) {
 			require_once $this->path . 'registry.php';
+			require_once $this->path . 'style-inserter.php';
+
 			// Must be always called before registering the 1st block.
 			Registry::instance()->set_path( $this->path )->set_url( $this->url );
 		}

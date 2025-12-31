@@ -1,5 +1,4 @@
 import { BoxControl } from '@wordpress/components';
-import { isObject } from '../../helpers/utils';
 
 const ControlDimensions = ( { control, value, handleChange } ) => {
 

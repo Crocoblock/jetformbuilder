@@ -19,6 +19,8 @@ class Editor {
 	 */
 	protected static $instance = null;
 
+	protected $defaults = array();
+
 	/**
 	 * Get instance of the class
 	 *
@@ -72,13 +74,45 @@ class Editor {
 			true
 		);
 
+		$fonts_manager_url = esc_url( admin_url( 'site-editor.php?p=/styles&section=/typography' ) );
+		$settings = wp_get_global_settings();
+		$fonts = [];
+
+		if ( ! empty( $settings['typography']['fontFamilies'] ) ) {
+			foreach ( $settings['typography']['fontFamilies'] as $fonts_set ) {
+				if ( is_array( $fonts_set ) ) {
+					foreach ( $fonts_set as $font ) {
+						if ( ! empty( $font['name'] ) && ! empty( $font['fontFamily'] ) ) {
+							$fonts[] = [
+								'value' => $font['fontFamily'],
+								'label' => $font['name'],
+							];
+						}
+					}
+				}
+			}
+		}
+
+		/**
+		 * Note!
+		 *
+		 * get_blocks_supports() always must be called before get_block_defaults()
+		 * because it internally calls extract_children(),
+		 * which extract also defaults of these children.
+		 */
+		$supports = $this->get_blocks_supports();
+		$defaults = $this->get_block_defaults();
+
 		wp_localize_script(
 			'crocoblock-blocks-style-editor',
 			'crocoStyleEditorData',
 			array(
-				'blocks_supports' => $this->get_blocks_supports(),
-				'support_name'    => Registry::instance()->get_support_name(),
-				'class_prefix'    => 'cb-',
+				'blocks_supports'   => $supports,
+				'support_name'      => Registry::instance()->get_support_name(),
+				'defaults'          => $defaults,
+				'class_prefix'      => 'cb-',
+				'fonts_manager_url' => $fonts_manager_url,
+				'fonts'             => $fonts,
 			)
 		);
 
@@ -103,7 +137,24 @@ class Editor {
 		$blocks = Registry::instance()->get_blocks();
 
 		foreach ( $blocks as $block ) {
-			$result[ $block->get_block_name() ] = $this->extract_children( $block->get_controls_stack() );
+
+			$this->defaults[ $block->get_block_name() ] = $block->get_defaults();
+
+			$result[ $block->get_block_name() ] = $this->extract_children(
+				$block->get_controls_stack()
+			);
+		}
+
+		return $result;
+	}
+
+	public function get_block_defaults() {
+
+		$result = array();
+		$blocks = Registry::instance()->get_blocks();
+
+		foreach ( $blocks as $block ) {
+			$result[ $block->get_block_name() ] = $block->get_defaults();
 		}
 
 		return $result;

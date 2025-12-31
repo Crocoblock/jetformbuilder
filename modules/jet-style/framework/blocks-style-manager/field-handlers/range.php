@@ -9,8 +9,19 @@ class Range extends Base {
 	 * @return array
 	 */
 	public function get_parsed_value() {
+
+		if ( is_array( $this->raw_value )
+			&& isset( $this->raw_value['value'] )
+			&& isset( $this->raw_value['unit'] )
+		) {
+			return array(
+				'value' => ! empty( $this->raw_value['value'] ) ? esc_attr( $this->raw_value['value'] ) : 0,
+				'unit'  => esc_attr( $this->raw_value['unit'] ),
+			);
+		}
+
 		return array(
-			'value' => ! empty( $this->raw_value ) ? floatval( $this->raw_value ) : 0,
+			'value' => ! empty( $this->raw_value ) ? esc_attr( $this->raw_value ) : 0,
 			'unit'  => '',
 		);
 	}

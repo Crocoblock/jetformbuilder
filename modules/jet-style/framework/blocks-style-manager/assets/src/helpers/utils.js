@@ -64,3 +64,18 @@ export const isEmpty = ( variable ) => {
 
 	return false;
 }
+
+export const valueIsEmpty = ( value ) => {
+
+	if ( isEmpty( value ) ) {
+		return true;
+	}
+
+	if ( isObject( value ) && Object.keys( value ).length > 0 ) {
+		if ( Object.values( value ).every( ( v ) => isEmpty( v ) ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}

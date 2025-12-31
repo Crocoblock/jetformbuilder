@@ -51,6 +51,11 @@ class Typography extends Base {
 	 * @return array
 	 */
 	public function get_parsed_value() {
+
+		if ( isset( $this->raw_value['lineHeight'] ) ) {
+			$this->raw_value['lineheight'] = $this->raw_value['lineHeight'];
+		}
+
 		return [
 			'family'      => isset($this->raw_value['family']) ? $this->raw_value['family'] : 'inherit',
 			'weight'      => isset($this->raw_value['weight']) ? $this->raw_value['weight'] : 'inherit',

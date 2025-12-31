@@ -11,7 +11,8 @@ export default class BaseField {
 
 	getSelectorMacros() {
 		return {
-			wrapper: '.' + this.uniqueClassName
+			wrapper: 'body .is-root-container .' + this.uniqueClassName,
+			id: this.uniqueClassName
 		};
 	}
 
@@ -61,6 +62,35 @@ export default class BaseField {
 		return '{{VALUE}}';
 	}
 
+	isValidValueForVar( value, key ) {
+
+		if ( 'inherit' === value || 'initial' === value || 'unset' === value ) {
+			return false;
+		}
+
+		if ( 'undefined' === typeof value || null === value ) {
+			return false;
+		}
+
+		if ( 'object' === typeof value && ! Object.keys( value ).length ) {
+			return false;
+		}
+
+		if ( 'string' === typeof value && ! value.trim() ) {
+			return false;
+		}
+
+		if ( 'number' === typeof value && isNaN( value ) ) {
+			return false;
+		}
+
+		if ( 'function' === typeof value ) {
+			return false;
+		}
+
+		return true;
+	}
+
 	parseVariable( variable ) {
 
 		const prefix = variable.prefix || '';
@@ -83,10 +113,14 @@ export default class BaseField {
 			result[ fullName ] = parsedValues.value;
 		} else {
 
-			result[ fullName ] = this.replaceData(
-				this.cssVarValueFormat(),
-				parsedValues
-			);
+			for ( const key in parsedValues ) {
+				if (
+					parsedValues.hasOwnProperty( key )
+					&& this.isValidValueForVar( parsedValues[ key ], key )
+				) {
+					result[ fullName + '__' + key ] = parsedValues[ key ];
+				}
+			}
 		}
 
 		return result;

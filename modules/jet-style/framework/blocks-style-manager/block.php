@@ -38,9 +38,12 @@ class Block {
 		'children' => array(),
 	);
 
-	public static $timer = 0;
-
-	public static $count = 0;
+	/**
+	 * Whether the block is rendered via REST API.
+	 *
+	 * @var bool
+	 */
+	protected $is_rest_render = false;
 
 	/**
 	 * Currently processed section for registration.
@@ -58,6 +61,8 @@ class Block {
 	protected $_current_tab = null;
 
 	protected $css_props = array();
+
+	protected $defaults = null;
 
 	/**
 	 * Constructor
@@ -83,6 +88,15 @@ class Block {
 	}
 
 	/**
+	 * Set block attributes
+	 *
+	 * @param array $attributes Block attributes.
+	 */
+	public function set_attributes( $attributes ) {
+		$this->attributes = array_merge( $this->attributes, $attributes );
+	}
+
+	/**
 	 * Prevent styles from being rendered when there is a Rest API request
 	 * to render the block itself.
 	 *
@@ -102,14 +116,14 @@ class Block {
 			}
 
 			if ( $block_name === $this->get_block_name() ) {
-				remove_filter(
+				/*remove_filter(
 					'render_block_' . $this->get_block_name(),
 					array( $this, 'render_block_styles' ),
 					10, 3
-				);
+				);*/
+				$this->is_rest_render = true;
 			}
 		}
-
 
 		return $response;
 	}
@@ -126,11 +140,16 @@ class Block {
 
 		if ( ! empty( $parsed_block['attrs'][ Registry::instance()->get_support_name() ] ) ) {
 
-			timer_start();
+			if ( $this->is_rest_render ) {
 
-			$block_class_name = Style_Engine::get_classname_from_attrs(
-				$parsed_block['attrs'][ Registry::instance()->get_support_name() ]
-			);
+				$block_class_name = Style_Engine::get_classname_from_attrs(
+					$parsed_block['attrs'][ Registry::instance()->get_support_name() ]
+				);
+
+				$style_inserter = new Style_Inserter( $block_class_name, [] );
+
+				return $style_inserter->with_class_name( $block_content );
+			}
 
 			$style_engine = new Style_Engine(
 				$parsed_block['attrs'][ Registry::instance()->get_support_name() ],
@@ -149,12 +168,6 @@ class Block {
 			if ( ! apply_filters( 'jet-styles-manager/block/force-print-styles', false, $this ) ) {
 				Style_Cache::get_instance()->add_printed( $style_engine->get_class_name() );
 			}
-
-			self::$timer += timer_stop( 0, 8 );
-			self::$count++;
-
-			//var_dump( self::$timer );
-			//var_dump( self::$count );
 		}
 
 		return $block_content;
@@ -179,12 +192,35 @@ class Block {
 	}
 
 	/**
+	 * Get default values for the registered controls,
+	 * if there were any.
+	 *
+	 * @return array|null
+	 */
+	public function get_defaults() {
+		return $this->defaults;
+	}
+
+	/**
+	 * Whether to register full controls or only CSS-render-related.
+	 *
+	 * @return bool
+	 */
+	public function should_register_full_controls() {
+		return is_admin();
+	}
+
+	/**
 	 * Start a new section for block styles
 	 *
 	 * @param array $args
 	 * @return void
 	 */
 	public function start_section( $args = array() ) {
+
+		if ( ! $this->should_register_full_controls() ) {
+			return;
+		}
 
 		if ( ! isset( $args['id'] ) ) {
 			_doing_it_wrong(
@@ -211,6 +247,11 @@ class Block {
 	 * @return void
 	 */
 	public function end_section() {
+
+		if ( ! $this->should_register_full_controls() ) {
+			return;
+		}
+
 		$this->_current_section = null;
 	}
 
@@ -221,6 +262,19 @@ class Block {
 	 * @return void
 	 */
 	public function add_control( $args = array() ) {
+
+		if ( ! $this->should_register_full_controls() ) {
+
+			$control_id = ! empty( $args['id'] ) ? $args['id'] : false;
+
+			$this->css_props[ $control_id ] = array(
+				'type'         => ! empty( $args['type'] ) ? $args['type'] : 'text',
+				'css_var'      => ! empty( $args['css_var'] ) ? $args['css_var'] : array(),
+				'css_selector' => ! empty( $args['css_selector'] ) ? $args['css_selector'] : array(),
+			);
+
+			return;
+		}
 
 		if ( ! $this->_current_section ) {
 
@@ -275,6 +329,15 @@ class Block {
 			);
 		}
 
+		if ( ! empty( $args['default'] ) ) {
+
+			if ( is_null( $this->defaults ) ) {
+				$this->defaults = array();
+			}
+
+			$this->defaults[ $control_id ] = $args['default'];
+		}
+
 		$this->css_props[ $control_id ] = array(
 			'type'         => ! empty( $args['type'] ) ? $args['type'] : 'text',
 			'css_var'      => ! empty( $args['css_var'] ) ? $args['css_var'] : array(),
@@ -289,6 +352,10 @@ class Block {
 	 * @return void
 	 */
 	public function start_tabs( $args = array() ) {
+
+		if ( ! $this->should_register_full_controls() ) {
+			return;
+		}
 
 		if ( ! empty( $args['id'] ) ) {
 			$id = $args['id'];
@@ -320,6 +387,10 @@ class Block {
 	 */
 	public function start_tab( $args = array() ) {
 
+		if ( ! $this->should_register_full_controls() ) {
+			return;
+		}
+
 		if ( ! empty( $args['id'] ) ) {
 			$id = $args['id'];
 		} else {
@@ -348,6 +419,11 @@ class Block {
 	 * @return void
 	 */
 	public function end_tabs() {
+
+		if ( ! $this->should_register_full_controls() ) {
+			return;
+		}
+
 		$this->_current_tabs = null;
 		$this->_current_tab   = null;
 	}
@@ -358,6 +434,11 @@ class Block {
 	 * @return void
 	 */
 	public function end_tab() {
+
+		if ( ! $this->should_register_full_controls() ) {
+			return;
+		}
+
 		$this->_current_tab = null;
 	}
 

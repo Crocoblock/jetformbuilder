@@ -18,12 +18,15 @@ export class Generator {
 			[ Fields.Border.getType() ]: Fields.Border,
 			[ Fields.Dimensions.getType() ]: Fields.Dimensions,
 			[ Fields.Range.getType() ]: Fields.Range,
+			[ Fields.Choose.getType() ]: Fields.Choose,
+			[ Fields.Toggle.getType() ]: Fields.Toggle,
 		};
 	}
 
 	getControlHandler( control ) {
 
 		const controlType = control.type || false;
+
 		if ( ! controlType ) {
 			return false;
 		}
@@ -65,8 +68,17 @@ export class Generator {
 		}
 	}
 
-	generateResponsiveStyles( controlID, cssSelectors, ControlHandler ) {
+	generateResponsiveStyles( control, ControlHandler ) {
+
+		const controlID = control.id || false;
+		const cssSelectors = control.css_selector || false;
+
+		if ( ! controlID || ! cssSelectors ) {
+			return;
+		}
+
 		for ( const device in getBreakpoints() ) {
+
 			if ( ! this.attributes?.[ device ]?.[ controlID ] ) {
 				continue;
 			}
@@ -121,31 +133,37 @@ export class Generator {
 		const controlID = control.id || false;
 		const { attributes } = this;
 
-		if ( ControlHandler && controlID && attributes[ controlID ] ) {
+		if ( ControlHandler && controlID ) {
 
-			const controlInstance = new ControlHandler(
-				this.uniqueClassName,
-				this.attributes[ controlID ]
-			);
+			if ( attributes[ controlID ] ) {
 
-			if ( control.css_selector ) {
-				for ( const selector in control.css_selector ) {
-					this.css += controlInstance.parseSelector(
-						selector,
-						control.css_selector[ selector ]
-					);
+				const controlInstance = new ControlHandler(
+					this.uniqueClassName,
+					this.attributes[ controlID ]
+				);
+
+				if ( control.css_selector ) {
+					for ( const selector in control.css_selector ) {
+						this.css += controlInstance.parseSelector(
+							selector,
+							control.css_selector[ selector ]
+						);
+					}
 				}
 
-				this.generateResponsiveStyles( controlID, control.css_selector, ControlHandler );
+				if ( control.css_var ) {
+					this.cssVariables = {
+						...this.cssVariables,
+						...controlInstance.parseVariable( control.css_var ),
+					};
+				}
+			}
+
+			if ( control.css_selector ) {
+				this.generateResponsiveStyles( control, ControlHandler );
 			}
 
 			if ( control.css_var ) {
-
-				this.cssVariables = {
-					...this.cssVariables,
-					...controlInstance.parseVariable( control.css_var ),
-				};
-
 				this.generateResponsiveVariables( controlID, control.css_var, ControlHandler );
 			}
 		}

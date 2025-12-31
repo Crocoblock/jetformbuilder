@@ -5,16 +5,24 @@ import ControlColor from './controls/color';
 import ControlTypography from './controls/typography';
 import ControlDimensions from './controls/dimensions';
 import ControlRange from './controls/range';
+import ControlToggle from './controls/toggle';
+import ControlHeading from './controls/heading';
 import ControlsTabs from './common/controls-tabs';
 
 import { useSelect } from '@wordpress/data';
 import { getBreakpointsHierarchy } from '../helpers/breakpoints';
+import { valueIsEmpty } from '../helpers/utils';
 import { Tooltip } from '@wordpress/components';
+import { isVisible, getContextFromProps } from '../helpers/conditions-checker';
 
 /**
  * Renders control depending on it's type and attach attributes handlers.
  */
 const ControlComponent = ( { control, props } ) => {
+
+	if ( control.condition && ! isVisible( control.condition, getContextFromProps( props ) ) ) {
+		return null;
+	}
 
 	const { attributes, setAttributes } = props;
 	const supportName = window.crocoStyleEditorData.support_name;
@@ -43,7 +51,63 @@ const ControlComponent = ( { control, props } ) => {
 		attributes[ supportName ][ control.id ] = control.defaultValue;
 	}
 
+	const findProp = ( obj, search ) => {
+
+		let result = null;
+
+		for ( const [ k, v ] of Object.entries( obj ) ) {
+			if ( v === search ) {
+				return k;
+			} else if ( 'object' === typeof v ) {
+				result = findProp( v, search );
+				if ( result ) {
+					break;
+				}
+			}
+		}
+
+		return result;
+	};
+
+	const maybeConvertFromReturnValue = ( value ) => {
+
+		if ( control.return_value ) {
+
+			let found = findProp( control.return_value, value );
+
+			if ( found ) {
+
+				value = found;
+
+				// convert string 'true'/'false' to boolean
+				if ( 'true' === value ) {
+					value = true;
+				} else if ( 'false' === value ) {
+					value = false;
+				}
+			}
+		}
+
+		return value;
+	};
+
 	const handleChange = ( value ) => {
+
+		if ( control.return_value ) {
+
+			if ( 'boolean' === typeof value ) {
+				if ( true === value ) {
+					value = control.return_value.true || null;
+				} else if ( false === value ) {
+					value = control.return_value.false || null;
+				} else {
+					value = null;
+				}
+			} else if ( 'string' === typeof value || 'number' === typeof value ) {
+				value = control.return_value?.[ value ] || null;
+			}
+		}
+
 		setStyleAttr( control.id, value );
 	};
 
@@ -75,7 +139,11 @@ const ControlComponent = ( { control, props } ) => {
 
 		const value = getResponsiveValue( control.id );
 
-		if ( ! value ) {
+		if ( control.default && control.default === value ) {
+			return null;
+		}
+
+		if ( valueIsEmpty( value ) ) {
 			return null;
 		}
 
@@ -83,10 +151,12 @@ const ControlComponent = ( { control, props } ) => {
 		let tooltipText = 'Is inherited from the previous breakpoints';
 
 		// Check if the value is set for the current device
-		if ( '__desktop' === device && attributes[ supportName ][ control.id ] ) {
+		if ( '__desktop' === device
+			&& ! valueIsEmpty( attributes[ supportName ][ control.id ] )
+		) {
 			isUsedForCurrentDevice = true;
 			tooltipText = 'Explicitly set for the current device';
-		} else if ( attributes[ supportName ]?.[ device ]?.[ control.id ] ) {
+		} else if ( ! valueIsEmpty( attributes[ supportName ]?.[ device ]?.[ control.id ] ) ) {
 			isUsedForCurrentDevice = true;
 			tooltipText = 'Explicitly set for the current device';
 		}
@@ -130,12 +200,15 @@ const ControlComponent = ( { control, props } ) => {
 
 		const controlProps = {
 			control: control,
-			value: getResponsiveValue( control.id ),
+			value: maybeConvertFromReturnValue( getResponsiveValue( control.id ) ),
 			handleChange: handleChange,
 		};
 
 		switch ( control.type ) {
 			case 'text':
+				return (
+					<ControlHeading { ...controlProps }/>
+				);
 			case 'input':
 				return (
 					<ControlText { ...controlProps }/>
@@ -146,7 +219,7 @@ const ControlComponent = ( { control, props } ) => {
 				);
 			case 'toggle':
 				return (
-					<></>
+					<ControlToggle { ...controlProps }/>
 				);
 			case 'range':
 				return (

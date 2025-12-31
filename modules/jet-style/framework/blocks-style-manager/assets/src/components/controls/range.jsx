@@ -16,7 +16,49 @@ import { useState } from '@wordpress/element';
  */
 const ControlRange = ( { control, value, handleChange } ) => {
 
-	const [ currentValue, setCurrentValue ] = useState( value );
+	const withoutUnits = ( value ) => {
+		// Remove units from the value
+		return value ? parseFloat( value ) : 0;
+	}
+
+	const sanitizeValue = ( val ) => {
+
+		// Sanitize the value based on min and max
+		let sanitizedValue = val;
+
+		const min = control.min || 0;
+		const max = control.max || 100;
+
+		if ( typeof sanitizedValue === 'number' ) {
+			if ( sanitizedValue < min ) {
+				sanitizedValue = min;
+			} else if ( sanitizedValue > max ) {
+				sanitizedValue = max;
+			}
+		}
+
+		if ( typeof sanitizedValue === 'object' && sanitizedValue !== null ) {
+
+			let result = '';
+
+			for ( const key in sanitizedValue ) {
+				if ( sanitizedValue.hasOwnProperty( key ) ) {
+					result += sanitizeValue( sanitizedValue[ key ] );
+				}
+			}
+
+			sanitizedValue = result;
+		}
+
+		if ( true === control.cut_units ) {
+			// Remove units from the value
+			sanitizedValue = withoutUnits( sanitizedValue );
+		}
+
+		return sanitizedValue;
+	}
+
+	const [ currentValue, setCurrentValue ] = useState( sanitizeValue( value ) );
 
 	const getDefaultUnit = () => {
 		// Return the first unit from the allowed units or 'px' if no units are specified
@@ -25,8 +67,17 @@ const ControlRange = ( { control, value, handleChange } ) => {
 
 	const getCurrentUnit = () => {
 
+		if ( true === control.cut_units ) {
+			return '';
+		}
+
 		if ( currentValue ) {
-			const match = currentValue.match( /[a-zA-Z%]+/ );
+
+			// adjust current value to string in case it's number
+			let currentValueStr = typeof currentValue === 'number' ? currentValue.toString() : currentValue;
+
+			const match = currentValueStr.match( /[a-zA-Z%]+/ );
+
 			if ( match && match.length > 0 ) {
 				return match[ 0 ];
 			}
@@ -42,11 +93,6 @@ const ControlRange = ( { control, value, handleChange } ) => {
 		const result = currentUnit ? `${ value }${ currentUnit }` : value;
 
 		return result;
-	}
-
-	const withoutUnits = ( value ) => {
-		// Remove units from the value
-		return value ? parseFloat( value ) : 0;
 	}
 
 	const allowedUnits = () => {

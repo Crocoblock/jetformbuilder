@@ -62,7 +62,12 @@ class Base {
 		if ( ! empty( $parsed_values['value'] ) ) {
 			$result[] = $full_name . ':' . $parsed_values['value'];
 		} else {
-			$result[] = $full_name . ':' . self::replace_data( $this->css_var_value_format(), $parsed_values );
+			$values = self::replace_data( $this->css_var_value_format(), $parsed_values );
+			$values = trim( $values );
+
+			if ( ! empty( $values ) ) {
+				$result[] = $full_name . ':' . $values;
+			}
 		}
 
 		return $result;

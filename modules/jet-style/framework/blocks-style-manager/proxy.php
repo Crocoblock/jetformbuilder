@@ -11,6 +11,8 @@ class Proxy {
 	protected $legacy_block_manager;
 	protected $legacy_controls_manager;
 
+	public static $is_migrated = null;
+
 	/**
 	 * Set the Block instance
 	 *
@@ -23,7 +25,7 @@ class Proxy {
 		if ( $this->has_legacy_style_manager() ) {
 			$this->legacy_block_manager    = \JET_SM\Gutenberg\Block_Manager::get_instance();
 			$this->legacy_controls_manager = new \JET_SM\Gutenberg\Controls_Manager(
-				 $this->block->get_block_name()
+				$this->block->get_block_name()
 			);
 		}
 	}
@@ -43,7 +45,14 @@ class Proxy {
 	 * @return boolean
 	 */
 	public function has_legacy_style_manager() {
-		return ( class_exists( '\JET_SM\Gutenberg\Block_Manager' ) && class_exists( '\JET_SM\Gutenberg\Block_Manager' ) );
+
+		if ( self::$is_migrated ) {
+			return false;
+		}
+
+		self::$is_migrated = get_option( 'jet_sm_migration_completed', false );
+
+		return class_exists( '\JET_SM\Gutenberg\Block_Manager' );
 	}
 
 	/**
@@ -79,13 +88,25 @@ class Proxy {
 	/**
 	 * Add a new control to the current section
 	 *
-	 * @param array $args
+	 * @param array   $args
 	 * @return void
 	 */
 	public function add_control( $args = array() ) {
 
 		if ( $this->has_legacy_style_manager() ) {
-			$this->legacy_controls_manager->add_control( $args );
+
+			$is_responsive = ! empty( $args['is_responsive'] ) && $args['is_responsive'];
+
+			if ( ! empty( $args['legacy_css_selector'] ) ) {
+				$args['css_selector'] = $args['legacy_css_selector'];
+				unset( $args['legacy_css_selector'] );
+			}
+
+			if ( $is_responsive ) {
+				$this->legacy_controls_manager->add_responsive_control( $args );
+			} else {
+				$this->legacy_controls_manager->add_control( $args );
+			}
 		}
 
 		if ( ! empty( $args['is_legacy'] ) ) {
@@ -93,7 +114,78 @@ class Proxy {
 			return;
 		}
 
+		// rewrite default attribute
+		if (
+			! empty( $args['attributes'] )
+			&& ! empty( $args['attributes']['default'] )
+		) {
+			$raw_default = $args['attributes']['default'];
+			$default = null;
+
+			if ( is_array( $raw_default ) ) {
+				if ( ! empty( $raw_default['value'] ) ) {
+					if ( is_array( $raw_default['value'] ) ) {
+
+						if ( isset( $raw_default['value']['value'] ) ) {
+							$default = $raw_default['value']['value'];
+						}
+
+						if ( ! empty( $raw_default['value']['unit'] ) && null !== $default ) {
+							$default .= $raw_default['value']['unit'];
+						}
+					} else {
+						$default = (string) $raw_default['value'];
+					}
+				}
+
+				if ( ! empty( $raw_default['unit'] ) && null !== $default ) {
+					$default .= $raw_default['unit'];
+				}
+			} else {
+				$default = $raw_default;
+			}
+
+			if ( null !== $default ) {
+
+				if ( ! empty( $args['return_value'] ) ) {
+					$default = $this->find_value_by_return_value( $args['return_value'], $default );
+				}
+
+				$args['default'] = $default;
+			}
+
+			unset( $args['attributes']['default'] );
+		}
+
 		$this->block->add_control( $args );
+	}
+
+	/**
+	 * Find the value by return value array
+	 *
+	 * @param array $return_value
+	 * @param mixed $default
+	 * @return mixed
+	 */
+	protected function find_value_by_return_value( $return_value, $default ) {
+		if ( is_array( $return_value ) ) {
+
+			$key = $default;
+
+			if ( is_bool( $key ) ) {
+				$key = ( $key ) ? 'true' : 'false';
+			} elseif ( is_null( $key ) ) {
+				$key = 'null';
+			} elseif ( is_array( $key ) ) {
+				$key = json_encode( $key );
+			} else {
+				$key = (string) $key;
+			}
+
+			return ( isset( $return_value[ $key ] ) ) ? $return_value[ $key ] : $default;
+		}
+
+		return $default;
 	}
 
 	/**
@@ -104,6 +196,7 @@ class Proxy {
 	 * @return void
 	 */
 	public function add_responsive_control( $args = array() ) {
+		$args['is_responsive'] = true;
 		$this->add_control( $args );
 	}
 

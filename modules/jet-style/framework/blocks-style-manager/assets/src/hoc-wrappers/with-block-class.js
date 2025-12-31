@@ -23,7 +23,6 @@ export const withBlockUniqueClass = createHigherOrderComponent( ( BlockListBlock
 
 			const uniqueClass = props?.attributes?.[ window.crocoStyleEditorData.support_name ]?.[ '_uniqueClassName' ];
 
-
 			useEffect( () => {
 				if ( window.crocoBlockStyleEditor.classIsUsed( uniqueClass, clientId ) ) {
 					// If the class is already used, we need to generate a new one

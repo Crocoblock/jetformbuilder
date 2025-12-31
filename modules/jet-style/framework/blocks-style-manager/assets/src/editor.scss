@@ -9,26 +9,46 @@
 			display: flex;
 			align-items: flex-start;
 			justify-content: space-between;
-			gap: 15px;
+			gap: 20px;
 			> .components-base-control__label {
 				margin: 0;
-				line-height: 20px;
+				line-height: 16px;
 			}
 		}
+	}
+
+	&__heading-control {
+		margin: 0;
+		font-size: 13px;
+		line-height: 18px;
+		font-weight: 600;
+		text-transform: uppercase;
+	}
+
+	&__control.is-control--text {
+		padding: 0 0 10px;
 	}
 
 	&__color-indicator {
 		cursor: pointer;
 		display: flex;
+		align-items: center;
 		gap: 5px;
+		width: 100px;
+		flex: 0 0 100px;
+		.component-color-indicator {
+			width: 16px;
+			height: 16px;
+		}
 		&-label {
 			font-size: 12px;
+			line-height: 16px;
 		}
 	}
 
 	&__usage-marker {
 		position: absolute;
-		top: 7px;
+		top: 5px;
 		left: -10px;
 		width: 6px;
 		height: 6px;
@@ -40,6 +60,9 @@
 		.is-control--range &,
 		.is-control--border & {
 			top: 4px;
+		}
+		.is-control--typography & {
+			top: 5px;
 		}
 		&.is-used {
 			background-color: var(--csm-accent-color);
@@ -53,6 +76,17 @@
 	&__with-spacing {
 		position: relative;
 		padding: 0 0 25px;
+
+		.components-base-control .components-base-control__field {
+			padding-top: 0;
+		}
+
+		&:last-child {
+			padding-bottom: 0;
+			.crocoblock-style-manager__controls-tabs {
+				border-bottom: none;
+			}
+		}
 
 		// Fixes for vertical alignment of controls
 		.components-input-control {
@@ -95,8 +129,25 @@
 		}
 	}
 
-	&__typography-controls {
-		min-width: 300px;
+	&__typography {
+		&-controls {
+			min-width: 300px;
+		}
+		&-indicator {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			cursor: pointer;
+			width: 100px;
+			&-label {
+				font-size: 11px;
+				line-height: 16px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				max-width: 67px;
+			}
+		}
 	}
 
 	&__controls-tabs {
@@ -124,6 +175,13 @@
 		}
 		&-content {
 			padding: 15px 16px 0;
+			&:last-child {
+				padding-bottom: 15px;
+			}
+		}
+		.is-control--tabs + .is-control--tabs & {
+			margin-top: -25px;
+			border-top: none;
 		}
 	}
 
@@ -155,18 +213,38 @@
 			border: 1px solid var(--csm-border-color);
 			padding: 5px;
 			border-radius: 3px;
-			margin-top: -3px;
+			margin-top: -5px;
+			position: relative;
 			svg {
 				width: 16px;
-				height: 16pxr;
+				height: 16px;
 				display: block;
 				path {
 					fill: currentColor;
 				}
 			}
 		}
+		&-clear {
+			position: absolute;
+			top: 50%;
+			left: -23px;
+			transform: translateY(-50%);
+			padding: 0 !important;
+			min-width: 20px !important;
+			height: 20px !important;
+			svg {
+				width: 12px;
+				height: 12px;
+			}
+		}
 		&-control {
 			padding-bottom: 10px;
+			&-text-row {
+				font-size: 12px;
+				line-height: 16px;
+				margin-top: -3px;
+				margin-bottom: 10px;
+			}
 		}
 		&-controls-row {
 			display: flex;

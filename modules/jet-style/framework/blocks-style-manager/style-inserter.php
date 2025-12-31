@@ -4,15 +4,40 @@
  */
 namespace Crocoblock\Blocks_Style;
 
+
 class Style_Inserter {
 
 	protected $class_name = '';
 
 	protected $data = array();
 
+	/**
+	 * Current styles collection.
+	 *
+	 * @var string|null
+	 */
+	public static $current_collection = null;
+
+	/**
+	 * All styles grouped into collections.
+	 *
+	 * @var array
+	 */
+	public static $collections = array();
+
 	public function __construct( $class_name = '', $data = array() ) {
 		$this->class_name = $class_name;
 		$this->data       = $data;
+	}
+
+	/**
+	 * Set current styles collection.
+	 *
+	 * @param string|null $name
+	 * @return void
+	 */
+	public static function set_collection( $name = null ) {
+		self::$current_collection = $name;
 	}
 
 	/**
@@ -38,10 +63,6 @@ class Style_Inserter {
 	 */
 	public function insert_styles( $content = '' ) {
 
-		if ( empty( $content ) ) {
-			return '';
-		}
-
 		$variables = '';
 
 		if ( ! empty( $this->data['variables'] ) ) {
@@ -53,26 +74,96 @@ class Style_Inserter {
 
 		if ( ! empty( $styles ) ) {
 
-			if ( ! empty( $this->class_name ) ) {
-				// Check if the first tag contains class attribute.
-				if ( preg_match( '/<(\w+)([^>]*)class="([^"]*)"/', $content, $matches ) ) {
-					// If it does, we will add our class to it.
-					$content = str_replace(
-						$matches[0],
-						sprintf( '<%s%s class="%s %s"', $matches[1], $matches[2], $matches[3], $this->class_name ),
-						$content
-					);
-				} else {
-					// If it does not, we create a new class attribute with our class and add it to the first tag.
-					$content = preg_replace( '/<(\w+)/', sprintf( '<$1 class="%s"', $this->class_name ), $content, 1 );
+			if ( ! empty( $content ) && ! empty( $this->class_name ) ) {
+				$content = $this->with_class_name( $content );
+			}
+
+			if ( ! empty( self::$current_collection ) ) {
+
+				if ( ! isset( self::$collections[ self::$current_collection ] ) ) {
+					self::$collections[ self::$current_collection ] = '';
 				}
+
+				self::$collections[ self::$current_collection ] .= $styles;
+
+				// If we stored styles into the collection - there is nothing more to do.
+				return $content;
 			}
 
 			if ( ! Style_Cache::get_instance()->is_printed( $this->class_name ) ) {
-				$content = '<style>' . $styles . '</style>' . $content;
+				if ( ! did_action( 'wp_head' ) ) {
+					// If the wp_head action isn't called yet, we will add the styles to the head.
+					add_action( 'wp_head', function() use ( $styles ) {
+						echo self::styles_with_tag( $styles );
+					} );
+				} else {
+					// If the wp_head action is already called, we will add the styles to the content.
+					$content = self::styles_with_tag( $styles ) . $content;
+				}
 			}
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Get styles collection by name.
+	 *
+	 * @param string|null $name
+	 * @return string
+	 */
+	public static function get_styles_collection( $name = null, $with_tag = true ) {
+
+		if ( ! $name ) {
+			return '';
+		}
+
+		$styles = isset( self::$collections[ $name ] ) ? self::$collections[ $name ] : '';
+
+		if ( ! $styles ) {
+			return '';
+		}
+
+		return $with_tag ? self::styles_with_tag( $styles ) : $styles;
+	}
+
+	/**
+	 * Add class name to the content wrapper.
+	 *
+	 * @param string $content Content to add class name to.
+	 * @return string
+	 */
+	public function with_class_name( $content = '' ) {
+
+		if ( empty( $content ) || empty( $this->class_name ) ) {
+			return $content;
+		}
+
+		if ( ! class_exists( '\WP_HTML_Processor' ) ) {
+			require_once ABSPATH . WPINC . '/class-wp-html-processor.php';
+		}
+
+		$processor = \WP_HTML_Processor::create_fragment( $content );
+
+		while ( $processor->next_tag( [
+			'breadcrumbs' => [ 'BODY', '*' ],
+			'tag_closers' => 'skip',
+		] ) ) {
+			$processor->add_class( $this->class_name );
+		}
+
+		$content = $processor->get_updated_html();
+
+		return $content;
+	}
+
+	/**
+	 * Get styles wrapped into the <style> tag.
+	 *
+	 * @param string $css CSS styles to insert.
+	 * @return string
+	 */
+	public static function styles_with_tag( $css = '' ) {
+		return '<style>' . $css . '</style>';
 	}
 }

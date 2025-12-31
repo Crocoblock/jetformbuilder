@@ -80,6 +80,58 @@ export default class Border extends BaseField {
 		return result;
 	}
 
+	parseVariable( variable ) {
+
+		const prefix = variable.prefix !== undefined ? variable.prefix : '';
+		const name   = variable.name !== undefined ? variable.name : false;
+		let full_name = variable.full_name ? variable.full_name : prefix + '-' + name;
+
+		if (!full_name) {
+			return {};
+		}
+
+		if (variable.suffix) {
+			full_name += variable.suffix;
+		}
+
+		const values = this.getParsedValue();
+		const result = {};
+
+		if (values.radius) {
+			let radius = '';
+
+			if (typeof values.radius === 'string') {
+				radius = values.radius;
+			} else {
+				const propsOrder = ['topLeft', 'topRight', 'bottomRight', 'bottomLeft'];
+
+				propsOrder.forEach(prop => {
+					radius += values.radius[prop] ? values.radius[prop] + ' ' : '0 ';
+				});
+
+				radius = radius.trim();
+			}
+
+			result[ full_name + '__radius' ] = radius;
+		}
+
+		if (values.border && typeof values.border === 'object') {
+			const globalProps = values.border.global || {};
+			const sides = ['top', 'right', 'bottom', 'left'];
+
+			sides.forEach(side => {
+				const side_props = (values.border[side] && typeof values.border[side] === 'object') ? values.border[side] : {};
+				const color = side_props.color || globalProps.color || 'transparent';
+				const width = side_props.width || globalProps.width || '0';
+				const style = side_props.style || globalProps.style || 'solid';
+
+				result[ full_name + '__' + side ] = width + ' ' + style + ' ' + color;
+			});
+		}
+
+		return result;
+	}
+
 	getBorderCSS( props, key ) {
 
 		let css = '';

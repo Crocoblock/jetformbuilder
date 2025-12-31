@@ -1,8 +1,13 @@
 import { PanelBody } from '@wordpress/components';
 import { hasChildren } from '../helpers/utils';
 import ControlComponent from './control-component';
+import { isVisible, getContextFromProps } from '../helpers/conditions-checker';
 
 const ControlSection = ( { section, props } ) => {
+
+	if ( section.condition && ! isVisible( section.condition, getContextFromProps( props ) ) ) {
+		return null;
+	}
 
 	return (
 		<PanelBody

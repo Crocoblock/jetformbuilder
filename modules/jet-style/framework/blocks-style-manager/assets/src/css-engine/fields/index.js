@@ -4,6 +4,8 @@ import Typography from './typography.js';
 import Border from './border.js';
 import Dimensions from './dimensions.js';
 import Range from './range.js';
+import Choose from './choose.js';
+import Toggle from './toggle.js';
 
 export {
 	Color,
@@ -12,4 +14,6 @@ export {
 	BaseField,
 	Dimensions,
 	Range,
+	Choose,
+	Toggle,
 };

@@ -79,13 +79,6 @@ class Number_Field extends Base {
 					'{{WRAPPER}} ' . $this->css_scheme['front-field']        => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 					'{{WRAPPER}} ' . $this->css_scheme['field']              => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => array(
-							'borderStyle' => 'solid',
-						),
-					),
-				),
 			)
 		);
 

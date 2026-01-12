@@ -46,6 +46,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @var Controls_Manager
 	 */
 	protected $controls_manager;
+	protected $style_manager;
 	protected $css_scheme;
 	public $style_attributes = array();
 
@@ -103,11 +104,6 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 */
 	public function register_block_type() {
 		$this->register_block();
-
-		add_action(
-			'jet-form-builder/styles/register-block',
-			array( $this, 'maybe_init_style_manager' )
-		);
 	}
 
 	/**
@@ -205,11 +201,11 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 	public function maybe_init_style_manager( $style_manager ) {
 
-		$style_manager->get_manager()->register_block_support(
+		$style_manager->register_block_support(
 			$this->block_name()
 		);
 
-		$proxy = $style_manager->get_manager()->get_proxy( $this->block_name() );
+		$proxy = $style_manager->get_proxy( $this->block_name() );
 
 		$this->controls_manager = $proxy;
 		$this->css_scheme       = array_merge( $this->general_css_scheme(), $this->get_css_scheme() );

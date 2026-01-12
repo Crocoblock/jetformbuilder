@@ -23,7 +23,7 @@ class Style_Manager {
 			'url'  => $module_data['url'],
 		) );
 
-		add_action( 'init', array( $this, 'register_blocks' ), 99 );
+		add_action( 'jet-form-builder/block-type/before-intall', array( $this, 'register_block' ) );
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Style_Manager {
 	 *
 	 * @return void
 	 */
-	public function register_blocks() {
-		do_action( 'jet-form-builder/styles/register-block', $this );
+	public function register_block( $block_type ) {
+		$block_type->maybe_init_style_manager( $this->manager );
 	}
 }

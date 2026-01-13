@@ -58,7 +58,7 @@ class Textarea_Field extends Base {
 					),
 				),
 				'css_selector' => array(
-					$this->selector( 'field' ) => 'height: {{VALUE}}px; min-height: {{VALUE}}px;',
+					$this->selector( 'field' ) => 'height: {{VALUE}}{{UNIT}}; min-height: {{VALUE}}{{UNIT}};',
 				),
 				'attributes'   => array(
 					'default' => array(

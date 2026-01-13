@@ -46,7 +46,6 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @var Controls_Manager
 	 */
 	protected $controls_manager;
-	protected $style_manager;
 	protected $css_scheme;
 	public $style_attributes = array();
 
@@ -199,6 +198,11 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		return $this->provides_context;
 	}
 
+	/**
+	 * Initialize style manager for the block
+	 *
+	 * @param Object $style_manager Actual style manager instance.
+	 */
 	public function maybe_init_style_manager( $style_manager ) {
 
 		$style_manager->register_block_support(

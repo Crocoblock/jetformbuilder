@@ -102,12 +102,7 @@ class Action_Button extends Base {
 					),
 				),
 				'css_selector' => array(
-					$this->selector( '__action-button' ) => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
-				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => 20,
-					),
+					$this->selector( '__action-button' ) => 'width: {{VALUE}}{{UNIT}}; max-width: {{VALUE}}{{UNIT}};',
 				),
 			)
 		);

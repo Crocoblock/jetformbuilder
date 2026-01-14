@@ -295,7 +295,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 				'separator'    => 'after',
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['radio']                           => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-					'{{WRAPPER}} ' . $this->css_scheme['front-label'] . ' > span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					'{{WRAPPER}} ' . $this->css_scheme['front-label'] . '.jet-form-builder__field-label > span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				),
 			)
 		);
@@ -314,7 +314,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 					// editor
 					'{{WRAPPER}} ' . $this->css_scheme['radio']                           => 'background-color: {{VALUE}}',
 					// front
-					'{{WRAPPER}} ' . $this->css_scheme['front-label'] . ' > span::before' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} ' . $this->css_scheme['front-label'] . '.jet-form-builder__field-label > span::before' => 'background-color: {{VALUE}}',
 				),
 			)
 		);
@@ -337,7 +337,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 				'separator'    => 'after',
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['radio'] . ':checked'                       => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-					'{{WRAPPER}} ' . $this->css_scheme['front-label'] . ' :checked + span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					'{{WRAPPER}} ' . $this->css_scheme['front-label'] . '.jet-form-builder__field-label :checked + span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				),
 			)
 		);
@@ -356,7 +356,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes, Suppor
 					// editor
 					'{{WRAPPER}} ' . $this->css_scheme['radio'] . ':checked'                       => 'background-color: {{VALUE}}',
 					// front
-					'{{WRAPPER}} ' . $this->css_scheme['front-label'] . ' :checked + span::before' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} ' . $this->css_scheme['front-label'] . '.jet-form-builder__field-label :checked + span::before' => 'background-color: {{VALUE}}',
 				),
 			)
 		);

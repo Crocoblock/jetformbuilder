@@ -590,7 +590,7 @@ class Form implements Style_Block_It {
 				'css_selector' => array(
 					$this->selector(
 						'-row.field-type-select-field %1$s__field-wrap'
-					) => 'max-width: {{VALUE}}%',
+					) => 'max-width: {{VALUE}}{{UNIT}};',
 				),
 			)
 		);

@@ -1648,7 +1648,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 				'label'     => esc_html__( 'Background', 'jet-form-builder' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					$this->selector( '__field-wrap label > span::before' ) => 'background-color: {{VALUE}};',
+					$this->selector( '__field-wrap label.jet-form-builder__field-label > span::before' ) => 'background-color: {{VALUE}};',
 				),
 			)
 		);

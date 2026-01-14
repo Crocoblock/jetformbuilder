@@ -69,7 +69,7 @@ class Block_Type extends Base implements
 					),
 				),
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['select-wrapper'] => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
+					'{{WRAPPER}} ' . $this->css_scheme['select-wrapper'] => 'width: {{VALUE}}{{UNIT}}; max-width: {{VALUE}}{{UNIT}};',
 				),
 				'attributes'   => array(
 					'default' => array(

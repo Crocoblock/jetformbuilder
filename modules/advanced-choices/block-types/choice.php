@@ -28,6 +28,10 @@ class Choice extends Base implements Base_Choice_Item_It {
 		return false;
 	}
 
+	public function general_style_unregister() {
+		return array( 'description', 'required' );
+	}
+
 	/**
 	 * @param null|array $wp_block
 	 *

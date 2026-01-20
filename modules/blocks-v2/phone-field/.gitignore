@@ -1,0 +1,16 @@
+# Node modules
+node_modules/
+
+# NPM lock files
+package-lock.json
+
+# Editor directories
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Note: We DO commit assets/lib/intl-tel-input/
+# because it's needed for the plugin to work

@@ -1,0 +1,70 @@
+/* International Phone Field Styles */
+
+.jet-form-builder__field-wrap.phone-field-wrap {
+	position: relative;
+
+	.iti {
+		width: 100%;
+	}
+
+	.intl-tel-input {
+		width: 100%;
+		display: block;
+	}
+
+	.intl-tel-input .iti__selected-flag {
+		padding: 0 8px;
+	}
+
+	.intl-tel-input input[type='tel'] {
+		width: 100%;
+		padding-left: 52px;
+		transition: border-color 0.2s ease, background-color 0.2s ease;
+	}
+
+	/* Focus state */
+	.intl-tel-input input[type='tel']:focus {
+		outline: none;
+		border-color: #2271b1;
+		box-shadow: 0 0 0 1px #2271b1;
+	}
+
+	.iti__flag-container {
+		z-index: 2;
+	}
+
+	.iti__country-list {
+		z-index: 10;
+		max-height: 200px;
+		overflow-y: auto;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	}
+
+	/* Validation states */
+	.phone-field-intl.invalid,
+	input.phone-field-intl.iti__tel-input.invalid {
+		border-color: #dc3232 !important;
+	}
+
+
+	/* Error state for phone field */
+	&.field-has-error {
+		.phone-field-intl,
+		input.phone-field-intl.iti__tel-input {
+			border-color: #dc3232 !important;
+			background-color: #fff0f0;
+		}
+
+		.error-message {
+			color: red;
+			font-size: 0.8rem;
+		}
+	}
+
+	/* Hide hidden fields */
+	.jet-form-builder__field {
+		&.phone-field {
+			display: none;
+		}
+	}
+}

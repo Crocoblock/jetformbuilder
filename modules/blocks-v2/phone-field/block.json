@@ -1,0 +1,119 @@
+{
+	"$schema": "https://raw.githubusercontent.com/WordPress/gutenberg/trunk/schemas/json/block.json",
+	"apiVersion": 2,
+	"name": "jet-forms/phone-field",
+	"category": "jet-form-builder-fields",
+	"keywords": [
+		"jetformbuilder",
+		"field",
+		"phone",
+		"international",
+		"telephone"
+	],
+	"textdomain": "jet-form-builder",
+	"supports": {
+		"customClassName": false,
+		"html": false,
+		"jetFBSanitizeValue": true
+	},
+	"title": "Phone Field",
+	"icon": "<svg width=\"64\" height=\"64\" viewBox=\"0 0 64 64\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M38 10C36.8954 10 36 10.8954 36 12V16H28V12C28 10.8954 27.1046 10 26 10C24.8954 10 24 10.8954 24 12V16H20C17.7909 16 16 17.7909 16 20V48C16 50.2091 17.7909 52 20 52H44C46.2091 52 48 50.2091 48 48V20C48 17.7909 46.2091 16 44 16H40V12C40 10.8954 39.1046 10 38 10ZM18 20C18 18.8954 18.8954 18 20 18H44C45.1046 18 46 18.8954 46 20V24H18V20ZM18 26V48C18 49.1046 18.8954 50 20 50H44C45.1046 50 46 49.1046 46 48V26H18ZM22 30C21.4477 30 21 30.4477 21 31C21 31.5523 21.4477 32 22 32H42C42.5523 32 43 31.5523 43 31C43 30.4477 42.5523 30 42 30H22ZM21 37C21 36.4477 21.4477 36 22 36H42C42.5523 36 43 36.4477 43 37C43 37.5523 42.5523 38 42 38H22C21.4477 38 21 37.5523 21 37ZM22 42C21.4477 42 21 42.4477 21 43C21 43.5523 21.4477 44 22 44H34C34.5523 44 35 43.5523 35 43C35 42.4477 34.5523 42 34 42H22Z\" fill=\"currentColor\"/></svg>",
+	"attributes": {
+		"label": {
+			"type": "string",
+			"default": "",
+			"jfb": {
+				"rich": true
+			}
+		},
+		"name": {
+			"type": "string",
+			"default": "field_name"
+		},
+		"desc": {
+			"type": "string",
+			"default": "",
+			"jfb": {
+				"rich": true
+			}
+		},
+		"default": {
+			"type": "string",
+			"default": "",
+			"jfb": {
+				"rich-no-preset": true
+			}
+		},
+		"value": {
+			"type": "object",
+			"default": {
+				"groups": []
+			}
+		},
+		"required": {
+			"type": "boolean",
+			"default": false
+		},
+		"visibility": {
+			"type": "string",
+			"default": ""
+		},
+		"class_name": {
+			"type": "string",
+			"default": ""
+		},
+		"className": {
+			"type": "string",
+			"default": ""
+		},
+		"default_country": {
+			"type": "string",
+			"default": "auto"
+		},
+		"preferred_countries": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "string"
+			}
+		},
+		"only_countries": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "string"
+			}
+		},
+		"exclude_countries": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "string"
+			}
+		},
+		"separate_dial_code" : {
+			"type": "boolean",
+			"default": false
+		},
+		"save_format": {
+			"type": "string",
+			"default": "e164",
+			"enum": ["e164", "national", "international"]
+		},
+		"ipinfo_token": {
+			"type": "string",
+			"default": ""
+		},
+		"isPreview": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"usesContext": [
+		"jet-forms/repeater-field--name",
+		"jet-forms/repeater-row--default",
+		"jet-forms/repeater-row--current-index"
+	],
+	"viewScript": "jet-fb-blocks-v2-phone-field",
+	"viewStyle": "jet-fb-blocks-v2-phone-field"
+}

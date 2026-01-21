@@ -58,7 +58,7 @@ class Textarea_Field extends Base {
 					),
 				),
 				'css_selector' => array(
-					$this->selector( 'field' ) => 'height: {{VALUE}}px; min-height: {{VALUE}}px;',
+					$this->selector( 'field' ) => 'height: {{VALUE}}{{UNIT}}; min-height: {{VALUE}}{{UNIT}};',
 				),
 				'attributes'   => array(
 					'default' => array(
@@ -118,7 +118,7 @@ class Textarea_Field extends Base {
 			array(
 				'id'           => 'item_normal_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'field' ) => 'background-color: {{VALUE}}',
 				),

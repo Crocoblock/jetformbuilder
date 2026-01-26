@@ -62,6 +62,8 @@ if ( ! empty( $args['ipinfo_token'] ) ) {
 	$this->add_attribute( 'data-ipinfo-token', esc_attr( $args['ipinfo_token'] ) );
 }
 
+$separate_dial_code = '';
+
 if ( ! empty( $args['separate_dial_code'] ) ) {
 	$separate_dial_code = $args['separate_dial_code'] ? 'separate-dial-code' : '';
 }

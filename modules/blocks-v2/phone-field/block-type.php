@@ -36,9 +36,121 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 	 */
 	public function get_css_scheme() {
 		return array(
-			'field'   => '__field-wrap input[type="tel"]',
-			'wrapper' => '__field-wrap',
+			'field'            => '__field-wrap input[type="tel"].jet-form-builder__field.phone-field-intl.iti__tel-input',
+			'button_arrow'     => ' .iti__selected-country .iti__arrow',
+			'button_dial_code' => '__field-wrap .iti__selected-country .iti__selected-dial-code'
 		);
+	}
+
+	public function jsm_controls() {
+
+		$this->controls_manager->start_section(
+			'style_controls',
+			array(
+				'id'    => 'field_style',
+				'title' => __( 'Text Input', 'jet-form-builder' ),
+			)
+		);
+
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'item_typography',
+				'type'         => 'typography',
+				'separator'    => 'after',
+				'css_selector' => array(
+					$this->selector( 'field' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+					$this->selector( 'button_dial_code' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+				),
+			)
+		);
+
+		$this->add_margin_padding(
+			$this->selector( 'field' ),
+			array(
+				'padding' => array(
+					'id'        => 'item_padding',
+					'separator' => 'after',
+				),
+			)
+		);
+
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'item_border',
+				'type'         => 'border',
+				'separator'    => 'after',
+				'label'        => __( 'Border', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( 'field' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
+
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'item_error_border_color',
+				'type'         => 'border',
+				'separator'    => 'after',
+				'label'        => __( 'Error Border Color', 'jet-form-builder' ),
+				'css_selector' => array(
+					$this->selector( 'field' ) . '.invalid' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+				),
+			)
+		);
+
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'item_text_color',
+				'type'         => 'color-picker',
+				'separator'    => 'after',
+				'label'        => __( 'Color', 'jet-form-builder' ),
+				'attributes'   => array(
+					'default' => array(
+						'value' => '#000000',
+					),
+				),
+				'css_selector' => array(
+					$this->selector( 'field' ) => 'color: {{VALUE}}',
+					$this->selector( 'field' ) . '::placeholder' => 'color: {{VALUE}}',
+					$this->selector( 'button_dial_code' ) => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'item_background_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Background', 'jet-form-builder' ),
+				'attributes'   => array(
+					'default' => array(
+						'value' => '#FFFFFF',
+					),
+				),
+				'css_selector' => array(
+					$this->selector( 'field' ) => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'item_arrow_color',
+				'type'         => 'color-picker',
+				'separator'    => 'after',
+				'label'        => __( 'Arrow Color', 'jet-form-builder' ),
+				'attributes'   => array(
+					'default' => array(
+						'value' => '#555',
+					),
+				),
+				'css_selector' => array(
+					$this->selector( 'button_arrow' ) => 'border-top-color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->controls_manager->end_section();
 	}
 
 	/**

@@ -2,9 +2,25 @@
 
 .jet-form-builder__field-wrap.phone-field-wrap {
 	position: relative;
+	width: 100%;
 
 	.iti {
 		width: 100%;
+		position: relative;
+		display: inline-block;
+	}
+
+	.iti--allow-dropdown .iti__country-container:not(:has(+ input[disabled])):not(:has(+ input[readonly])) .iti__selected-country-primary:hover,
+	.iti--allow-dropdown .iti__country-container:not(:has(+ input[disabled])):not(:has(+ input[readonly])) .iti__selected-country:has(+ .iti__dropdown-content:hover) .iti__selected-country-primary {
+		background-color: rgba(0, 0, 0, 0.05);
+		transition: all 0.3s ease-in-out;
+	}
+
+	.iti__selected-country {
+		&:hover {
+			background-color: transparent;
+			color: inherit;
+		}
 	}
 
 	.intl-tel-input {
@@ -43,7 +59,7 @@
 	/* Validation states */
 	.phone-field-intl.invalid,
 	input.phone-field-intl.iti__tel-input.invalid {
-		border-color: #dc3232 !important;
+		border-color: #dc3232;
 	}
 
 
@@ -51,13 +67,8 @@
 	&.field-has-error {
 		.phone-field-intl,
 		input.phone-field-intl.iti__tel-input {
-			border-color: #dc3232 !important;
+			border-color: #dc3232;
 			background-color: #fff0f0;
-		}
-
-		.error-message {
-			color: red;
-			font-size: 0.8rem;
 		}
 	}
 

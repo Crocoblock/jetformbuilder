@@ -7,7 +7,7 @@ import {
 	BaseControl,
 } from '@wordpress/components';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import globeIcon from '../../../lib/img/globe.png';
+import globeIcon from '../../../lib/img/globe@2x.webp';
 import PhoneFieldVisualPreview from './preview';
 
 const {
@@ -17,9 +17,7 @@ const {
 	BlockDescription,
 	AdvancedFields,
 	FieldWrapper,
-	FieldSettingsWrapper,
 	BlockAdvancedValue,
-	BaseHelp,
 } = JetFBComponents;
 
 const {

@@ -1,7 +1,97 @@
 .wp-block-jet-forms-phone-field {
-	.intl-phone-preview {
-		input[type="tel"] {
+
+	/* Editor Preview Styles */
+	.jet-form-builder__field-wrap.phone-field-wrap {
+		position: relative;
+	}
+
+	.iti {
+		width: 100%;
+		position: relative;
+		display: inline-block;
+	}
+
+	.phone-field-preview {
+		.iti__country-container {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			padding: var(--iti-border-width);
+		}
+
+		.iti__selected-country {
+			z-index: 1;
+			position: relative;
+			display: flex;
+			align-items: center;
+			height: 100%;
+			background: transparent;
+			border: 0;
+			margin: 0;
+			padding: 0;
+			font-family: inherit;
+			font-size: inherit;
+			color: inherit;
+			border-radius: 0;
+			font-weight: inherit;
+			line-height: inherit;
+			text-decoration: none;
+		}
+
+		.iti__selected-dial-code {
+			margin-left: 4px;
+		}
+
+		.iti__selected-country-primary {
+			display: flex;
+			align-items: center;
+			height: 100%;
+			padding: 0 6px 0 8px;
+		}
+
+		.iti__flag.iti__globe {
+			background-size: contain;
+			background-position: right;
+			background-repeat: no-repeat;
+			box-shadow: none;
+			height: 19px;
+			width: 16px;
+			border-radius: 1px;
+		}
+
+		.iti__arrow {
+			margin-left: 6px;
+			width: 0;
+			height: 0;
+			border-left: 3px solid transparent;
+			border-right: 3px solid transparent;
+			border-top: 4px solid #555;
+		}
+
+		&.separate-dial-code {
+			input.phone-field-intl.iti__tel-input {
+				padding-left: 70px;
+			}
+		}
+
+		input.phone-field-intl.iti__tel-input {
+			flex: 1;
+			height: 100%;
 			width: 100%;
+			border: 1px solid #ebeced;
+			outline: none;
+			padding: 8px 12px;
+			padding-left: 52px;
+			color: #1e1e1e;
+			background: #fff;
+			box-sizing: border-box;
+			min-width: 0;
+			font-size: 14px;
+		}
+
+		.iti--allow-dropdown .iti__country-container .iti__selected-country-primary:hover {
+			background-color: rgba(0, 0, 0, 0.05);
+			transition: all 0.3s ease-in-out;
 		}
 	}
 }

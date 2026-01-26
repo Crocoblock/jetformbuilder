@@ -62,9 +62,13 @@ if ( ! empty( $args['ipinfo_token'] ) ) {
 	$this->add_attribute( 'data-ipinfo-token', esc_attr( $args['ipinfo_token'] ) );
 }
 
+if ( ! empty( $args['separate_dial_code'] ) ) {
+	$separate_dial_code = $args['separate_dial_code'] ? 'separate-dial-code' : '';
+}
+
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
-<div class="jet-form-builder__field-wrap phone-field-wrap">
+<div class="jet-form-builder__field-wrap phone-field-wrap <?php echo $separate_dial_code;?>">
 	<?php do_action( 'jet-form-builder/before-field', $this ); ?>
 
 	<input <?php $this->render_attributes_string(); ?>>
@@ -73,7 +77,7 @@ if ( ! empty( $args['ipinfo_token'] ) ) {
 		type="tel"
 		name="<?php echo $this->block_type->get_field_name( $args['name'] . '_intl' ); ?>"
 		data-field-name="<?php echo $args['name'] . '_intl';?>"
-		class="jet-form-builder__field phone-field-intl <?php echo $args['class_name'];?>"
+		class="jet-form-builder__field phone-field-intl <?php echo $args['class_name'];?> "
 		value=""
 		autocomplete="tel"
 	>

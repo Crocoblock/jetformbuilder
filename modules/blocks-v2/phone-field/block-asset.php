@@ -31,7 +31,6 @@ class Block_Asset implements Block_Asset_Interface {
 			'jet_plugins/frontend/register_scripts',
 			array( $this, 'register_frontend_assets' )
 		);
-		// Note: Assets are enqueued in Block_Render::before_render() instead of globally
 	}
 
 	/**

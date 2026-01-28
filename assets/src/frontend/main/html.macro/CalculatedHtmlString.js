@@ -1,12 +1,10 @@
 import CalculatedFormula from '../calc.module/CalculatedFormula';
 
-const {
-	      applyFilters,
-      } = JetPlugins.hooks;
+const { applyFilters } = JetPlugins.hooks;
 
 function CalculatedHtmlString(
 	root,
-	{ withPrefix = true, ...options } = {},
+	{ withPrefix = true, macroHost = false, ...options } = {},
 ) {
 	CalculatedFormula.call( this, root, options );
 
@@ -14,25 +12,32 @@ function CalculatedHtmlString(
 		this.regexp = /JFB_FIELD::(.+)/gi;
 	}
 
+	this.macroHost = macroHost || false;
+
 	this.relatedCallback = function ( input ) {
+		const $fieldNode = jQuery( input.nodes[ 0 ] );
+		const $macroHost = this.macroHost ? jQuery( this.macroHost ) : false;
+
 		let fieldValue = applyFilters(
 			'jet.fb.macro.field.value',
 			false,
-			jQuery( input.nodes[ 0 ] ),
+			$fieldNode,
+			$macroHost,
 		);
 
-		fieldValue = wp?.hooks?.applyFilters ?
-		             wp.hooks.applyFilters(
-			             'jet.fb.macro.field.value',
-			             fieldValue,
-			             jQuery( input.nodes[ 0 ] ),
-		             ) : fieldValue;
+		fieldValue = wp?.hooks?.applyFilters
+			? wp.hooks.applyFilters(
+				'jet.fb.macro.field.value',
+				fieldValue,
+				$fieldNode,
+				$macroHost,
+			)
+			: fieldValue;
 
 		return false === fieldValue ? input.value.current : fieldValue;
-	};
+	}.bind( this );
 
-	this.onMissingPart = function () {
-	};
+	this.onMissingPart = function () {};
 }
 
 CalculatedHtmlString.prototype = Object.create( CalculatedFormula.prototype );
@@ -42,16 +47,17 @@ CalculatedHtmlString.prototype.calculateString = function () {
 		return this.formula;
 	}
 
-	return this.parts.map( current => {
-		if ( 'function' !== typeof current ) {
-			return current;
-		}
-		const result = current();
+	return this.parts
+		.map( ( current ) => {
+			if ( 'function' !== typeof current ) {
+				return current;
+			}
 
-		return (
-			       null === result || '' === result
-		       ) ? '' : result;
-	} ).join( '' );
+			const result = current();
+
+			return ( null === result || '' === result ) ? '' : result;
+		} )
+		.join( '' );
 };
 
 export default CalculatedHtmlString;

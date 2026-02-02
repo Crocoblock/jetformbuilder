@@ -158,7 +158,6 @@ class Block_Asset implements Block_Asset_Interface {
 	 */
 	public function enqueue_field_assets() {
 		wp_enqueue_style( 'intl-tel-input' );
-		wp_enqueue_style( 'intl-tel-input-flags-fix' );
 		wp_enqueue_script( Base_Module_Handle_It::HANDLE_PREFIX . 'blocks-v2-phone-field' );
 		wp_enqueue_style( Base_Module_Handle_It::HANDLE_PREFIX . 'blocks-v2-phone-field' );
 	}

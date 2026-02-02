@@ -17,6 +17,7 @@
 			top: 0;
 			bottom: 0;
 			padding: var(--iti-border-width);
+			width: 100%;
 		}
 
 		.iti__selected-country {
@@ -70,7 +71,7 @@
 
 		&.separate-dial-code {
 			input.phone-field-intl.iti__tel-input {
-				padding-left: 70px;
+				padding-left: 63px;
 			}
 		}
 
@@ -81,7 +82,7 @@
 			border: 1px solid #ebeced;
 			outline: none;
 			padding: 8px 12px;
-			padding-left: 52px;
+			padding-left: 48px;
 			color: #1e1e1e;
 			background: #fff;
 			box-sizing: border-box;

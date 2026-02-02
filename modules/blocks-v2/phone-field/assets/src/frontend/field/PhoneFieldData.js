@@ -52,6 +52,7 @@ function PhoneFieldData() {
 		const preferredCountries = this.parseCountryList( node.dataset.preferredCountries );
 		const onlyCountries      = this.parseCountryList( node.dataset.onlyCountries );
 		const excludeCountries   = this.parseCountryList( node.dataset.excludeCountries );
+		const separateDialCode   = node.dataset.separateDialCode || false;
 		const ipinfoToken        = node.dataset.ipinfoToken || '';
 
 		// Determine initial country
@@ -69,7 +70,7 @@ function PhoneFieldData() {
 		// Build config object, only include arrays if they have items
 		const config = {
 			initialCountry: initialCountry,
-			separateDialCode: true,
+			separateDialCode: 1 == separateDialCode ? true : false,
 			strictMode: true,
 			nationalMode: true,
 			formatAsYouType: true,
@@ -90,7 +91,6 @@ function PhoneFieldData() {
 		if ( Object.keys( i18n ).length ) {
 			config.i18n = i18n;
 		}
-
 
 		// Initialize intl-tel-input
 		this.itiInstance = window.intlTelInput( input, config );
@@ -133,15 +133,15 @@ function PhoneFieldData() {
 			return cached;
 		}
 
-		// Async detection (won't block initialization)
 		const url = token
-			? `https://ipinfo.io/json?token=${ token }`
+			? `https://api.ipinfo.io/lite/me?token=${ token }`
 			: 'https://ipinfo.io/json';
 
 		fetch( url )
 			.then( response => response.json() )
 			.then( data => {
 				if ( data.country ) {
+
 					const country = data.country.toLowerCase();
 					sessionStorage.setItem( 'jfb_detected_country', country );
 
@@ -387,6 +387,26 @@ function PhoneFieldData() {
 	};
 
 	/**
+	 * Get validation message from data-attributes or fallback
+	 */
+	this.getValidationMessage = function ( type ) {
+		const mainField = this.nodes[ 0 ];
+
+		// Get custom message from block settings (data-attributes)
+		if ( type === 'required' && mainField.dataset.validationMessageRequired ) {
+			return mainField.dataset.validationMessageRequired;
+		}
+		if ( type === 'invalid' && mainField.dataset.validationMessageInvalid ) {
+			return mainField.dataset.validationMessageInvalid;
+		}
+
+		// Fallback to default messages
+		return type === 'required'
+			? 'This field is required'
+			: 'Please enter a valid phone number';
+	};
+
+	/**
 	 * Validate phone number and show error if invalid
 	 */
 	this.validateAndShowError = function () {
@@ -402,7 +422,7 @@ function PhoneFieldData() {
 
 		// Check if field is required and empty
 		if ( mainField.hasAttribute( 'required' ) && ! value ) {
-			this.showError( 'This field is required' );
+			this.showError( this.getValidationMessage( 'required' ) );
 
 			return false;
 		}
@@ -412,7 +432,7 @@ function PhoneFieldData() {
 			const isValid = this.itiInstance.isValidNumber();
 
 			if ( ! isValid ) {
-				this.showError( 'Please enter a valid phone number' );
+				this.showError( this.getValidationMessage( 'invalid' ) );
 
 				return false;
 			}

@@ -9,7 +9,7 @@ export default function PhoneFieldVisualPreview({
 	globeIcon,
 }) {
 	return (
-		<div className='jet-form-builder'>
+		<div>
 			<div className={`jet-form-builder__field-wrap phone-field-wrap phone-field-preview ${separateDialCode ? separateDialCodeClass: ''}`}>
 				<div className='iti iti--allow-dropdown iti--show-flags iti--inline-dropdown'>
 					<div className='iti__country-container' aria-hidden="true">

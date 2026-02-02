@@ -25,32 +25,32 @@ $this->add_attribute( 'class', 'jet-form-builder__field phone-field' );
 $this->add_attribute( 'class', $args['class_name'] );
 $this->add_attribute( 'data-jfb-sync' );
 $this->add_attribute( 'autocomplete', 'tel' );
-
 $this->add_attribute( 'data-default-country', esc_attr( $args['default_country'] ?? 'auto' ) );
 
 if ( ! empty( $args['preferred_countries'] ) ) {
-	$preferred_countries = array_map( 'sanitize_text_field', $args['preferred_countries'] );
+	$preferred_countries = $args['preferred_countries'];
 
 	$this->add_attribute(
 		'data-preferred-countries',
-		esc_attr( implode( ',', $preferred_countries ) )
+		esc_attr( $preferred_countries )
 	);
 }
 
-if ( ! empty( $args['only_countries'] ) && is_array( $args['only_countries'] ) ) {
-	$countries = array_map( 'sanitize_text_field', $args['only_countries'] );
+if ( ! empty( $args['only_countries'] ) && $args['only_countries'] ) {
+	$countries = $args['only_countries'];
 
 	$this->add_attribute(
 		'data-only-countries',
-		esc_attr( implode( ',', $countries ) )
+		esc_attr( $countries )
 	);
 }
 
 if ( ! empty( $args['exclude_countries'] ) ) {
-	$exclude_countries = array_map( 'sanitize_text_field', $args['exclude_countries'] );
+	$exclude_countries = $args['exclude_countries'];
+
 	$this->add_attribute(
 		'data-exclude-countries',
-		esc_attr( implode( ',', $exclude_countries ) )
+		esc_attr( $exclude_countries )
 	);
 }
 
@@ -58,14 +58,35 @@ if ( ! empty( $args['save_format'] ) ) {
 	$this->add_attribute( 'data-save-format', esc_attr( $args['save_format'] ) );
 }
 
-if ( ! empty( $args['ipinfo_token'] ) ) {
-	$this->add_attribute( 'data-ipinfo-token', esc_attr( $args['ipinfo_token'] ) );
+// Handle ipinfo.io token (global or per-block)
+$ipinfo_token = '';
+
+if ( ! empty( $args['use_global'] ) && $args['use_global'] ) {
+	// Use global token from settings
+	$global_options = \Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager::get_options( 'phone-field-tab' );
+	$ipinfo_token   = $global_options['ipinfo_token'] ?? '';
+} elseif ( ! empty( $args['ipinfo_token'] ) ) {
+	// Use per-block token
+	$ipinfo_token = $args['ipinfo_token'];
+}
+
+if ( ! empty( $ipinfo_token ) ) {
+	$this->add_attribute( 'data-ipinfo-token', esc_attr( $ipinfo_token ) );
+}
+
+if ( ! empty( $args['validation_message_required'] ) ) {
+	$this->add_attribute( 'data-validation-message-required', esc_attr( $args['validation_message_required'] ) );
+}
+
+if ( ! empty( $args['validation_message_invalid'] ) ) {
+	$this->add_attribute( 'data-validation-message-invalid', esc_attr( $args['validation_message_invalid'] ) );
 }
 
 $separate_dial_code = '';
 
 if ( ! empty( $args['separate_dial_code'] ) ) {
 	$separate_dial_code = $args['separate_dial_code'] ? 'separate-dial-code' : '';
+	$this->add_attribute( 'data-separate-dial-code', esc_attr( $args['separate_dial_code'] ) );
 }
 
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped

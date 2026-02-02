@@ -54,9 +54,9 @@ const localeMap = {
 /**
  * Dynamic import loaders for each supported locale
  * These are side-effect imports that register translations globally
+ * Note: English is built-in to intl-tel-input, so no loader needed
  */
 const loaders = {
-	en: () => import( /* webpackChunkName: "phone-i18n-en" */ '../../../lib/intl-tel-input/i18n/en' ),
 	uk: () => import( /* webpackChunkName: "phone-i18n-uk" */ '../../../lib/intl-tel-input/i18n/uk' ),
 	ru: () => import( /* webpackChunkName: "phone-i18n-ru" */ '../../../lib/intl-tel-input/i18n/ru' ),
 	de: () => import( /* webpackChunkName: "phone-i18n-de" */ '../../../lib/intl-tel-input/i18n/de' ),
@@ -110,13 +110,23 @@ export async function loadIntlTelInputLocale( wpLocale ) {
 	// Get intl-tel-input locale code
 	const locale = localeMap[ wpLocale ] || 'en';
 
+	// English is built-in to intl-tel-input, no need to load
+	if ( locale === 'en' ) {
+		return {};
+	}
+
 	// Check cache first
 	if ( translationCache[ locale ] ) {
 		return translationCache[ locale ];
 	}
 
-	// Get loader for this locale (fallback to English)
-	const loader = loaders[ locale ] || loaders.en;
+	// Get loader for this locale
+	const loader = loaders[ locale ];
+
+	if ( ! loader ) {
+		// No loader found, return empty (will use English default)
+		return {};
+	}
 
 	try {
 		// Execute import and get the module

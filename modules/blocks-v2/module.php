@@ -2,6 +2,7 @@
 
 namespace JFB_Modules\Blocks_V2;
 
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use JFB_Components\Module\Base_Module_After_Install_It;
 use JFB_Components\Module\Base_Module_Dir_It;
 use JFB_Components\Module\Base_Module_Dir_Trait;
@@ -37,10 +38,16 @@ final class Module implements
 
 	public function on_install() {
 		$this->action_integration = new Actions_Integration\Actions_Integration();
+
+		// Register Phone Field settings tab
+		Tab_Handler_Manager::instance()->install( new Phone_Field\Admin_Tabs\Phone_Field_Handler() );
 	}
 
 	public function on_uninstall() {
 		unset( $this->action_integration );
+
+		// Unregister Phone Field settings tab
+		Tab_Handler_Manager::instance()->uninstall( 'phone-field-tab' );
 	}
 
 	public function init_hooks() {

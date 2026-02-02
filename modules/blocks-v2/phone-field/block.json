@@ -71,25 +71,16 @@
 			"default": "auto"
 		},
 		"preferred_countries": {
-			"type": "array",
-			"default": [],
-			"items": {
-				"type": "string"
-			}
+			"type": "string",
+			"default": ""
 		},
 		"only_countries": {
-			"type": "array",
-			"default": [],
-			"items": {
-				"type": "string"
-			}
+			"type": "string",
+			"default": ""
 		},
 		"exclude_countries": {
-			"type": "array",
-			"default": [],
-			"items": {
-				"type": "string"
-			}
+			"type": "string",
+			"default": ""
 		},
 		"separate_dial_code" : {
 			"type": "boolean",
@@ -104,9 +95,21 @@
 			"type": "string",
 			"default": ""
 		},
+		"use_global": {
+			"type": "boolean",
+			"default": false
+		},
 		"isPreview": {
 			"type": "boolean",
 			"default": false
+		},
+		"validation_message_required": {
+			"type": "string",
+			"default": "Required field is empty"
+		},
+		"validation_message_invalid": {
+			"type": "string",
+			"default": "Please enter a valid phone number"
 		}
 	},
 	"usesContext": [

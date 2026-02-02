@@ -35,18 +35,6 @@ export default function IntlPhoneEdit( props ) {
 	const blockProps = useBlockProps();
 	useUniqueNameOnDuplicate();
 
-	// Helper to convert comma-separated string to array
-	const stringToArray = ( str ) => {
-		if ( ! str ) return [];
-		return str.split( ',' ).map( item => item.trim() ).filter( Boolean );
-	};
-
-	// Helper to convert array to comma-separated string
-	const arrayToString = ( arr ) => {
-		if ( ! arr || ! Array.isArray( arr ) ) return '';
-		return arr.join( ', ' );
-	};
-
 	return [
 		<ToolBarFields
 			key={ uniqKey( 'ToolBarFields' ) }
@@ -72,47 +60,49 @@ export default function IntlPhoneEdit( props ) {
 						label={ __( 'Default Country', 'jet-form-builder' ) }
 						value={ attributes.default_country }
 						onChange={ ( newValue ) => setAttributes( { default_country: newValue } ) }
-						help={ __( 'ISO country code (e.g., "us", "ua") or "auto" for IP detection', 'jet-form-builder' ) }
+						help={ __( 'ISO country code (e.g., "US", "UA") or "auto" for IP detection.', 'jet-form-builder' ) }
 					/>
 
 					<BaseControl
 						label={ __( 'Preferred Countries', 'jet-form-builder' ) }
-						help={ __( 'Comma-separated country codes (e.g., "us, gb, ua").', 'jet-form-builder' ) }
+						help={ __( 'Comma-separated country codes (e.g., "US, GB, UA").', 'jet-form-builder' ) }
 					>
 						<TextControl
-							value={ arrayToString( attributes.preferred_countries ) }
+							value={ attributes.preferred_countries }
 							onChange={ ( newValue ) => {
-								setAttributes( { preferred_countries: stringToArray( newValue ) } );
+								setAttributes( { preferred_countries: newValue } );
 							} }
-							placeholder="us, gb, ua"
+							placeholder="US, GB, UA"
 						/>
 					</BaseControl>
 
 					<BaseControl
 						label={ __( 'Only Countries', 'jet-form-builder' ) }
-						help={ __( 'Show only these countries (e.g., "us, ca, mx")', 'jet-form-builder' ) }
+						help={ __( 'Show only these countries (e.g., "US, CA, MX").', 'jet-form-builder' ) }
 					>
 						<TextControl
-							value={ arrayToString( attributes.only_countries ) }
+							value={ attributes.only_countries }
 							onChange={ ( newValue ) => {
-								setAttributes( { only_countries: stringToArray( newValue ) } );
+								setAttributes( { only_countries: newValue } );
 							} }
-							placeholder="us, ca, mx"
+							placeholder="US, CA, MX"
 						/>
 					</BaseControl>
 
-					<BaseControl
-						label={ __( 'Exclude Countries', 'jet-form-builder' ) }
-						help={ __( 'Exclude these countries (e.g., "us, by")', 'jet-form-builder' ) }
-					>
-						<TextControl
-							value={ arrayToString( attributes.exclude_countries ) }
-							onChange={ ( newValue ) => {
-								setAttributes( { exclude_countries: stringToArray( newValue ) } );
-							} }
-							placeholder="us, by"
-						/>
-					</BaseControl>
+					{ attributes.only_countries.length <= 0 && (
+						<BaseControl
+							label={ __( 'Exclude Countries', 'jet-form-builder' ) }
+							help={ __( 'Exclude these countries (e.g., "US, BY")', 'jet-form-builder' ) }
+						>
+							<TextControl
+								value={ attributes.exclude_countries }
+								onChange={ ( newValue ) => {
+									setAttributes( { exclude_countries: newValue } );
+								} }
+								placeholder="US, BY"
+							/>
+						</BaseControl>
+					) }
 
 					<ToggleControl
 						label={ __( 'Separate Dial Code', 'jet-form-builder' ) }
@@ -144,11 +134,50 @@ export default function IntlPhoneEdit( props ) {
 					title={ __( 'Additional Settings', 'jet-form-builder' ) }
 					initialOpen={ false }
 				>
+					<ToggleControl
+						label={ __( 'Use Global ipinfo.io Token', 'jet-form-builder' ) }
+						checked={ attributes.use_global }
+						onChange={ () => setAttributes( { use_global: ! attributes.use_global } ) }
+						help={
+							<>
+								{ __( 'Use', 'jet-form-builder' ) + ' ' }
+								<a
+									href={ window.JetFormEditorData?.global_settings_url + '#phone-field-tab' }
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{ __( 'Global Settings', 'jet-form-builder' ) }
+								</a>
+							</>
+						}
+					/>
+
+					{ ! attributes.use_global && (
+						<TextControl
+							label={ __( 'ipinfo.io API Token', 'jet-form-builder' ) }
+							value={ attributes.ipinfo_token }
+							onChange={ ( newValue ) => setAttributes( { ipinfo_token: newValue } ) }
+							help={ __( 'Optional: API token for IP-based country detection (50k free requests/month)', 'jet-form-builder' ) }
+						/>
+					) }
+				</PanelBody>
+
+				<PanelBody
+					title={ __( 'Validation Messages', 'jet-form-builder' ) }
+					initialOpen={ false }
+				>
 					<TextControl
-						label={ __( 'ipinfo.io API Token', 'jet-form-builder' ) }
-						value={ attributes.ipinfo_token }
-						onChange={ ( newValue ) => setAttributes( { ipinfo_token: newValue } ) }
-						help={ __( 'Optional: API token for IP-based country detection (50k free requests/month)', 'jet-form-builder' ) }
+						label={ __( 'Required Field Message', 'jet-form-builder' ) }
+						value={ attributes.validation_message_required }
+						onChange={ ( newValue ) => setAttributes( { validation_message_required: newValue } ) }
+						placeholder={ __( 'Required field is empty', 'jet-form-builder' ) }
+					/>
+
+					<TextControl
+						label={ __( 'Invalid Phone Message', 'jet-form-builder' ) }
+						value={ attributes.validation_message_invalid }
+						onChange={ ( newValue ) => setAttributes( { validation_message_invalid: newValue } ) }
+						placeholder={ __( 'Please enter a valid phone number', 'jet-form-builder' ) }
 					/>
 				</PanelBody>
 

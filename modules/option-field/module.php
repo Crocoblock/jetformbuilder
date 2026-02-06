@@ -269,9 +269,10 @@ final class Module implements
 	 */
 	protected function get_localize_data( $merged = array() ): array {
 		$options = array(
-			'post_types_list' => Tools::get_post_types_for_options(),
-			'taxonomies_list' => Tools::get_taxonomies_for_js(),
-			'generators_list' => Tools::get_generators_list_for_js(),
+			'post_types_list'   => Tools::get_post_types_for_options(),
+			'taxonomies_list'   => Tools::get_taxonomies_for_js(),
+			'generators_list'   => Tools::get_generators_list_for_js(),
+			'generator_schemas' => Tools::get_generator_schemas_for_js(),
 		);
 
 		$active_jet_engine = false !== Tools::get_jet_engine_version();

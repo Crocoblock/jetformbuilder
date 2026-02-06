@@ -1,4 +1,9 @@
 <?php
+/**
+ * Numbers Range by Meta Value Generator with schema support.
+ *
+ * @package Jet_Form_Builder\Generators
+ */
 
 namespace Jet_Form_Builder\Generators;
 
@@ -7,10 +12,15 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Num_Range extends Base {
+/**
+ * Num_Range class.
+ *
+ * Generates a list of numbers from 1 to the value stored in a post meta field.
+ */
+class Num_Range extends Base_V2 {
 
 	/**
-	 * Returns generator ID
+	 * Returns generator ID.
 	 *
 	 * @return string
 	 */
@@ -19,7 +29,7 @@ class Num_Range extends Base {
 	}
 
 	/**
-	 * Returns generator name
+	 * Returns generator name.
 	 *
 	 * @return string
 	 */
@@ -28,21 +38,54 @@ class Num_Range extends Base {
 	}
 
 	/**
-	 * Returns generated options list
+	 * Returns structured settings schema.
 	 *
-	 * @param $args
+	 * @return array
+	 */
+	public function get_settings_schema(): array {
+		return array(
+			'meta_key' => array(
+				'type'        => 'string',
+				'default'     => '',
+				'label'       => __( 'Meta Key', 'jet-form-builder' ),
+				'control'     => 'text',
+				'required'    => true,
+				'placeholder' => '_max_quantity',
+				'help'        => __( 'Enter the meta key containing the maximum number for the range.', 'jet-form-builder' ),
+			),
+		);
+	}
+
+	/**
+	 * Returns generated options list.
+	 *
+	 * @param array|string $args Settings array or legacy string.
 	 *
 	 * @return array
 	 */
 	public function generate( $args ) {
-
 		$result = array();
 
-		if ( ! $args['generator_field'] ) {
+		// Handle both new array format and legacy string/array format
+		if ( is_string( $args ) ) {
+			$meta_key = $args;
+		} elseif ( is_array( $args ) ) {
+			// New schema format
+			$meta_key = $args['meta_key'] ?? '';
+
+			// Legacy format support
+			if ( empty( $meta_key ) && ! empty( $args['generator_field'] ) ) {
+				$meta_key = $args['generator_field'];
+			}
+		} else {
 			return $result;
 		}
 
-		$meta_value = get_post_meta( get_the_ID(), $args['generator_field'], true );
+		if ( empty( $meta_key ) ) {
+			return $result;
+		}
+
+		$meta_value = get_post_meta( get_the_ID(), $meta_key, true );
 		$meta_value = absint( $meta_value );
 
 		if ( ! $meta_value ) {
@@ -65,5 +108,4 @@ class Num_Range extends Base {
 
 		return $result;
 	}
-
 }

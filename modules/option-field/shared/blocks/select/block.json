@@ -81,6 +81,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"generator_args": {
+			"type": "object",
+			"default": {}
+		},
 		"calculated_value_from_key": {
 			"type": "string",
 			"default": ""

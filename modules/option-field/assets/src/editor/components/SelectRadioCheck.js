@@ -1,7 +1,8 @@
 import { listFrom } from './sources';
 import FromManualFields from './FromManual/FromManualFields';
 import FromPostTermsFields from './FromPostTermsFields';
-import FromGeneratorsFields from './FromGeneratorsFields';
+// Use new GeneratorSettings component with schema support
+import { GeneratorSettings } from '../generators';
 
 const {
 	      TextControl,
@@ -38,7 +39,7 @@ function getFieldOptionsForm( optionsFrom, props ) {
 				} }
 			/>;
 		case 'generate':
-			return <FromGeneratorsFields
+			return <GeneratorSettings
 				key="form_generators"
 				{ ...props }
 			/>;

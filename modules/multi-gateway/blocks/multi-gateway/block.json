@@ -1,0 +1,23 @@
+{
+	"apiVersion": 2,
+	"name": "jet-forms/multi-gateway",
+	"title": "Multi Gateway",
+	"description": "Displays available payment gateways selected in form settings.",
+	"category": "jet-form-builder-fields",
+	"textdomain": "jet-form-builder",
+	"keywords": ["jetformbuilder", "gateway", "payment"],
+	"supports": {
+		"html": false,
+		"multiple": false
+	},
+	"attributes": {
+		"isPreview": {
+			"type": "boolean",
+			"default": false
+		},
+		"title": { "type": "string", "default": "" },
+		"description": { "type": "string", "default": "" }
+	},
+	"viewScript": "jet-fb-multi-gateway",
+	"style": "jet-fb-multi-gateway"
+}

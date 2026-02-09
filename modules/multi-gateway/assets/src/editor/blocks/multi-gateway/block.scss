@@ -1,0 +1,36 @@
+.jfb-multi-gateway h3 {
+  margin: 0 0 6px;
+}
+
+.jfb-multi-gateway p {
+  margin: 0 0 14px;
+  opacity: 0.75;
+}
+
+.jfb-multi-gateway__list {
+  border: 1px solid #dcdcde;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.jfb-multi-gateway__item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 16px;
+  border-top: 1px solid #dcdcde;
+}
+
+.jfb-multi-gateway__item:first-child {
+  border-top: 0;
+}
+
+.jfb-multi-gateway__item input {
+  margin-top: 2px;
+}
+
+.jfb-multi-gateway__empty {
+  padding: 16px;
+  opacity: 0.7;
+}

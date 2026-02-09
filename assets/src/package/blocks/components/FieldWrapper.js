@@ -103,6 +103,12 @@ function FieldWrapper( props ) {
 		wrapClasses.push( 'jet-form-builder-row__flex' );
 	}
 
+	if ( attributes?.crocoblock_styles?._uniqueClassName ) {
+		wrapClasses.push(
+			attributes.crocoblock_styles._uniqueClassName,
+		);
+	}
+
 	return (
 		<BaseControl
 			key={ uniqKey( 'placeHolder_block' ) }

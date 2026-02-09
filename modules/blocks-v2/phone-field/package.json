@@ -1,0 +1,14 @@
+{
+	"name": "jet-form-builder-phone-field",
+	"description": "Phone Field block for JetFormBuilder Plugin",
+	"version": "1.0.0",
+	"author": "JetFormBuilder",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"build": "npx webpack build --mode production",
+		"dev": "npx webpack build --mode development -w",
+		"lint": "eslint --fix ./",
+		"sync:intl-tel-input": "node tools/sync-intl-tel-input.js"
+	}
+}

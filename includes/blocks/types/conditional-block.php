@@ -92,7 +92,7 @@ class Conditional_Block extends Base {
 			array(
 				'id'           => 'style_bg_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( '__conditional' ) => 'background-color: {{VALUE}}',
 				),

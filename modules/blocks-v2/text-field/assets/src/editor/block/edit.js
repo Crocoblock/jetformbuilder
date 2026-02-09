@@ -12,6 +12,7 @@ import {
 	SelectControl,
 	ToggleControl,
 	PanelBody,
+	Notice
 } from '@wordpress/components';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { styled } from '@linaria/react';
@@ -101,6 +102,23 @@ export default function TextEdit( props ) {
 					} }
 					options={ fieldTypesList }
 				/>
+				{ 'tel' === attributes.field_type && (
+					<div
+						style={ { marginBottom:'16px' } }
+					>
+						<Notice
+							status="info"
+							isDismissible={ false }
+						>
+							<div>
+								{ __(
+									'There is a dedicated Phone Field for entering the phone number in the form.',
+									'jet-form-builder' )
+								}
+							</div>
+						</Notice>
+					</div>
+				) }
 				{ 'password' === attributes.field_type && <>
 					<ToggleControl
 						label={ __( 'Show eye icon', 'jet-form-builder' ) }

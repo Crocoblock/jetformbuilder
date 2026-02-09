@@ -108,7 +108,7 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 			array(
 				'id'           => 'item_normal_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'attributes'   => array(
 					'default' => array(
 						'value' => '#FFFFFF',

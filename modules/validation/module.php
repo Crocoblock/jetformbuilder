@@ -19,6 +19,7 @@ use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
 use JFB_Modules\Validation\Class_Validation_Handlers;
+use JFB_Modules\Validation\Rest_Api\Rest_Validation_Endpoint;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -241,6 +242,21 @@ final class Module implements
 
 		if ( ! empty( $rules ) ) {
 			$this->get_rules()->prepare_rules( $rules );
+
+			// Security: Add signatures for SSR validation rules
+			$form_id    = jet_fb_live()->form_id;
+			$field_name = $block->block_attrs['name'] ?? '';
+
+			foreach ( $rules as $index => &$rule ) {
+				if ( 'ssr' === ( $rule['type'] ?? '' ) ) {
+					$rule['_sig'] = Rest_Validation_Endpoint::generate_signature(
+						(int) $form_id,
+						$field_name,
+						(int) $index
+					);
+				}
+			}
+			unset( $rule );
 
 			$block->add_attribute(
 				'data-validation-rules',

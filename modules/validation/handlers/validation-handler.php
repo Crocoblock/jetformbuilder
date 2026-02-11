@@ -6,8 +6,86 @@ use JFB_Modules\Validation\Silence_Exception;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 
 class Validation_Handler {
+
+	/**
+	 * Form post type constant for validation.
+	 *
+	 * @since 3.5.6.2
+	 */
+	const FORM_POST_TYPE = 'jet-form-builder';
+
+	/**
+	 * Validate that the given ID belongs to a published JetFormBuilder form.
+	 *
+	 * @since 3.5.6.2
+	 *
+	 * @param int $form_id The form ID to validate.
+	 *
+	 * @return bool True if valid, false otherwise.
+	 */
+	public static function validate_form_post_type( int $form_id ): bool {
+		if ( ! $form_id ) {
+			return false;
+		}
+
+		$post = get_post( $form_id );
+
+		if ( ! $post || self::FORM_POST_TYPE !== $post->post_type ) {
+			return false;
+		}
+
+		// Only allow published forms
+		if ( 'publish' !== $post->post_status ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Validate the signature from request body.
+	 *
+	 * @since 3.5.6.2
+	 *
+	 * @param array $body Request body parameters.
+	 *
+	 * @return bool True if signature is valid, false otherwise.
+	 */
+	public static function validate_signature( array $body ): bool {
+		$form_id    = absint( $body[ jet_fb_handler()->form_key ] ?? 0 );
+		$field_path = $body[ Rest_Validation_Endpoint::FIELD_KEY ] ?? '';
+		$rule_index = absint( $body[ Rest_Validation_Endpoint::RULE_INDEX_KEY ] ?? 0 );
+		$signature  = sanitize_text_field( $body[ Rest_Validation_Endpoint::SIGNATURE_KEY ] ?? '' );
+
+		if ( empty( $signature ) || empty( $form_id ) ) {
+			return false;
+		}
+
+		$expected = Rest_Validation_Endpoint::generate_signature( $form_id, $field_path, $rule_index );
+
+		return hash_equals( $expected, $signature );
+	}
+
 	public static function validate( $body ) {
 		remove_all_actions( 'jet-form-builder/validate-field' );
+
+		// Security: Validate form post type
+		$form_id = absint( $body[ jet_fb_handler()->form_key ] ?? 0 );
+
+		if ( ! self::validate_form_post_type( $form_id ) ) {
+			return array(
+				'result'  => false,
+				'message' => __( 'Invalid form ID', 'jet-form-builder' ),
+			);
+		}
+
+		// Security: Validate signature
+		if ( ! self::validate_signature( $body ) ) {
+			return array(
+				'result'  => false,
+				'message' => __( 'Invalid security signature', 'jet-form-builder' ),
+			);
+		}
 
 		try {
 			$request = new \WP_REST_Request();

@@ -80,7 +80,14 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 			return false;
 		}
 
-		$expected = self::generate_signature( $form_id, $field_path, $rule_index );
+		// For repeater fields, path is array like ['repeater', '0', 'field_name']
+		// Signature is generated using only field name, so extract last element
+		$field_name = $field_path;
+		if ( is_array( $field_path ) && ! empty( $field_path ) ) {
+			$field_name = end( $field_path );
+		}
+
+		$expected = self::generate_signature( $form_id, $field_name, $rule_index );
 
 		return hash_equals( $expected, $signature );
 	}

@@ -21,7 +21,7 @@ class Server_Side_Rule extends Rule {
 	 * Blacklist of dangerous functions that should never be allowed as callbacks.
 	 * All values MUST be lowercase for case-insensitive comparison.
 	 *
-	 * @since 3.x.x Security fix: expanded list and case-insensitive check
+	 * @since 3.5.6.2 Security fix: expanded list and case-insensitive check
 	 */
 	const NOT_ALLOWED = array(
 		// Debug/output functions

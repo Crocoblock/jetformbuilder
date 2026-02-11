@@ -2,7 +2,8 @@
 namespace JFB_Modules\Validation\Handlers;
 
 use JFB_Modules\Validation\Rest_Api\Rest_Validation_Endpoint;
-use JFB_Modules\Validation\Silence_Exception;
+use Jet_Form_Builder\Exceptions\Repository_Exception;
+use Jet_Form_Builder\Request\Exceptions\Plain_Value_Exception;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 
 class Validation_Handler {
@@ -61,7 +62,14 @@ class Validation_Handler {
 			return false;
 		}
 
-		$expected = Rest_Validation_Endpoint::generate_signature( $form_id, $field_path, $rule_index );
+		// For repeater fields, path is array like ['repeater', '0', 'field_name']
+		// Signature is generated using only field name, so extract last element
+		$field_name = $field_path;
+		if ( is_array( $field_path ) && ! empty( $field_path ) ) {
+			$field_name = end( $field_path );
+		}
+
+		$expected = Rest_Validation_Endpoint::generate_signature( $form_id, $field_name, $rule_index );
 
 		return hash_equals( $expected, $signature );
 	}
@@ -91,7 +99,12 @@ class Validation_Handler {
 			$request = new \WP_REST_Request();
 			$request->set_body_params( $body );
 			$parser = ( new Rest_Validation_Endpoint() )->get_parser_public( $request );
-		} catch ( Silence_Exception $exception ) {
+		} catch ( Plain_Value_Exception $exception ) {
+			return array(
+				'result' => false,
+				'message' => __( 'Unresolved parser for field', 'jet-form-builder' ),
+			);
+		} catch ( Repository_Exception $exception ) {
 			return array(
 				'result' => false,
 				'message' => __( 'Unresolved parser for field', 'jet-form-builder' ),

@@ -28,13 +28,6 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 	const RULE_INDEX_KEY = '_jfb_validation_rule_index';
 	const SIGNATURE_KEY  = '_jfb_validation_sig';
 
-	/**
-	 * Form post type constant for validation.
-	 *
-	 * @since 3.5.6.2
-	 */
-	const FORM_POST_TYPE = 'jet-form-builder';
-
 	public static function get_rest_base() {
 		return 'validate-field';
 	}
@@ -62,65 +55,6 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 	}
 
 	/**
-	 * Validate the signature from request body.
-	 *
-	 * @since 3.5.6.2
-	 *
-	 * @param array $body Request body parameters.
-	 *
-	 * @return bool True if signature is valid, false otherwise.
-	 */
-	protected function validate_signature( array $body ): bool {
-		$form_id    = absint( $body[ jet_fb_handler()->form_key ] ?? 0 );
-		$field_path = $body[ self::FIELD_KEY ] ?? '';
-		$rule_index = absint( $body[ self::RULE_INDEX_KEY ] ?? 0 );
-		$signature  = sanitize_text_field( $body[ self::SIGNATURE_KEY ] ?? '' );
-
-		if ( empty( $signature ) || empty( $form_id ) ) {
-			return false;
-		}
-
-		// For repeater fields, path is array like ['repeater', '0', 'field_name']
-		// Signature is generated using only field name, so extract last element
-		$field_name = $field_path;
-		if ( is_array( $field_path ) && ! empty( $field_path ) ) {
-			$field_name = end( $field_path );
-		}
-
-		$expected = self::generate_signature( $form_id, $field_name, $rule_index );
-
-		return hash_equals( $expected, $signature );
-	}
-
-	/**
-	 * Validate that the given ID belongs to a JetFormBuilder form.
-	 *
-	 * @since 3.5.6.2
-	 *
-	 * @param int $form_id The form ID to validate.
-	 *
-	 * @return bool|\WP_Post False if invalid, WP_Post object if valid.
-	 */
-	protected function validate_form_post_type( int $form_id ) {
-		if ( ! $form_id ) {
-			return false;
-		}
-
-		$post = get_post( $form_id );
-
-		if ( ! $post || self::FORM_POST_TYPE !== $post->post_type ) {
-			return false;
-		}
-
-		// Only allow published forms
-		if ( 'publish' !== $post->post_status ) {
-			return false;
-		}
-
-		return $post;
-	}
-
-	/**
 	 * @param \WP_REST_Request $request
 	 *
 	 * @return \WP_REST_Response
@@ -129,33 +63,34 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 	public function run_callback( \WP_REST_Request $request ) {
 		$body = $request->get_body_params();
 
-		// Security: Validate form post type
-		$form_id = absint( $body[ jet_fb_handler()->form_key ] ?? 0 );
-
-		if ( ! $this->validate_form_post_type( $form_id ) ) {
-			return new WP_REST_Response(
-				array(
-					'result'  => false,
-					'message' => __( 'Invalid form ID', 'jet-form-builder' ),
-				),
-				403
-			);
-		}
-
-		// Security: Validate signature
-		if ( ! $this->validate_signature( $body ) ) {
-			return new WP_REST_Response(
-				array(
-					'result'  => false,
-					'message' => __( 'Invalid security signature', 'jet-form-builder' ),
-				),
-				403
-			);
-		}
-
+		// All security validation is centralized in Validation_Handler::validate()
 		$result = Validation_Handler::validate( $body );
 
-		return new WP_REST_Response( $result );
+		// Return 403 for security-related failures
+		$status = 200;
+		if ( false === $result['result'] && $this->is_security_error( $result['message'] ?? '' ) ) {
+			$status = 403;
+		}
+
+		return new WP_REST_Response( $result, $status );
+	}
+
+	/**
+	 * Check if the error message indicates a security failure.
+	 *
+	 * @since 3.5.6.2
+	 *
+	 * @param string $message The error message.
+	 *
+	 * @return bool True if security error, false otherwise.
+	 */
+	protected function is_security_error( string $message ): bool {
+		$security_messages = array(
+			__( 'Invalid form ID', 'jet-form-builder' ),
+			__( 'Invalid security signature', 'jet-form-builder' ),
+		);
+
+		return in_array( $message, $security_messages, true );
 	}
 
 	/**

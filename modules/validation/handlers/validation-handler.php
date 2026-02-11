@@ -17,10 +17,11 @@ class Validation_Handler {
 
 	/**
 	 * Validate that the given ID belongs to a published JetFormBuilder form.
+	 * Supports revision IDs by resolving them to their parent form.
 	 *
 	 * @since 3.5.6.2
 	 *
-	 * @param int $form_id The form ID to validate.
+	 * @param int $form_id The form ID to validate (can be a revision ID).
 	 *
 	 * @return bool True if valid, false otherwise.
 	 */
@@ -31,7 +32,25 @@ class Validation_Handler {
 
 		$post = get_post( $form_id );
 
-		if ( ! $post || self::FORM_POST_TYPE !== $post->post_type ) {
+		if ( ! $post ) {
+			return false;
+		}
+
+		// Handle revisions: resolve to parent form and validate the parent
+		if ( 'revision' === $post->post_type ) {
+			$parent_id = wp_get_post_parent_id( $form_id );
+			if ( ! $parent_id ) {
+				return false;
+			}
+
+			$post = get_post( $parent_id );
+			if ( ! $post ) {
+				return false;
+			}
+		}
+
+		// Must be a JetFormBuilder form
+		if ( self::FORM_POST_TYPE !== $post->post_type ) {
 			return false;
 		}
 

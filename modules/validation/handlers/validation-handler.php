@@ -16,6 +16,14 @@ class Validation_Handler {
 	const FORM_POST_TYPE = 'jet-form-builder';
 
 	/**
+	 * Error codes for security failures.
+	 *
+	 * @since 3.5.6.2
+	 */
+	const ERROR_INVALID_FORM_ID   = 'invalid_form_id';
+	const ERROR_INVALID_SIGNATURE = 'invalid_signature';
+
+	/**
 	 * Validate that the given ID belongs to a published JetFormBuilder form.
 	 * Supports revision IDs by resolving them to their parent form.
 	 *
@@ -81,16 +89,42 @@ class Validation_Handler {
 			return false;
 		}
 
-		// For repeater fields, path is array like ['repeater', '0', 'field_name']
-		// Signature is generated using only field name, so extract last element
-		$field_name = $field_path;
-		if ( is_array( $field_path ) && ! empty( $field_path ) ) {
-			$field_name = end( $field_path );
-		}
+		// Normalize the field path for signature verification.
+		// Client sends full path like ['repeater_name', '0', 'field_name']
+		// but signature is generated without row indexes: ['repeater_name', 'field_name']
+		$normalized_path = self::normalize_field_path( $field_path );
 
-		$expected = Rest_Validation_Endpoint::generate_signature( $form_id, $field_name, $rule_index );
+		$expected = Rest_Validation_Endpoint::generate_signature( $form_id, $normalized_path, $rule_index );
 
 		return hash_equals( $expected, $signature );
+	}
+
+	/**
+	 * Normalize field path by removing numeric row indexes.
+	 * Converts ['repeater', '0', 'field'] to ['repeater', 'field']
+	 * and sanitizes all path segments.
+	 *
+	 * @since 3.5.6.2
+	 *
+	 * @param string|array $field_path The field path from request.
+	 *
+	 * @return string|array Normalized path without row indexes.
+	 */
+	protected static function normalize_field_path( $field_path ) {
+		if ( ! is_array( $field_path ) ) {
+			return sanitize_text_field( (string) $field_path );
+		}
+
+		$normalized = array();
+		foreach ( $field_path as $segment ) {
+			$segment = sanitize_key( $segment );
+			// Skip numeric segments (row indexes in repeaters)
+			if ( ! is_numeric( $segment ) ) {
+				$normalized[] = $segment;
+			}
+		}
+
+		return $normalized;
 	}
 
 	public static function validate( $body ) {
@@ -101,16 +135,18 @@ class Validation_Handler {
 
 		if ( ! self::validate_form_post_type( $form_id ) ) {
 			return array(
-				'result'  => false,
-				'message' => __( 'Invalid form ID', 'jet-form-builder' ),
+				'result'     => false,
+				'message'    => __( 'Invalid form ID', 'jet-form-builder' ),
+				'error_code' => self::ERROR_INVALID_FORM_ID,
 			);
 		}
 
 		// Security: Validate signature
 		if ( ! self::validate_signature( $body ) ) {
 			return array(
-				'result'  => false,
-				'message' => __( 'Invalid security signature', 'jet-form-builder' ),
+				'result'     => false,
+				'message'    => __( 'Invalid security signature', 'jet-form-builder' ),
+				'error_code' => self::ERROR_INVALID_SIGNATURE,
 			);
 		}
 

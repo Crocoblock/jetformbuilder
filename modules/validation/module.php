@@ -244,14 +244,23 @@ final class Module implements
 			$this->get_rules()->prepare_rules( $rules );
 
 			// Security: Add signatures for SSR validation rules
-			$form_id    = jet_fb_live()->form_id;
-			$field_name = $block->block_attrs['name'] ?? '';
+			// For repeater fields, we include the repeater name in the signature
+			// but NOT the row index (which is dynamic). The signature binds the
+			// field to its structural path: [repeater_name, field_name] or just field_name
+			$form_id       = jet_fb_live()->form_id;
+			$field_name    = $block->block_attrs['name'] ?? '';
+			$repeater_name = $block->get_repeater_name();
+
+			// Build canonical path for signature (without row index)
+			$signature_path = $repeater_name
+				? array( $repeater_name, $field_name )
+				: $field_name;
 
 			foreach ( $rules as $index => &$rule ) {
 				if ( 'ssr' === ( $rule['type'] ?? '' ) ) {
 					$rule['_sig'] = Rest_Validation_Endpoint::generate_signature(
 						(int) $form_id,
-						$field_name,
+						$signature_path,
 						(int) $index
 					);
 				}

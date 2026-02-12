@@ -26,6 +26,7 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 
 	const FIELD_KEY      = '_jfb_validation_path';
 	const RULE_INDEX_KEY = '_jfb_validation_rule_index';
+	const SIGNATURE_KEY  = '_jfb_validation_sig';
 
 	public static function get_rest_base() {
 		return 'validate-field';
@@ -36,14 +37,34 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 	}
 
 	/**
+	 * Generate a cryptographic signature for validation request.
+	 *
+	 * @since 3.5.6.2
+	 *
+	 * @param int          $form_id    The form ID.
+	 * @param string|array $field_path The field path.
+	 * @param int          $rule_index The rule index.
+	 *
+	 * @return string The generated signature.
+	 */
+	public static function generate_signature( int $form_id, $field_path, int $rule_index ): string {
+		$path_string = is_array( $field_path ) ? implode( '.', $field_path ) : (string) $field_path;
+		$data        = $form_id . '|' . $path_string . '|' . $rule_index;
+
+		return wp_hash( $data, 'nonce' );
+	}
+
+	/**
 	 * @param \WP_REST_Request $request
 	 *
 	 * @return \WP_REST_Response
-	 * @throws Repository_Exception
 	 */
 	public function run_callback( \WP_REST_Request $request ) {
 		$body = $request->get_body_params();
+
+		// All security validation is centralized in Validation_Handler::validate()
 		$result = Validation_Handler::validate( $body );
+
 		return new WP_REST_Response( $result );
 	}
 

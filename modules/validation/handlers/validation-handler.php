@@ -16,14 +16,6 @@ class Validation_Handler {
 	const FORM_POST_TYPE = 'jet-form-builder';
 
 	/**
-	 * Error codes for security failures.
-	 *
-	 * @since 3.5.6.2
-	 */
-	const ERROR_INVALID_FORM_ID   = 'invalid_form_id';
-	const ERROR_INVALID_SIGNATURE = 'invalid_signature';
-
-	/**
 	 * Validate that the given ID belongs to a published JetFormBuilder form.
 	 * Supports revision IDs by resolving them to their parent form.
 	 *
@@ -117,7 +109,7 @@ class Validation_Handler {
 
 		$normalized = array();
 		foreach ( $field_path as $segment ) {
-			$segment = sanitize_key( $segment );
+			$segment = sanitize_text_field( $segment );
 			// Skip numeric segments (row indexes in repeaters)
 			if ( ! is_numeric( $segment ) ) {
 				$normalized[] = $segment;
@@ -135,18 +127,16 @@ class Validation_Handler {
 
 		if ( ! self::validate_form_post_type( $form_id ) ) {
 			return array(
-				'result'     => false,
-				'message'    => __( 'Invalid form ID', 'jet-form-builder' ),
-				'error_code' => self::ERROR_INVALID_FORM_ID,
+				'result'  => false,
+				'message' => __( 'Invalid form ID', 'jet-form-builder' ),
 			);
 		}
 
 		// Security: Validate signature
 		if ( ! self::validate_signature( $body ) ) {
 			return array(
-				'result'     => false,
-				'message'    => __( 'Invalid security signature', 'jet-form-builder' ),
-				'error_code' => self::ERROR_INVALID_SIGNATURE,
+				'result'  => false,
+				'message' => __( 'Invalid security signature', 'jet-form-builder' ),
 			);
 		}
 

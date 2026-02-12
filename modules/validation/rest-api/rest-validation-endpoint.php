@@ -65,31 +65,7 @@ class Rest_Validation_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 		// All security validation is centralized in Validation_Handler::validate()
 		$result = Validation_Handler::validate( $body );
 
-		// Return 403 for security-related failures
-		$status = 200;
-		if ( false === $result['result'] && $this->is_security_error( $result['error_code'] ?? '' ) ) {
-			$status = 403;
-		}
-
-		return new WP_REST_Response( $result, $status );
-	}
-
-	/**
-	 * Check if the error code indicates a security failure.
-	 *
-	 * @since 3.5.6.2
-	 *
-	 * @param string $error_code The error code from validation result.
-	 *
-	 * @return bool True if security error, false otherwise.
-	 */
-	protected function is_security_error( string $error_code ): bool {
-		$security_codes = array(
-			Validation_Handler::ERROR_INVALID_FORM_ID,
-			Validation_Handler::ERROR_INVALID_SIGNATURE,
-		);
-
-		return in_array( $error_code, $security_codes, true );
+		return new WP_REST_Response( $result );
 	}
 
 	/**

@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 3.5.6.1
+Stable tag: 3.5.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,9 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.5.6.2**
+- FIX: RCE vulnerability
 
 **3.5.6.1**
 - FIX: Compatibility with jetBooking 4.0.0

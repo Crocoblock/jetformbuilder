@@ -32,6 +32,16 @@ class Captcha_Container extends Base {
 	}
 
 	/**
+	 * Initialize style manager for the block
+	 *
+	 * @param Object $style_manager Actual style manager instance.
+	 */
+	public function maybe_init_style_manager( $style_manager ) {
+		// Captcha Field does not use style manager
+		return;
+	}
+
+	/**
 	 * Returns current block render instance
 	 *
 	 * @param null $wp_block

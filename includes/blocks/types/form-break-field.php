@@ -47,6 +47,16 @@ class Form_Break_Field extends Base {
 	}
 
 	/**
+	 * Initialize style manager for the block
+	 *
+	 * @param Object $style_manager Actual style manager instance.
+	 */
+	public function maybe_init_style_manager( $style_manager ) {
+		// Form Break Field does not use style manager
+		return;
+	}
+
+	/**
 	 * @param array $attrs
 	 * @param null $content
 	 * @param \WP_Block $wp_block

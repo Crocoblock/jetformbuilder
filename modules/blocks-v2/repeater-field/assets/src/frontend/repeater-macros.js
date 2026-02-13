@@ -68,13 +68,17 @@ function collectRepeaterLines(fieldNode, macros, template) {
 				return;
 			}
 
-			rowNode.querySelector(`[data-jfb-macro="${name}"]`).textContent = value;
+			const macrosNode = rowNode.querySelector(`[data-jfb-macro="${name}"]`);
+
+			if (macrosNode) {
+				macrosNode.textContent = value;
+			}
 		});
 
 		lines.push(rowNode.body.innerHTML);
 	});
 
-	return lines.join('<br/>');
+	return lines.join('');
 }
 
 export function resolveRepeaterMacrosValue(current, $fieldNode, $macroHost = false) {
@@ -95,6 +99,8 @@ export function resolveRepeaterMacrosValue(current, $fieldNode, $macroHost = fal
 	if (!source) {
 		return collectRepeaterLines(fieldNode, null, null);
 	}
+
+	console.log(source);
 
 	const doc = new DOMParser().parseFromString(String(source), 'text/html');
 

@@ -32,6 +32,20 @@ final class Module implements
 	use Base_Module_Dir_Trait;
 	use Base_Module_Handle_Trait;
 
+	/**
+	 * REST API controller instance.
+	 *
+	 * @var Rest_Api\Rest_Api_Controller
+	 */
+	private $rest;
+
+	/**
+	 * HTML attributes injector instance.
+	 *
+	 * @var Html_Attributes_Injector
+	 */
+	private $html_injector;
+
 	public function rep_item_id() {
 		return 'option-field';
 	}
@@ -51,6 +65,10 @@ final class Module implements
 			array( $this, 'on_set_in_block' ),
 			0
 		);
+		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
+
+		// Initialize HTML attributes injector for auto-update
+		$this->html_injector = new Html_Attributes_Injector();
 	}
 
 	public function remove_hooks() {
@@ -63,6 +81,7 @@ final class Module implements
 			array( $this, 'on_set_in_block' ),
 			0
 		);
+		remove_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
 	}
 
 	public function add_blocks_types( array $block_types ): array {
@@ -298,5 +317,25 @@ final class Module implements
 			},
 			jet_engine()->glossaries->settings->get()
 		);
+	}
+
+	/**
+	 * Get or create REST API controller instance.
+	 *
+	 * @return Rest_Api\Rest_Api_Controller
+	 */
+	private function get_rest(): Rest_Api\Rest_Api_Controller {
+		if ( ! $this->rest ) {
+			$this->rest = new Rest_Api\Rest_Api_Controller();
+		}
+
+		return $this->rest;
+	}
+
+	/**
+	 * Register REST API routes.
+	 */
+	public function register_rest_routes() {
+		$this->get_rest()->register_routes();
 	}
 }

@@ -13,6 +13,8 @@ export {
 	GeneratorControlsSlot,
 	GeneratorAdditionalFill,
 	GeneratorAdditionalSlot,
+	AutoUpdateControlsFill,
+	AutoUpdateControlsSlot,
 	BeforeGeneratorSelectorFill,
 	BeforeGeneratorSelectorSlot,
 	AfterGeneratorControlsFill,

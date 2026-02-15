@@ -258,10 +258,11 @@ class Registry {
 	 *
 	 * @param string $generator_id Generator ID.
 	 * @param array  $block_attrs  Block attributes.
+	 * @param array  $context      Optional context for auto-update.
 	 *
 	 * @return array Generated options or empty array if generator not found.
 	 */
-	public function generate( string $generator_id, array $block_attrs ): array {
+	public function generate( string $generator_id, array $block_attrs, array $context = array() ): array {
 		$generator = $this->get( $generator_id );
 
 		if ( ! $generator ) {
@@ -272,6 +273,18 @@ class Registry {
 			return array();
 		}
 
+		// Use context-aware generation for V2 generators
+		if ( $generator instanceof Base_V2 && ! empty( $context ) ) {
+			// Priority: generator_args object (new format) > prefixed attrs (intermediate) > defaults
+			if ( ! empty( $block_attrs['generator_args'] ) && is_array( $block_attrs['generator_args'] ) ) {
+				$settings = $generator->parse_generator_args( $block_attrs['generator_args'] );
+			} else {
+				$settings = $generator->parse_settings( $block_attrs );
+			}
+			return $generator->generate_with_context( $settings, $context );
+		}
+
+		// Standard generation
 		return $generator->get_values( $block_attrs );
 	}
 

@@ -161,6 +161,9 @@ class Jet_Engine implements
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/12555
 		 */
 		add_action( 'jet-engine/rest-api/init-endpoints', array( $this, 'rewrite_map_location_data_endpoint' ), 99 );
+
+		// Register JetEngine macros for auto-update feature
+		add_action( 'jet-engine/register-macros', array( $this, 'register_macros' ) );
 	}
 
 	public function remove_hooks() {
@@ -223,6 +226,8 @@ class Jet_Engine implements
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/12555
 		 */
 		remove_action( 'jet-engine/rest-api/init-endpoints', array( $this, 'rewrite_map_location_data_endpoint' ), 99 );
+
+		remove_action( 'jet-engine/register-macros', array( $this, 'register_macros' ) );
 	}
 
 	/**
@@ -236,6 +241,17 @@ class Jet_Engine implements
 			require_once $this->get_dir( 'map-field/get-map-location-data-endpoint.php' );
 			$api_manager->register_endpoint( new Map_Field\Get_Map_Location_Data_Endpoint() );
 		}
+	}
+
+	/**
+	 * Register JetEngine macros for auto-update feature.
+	 *
+	 * Registers macro that allows JetEngine Query Builder to access form field values
+	 * during cascading field updates (auto-update feature).
+	 */
+	public function register_macros() {
+		require_once $this->get_dir( 'macros/auto-update-field-value.php' );
+		new Macros\Auto_Update_Field_Value();
 	}
 
 	public function register_scripts() {

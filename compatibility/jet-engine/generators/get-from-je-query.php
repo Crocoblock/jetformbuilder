@@ -138,6 +138,38 @@ class Get_From_Je_Query extends Base_V2 {
 	}
 
 	/**
+	 * Parse settings from block attributes.
+	 * Override to support legacy generator_args format.
+	 *
+	 * @param array $block_attrs Block attributes.
+	 *
+	 * @return array Parsed settings.
+	 */
+	public function parse_settings( array $block_attrs ): array {
+		// Try parent's parse_settings first (looks for gen_get_from_query_* keys)
+		$settings = parent::parse_settings( $block_attrs );
+
+		// If empty, try legacy generator_args format
+		if ( empty( $settings['query_id'] ) && ! empty( $block_attrs['generator_args'] ) && is_array( $block_attrs['generator_args'] ) ) {
+			$settings['query_id']    = $block_attrs['generator_args']['query_id'] ?? '';
+			$settings['value_field'] = $block_attrs['generator_args']['value_field'] ?? 'ID';
+			$settings['label_field'] = $block_attrs['generator_args']['label_field'] ?? 'post_title';
+			$settings['calc_field']  = $block_attrs['generator_args']['calc_field'] ?? '';
+		}
+
+		// If still empty, try generator_field (pipe format)
+		if ( empty( $settings['query_id'] ) && ! empty( $block_attrs['generator_field'] ) ) {
+			$parts = explode( '|', $block_attrs['generator_field'] );
+			$settings['query_id']    = $parts[0] ?? '';
+			$settings['value_field'] = $parts[1] ?? 'ID';
+			$settings['label_field'] = $parts[2] ?? 'post_title';
+			$settings['calc_field']  = $parts[3] ?? '';
+		}
+
+		return $settings;
+	}
+
+	/**
 	 * Enrich legacy pipe-delimited generator_field with calculated_value_from_key.
 	 * Legacy blocks store calc field separately in block attr, not in the pipe string.
 	 *
@@ -165,6 +197,50 @@ class Get_From_Je_Query extends Base_V2 {
 	}
 
 	/**
+	 * Whether this generator supports auto-update.
+	 *
+	 * @return bool
+	 */
+	public function supports_auto_update(): bool {
+		return true;
+	}
+
+	/**
+	 * Returns context fields description for auto-update.
+	 *
+	 * @return array
+	 */
+	public function get_auto_update_context_fields(): array {
+		return array(
+			array(
+				'description' => __( 'The selected value from the listened field can be used in JetEngine Query via dynamic tags.', 'jet-form-builder' ),
+				'example'     => __( 'Use "JFB Update Field - Form Field Value" dynamic tag in your query.', 'jet-form-builder' ),
+			),
+		);
+	}
+
+	/**
+	 * Generate options with context from dependent fields.
+	 *
+	 * @param array $settings Parsed settings.
+	 * @param array $context  Context from dependent fields.
+	 *
+	 * @return array Generated options.
+	 */
+	public function generate_with_context( array $settings, array $context = array() ): array {
+		// Store context for JetEngine dynamic tags to access
+		if ( ! empty( $context ) ) {
+			foreach ( $context as $field_name => $field_value ) {
+				// Set global that JetEngine dynamic tags can read
+				$global_key = 'jfb_update_related_' . $field_name;
+				$GLOBALS[ $global_key ] = $field_value;
+			}
+		}
+
+		return $this->generate( $settings );
+	}
+
+	/**
 	 * Returns generated options list.
 	 *
 	 * @param array|string $args Settings array with query_id, value_field, label_field, calc_field
@@ -175,31 +251,30 @@ class Get_From_Je_Query extends Base_V2 {
 	public function generate( $args ) {
 		$result = array();
 
-		error_log( '=== [GET_FROM_QUERY V2] generate() ===' );
-		error_log( '[GET_FROM_QUERY V2] Input $args type: ' . gettype( $args ) );
-		error_log( '[GET_FROM_QUERY V2] Input $args: ' . print_r( $args, true ) );
-
 		// Handle legacy string format (pipe-delimited: "query_id|value|label|calc")
 		if ( is_string( $args ) ) {
-			error_log( '[GET_FROM_QUERY V2] Parsing as STRING (legacy pipe format)' );
 			$parts       = explode( '|', $args );
 			$query_id    = $parts[0] ?? '';
 			$value_field = $parts[1] ?? 'ID';
 			$label_field = $parts[2] ?? 'post_title';
 			$calc_field  = $parts[3] ?? '';
 		} elseif ( is_array( $args ) ) {
-			error_log( '[GET_FROM_QUERY V2] Parsing as ARRAY' );
 			// New structured format OR legacy array with generator_field
 			$query_id    = $args['query_id'] ?? '';
 			$value_field = $args['value_field'] ?? 'ID';
 			$label_field = $args['label_field'] ?? 'post_title';
 			$calc_field  = $args['calc_field'] ?? '';
 
-			error_log( '[GET_FROM_QUERY V2] Direct extraction: query_id=' . $query_id );
+			// Legacy format support: check for generator_args object
+			if ( empty( $query_id ) && ! empty( $args['generator_args'] ) && is_array( $args['generator_args'] ) ) {
+				$query_id    = $args['generator_args']['query_id'] ?? '';
+				$value_field = $args['generator_args']['value_field'] ?? 'ID';
+				$label_field = $args['generator_args']['label_field'] ?? 'post_title';
+				$calc_field  = $args['generator_args']['calc_field'] ?? '';
+			}
 
 			// Legacy format support: check for generator_field with pipe delimiter
 			if ( empty( $query_id ) && ! empty( $args['generator_field'] ) ) {
-				error_log( '[GET_FROM_QUERY V2] query_id empty, trying generator_field: ' . $args['generator_field'] );
 				$parts       = explode( '|', $args['generator_field'] );
 				$query_id    = $parts[0] ?? '';
 				$value_field = $parts[1] ?? 'ID';
@@ -207,15 +282,11 @@ class Get_From_Je_Query extends Base_V2 {
 				$calc_field  = $parts[3] ?? '';
 			}
 		} else {
-			error_log( '[GET_FROM_QUERY V2] Unknown format, returning empty' );
 			// Unknown format
 			return $result;
 		}
 
-		error_log( '[GET_FROM_QUERY V2] Final parsed: query_id=' . $query_id . ', value=' . $value_field . ', label=' . $label_field . ', calc=' . $calc_field );
-
 		if ( empty( $query_id ) ) {
-			error_log( '[GET_FROM_QUERY V2] query_id is EMPTY, returning empty result' );
 			return $result;
 		}
 
@@ -223,11 +294,8 @@ class Get_From_Je_Query extends Base_V2 {
 		$query = Query_Manager::instance()->get_query_by_id( $query_id );
 
 		if ( ! $query ) {
-			error_log( '[GET_FROM_QUERY V2] Query NOT FOUND for ID: ' . $query_id );
 			return $result;
 		}
-
-		error_log( '[GET_FROM_QUERY V2] Query found: ' . get_class( $query ) );
 
 		$query->setup_query();
 
@@ -239,10 +307,8 @@ class Get_From_Je_Query extends Base_V2 {
 		do_action( 'jet-form-builder/generators/get_from_query/setup', $this, $query );
 
 		$objects = $query->get_items();
-		error_log( '[GET_FROM_QUERY V2] Query returned ' . count( $objects ) . ' items' );
 
 		if ( empty( $objects ) ) {
-			error_log( '[GET_FROM_QUERY V2] No objects, returning empty' );
 			return $result;
 		}
 

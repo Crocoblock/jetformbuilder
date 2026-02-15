@@ -189,6 +189,40 @@ abstract class Base_V2 extends Base {
 	}
 
 	/**
+	 * Whether this generator supports auto-update/cascading feature.
+	 * Override in child classes to enable.
+	 *
+	 * @return bool
+	 */
+	public function supports_auto_update(): bool {
+		return false;
+	}
+
+	/**
+	 * Returns list of context fields this generator can use for auto-update.
+	 * Override in child classes to specify which fields can be listened to.
+	 *
+	 * @return array Array of context descriptions
+	 */
+	public function get_auto_update_context_fields(): array {
+		return array();
+	}
+
+	/**
+	 * Generate options with context from dependent fields.
+	 * Used when auto-update is triggered by another field's change.
+	 *
+	 * @param array $settings Parsed settings from block attributes.
+	 * @param array $context  Associative array ['field_name' => 'value'] from dependent fields.
+	 *
+	 * @return array Generated options
+	 */
+	public function generate_with_context( array $settings, array $context = array() ): array {
+		// Default implementation ignores context and calls regular generate
+		return $this->generate( $settings );
+	}
+
+	/**
 	 * Override incoming_args to use schema-based parsing.
 	 * For backward compatibility, this still works with the old system.
 	 *
@@ -244,50 +278,41 @@ abstract class Base_V2 extends Base {
 	 * @return array Generated options
 	 */
 	public function get_values( $args ) {
-		error_log( '=== [BASE_V2] get_values() ===' );
-		error_log( '[BASE_V2] Generator ID: ' . $this->get_id() );
-		error_log( '[BASE_V2] Input $args keys: ' . print_r( array_keys( $args ), true ) );
-		error_log( '[BASE_V2] generator_args: ' . print_r( $args['generator_args'] ?? 'NOT SET', true ) );
-		error_log( '[BASE_V2] generator_field: ' . ( $args['generator_field'] ?? 'NOT SET' ) );
+		// error_log( '=== [BASE_V2] get_values() ===' );
+		// error_log( '[BASE_V2] Generator ID: ' . $this->get_id() );
+		// error_log( '[BASE_V2] Input $args keys: ' . print_r( array_keys( $args ), true ) );
+		// error_log( '[BASE_V2] generator_args: ' . print_r( $args['generator_args'] ?? 'NOT SET', true ) );
+		// error_log( '[BASE_V2] generator_field: ' . ( $args['generator_field'] ?? 'NOT SET' ) );
 
 		// Priority 1: Check for generator_args object (new format)
 		if ( ! empty( $args['generator_args'] ) && is_array( $args['generator_args'] ) ) {
 			$settings = $this->parse_generator_args( $args['generator_args'] );
-			error_log( '[BASE_V2] Priority 1: generator_args parsed: ' . print_r( $settings, true ) );
-			error_log( '[BASE_V2] has_meaningful_values: ' . ( $this->has_meaningful_values( $settings ) ? 'YES' : 'NO' ) );
+			// error_log( '[BASE_V2] Priority 1: generator_args parsed: ' . print_r( $settings, true ) );
+			// error_log( '[BASE_V2] has_meaningful_values: ' . ( $this->has_meaningful_values( $settings ) ? 'YES' : 'NO' ) );
 			if ( $this->has_meaningful_values( $settings ) ) {
-				error_log( '[BASE_V2] Using Priority 1 (generator_args)' );
 				$result = $this->generate( $settings );
-				error_log( '[BASE_V2] generate() returned ' . count( $result ) . ' items' );
 				return $result;
 			}
 		}
 
 		// Priority 2: Try prefixed attributes
 		$settings = $this->parse_settings( $args );
-		error_log( '[BASE_V2] Priority 2: prefixed attrs parsed: ' . print_r( $settings, true ) );
-		error_log( '[BASE_V2] has_meaningful_values: ' . ( $this->has_meaningful_values( $settings ) ? 'YES' : 'NO' ) );
+		// error_log( '[BASE_V2] Priority 2: prefixed attrs parsed: ' . print_r( $settings, true ) );
+		// error_log( '[BASE_V2] has_meaningful_values: ' . ( $this->has_meaningful_values( $settings ) ? 'YES' : 'NO' ) );
 		if ( $this->has_meaningful_values( $settings ) ) {
-			error_log( '[BASE_V2] Using Priority 2 (prefixed attrs)' );
 			$result = $this->generate( $settings );
-			error_log( '[BASE_V2] generate() returned ' . count( $result ) . ' items' );
 			return $result;
 		}
 
 		// Priority 3: Fall back to legacy generator_field (pipe-delimited)
 		if ( ! empty( $args['generator_field'] ) ) {
 			$legacy_input = $this->enrich_legacy_field( $args['generator_field'], $args );
-			error_log( '[BASE_V2] Using Priority 3 (legacy generator_field): ' . print_r( $legacy_input, true ) );
 			$result = $this->generate( $legacy_input );
-			error_log( '[BASE_V2] generate() returned ' . count( $result ) . ' items' );
 			return $result;
 		}
 
 		// No settings found, return empty
-		error_log( '[BASE_V2] No meaningful settings found, calling generate with defaults' );
 		$result = $this->generate( $settings );
-		error_log( '[BASE_V2] generate() returned ' . count( $result ) . ' items' );
-		error_log( '=== [BASE_V2] END ===' );
 		return $result;
 	}
 
@@ -311,7 +336,7 @@ abstract class Base_V2 extends Base {
 	 *
 	 * @return array Parsed settings with defaults applied.
 	 */
-	protected function parse_generator_args( array $generator_args ): array {
+	public function parse_generator_args( array $generator_args ): array {
 		$settings = array();
 		$schema   = $this->get_settings_schema();
 
@@ -354,9 +379,11 @@ abstract class Base_V2 extends Base {
 	 */
 	public function get_schema_for_js(): array {
 		return array(
-			'id'     => $this->get_id(),
-			'name'   => $this->get_name(),
-			'schema' => $this->get_settings_schema(),
+			'id'              => $this->get_id(),
+			'name'            => $this->get_name(),
+			'schema'          => $this->get_settings_schema(),
+			'supports_update' => $this->supports_auto_update(),
+			'update_context'  => $this->get_auto_update_context_fields(),
 		);
 	}
 }

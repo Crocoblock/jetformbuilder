@@ -28,6 +28,13 @@ $this->add_attribute(
 );
 $this->add_attribute( 'data-jfb-sync' );
 
+// Add auto-update data attributes if configured
+if ( ! empty( $args['_jfb_data_attrs'] ) ) {
+	foreach ( $args['_jfb_data_attrs'] as $attr_key => $attr_value ) {
+		$this->add_attribute( $attr_key, $attr_value );
+	}
+}
+
 $placeholder = $args['placeholder'] ?? false;
 $default     = $args['default'] ?? false;
 

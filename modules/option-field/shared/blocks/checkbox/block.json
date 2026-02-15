@@ -88,6 +88,26 @@
 			"type": "object",
 			"default": {}
 		},
+		"generator_auto_update": {
+			"type": "boolean",
+			"default": false
+		},
+		"generator_listen_field": {
+			"type": ["string", "array"],
+			"default": ""
+		},
+		"generator_listen_all": {
+			"type": "boolean",
+			"default": false
+		},
+		"generator_update_on_button": {
+			"type": "string",
+			"default": ""
+		},
+		"generator_cache_timeout": {
+			"type": "number",
+			"default": 60
+		},
 		"calculated_value_from_key": {
 			"type": "string",
 			"default": ""

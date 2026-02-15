@@ -66,6 +66,17 @@ export const {
 } = createSlotFill( 'JFBGeneratorAdditional' );
 
 /**
+ * Slot for auto-update controls.
+ *
+ * This slot renders the auto-update toggle and field selector
+ * when a generator supports cascading updates.
+ */
+export const {
+	Fill: AutoUpdateControlsFill,
+	Slot: AutoUpdateControlsSlot,
+} = createSlotFill( 'JFBAutoUpdateControls' );
+
+/**
  * Slot for before generator selector.
  *
  * Can be used to add content before the generator type dropdown,
@@ -95,6 +106,8 @@ export default {
 	GeneratorControlsSlot,
 	GeneratorAdditionalFill,
 	GeneratorAdditionalSlot,
+	AutoUpdateControlsFill,
+	AutoUpdateControlsSlot,
 	BeforeGeneratorSelectorFill,
 	BeforeGeneratorSelectorSlot,
 	AfterGeneratorControlsFill,

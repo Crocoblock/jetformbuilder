@@ -24,6 +24,7 @@ import {
 import { getGeneratorControls } from './registry';
 import { SchemaBasedControls, NoSchemaNotice } from './schema-renderer';
 import LegacyControls from './legacy-controls';
+import AutoUpdateControls from './components/AutoUpdateControls';
 
 /**
  * Legacy generators that use pipe-delimited format for generator_field.
@@ -206,6 +207,7 @@ export function GeneratorSettings( props ) {
 
 	const generatorData = schemas[ generatorId ] ?? {};
 	const currentSchema = generatorData.schema ?? {};
+	const supportsUpdate = generatorData.supports_update ?? false;
 	const isLegacyGenerator = generatorData.legacy === true;
 
 	const CustomControls = getGeneratorControls( generatorId );
@@ -291,6 +293,12 @@ export function GeneratorSettings( props ) {
 
 					<GeneratorControlsSlot fillProps={ fillProps } />
 					<GeneratorAdditionalSlot fillProps={ fillProps } />
+
+					<AutoUpdateControls
+						attributes={ attributes }
+						setAttributes={ setAttributes }
+						supportsUpdate={ supportsUpdate }
+					/>
 				</Fragment>
 			) }
 

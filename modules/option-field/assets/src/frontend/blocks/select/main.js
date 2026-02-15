@@ -2,6 +2,9 @@ import MultiSelectData from './input';
 import SignalSelect from './signal';
 import './main.pcss';
 
+// Import auto-update feature
+import '../../auto-update';
+
 const { addFilter } = JetPlugins.hooks;
 
 window.JetFormBuilderAbstract = {

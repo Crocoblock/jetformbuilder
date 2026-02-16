@@ -102,12 +102,7 @@ class Action_Button extends Base {
 					),
 				),
 				'css_selector' => array(
-					$this->selector( '__action-button' ) => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
-				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => 20,
-					),
+					$this->selector( '__action-button' ) => 'width: {{VALUE}}{{UNIT}}; max-width: {{VALUE}}{{UNIT}};',
 				),
 			)
 		);
@@ -228,7 +223,7 @@ class Action_Button extends Base {
 			array(
 				'id'           => 'submit_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( '__action-button' ) => 'background-color: {{VALUE}}',
 				),
@@ -261,7 +256,7 @@ class Action_Button extends Base {
 			array(
 				'id'           => 'submit_hover_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( '__action-button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),

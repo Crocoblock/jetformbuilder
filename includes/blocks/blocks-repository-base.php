@@ -23,6 +23,8 @@ abstract class Blocks_Repository_Base {
 	public function rep_before_install_item( $block_type ) {
 		/** @var Types\Base $block_type */
 
+		do_action( 'jet-form-builder/block-type/before-intall', $block_type );
+
 		// throw exception & exclude from repository if block is not supported
 		if ( ! $block_type->is_supported() ) {
 			$this->_rep_abort_this();

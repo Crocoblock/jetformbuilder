@@ -69,7 +69,7 @@ class Block_Type extends Base implements
 					),
 				),
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['select-wrapper'] => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
+					'{{WRAPPER}} ' . $this->css_scheme['select-wrapper'] => 'width: {{VALUE}}{{UNIT}}; max-width: {{VALUE}}{{UNIT}};',
 				),
 				'attributes'   => array(
 					'default' => array(
@@ -135,7 +135,7 @@ class Block_Type extends Base implements
 			array(
 				'id'           => 'item_normal_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['select'] => 'background-color: {{VALUE}}',
 				),

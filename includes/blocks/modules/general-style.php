@@ -53,23 +53,23 @@ trait General_Style {
 	}
 
 	public function get_label_selector() {
-		return '__label.%1$s__label.%1$s__label';
+		return '__label';
 	}
 
 	public function get_required_selector() {
-		return '__label span.%1$s__required.%1$s__required.%1$s__required';
+		return '__label span.%1$s__required';
 	}
 
 	public function get_description_selector() {
-		return '__desc.%1$s__desc.%1$s__desc';
+		return '__desc';
 	}
 
 	public function get_field_wrap() {
-		return '-row.%1$s-row.%1$s-row.%1$s-row';
+		return '.%1$s-row';
 	}
 
 	public function get_field_input() {
-		return '-row.%1$s-row.%1$s-row input';
+		return '.%1$s-row input';
 	}
 
 
@@ -188,7 +188,7 @@ trait General_Style {
 		);
 
 		$this->add_margin_padding(
-			$this->selector( 'wrap' ),
+			$this->selector_no_space( $this->get_field_wrap() ),
 			array(
 				'margin'  => array(
 					'id'        => 'field_margin',
@@ -223,7 +223,7 @@ trait General_Style {
 					),
 				),
 				'css_selector' => array(
-					$this->selector( 'wrap' ) => 'text-align: {{VALUE}};',
+					$this->selector_no_space( $this->get_field_wrap() ) => 'text-align: {{VALUE}};',
 				),
 			)
 		);
@@ -235,7 +235,7 @@ trait General_Style {
 				'label'        => __( 'Border', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'css_selector' => array(
-					$this->selector( 'wrap' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					$this->selector_no_space( $this->get_field_wrap() ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				),
 			)
 		);
@@ -244,9 +244,9 @@ trait General_Style {
 			array(
 				'id'           => 'field_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
-					$this->selector( 'wrap' ) => 'background-color: {{VALUE}}',
+					$this->selector_no_space( $this->get_field_wrap() ) => 'background-color: {{VALUE}}',
 				),
 			)
 		);
@@ -342,7 +342,7 @@ trait General_Style {
 			array(
 				'id'           => 'label_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'label' ) => 'background-color: {{VALUE}}',
 				),
@@ -440,7 +440,7 @@ trait General_Style {
 			array(
 				'id'           => 'description_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'description' ) => 'background-color: {{VALUE}}',
 				),
@@ -493,7 +493,7 @@ trait General_Style {
 			array(
 				'id'           => 'required_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'required' ) => 'background-color: {{VALUE}}',
 				),
@@ -513,7 +513,7 @@ trait General_Style {
 		);
 
 		$this->add_margin_padding(
-			$this->selector( 'input' ),
+			$this->selector_no_space( $this->get_field_input() ),
 			array(
 				'margin'  => array(
 					'id'        => 'input_margin',
@@ -548,7 +548,7 @@ trait General_Style {
 						),
 					),
 					'css_selector' => array(
-						$this->selector( 'input' ) => 'text-align: {{VALUE}};',
+						$this->selector_no_space( $this->get_field_input() ) => 'text-align: {{VALUE}};',
 					),
 				),
 				$this->get_additional_styles( 'input_alignment' )
@@ -561,7 +561,7 @@ trait General_Style {
 				'type'         => 'typography',
 				'separator'    => 'after',
 				'css_selector' => array(
-					$this->selector( 'input' ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
+					$this->selector_no_space( $this->get_field_input() ) => 'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};',
 				),
 			)
 		);
@@ -573,7 +573,7 @@ trait General_Style {
 				'label'        => __( 'Border', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'css_selector' => array(
-					$this->selector( 'input' ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					$this->selector_no_space( $this->get_field_input() ) => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				),
 			)
 		);
@@ -585,7 +585,7 @@ trait General_Style {
 				'separator'    => 'after',
 				'label'        => __( 'Text Color', 'jet-form-builder' ),
 				'css_selector' => array(
-					$this->selector( 'input' ) => 'color: {{VALUE}}',
+					$this->selector_no_space( $this->get_field_input() ) => 'color: {{VALUE}}',
 				),
 			)
 		);
@@ -594,9 +594,9 @@ trait General_Style {
 			array(
 				'id'           => 'input_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
-					$this->selector( 'input' ) => 'background-color: {{VALUE}}',
+					$this->selector_no_space( $this->get_field_input() ) => 'background-color: {{VALUE}}',
 				),
 			)
 		);

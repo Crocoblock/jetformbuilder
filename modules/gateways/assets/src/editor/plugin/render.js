@@ -1,14 +1,18 @@
 import GatewaysEditor from '../components/gateways-editor';
 
-const { Button, ToggleControl } = wp.components;
+const {
+	Button,
+	ToggleControl,
+	Notice,
+	__experimentalItemGroup: ItemGroup,
+	__experimentalItem: Item,
+} = wp.components;
 
-const { withDispatch, withSelect } = wp.data;
-
+const { withDispatch, withSelect, useSelect, dispatch } = wp.data;
 const { useState, useEffect } = wp.element;
-
 const { __ } = wp.i18n;
-
 const { compose } = wp.compose;
+const { createBlock } = wp.blocks;
 
 const { ActionModal } = JetFBComponents;
 
@@ -23,14 +27,25 @@ const gatewaysData = window.JetFormEditorData.gateways;
 const MODE_SINGLE = 'single';
 const MODE_MANUAL = 'manual';
 
+const MULTI_GATEWAY_BLOCK = 'jet-forms/multi-gateway';
+
 const getGatewayLabel = ( type ) => {
-	return (
-		gatewaysData.list.find( el => el.value === type )?.label || type
-	);
+	return gatewaysData.list.find( el => el.value === type )?.label || type;
+};
+
+const hasBlockRecursive = ( blocks, name ) => {
+	for ( const block of blocks ) {
+		if ( block.name === name ) {
+			return true;
+		}
+		if ( block.innerBlocks?.length && hasBlockRecursive( block.innerBlocks, name ) ) {
+			return true;
+		}
+	}
+	return false;
 };
 
 function PluginGateways( props ) {
-
 	const {
 		setGateway,
 		setGatewayScenario,
@@ -41,7 +56,6 @@ function PluginGateways( props ) {
 	} = props;
 
 	const [ meta, setMeta ] = useMetaState( '_jf_gateways' );
-
 	const [ isEdit, setEdit ] = useState( false );
 
 	// UI-selected value (can be "manual" without touching meta.gateway)
@@ -52,7 +66,23 @@ function PluginGateways( props ) {
 
 	const isManualMode = meta?.mode === MODE_MANUAL;
 
-	// keep UI selected in sync with saved meta
+	const hasMultiGatewayBlock = useSelect(
+		( select ) => {
+			const editor = select( 'core/block-editor' );
+			if ( !editor?.getBlocks ) {
+				return false;
+			}
+			return hasBlockRecursive( editor.getBlocks(), MULTI_GATEWAY_BLOCK );
+		},
+		[]
+	);
+
+	const insertMultiGatewayBlock = () => {
+		dispatch( 'core/block-editor' ).insertBlocks(
+			createBlock( MULTI_GATEWAY_BLOCK )
+		);
+	};
+
 	useEffect( () => {
 		if ( isManualMode ) {
 			setSelectedGateway( MODE_MANUAL );
@@ -61,7 +91,6 @@ function PluginGateways( props ) {
 		setSelectedGateway( meta?.gateway ?? 'none' );
 	}, [ meta?.gateway, meta?.mode ] );
 
-	// bind editor store when modal is open
 	useEffect( () => {
 		if ( !isEdit ) {
 			clearGateway();
@@ -75,7 +104,6 @@ function PluginGateways( props ) {
 			return;
 		}
 
-		// When manual mode is active, modal opens for "editGateway" only
 		if ( isManualMode && !editGateway ) {
 			return;
 		}
@@ -98,14 +126,37 @@ function PluginGateways( props ) {
 		{ label: 'Manual', value: MODE_MANUAL },
 	];
 
+	const styles = {
+		row: {
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'space-between',
+			width: '100%',
+		},
+		item: {
+			display: 'flex',
+			minHeight: '50px',
+			flexDirection: 'column',
+			justifyContent: 'center',
+		},
+		toggle: {
+			paddingTop: '10px',
+			flexDirection: 'column',
+		},
+		notice: {
+			marginTop: '10px',
+		},
+		notice__btn: {
+			marginLeft: '0',
+		}
+	};
+
 	return (
 		<>
-			<div className="jfb-gateways">
+			<ItemGroup className="jfb-gateways" isBordered isSeparated>
 				{ options.map( ( opt ) => {
 					const isSelected = selectedGateway === opt.value;
 
-					// In manual mode: show Edit under EACH gateway
-					// Otherwise: show Edit only under the selected gateway
 					const canEdit =
 						opt.value !== 'none'
 						&& opt.value !== MODE_MANUAL
@@ -117,70 +168,104 @@ function PluginGateways( props ) {
 						&& opt.value !== MODE_MANUAL;
 
 					return (
-						<div key={ opt.value } className="jfb-gateways__item">
-							<label className="jfb-gateways__option">
-								<input
-									type="radio"
-									name="jfb_gateway"
-									value={ opt.value }
-									checked={ isSelected }
-									onChange={ () => {
-										setSelectedGateway( opt.value );
+						<Item
+							key={ opt.value }
+							className="jfb-gateways__item"
+							style={ styles.item }
+						>
+							<div className="jfb-gateways__row" style={ styles.row }>
+								<label className="jfb-gateways__option">
+									<input
+										type="radio"
+										name="jfb_gateway"
+										value={ opt.value }
+										checked={ isSelected }
+										onChange={ () => {
+											setSelectedGateway( opt.value );
 
-										// Manual mode selected
-										if ( opt.value === MODE_MANUAL ) {
+											if ( opt.value === MODE_MANUAL ) {
+												setMeta( { ...meta, mode: MODE_MANUAL } );
+												return;
+											}
+
 											setMeta( {
 												...meta,
-												mode: MODE_MANUAL,
+												mode: MODE_SINGLE,
+												gateway: opt.value,
 											} );
-											return;
-										}
+										} }
+									/>
+									<span className="jfb-gateways__label">{ opt.label }</span>
+								</label>
 
-										// Single mode selected
-										setMeta( {
-											...meta,
-											mode: MODE_SINGLE,
-											gateway: opt.value,
-										} );
-									} }
-								/>
-								<span>{ opt.label }</span>
-							</label><br/>
-
-							{ canEdit && (
-								<Button
-									onClick={ () => {
-										setEditGateway( opt.value );
-										setEdit( true );
-									} }
-									icon={ 'admin-tools' }
-									style={ { margin: '8px 0' } }
-									isSecondary
-								>
-									{ __( 'Edit', 'jet-form-builder' ) }
-								</Button>
-							) }
+								<div className="jfb-gateways__actions">
+									{ canEdit ? (
+										<Button
+											onClick={ () => {
+												setEditGateway( opt.value );
+												setEdit( true );
+											} }
+											icon="admin-tools"
+											isSecondary
+											size="small"
+										>
+											{ __( 'Edit', 'jet-form-builder' ) }
+										</Button>
+									) : (
+										// spacer to prevent jumps
+										<span className="jfb-gateways__edit-spacer" aria-hidden="true" />
+									) }
+								</div>
+							</div>
 
 							{ canToggle && (
-								<ToggleControl
-									label={ __( 'Show on frontend', 'jet-form-builder' ) }
-									checked={ !!meta?.[ opt.value ]?.show_on_front }
-									onChange={ ( value ) => {
-										setMeta( {
-											...meta,
-											[ opt.value ]: {
-												...( meta?.[ opt.value ] || {} ),
-												show_on_front: value,
-											},
-										} );
-									} }
-									style={ { margin: '8px 0' } }
-								/>
+								<div className="jfb-gateways__toggle" style={ styles.toggle }>
+									<ToggleControl
+										label={ __( 'Show on frontend', 'jet-form-builder' ) }
+										checked={ !!meta?.[ opt.value ]?.show_on_front }
+										onChange={ ( value ) => {
+											setMeta( {
+												...meta,
+												[ opt.value ]: {
+													...( meta?.[ opt.value ] || {} ),
+													show_on_front: value,
+												},
+											} );
+										} }
+									/>
+								</div>
 							) }
-						</div>
+
+							{ opt.value === MODE_MANUAL && isManualMode && !hasMultiGatewayBlock && (
+								<div className="jfb-gateways__notice" style={ styles.notice }>
+									<Notice
+										status="warning"
+										isDismissible={ false }
+									>
+
+										<div>
+											{ __(
+												'To display gateways on the frontend in Manual mode, add the Multi Gateway block to the form.',
+												'jet-form-builder'
+											) }
+										</div>
+
+										<Button
+											isSecondary
+											onClick={ insertMultiGatewayBlock }
+											size="small"
+											style={ styles.notice__btn }
+										>
+											{ __( 'Add block', 'jet-form-builder' ) }
+										</Button>
+
+									</Notice>
+								</div>
+							) }
+						</Item>
 					);
 				} ) }
-			</div>
+			</ItemGroup>
 
 			{ isEdit && (
 				<ActionModal

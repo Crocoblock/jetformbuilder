@@ -16,7 +16,8 @@
 			"default": false
 		},
 		"title": { "type": "string", "default": "" },
-		"description": { "type": "string", "default": "" }
+		"description": { "type": "string", "default": "" },
+		"gatewaysSettings": { "type": "object", "default": {} }
 	},
 	"viewScript": "jet-fb-multi-gateway",
 	"style": "jet-fb-multi-gateway"

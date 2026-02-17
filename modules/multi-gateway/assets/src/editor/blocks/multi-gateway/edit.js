@@ -9,9 +9,7 @@ const getGatewayLabel = ( type ) => (
 );
 
 export default function MultiGatewayEdit( { attributes, setAttributes } ) {
-	const blockProps = useBlockProps( {
-		className: 'jfb-multi-gateway',
-	} );
+	const blockProps = useBlockProps();
 
 	const [ meta ] = useMetaState( '_jf_gateways' );
 
@@ -79,6 +77,12 @@ export default function MultiGatewayEdit( { attributes, setAttributes } ) {
 								<label
 									key={ key }
 									className="jfb-multi-gateway__item"
+									onClickCapture={ ( e ) => {
+										if ( e.target?.closest?.( '[contenteditable="true"]' ) ) {
+											e.preventDefault();
+											e.stopPropagation();
+										}
+									} }
 								>
 									<input
 										type="radio"
@@ -106,7 +110,7 @@ export default function MultiGatewayEdit( { attributes, setAttributes } ) {
 										/>
 
 										<div className="jfb-multi-gateway__description">
-											<i>
+											<div>
 												<RichText
 													tagName="span"
 													value={ itemDesc }
@@ -115,7 +119,7 @@ export default function MultiGatewayEdit( { attributes, setAttributes } ) {
 														updateGatewaySetting( key, 'description', value )
 													}
 												/>
-											</i>
+											</div>
 										</div>
 									</div>
 								</label>

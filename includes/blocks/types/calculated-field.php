@@ -53,28 +53,28 @@ class Calculated_Field extends Base {
 	}
 
 	public function get_field_input() {
-		return '-row .%1$s__calculated-field, {{WRAPPER}} .%1$s-row .%1$s__calculated-field--child';
+		return '-row .%1$s__calculated-field, {{WRAPPER}} .%1$s-row .%1$s__calculated-field--child, {{WRAPPER}} .jet-form-builder__calculated-field-val';
 	}
 
 	public function additional_selectors_for_controls() {
 		return array(
 			'input_alignment' => array(
-				'options'      => array(
+				'options' => array(
 					'flex-start' => array(
 						'shortcut' => __( 'Left', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-alignleft',
+						'icon' => 'dashicons-editor-alignleft',
 					),
-					'center'     => array(
+					'center' => array(
 						'shortcut' => __( 'Center', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-aligncenter',
+						'icon' => 'dashicons-editor-aligncenter',
 					),
-					'flex-end'   => array(
+					'flex-end' => array(
 						'shortcut' => __( 'Right', 'jet-form-builder' ),
-						'icon'     => 'dashicons-editor-alignright',
+						'icon' => 'dashicons-editor-alignright',
 					),
 				),
 				'css_selector' => array(
-					$this->selector( 'input' ) => 'justify-content: {{VALUE}};',
+					$this->selector( 'input' ) => 'justify-content: {{VALUE}}; display: flex; width: 100%;',
 				),
 
 			),

@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.5.6.1
+* FIX: Compatibility with jetBooking 4.0.0
+
 ## 3.5.6
 * ADD: Bricks builder ajax popup compatibility
 * ADD: Added aria-label to hidden input in advanced choices block for better accessibility

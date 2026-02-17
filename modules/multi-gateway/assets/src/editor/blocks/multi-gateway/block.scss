@@ -1,0 +1,49 @@
+.jfb-multi-gateway,
+.jfb-multi-gateway * {
+  box-sizing: border-box;
+}
+
+.jfb-multi-gateway h3 {
+  margin: 0 0 6px;
+}
+
+.jfb-multi-gateway p {
+  margin: 0 0 14px;
+  opacity: 0.75;
+}
+
+.jfb-multi-gateway__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.jfb-multi-gateway__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  margin: 0;
+  border-top: 1px solid #dcdcde;
+  cursor: pointer;
+}
+
+.jfb-multi-gateway__item:first-child {
+  border-top: 0;
+}
+
+.jfb-multi-gateway__item .jet-form-builder__field[type="radio"] {
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.jfb-multi-gateway__content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.jfb-multi-gateway__empty {
+  padding: 16px;
+  opacity: 0.7;
+}

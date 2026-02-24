@@ -47,3 +47,20 @@
   padding: 16px;
   opacity: 0.7;
 }
+.jfb-multi-gateway__label-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.jfb-multi-gateway__warning{
+  display:inline-flex;
+  align-items:center;
+  cursor:help;
+  line-height:1;
+  .dashicons-warning {
+    &:before {
+      color:red;
+    }
+  }
+}

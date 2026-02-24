@@ -75,6 +75,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes {
 			array(
 				'id'    => 'mg_wrapper',
 				'title' => __( 'Wrapper', 'jet-form-builder' ),
+				'initialOpen' => true,
 			)
 		);
 
@@ -131,6 +132,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes {
 			array(
 				'id'    => 'mg_heading',
 				'title' => __( 'Heading', 'jet-form-builder' ),
+				'initialOpen' => false,
 			)
 		);
 
@@ -212,6 +214,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes {
 			array(
 				'id'    => 'mg_list_layout',
 				'title' => __( 'List Layout', 'jet-form-builder' ),
+				'initialOpen' => false,
 			)
 		);
 
@@ -263,6 +266,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes {
 			array(
 				'id'    => 'mg_item',
 				'title' => __( 'Item', 'jet-form-builder' ),
+				'initialOpen' => false,
 			)
 		);
 
@@ -342,6 +346,7 @@ class Block_Type extends Base implements Native_Block_Wrapper_Attributes {
 			array(
 				'id'    => 'mg_text',
 				'title' => __( 'Label & Description', 'jet-form-builder' ),
+				'initialOpen' => false,
 			)
 		);
 

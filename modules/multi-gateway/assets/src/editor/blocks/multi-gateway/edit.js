@@ -1,4 +1,6 @@
 const { useBlockProps, RichText } = wp.blockEditor;
+const { __ } = wp.i18n;
+const { Tooltip } = wp.components;
 const { useMetaState } = JetFBHooks;
 
 const gatewaysData = window?.JetFormEditorData?.gateways;
@@ -16,6 +18,7 @@ export default function MultiGatewayEdit( { attributes, setAttributes } ) {
 	const mode = meta?.mode || 'single';
 
 	let selected = [];
+
 	if ( mode === MODE_MANUAL ) {
 		selected = ( gatewaysData?.list || [] )
 			.map( ( { value } ) => value )
@@ -40,6 +43,15 @@ export default function MultiGatewayEdit( { attributes, setAttributes } ) {
 			},
 		} );
 	};
+
+	const gatewayValidityMap = {};
+
+	selected.forEach( ( key ) => {
+		gatewayValidityMap[ key ] =
+			typeof JetFBActions?.isGatewayValid === 'function'
+				? JetFBActions.isGatewayValid( key, meta )
+				: true;
+	} );
 
 	return (
 		<div { ...blockProps }>
@@ -73,10 +85,15 @@ export default function MultiGatewayEdit( { attributes, setAttributes } ) {
 								? saved.description
 								: '';
 
+							const isValid = gatewayValidityMap[ key ];
+
 							return (
 								<label
 									key={ key }
-									className="jfb-multi-gateway__item"
+									className={ `
+										jfb-multi-gateway__item
+										${ ! isValid ? 'jfb-multi-gateway__item--invalid' : '' }
+									` }
 									onClickCapture={ ( e ) => {
 										if ( e.target?.closest?.( '[contenteditable="true"]' ) ) {
 											e.preventDefault();
@@ -99,15 +116,33 @@ export default function MultiGatewayEdit( { attributes, setAttributes } ) {
 											}
 										} }
 									>
-										<RichText
-											tagName="div"
-											className="jfb-multi-gateway__label"
-											value={ itemLabel }
-											placeholder={ getGatewayLabel( key ) }
-											onChange={ ( value ) =>
-												updateGatewaySetting( key, 'label', value )
-											}
-										/>
+										<div className="jfb-multi-gateway__label-row">
+											<RichText
+												tagName="div"
+												className="jfb-multi-gateway__label"
+												value={ itemLabel }
+												placeholder={ getGatewayLabel( key ) }
+												onChange={ ( value ) =>
+													updateGatewaySetting( key, 'label', value )
+												}
+											/>
+
+											{ ! isValid && (
+												<Tooltip
+													text={ __(
+														'This gateway is not configured. Please use the Edit button in the Gateways settings to set up this gateway.',
+														'jet-form-builder'
+													) }
+												>
+													<span
+														className="jfb-multi-gateway__warning"
+														onMouseDown={ ( e ) => e.preventDefault() }
+													>
+														<span className="dashicons dashicons-warning" />
+													</span>
+												</Tooltip>
+											) }
+										</div>
 
 										<div className="jfb-multi-gateway__description">
 											<div>

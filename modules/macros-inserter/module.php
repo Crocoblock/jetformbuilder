@@ -47,11 +47,37 @@ class Module implements
 	}
 
 	public function register_editor_assets() {
+		// CodeMirror for wp.codeEditor.initialize(...)
+		wp_enqueue_code_editor(
+			array(
+				'type' => 'text/html',
+			)
+		);
+
+		// Styles for CodeMirror in WP
+		wp_enqueue_style( 'wp-codemirror' );
+
+		$asset_path = $this->get_dir( 'assets/build/editor.asset.php' );
+
+		$asset = file_exists( $asset_path )
+			? require $asset_path
+			: array(
+				'dependencies' => array(),
+				'version'      => jet_form_builder()->get_version(),
+			);
+
+		$deps = array_unique(
+			array_merge(
+				$asset['dependencies'] ?? array(),
+				array( 'code-editor' )
+			)
+		);
+
 		wp_enqueue_script(
 			$this->get_handle( 'editor' ),
 			$this->get_url( 'assets/build/editor.js' ),
-			array(),
-			jet_form_builder()->get_version(),
+			$deps,
+			$asset['version'] ?? jet_form_builder()->get_version(),
 			true
 		);
 	}

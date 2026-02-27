@@ -1,3 +1,4 @@
+const WPExtractorPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
 const path              = require( 'path' );
 const devMode           = !process.argv.join( ':' ).
 includes( '--mode:production' );
@@ -5,7 +6,7 @@ includes( '--mode:production' );
 module.exports = {
 	context: path.resolve( __dirname, 'assets/src' ),
 	entry: {
-		'editor': './editor.js',
+		'editor': './editor/main.js',
 	},
 	output: {
 		path: path.resolve( __dirname, 'assets/build' ),
@@ -25,5 +26,8 @@ module.exports = {
 				exclude: /node_modules/,
 			},
 		],
-	}
+	},
+	plugins: [
+		new WPExtractorPlugin(),
+	],
 };

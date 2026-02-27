@@ -7,7 +7,14 @@ import { sprintf, __ } from '@wordpress/i18n';
  * @param root {Observable}
  */
 function observeNode( node, root ) {
-	const formula = new CalculatedHtmlString( root, { withPrefix: false } );
+	if ( !node.__jfbMacroTemplate ) {
+		node.__jfbMacroTemplate = node.innerHTML;
+	}
+
+	const formula = new CalculatedHtmlString( root, {
+		withPrefix: false,
+		macroHost: node,
+	} );
 	formula.observe( `%${ node.dataset.jfbMacro }%` );
 
 	if ( !formula.parts?.length ) {
@@ -35,8 +42,17 @@ function observeNode( node, root ) {
 	node.dataset.jfbObserved = 1;
 
 	formula.setResult = () => {
-		node.innerHTML = formula.calculateString();
+		let html = String( formula.calculateString() );
+
+		const hasTextarea = node.querySelector?.( 'textarea' );
+
+		if ( hasTextarea ) {
+			html = html.replace( /\r\n|\r|\n/g, '<br>' );
+		}
+
+		node.innerHTML = html;
 	};
+
 	formula.setResult();
 }
 

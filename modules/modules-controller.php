@@ -62,6 +62,7 @@ class Modules_Controller implements Module_Controller_It {
 			new Promo_Banner\Module(),
 			new Fields_Render_Validator\Module(),
 			new User_Journey\Module(),
+			new Macros_Inserter\Module(),
 		);
 	}
 

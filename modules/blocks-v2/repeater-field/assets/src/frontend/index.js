@@ -1,6 +1,7 @@
 import RepeaterData from './input';
 import SignalRepeater from './signal';
 import RepeaterRestriction from './restrictions/RepeaterRestriction';
+import { resolveRepeaterMacrosValue } from './repeater-macros';
 import './index.pcss';
 
 const {
@@ -88,3 +89,12 @@ addAction(
 		} );
 	},
 );
+
+addFilter(
+	'jet.fb.macro.field.value',
+	'jet-form-builder/repeater-field',
+	( current, $fieldNode, $macroHost ) =>
+		resolveRepeaterMacrosValue( current, $fieldNode, $macroHost ),
+);
+
+

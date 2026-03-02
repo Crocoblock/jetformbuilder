@@ -53,7 +53,7 @@ class Calculated_Field extends Base {
 	}
 
 	public function get_field_input() {
-		return '-row .%1$s__calculated-field, {{WRAPPER}} .%1$s-row .%1$s__calculated-field--child, {{WRAPPER}} .jet-form-builder__calculated-field-val';
+		return '-row .%1$s__calculated-field, {{WRAPPER}} .%1$s-row .%1$s__calculated-field--child, {{WRAPPER}} .jet-form-builder__calculated-field';
 	}
 
 	public function additional_selectors_for_controls() {

@@ -68,6 +68,26 @@ const selectors = {
 
 		return map;
 	},
+	getEventValuesByGateway( state ) {
+		const grouped = {};
+
+		for ( const type of state.types ) {
+
+			if ( !type.gateway ) {
+				continue;
+			}
+
+			const gw = type.gateway;
+
+			if ( !grouped[ gw ] ) {
+				grouped[ gw ] = [];
+			}
+
+			grouped[ gw ].push( type.value );
+		}
+
+		return grouped;
+	},
 };
 
 export default {

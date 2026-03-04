@@ -141,6 +141,7 @@ function PluginGateways( props ) {
 		},
 		toggle: {
 			paddingTop: '10px',
+			paddingLeft: '20px', 
 			flexDirection: 'column',
 		},
 		notice: {

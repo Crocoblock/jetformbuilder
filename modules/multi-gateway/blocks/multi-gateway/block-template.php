@@ -105,7 +105,7 @@ $gw_settings = is_array( $gw_settings ) ? $gw_settings : array();
                     <label class="jfb-multi-gateway__item">
                         <input
                                 type="radio"
-                                class="jet-form-builder__field"
+                                class="jet-form-builder__field checkradio-field"
                                 name="<?php echo esc_attr( $name ); ?>"
                                 value="<?php echo esc_attr( $gateway_key ); ?>"
 							<?php checked( 0 === $index ); ?>

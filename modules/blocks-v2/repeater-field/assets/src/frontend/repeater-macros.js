@@ -25,14 +25,106 @@ function bindRepeaterNotifyOnce( node ) {
 			if ( !removeBtn || !node.contains( removeBtn ) ) {
 				return;
 			}
-
 			requestAnimationFrame( notify );
 		},
 		true
 	);
 }
 
-function collectRepeaterLines( fieldNode, macros ) {
+function getFieldValue( el ) {
+	if ( el.tagName === 'SELECT' && el.multiple ) {
+		const values = Array.from( el.selectedOptions || [] )
+			.map( opt => String( opt.value ?? '' ).trim() )
+			.filter( Boolean );
+
+		return values.join( ', ' );
+	}
+
+	return String( el.value ?? '' ).trim();
+}
+
+function collectRowValues( rowEl ) {
+	const valuesByName = Object.create( null );
+
+	const rowRepeaterField = rowEl.closest( '.field-type-repeater-field' );
+	const fields = rowEl.querySelectorAll( 'input, select, textarea' );
+
+	fields.forEach( ( el ) => {
+		// ignore nested repeater-in-repeater
+		if ( el.closest( '.field-type-repeater-field' ) !== rowRepeaterField ) {
+			return;
+		}
+
+		if ( el.disabled ) {
+			return;
+		}
+
+		// KEY FIX: ignore hidden (usually stores internal/service values)
+		if ( el.tagName === 'INPUT' && el.type === 'hidden' ) {
+			return;
+		}
+
+		if ( ( el.type === 'checkbox' || el.type === 'radio' ) && !el.checked ) {
+			return;
+		}
+
+		const name = el.dataset?.fieldName || el.name || '';
+		if ( !name ) {
+			return;
+		}
+
+		const value = getFieldValue( el );
+		if ( value === '' ) {
+			return;
+		}
+
+		if ( valuesByName[ name ] ) {
+			valuesByName[ name ] += `, ${ value }`;
+		} else {
+			valuesByName[ name ] = value;
+		}
+	} );
+
+	return valuesByName;
+}
+
+function collectRepeaterLinesFromTemplate( fieldNode, templateHtml ) {
+	const items = fieldNode.querySelector( '.jet-form-builder-repeater__items' );
+	if ( !items ) {
+		return '';
+	}
+
+	const tpl = document.createElement( 'template' );
+	tpl.innerHTML = String( templateHtml ?? '' );
+
+	const rows  = items.querySelectorAll( '[data-repeater-row]' );
+	const lines = [];
+
+	rows.forEach( ( rowEl ) => {
+		const fragment = tpl.content.cloneNode( true );
+		const macroNodes = fragment.querySelectorAll( '[data-jfb-macro]' );
+
+		const valuesByName = collectRowValues( rowEl );
+
+		macroNodes.forEach( ( node ) => {
+			const macroName = node.getAttribute( 'data-jfb-macro' ) || '';
+			if ( !macroName ) {
+				return;
+			}
+
+			node.textContent = valuesByName[ macroName ] ?? '';
+		} );
+
+		const tmp = document.createElement( 'div' );
+		tmp.appendChild( fragment );
+		lines.push( tmp.innerHTML );
+	} );
+
+	return lines.join( '' );
+}
+
+
+function collectRepeaterLinesPlain( fieldNode, macros ) {
 	const items = fieldNode.querySelector( '.jet-form-builder-repeater__items' );
 	if ( !items ) {
 		return '';
@@ -56,23 +148,30 @@ function collectRepeaterLines( fieldNode, macros ) {
 			if ( el.disabled ) {
 				return;
 			}
+			if ( el.tagName === 'INPUT' && el.type === 'hidden' ) {
+				return;
+			}
 			if ( ( el.type === 'checkbox' || el.type === 'radio' ) && !el.checked ) {
 				return;
 			}
 
 			const name  = el.dataset?.fieldName || el.name || '';
-			const value = String( el.value ?? '' );
+			if ( !name ) {
+				return;
+			}
 
 			if ( macrosSet && !macrosSet.has( name ) ) {
 				return;
 			}
 
+			const value = getFieldValue( el );
 			lines.push( `${ name }: ${ value }` );
 		} );
 	} );
 
 	return lines.join( '<br/>' );
 }
+
 
 export function resolveRepeaterMacrosValue( current, $fieldNode, $macroHost = false ) {
 	const fieldNode = $fieldNode?.[ 0 ];
@@ -83,22 +182,11 @@ export function resolveRepeaterMacrosValue( current, $fieldNode, $macroHost = fa
 	bindRepeaterNotifyOnce( fieldNode );
 
 	const host = $macroHost?.[ 0 ];
-	if ( !host ) {
-		return collectRepeaterLines( fieldNode, null );
+	const source = host?.__jfbMacroTemplate;
+
+	if ( !host || !source ) { 
+		return collectRepeaterLinesPlain( fieldNode, null );
 	}
 
-	const source = host.__jfbMacroTemplate;
-	if ( !source ) {
-		return collectRepeaterLines( fieldNode, null );
-	}
-
-	const doc = new DOMParser().parseFromString( String( source ), 'text/html' );
-
-	const macros = Array.from( doc.querySelectorAll( '[data-jfb-macro]' ) )
-		.map( ( el ) => el.getAttribute( 'data-jfb-macro' ) )
-		.filter( Boolean );
-
-	return collectRepeaterLines( fieldNode, macros );
+	return collectRepeaterLinesFromTemplate( fieldNode, source );
 }
-
-

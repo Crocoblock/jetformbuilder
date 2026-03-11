@@ -13,7 +13,7 @@ function toHtmlMacro( name, field ) {
 			'this field can be used only inside repeater - ' + field.repeater_name;
 	}
 
-	return `<div data-jfb-macro="${ macro }">${ repeaterNote }</div>`;
+	return `<span data-jfb-macro="${ macro }">${ repeaterNote }</span>`;
 }
 
 function insertAtCursor( cm, text ) {

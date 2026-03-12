@@ -59,7 +59,7 @@ class Get_From_Users extends Base_V2 {
 			'value_field'     => array(
 				'type'    => 'string',
 				'default' => 'ID',
-				'label'   => __( 'Value Field', 'jet-form-builder' ),
+				'label'   => __( 'Option Value', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
 					array( 'value' => 'ID',            'label' => 'User ID' ),
@@ -71,7 +71,7 @@ class Get_From_Users extends Base_V2 {
 			'label_field'     => array(
 				'type'    => 'string',
 				'default' => 'display_name',
-				'label'   => __( 'Label Field', 'jet-form-builder' ),
+				'label'   => __( 'Option Label', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
 					array( 'value' => 'display_name', 'label' => 'Display Name' ),
@@ -106,6 +106,51 @@ class Get_From_Users extends Base_V2 {
 				'help'    => __( 'Set to -1 to include all users.', 'jet-form-builder' ),
 			),
 		);
+	}
+
+	/**
+	 * Whether this generator supports auto-update/cascading feature.
+	 *
+	 * @return bool
+	 */
+	public function supports_auto_update(): bool {
+		return true;
+	}
+
+	/**
+	 * Returns context field hints for the editor.
+	 * Signals that a single listened field provides the role to filter by.
+	 *
+	 * @return array
+	 */
+	public function get_auto_update_context_fields(): array {
+		return array(
+			array(
+				'single'      => true,
+				'description' => __( 'When the watched field has a value, it overrides the static "Filter by Roles" setting. If the watched field is empty, the static roles setting is used.', 'jet-form-builder' ),
+				'example'     => __( 'Watched field value should be a role slug, e.g.: administrator, editor, subscriber', 'jet-form-builder' ),
+			),
+		);
+	}
+
+	/**
+	 * Generates options with context from a dependent field.
+	 * Overrides the roles setting with the value from the listened field.
+	 *
+	 * @param array $settings Parsed settings from block attributes.
+	 * @param array $context  Associative array ['field_name' => 'value'] from dependent fields.
+	 *
+	 * @return array Generated options
+	 */
+	public function generate_with_context( array $settings, array $context = array() ): array {
+		if ( ! empty( $context ) ) {
+			$role = sanitize_key( reset( $context ) );
+			if ( $role ) {
+				$settings['roles'] = array( $role );
+			}
+		}
+
+		return $this->generate( $settings );
 	}
 
 	/**

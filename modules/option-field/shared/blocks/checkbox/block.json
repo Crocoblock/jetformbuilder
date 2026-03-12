@@ -96,7 +96,7 @@
 			"type": ["string", "array"],
 			"default": ""
 		},
-		"generator_listen_all": {
+		"generator_require_all_filled": {
 			"type": "boolean",
 			"default": false
 		},

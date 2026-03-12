@@ -23,8 +23,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Auto_Update_Field_Value class.
  *
  * JetEngine macro that retrieves form field values from the auto-update context.
- * Values are stored in $_REQUEST with 'jfb_update_related_' prefix by the
- * Generator_Update_Endpoint during cascading field updates.
+ * Values are available in scoped $GLOBALS['jfb_generator_context'] and
+ * in legacy $_REQUEST / $GLOBALS keys with 'jfb_update_related_' prefix.
  */
 class Auto_Update_Field_Value extends \Jet_Engine_Base_Macros {
 
@@ -64,10 +64,10 @@ class Auto_Update_Field_Value extends \Jet_Engine_Base_Macros {
 	/**
 	 * Macro callback - retrieves field value from request context.
 	 *
-	 * Values are set by Generator_Update_Endpoint::run_callback() with format:
-	 * $_REQUEST['jfb_update_related_' . field_name] = field_value
-	 *
-	 * Also checks $GLOBALS as fallback (set by Get_From_Je_Query::generate_with_context).
+	 * Preferred source (scoped): $GLOBALS['jfb_generator_context'][field_name].
+	 * Legacy fallback sources:
+	 * - $_REQUEST['jfb_update_related_' . field_name]
+	 * - $GLOBALS['jfb_update_related_' . field_name] (set by Get_From_Je_Query::generate_with_context).
 	 *
 	 * @param array $args Macro arguments with 'field_name'.
 	 *
@@ -82,12 +82,21 @@ class Auto_Update_Field_Value extends \Jet_Engine_Base_Macros {
 
 		$request_key = 'jfb_update_related_' . $field_name;
 
-		// Check $_REQUEST first (set by Generator_Update_Endpoint)
+		// 1) Preferred scoped context (set by Generator_Update_Endpoint)
+		if (
+			isset( $GLOBALS['jfb_generator_context'] ) &&
+			is_array( $GLOBALS['jfb_generator_context'] ) &&
+			array_key_exists( $field_name, $GLOBALS['jfb_generator_context'] )
+		) {
+			return $this->sanitize_value( $GLOBALS['jfb_generator_context'][ $field_name ] );
+		}
+
+		// 2) Legacy: $_REQUEST (set by Generator_Update_Endpoint during transition period)
 		if ( isset( $_REQUEST[ $request_key ] ) ) {
 			return $this->sanitize_value( $_REQUEST[ $request_key ] );
 		}
 
-		// Fallback to $GLOBALS (set by Get_From_Je_Query::generate_with_context)
+		// 3) Legacy: $GLOBALS key (set by Get_From_Je_Query::generate_with_context)
 		if ( isset( $GLOBALS[ $request_key ] ) ) {
 			return $this->sanitize_value( $GLOBALS[ $request_key ] );
 		}

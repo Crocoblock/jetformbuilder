@@ -55,12 +55,12 @@ class Get_From_Rest_Api extends Base_V2 {
 				'control'     => 'text',
 				'placeholder' => 'https://api.example.com/items',
 				'required'    => true,
-				'help'        => __( 'URL must return a JSON array or object. Use {field_name} placeholders for auto-update filtering.', 'jet-form-builder' ),
+				'help'        => __( 'URL must return a JSON array or object. For auto-update, use {field_name} placeholders to inject values from watched fields.', 'jet-form-builder' ),
 			),
 			'value_path'      => array(
 				'type'        => 'string',
 				'default'     => 'id',
-				'label'       => __( 'Value Field', 'jet-form-builder' ),
+				'label'       => __( 'Option Value', 'jet-form-builder' ),
 				'control'     => 'text',
 				'placeholder' => 'id',
 				'help'        => __( 'JSON key for option value. Supports dot notation: data.id', 'jet-form-builder' ),
@@ -68,7 +68,7 @@ class Get_From_Rest_Api extends Base_V2 {
 			'label_path'      => array(
 				'type'        => 'string',
 				'default'     => 'name',
-				'label'       => __( 'Label Field', 'jet-form-builder' ),
+				'label'       => __( 'Option Label', 'jet-form-builder' ),
 				'control'     => 'text',
 				'placeholder' => 'name',
 				'help'        => __( 'JSON key for option label. Supports dot notation: data.name', 'jet-form-builder' ),
@@ -117,7 +117,7 @@ class Get_From_Rest_Api extends Base_V2 {
 	public function get_auto_update_context_fields(): array {
 		return array(
 			array(
-				'description' => __( 'Use {field_name} placeholders in the Endpoint URL to inject field values.', 'jet-form-builder' ),
+				'description' => __( 'Use {field_name} placeholders in the Endpoint URL to inject values from watched fields.', 'jet-form-builder' ),
 				'example'     => 'https://api.example.com/products?category={category_field}',
 			),
 		);
@@ -156,6 +156,15 @@ class Get_From_Rest_Api extends Base_V2 {
 		$endpoint = trim( $args['endpoint_url'] ?? '' );
 
 		if ( empty( $endpoint ) ) {
+			return array();
+		}
+
+		// Bail if URL still contains unresolved {placeholder} tokens.
+		if ( preg_match( '/\{[^}]+\}/', $endpoint ) ) {
+			return array();
+		}
+
+		if ( ! $this->is_safe_url( $endpoint ) ) {
 			return array();
 		}
 
@@ -213,6 +222,38 @@ class Get_From_Rest_Api extends Base_V2 {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Validates that a URL is safe to request (not a private/loopback address).
+	 *
+	 * @param string $url URL to validate.
+	 *
+	 * @return bool
+	 */
+	private function is_safe_url( string $url ): bool {
+		if ( ! wp_http_validate_url( $url ) ) {
+			return false;
+		}
+
+		$host = wp_parse_url( $url, PHP_URL_HOST );
+
+		if ( empty( $host ) ) {
+			return false;
+		}
+
+		// Resolve hostname to IP for range checking.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.net_http_http_request
+		$ip = gethostbyname( $host );
+
+		// Block private, loopback, and reserved IP ranges.
+		$is_public = filter_var(
+			$ip,
+			FILTER_VALIDATE_IP,
+			FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+		);
+
+		return false !== $is_public;
 	}
 
 	/**

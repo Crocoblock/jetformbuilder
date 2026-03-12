@@ -202,12 +202,13 @@ export function GeneratorSettings( props ) {
 
 	const [ errors, setErrors ] = useState( {} );
 
-	const schemas = getGeneratorSchemas();
+	const schemas        = getGeneratorSchemas();
 	const generatorsList = getGeneratorsList();
 
-	const generatorData = schemas[ generatorId ] ?? {};
-	const currentSchema = generatorData.schema ?? {};
-	const supportsUpdate = generatorData.supports_update ?? false;
+	const generatorData     = schemas[ generatorId ] ?? {};
+	const currentSchema     = generatorData.schema ?? {};
+	const supportsUpdate    = generatorData.supports_update ?? false;
+	const contextFields     = generatorData.update_context ?? [];
 	const isLegacyGenerator = generatorData.legacy === true;
 
 	const CustomControls = getGeneratorControls( generatorId );
@@ -298,6 +299,7 @@ export function GeneratorSettings( props ) {
 						attributes={ attributes }
 						setAttributes={ setAttributes }
 						supportsUpdate={ supportsUpdate }
+						contextFields={ contextFields }
 					/>
 				</Fragment>
 			) }

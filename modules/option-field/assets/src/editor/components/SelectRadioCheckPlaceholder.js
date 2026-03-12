@@ -73,15 +73,18 @@ export function SelectRadioCheckPlaceholder( props ) {
 			      field_options_tax,
 			      field_options_key,
 			      generator_function,
-			      generator_field,
+			      generator_auto_update,
+			      generator_listen_field,
 		      } = attributes;
+
+		const optionFieldData = window.JetFormOptionFieldData ?? scriptData ?? {};
 
 		let full_label = [];
 		let value      = [];
 		switch ( field_options_from ) {
 			case 'posts':
 				if ( field_options_post_type ) {
-					value.push( getLabelProp( scriptData.post_types_list.find(
+					value.push( getLabelProp( ( optionFieldData.post_types_list ?? [] ).find(
 						option => option.value === field_options_post_type,
 					) ) );
 				}
@@ -89,7 +92,7 @@ export function SelectRadioCheckPlaceholder( props ) {
 
 			case 'terms':
 				if ( field_options_tax ) {
-					value.push( getLabelProp( scriptData.taxonomies_list.find(
+					value.push( getLabelProp( ( optionFieldData.taxonomies_list ?? [] ).find(
 						option => option.value === field_options_tax,
 					) ) );
 				}
@@ -103,12 +106,17 @@ export function SelectRadioCheckPlaceholder( props ) {
 
 			case 'generate':
 				if ( generator_function ) {
-					value.push( getLabelProp( scriptData.generators_list.find(
+					value.push( getLabelProp( ( optionFieldData.generators_list ?? [] ).find(
 						option => option.value === generator_function,
 					) ) );
 				}
-				if ( generator_field ) {
-					value.push( generator_field );
+				if ( generator_auto_update && generator_listen_field ) {
+					const listenFields = Array.isArray( generator_listen_field )
+						? generator_listen_field
+						: [ generator_listen_field ];
+					if ( listenFields.length ) {
+						value.push( `↻ ${ listenFields.join( ', ' ) }` );
+					}
 				}
 				break;
 
@@ -169,7 +177,7 @@ export function SelectRadioCheckPlaceholder( props ) {
 				'manual_input' !== attributes.field_options_from ||
 				!attributes.field_options.length
 			) &&
-			getManualField( getFullLabel( scriptData, attributes ) ) || null
+			getManualField( getFullLabel() ) || null
 			}
 			{ 'manual_input' === attributes.field_options_from &&
 			attributes.field_options.length &&

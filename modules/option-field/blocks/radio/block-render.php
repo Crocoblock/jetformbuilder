@@ -25,6 +25,28 @@ class Block_Render extends Base {
 		return $this->render_options();
 	}
 
+	/**
+	 * Build an HTML attribute string from _jfb_data_attrs injected by Html_Attributes_Injector.
+	 * Returns a space-prefixed string ready to embed inside an opening tag, or empty string.
+	 *
+	 * @return string
+	 */
+	protected function get_auto_update_attrs_string(): string {
+		if ( empty( $this->args['_jfb_data_attrs'] ) || ! is_array( $this->args['_jfb_data_attrs'] ) ) {
+			return '';
+		}
+
+		$parts = array();
+
+		foreach ( $this->args['_jfb_data_attrs'] as $key => $value ) {
+			if ( '' !== (string) $value ) {
+				$parts[] = sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $value ) );
+			}
+		}
+
+		return $parts ? ' ' . implode( ' ', $parts ) : '';
+	}
+
 	public function render_options(): string {
 		$required = $this->block_type->get_required_val();
 
@@ -32,7 +54,9 @@ class Block_Render extends Base {
 		$this->add_attribute( 'class', $this->args['class_name'] );
 		$this->add_attribute( 'required', $required );
 
-		$html = '<div class="jet-form-builder__fields-group checkradio-wrap" data-jfb-sync>';
+		$auto_update_attrs = $this->get_auto_update_attrs_string();
+
+		$html = '<div class="jet-form-builder__fields-group checkradio-wrap" data-jfb-sync' . $auto_update_attrs . '>';
 
 		if ( ! empty( $this->args['field_options'] ) ) {
 			foreach ( $this->args['field_options'] as $value => $option ) {

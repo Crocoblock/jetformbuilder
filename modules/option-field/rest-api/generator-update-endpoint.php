@@ -2,7 +2,9 @@
 
 namespace JFB_Modules\Option_Field\Rest_Api;
 
+use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Generators\Registry;
+use Jet_Form_Builder\Plugin;
 use JFB_Components\Rest_Api\Rest_Api_Endpoint_Base;
 
 // If this file is called directly, abort.
@@ -61,10 +63,7 @@ class Generator_Update_Endpoint extends Rest_Api_Endpoint_Base {
 	 *   "form_id": 123,
 	 *   "field_name": "my_field",
 	 *   "generator_id": "get_from_query",
-	 *   "block_attrs": { ... },
-	 *   "context": {
-	 *     "parent_field": "parent_value"
-	 *   }
+	 *   "context": { "parent_field": "parent_value" }
 	 * }
 	 *
 	 * @param \WP_REST_Request $request REST request object.
@@ -74,105 +73,135 @@ class Generator_Update_Endpoint extends Rest_Api_Endpoint_Base {
 	public function run_callback( \WP_REST_Request $request ) {
 		$body = $request->get_json_params();
 
-		// Validate required parameters
 		$form_id      = isset( $body['form_id'] ) ? absint( $body['form_id'] ) : 0;
 		$field_name   = isset( $body['field_name'] ) ? sanitize_text_field( $body['field_name'] ) : '';
 		$generator_id = isset( $body['generator_id'] ) ? sanitize_text_field( $body['generator_id'] ) : '';
-		$block_attrs  = isset( $body['block_attrs'] ) && is_array( $body['block_attrs'] ) ? $body['block_attrs'] : array();
 		$context      = isset( $body['context'] ) && is_array( $body['context'] ) ? $body['context'] : array();
 
-		// Validate required fields
 		if ( ! $form_id ) {
 			return new \WP_REST_Response(
-				array(
-					'success' => false,
-					'message' => __( 'Form ID is required.', 'jet-form-builder' ),
-				),
+				array( 'success' => false, 'message' => __( 'Form ID is required.', 'jet-form-builder' ) ),
 				400
 			);
 		}
 
-		// Validate form exists and is published
+		// Validate form exists and is published.
 		$form_post = get_post( $form_id );
 		if ( ! $form_post || 'jet-form-builder' !== $form_post->post_type || 'publish' !== $form_post->post_status ) {
 			return new \WP_REST_Response(
-				array(
-					'success' => false,
-					'message' => __( 'Invalid form ID.', 'jet-form-builder' ),
-				),
+				array( 'success' => false, 'message' => __( 'Invalid form ID.', 'jet-form-builder' ) ),
 				404
 			);
 		}
 
 		if ( ! $generator_id ) {
 			return new \WP_REST_Response(
-				array(
-					'success' => false,
-					'message' => __( 'Generator ID is required.', 'jet-form-builder' ),
-				),
+				array( 'success' => false, 'message' => __( 'Generator ID is required.', 'jet-form-builder' ) ),
 				400
 			);
 		}
 
-		// Sanitize block attributes
-		$block_attrs = $this->sanitize_block_attrs( $block_attrs );
+		// Load block_attrs from the saved post — never trust the client.
+		// This prevents SSRF (endpoint_url tampering) and arbitrary template injection.
+		$block_attrs = $this->get_block_attrs_from_post( $form_post, $field_name );
 
-		// Sanitize context values
-		$context = $this->sanitize_context( $context );
-
-		// Set context in $_REQUEST for JetEngine compatibility
-		// JetEngine's dynamic tags and macros read from $_REQUEST
-		foreach ( $context as $context_field => $context_value ) {
-			$_REQUEST[ 'jfb_update_related_' . $context_field ] = $context_value;
+		if ( null === $block_attrs ) {
+			return new \WP_REST_Response(
+				array( 'success' => false, 'message' => __( 'Field not found in form.', 'jet-form-builder' ) ),
+				404
+			);
 		}
 
-		// Generate options using the generator registry
+		// Verify that the requested generator_id matches what is saved in the post.
+		$saved_generator_id = $block_attrs['generator_function'] ?? '';
+		if ( $generator_id !== $saved_generator_id ) {
+			return new \WP_REST_Response(
+				array( 'success' => false, 'message' => __( 'Generator mismatch.', 'jet-form-builder' ) ),
+				400
+			);
+		}
+
+		$context = $this->sanitize_context( $context );
+
+		// Scoped context storage for integrations (preferred over $_REQUEST).
+		$had_scoped_context = array_key_exists( 'jfb_generator_context', $GLOBALS );
+		$prev_scoped_context = $had_scoped_context ? $GLOBALS['jfb_generator_context'] : null;
+		$GLOBALS['jfb_generator_context'] = $context;
+
+		// Set context in $_REQUEST for JetEngine dynamic tags compatibility.
+		// Legacy fallback, keep during transition period.
+		$context_keys_set = array();
+		foreach ( $context as $context_field => $context_value ) {
+			$_REQUEST[ 'jfb_update_related_' . $context_field ] = $context_value;
+			$context_keys_set[] = $context_field;
+		}
+
 		try {
 			$options = Registry::instance()->generate( $generator_id, $block_attrs, $context );
 
+			// Render JetEngine custom template HTML server-side if configured.
+			if ( ! empty( $block_attrs['custom_item_template'] ) && ! empty( $block_attrs['custom_item_template_id'] ) ) {
+				$builder_helper = new Builder_Helper();
+				foreach ( $options as &$option ) {
+					$object_id = $option['object_id'] ?? $option['value'] ?? null;
+					if ( $object_id ) {
+						//$option['html'] = $builder_helper->get_custom_template( $object_id, $block_attrs );
+						$raw_html = $builder_helper->get_custom_template( $object_id, $block_attrs );
+						$option['html'] = wp_kses_post( $raw_html );
+					}
+				}
+				unset( $option );
+			}
+
 			return new \WP_REST_Response(
-				array(
-					'success' => true,
-					'options' => $options,
-				),
+				array( 'success' => true, 'options' => $options ),
 				200
 			);
 		} catch ( \Exception $e ) {
+			error_log( '[JFB Generator] Error for form ' . $form_id . ', field ' . $field_name . ': ' . $e->getMessage() );
+
 			return new \WP_REST_Response(
-				array(
-					'success' => false,
-					'message' => $e->getMessage(),
-				),
+				array( 'success' => false, 'message' => __( 'Failed to generate options.', 'jet-form-builder' ) ),
 				500
 			);
+		} finally {
+			// Clean up $_REQUEST entries set by this request.
+			foreach ( $context_keys_set as $context_field ) {
+				unset( $_REQUEST[ 'jfb_update_related_' . $context_field ] );
+			}
+
+			// Restore previous scoped context (or unset if it didn't exist).
+			if ( $had_scoped_context ) {
+				$GLOBALS['jfb_generator_context'] = $prev_scoped_context;
+			} else {
+				unset( $GLOBALS['jfb_generator_context'] );
+			}
 		}
 	}
 
 	/**
-	 * Sanitize block attributes recursively.
+	 * Load block attributes for a specific field from the saved post content.
 	 *
-	 * @param array $attrs Attributes array.
+	 * Returns null if the field is not found, preventing any generation
+	 * with client-supplied parameters.
 	 *
-	 * @return array Sanitized attributes.
+	 * @param \WP_Post $form_post  Published form post.
+	 * @param string   $field_name Field name to find.
+	 *
+	 * @return array|null Block attrs array or null if field not found.
 	 */
-	private function sanitize_block_attrs( array $attrs ): array {
-		$sanitized = array();
-
-		foreach ( $attrs as $key => $value ) {
-			$clean_key = sanitize_key( $key );
-
-			if ( is_array( $value ) ) {
-				$sanitized[ $clean_key ] = $this->sanitize_block_attrs( $value );
-			} elseif ( is_string( $value ) ) {
-				$sanitized[ $clean_key ] = sanitize_text_field( $value );
-			} elseif ( is_numeric( $value ) ) {
-				$sanitized[ $clean_key ] = $value;
-			} elseif ( is_bool( $value ) ) {
-				$sanitized[ $clean_key ] = $value;
-			}
+	private function get_block_attrs_from_post( \WP_Post $form_post, string $field_name ): ?array {
+		if ( empty( $field_name ) ) {
+			return null;
 		}
 
-		return $sanitized;
+		$block = Plugin::instance()->form->get_field_by_name( $form_post->ID, $field_name );
+
+		if ( empty( $block ) || ! isset( $block['attrs'] ) ) {
+			return null;
+		}
+
+		return $block['attrs'];
 	}
 
 	/**

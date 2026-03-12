@@ -77,6 +77,7 @@ class Html_Attributes_Injector {
 		$data_attrs['data-jfb-auto-update'] = '1';
 		$data_attrs['data-generator-id']    = esc_attr( $args['generator_function'] );
 		$data_attrs['data-field-name']      = esc_attr( $args['name'] );
+		$data_attrs['data-field-type']      = esc_attr( $render_base->get_name() );
 
 		// Listen field configuration
 		if ( ! empty( $args['generator_listen_field'] ) ) {
@@ -93,9 +94,10 @@ class Html_Attributes_Injector {
 			}
 		}
 
-		// Listen to all form changes
-		if ( ! empty( $args['generator_listen_all'] ) ) {
-			$data_attrs['data-listen-all'] = '1';
+		// Require all listened fields to be filled before triggering update.
+		// Also check legacy attribute name for backward compatibility with saved forms.
+		if ( ! empty( $args['generator_require_all_filled'] ) || ! empty( $args['generator_listen_all'] ) ) {
+			$data_attrs['data-require-all-filled'] = '1';
 		}
 
 		// Button trigger configuration
@@ -113,61 +115,22 @@ class Html_Attributes_Injector {
 			$data_attrs['data-form-id'] = absint( $form_id );
 		}
 
-		// Serialize block attributes for REST API
-		// These will be passed to the generator on update
-		$block_attrs_json = wp_json_encode( $this->prepare_block_attrs_for_js( $args ) );
-		if ( $block_attrs_json ) {
-			$data_attrs['data-block-attrs'] = esc_attr( $block_attrs_json );
-		}
-
 		// Store data attributes in args for template access
 		if ( ! isset( $args['_jfb_data_attrs'] ) ) {
 			$args['_jfb_data_attrs'] = array();
 		}
 		$args['_jfb_data_attrs'] = array_merge( $args['_jfb_data_attrs'], $data_attrs );
 
-		return $args;
-	}
-
-	/**
-	 * Prepare block attributes for JavaScript.
-	 * Removes unnecessary attributes and keeps only what's needed for generation.
-	 *
-	 * @param array $args Full block attributes.
-	 *
-	 * @return array Filtered attributes for JS.
-	 */
-	private function prepare_block_attrs_for_js( array $args ): array {
-		// Attributes needed for option generation
-		$needed_attrs = array(
-			'generator_function',
-			'generator_field',
-			'generator_args',
-			'generator_numbers_min',
-			'generator_numbers_max',
-			'generator_numbers_step',
-			'field_options_post_type',
-			'field_options_tax',
-			'field_options_key',
-			'glossary_id',
-			'value_from_key',
-			'calculated_value_from_key',
-		);
-
-		$filtered = array();
-
-		foreach ( $needed_attrs as $key ) {
-			if ( ! isset( $args[ $key ] ) ) {
-				continue;
+		// Enqueue the auto-update script when a field uses it
+		$module = \Jet_Form_Builder\Plugin::instance()->module( 'option-field' );
+		if ( $module ) {
+			wp_enqueue_script( $module->get_handle( 'auto-update' ) );
+			if ( wp_style_is( $module->get_handle( 'auto-update' ), 'registered' ) ) {
+				wp_enqueue_style( $module->get_handle( 'auto-update' ) );
 			}
-			// Skip empty strings and empty arrays (they add noise but no value)
-			if ( '' === $args[ $key ] || array() === $args[ $key ] ) {
-				continue;
-			}
-			$filtered[ $key ] = $args[ $key ];
 		}
 
-		return $filtered;
+		return $args;
 	}
 
 	/**

@@ -16,10 +16,11 @@ class OptionsUpdater {
 	/**
 	 * Update options for a field element.
 	 *
-	 * @param {HTMLElement} fieldElement Field element (select/input container).
-	 * @param {Array}       options      New options array.
+	 * @param {HTMLElement}      fieldElement Field element (select/input container).
+	 * @param {Array}            options      New options array.
+	 * @param {HTMLElement|null} formNode     Form element (needed for re-initialization).
 	 */
-	updateOptions( fieldElement, options ) {
+	updateOptions( fieldElement, options, formNode = null ) {
 		const fieldType = this.getFieldType( fieldElement );
 
 		switch ( fieldType ) {
@@ -28,7 +29,7 @@ class OptionsUpdater {
 				break;
 			case 'checkbox':
 			case 'radio':
-				this.updateChoiceOptions( fieldElement, options, fieldType );
+				this.updateChoiceOptions( fieldElement, options, fieldType, formNode );
 				break;
 			default:
 				console.warn( '[JFB Auto-Update] Unsupported field type:', fieldType );
@@ -37,6 +38,9 @@ class OptionsUpdater {
 
 	/**
 	 * Get field type from element.
+	 *
+	 * Reads data-field-type first (injected server-side), so detection works
+	 * even when the container is empty (no options rendered yet).
 	 *
 	 * @param {HTMLElement} fieldElement Field element.
 	 *
@@ -47,7 +51,13 @@ class OptionsUpdater {
 			return 'select';
 		}
 
-		// For checkbox/radio, element might be the wrapper
+		const dataType = fieldElement.dataset.fieldType;
+		if ( dataType ) {
+			if ( dataType === 'checkbox-field' ) { return 'checkbox'; }
+			if ( dataType === 'radio-field' ) { return 'radio'; }
+			if ( dataType === 'select-field' ) { return 'select'; }
+		}
+
 		const firstInput = fieldElement.querySelector( 'input[type="checkbox"], input[type="radio"]' );
 		if ( firstInput ) {
 			return firstInput.type;
@@ -59,44 +69,48 @@ class OptionsUpdater {
 	/**
 	 * Update select field options.
 	 *
+	 * For Select2 autocomplete fields, we skip DOM rebuild and instead
+	 * clear the current selection so that Select2 AJAX fires fresh
+	 * (with updated context from autocomplete-bridge.js).
+	 *
 	 * @param {HTMLSelectElement} selectElement Select element.
 	 * @param {Array}             options       New options array.
 	 */
 	updateSelectOptions( selectElement, options ) {
-		// Store current value
-		const currentValue = selectElement.value;
-		const isMultiple = selectElement.multiple;
-		const currentValues = isMultiple
-			? Array.from( selectElement.selectedOptions ).map( ( opt ) => opt.value )
-			: [ currentValue ];
+		if ( selectElement.classList.contains( 'jet-select-autocomplete' ) ) {
+			const $select = jQuery( selectElement );
 
-		// Store placeholder option if exists
-		let placeholderOption = null;
-		const firstOption = selectElement.options[ 0 ];
-		if ( firstOption && firstOption.value === '' ) {
-			placeholderOption = firstOption.cloneNode( true );
+			if ( $select.data( 'select2' ) ) {
+				$select.val( null ).trigger( 'change' );
+				return;
+			}
 		}
 
-		// Clear existing options
+		const isMultiple    = selectElement.multiple;
+		const currentValues = isMultiple
+			? Array.from( selectElement.selectedOptions ).map( ( opt ) => opt.value )
+			: [ selectElement.value ];
+
+		const firstOption      = selectElement.options[ 0 ];
+		const placeholderOption = ( firstOption && firstOption.value === '' )
+			? firstOption.cloneNode( true )
+			: null;
+
 		selectElement.innerHTML = '';
 
-		// Restore placeholder
 		if ( placeholderOption ) {
 			selectElement.appendChild( placeholderOption );
 		}
 
-		// Add new options
 		options.forEach( ( option ) => {
 			const optionElement = document.createElement( 'option' );
 			optionElement.value = option.value || option.val || '';
 			optionElement.textContent = option.label || option.value || '';
 
-			// Restore selection if value matches
 			if ( currentValues.includes( optionElement.value ) ) {
 				optionElement.selected = true;
 			}
 
-			// Add calculate attribute if present
 			if ( option.calculate ) {
 				optionElement.dataset.calculate = option.calculate;
 			}
@@ -104,94 +118,181 @@ class OptionsUpdater {
 			selectElement.appendChild( optionElement );
 		} );
 
-		// Trigger change event for reactive updates
 		selectElement.dispatchEvent( new Event( 'change', { bubbles: true } ) );
 	}
 
 	/**
 	 * Update checkbox/radio field options.
 	 *
-	 * @param {HTMLElement} containerElement Container element.
-	 * @param {Array}       options          New options array.
-	 * @param {string}      fieldType        Field type (checkbox/radio).
+	 * containerElement is the outer .checkradio-wrap div (has data-jfb-auto-update).
+	 * Each option row is a child div (.checkboxes-wrap/.radio-wrap .checkradio-wrap)
+	 * containing a <label class="jet-form-builder__field-label for-checkbox|for-radio">
+	 *   <input type="checkbox|radio" ...><span>label text</span>
+	 * </label>.
+	 *
+	 * @param {HTMLElement}      containerElement Outer .checkradio-wrap element.
+	 * @param {Array}            options          New options array.
+	 * @param {string}           fieldType        Field type (checkbox/radio).
+	 * @param {HTMLElement|null} formNode         Form element (for re-initialization).
 	 */
-	updateChoiceOptions( containerElement, options, fieldType ) {
-		// Find the wrapper that contains all options
-		const wrapper = containerElement.closest( '.jet-form-builder__field-wrap' ) ||
-		                containerElement.querySelector( '.jet-form-builder__field-wrap' );
-
-		if ( ! wrapper ) {
-			console.warn( '[JFB Auto-Update] Could not find field wrapper' );
+	updateChoiceOptions( containerElement, options, fieldType, formNode = null ) {
+		// Get field name from data attribute (most reliable source)
+		const fieldName = containerElement.getAttribute( 'data-field-name' );
+		if ( ! fieldName ) {
+			console.warn( '[JFB Auto-Update] Could not find field name on container' );
 			return;
 		}
 
-		// Get field name from first input
-		const firstInput = wrapper.querySelector( `input[type="${ fieldType }"]` );
-		if ( ! firstInput ) {
-			return;
-		}
-
-		const fieldName = firstInput.name.replace( '[]', '' ); // Remove array suffix for checkboxes
-
-		// Store current values
 		const currentValues = Array.from(
-			wrapper.querySelectorAll( `input[type="${ fieldType }"]:checked` )
+			containerElement.querySelectorAll( `input[type="${ fieldType }"]:checked` )
 		).map( ( input ) => input.value );
 
-		// Find the options container
-		const optionsContainer = wrapper.querySelector( '.checkboxes-wrap, .radioboxes-wrap' ) || wrapper;
+		// Preserve custom-option rows (e.g. "Add New" button)
+		containerElement
+			.querySelectorAll( ':scope > .jet-form-builder__field-wrap:not(.custom-option)' )
+			.forEach( ( row ) => row.remove() );
 
-		// Clear existing options (but preserve any non-option elements)
-		const labels = optionsContainer.querySelectorAll( 'label' );
-		labels.forEach( ( label ) => label.remove() );
+		const inputName  = fieldType === 'checkbox' ? `${ fieldName }[]` : fieldName;
+		const labelClass = fieldType === 'checkbox' ? 'for-checkbox' : 'for-radio';
+		const rowClass   = fieldType === 'checkbox'
+			? 'jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap'
+			: 'jet-form-builder__field-wrap radio-wrap checkradio-wrap';
 
-		// Create new options
-		options.forEach( ( option, index ) => {
-			const value = option.value || option.val || '';
-			const label = option.label || value;
-			const inputId = `${ fieldName }_${ index }_${ Date.now() }`;
+		const customOptionRow = containerElement.querySelector( ':scope > .custom-option' );
 
-			// Create label element
-			const labelElement = document.createElement( 'label' );
-			labelElement.className = 'jet-form-builder__field-label';
-			labelElement.setAttribute( 'for', inputId );
+		const inputClass = fieldType === 'checkbox'
+			? 'jet-form-builder__field checkboxes-field checkradio-field'
+			: 'jet-form-builder__field radio-field checkradio-field';
 
-			// Create input element
+		const fragment = document.createDocumentFragment();
+		let hasCustomTemplates = false;
+
+		options.forEach( ( option ) => {
+			const value     = option.value || option.val || '';
+			const label     = option.label || value;
+			const isChecked = currentValues.includes( value );
+
 			const inputElement = document.createElement( 'input' );
-			inputElement.type = fieldType;
-			inputElement.name = fieldType === 'checkbox' ? `${ fieldName }[]` : fieldName;
+			inputElement.type  = fieldType;
+			inputElement.name  = inputName;
 			inputElement.value = value;
-			inputElement.id = inputId;
-			inputElement.className = 'jet-form-builder__field';
+			inputElement.className = inputClass;
+			inputElement.setAttribute( 'data-field-name', fieldName );
+			inputElement.checked = isChecked;
 
-			// Restore checked state
-			if ( currentValues.includes( value ) ) {
-				inputElement.checked = true;
-			}
-
-			// Add calculate attribute if present
 			if ( option.calculate ) {
 				inputElement.dataset.calculate = option.calculate;
 			}
 
-			// Create span for custom styling
-			const spanElement = document.createElement( 'span' );
-			spanElement.className = 'jet-form-builder__field-wrap';
+			const rowElement = document.createElement( 'div' );
+			rowElement.className = rowClass;
 
-			// Assemble elements
-			spanElement.appendChild( inputElement );
+			// JetEngine custom template HTML (pre-rendered server-side)
+			if ( option.html ) {
+				hasCustomTemplates = true;
+				const templateWrapper = document.createElement( 'div' );
+				templateWrapper.innerHTML = option.html;
+				while ( templateWrapper.firstChild ) {
+					rowElement.appendChild( templateWrapper.firstChild );
+				}
+			}
+
+			const spanElement = document.createElement( 'span' );
+			spanElement.textContent = label;
+
+			const labelElement = document.createElement( 'label' );
+			labelElement.className = `jet-form-builder__field-label ${ labelClass }`;
+			labelElement.appendChild( inputElement );
 			labelElement.appendChild( spanElement );
 
-			const textNode = document.createTextNode( ` ${ label }` );
-			labelElement.appendChild( textNode );
+			rowElement.appendChild( labelElement );
 
-			optionsContainer.appendChild( labelElement );
-
-			// Trigger change event if checked
-			if ( inputElement.checked ) {
-				inputElement.dispatchEvent( new Event( 'change', { bubbles: true } ) );
-			}
+			fragment.appendChild( rowElement );
 		} );
+
+		if ( customOptionRow ) {
+			containerElement.insertBefore( fragment, customOptionRow );
+		} else {
+			containerElement.appendChild( fragment );
+		}
+
+		if ( hasCustomTemplates ) {
+			const $container = jQuery( containerElement );
+
+			if ( window.JetEngine && window.JetEngine.initElementsHandlers ) {
+				window.JetEngine.initElementsHandlers( $container );
+			} else if ( window.JetPlugins ) {
+				window.JetPlugins.init( $container );
+			}
+		}
+
+		const reInited = this.reInitField( containerElement, formNode );
+
+		if ( ! reInited ) {
+			const firstInput = containerElement.querySelector( `input[type="${ fieldType }"]` );
+			if ( firstInput ) {
+				firstInput.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+			}
+		}
+	}
+
+	/**
+	 * Re-initialize a field via JFB's standard Observable.observeInput() API.
+	 *
+	 * After DOM changes (new options with custom templates), the field's InputData
+	 * must be replaced so that createInput() re-evaluates and picks the correct
+	 * handler (e.g. DynamicCheckboxData instead of plain CheckboxData).
+	 * observeInput() also fires jet.fb.input.makeReactive, which lets
+	 * listing.options bind template clicks and --checked class toggling.
+	 *
+	 * @param {HTMLElement}      fieldElement The [data-jfb-sync] container element.
+	 * @param {HTMLElement|null} formNode     The form element.
+	 *
+	 * @return {boolean} True if re-initialization succeeded.
+	 */
+	reInitField( fieldElement, formNode ) {
+		if ( ! formNode ) {
+			return false;
+		}
+
+		const syncNode = fieldElement.hasAttribute( 'data-jfb-sync' )
+			? fieldElement
+			: fieldElement.querySelector( '[data-jfb-sync]' );
+
+		if ( ! syncNode ) {
+			return false;
+		}
+
+		const formId     = formNode.dataset.formId;
+		const observable = formId && window.JetFormBuilder ? window.JetFormBuilder[ formId ] : null;
+
+		if ( ! observable || ! observable.observeInput ) {
+			return false;
+		}
+
+		observable.observeInput( syncNode, true );
+
+		return true;
+	}
+
+	/**
+	 * Get the visual wrapper for loading/error state classes.
+	 *
+	 * For select elements the wrapper is the closest .jet-form-builder__field-wrap ancestor.
+	 * For checkbox/radio, fieldElement IS the outer .checkradio-wrap div
+	 * (class jet-form-builder__fields-group), so we use it directly.
+	 *
+	 * @param {HTMLElement} fieldElement Field element (select or .checkradio-wrap div).
+	 *
+	 * @return {HTMLElement|null} Wrapper element.
+	 */
+	getStateWrapper( fieldElement ) {
+		// If it's the .checkradio-wrap container itself, use it directly
+		if ( fieldElement.classList.contains( 'checkradio-wrap' ) ) {
+			return fieldElement;
+		}
+
+		return fieldElement.closest( '.jet-form-builder__field-wrap' ) || fieldElement.parentElement;
 	}
 
 	/**
@@ -201,8 +302,7 @@ class OptionsUpdater {
 	 * @param {boolean}     isLoading    Loading state.
 	 */
 	setLoadingState( fieldElement, isLoading ) {
-		const wrapper = fieldElement.closest( '.jet-form-builder__field-wrap' ) ||
-		                fieldElement.parentElement;
+		const wrapper = this.getStateWrapper( fieldElement );
 
 		if ( ! wrapper ) {
 			return;
@@ -210,9 +310,7 @@ class OptionsUpdater {
 
 		if ( isLoading ) {
 			wrapper.classList.add( 'jfb-auto-update-loading' );
-			fieldElement.disabled = true;
 
-			// Add loading indicator if doesn't exist
 			if ( ! wrapper.querySelector( '.jfb-auto-update-spinner' ) ) {
 				const spinner = document.createElement( 'span' );
 				spinner.className = 'jfb-auto-update-spinner';
@@ -221,9 +319,7 @@ class OptionsUpdater {
 			}
 		} else {
 			wrapper.classList.remove( 'jfb-auto-update-loading' );
-			fieldElement.disabled = false;
 
-			// Remove loading indicator
 			const spinner = wrapper.querySelector( '.jfb-auto-update-spinner' );
 			if ( spinner ) {
 				spinner.remove();
@@ -238,8 +334,7 @@ class OptionsUpdater {
 	 * @param {string}      errorMessage Error message.
 	 */
 	setErrorState( fieldElement, errorMessage ) {
-		const wrapper = fieldElement.closest( '.jet-form-builder__field-wrap' ) ||
-		                fieldElement.parentElement;
+		const wrapper = this.getStateWrapper( fieldElement );
 
 		if ( ! wrapper ) {
 			return;
@@ -247,7 +342,6 @@ class OptionsUpdater {
 
 		wrapper.classList.add( 'jfb-auto-update-error' );
 
-		// Add error message if doesn't exist
 		let errorElement = wrapper.querySelector( '.jfb-auto-update-error-message' );
 
 		if ( ! errorElement ) {
@@ -258,7 +352,6 @@ class OptionsUpdater {
 
 		errorElement.textContent = errorMessage;
 
-		// Auto-remove error after 5 seconds
 		setTimeout( () => {
 			this.clearErrorState( fieldElement );
 		}, 5000 );
@@ -270,8 +363,7 @@ class OptionsUpdater {
 	 * @param {HTMLElement} fieldElement Field element.
 	 */
 	clearErrorState( fieldElement ) {
-		const wrapper = fieldElement.closest( '.jet-form-builder__field-wrap' ) ||
-		                fieldElement.parentElement;
+		const wrapper = this.getStateWrapper( fieldElement );
 
 		if ( ! wrapper ) {
 			return;

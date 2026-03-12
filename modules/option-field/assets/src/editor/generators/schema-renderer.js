@@ -214,18 +214,59 @@ export function SchemaBasedControls( {
 		setAttributes( { [ attrKey ]: newValue } );
 	};
 
+	/**
+	 * Check if a field should be visible based on its condition.
+	 *
+	 * Condition format: { 'other_field_key': 'expected_value' }
+	 *   - Key without '!' suffix: show when value matches (equals)
+	 *   - Key with '!' suffix:    hide when value matches (not equals)
+	 *
+	 * Multiple entries are AND-combined: all must pass.
+	 *
+	 * @param {Object} condition Condition definition.
+	 *
+	 * @return {boolean} True if field should be visible.
+	 */
+	const isConditionMet = ( condition ) => {
+		if ( ! condition || typeof condition !== 'object' ) {
+			return true;
+		}
+
+		return Object.entries( condition ).every( ( [ rawKey, expected ] ) => {
+			const isNegated    = rawKey.endsWith( '!' );
+			const conditionKey = isNegated ? rawKey.slice( 0, -1 ) : rawKey;
+
+			// Look up the current value of the referenced field in attributes
+			const conditionFieldDef = schema[ conditionKey ];
+			const currentValue      = conditionFieldDef
+				? getValue( conditionKey, conditionFieldDef )
+				: '';
+
+			// Support array of allowed values
+			const matches = Array.isArray( expected )
+				? expected.includes( currentValue )
+				: String( currentValue ) === String( expected );
+
+			return isNegated ? ! matches : matches;
+		} );
+	};
+
 	return (
 		<Fragment>
-			{ Object.entries( schema ).map( ( [ fieldKey, fieldDef ] ) => (
-				<SchemaControl
+			{ Object.entries( schema ).map( ( [ fieldKey, fieldDef ] ) => {
+				if ( fieldDef.condition && ! isConditionMet( fieldDef.condition ) ) {
+					return null;
+				}
+
+				return <SchemaControl
 					key={ fieldKey }
 					fieldKey={ fieldKey }
 					fieldDef={ fieldDef }
 					value={ getValue( fieldKey, fieldDef ) }
 					onChange={ createOnChange( fieldKey ) }
 					generatorId={ generatorId }
-				/>
-			) ) }
+				/>;
+			} ) }
 		</Fragment>
 	);
 }

@@ -1,27 +1,19 @@
 /**
- * Auto-Update Feature Initialization.
- *
- * Main entry point for the auto-update feature.
- * Integrates with JetFormBuilder's form initialization hooks.
+ * Auto-Update Feature — main entry point.
+ * Hooks into JFB form lifecycle and sets up field watchers.
  *
  * @package JetFormBuilder
  */
 
 import FieldWatcher from './FieldWatcher';
+import './autocomplete-bridge';
 import './styles.pcss';
 
-/**
- * Global field watcher instance.
- * Shared across all forms for centralized management.
- *
- * @type {FieldWatcher|null}
- */
+/** @type {FieldWatcher|null} */
 let globalWatcher = null;
 
 /**
- * Get or create global field watcher instance.
- *
- * @return {FieldWatcher} Field watcher instance.
+ * @return {FieldWatcher}
  */
 function getWatcher() {
 	if ( ! globalWatcher ) {
@@ -32,92 +24,72 @@ function getWatcher() {
 }
 
 /**
- * Initialize auto-update for a form.
- * Called by JetFormBuilder when a form is rendered.
- *
- * @param {HTMLElement|jQuery} formNode Form element (can be jQuery object or DOM element).
+ * @param {HTMLElement|jQuery} formNode
  */
 function initAutoUpdate( formNode ) {
 	if ( ! formNode ) {
 		return;
 	}
 
-	// Convert jQuery object to DOM element if needed
 	if ( formNode instanceof jQuery ) {
 		formNode = formNode[ 0 ];
 	}
 
-	// Ensure we have a valid DOM element
-	if ( ! formNode || ! formNode.querySelectorAll ) {
-		console.error( '[JFB Auto-Update] Invalid formNode:', formNode );
+	if ( ! formNode?.querySelectorAll ) {
 		return;
 	}
 
-	const watcher = getWatcher();
-	watcher.initForm( formNode );
+	getWatcher().initForm( formNode );
 }
 
 /**
- * Initialize MutationObserver to watch for dynamically added fields.
- * This handles Conditional Blocks that show/hide fields dynamically.
+ * MutationObserver for dynamically added/removed fields (Conditional Blocks, Repeater rows).
  *
- * @param {HTMLElement|jQuery} formNode Form element to observe (can be jQuery object or DOM element).
+ * @param {HTMLElement|jQuery} formNode
  */
 function observeDynamicFields( formNode ) {
 	if ( ! formNode || ! window.MutationObserver ) {
 		return;
 	}
 
-	// Convert jQuery object to DOM element if needed
 	if ( formNode instanceof jQuery ) {
 		formNode = formNode[ 0 ];
 	}
 
-	// Ensure we have a valid DOM element
-	if ( ! formNode || ! formNode.querySelectorAll ) {
-		console.error( '[JFB Auto-Update] Invalid formNode for observer:', formNode );
+	if ( ! formNode?.querySelectorAll ) {
 		return;
 	}
 
 	const observer = new MutationObserver( ( mutations ) => {
 		mutations.forEach( ( mutation ) => {
-			// Check added nodes for auto-update fields
+			mutation.removedNodes.forEach( ( node ) => {
+				if ( node.nodeType === Node.ELEMENT_NODE ) {
+					cleanupRemovedRepeaterRow( node );
+				}
+			} );
+
 			mutation.addedNodes.forEach( ( node ) => {
-				// Skip non-element nodes (text nodes, comments, etc.)
 				if ( node.nodeType !== Node.ELEMENT_NODE ) {
 					return;
 				}
 
-				// Collect all fields that appeared (both auto-update and regular fields)
 				const appearedFields = [];
 
-				// Check if the added node itself is a field
 				if ( node.hasAttribute && node.getAttribute( 'data-field-name' ) ) {
 					appearedFields.push( node );
 				}
 
-				// Check if the added node contains fields
 				if ( node.querySelectorAll ) {
-					const nestedFields = node.querySelectorAll( '[data-field-name]' );
-					nestedFields.forEach( ( field ) => appearedFields.push( field ) );
+					node.querySelectorAll( '[data-field-name]' ).forEach( ( f ) => appearedFields.push( f ) );
 				}
 
-				// Process appeared fields
 				appearedFields.forEach( ( fieldElement ) => {
 					const fieldName = fieldElement.getAttribute( 'data-field-name' );
 
-					// If it's an auto-update field, initialize it
 					if ( fieldElement.hasAttribute( 'data-jfb-auto-update' ) ) {
-						console.log( '[JFB Auto-Update] Dynamically added auto-update field:', fieldName );
-						const watcher = getWatcher();
-						watcher.initField( fieldElement, formNode );
-
-						// Trigger update immediately if it's a dependent field that just appeared
-						triggerUpdateForNewField( fieldElement, formNode );
+						getWatcher().initField( fieldElement, formNode );
 					}
 
-					// Check if any existing auto-update fields were waiting for this field
-					// (This handles the case where source field appears after dependent field was initialized)
 					retryFailedWatchers( fieldName, formNode );
 				} );
 			} );
@@ -130,7 +102,81 @@ function observeDynamicFields( formNode ) {
 		subtree: true,
 	} );
 
-	console.log( '[JFB Auto-Update] MutationObserver initialized for form' );
+}
+
+/**
+ * Clean up watchers and cached data for fields in a removed repeater row.
+ *
+ * When a repeater row is removed we must tear down any watchers that were
+ * scoped to that row so they don't hold references to detached elements.
+ *
+ * @param {HTMLElement} removedNode The DOM node that was removed.
+ */
+function cleanupRemovedRepeaterRow( removedNode ) {
+	// Check if the removed node is itself a repeater row or contains rows
+	const rows = [];
+
+	if ( removedNode.dataset?.repeaterRow === '1' ||
+	     removedNode.classList?.contains( 'jet-form-builder-repeater__row' ) ) {
+		rows.push( removedNode );
+	}
+
+	if ( removedNode.querySelectorAll ) {
+		const nestedRows = removedNode.querySelectorAll( '.jet-form-builder-repeater__row' );
+		nestedRows.forEach( ( row ) => rows.push( row ) );
+	}
+
+	if ( ! rows.length ) {
+		return;
+	}
+
+	const watcher = getWatcher();
+
+	rows.forEach( ( row ) => {
+		// Collect field keys that belong to this row
+		const keysToRemove = [];
+
+		watcher.autoUpdateFields.forEach( ( fieldData, fieldKey ) => {
+			const element = fieldData?.element;
+			if ( element && row.contains( element ) ) {
+				keysToRemove.push( fieldKey );
+			}
+		} );
+
+		keysToRemove.forEach( ( fieldKey ) => {
+			watcher.autoUpdateFields.delete( fieldKey );
+		} );
+
+		// Remove watchers scoped to this row
+		const watcherKeysToRemove = [];
+
+		watcher.watchers.forEach( ( watcherData, watcherKey ) => {
+			// Watcher key includes repeater scope — check if this row is the scope
+			// by checking if any dependent field was in this row
+			const hasRemovedDependents = watcherData.dependents.some(
+				( dep ) => keysToRemove.includes( dep )
+			);
+
+			if ( hasRemovedDependents ) {
+				// Remove dependents that belong to this row
+				watcherData.dependents = watcherData.dependents.filter(
+					( dep ) => ! keysToRemove.includes( dep )
+				);
+
+				// If no more dependents, unwatch entirely
+				if ( ! watcherData.dependents.length ) {
+					if ( watcherData.unwatch ) {
+						watcherData.unwatch();
+					}
+					watcherKeysToRemove.push( watcherKey );
+				}
+			}
+		} );
+
+		watcherKeysToRemove.forEach( ( key ) => {
+			watcher.watchers.delete( key );
+		} );
+	} );
 }
 
 /**
@@ -167,15 +213,13 @@ function retryFailedWatchers( sourceFieldName, formNode ) {
 			// Mark as retried
 			retriedWatchers.add( watcherKey );
 
-			console.log( `[JFB Auto-Update] Retrying watcher for field "${ targetFieldName }" (source "${ sourceFieldName }" appeared)` );
-
-			// Re-initialize the watcher for this field
+				// Re-initialize the watcher for this field
 			watcher.watchField( sourceFieldName, targetFieldName, formNode );
 
-			// Trigger update if ALL source fields have values
+			// Trigger debounced update if ALL source fields have values.
+			// Debounced so multiple retries in the same tick collapse into one.
 			if ( allSourceFieldsHaveValues( config.listenTo, formNode ) ) {
-				console.log( `[JFB Auto-Update] All source fields have values, triggering update for "${ targetFieldName }"` );
-				watcher.updateField( targetFieldName, formNode );
+				watcher.debouncedUpdate( targetFieldName, formNode );
 			}
 		}
 	} );
@@ -198,53 +242,105 @@ function allSourceFieldsHaveValues( sourceFieldNames, formNode ) {
 }
 
 /**
- * Trigger update for a newly appeared field.
- * If the field listens to another field, check if that field has a value and trigger update.
+ * Handle conditional block toggling a field's DOM presence.
  *
- * @param {HTMLElement} fieldElement Field element.
- * @param {HTMLElement} formNode     Form element.
+ * When "Remove hidden elements from page HTML" is enabled, the conditional
+ * block fires a custom event. If the toggled block contains a source field
+ * that our auto-update fields listen to, we trigger an update so the
+ * generator re-runs with the correct context (empty for removed fields).
+ *
+ * When the block is shown again (result: true), MutationObserver handles
+ * re-initialization via retryFailedWatchers. Here we only need to handle
+ * the hide case (result: false) — trigger updates for dependents so they
+ * get fresh options without the hidden field's value.
  */
-function triggerUpdateForNewField( fieldElement, formNode ) {
-	const listenTo = fieldElement.getAttribute( 'data-listen-to' );
-	const isMultiple = fieldElement.hasAttribute( 'data-listen-to-multiple' );
+function setupConditionalBlockListener() {
+	document.addEventListener(
+		'jet-form-builder/conditional-block/block-toggle-hidden-dom',
+		( event ) => {
+			const { block, result } = event.detail || {};
 
-	if ( ! listenTo ) {
-		return;
-	}
+			if ( ! block || result ) {
+				return;
+			}
 
-	// Parse listen_to (can be string or JSON array)
-	let sourceFieldNames;
-	if ( isMultiple ) {
-		try {
-			sourceFieldNames = JSON.parse( listenTo );
-		} catch ( e ) {
-			console.error( '[JFB Auto-Update] Failed to parse listen_to:', e );
-			return;
+			const watcher = getWatcher();
+
+			if ( ! watcher.watchers.size ) {
+				return;
+			}
+
+			// Collect field names from the block being hidden
+			const hiddenFieldNames = new Set();
+
+			// The block itself might have a field-name
+			if ( block.dataset?.fieldName ) {
+				hiddenFieldNames.add( block.dataset.fieldName );
+			}
+
+			// Fields inside the block
+			const innerFields = block.querySelectorAll
+				? block.querySelectorAll( '[data-field-name]' )
+				: [];
+
+			innerFields.forEach( ( field ) => {
+				hiddenFieldNames.add( field.getAttribute( 'data-field-name' ) );
+			} );
+
+			if ( ! hiddenFieldNames.size ) {
+				return;
+			}
+
+			// Find all auto-update fields that depend on any hidden field
+			const targetFieldsToUpdate = new Set();
+
+			watcher.watchers.forEach( ( watcherData, watcherKey ) => {
+				// watcherKey could be plain field name or repeater-scoped
+				// Check if any hidden field name is part of the watcher key
+				const matchesHidden = [ ...hiddenFieldNames ].some(
+					( name ) => watcherKey === name || watcherKey.endsWith( `.${ name }` )
+				);
+
+				if ( matchesHidden ) {
+					watcherData.dependents.forEach( ( dep ) => {
+						targetFieldsToUpdate.add( dep );
+
+						// Clear retry tracking so retryFailedWatchers fires
+						// again when the source field reappears.
+						[ ...hiddenFieldNames ].forEach( ( name ) => {
+							retriedWatchers.delete( `${ name }:${ dep }` );
+						} );
+					} );
+				}
+			} );
+
+			if ( ! targetFieldsToUpdate.size ) {
+				return;
+			}
+
+			// Find the form node from any remaining auto-update field
+			let formNode = null;
+
+			for ( const targetKey of targetFieldsToUpdate ) {
+				const fieldData = watcher.autoUpdateFields.get( targetKey );
+				if ( fieldData?.element ) {
+					formNode = fieldData.element.closest( 'form' );
+					if ( formNode ) {
+						break;
+					}
+				}
+			}
+
+			if ( ! formNode ) {
+				return;
+			}
+
+			// Trigger updates for all affected dependents
+			targetFieldsToUpdate.forEach( ( targetKey ) => {
+				watcher.debouncedUpdate( targetKey, formNode );
+			} );
 		}
-	} else {
-		sourceFieldNames = [ listenTo ];
-	}
-
-	// Check if ALL source fields have values
-	const allHaveValues = sourceFieldNames.every( ( fieldName ) => {
-		const sourceField = formNode.querySelector( `[data-field-name="${ fieldName }"]` ) ||
-		                   formNode.querySelector( `[name="${ fieldName }"]` );
-		return sourceField && sourceField.value;
-	} );
-
-	if ( ! allHaveValues ) {
-		return;
-	}
-
-	const fieldName = fieldElement.getAttribute( 'data-field-name' );
-	console.log( `[JFB Auto-Update] Triggering update for newly appeared field: ${ fieldName }` );
-
-	// Get watcher and trigger update manually
-	const watcher = getWatcher();
-
-	// Trigger update immediately (no debounce for initial appearance)
-	// Use the field name, not config object
-	watcher.updateField( fieldName, formNode );
+	);
 }
 
 /**
@@ -260,31 +356,24 @@ function hookIntoJetFormBuilder() {
 		return;
 	}
 
-	// Hook into form init event
-	// JetFormBuilder triggers this when form is ready
-	jQuery( document ).on( 'jet-form-builder/init', ( event, formNode ) => {
-		// Delay initialization to ensure all inputs are registered
-		setTimeout( () => {
-			initAutoUpdate( formNode );
+	// Listen for conditional block DOM toggling (global, once)
+	setupConditionalBlockListener();
 
-			// Set up observer for dynamic fields (Conditional Blocks)
-			observeDynamicFields( formNode );
-		}, 100 );
+	// Hook into form after-init event.
+	// Callback receives ( event, $scope, observable ).
+	jQuery( document ).on( 'jet-form-builder/after-init', ( event, $scope ) => {
+		const formNode = $scope[ 0 ]?.querySelector( 'form.jet-form-builder' );
+
+		if ( ! formNode ) {
+			return;
+		}
+
+		initAutoUpdate( formNode );
+
+		// Set up observer for dynamic fields (Conditional Blocks)
+		observeDynamicFields( formNode );
 	} );
 
-	// Also init for any already-rendered forms
-	const existingForms = document.querySelectorAll( '.jet-form-builder' );
-	existingForms.forEach( ( formNode ) => {
-		// Delay initialization to ensure all inputs are registered
-		setTimeout( () => {
-			initAutoUpdate( formNode );
-
-			// Set up observer for dynamic fields (Conditional Blocks)
-			observeDynamicFields( formNode );
-		}, 100 );
-	} );
-
-	console.log( '[JFB Auto-Update] Initialization complete' );
 }
 
 /**

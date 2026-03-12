@@ -49,7 +49,6 @@ class Num_Range extends Base_V2 {
 				'default'     => '',
 				'label'       => __( 'Meta Key', 'jet-form-builder' ),
 				'control'     => 'text',
-				'required'    => true,
 				'placeholder' => '_max_quantity',
 				'help'        => __( 'Enter the meta key containing the maximum number for the range.', 'jet-form-builder' ),
 			),

@@ -49,37 +49,51 @@ class Get_Related_Posts extends Base_V2 {
 	public function get_settings_schema(): array {
 		return array(
 			'post_type'      => array(
-				'type'        => 'string',
-				'default'     => 'post',
-				'label'       => __( 'Post Type', 'jet-form-builder' ),
-				'control'     => 'text',
-				'placeholder' => 'post',
-				'help'        => __( 'Post type slug to query.', 'jet-form-builder' ),
+				'type'    => 'string',
+				'default' => 'post',
+				'label'   => __( 'Post Type', 'jet-form-builder' ),
+				'control' => 'select',
+				'options' => $this->get_post_types_options(),
+				'help'    => __( 'The type of posts to show as options in this field.', 'jet-form-builder' ),
 			),
 			'relation_type'  => array(
 				'type'    => 'string',
 				'default' => 'meta_field',
-				'label'   => __( 'Relation Type', 'jet-form-builder' ),
+				'label'   => __( 'Filter By', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
-					array( 'value' => 'meta_field',  'label' => 'Meta Field (stores related ID)' ),
-					array( 'value' => 'post_parent', 'label' => 'Post Parent' ),
-					array( 'value' => 'taxonomy',    'label' => 'Shared Taxonomy Term' ),
+					array( 'value' => 'meta_field',  'label' => 'Meta Field — post stores the parent value in a custom field' ),
+					array( 'value' => 'post_parent', 'label' => 'Post Parent — post is a child of the selected item' ),
+					array( 'value' => 'taxonomy',    'label' => 'Taxonomy Term — post belongs to the selected term' ),
 				),
-				'help'    => __( 'How this post type relates to the source field value.', 'jet-form-builder' ),
+				'help'    => __( 'How the listed posts are connected to the value from the watched field.', 'jet-form-builder' ),
 			),
-			'relation_key'   => array(
+			'relation_key'       => array(
 				'type'        => 'string',
 				'default'     => '',
 				'label'       => __( 'Relation Key', 'jet-form-builder' ),
 				'control'     => 'text',
 				'placeholder' => 'related_project_id',
-				'help'        => __( 'Meta key (for meta_field), or taxonomy slug (for taxonomy). Not used for post_parent.', 'jet-form-builder' ),
+				'help'        => __( 'Custom field name (for "Meta Field") or taxonomy slug (for "Taxonomy Term").', 'jet-form-builder' ),
+				'condition'   => array(
+					'relation_type!' => 'post_parent'
+				),
+			),
+			'relation_key_value' => array(
+				'type'        => 'string',
+				'default'     => '',
+				'label'       => __( 'Filter Value', 'jet-form-builder' ),
+				'control'     => 'text',
+				'placeholder' => '42',
+				'help'        => __( 'Static value to filter by.', 'jet-form-builder' ),
+				'condition'   => array(
+					'relation_type!' => 'post_parent'
+				),
 			),
 			'value_field'    => array(
 				'type'    => 'string',
 				'default' => 'ID',
-				'label'   => __( 'Value Field', 'jet-form-builder' ),
+				'label'   => __( 'Option Value', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
 					array( 'value' => 'ID',         'label' => 'Post ID' ),
@@ -90,7 +104,7 @@ class Get_Related_Posts extends Base_V2 {
 			'label_field'    => array(
 				'type'    => 'string',
 				'default' => 'post_title',
-				'label'   => __( 'Label Field', 'jet-form-builder' ),
+				'label'   => __( 'Option Label', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
 					array( 'value' => 'post_title',   'label' => 'Post Title' ),
@@ -104,7 +118,7 @@ class Get_Related_Posts extends Base_V2 {
 				'label'   => __( 'Max Items', 'jet-form-builder' ),
 				'control' => 'number',
 				'min'     => -1,
-				'help'    => __( 'Set to -1 to include all posts.', 'jet-form-builder' ),
+				'help'    => __( 'Maximum number of options to show. Set to -1 to show all.', 'jet-form-builder' ),
 			),
 			'orderby'        => array(
 				'type'    => 'string',
@@ -119,6 +133,24 @@ class Get_Related_Posts extends Base_V2 {
 				),
 			),
 		);
+	}
+
+	/**
+	 * Get public post types as select options.
+	 *
+	 * @return array
+	 */
+	private function get_post_types_options(): array {
+		$options = array();
+
+		foreach ( get_post_types( array(), 'objects' ) as $post_type ) {
+			$options[] = array(
+				'value' => $post_type->name,
+				'label' => $post_type->label,
+			);
+		}
+
+		return $options;
 	}
 
 	/**
@@ -138,8 +170,8 @@ class Get_Related_Posts extends Base_V2 {
 	public function get_auto_update_context_fields(): array {
 		return array(
 			array(
-				'description' => __( 'Source field value used to filter related posts.', 'jet-form-builder' ),
-				'example'     => __( 'E.g. project ID from a "Project" select field.', 'jet-form-builder' ),
+				'single'      => true,
+				'description' => __( 'The watched field\'s value overrides the static "Filter Value" above. When the watched field is empty, this list will also be empty.', 'jet-form-builder' ),
 			),
 		);
 	}
@@ -153,10 +185,13 @@ class Get_Related_Posts extends Base_V2 {
 	 * @return array
 	 */
 	public function generate_with_context( array $settings, array $context = array() ): array {
-		if ( ! empty( $context ) ) {
-			// Take the first context value as the relation source
-			$settings['_related_value'] = reset( $context );
+		if ( empty( $context ) ) {
+			// No context yet — watched field is empty, return nothing.
+			return array();
 		}
+
+		// Take the first context value as the relation source.
+		$settings['_related_value'] = reset( $context );
 
 		return $this->generate( $settings );
 	}
@@ -169,9 +204,19 @@ class Get_Related_Posts extends Base_V2 {
 	 * @return array
 	 */
 	public function generate( $args ) {
-		$post_type    = sanitize_key( $args['post_type'] ?? 'post' );
+		$post_type     = sanitize_key( $args['post_type'] ?? 'post' );
 		$relation_type = $args['relation_type'] ?? 'meta_field';
-		$source_value = $args['_related_value'] ?? null;
+
+		// _related_value comes from auto-update context; relation_key_value is the static fallback.
+		$source_value = $args['_related_value'] ?? ( $args['relation_key_value'] ?? null );
+
+		// If the relation requires a key and there is no source value at all, return nothing.
+		if ( 'post_parent' !== $relation_type && null === $source_value ) {
+			$relation_key = $args['relation_key'] ?? '';
+			if ( $relation_key ) {
+				return array();
+			}
+		}
 
 		$query_args = array(
 			'post_type'      => $post_type,
@@ -181,7 +226,7 @@ class Get_Related_Posts extends Base_V2 {
 			'order'          => 'ASC',
 		);
 
-		// Apply relation filter when source value is available
+		// Apply relation filter when a source value is present (direct call without context returns all posts).
 		if ( null !== $source_value && '' !== $source_value ) {
 			switch ( $relation_type ) {
 				case 'meta_field':

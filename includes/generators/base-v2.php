@@ -35,7 +35,6 @@ abstract class Base_V2 extends Base {
 	 *         'control'     => 'text|number|select|toggle|textarea',
 	 *         'help'        => string (optional),
 	 *         'placeholder' => string (optional),
-	 *         'required'    => bool (optional),
 	 *         'options'     => array (for select control),
 	 *         'min'         => number (for number control),
 	 *         'max'         => number (for number control),
@@ -233,7 +232,7 @@ abstract class Base_V2 extends Base {
 		$schema = $this->get_settings_schema();
 
 		foreach ( $schema as $key => $field_def ) {
-			$attr_name    = $this->get_attribute_name( $key );
+			$attr_name          = $this->get_attribute_name( $key );
 			$args[ $attr_name ] = $this->get_parse_callback_for_type( $field_def['type'] ?? 'string' );
 		}
 
@@ -278,17 +277,10 @@ abstract class Base_V2 extends Base {
 	 * @return array Generated options
 	 */
 	public function get_values( $args ) {
-		// error_log( '=== [BASE_V2] get_values() ===' );
-		// error_log( '[BASE_V2] Generator ID: ' . $this->get_id() );
-		// error_log( '[BASE_V2] Input $args keys: ' . print_r( array_keys( $args ), true ) );
-		// error_log( '[BASE_V2] generator_args: ' . print_r( $args['generator_args'] ?? 'NOT SET', true ) );
-		// error_log( '[BASE_V2] generator_field: ' . ( $args['generator_field'] ?? 'NOT SET' ) );
 
 		// Priority 1: Check for generator_args object (new format)
 		if ( ! empty( $args['generator_args'] ) && is_array( $args['generator_args'] ) ) {
 			$settings = $this->parse_generator_args( $args['generator_args'] );
-			// error_log( '[BASE_V2] Priority 1: generator_args parsed: ' . print_r( $settings, true ) );
-			// error_log( '[BASE_V2] has_meaningful_values: ' . ( $this->has_meaningful_values( $settings ) ? 'YES' : 'NO' ) );
 			if ( $this->has_meaningful_values( $settings ) ) {
 				$result = $this->generate( $settings );
 				return $result;
@@ -297,8 +289,6 @@ abstract class Base_V2 extends Base {
 
 		// Priority 2: Try prefixed attributes
 		$settings = $this->parse_settings( $args );
-		// error_log( '[BASE_V2] Priority 2: prefixed attrs parsed: ' . print_r( $settings, true ) );
-		// error_log( '[BASE_V2] has_meaningful_values: ' . ( $this->has_meaningful_values( $settings ) ? 'YES' : 'NO' ) );
 		if ( $this->has_meaningful_values( $settings ) ) {
 			$result = $this->generate( $settings );
 			return $result;

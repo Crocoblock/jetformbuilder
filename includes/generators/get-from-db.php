@@ -57,6 +57,53 @@ class Get_From_DB extends Base_V2 {
 	}
 
 	/**
+	 * Whether this generator supports auto-update.
+	 *
+	 * @return bool
+	 */
+	public function supports_auto_update(): bool {
+		return true;
+	}
+
+	/**
+	 * Returns context field descriptions for auto-update.
+	 *
+	 * @return array
+	 */
+	public function get_auto_update_context_fields(): array {
+		return array(
+			array(
+				'single'      => true,
+				'description' => __( 'The watched field value overrides the static "Meta Key" setting. When the watched field value is empty, the static "Meta Key" setting is used.', 'jet-form-builder' ),
+			),
+		);
+	}
+
+	/**
+	 * Generate options with context from dependent fields.
+	 * Uses the watched field value as meta key.
+	 *
+	 * @param array $settings Parsed settings.
+	 * @param array $context  ['field_name' => 'value'] from listened fields.
+	 *
+	 * @return array
+	 */
+	public function generate_with_context( array $settings, array $context = array() ): array {
+		if ( ! empty( $context ) ) {
+			$context_value = reset( $context );
+			$meta_key      = is_scalar( $context_value ) ? trim( sanitize_text_field( (string) $context_value ) ) : '';
+
+			// Use watched field value as override only when it is non-empty.
+			// Otherwise keep static meta_key from generator settings.
+			if ( '' !== $meta_key ) {
+				$settings['meta_key'] = $meta_key;
+			}
+		}
+
+		return $this->generate( $settings );
+	}
+
+	/**
 	 * Returns generated options list.
 	 *
 	 * @param array|string $args Settings array or legacy string.

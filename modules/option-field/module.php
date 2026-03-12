@@ -225,6 +225,35 @@ final class Module implements
 			array(),
 			$script_asset['version']
 		);
+
+		// auto-update
+		$auto_update_asset_file = $this->get_dir( 'assets/build/auto-update.asset.php' );
+
+		if ( file_exists( $auto_update_asset_file ) ) {
+			$auto_update_asset = require_once $auto_update_asset_file;
+
+			if ( is_array( $auto_update_asset ) ) {
+				array_push(
+					$auto_update_asset['dependencies'],
+					BlocksModule::MAIN_SCRIPT_HANDLE
+				);
+
+				wp_register_script(
+					$this->get_handle( 'auto-update' ),
+					$this->get_url( 'assets/build/auto-update.js' ),
+					$auto_update_asset['dependencies'],
+					$auto_update_asset['version'],
+					true
+				);
+
+				wp_register_style(
+					$this->get_handle( 'auto-update' ),
+					$this->get_url( 'assets/build/auto-update.css' ),
+					array(),
+					$auto_update_asset['version']
+				);
+			}
+		}
 	}
 
 	/**

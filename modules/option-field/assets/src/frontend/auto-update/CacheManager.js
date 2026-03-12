@@ -7,51 +7,35 @@
  * @package JetFormBuilder
  */
 
-/**
- * Cache Manager Class.
- *
- * Stores generated options with keys based on generator ID and context values.
- * Supports cache timeout configuration per field.
- */
 class CacheManager {
 	constructor() {
-		/**
-		 * Cache storage.
-		 * Key format: "generatorId:contextHash"
-		 * Value: { options: Array, timestamp: Number }
-		 *
-		 * @type {Map<string, Object>}
-		 */
+		/** @type {Map<string, {options: Array, timestamp: number}>} */
 		this.cache = new Map();
 
-		/**
-		 * Default cache timeout in seconds.
-		 * 0 = disabled, -1 = permanent, N = seconds
-		 *
-		 * @type {number}
-		 */
+		/** @type {number} default TTL in seconds; 0 = disabled */
 		this.defaultTimeout = 60;
 	}
 
 	/**
-	 * Generate cache key from generator ID and context.
+	 * Generate cache key from generator ID, field name, and context.
+	 *
+	 * Field name is included so that two different fields using the same
+	 * generator and the same context don't share cached responses
+	 * (they may have different block_attrs, e.g. custom_item_template).
 	 *
 	 * @param {string} generatorId Generator identifier.
 	 * @param {Object} context     Context object with field values.
+	 * @param {string} fieldName   Target field name.
 	 *
 	 * @return {string} Cache key.
 	 */
-	generateKey( generatorId, context ) {
-		// Sort context keys for consistent hashing
-		const sortedContext = Object.keys( context )
-			.sort()
-			.reduce( ( acc, key ) => {
-				acc[ key ] = context[ key ];
-				return acc;
-			}, {} );
+	generateKey( generatorId, context, fieldName = '' ) {
+		const sortedContext = Object.keys( context ).sort().reduce( ( acc, key ) => {
+			acc[ key ] = context[ key ];
+			return acc;
+		}, {} );
 
-		const contextString = JSON.stringify( sortedContext );
-		return `${ generatorId }:${ contextString }`;
+		return `${ generatorId }:${ fieldName }:${ JSON.stringify( sortedContext ) }`;
 	}
 
 	/**
@@ -60,33 +44,26 @@ class CacheManager {
 	 * @param {string} generatorId  Generator identifier.
 	 * @param {Object} context      Context object with field values.
 	 * @param {number} cacheTimeout Cache timeout in seconds (0=disabled, -1=permanent, N=seconds).
+	 * @param {string} fieldName    Target field name.
 	 *
 	 * @return {boolean} True if valid cache exists.
 	 */
-	has( generatorId, context, cacheTimeout = this.defaultTimeout ) {
+	has( generatorId, context, cacheTimeout = this.defaultTimeout, fieldName = '' ) {
 		// Cache disabled
 		if ( cacheTimeout === 0 ) {
 			return false;
 		}
 
-		const key = this.generateKey( generatorId, context );
+		const key    = this.generateKey( generatorId, context, fieldName );
 		const cached = this.cache.get( key );
 
 		if ( ! cached ) {
 			return false;
 		}
 
-		// Permanent cache
-		if ( cacheTimeout === -1 ) {
-			return true;
-		}
-
-		// Check if cache is expired
-		const now = Date.now();
-		const age = ( now - cached.timestamp ) / 1000; // Convert to seconds
+		const age = ( Date.now() - cached.timestamp ) / 1000;
 
 		if ( age > cacheTimeout ) {
-			// Cache expired, remove it
 			this.cache.delete( key );
 			return false;
 		}
@@ -100,15 +77,16 @@ class CacheManager {
 	 * @param {string} generatorId  Generator identifier.
 	 * @param {Object} context      Context object with field values.
 	 * @param {number} cacheTimeout Cache timeout in seconds.
+	 * @param {string} fieldName    Target field name.
 	 *
 	 * @return {Array|null} Cached options or null if not found/expired.
 	 */
-	get( generatorId, context, cacheTimeout = this.defaultTimeout ) {
-		if ( ! this.has( generatorId, context, cacheTimeout ) ) {
+	get( generatorId, context, cacheTimeout = this.defaultTimeout, fieldName = '' ) {
+		if ( ! this.has( generatorId, context, cacheTimeout, fieldName ) ) {
 			return null;
 		}
 
-		const key = this.generateKey( generatorId, context );
+		const key = this.generateKey( generatorId, context, fieldName );
 		const cached = this.cache.get( key );
 
 		return cached ? cached.options : null;
@@ -120,9 +98,10 @@ class CacheManager {
 	 * @param {string} generatorId Generator identifier.
 	 * @param {Object} context     Context object with field values.
 	 * @param {Array}  options     Generated options to cache.
+	 * @param {string} fieldName   Target field name.
 	 */
-	set( generatorId, context, options ) {
-		const key = this.generateKey( generatorId, context );
+	set( generatorId, context, options, fieldName = '' ) {
+		const key = this.generateKey( generatorId, context, fieldName );
 
 		this.cache.set( key, {
 			options,
@@ -135,10 +114,26 @@ class CacheManager {
 	 *
 	 * @param {string} generatorId Generator identifier.
 	 * @param {Object} context     Context object with field values.
+	 * @param {string} fieldName   Target field name.
 	 */
-	clear( generatorId, context ) {
-		const key = this.generateKey( generatorId, context );
+	clear( generatorId, context, fieldName = '' ) {
+		const key = this.generateKey( generatorId, context, fieldName );
 		this.cache.delete( key );
+	}
+
+	/**
+	 * Clear all cache entries for a specific field name.
+	 * Used when the field should show no options (e.g. requireAllFilled not met).
+	 *
+	 * @param {string} fieldName Target field name.
+	 */
+	clearByField( fieldName ) {
+		const prefix = `:${ fieldName }:`;
+		this.cache.forEach( ( _value, key ) => {
+			if ( key.includes( prefix ) ) {
+				this.cache.delete( key );
+			}
+		} );
 	}
 
 	/**
@@ -167,19 +162,16 @@ class CacheManager {
 	 * @param {number} maxAge Maximum age in seconds (default: 3600 = 1 hour).
 	 */
 	cleanExpired( maxAge = 3600 ) {
-		const now = Date.now();
+		const now          = Date.now();
 		const keysToDelete = [];
 
 		this.cache.forEach( ( value, key ) => {
-			const age = ( now - value.timestamp ) / 1000;
-			if ( age > maxAge ) {
+			if ( ( now - value.timestamp ) / 1000 > maxAge ) {
 				keysToDelete.push( key );
 			}
 		} );
 
-		keysToDelete.forEach( ( key ) => {
-			this.cache.delete( key );
-		} );
+		keysToDelete.forEach( ( key ) => this.cache.delete( key ) );
 
 		return keysToDelete.length;
 	}

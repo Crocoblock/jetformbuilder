@@ -82,7 +82,7 @@ class Get_From_Je_Query extends Base_V2 {
 			'value_field' => array(
 				'type'        => 'string',
 				'default'     => '',
-				'label'       => __( 'Value Field', 'jet-form-builder' ),
+				'label'       => __( 'Option Value', 'jet-form-builder' ),
 				'control'     => 'text',
 				'placeholder' => '',
 				'help'        => __( 'Field to use as option value (e.g., ID, post_name, meta_key).', 'jet-form-builder' ),
@@ -90,7 +90,7 @@ class Get_From_Je_Query extends Base_V2 {
 			'label_field' => array(
 				'type'        => 'string',
 				'default'     => '',
-				'label'       => __( 'Label Field', 'jet-form-builder' ),
+				'label'       => __( 'Option Label', 'jet-form-builder' ),
 				'control'     => 'text',
 				'placeholder' => '',
 				'help'        => __( 'Field to use as option label (e.g., post_title, display_name).', 'jet-form-builder' ),
@@ -213,7 +213,7 @@ class Get_From_Je_Query extends Base_V2 {
 	public function get_auto_update_context_fields(): array {
 		return array(
 			array(
-				'description' => __( 'The selected value from the listened field can be used in JetEngine Query via dynamic tags.', 'jet-form-builder' ),
+				'description' => __( 'The selected value from "Watch These Fields" can be used in JetEngine Query via dynamic tags.', 'jet-form-builder' ),
 				'example'     => __( 'Use "JFB Update Field - Form Field Value" dynamic tag in your query.', 'jet-form-builder' ),
 			),
 		);
@@ -320,7 +320,6 @@ class Get_From_Je_Query extends Base_V2 {
 
 		$handler = $this->get_handler( $objects[0] ?? array() );
 		$handler->set_fields( $fields );
-		error_log( '[GET_FROM_QUERY V2] Handler: ' . get_class( $handler ) . ', fields: ' . print_r( $fields, true ) );
 
 		foreach ( $objects as $object ) {
 			$item = $handler->to_array( $object );
@@ -329,9 +328,6 @@ class Get_From_Je_Query extends Base_V2 {
 				$result[] = $item;
 			}
 		}
-
-		error_log( '[GET_FROM_QUERY V2] Final result: ' . count( $result ) . ' options' );
-		error_log( '=== [GET_FROM_QUERY V2] END ===' );
 
 		return $result;
 	}

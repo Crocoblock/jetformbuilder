@@ -4,6 +4,7 @@ namespace JFB_Modules\Option_Field\Blocks\Checkbox;
 
 use Jet_Form_Builder\Blocks\Render\Base;
 use Jet_Form_Builder\Classes\Builder_Helper;
+use JFB_Modules\Option_Field\Html_Attributes_Injector;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -32,7 +33,10 @@ class Block_Render extends Base {
 		$this->add_attribute( 'class', $this->args['class_name'] );
 		$this->add_attribute( 'required', $required );
 
-		$html = '<div class="jet-form-builder__fields-group checkradio-wrap" data-jfb-sync>';
+		$auto_update_attrs = Html_Attributes_Injector::render_data_attributes( $this->args );
+		$auto_update_attrs = $auto_update_attrs ? ' ' . $auto_update_attrs : '';
+
+		$html = '<div class="jet-form-builder__fields-group checkradio-wrap" data-jfb-sync' . $auto_update_attrs . '>';
 
 		if ( ! empty( $this->args['field_options'] ) ) {
 			foreach ( $this->args['field_options'] as $value => $option ) {

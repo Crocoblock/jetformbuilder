@@ -5,6 +5,9 @@ namespace Jet_Form_Builder;
 
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Generators\Get_From_DB;
+use Jet_Form_Builder\Generators\Get_From_Rest_Api;
+use Jet_Form_Builder\Generators\Get_From_Users;
+use Jet_Form_Builder\Generators\Get_Related_Posts;
 use Jet_Form_Builder\Generators\Num_Range;
 use Jet_Form_Builder\Generators\Num_Range_Manual;
 
@@ -35,6 +38,9 @@ class Form_Manager {
 					new Num_Range(),
 					new Num_Range_Manual(),
 					new Get_From_DB(),
+					new Get_From_Users(),
+					new Get_Related_Posts(),
+					new Get_From_Rest_Api(),
 				),
 				$this
 			);

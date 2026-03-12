@@ -6,9 +6,7 @@ function toHtmlMacro( name, field ) {
 
 	let repeaterNote = '';
 
-	if ( field?.is_repeater ) {
-		repeaterNote = 'repeater tooltip';
-	} else if ( field?.is_repeater_child ) {
+	if ( field?.is_repeater_child ) { 
 		repeaterNote =
 			'this field can be used only inside repeater - ' + field.repeater_name;
 	}

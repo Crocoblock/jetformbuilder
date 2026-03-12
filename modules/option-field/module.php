@@ -230,7 +230,7 @@ final class Module implements
 		$auto_update_asset_file = $this->get_dir( 'assets/build/auto-update.asset.php' );
 
 		if ( file_exists( $auto_update_asset_file ) ) {
-			$auto_update_asset = require_once $auto_update_asset_file;
+			$auto_update_asset = require $auto_update_asset_file;
 
 			if ( is_array( $auto_update_asset ) ) {
 				array_push(
@@ -244,6 +244,15 @@ final class Module implements
 					$auto_update_asset['dependencies'],
 					$auto_update_asset['version'],
 					true
+				);
+
+				wp_add_inline_script(
+					$this->get_handle( 'auto-update' ),
+					'window.JFBOptionFieldAutoUpdate = window.JFBOptionFieldAutoUpdate || {};'
+					. 'window.JFBOptionFieldAutoUpdate.endpoint = '
+					. wp_json_encode( Rest_Api\Generator_Update_Endpoint::rest_url() )
+					. ';',
+					'before'
 				);
 
 				wp_register_style(

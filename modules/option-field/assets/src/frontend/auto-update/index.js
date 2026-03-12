@@ -213,7 +213,7 @@ function retryFailedWatchers( sourceFieldName, formNode ) {
 			// Mark as retried
 			retriedWatchers.add( watcherKey );
 
-				// Re-initialize the watcher for this field
+			// Re-initialize the watcher for this field
 			watcher.watchField( sourceFieldName, targetFieldName, formNode );
 
 			// Trigger debounced update if ALL source fields have values.
@@ -346,13 +346,20 @@ function setupConditionalBlockListener() {
 /**
  * Hook into JetFormBuilder's form initialization.
  */
-function hookIntoJetFormBuilder() {
+function hookIntoJetFormBuilder( attemptsLeft = 100 ) {
 	// Wait for JetFormBuilderMain to be available
 	if ( typeof window.JetFormBuilderMain === 'undefined' ) {
-		console.warn( '[JFB Auto-Update] JetFormBuilderMain not available, retrying...' );
+		if ( attemptsLeft <= 0 ) {
+			console.warn( '[JFB Auto-Update] JetFormBuilderMain is not available. Auto-update was not initialized.' );
+			return;
+		}
+
+		if ( attemptsLeft % 20 === 0 ) {
+			console.warn( '[JFB Auto-Update] JetFormBuilderMain not available, retrying...' );
+		}
 
 		// Retry after a short delay
-		setTimeout( hookIntoJetFormBuilder, 100 );
+		setTimeout( () => hookIntoJetFormBuilder( attemptsLeft - 1 ), 100 );
 		return;
 	}
 

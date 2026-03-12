@@ -680,6 +680,30 @@ class FieldWatcher {
 	}
 
 	/**
+	 * Resolve REST endpoint URL for generator updates.
+	 *
+	 * Priority:
+	 * 1) Localized module config (supports custom prefix/subdirectory)
+	 * 2) wpApiSettings.root (if available)
+	 * 3) Legacy fallback
+	 *
+	 * @return {string}
+	 */
+	getUpdateEndpoint() {
+		const localized = window.JFBOptionFieldAutoUpdate?.endpoint;
+		if ( localized ) {
+			return localized;
+		}
+
+		const apiRoot = window.wpApiSettings?.root;
+		if ( apiRoot ) {
+			return `${ apiRoot.replace( /\/+$/, '' ) }/jet-form-builder/v1/generator-update`;
+		}
+
+		return '/wp-json/jet-form-builder/v1/generator-update';
+	}
+
+	/**
 	 * Fetch options from REST API.
 	 *
 	 * @param {Object}      config Field configuration.
@@ -689,7 +713,7 @@ class FieldWatcher {
 	 * @return {Promise<Array>} Generated options.
 	 */
 	async fetchOptions( config, context, signal ) {
-		const response = await fetch( '/wp-json/jet-form-builder/v1/generator-update', {
+		const response = await fetch( this.getUpdateEndpoint(), {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

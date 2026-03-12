@@ -4,6 +4,7 @@ namespace JFB_Modules\Option_Field\Blocks\Checkbox;
 
 use Jet_Form_Builder\Blocks\Render\Base;
 use Jet_Form_Builder\Classes\Builder_Helper;
+use JFB_Modules\Option_Field\Html_Attributes_Injector;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -25,28 +26,6 @@ class Block_Render extends Base {
 		return $this->render_options();
 	}
 
-	/**
-	 * Build an HTML attribute string from _jfb_data_attrs injected by Html_Attributes_Injector.
-	 * Returns a space-prefixed string ready to embed inside an opening tag, or empty string.
-	 *
-	 * @return string
-	 */
-	protected function get_auto_update_attrs_string(): string {
-		if ( empty( $this->args['_jfb_data_attrs'] ) || ! is_array( $this->args['_jfb_data_attrs'] ) ) {
-			return '';
-		}
-
-		$parts = array();
-
-		foreach ( $this->args['_jfb_data_attrs'] as $key => $value ) {
-			if ( '' !== (string) $value ) {
-				$parts[] = sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $value ) );
-			}
-		}
-
-		return $parts ? ' ' . implode( ' ', $parts ) : '';
-	}
-
 	public function render_options(): string {
 		$required = $this->block_type->get_required_val();
 
@@ -54,7 +33,8 @@ class Block_Render extends Base {
 		$this->add_attribute( 'class', $this->args['class_name'] );
 		$this->add_attribute( 'required', $required );
 
-		$auto_update_attrs = $this->get_auto_update_attrs_string();
+		$auto_update_attrs = Html_Attributes_Injector::render_data_attributes( $this->args );
+		$auto_update_attrs = $auto_update_attrs ? ' ' . $auto_update_attrs : '';
 
 		$html = '<div class="jet-form-builder__fields-group checkradio-wrap" data-jfb-sync' . $auto_update_attrs . '>';
 

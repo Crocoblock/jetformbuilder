@@ -50,7 +50,7 @@ $this->add_attribute( 'data-jfb-sync' );
 		<input <?php $this->render_attributes_string(); ?> />
 		<input
 			type="hidden"
-			name=" <?php echo esc_attr( $this->block_type->get_field_name( $name . '_lat' ) ); ?>"
+			name="<?php echo esc_attr( $this->block_type->get_field_name( $name . '_lat' ) ); ?>"
 			value="<?php echo esc_attr( $args['default']['lat'] ?? '' ); ?>"
 			data-map-field="lat"
 		/>

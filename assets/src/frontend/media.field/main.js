@@ -1,5 +1,7 @@
 import FileData from './input';
 import SignalFile from './signal';
+import { resolveMediaMacrosValue } from './resolveMediaMacrosValue';
+
 
 const { addFilter } = JetPlugins.hooks;
 
@@ -22,3 +24,13 @@ addFilter(
 		return signals;
 	},
 );
+
+addFilter(
+	'jet.fb.macro.field.value',
+	'jet-form-builder/media-field',
+	( current, $fieldNode, $macroHost ) =>
+		resolveMediaMacrosValue( current, $fieldNode, $macroHost ),
+);
+
+
+

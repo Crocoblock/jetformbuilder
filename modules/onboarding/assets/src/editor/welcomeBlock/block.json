@@ -1,5 +1,5 @@
 {
-	"apiVersion": 2,
+	"apiVersion": 3,
 	"name": "jet-forms/welcome",
 	"title": "Welcome",
 	"category": "jet-form-builder-elements",

@@ -37,7 +37,7 @@ class Form_Record_Values_Box extends Base_List_Box {
 	}
 
 	public function get_columns(): array {
-		return array(
+		return apply_filters( 'jet-form-builder/form-record/general-values-columns', [
 			'form'       => new Form_Link_Column(),
 			'referrer'   => new Referrer_Link_Column(),
 			'status'     => new Status_Column(),
@@ -46,7 +46,7 @@ class Form_Record_Values_Box extends Base_List_Box {
 			'user_agent' => new User_Agent_Column(),
 			'created_at' => new Created_At_Column(),
 			'updated_at' => new Updated_At_Column(),
-		);
+		], $this );
 	}
 
 	/**

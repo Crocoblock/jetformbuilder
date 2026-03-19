@@ -37,16 +37,20 @@ class Form_Record_Values_Box extends Base_List_Box {
 	}
 
 	public function get_columns(): array {
-		return apply_filters( 'jet-form-builder/form-record/general-values-columns', [
-			'form'       => new Form_Link_Column(),
-			'referrer'   => new Referrer_Link_Column(),
-			'status'     => new Status_Column(),
-			'user'       => new User_Login_Column(),
-			'ip_address' => new Ip_Address_Column(),
-			'user_agent' => new User_Agent_Column(),
-			'created_at' => new Created_At_Column(),
-			'updated_at' => new Updated_At_Column(),
-		], $this );
+		return apply_filters(
+			'jet-form-builder/form-record/general-values-columns',
+			array(
+				'form'       => new Form_Link_Column(),
+				'referrer'   => new Referrer_Link_Column(),
+				'status'     => new Status_Column(),
+				'user'       => new User_Login_Column(),
+				'ip_address' => new Ip_Address_Column(),
+				'user_agent' => new User_Agent_Column(),
+				'created_at' => new Created_At_Column(),
+				'updated_at' => new Updated_At_Column(),
+			),
+			$this
+		);
 	}
 
 	/**

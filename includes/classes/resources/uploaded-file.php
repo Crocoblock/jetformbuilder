@@ -215,7 +215,9 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 	}
 
 	/**
-	 * Normalize path and allow only files inside wp-content uploads directory.
+	 * Normalize path and allow only existing files inside wp-content uploads directory.
+	 *
+	 * @return string Normalized realpath to a file in uploads, or empty string.
 	 */
 	public static function normalize_allowed_upload_file_path( string $file ): string {
 		if ( '' === $file ) {
@@ -233,15 +235,21 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 		$real = untrailingslashit( $real );
 
 		$uploads = wp_get_upload_dir();
-		$base    = wp_normalize_path( (string) ( $uploads['basedir'] ?? '' ) );
+		$base    = (string) ( $uploads['basedir'] ?? '' );
 
 		if ( '' === $base ) {
 			return '';
 		}
 
+		$base_real = realpath( $base );
+		if ( false === $base_real ) {
+			return '';
+		}
+
+		$base = wp_normalize_path( $base_real );
 		$base = untrailingslashit( $base );
 
-		if ( $real === $base || 0 === strpos( $real, $base . '/' ) ) {
+		if ( 0 === strpos( $real, $base . '/' ) && is_file( $real ) ) {
 			return $real;
 		}
 

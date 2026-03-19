@@ -413,11 +413,9 @@ class Send_Email_Action extends Base {
 			}
 
 			$allowed = Uploaded_File::normalize_allowed_upload_file_path( $attachment );
-			if ( '' === $allowed || ! is_readable( $allowed ) ) {
+			if ( '' === $allowed || ! is_file( $allowed ) || ! is_readable( $allowed ) ) {
 				continue;
 			}
-
-			error_log('$allowed' . print_r($allowed,true));
 
 			$safe[] = $allowed;
 		}

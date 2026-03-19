@@ -231,17 +231,16 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 
 		$real = wp_normalize_path( $real );
 		$real = untrailingslashit( $real );
-error_log('$real'. print_r($real,true));
+
 		$uploads = wp_get_upload_dir();
 		$base    = wp_normalize_path( (string) ( $uploads['basedir'] ?? '' ) );
-error_log('$uploads'. print_r($uploads,true));
-error_log('$base'. print_r($base,true));
+
 		if ( '' === $base ) {
 			return '';
 		}
 
 		$base = untrailingslashit( $base );
-error_log('$base'. print_r($base,true));
+
 		if ( $real === $base || 0 === strpos( $real, $base . '/' ) ) {
 			return $real;
 		}

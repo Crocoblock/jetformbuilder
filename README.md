@@ -8,6 +8,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.5.6.3
+* ADD: Support preview for AVIF files in Media Field
+* ADD: `jet-form-builder/form-record/general-values-columns` filter for Form Record General Values Columns
+* FIX: LFI vulnerability
+
 ## 3.5.6.2
 * FIX: RCE vulnerability
 

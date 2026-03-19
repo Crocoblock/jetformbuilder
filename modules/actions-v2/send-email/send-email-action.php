@@ -5,6 +5,7 @@ namespace JFB_Modules\Actions_V2\Send_Email;
 use Jet_Form_Builder\Actions\Action_Handler;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
+use Jet_Form_Builder\Classes\Resources\Uploaded_File;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Request\Request_Tools;
@@ -397,7 +398,29 @@ class Send_Email_Action extends Base {
 			);
 		}
 
-		return $attachments;
+		return $this->filter_safe_attachments( $attachments );
+	}
+
+	/**
+	 * Allow only readable files within the uploads directory.
+	 */
+	private function filter_safe_attachments( array $attachments ): array {
+		$safe = array();
+
+		foreach ( $attachments as $attachment ) {
+			if ( ! is_string( $attachment ) || '' === $attachment ) {
+				continue;
+			}
+
+			$allowed = Uploaded_File::normalize_allowed_upload_file_path( $attachment );
+			if ( '' === $allowed || ! is_file( $allowed ) || ! is_readable( $allowed ) ) {
+				continue;
+			}
+
+			$safe[] = $allowed;
+		}
+
+		return array_values( array_unique( $safe ) );
 	}
 
 	public function update_headers() {

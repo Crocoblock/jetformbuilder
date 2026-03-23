@@ -8,11 +8,11 @@ function escapeHtml( value ) {
 }
 
 function isMediaField( fieldNode ) {
-	if ( !fieldNode ) {
+	if ( ! fieldNode ) {
 		return false;
 	}
 
-	return !!fieldNode.closest( '.field-type-media-field' );
+	return !! fieldNode.closest( '.field-type-media-field' );
 }
 
 function renderImageItem( url, name = '' ) {
@@ -87,7 +87,7 @@ function renderFileItem( url, name = '' ) {
 }
 
 function wrapItems( items ) {
-	if ( !items.length ) {
+	if ( ! items.length ) {
 		return '';
 	}
 
@@ -110,7 +110,8 @@ function wrapItems( items ) {
 
 function collectMediaFromDom( fieldNode ) {
 	const wrapper = fieldNode.closest( '.field-type-media-field' );
-	if ( !wrapper ) {
+
+	if ( ! wrapper ) {
 		return '';
 	}
 
@@ -118,7 +119,7 @@ function collectMediaFromDom( fieldNode ) {
 		'.jet-form-builder-file-upload__file'
 	);
 
-	if ( !fileNodes.length ) {
+	if ( ! fileNodes.length ) {
 		return '';
 	}
 
@@ -150,49 +151,123 @@ function collectMediaFromDom( fieldNode ) {
 	return wrapItems( items );
 }
 
-function collectMediaFromCurrent( current ) {
-	if ( !current || !current.length ) {
-		return '';
+function getObservedContainer( fieldNode ) {
+	const wrapper = fieldNode.closest( '.field-type-media-field' );
+
+	if ( ! wrapper ) {
+		return null;
 	}
 
-	const items = [];
+	return (
+		wrapper.querySelector( '.jet-form-builder-file-upload__files' ) ||
+		wrapper.querySelector( '.jet-form-builder-file-upload' ) ||
+		wrapper
+	);
+}
 
-	for ( const file of current ) {
-		if ( !file ) {
-			continue;
-		}
+function triggerMediaRefresh( fieldNode ) {
+	fieldNode.dispatchEvent(
+		new Event( 'input', { bubbles: true } )
+	);
 
-		const name = String( file.name ?? '' ).trim();
-		const type = String( file.type ?? '' ).trim();
+	fieldNode.dispatchEvent(
+		new Event( 'change', { bubbles: true } )
+	);
+}
 
-		if ( /^image\//.test( type ) ) {
-			const url = URL.createObjectURL( file );
-			items.push( renderImageItem( url, name ) );
-			continue;
-		}
-
-		items.push( renderFileItem( '', name ) );
+function bindRemoveHandler( fieldNode ) {
+	if ( ! fieldNode || fieldNode.__jfbMediaRemoveBound ) {
+		return;
 	}
 
-	return wrapItems( items );
+	const wrapper = fieldNode.closest( '.field-type-media-field' );
+
+	if ( ! wrapper ) {
+		return;
+	}
+
+	fieldNode.__jfbMediaRemoveBound = true;
+
+	wrapper.addEventListener( 'click', ( event ) => {
+		const removeBtn = event.target.closest(
+			'.jet-form-builder-file-upload__file-remove'
+		);
+
+		if ( ! removeBtn ) {
+			return;
+		}
+
+		setTimeout( () => {
+			triggerMediaRefresh( fieldNode );
+		}, 0 );
+	} );
+}
+
+function scheduleRefresh( fieldNode ) {
+	if ( ! fieldNode ) {
+		return;
+	}
+
+	const observedNode = getObservedContainer( fieldNode );
+
+	if ( ! observedNode ) {
+		return;
+	}
+
+	if ( fieldNode.__jfbMediaMacrosObserver ) {
+		fieldNode.__jfbMediaMacrosObserver.disconnect();
+		fieldNode.__jfbMediaMacrosObserver = null;
+	}
+
+	const initialMarkup = collectMediaFromDom( fieldNode );
+
+	const observer = new MutationObserver( () => {
+		const nextMarkup = collectMediaFromDom( fieldNode );
+
+		if ( nextMarkup === initialMarkup ) {
+			return;
+		}
+
+		observer.disconnect();
+		fieldNode.__jfbMediaMacrosObserver = null;
+
+		triggerMediaRefresh( fieldNode );
+	} );
+
+	fieldNode.__jfbMediaMacrosObserver = observer;
+
+	observer.observe( observedNode, {
+		childList: true,
+		subtree: true,
+		attributes: true,
+		attributeFilter: [ 'data-file', 'src' ],
+	} );
+
+	setTimeout( () => {
+		if ( fieldNode.__jfbMediaMacrosObserver !== observer ) {
+			return;
+		}
+
+		observer.disconnect();
+		fieldNode.__jfbMediaMacrosObserver = null;
+
+		const fallbackMarkup = collectMediaFromDom( fieldNode );
+
+		if ( fallbackMarkup !== initialMarkup ) {
+			triggerMediaRefresh( fieldNode );
+		}
+	}, 300 );
 }
 
 export function resolveMediaMacrosValue( current, $fieldNode ) {
-	const fieldNode = $fieldNode?.[ 0 ];
+	const fieldNode = $fieldNode?.[ 0 ] || $fieldNode;
 
-	if ( !isMediaField( fieldNode ) ) {
+	if ( ! isMediaField( fieldNode ) ) {
 		return current;
 	}
 
-	const fromDom = collectMediaFromDom( fieldNode );
-	if ( fromDom ) {
-		return fromDom;
-	}
+	bindRemoveHandler( fieldNode );
+	scheduleRefresh( fieldNode );
 
-	const fromCurrent = collectMediaFromCurrent( current );
-	if ( fromCurrent ) {
-		return fromCurrent;
-	}
-
-	return '';
+	return collectMediaFromDom( fieldNode );
 }

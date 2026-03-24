@@ -13,6 +13,7 @@ const {
 	      useRequestEvents,
 	      useCurrentAction,
 	      useUpdateCurrentAction,
+	      useMetaState,
       } = JetFBHooks;
 
 const {
@@ -155,6 +156,8 @@ function EditEvents( { events } ) {
 		select => select( 'jet-forms/events' ).getHelpMap(),
 	);
 
+
+
 	useEffect( () => {
 		if ( excludedEvents[currentAction.type] && currentAction.events.length ) {
 			const newCurrentActionEvents = currentAction.events.filter(
@@ -246,37 +249,77 @@ function EditFields() {
 }
 
 function EditConditions() {
-	let provideEvents       = useRequestEvents();
+	let provideEvents = useRequestEvents();
+
 	const { currentAction } = useCurrentAction();
 
-	if ( excludedEvents[ currentAction.type ] ) {
-		provideEvents = provideEvents.filter( item => !excludedEvents[ currentAction.type ].includes( item ) );
+	const [ gatewaysMeta ] = useMetaState( '_jf_gateways', {} );
+
+	const eventsByGateway = useSelect(
+		select => select( 'jet-forms/events' ).getEventValuesByGateway()
+	);
+
+	/**
+	 * NEW LOGIC (manual gateways mode only)
+	 *
+	 * Issue: https://github.com/Crocoblock/issues-tracker/issues/17484
+	 * See details here.
+	 *
+	 * If gateways mode is "manual", we append events
+	 * of the enabled (show_on_front) gateways
+	 * to the default provideEvents list.
+	 */
+	if (
+		gatewaysMeta?.mode === 'manual' &&
+		eventsByGateway &&
+		typeof eventsByGateway === 'object'
+	) {
+		const enabledGateways = Object.keys( eventsByGateway ).filter(
+			( gateway ) => !!gatewaysMeta?.[ gateway ]?.show_on_front
+		);
+
+		const extraEvents = enabledGateways.flatMap(
+			( gateway ) => eventsByGateway?.[ gateway ] ?? []
+		);
+
+		provideEvents = Array.from(
+			new Set( [ ...( provideEvents ?? [] ), ...extraEvents ] )
+		);
 	}
 
-	if ( 1 === provideEvents.length ) {
-		return <EditFields/>;
+	if ( excludedEvents?.[ currentAction.type ] ) {
+		const excluded = excludedEvents[ currentAction.type ];
+
+		provideEvents = ( provideEvents ?? [] ).filter(
+			( item ) => !excluded.includes( item )
+		);
 	}
 
-	return <>
-		<TabPanel
-			className="jfb-conditions-tab-panel"
-			initialTabName={ 'fields' }
-			tabs={ [
-				{
-					name: 'fields',
-					title: __( 'Fields comparison', 'jet-form-builder' ),
-					edit: <EditFields/>,
-				},
-				{
-					name: 'events',
-					title: __( 'Events match', 'jet-form-builder' ),
-					edit: <EditEvents events={ provideEvents }/>,
-				},
-			] }
-		>
-			{ tab => tab.edit }
-		</TabPanel>
-	</>;
+	if ( 1 === ( provideEvents?.length ?? 0 ) ) {
+		return <EditFields />;
+	}
+
+	return (<>
+			<TabPanel
+				className="jfb-conditions-tab-panel"
+				initialTabName={ 'fields' }
+				tabs={ [
+					{
+						name: 'fields',
+						title: __( 'Fields comparison', 'jet-form-builder' ),
+						edit: <EditFields />,
+					},
+					{
+						name: 'events',
+						title: __( 'Events match', 'jet-form-builder' ),
+						edit: <EditEvents events={ provideEvents } />,
+					},
+				] }
+			>
+				{ ( tab ) => tab.edit }
+			</TabPanel>
+		</>
+	);
 }
 
 export default EditConditions;

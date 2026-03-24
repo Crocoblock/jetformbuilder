@@ -191,4 +191,8 @@ class Controller extends \Jet_Form_Builder\Gateways\Base_Scenario_Gateway {
 		return $token;
 	}
 
+	public function required_credentials_fields(): array {
+		return array( 'client_id', 'secret' );
+	}
+
 }

@@ -1,0 +1,38 @@
+.wp-block-jet-forms-multi-gateway {
+
+  .jfb-multi-gateway__list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .jfb-multi-gateway__item {
+    display: grid !important;
+    grid-template-columns: 18px 1fr;
+    align-items: center;
+    column-gap: 10px;
+
+    width: 100%;
+    margin: 0;
+    text-align: left !important;
+
+    padding: 10px 12px;
+    border: 1px solid rgba(0,0,0,.12);
+    border-radius: 10px;
+
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .jfb-multi-gateway__item input[type="radio"] {
+    margin: 0 !important;
+    width: auto !important;
+    justify-self: start;
+  }
+
+  .jfb-multi-gateway__label {
+    margin: 0 !important;
+    width: auto !important;
+    text-align: left !important;
+    justify-self: start;
+  }
+}

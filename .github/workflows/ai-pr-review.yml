@@ -10,7 +10,7 @@ jobs:
 
     # Job-level environment
     env:
-      AI_REVIEW_MODEL: gpt-4.1-mini
+      AI_REVIEW_MODEL: gpt-5-mini
 
     permissions:
       contents: read           # to read the repo

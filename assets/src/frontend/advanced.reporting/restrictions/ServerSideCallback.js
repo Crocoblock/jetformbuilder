@@ -98,6 +98,11 @@ function ServerSideCallback() {
 			formData.append( '_jfb_validation_path[]', pathElement );
 		}
 
+		// Security: Include signature for SSR validation
+		if ( this.attrs._sig ) {
+			formData.set( '_jfb_validation_sig', this.attrs._sig );
+		}
+
 		return formData;
 	};
 

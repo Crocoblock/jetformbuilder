@@ -104,6 +104,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"generator_update_on_button_class": {
+			"type": "string",
+			"default": ""
+		},
 		"generator_cache_timeout": {
 			"type": "number",
 			"default": 60

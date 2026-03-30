@@ -208,6 +208,67 @@ abstract class Base_V2 extends Base {
 	}
 
 	/**
+	 * Returns the value type supported by auto-update context.
+	 *
+	 * Supported values:
+	 * - scalar: single-value fields only
+	 * - scalar_or_array: single-value and multi-value fields
+	 *
+	 * @return string
+	 */
+	public function get_auto_update_value_type(): string {
+		return 'scalar';
+	}
+
+	/**
+	 * Returns how the generator should behave when auto-update context is empty.
+	 *
+	 * Supported values:
+	 * - clear_on_empty: always clear dependent options
+	 * - fallback_to_static: always use static generator settings
+	 * - fallback_to_static_if_configured: use static settings only when a valid fallback exists
+	 *
+	 * @return string
+	 */
+	public function get_auto_update_empty_context_policy(): string {
+		return 'clear_on_empty';
+	}
+
+	/**
+	 * Whether the current generator settings provide a valid static fallback
+	 * for empty auto-update context.
+	 *
+	 * @param array $settings Parsed generator settings.
+	 *
+	 * @return bool
+	 */
+	public function has_auto_update_static_fallback( array $settings ): bool {
+		return false;
+	}
+
+	/**
+	 * Whether the frontend should clear options immediately when auto-update
+	 * context is empty for this field configuration.
+	 *
+	 * @param array $settings Parsed generator settings.
+	 *
+	 * @return bool
+	 */
+	public function should_clear_on_empty_auto_update_context( array $settings ): bool {
+		$policy = $this->get_auto_update_empty_context_policy();
+
+		if ( 'fallback_to_static' === $policy ) {
+			return false;
+		}
+
+		if ( 'fallback_to_static_if_configured' === $policy ) {
+			return ! $this->has_auto_update_static_fallback( $settings );
+		}
+
+		return true;
+	}
+
+	/**
 	 * Generate options with context from dependent fields.
 	 * Used when auto-update is triggered by another field's change.
 	 *
@@ -374,6 +435,8 @@ abstract class Base_V2 extends Base {
 			'schema'          => $this->get_settings_schema(),
 			'supports_update' => $this->supports_auto_update(),
 			'update_context'  => $this->get_auto_update_context_fields(),
+			'update_value_type' => $this->get_auto_update_value_type(),
+			'update_empty_context_policy' => $this->get_auto_update_empty_context_policy(),
 		);
 	}
 }

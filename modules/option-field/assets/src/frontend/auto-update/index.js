@@ -60,6 +60,14 @@ function observeDynamicFields( formNode ) {
 		return;
 	}
 
+	// Multi-step forms can fire after-init more than once for the same form.
+	// Avoid stacking multiple observers on one form instance.
+	if ( formNode.hasAttribute( 'data-jfb-au-observed' ) ) {
+		return;
+	}
+
+	formNode.setAttribute( 'data-jfb-au-observed', '1' );
+
 	const observer = new MutationObserver( ( mutations ) => {
 		mutations.forEach( ( mutation ) => {
 			mutation.removedNodes.forEach( ( node ) => {

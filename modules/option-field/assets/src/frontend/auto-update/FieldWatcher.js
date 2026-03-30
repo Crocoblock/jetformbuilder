@@ -89,7 +89,10 @@ class FieldWatcher {
 
 		// Prevent double-init: MutationObserver with subtree:true can fire
 		// multiple callbacks for one repeater row insertion.
-		const alreadyInitialized = fieldElement.hasAttribute( 'data-jfb-au-init' );
+		if ( fieldElement.hasAttribute( 'data-jfb-au-init' ) ) {
+			return;
+		}
+
 		fieldElement.setAttribute( 'data-jfb-au-init', '1' );
 
 		config.fieldKey = fieldKey;
@@ -112,15 +115,19 @@ class FieldWatcher {
 		// Auto-trigger initial update only when no button is configured.
 		// With a button, the user controls when to fetch — no automatic update.
 		// With requireAllFilled, skip if any listenTo field is empty.
-		if ( ! alreadyInitialized && ! config.updateOnButton && config.listenTo ) {
+		if ( ! config.updateOnButton && config.listenTo ) {
 			if ( config.requireAllFilled ) {
 				const context   = this.collectContext( config, formNode );
 				const allFilled = config.listenTo.every( ( fieldName ) => {
 					const val = context[ fieldName ];
-					return val !== undefined && val !== null && val !== '';
+					return this.isContextValueFilled( val );
 				} );
 
 				if ( allFilled ) {
+					this.debouncedUpdate( fieldKey, formNode );
+				} else if ( this.shouldClearOnEmptyContext( config ) ) {
+					this.optionsUpdater.updateOptions( fieldElement, [], formNode );
+				} else {
 					this.debouncedUpdate( fieldKey, formNode );
 				}
 			} else {
@@ -162,7 +169,9 @@ class FieldWatcher {
 			fieldName,
 			listenTo,
 			requireAllFilled: fieldElement.dataset.requireAllFilled === '1',
+			emptyContextAction: fieldElement.dataset.emptyContextAction || 'clear',
 			updateOnButton: fieldElement.dataset.updateOnButton || null,
+			updateOnButtonClass: fieldElement.dataset.updateOnButtonClass || '',
 			cacheTimeout: parseInt( fieldElement.dataset.cacheTimeout ) || 60,
 			formId: parseInt( fieldElement.dataset.formId ) || 0,
 		};
@@ -254,6 +263,8 @@ class FieldWatcher {
 
 		for ( const root of roots ) {
 			let el = root.querySelector( `[data-field-name="${ fieldName }"]` )
+				|| root.querySelector( `[name="${ fieldName }"]` )
+				|| root.querySelector( `[name="${ fieldName }[]"]` )
 				|| root.querySelector( `[name*="[${ fieldName }]"]` );
 
 			if ( el ) {
@@ -304,11 +315,12 @@ class FieldWatcher {
 		const targetElement = fieldData?.element || null;
 		const repeaterRow   = targetElement ? targetElement.closest( '.jet-form-builder-repeater__row' ) : null;
 		const sourceElement = this.findElementInScope( sourceFieldName, repeaterRow, formNode );
+		const forceDomWatch = sourceElement ? this.shouldUseDomWatch( sourceElement ) : false;
 
 		let sourceInput = null;
 
-		if ( sourceElement && window.JetFormBuilderMain?.inputData ) {
-			const actualName = sourceElement.getAttribute( 'name' ) || sourceFieldName;
+		if ( sourceElement && ! forceDomWatch && window.JetFormBuilderMain?.inputData ) {
+			const actualName = this.resolveActualName( sourceElement, sourceFieldName );
 
 			if ( window.JetFormBuilderMain.inputData.findInput ) {
 				sourceInput = window.JetFormBuilderMain.inputData.findInput( actualName, formNode ) ||
@@ -345,12 +357,11 @@ class FieldWatcher {
 		if ( ! sourceInput ) {
 			const el = sourceElement || this.findElementInScope( sourceFieldName, null, formNode );
 			if ( el ) {
-				sourceInput = this.createInputWrapperFromDOM( el.getAttribute( 'name' ) || sourceFieldName, formNode, el );
+				sourceInput = this.createInputWrapperFromDOM( this.resolveActualName( el, sourceFieldName ), formNode, el );
 			}
 		}
 
 		if ( ! sourceInput ) {
-			console.warn( `[JFB Auto-Update] Source field not found: ${ sourceFieldName }` );
 			return;
 		}
 
@@ -358,9 +369,156 @@ class FieldWatcher {
 		let watcher      = this.watchers.get( watcherKey );
 
 		if ( ! watcher ) {
-			const unwatch = sourceInput.value.watch( () => {
-				this.handleFieldChange( watcherKey, formNode );
-			} );
+			let unwatch;
+
+			if ( forceDomWatch ) {
+				let lastSerialized = null;
+				const domHandler = ( event ) => {
+					const eventTarget = event?.target;
+					if ( ! eventTarget || eventTarget.nodeType !== Node.ELEMENT_NODE ) {
+						return;
+					}
+
+					const run = () => {
+						const liveSourceElement = this.findElementInScope( sourceFieldName, repeaterRow, formNode );
+						if ( ! liveSourceElement ) {
+							return;
+						}
+
+						if ( ! this.isEventFromSourceField( eventTarget, liveSourceElement ) ) {
+							return;
+						}
+
+						const currentValue = this.readValueFromSourceElement( liveSourceElement );
+						const serialized   = JSON.stringify( currentValue );
+
+						if ( serialized === lastSerialized ) {
+							return;
+						}
+
+						lastSerialized = serialized;
+
+						this.handleFieldChange( watcherKey, formNode );
+					};
+
+					// "click" can fire before checked state is updated on custom controls.
+					if ( event.type === 'click' ) {
+						setTimeout( run, 0 );
+						return;
+					}
+
+					run();
+				};
+
+				formNode.addEventListener( 'change', domHandler, true );
+				formNode.addEventListener( 'input', domHandler, true );
+				formNode.addEventListener( 'click', domHandler, true );
+
+				const isAutocompleteSource = this.isAutocompleteSourceElement( sourceElement );
+				const isCalculatedSource   = this.isCalculatedSourceElement( sourceElement );
+				let $sourceElement         = null;
+				let select2Handler         = null;
+				let calculatedHandler      = null;
+				let calculatedNode         = null;
+				let calculatedObserver     = null;
+				let calculatedNativeHandler = null;
+
+				if ( window.jQuery && ( isAutocompleteSource || isCalculatedSource ) ) {
+					const liveSourceElement = this.findElementInScope( sourceFieldName, repeaterRow, formNode );
+					const sourceNode        = isAutocompleteSource
+						? ( liveSourceElement?.matches( 'select' )
+							? liveSourceElement
+							: liveSourceElement?.querySelector( 'select' ) )
+						: ( liveSourceElement?.matches( 'input.jet-form-builder__calculated-field-input' )
+							? liveSourceElement
+							: liveSourceElement?.querySelector( 'input.jet-form-builder__calculated-field-input' ) );
+
+					if ( sourceNode ) {
+						$sourceElement = window.jQuery( sourceNode );
+
+						if ( isAutocompleteSource ) {
+							select2Handler = () => {
+								const currentValue = this.readValueFromSourceElement( sourceNode );
+								const serialized   = JSON.stringify( currentValue );
+
+								if ( serialized === lastSerialized ) {
+									return;
+								}
+
+								lastSerialized = serialized;
+
+								this.handleFieldChange( watcherKey, formNode );
+							};
+
+							$sourceElement.on( 'select2:select select2:unselect', select2Handler );
+						}
+
+						if ( isCalculatedSource ) {
+							calculatedNode = sourceNode;
+							calculatedHandler = () => {
+								const currentValue = this.readValueFromSourceElement( sourceNode );
+								const serialized   = JSON.stringify( currentValue );
+
+								if ( serialized === lastSerialized ) {
+									return;
+								}
+
+								lastSerialized = serialized;
+
+								this.handleFieldChange( watcherKey, formNode );
+							};
+
+							$sourceElement.on( 'change', calculatedHandler );
+
+							calculatedNativeHandler = calculatedHandler;
+							sourceNode.addEventListener( 'change', calculatedNativeHandler );
+							sourceNode.addEventListener( 'input', calculatedNativeHandler );
+
+							const calculatedWrapper = sourceNode.closest( '.jet-form-builder__calculated-field' );
+							const calculatedValueNode = calculatedWrapper?.querySelector( '.jet-form-builder__calculated-field-val' );
+
+							if ( calculatedValueNode && window.MutationObserver ) {
+								calculatedObserver = new MutationObserver( () => {
+									calculatedHandler();
+								} );
+
+								calculatedObserver.observe( calculatedValueNode, {
+									childList: true,
+									characterData: true,
+									subtree: true,
+								} );
+							}
+						}
+					}
+				}
+
+				unwatch = () => {
+					formNode.removeEventListener( 'change', domHandler, true );
+					formNode.removeEventListener( 'input', domHandler, true );
+					formNode.removeEventListener( 'click', domHandler, true );
+
+					if ( $sourceElement && select2Handler ) {
+						$sourceElement.off( 'select2:select select2:unselect', select2Handler );
+					}
+
+					if ( $sourceElement && calculatedHandler ) {
+						$sourceElement.off( 'change', calculatedHandler );
+					}
+
+					if ( calculatedNode && calculatedNativeHandler ) {
+						calculatedNode.removeEventListener( 'change', calculatedNativeHandler );
+						calculatedNode.removeEventListener( 'input', calculatedNativeHandler );
+					}
+
+					if ( calculatedObserver ) {
+						calculatedObserver.disconnect();
+					}
+				};
+			} else {
+				unwatch = sourceInput.value.watch( () => {
+					this.handleFieldChange( watcherKey, formNode );
+				} );
+			}
 
 			watcher = {
 				unwatch,
@@ -407,26 +565,57 @@ class FieldWatcher {
 	 * @param {HTMLElement} formNode       Form element.
 	 */
 	watchButton( actionType, targetFieldKey, formNode ) {
-		const listenerKey = `${ actionType }::${ targetFieldKey }`;
+		const targetField = this.autoUpdateFields.get( targetFieldKey );
+		const buttonClass = targetField?.config?.updateOnButtonClass || '';
+		const listenerKey = `${ actionType }::${ buttonClass }::${ targetFieldKey }`;
 
 		if ( this.buttonListeners.has( listenerKey ) ) {
 			return;
 		}
 
-		const wrapper       = formNode.querySelector( `.jet-form-builder__action-button-wrapper[data-type="${ actionType }"]` );
+		const targetElement = targetField?.element || null;
+		const targetPage    = targetElement?.closest( '.jet-form-builder-page' ) || null;
+		const targetScopeSelectors = [];
+
+		if ( targetPage ) {
+			const pageNumber = parseInt( targetPage.dataset.page ) || 0;
+
+			if ( 'next' === actionType && pageNumber > 1 ) {
+				targetScopeSelectors.push(
+					`.jet-form-builder-page[data-page="${ pageNumber - 1 }"] .jet-form-builder__action-button-wrapper[data-type="${ actionType }"]`
+				);
+			} else if ( 'prev' === actionType && pageNumber > 0 ) {
+				targetScopeSelectors.push(
+					`.jet-form-builder-page[data-page="${ pageNumber + 1 }"] .jet-form-builder__action-button-wrapper[data-type="${ actionType }"]`
+				);
+			}
+
+			targetScopeSelectors.push(
+				`.jet-form-builder-page[data-page="${ targetPage.dataset.page }"] .jet-form-builder__action-button-wrapper[data-type="${ actionType }"]`
+			);
+		}
+
+		targetScopeSelectors.push(
+			`.jet-form-builder__action-button-wrapper[data-type="${ actionType }"]`
+		);
+
+		const wrapper = this.findActionButtonWrapper(
+			targetScopeSelectors,
+			buttonClass,
+			formNode
+		);
+
 		const buttonElement = wrapper ? wrapper.querySelector( 'button' ) : null;
 
 		if ( ! buttonElement ) {
-			console.warn( `[JFB Auto-Update] Action button not found for type: ${ actionType }` );
 			return;
 		}
 
 		let isProcessing = false;
 
 		const handler = async ( event ) => {
-			// Allow one synthetic click to pass through after options are refreshed.
-			if ( buttonElement.dataset.jfbAuBypassClick === '1' ) {
-				delete buttonElement.dataset.jfbAuBypassClick;
+			// Ignore programmatic re-clicks triggered after pre-update.
+			if ( ! event.isTrusted ) {
 				return;
 			}
 
@@ -443,16 +632,56 @@ class FieldWatcher {
 				await this.updateField( targetFieldKey, formNode );
 			} catch ( error ) {
 				// Safety net: never block original button action because of bad config/state.
-				console.warn( '[JFB Auto-Update] Pre-button update failed, continuing action:', error );
 			} finally {
 				isProcessing = false;
-				buttonElement.dataset.jfbAuBypassClick = '1';
 				buttonElement.click();
 			}
 		};
 
 		buttonElement.addEventListener( 'click', handler );
 		this.buttonListeners.set( listenerKey, { element: buttonElement, handler } );
+	}
+
+	normalizeButtonClassNames( buttonClass ) {
+		return ( buttonClass || '' )
+			.split( /\s+/ )
+			.map( ( token ) => token.trim().replace( /^\./, '' ) )
+			.filter( Boolean );
+	}
+
+	findActionButtonWrapper( selectors, buttonClass, formNode ) {
+		const classNames = this.normalizeButtonClassNames( buttonClass );
+
+		if ( classNames.length ) {
+			for ( const selector of selectors ) {
+				const wrappers = Array.from( formNode.querySelectorAll( selector ) );
+				const exactWrapper = wrappers.find( ( currentWrapper ) => {
+					const button = currentWrapper.querySelector( 'button' );
+
+					if ( ! button ) {
+						return false;
+					}
+
+					return classNames.every(
+						( className ) => button.classList.contains( className )
+					);
+				} );
+
+				if ( exactWrapper ) {
+					return exactWrapper;
+				}
+			}
+		}
+
+		for ( const selector of selectors ) {
+			const wrapper = formNode.querySelector( selector );
+
+			if ( wrapper ) {
+				return wrapper;
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -485,14 +714,18 @@ class FieldWatcher {
 				const allFilled = config.listenTo.every(
 					( fieldName ) => {
 						const val = context[ fieldName ];
-						return val !== undefined && val !== null && val !== '';
+						return this.isContextValueFilled( val );
 					}
 				);
 
 				if ( ! allFilled ) {
-					this.abortPreviousRequest( targetFieldName );
-					this.cacheManager.clearByField( config.fieldName );
-					this.optionsUpdater.updateOptions( fieldData.element, [], formNode );
+					if ( this.shouldClearOnEmptyContext( config ) ) {
+						this.abortPreviousRequest( targetFieldName );
+						// Keep cache entries so re-entering the same context can reuse TTL cache.
+						this.optionsUpdater.updateOptions( fieldData.element, [], formNode );
+					} else {
+						this.debouncedUpdate( targetFieldName, formNode );
+					}
 					return;
 				}
 			}
@@ -591,7 +824,6 @@ class FieldWatcher {
 		const { element, config } = fieldData;
 
 		const context = this.collectContext( config, formNode );
-
 		const cachedOptions = this.cacheManager.get(
 			config.generatorId,
 			context,
@@ -653,7 +885,7 @@ class FieldWatcher {
 				const sourceElement = this.findElementInScope( sourceFieldName, repeaterRow, formNode );
 
 				if ( sourceElement ) {
-					const actualName = sourceElement.getAttribute( 'name' ) || sourceFieldName;
+					const actualName = this.resolveActualName( sourceElement, sourceFieldName );
 					let input = null;
 
 					if ( window.JetFormBuilderMain?.inputData ) {
@@ -669,14 +901,270 @@ class FieldWatcher {
 						}
 					}
 
-					context[ sourceFieldName ] = input
+					const forceDomRead = this.shouldUseDomWatch( sourceElement );
+
+					context[ sourceFieldName ] = ( ! forceDomRead && input )
 						? input.value.current
-						: ( sourceElement.value || '' );
+						: this.readValueFromSourceElement( sourceElement );
+
 				}
 			} );
 		}
 
 		return context;
+	}
+
+	/**
+	 * Resolve field name to use with JetFormBuilder inputData lookup.
+	 *
+	 * Wrapper elements (checkbox/radio groups) don't have "name" attribute,
+	 * so we read it from the first nested input.
+	 *
+	 * @param {HTMLElement} sourceElement    Source field element or wrapper.
+	 * @param {string}      sourceFieldName  Fallback field name.
+	 *
+	 * @return {string}
+	 */
+	resolveActualName( sourceElement, sourceFieldName ) {
+		return sourceElement.getAttribute( 'name' )
+			|| sourceElement.querySelector( '[name]' )?.getAttribute( 'name' )
+			|| sourceFieldName;
+	}
+
+	/**
+	 * Read current value directly from a source element.
+	 * Supports checkbox/radio groups rendered as wrappers.
+	 *
+	 * @param {HTMLElement} sourceElement Source field element.
+	 *
+	 * @return {string|Array}
+	 */
+	readValueFromSourceElement( sourceElement ) {
+		const sourceName =
+			sourceElement.getAttribute( 'name' )
+			|| sourceElement.querySelector( '[name]' )?.getAttribute( 'name' )
+			|| null;
+		const root = sourceElement.closest( '.jet-form-builder-repeater__row' )
+			|| sourceElement.closest( 'form' )
+			|| document;
+
+		if ( sourceName ) {
+			const allNamedCheckboxes = Array.from(
+				root.querySelectorAll( `input[type="checkbox"][name="${ CSS.escape( sourceName ) }"]` )
+			);
+
+			if ( allNamedCheckboxes.length ) {
+				return allNamedCheckboxes
+					.filter( ( node ) => node.checked )
+					.map( ( node ) => node.value );
+			}
+
+			const allNamedRadios = Array.from(
+				root.querySelectorAll( `input[type="radio"][name="${ CSS.escape( sourceName ) }"]` )
+			);
+
+			if ( allNamedRadios.length ) {
+				const active = allNamedRadios.find( ( node ) => node.checked );
+				return active ? active.value : '';
+			}
+		}
+
+		const checkboxNodes = sourceElement.matches( 'input[type="checkbox"]' )
+			? [ sourceElement ]
+			: Array.from( sourceElement.querySelectorAll( 'input[type="checkbox"]' ) );
+
+		if ( checkboxNodes.length ) {
+			return checkboxNodes
+				.filter( ( node ) => node.checked )
+				.map( ( node ) => node.value );
+		}
+
+		const radioNodes = sourceElement.matches( 'input[type="radio"]' )
+			? [ sourceElement ]
+			: Array.from( sourceElement.querySelectorAll( 'input[type="radio"]' ) );
+
+		if ( radioNodes.length ) {
+			const active = radioNodes.find( ( node ) => node.checked );
+			return active ? active.value : '';
+		}
+
+		const selectMultiple = sourceElement.matches( 'select[multiple]' )
+			? sourceElement
+			: sourceElement.querySelector( 'select[multiple]' );
+
+		if ( selectMultiple ) {
+			return Array.from( selectMultiple.selectedOptions ).map( ( option ) => option.value );
+		}
+
+		return sourceElement.value || '';
+	}
+
+	/**
+	 * Detects field wrappers/elements that should be read/watched via DOM only.
+	 *
+	 * @param {HTMLElement} sourceElement Source field element.
+	 *
+	 * @return {boolean}
+	 */
+	isMultiChoiceSourceElement( sourceElement ) {
+		if ( ! sourceElement ) {
+			return false;
+		}
+
+		if ( sourceElement.matches( 'input[type="checkbox"], input[type="radio"], select[multiple]' ) ) {
+			return true;
+		}
+
+		return Boolean(
+			sourceElement.querySelector( 'input[type="checkbox"], input[type="radio"], select[multiple]' )
+		);
+	}
+
+	/**
+	 * Detects autocomplete select fields that should also be watched via DOM.
+	 *
+	 * @param {HTMLElement} sourceElement Source field element.
+	 *
+	 * @return {boolean}
+	 */
+	isAutocompleteSourceElement( sourceElement ) {
+		if ( ! sourceElement ) {
+			return false;
+		}
+
+		return sourceElement.matches( 'select.jet-select-autocomplete' )
+			|| Boolean(
+				sourceElement.querySelector( 'select.jet-select-autocomplete' )
+			);
+	}
+
+	/**
+	 * Detects calculated fields that trigger jQuery change instead of reactive watchers.
+	 *
+	 * @param {HTMLElement} sourceElement Source field element.
+	 *
+	 * @return {boolean}
+	 */
+	isCalculatedSourceElement( sourceElement ) {
+		if ( ! sourceElement ) {
+			return false;
+		}
+
+		return sourceElement.matches( 'input.jet-form-builder__calculated-field-input' )
+			|| Boolean(
+				sourceElement.querySelector( 'input.jet-form-builder__calculated-field-input' )
+			)
+			|| Boolean( sourceElement.closest( '.jet-form-builder__calculated-field' ) );
+	}
+
+	/**
+	 * Determine if the source field should be watched/read via DOM.
+	 *
+	 * @param {HTMLElement} sourceElement Source field element.
+	 *
+	 * @return {boolean}
+	 */
+	shouldUseDomWatch( sourceElement ) {
+		return this.isMultiChoiceSourceElement( sourceElement )
+			|| this.isAutocompleteSourceElement( sourceElement )
+			|| this.isCalculatedSourceElement( sourceElement );
+	}
+
+	/**
+	 * Check if event target belongs to the watched source field/group.
+	 *
+	 * @param {Element}     eventTarget       Event target.
+	 * @param {HTMLElement} liveSourceElement Source field element.
+	 *
+	 * @return {boolean}
+	 */
+	isEventFromSourceField( eventTarget, liveSourceElement ) {
+		if ( liveSourceElement.contains( eventTarget ) || liveSourceElement === eventTarget ) {
+			return true;
+		}
+
+		const eventName = this.resolveEventTargetName( eventTarget, liveSourceElement.closest( 'form' ) || document );
+		const sourceName =
+			liveSourceElement.getAttribute( 'name' )
+			|| liveSourceElement.querySelector( '[name]' )?.getAttribute( 'name' )
+			|| null;
+
+		return Boolean( eventName && sourceName && eventName === sourceName );
+	}
+
+	/**
+	 * Resolve source field name from any event target (input, wrapper, label).
+	 *
+	 * @param {Element}      eventTarget Event target.
+	 * @param {HTMLElement|Document} root Root node for label[for] lookup.
+	 *
+	 * @return {string|null}
+	 */
+	resolveEventTargetName( eventTarget, root ) {
+		if ( ! eventTarget ) {
+			return null;
+		}
+
+		if ( eventTarget.getAttribute && eventTarget.getAttribute( 'name' ) ) {
+			return eventTarget.getAttribute( 'name' );
+		}
+
+		const control = eventTarget.closest?.( 'input, select, textarea' );
+		if ( control?.getAttribute( 'name' ) ) {
+			return control.getAttribute( 'name' );
+		}
+
+		const label = eventTarget.closest?.( 'label' );
+		if ( ! label ) {
+			return null;
+		}
+
+		const nestedControl = label.querySelector( 'input, select, textarea' );
+		if ( nestedControl?.getAttribute( 'name' ) ) {
+			return nestedControl.getAttribute( 'name' );
+		}
+
+		const forId = label.getAttribute( 'for' );
+		if ( ! forId ) {
+			return null;
+		}
+
+		const linkedControl = root.querySelector( `#${ CSS.escape( forId ) }` );
+		return linkedControl?.getAttribute( 'name' ) || null;
+	}
+
+	/**
+	 * Check whether a context value should be treated as "filled".
+	 *
+	 * @param {*} value Context value.
+	 *
+	 * @return {boolean}
+	 */
+	isContextValueFilled( value ) {
+		if ( Array.isArray( value ) ) {
+			return value.some( ( item ) => item !== undefined && item !== null && item !== '' );
+		}
+
+		return value !== undefined && value !== null && value !== '';
+	}
+
+	/**
+	 * Whether the dependent field should be cleared immediately when a required
+	 * trigger field is empty.
+	 *
+	 * Multi-field mode keeps strict "Wait for All Fields" semantics. Generator
+	 * fallback policy is applied only to single trigger-field scenarios.
+	 *
+	 * @param {Object} config Field configuration.
+	 *
+	 * @return {boolean}
+	 */
+	shouldClearOnEmptyContext( config ) {
+		if ( Array.isArray( config?.listenTo ) && config.listenTo.length > 1 ) {
+			return true;
+		}
+
+		return ( config?.emptyContextAction || 'clear' ) === 'clear';
 	}
 
 	/**
@@ -713,16 +1201,24 @@ class FieldWatcher {
 	 * @return {Promise<Array>} Generated options.
 	 */
 	async fetchOptions( config, context, signal ) {
+		const previewNonce = new URLSearchParams( window.location.search ).get( 'jfb_preview_nonce' ) || '';
+		const headers      = {
+			'Content-Type': 'application/json',
+		};
+
+		if ( window.wpApiSettings?.nonce ) {
+			headers[ 'X-WP-Nonce' ] = window.wpApiSettings.nonce;
+		}
+
 		const response = await fetch( this.getUpdateEndpoint(), {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			headers,
 			body: JSON.stringify( {
 				form_id: config.formId,
 				field_name: config.fieldName,
 				generator_id: config.generatorId,
 				context,
+				preview_nonce: previewNonce,
 			} ),
 			signal,
 		} );

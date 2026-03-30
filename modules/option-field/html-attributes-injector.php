@@ -2,6 +2,8 @@
 
 namespace JFB_Modules\Option_Field;
 
+use Jet_Form_Builder\Generators\Base_V2;
+use Jet_Form_Builder\Generators\Registry;
 use Jet_Form_Builder\Blocks\Render\Base;
 
 // If this file is called directly, abort.
@@ -72,6 +74,7 @@ class Html_Attributes_Injector {
 
 		// Build data attributes array
 		$data_attrs = array();
+		$generator  = Registry::instance()->get( $args['generator_function'] );
 
 		// Core auto-update identification
 		$data_attrs['data-jfb-auto-update'] = '1';
@@ -103,6 +106,20 @@ class Html_Attributes_Injector {
 		// Button trigger configuration
 		if ( ! empty( $args['generator_update_on_button'] ) ) {
 			$data_attrs['data-update-on-button'] = esc_attr( $args['generator_update_on_button'] );
+		}
+
+		if ( ! empty( $args['generator_update_on_button_class'] ) ) {
+			$data_attrs['data-update-on-button-class'] = esc_attr( $args['generator_update_on_button_class'] );
+		}
+
+		if ( $generator instanceof Base_V2 ) {
+			$settings = ! empty( $args['generator_args'] ) && is_array( $args['generator_args'] )
+				? $generator->parse_generator_args( $args['generator_args'] )
+				: $generator->parse_settings( $args );
+
+			$data_attrs['data-empty-context-action'] = $generator->should_clear_on_empty_auto_update_context( $settings )
+				? 'clear'
+				: 'fallback';
 		}
 
 		// Cache timeout (in seconds)

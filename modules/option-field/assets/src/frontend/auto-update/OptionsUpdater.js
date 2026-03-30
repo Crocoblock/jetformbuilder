@@ -32,7 +32,7 @@ class OptionsUpdater {
 				this.updateChoiceOptions( fieldElement, options, fieldType, formNode );
 				break;
 			default:
-				console.warn( '[JFB Auto-Update] Unsupported field type:', fieldType );
+				break;
 		}
 	}
 
@@ -77,10 +77,15 @@ class OptionsUpdater {
 	 * @param {Array}             options       New options array.
 	 */
 	updateSelectOptions( selectElement, options ) {
-		if ( selectElement.classList.contains( 'jet-select-autocomplete' ) ) {
-			const $select = jQuery( selectElement );
+		const isAutocompleteSelect = selectElement.classList.contains( 'jet-select-autocomplete' );
+		const isAjaxAutocomplete   = isAutocompleteSelect && selectElement.hasAttribute( 'data-ajax--url' );
+		const $select              = isAutocompleteSelect ? jQuery( selectElement ) : null;
+		const hasSelect2           = Boolean( $select?.data( 'select2' ) );
 
-			if ( $select.data( 'select2' ) ) {
+		if (
+			isAjaxAutocomplete
+		) {
+			if ( hasSelect2 ) {
 				$select.val( null ).trigger( 'change' );
 				return;
 			}
@@ -90,9 +95,20 @@ class OptionsUpdater {
 		const currentValues = isMultiple
 			? Array.from( selectElement.selectedOptions ).map( ( opt ) => opt.value )
 			: [ selectElement.value ];
+		const hadSelection  = currentValues.some( Boolean );
+		const nextValues    = [];
+		let fallbackValue   = '';
 
-		const firstOption      = selectElement.options[ 0 ];
-		const placeholderOption = ( firstOption && firstOption.value === '' )
+		const firstOption = selectElement.options[ 0 ];
+		const hasPlaceholderOption = Boolean(
+			firstOption
+			&& firstOption.value === ''
+			&& (
+				firstOption.disabled
+				|| firstOption.textContent.trim() !== ''
+			)
+		);
+		const placeholderOption = hasPlaceholderOption
 			? firstOption.cloneNode( true )
 			: null;
 
@@ -107,8 +123,13 @@ class OptionsUpdater {
 			optionElement.value = option.value || option.val || '';
 			optionElement.textContent = option.label || option.value || '';
 
+			if ( ! fallbackValue && optionElement.value !== '' ) {
+				fallbackValue = optionElement.value;
+			}
+
 			if ( currentValues.includes( optionElement.value ) ) {
 				optionElement.selected = true;
+				nextValues.push( optionElement.value );
 			}
 
 			if ( option.calculate ) {
@@ -117,6 +138,61 @@ class OptionsUpdater {
 
 			selectElement.appendChild( optionElement );
 		} );
+
+		const hasMatchingSelection = nextValues.length > 0;
+
+		if ( isMultiple ) {
+			Array.from( selectElement.options ).forEach( ( option ) => {
+				option.selected = nextValues.includes( option.value );
+			} );
+		} else if ( hasMatchingSelection ) {
+			selectElement.value = nextValues[ 0 ];
+		} else if ( ! placeholderOption && selectElement.options.length ) {
+			selectElement.selectedIndex = 0;
+			if ( selectElement.options[ 0 ] ) {
+				selectElement.options[ 0 ].selected = true;
+			}
+			if ( fallbackValue ) {
+				selectElement.value = fallbackValue;
+			}
+		} else if ( placeholderOption ) {
+			selectElement.value = '';
+		} else {
+			selectElement.selectedIndex = -1;
+		}
+
+		if ( isAutocompleteSelect && hasSelect2 ) {
+			$select.select2( 'destroy' );
+
+			const select2Options = wp.hooks.applyFilters(
+				'jet.fb.select_autocomplete.options',
+				{
+					dropdownParent: $select.parent(),
+					width: '100%',
+				},
+				$select
+			);
+
+			$select.select2( select2Options );
+
+			if ( isMultiple ) {
+				$select.val( nextValues ).trigger( 'change' );
+			} else if ( hasMatchingSelection ) {
+				$select.val( nextValues[ 0 ] ).trigger( 'change' );
+			} else if ( ! placeholderOption && selectElement.options.length ) {
+				const nextValue = fallbackValue || selectElement.options[ 0 ].value;
+
+				Array.from( selectElement.options ).forEach( ( option ) => {
+					option.selected = option.value === nextValue;
+				} );
+				selectElement.value = nextValue;
+
+				$select.val( nextValue ).trigger( 'change' );
+			} else {
+				$select.val( null ).trigger( 'change' );
+			}
+
+		}
 
 		selectElement.dispatchEvent( new Event( 'change', { bubbles: true } ) );
 	}
@@ -139,7 +215,6 @@ class OptionsUpdater {
 		// Get field name from data attribute (most reliable source)
 		const fieldName = containerElement.getAttribute( 'data-field-name' );
 		if ( ! fieldName ) {
-			console.warn( '[JFB Auto-Update] Could not find field name on container' );
 			return;
 		}
 

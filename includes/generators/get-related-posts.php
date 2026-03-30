@@ -62,9 +62,9 @@ class Get_Related_Posts extends Base_V2 {
 				'label'   => __( 'Filter By', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
-					array( 'value' => 'meta_field',  'label' => 'Meta Field — post stores the parent value in a custom field' ),
-					array( 'value' => 'post_parent', 'label' => 'Post Parent — post is a child of the selected item' ),
-					array( 'value' => 'taxonomy',    'label' => 'Taxonomy Term — post belongs to the selected term' ),
+					array( 'value' => 'meta_field',  'label' => 'Match by meta key' ),
+					array( 'value' => 'post_parent', 'label' => 'Match by WordPress parent post' ),
+					array( 'value' => 'taxonomy',    'label' => 'Match by taxonomy term' ),
 				),
 				'help'    => __( 'How the listed posts are connected to the value from the watched field.', 'jet-form-builder' ),
 			),
@@ -88,6 +88,16 @@ class Get_Related_Posts extends Base_V2 {
 				'help'        => __( 'Static value to filter by.', 'jet-form-builder' ),
 				'condition'   => array(
 					'relation_type!' => 'post_parent'
+				),
+			),
+			'parent_post_id' => array(
+				'type'      => 'string',
+				'default'   => '',
+				'label'     => __( 'Parent Post ID', 'jet-form-builder' ),
+				'control'   => 'text',
+				'help'      => __( 'Static or dynamic parent post ID used to load child posts when auto-update is not active. Enter `current_post_id` to load child posts of the current post.', 'jet-form-builder' ),
+				'condition' => array(
+					'relation_type' => 'post_parent'
 				),
 			),
 			'value_field'    => array(
@@ -171,9 +181,48 @@ class Get_Related_Posts extends Base_V2 {
 		return array(
 			array(
 				'single'      => true,
-				'description' => __( 'The watched field\'s value overrides the static "Filter Value" above. When the watched field is empty, this list will also be empty.', 'jet-form-builder' ),
+				'description' => __( 'The Trigger Field value overrides the static filter above. If the Trigger Field is empty, the static filter is used when configured. Otherwise, this list will be empty.', 'jet-form-builder' ),
+				'example'     => __( 'Select the field that controls this list.', 'jet-form-builder' ),
 			),
 		);
+	}
+
+	/**
+	 * Returns the auto-update value type supported by this generator.
+	 *
+	 * @return string
+	 */
+	public function get_auto_update_value_type(): string {
+		return 'scalar';
+	}
+
+	/**
+	 * Empty trigger may fall back to static filter settings when configured.
+	 *
+	 * @return string
+	 */
+	public function get_auto_update_empty_context_policy(): string {
+		return 'fallback_to_static_if_configured';
+	}
+
+	/**
+	 * Whether current related-posts settings provide a valid static fallback.
+	 *
+	 * @param array $settings Parsed generator settings.
+	 *
+	 * @return bool
+	 */
+	public function has_auto_update_static_fallback( array $settings ): bool {
+		$relation_type = $settings['relation_type'] ?? 'meta_field';
+		$filter_value  = $this->resolve_source_value( $this->get_static_source_value( $settings ) );
+
+		if ( 'post_parent' === $relation_type ) {
+			return null !== $filter_value && '' !== $filter_value;
+		}
+
+		$relation_key = trim( (string) ( $settings['relation_key'] ?? '' ) );
+
+		return '' !== $relation_key && null !== $filter_value && '' !== $filter_value;
 	}
 
 	/**
@@ -186,12 +235,26 @@ class Get_Related_Posts extends Base_V2 {
 	 */
 	public function generate_with_context( array $settings, array $context = array() ): array {
 		if ( empty( $context ) ) {
-			// No context yet — watched field is empty, return nothing.
+			if ( $this->has_auto_update_static_fallback( $settings ) ) {
+				$settings['_related_value'] = $this->get_static_source_value( $settings );
+				return $this->generate( $settings );
+			}
+
 			return array();
 		}
 
 		// Take the first context value as the relation source.
 		$settings['_related_value'] = reset( $context );
+		$source_value               = $this->resolve_source_value( $settings['_related_value'] );
+
+		if ( null === $source_value || '' === $source_value ) {
+			if ( $this->has_auto_update_static_fallback( $settings ) ) {
+				$settings['_related_value'] = $this->get_static_source_value( $settings );
+				return $this->generate( $settings );
+			}
+
+			return array();
+		}
 
 		return $this->generate( $settings );
 	}
@@ -206,12 +269,18 @@ class Get_Related_Posts extends Base_V2 {
 	public function generate( $args ) {
 		$post_type     = sanitize_key( $args['post_type'] ?? 'post' );
 		$relation_type = $args['relation_type'] ?? 'meta_field';
+		$raw_source_value = $args['_related_value'] ?? (
+			'post_parent' === $relation_type
+				? ( $args['parent_post_id'] ?? null )
+				: ( $args['relation_key_value'] ?? null )
+		);
 
-		// _related_value comes from auto-update context; relation_key_value is the static fallback.
-		$source_value = $args['_related_value'] ?? ( $args['relation_key_value'] ?? null );
+		// _related_value comes from auto-update context.
+		// Static fallback depends on the selected relation type.
+		$source_value = $this->resolve_source_value( $raw_source_value );
 
-		// If the relation requires a key and there is no source value at all, return nothing.
-		if ( 'post_parent' !== $relation_type && null === $source_value ) {
+		// If the relation filter is configured but the source value is empty, return nothing.
+		if ( 'post_parent' !== $relation_type && ( null === $source_value || '' === $source_value ) ) {
 			$relation_key = $args['relation_key'] ?? '';
 			if ( $relation_key ) {
 				return array();
@@ -242,6 +311,10 @@ class Get_Related_Posts extends Base_V2 {
 					break;
 
 				case 'post_parent':
+					if ( '' !== (string) $raw_source_value && ! is_numeric( $source_value ) ) {
+						return array();
+					}
+
 					$query_args['post_parent'] = intval( $source_value );
 					break;
 
@@ -271,5 +344,79 @@ class Get_Related_Posts extends Base_V2 {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Resolve dynamic/static source value before applying filters.
+	 *
+	 * @param mixed $value Raw source value from settings or context.
+	 *
+	 * @return string|null
+	 */
+	private function resolve_source_value( $value ): ?string {
+		if ( null === $value ) {
+			return null;
+		}
+
+		if ( is_array( $value ) ) {
+			$value = reset( $value );
+		}
+
+		$value = trim( (string) $value );
+
+		if ( '' === $value ) {
+			return '';
+		}
+
+		return $this->resolve_special_source_alias( $value );
+	}
+
+	/**
+	 * Resolve simple aliases for current post context.
+	 *
+	 * @param string $value Raw or unresolved source value.
+	 *
+	 * @return string
+	 */
+	private function resolve_special_source_alias( string $value ): string {
+		if ( 'current_post_id' !== $value ) {
+			return $value;
+		}
+
+		$current_post_id = $this->get_current_post_id();
+
+		return $current_post_id ? (string) $current_post_id : '';
+	}
+
+	/**
+	 * Get current post ID for frontend render and AJAX fallback.
+	 *
+	 * @return int
+	 */
+	private function get_current_post_id(): int {
+		global $post;
+
+		if ( ! empty( $post->ID ) ) {
+			return absint( $post->ID );
+		}
+
+		if ( wp_doing_ajax() ) {
+			return absint( url_to_postid( wp_get_referer() ) );
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Get static fallback source value from generator settings.
+	 *
+	 * @param array $settings Parsed generator settings.
+	 *
+	 * @return mixed
+	 */
+	private function get_static_source_value( array $settings ) {
+		return 'post_parent' === ( $settings['relation_type'] ?? 'meta_field' )
+			? ( $settings['parent_post_id'] ?? null )
+			: ( $settings['relation_key_value'] ?? null );
 	}
 }

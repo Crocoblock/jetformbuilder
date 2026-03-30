@@ -198,7 +198,8 @@ function GeneratorArgsControls( { generatorId, schema, attributes, setAttributes
  */
 export function GeneratorSettings( props ) {
 	const { attributes, setAttributes, editProps = {} } = props;
-	const { generator_function: generatorId } = attributes;
+	const rawGeneratorId = attributes.generator_function || '';
+	const generatorId    = '0' === String( rawGeneratorId ) ? '' : rawGeneratorId;
 
 	const [ errors, setErrors ] = useState( {} );
 
@@ -209,6 +210,7 @@ export function GeneratorSettings( props ) {
 	const currentSchema     = generatorData.schema ?? {};
 	const supportsUpdate    = generatorData.supports_update ?? false;
 	const contextFields     = generatorData.update_context ?? [];
+	const updateValueType   = generatorData.update_value_type ?? 'scalar';
 	const isLegacyGenerator = generatorData.legacy === true;
 
 	const CustomControls = getGeneratorControls( generatorId );
@@ -232,7 +234,7 @@ export function GeneratorSettings( props ) {
 	 */
 	const handleGeneratorChange = ( newGeneratorId ) => {
 		setAttributes( {
-			generator_function: newGeneratorId,
+			generator_function: '0' === String( newGeneratorId ) ? '' : newGeneratorId,
 			generator_args: {}, // Clear args when changing generator
 			generator_field: '', // Clear legacy field too
 		} );
@@ -300,6 +302,7 @@ export function GeneratorSettings( props ) {
 						setAttributes={ setAttributes }
 						supportsUpdate={ supportsUpdate }
 						contextFields={ contextFields }
+						updateValueType={ updateValueType }
 					/>
 				</Fragment>
 			) }

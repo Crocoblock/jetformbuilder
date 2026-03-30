@@ -74,9 +74,28 @@ class Get_From_DB extends Base_V2 {
 		return array(
 			array(
 				'single'      => true,
-				'description' => __( 'The watched field value overrides the static "Meta Key" setting. When the watched field value is empty, the static "Meta Key" setting is used.', 'jet-form-builder' ),
+				'description' => __( 'The Trigger Field value is used as the Meta Key and overrides the static setting above. If the Trigger Field is empty, the static Meta Key is used.', 'jet-form-builder' ),
+				'example'     => __( 'Choose the field whose value will be used as the dynamic Meta Key.', 'jet-form-builder' ),
 			),
 		);
+	}
+
+	/**
+	 * Returns the auto-update value type supported by this generator.
+	 *
+	 * @return string
+	 */
+	public function get_auto_update_value_type(): string {
+		return 'scalar';
+	}
+
+	/**
+	 * Empty trigger should fall back to the static Meta Key setting.
+	 *
+	 * @return string
+	 */
+	public function get_auto_update_empty_context_policy(): string {
+		return 'fallback_to_static';
 	}
 
 	/**

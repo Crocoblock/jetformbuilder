@@ -73,10 +73,11 @@ class Generator_Update_Endpoint extends Rest_Api_Endpoint_Base {
 	public function run_callback( \WP_REST_Request $request ) {
 		$body = $request->get_json_params();
 
-		$form_id      = isset( $body['form_id'] ) ? absint( $body['form_id'] ) : 0;
-		$field_name   = isset( $body['field_name'] ) ? sanitize_text_field( $body['field_name'] ) : '';
-		$generator_id = isset( $body['generator_id'] ) ? sanitize_text_field( $body['generator_id'] ) : '';
-		$context      = isset( $body['context'] ) && is_array( $body['context'] ) ? $body['context'] : array();
+		$form_id       = isset( $body['form_id'] ) ? absint( $body['form_id'] ) : 0;
+		$field_name    = isset( $body['field_name'] ) ? sanitize_text_field( $body['field_name'] ) : '';
+		$generator_id  = isset( $body['generator_id'] ) ? sanitize_text_field( $body['generator_id'] ) : '';
+		$preview_nonce = isset( $body['preview_nonce'] ) ? sanitize_text_field( $body['preview_nonce'] ) : '';
+		$context       = isset( $body['context'] ) && is_array( $body['context'] ) ? $body['context'] : array();
 
 		if ( ! $form_id ) {
 			return new \WP_REST_Response(
@@ -85,9 +86,8 @@ class Generator_Update_Endpoint extends Rest_Api_Endpoint_Base {
 			);
 		}
 
-		// Validate form exists and is published.
-		$form_post = get_post( $form_id );
-		if ( ! $form_post || 'jet-form-builder' !== $form_post->post_type || 'publish' !== $form_post->post_status ) {
+		$form_post = $this->resolve_form_post( $form_id, $preview_nonce );
+		if ( ! $form_post ) {
 			return new \WP_REST_Response(
 				array( 'success' => false, 'message' => __( 'Invalid form ID.', 'jet-form-builder' ) ),
 				404
@@ -158,8 +158,6 @@ class Generator_Update_Endpoint extends Rest_Api_Endpoint_Base {
 				200
 			);
 		} catch ( \Exception $e ) {
-			error_log( '[JFB Generator] Error for form ' . $form_id . ', field ' . $field_name . ': ' . $e->getMessage() );
-
 			return new \WP_REST_Response(
 				array( 'success' => false, 'message' => __( 'Failed to generate options.', 'jet-form-builder' ) ),
 				500
@@ -202,6 +200,46 @@ class Generator_Update_Endpoint extends Rest_Api_Endpoint_Base {
 		}
 
 		return $block['attrs'];
+	}
+
+	/**
+	 * Resolve form post for regular frontend and preview requests.
+	 *
+	 * Published forms are accepted directly.
+	 * Revisions are accepted only in preview mode with a valid nonce and edit capability.
+	 *
+	 * @param int    $form_id       Requested form/revision ID.
+	 * @param string $preview_nonce Preview nonce from request body.
+	 *
+	 * @return \WP_Post|null
+	 */
+	private function resolve_form_post( int $form_id, string $preview_nonce ): ?\WP_Post {
+		$form_post = get_post( $form_id );
+
+		if ( $form_post && 'jet-form-builder' === $form_post->post_type && 'publish' === $form_post->post_status ) {
+			return $form_post;
+		}
+
+		if ( ! $form_post || 'revision' !== $form_post->post_type ) {
+			return null;
+		}
+
+		if ( empty( $preview_nonce ) || ! wp_verify_nonce( $preview_nonce, 'jfb-preview-form' ) ) {
+			return null;
+		}
+
+		$parent_form_id = (int) $form_post->post_parent;
+		$parent_form    = $parent_form_id ? get_post( $parent_form_id ) : null;
+
+		if ( ! $parent_form || 'jet-form-builder' !== $parent_form->post_type ) {
+			return null;
+		}
+
+		if ( ! current_user_can( 'edit_jet_fb_form', $parent_form_id ) ) {
+			return null;
+		}
+
+		return $form_post;
 	}
 
 	/**

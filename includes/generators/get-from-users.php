@@ -127,10 +127,28 @@ class Get_From_Users extends Base_V2 {
 		return array(
 			array(
 				'single'      => true,
-				'description' => __( 'When the watched field has a value, it overrides the static "Filter by Roles" setting. If the watched field is empty, the static roles setting is used.', 'jet-form-builder' ),
-				'example'     => __( 'Watched field value should be a role slug, e.g.: administrator, editor, subscriber', 'jet-form-builder' ),
+				'description' => __( 'The Trigger Field value overrides the static "Filter by Roles" setting above. If the Trigger Field is empty, the static roles are used.', 'jet-form-builder' ),
+				'example'     => __( 'Select the field that returns one or more user role slugs, for example: administrator, editor, subscriber.', 'jet-form-builder' ),
 			),
 		);
+	}
+
+	/**
+	 * Returns the auto-update value type supported by this generator.
+	 *
+	 * @return string
+	 */
+	public function get_auto_update_value_type(): string {
+		return 'scalar_or_array';
+	}
+
+	/**
+	 * Empty trigger should fall back to the static roles configuration.
+	 *
+	 * @return string
+	 */
+	public function get_auto_update_empty_context_policy(): string {
+		return 'fallback_to_static';
 	}
 
 	/**
@@ -144,9 +162,27 @@ class Get_From_Users extends Base_V2 {
 	 */
 	public function generate_with_context( array $settings, array $context = array() ): array {
 		if ( ! empty( $context ) ) {
-			$role = sanitize_key( reset( $context ) );
-			if ( $role ) {
-				$settings['roles'] = array( $role );
+			$context_value = reset( $context );
+
+			// Support both single role (scalar) and multi-role (checkbox/multi-select array).
+			if ( is_array( $context_value ) ) {
+				$roles = array_filter(
+					array_map(
+						static function ( $role ) {
+							return sanitize_key( (string) $role );
+						},
+						$context_value
+					)
+				);
+
+				if ( ! empty( $roles ) ) {
+					$settings['roles'] = array_values( $roles );
+				}
+			} else {
+				$role = sanitize_key( (string) $context_value );
+				if ( $role ) {
+					$settings['roles'] = array( $role );
+				}
 			}
 		}
 

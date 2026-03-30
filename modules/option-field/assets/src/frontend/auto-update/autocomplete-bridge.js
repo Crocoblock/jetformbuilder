@@ -52,11 +52,50 @@ function collectContext( listenTo, formNode ) {
 
 	listenTo.forEach( ( fieldName ) => {
 		const el = formNode.querySelector( `[data-field-name="${ fieldName }"]` )
-			|| formNode.querySelector( `[name="${ fieldName }"]` );
+			|| formNode.querySelector( `[name="${ fieldName }"]` )
+			|| formNode.querySelector( `[name="${ fieldName }[]"]` )
+			|| formNode.querySelector( `[name*="[${ fieldName }]"]` );
 
-		if ( el ) {
-			context[ fieldName ] = el.value || '';
+		if ( ! el ) {
+			return;
 		}
+
+		const actualName = el.getAttribute( 'name' )
+			|| el.querySelector( '[name]' )?.getAttribute( 'name' )
+			|| fieldName;
+
+		let input = null;
+
+		if ( window.JetFormBuilderMain?.inputData ) {
+			input = window.JetFormBuilderMain.inputData.findInput?.( actualName, formNode )
+				|| window.JetFormBuilderMain.inputData.findInput?.( fieldName, formNode )
+				|| window.JetFormBuilderMain.inputData.getInput?.( actualName, formNode )
+				|| window.JetFormBuilderMain.inputData.getInput?.( fieldName, formNode );
+
+			if ( ! input && window.JetFormBuilderMain.inputData.getAll ) {
+				const allInputs = window.JetFormBuilderMain.inputData.getAll( formNode ) || [];
+				input = allInputs.find( ( current ) => current.name === actualName )
+					|| allInputs.find( ( current ) => current.name === fieldName );
+			}
+		}
+
+		if ( input ) {
+			context[ fieldName ] = input.value.current;
+			return;
+		}
+
+		const selectMultiple = el.matches( 'select[multiple]' )
+			? el
+			: el.querySelector( 'select[multiple]' );
+
+		if ( selectMultiple ) {
+			context[ fieldName ] = Array.from( selectMultiple.selectedOptions ).map(
+				( option ) => option.value
+			);
+			return;
+		}
+
+		context[ fieldName ] = el.value || '';
 	} );
 
 	return context;
@@ -111,7 +150,6 @@ addFilter(
 
 			// Collect current values from dependent fields and add as context
 			const context = collectContext( listenTo, formNode );
-
 			data.context = JSON.stringify( context );
 
 			return data;

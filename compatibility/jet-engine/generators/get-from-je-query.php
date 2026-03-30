@@ -112,12 +112,7 @@ class Get_From_Je_Query extends Base_V2 {
 	 * @return array
 	 */
 	private function get_queries_for_select(): array {
-		$options = array(
-			array(
-				'value' => '',
-				'label' => __( '-- Select Query --', 'jet-form-builder' ),
-			),
-		);
+		$options = array();
 
 		if ( ! class_exists( Query_Manager::class ) ) {
 			return $options;
@@ -213,10 +208,28 @@ class Get_From_Je_Query extends Base_V2 {
 	public function get_auto_update_context_fields(): array {
 		return array(
 			array(
-				'description' => __( 'The selected value from "Watch These Fields" can be used in JetEngine Query via dynamic tags.', 'jet-form-builder' ),
-				'example'     => __( 'Use "JFB Update Field - Form Field Value" dynamic tag in your query.', 'jet-form-builder' ),
+				'description' => __( 'You can pass the Trigger Field value into your JetEngine Query.', 'jet-form-builder' ),
+				'example'     => __( 'In Query Builder, use the Dynamic Tag: "JFB Update Field - Form Field Value".', 'jet-form-builder' ),
 			),
 		);
+	}
+
+	/**
+	 * Returns the auto-update value type supported by this generator.
+	 *
+	 * @return string
+	 */
+	public function get_auto_update_value_type(): string {
+		return 'scalar';
+	}
+
+	/**
+	 * Empty trigger should fall back to the static query configuration.
+	 *
+	 * @return string
+	 */
+	public function get_auto_update_empty_context_policy(): string {
+		return 'fallback_to_static';
 	}
 
 	/**

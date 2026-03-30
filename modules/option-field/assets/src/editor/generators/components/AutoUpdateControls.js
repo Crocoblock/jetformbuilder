@@ -11,15 +11,16 @@ import './auto-update-controls.pcss';
 
 const { ToggleControl, SelectControl, TextControl, Notice } = wp.components;
 const { __ } = wp.i18n;
-const { Fragment, useMemo } = wp.element;
-const { select } = wp.data;
+const { Fragment, useEffect, useMemo } = wp.element;
+const { useSelect } = wp.data;
 /**
  * Get data fields from block editor (excludes structural and button blocks).
  *
+ * @param {Array} blocks Block list from editor store.
+ *
  * @return {Array} Array of { name, label, type } objects.
  */
-function getFormFields() {
-	const blocks = select( 'core/block-editor' )?.getBlocks() ?? [];
+function getFormFields( blocks = [] ) {
 	const fields = [];
 
 	const excludedBlocks = [
@@ -41,6 +42,8 @@ function getFormFields() {
 					name: block.attributes.name,
 					label: block.attributes.label || block.attributes.name,
 					type: block.name,
+					multiple: Boolean( block.attributes?.multiple ),
+					allowMultiple: Boolean( block.attributes?.allow_multiple ),
 				} );
 			}
 
@@ -54,6 +57,44 @@ function getFormFields() {
 	return fields;
 }
 
+function isMultiValueField( field ) {
+	if ( ! field ) {
+		return false;
+	}
+
+	return [
+		'jet-forms/checkbox-field',
+	].includes( field.type )
+		|| field.multiple
+		|| field.allowMultiple;
+}
+
+function isUnsupportedAutoUpdateField( field ) {
+	if ( ! field ) {
+		return true;
+	}
+
+	return [
+		'jet-forms/repeater-field',
+		'jet-forms/media-field',
+		'jet-forms/signature-field',
+		'jet-forms/drag-and-drop-file-upload',
+		'jet-forms/check-in-out',
+	].includes( field.type );
+}
+
+function supportsValueType( field, updateValueType = 'scalar' ) {
+	if ( isUnsupportedAutoUpdateField( field ) ) {
+		return false;
+	}
+
+	if ( 'scalar_or_array' === updateValueType ) {
+		return true;
+	}
+
+	return ! isMultiValueField( field );
+}
+
 /**
  * Get action buttons (jet-forms/submit-field) excluding action_type="submit".
  *
@@ -61,21 +102,26 @@ function getFormFields() {
  * We store action_type as the value so the frontend can find the button via
  * [data-type="next"] selector on the wrapper element.
  *
+ * @param {Array} blocks Block list from editor store.
+ *
  * @return {Array} Array of { actionType, label } objects.
  */
-function getActionButtons() {
-	const blocks  = select( 'core/block-editor' )?.getBlocks() ?? [];
+function getActionButtons( blocks = [] ) {
 	const buttons = [];
 
 	const extractButtons = ( blocksList ) => {
 		blocksList.forEach( ( block ) => {
 			if ( block.name === 'jet-forms/submit-field' ) {
-				const actionType = block.attributes?.action_type ?? 'submit';
+				const actionType     = block.attributes?.action_type ?? 'submit';
+				const rawButtonClass = block.attributes?.class_name || block.attributes?.className || '';
+				const buttonClass    = rawButtonClass.trim();
 
 				if ( actionType !== 'submit' ) {
 					buttons.push( {
+						id: block.clientId,
 						actionType,
 						label: block.attributes?.label || actionType,
+						buttonClass,
 					} );
 				}
 			}
@@ -101,7 +147,13 @@ function getActionButtons() {
  *
  * @return {JSX.Element|null} Controls or null if not supported.
  */
-function AutoUpdateControls( { attributes, setAttributes, supportsUpdate, contextFields = [] } ) {
+function AutoUpdateControls( {
+	attributes,
+	setAttributes,
+	supportsUpdate,
+	contextFields = [],
+	updateValueType = 'scalar',
+} ) {
 	if ( ! supportsUpdate ) {
 		return null;
 	}
@@ -111,6 +163,7 @@ function AutoUpdateControls( { attributes, setAttributes, supportsUpdate, contex
 		generator_listen_field: listenField = '',
 		generator_require_all_filled: requireAllFilled = false,
 		generator_update_on_button: updateOnButton = '',
+		generator_update_on_button_class: updateOnButtonClass = '',
 		generator_cache_timeout: cacheTimeout = 60,
 	} = attributes;
 
@@ -122,11 +175,22 @@ function AutoUpdateControls( { attributes, setAttributes, supportsUpdate, contex
 	// If any context hint declares single: true, restrict "Watch These Fields" to single select.
 	const singleListenField = contextFields.some( ( hint ) => hint.single );
 
-	const dataFields    = useMemo( () => getFormFields(), [] );
-	const actionButtons = useMemo( () => getActionButtons(), [] );
+	const blocks = useSelect(
+		( selectStore ) => selectStore( 'core/block-editor' )?.getBlocks() ?? [],
+		[]
+	);
+	const dataFields    = useMemo( () => getFormFields( blocks ), [ blocks ] );
+	const actionButtons = useMemo( () => getActionButtons( blocks ), [ blocks ] );
+	const currentFieldName = attributes?.name || '';
+	const availableFields = useMemo(
+		() => dataFields.filter(
+			( field ) => field.name !== currentFieldName && supportsValueType( field, updateValueType )
+		),
+		[ currentFieldName, dataFields, updateValueType ]
+	);
 
 	const fieldOptions = useMemo( () => {
-		const opts = dataFields.map( ( field ) => ( {
+		const opts = availableFields.map( ( field ) => ( {
 			value: field.name,
 			label: `${ field.label } (${ field.name })`,
 		} ) );
@@ -140,17 +204,79 @@ function AutoUpdateControls( { attributes, setAttributes, supportsUpdate, contex
 		}
 
 		return opts;
-	}, [ dataFields, singleListenField ] );
+	}, [ availableFields, singleListenField ] );
+
+	const selectedButtonId = useMemo( () => {
+		if ( ! updateOnButton ) {
+			return '';
+		}
+
+		const exactMatch = actionButtons.find(
+			( button ) => button.actionType === updateOnButton
+				&& ( button.buttonClass || '' ) === ( updateOnButtonClass || '' )
+		);
+
+		if ( exactMatch ) {
+			return exactMatch.id;
+		}
+
+		return actionButtons.find(
+			( button ) => button.actionType === updateOnButton
+		)?.id || '';
+	}, [ actionButtons, updateOnButton, updateOnButtonClass ] );
 
 	const buttonOptions = useMemo( () => {
 		return [
 			{ value: '', label: __( '— Select button —', 'jet-form-builder' ) },
 			...actionButtons.map( ( btn ) => ( {
-				value: btn.actionType,
-				label: `${ btn.label } (${ btn.actionType })`,
+				value: btn.id,
+				label: btn.buttonClass
+					? `${ btn.label } (${ btn.actionType }, ${ btn.buttonClass })`
+					: `${ btn.label } (${ btn.actionType })`,
 			} ) ),
 		];
 	}, [ actionButtons ] );
+
+	useEffect( () => {
+		if ( ! updateOnButton ) {
+			return;
+		}
+
+		const buttonStillExists = actionButtons.some(
+			( button ) => button.actionType === updateOnButton
+				&& ( updateOnButtonClass
+					? button.buttonClass === updateOnButtonClass
+					: true )
+		);
+
+		if ( buttonStillExists ) {
+			return;
+		}
+
+		setAttributes( {
+			generator_update_on_button: '',
+			generator_update_on_button_class: '',
+		} );
+	}, [ actionButtons, setAttributes, updateOnButton, updateOnButtonClass ] );
+
+	useEffect( () => {
+		if ( ! autoUpdate || ! listenFieldArray.length ) {
+			return;
+		}
+
+		const allowedNames = new Set( availableFields.map( ( field ) => field.name ) );
+		const nextListenFields = listenFieldArray.filter( ( fieldName ) => allowedNames.has( fieldName ) );
+
+		if ( nextListenFields.length === listenFieldArray.length ) {
+			return;
+		}
+
+		setAttributes( {
+			generator_listen_field: singleListenField
+				? ( nextListenFields[ 0 ] ?? '' )
+				: ( nextListenFields.length <= 1 ? ( nextListenFields[ 0 ] ?? '' ) : nextListenFields ),
+		} );
+	}, [ autoUpdate, availableFields, listenFieldArray, setAttributes, singleListenField ] );
 
 	return (
 		<Fragment>
@@ -168,6 +294,7 @@ function AutoUpdateControls( { attributes, setAttributes, supportsUpdate, contex
 							generator_listen_field: '',
 							generator_require_all_filled: false,
 							generator_update_on_button: '',
+							generator_update_on_button_class: '',
 						} ),
 					} );
 				} }
@@ -196,10 +323,13 @@ function AutoUpdateControls( { attributes, setAttributes, supportsUpdate, contex
 
 			{ autoUpdate && (
 				<SelectControl
-					label={ __( 'Watch These Fields', 'jet-form-builder' ) }
+					label={ singleListenField
+						? __( 'Trigger Field', 'jet-form-builder' )
+						: __( 'Trigger Fields', 'jet-form-builder' )
+					}
 					help={ singleListenField
-						? __( 'Choose the field whose value will be passed to the generator as a filter.', 'jet-form-builder' )
-						: __( 'Choose which fields trigger a refresh when their value changes. Hold Ctrl (Windows) or Cmd (Mac) to select multiple.', 'jet-form-builder' )
+						? __( 'Select the field that controls this generator.', 'jet-form-builder' )
+						: __( 'Select the fields that control this generator. Hold Ctrl (Windows) or Cmd (Mac) to select multiple.', 'jet-form-builder' )
 					}
 					{ ...( ! singleListenField && { multiple: true } ) }
 					value={ singleListenField ? ( listenFieldArray[ 0 ] ?? '' ) : listenFieldArray }
@@ -233,12 +363,15 @@ function AutoUpdateControls( { attributes, setAttributes, supportsUpdate, contex
 					help={
 						listenFieldArray.length > 1
 							? __( 'When enabled, the options refresh only after every watched field has a value. Useful when multiple fields are needed together to filter results.', 'jet-form-builder' )
-							: __( 'When enabled, the options will not refresh if the watched field is empty. The list stays blank until the user picks a value.', 'jet-form-builder' )
+							: __( 'When enabled, empty Trigger Field values use the generator-specific empty-state behavior. Generators with static fallback keep using their static settings; generators without fallback keep the list empty.', 'jet-form-builder' )
 					}
 					checked={ requireAllFilled }
 					onChange={ ( value ) => setAttributes( {
 						generator_require_all_filled: value,
-						...( value && { generator_update_on_button: '' } ),
+						...( value && {
+							generator_update_on_button: '',
+							generator_update_on_button_class: '',
+						} ),
 					} ) }
 				/>
 			) }
@@ -247,14 +380,21 @@ function AutoUpdateControls( { attributes, setAttributes, supportsUpdate, contex
 				<SelectControl
 					label={ __( 'Refresh on Button Click', 'jet-form-builder' ) }
 					help={ __(
-						'Instead of refreshing automatically, options update only when a selected JetFormBuilder action button is clicked. Supported action types: Update Field, Next Page, Prev Page, Change Render State (submit is not supported). Regular HTML buttons are not supported here. Leave empty to refresh instantly on watched field change.',
+						'Instead of refreshing automatically, options update only when a selected JetFormBuilder action button is clicked. Supported action types: Update Field, Next Page, Prev Page, Change Render State (submit is not supported). If the selected button has a CSS Class Name, auto-update first tries to match that exact button and falls back to the button type if no exact class match is found. If no CSS Class Name is set, the first matching button of the selected action type is used. In multi-step forms, "Next Page" is matched on the previous step and "Prev Page" is matched on the next step. Regular HTML buttons are not supported here. Leave empty to refresh instantly on watched field change.',
 						'jet-form-builder'
 					) }
-					value={ updateOnButton }
-					onChange={ ( value ) => setAttributes( {
-						generator_update_on_button: value,
-						...( value && { generator_require_all_filled: false } ),
-					} ) }
+					value={ selectedButtonId }
+					onChange={ ( value ) => {
+						const selectedButton = actionButtons.find(
+							( button ) => button.id === value
+						);
+
+						setAttributes( {
+							generator_update_on_button: selectedButton?.actionType || '',
+							generator_update_on_button_class: selectedButton?.buttonClass || '',
+							...( selectedButton && { generator_require_all_filled: false } ),
+						} );
+					} }
 					options={ buttonOptions }
 				/>
 			) }

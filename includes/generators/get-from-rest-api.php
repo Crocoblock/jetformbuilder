@@ -117,10 +117,28 @@ class Get_From_Rest_Api extends Base_V2 {
 	public function get_auto_update_context_fields(): array {
 		return array(
 			array(
-				'description' => __( 'Use {field_name} placeholders in the Endpoint URL to inject values from watched fields.', 'jet-form-builder' ),
+				'description' => __( 'Use {field_name} placeholders in the Endpoint URL below to inject values from the selected Trigger Fields.', 'jet-form-builder' ),
 				'example'     => 'https://api.example.com/products?category={category_field}',
 			),
 		);
+	}
+
+	/**
+	 * Returns the auto-update value type supported by this generator.
+	 *
+	 * @return string
+	 */
+	public function get_auto_update_value_type(): string {
+		return 'scalar';
+	}
+
+	/**
+	 * Empty trigger should use the static endpoint configuration.
+	 *
+	 * @return string
+	 */
+	public function get_auto_update_empty_context_policy(): string {
+		return 'fallback_to_static';
 	}
 
 	/**

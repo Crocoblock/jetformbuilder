@@ -1,56 +1,75 @@
 import GatewaysEditor from '../components/gateways-editor';
 
 const {
-	      RadioControl,
-	      Button,
-      } = wp.components;
+	RadioControl,
+	Button,
+} = wp.components;
 
 const {
-	      withDispatch,
-	      withSelect,
-      } = wp.data;
+	withDispatch,
+	withSelect,
+} = wp.data;
 
 const {
-	      useState,
-	      useEffect,
-      } = wp.element;
+	useState,
+	useEffect,
+} = wp.element;
 const {
-	      __,
-      } = wp.i18n;
+	__,
+} = wp.i18n;
 const {
-	      compose,
-      } = wp.compose;
+	compose,
+} = wp.compose;
 
 const {
-	      ActionModal,
-      } = JetFBComponents;
+	ActionModal,
+} = JetFBComponents;
 const {
-	      withDispatchGateways,
-	      withSelectGateways,
-	      useMetaState,
-      } = JetFBHooks;
+	withDispatchGateways,
+	withSelectGateways,
+	useMetaState,
+} = JetFBHooks;
 
 const gatewaysData = window.JetFormEditorData.gateways;
 
+// check that saved gateway still exists in available gateways list.
+const isGatewayAvailable = ( type ) => {
+	if ( ! type || 'none' === type ) {
+		return true;
+	}
+
+	return gatewaysData.list.some( ( el ) => el.value === type );
+};
+
 const getGatewayLabel = ( type ) => {
 	return (
-		gatewaysData.list.find( el => el.value === type ).label
+		gatewaysData.list.find( ( el ) => el.value === type )?.label || 'None'
 	);
 };
 
 function PluginGateways( props ) {
 
 	const {
-		      setGateway,
-		      setGatewayScenario,
-		      clearGateway,
-		      clearScenario,
-		      gatewayGeneral,
-		      gatewayScenario,
-	      } = props;
+		setGateway,
+		setGatewayScenario,
+		clearGateway,
+		clearScenario,
+		gatewayGeneral,
+		gatewayScenario,
+	} = props;
 
 	const [ meta, setMeta ]   = useMetaState( '_jf_gateways' );
 	const [ isEdit, setEdit ] = useState( false );
+
+	// reset removed/unavailable gateway to none in editor state.
+	useEffect( () => {
+		if ( ! isGatewayAvailable( meta?.gateway ) ) {
+			setMeta( {
+				...meta,
+				gateway: 'none',
+			} );
+		}
+	}, [ meta?.gateway ] );
 
 	useEffect( () => {
 		if ( isEdit ) {
@@ -84,7 +103,9 @@ function PluginGateways( props ) {
 			} }
 		/>
 		{ (
-			'none' !== meta.gateway && meta.gateway
+			'none' !== meta.gateway &&
+			meta.gateway &&
+			isGatewayAvailable( meta.gateway )
 		) && <Button
 			onClick={ () => setEdit( true ) }
 			icon={ 'admin-tools' }
@@ -96,7 +117,7 @@ function PluginGateways( props ) {
 			{ __( 'Edit', 'jet-form-builder' ) }
 		</Button> }
 
-		{ isEdit && (
+		{ isEdit && isGatewayAvailable( meta.gateway ) && (
 			<ActionModal
 				classNames={ [ 'width-60' ] }
 				onRequestClose={ () => closeModal() }

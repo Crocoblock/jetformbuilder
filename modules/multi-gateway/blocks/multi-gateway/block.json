@@ -1,8 +1,8 @@
 {
 	"apiVersion": 2,
 	"name": "jet-forms/multi-gateway",
-	"title": "Payment Gateway", 
-	"description": "Displays available payment gateways selected in form settings.",
+	"title": "Payment Gateway",
+	"description": "Field allowing users to choose a payment method on the front end.",
 	"category": "jet-form-builder-fields",
 	"textdomain": "jet-form-builder",
 	"keywords": ["jetformbuilder", "gateway", "payment"],

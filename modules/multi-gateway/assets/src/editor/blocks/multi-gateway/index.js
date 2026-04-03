@@ -16,7 +16,7 @@ metadata.attributes.isPreview = {
 const settings = {
 	icon: <span dangerouslySetInnerHTML={ { __html: icon } }></span>,
 	description: __(
-		`Displays available payment gateways selected in form settings.`,
+		`Field allowing users to choose a payment method on the front end.`,
 		'jet-form-builder',
 	),
 	edit: MultiGatewayEdit,

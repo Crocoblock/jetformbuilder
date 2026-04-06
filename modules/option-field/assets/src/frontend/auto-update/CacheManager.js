@@ -43,7 +43,7 @@ class CacheManager {
 	 *
 	 * @param {string} generatorId  Generator identifier.
 	 * @param {Object} context      Context object with field values.
-	 * @param {number} cacheTimeout Cache timeout in seconds (0=disabled, -1=permanent, N=seconds).
+	 * @param {number} cacheTimeout Cache timeout in seconds (0=disabled, N=seconds).
 	 * @param {string} fieldName    Target field name.
 	 *
 	 * @return {boolean} True if valid cache exists.

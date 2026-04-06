@@ -30,6 +30,12 @@ class FieldWatcher {
 		/** @type {Map<string, {element: HTMLElement, handler: Function}>} */
 		this.buttonListeners = new Map();
 
+		/** @type {Map<string, string>} */
+		this.lastContextHashes = new Map();
+
+		/** @type {Map<string, string|Array>} */
+		this.preservedRepeaterValues = new Map();
+
 		this.debounceDelay = 300;
 
 		/**
@@ -78,7 +84,7 @@ class FieldWatcher {
 	 * @param {HTMLElement} fieldElement Field element (select/input).
 	 * @param {HTMLElement} formNode     Form element.
 	 */
-	initField( fieldElement, formNode ) {
+	initField( fieldElement, formNode, options = {} ) {
 		const config = this.parseFieldConfig( fieldElement );
 
 		if ( ! config ) {
@@ -102,6 +108,11 @@ class FieldWatcher {
 			config,
 		} );
 
+		const preservedValue = this.consumePreservedRepeaterValue( fieldKey );
+		if ( preservedValue !== undefined ) {
+			fieldElement.dataset.jfbAuPreservedValue = JSON.stringify( preservedValue );
+		}
+
 		if ( config.updateOnButton ) {
 			this.watchButton( config.updateOnButton, fieldKey, formNode );
 		}
@@ -116,6 +127,10 @@ class FieldWatcher {
 		// With a button, the user controls when to fetch — no automatic update.
 		// With requireAllFilled, skip if any listenTo field is empty.
 		if ( ! config.updateOnButton && config.listenTo ) {
+			if ( this.shouldSkipDynamicInitRefresh( fieldElement, config, formNode, options ) ) {
+				return;
+			}
+
 			if ( config.requireAllFilled ) {
 				const context   = this.collectContext( config, formNode );
 				const allFilled = config.listenTo.every( ( fieldName ) => {
@@ -134,6 +149,151 @@ class FieldWatcher {
 				this.debouncedUpdate( fieldKey, formNode );
 			}
 		}
+	}
+
+	shouldSkipDynamicInitRefresh( fieldElement, config, formNode, options = {} ) {
+		if ( ! options?.isDynamicInit ) {
+			return false;
+		}
+
+		const repeaterRow = fieldElement.closest( '.jet-form-builder-repeater__row' );
+
+		if ( ! repeaterRow || ! Array.isArray( config.listenTo ) || ! config.listenTo.length ) {
+			return false;
+		}
+
+		const listensOnlyToExternalFields = config.listenTo.every( ( sourceFieldName ) => {
+			return ! this.findElementInScope( sourceFieldName, repeaterRow, repeaterRow );
+		} );
+
+		if ( ! listensOnlyToExternalFields ) {
+			return false;
+		}
+
+		const currentValue = this.readCurrentTargetValue( fieldElement );
+
+		if ( ! this.isContextValueFilled( currentValue ) ) {
+			return false;
+		}
+
+		const contextHash = this.serializeContext( this.collectContext( config, formNode ) );
+		const contextKey  = this.buildContextMemoryKey( config );
+
+		return this.lastContextHashes.get( contextKey ) === contextHash;
+	}
+
+	readCurrentTargetValue( fieldElement ) {
+		if ( fieldElement.matches( 'select' ) ) {
+			if ( fieldElement.multiple ) {
+				return Array.from( fieldElement.selectedOptions ).map( ( option ) => option.value );
+			}
+
+			return fieldElement.value || '';
+		}
+
+		const nestedSelect = fieldElement.querySelector?.( 'select' );
+		if ( nestedSelect ) {
+			if ( nestedSelect.multiple ) {
+				return Array.from( nestedSelect.selectedOptions ).map( ( option ) => option.value );
+			}
+
+			return nestedSelect.value || '';
+		}
+
+		const optionInputs = Array.from(
+			fieldElement.querySelectorAll?.( 'input[type="checkbox"], input[type="radio"]' ) || []
+		);
+
+		if ( ! optionInputs.length ) {
+			return '';
+		}
+
+		const checked = optionInputs.filter( ( input ) => input.checked );
+
+		if ( ! checked.length ) {
+			return '';
+		}
+
+		if ( checked.every( ( input ) => input.type === 'checkbox' ) ) {
+			return checked.map( ( input ) => input.value );
+		}
+
+		return checked[ 0 ]?.value || '';
+	}
+
+	buildContextMemoryKey( config ) {
+		return [
+			config.formId || 0,
+			config.generatorId || '',
+			config.fieldName || '',
+			Array.isArray( config.listenTo ) ? config.listenTo.join( '|' ) : '',
+		].join( '::' );
+	}
+
+	serializeContext( context ) {
+		const ordered = {};
+
+		Object.keys( context || {} ).sort().forEach( ( key ) => {
+			ordered[ key ] = context[ key ];
+		} );
+
+		return JSON.stringify( ordered );
+	}
+
+	preserveRepeaterValuesBeforeRemoval( removeButton ) {
+		const removedRow = removeButton.closest( '.jet-form-builder-repeater__row' );
+		const repeater   = removeButton.closest( '[data-repeater="1"]' );
+		const itemsRoot  = repeater?.querySelector( '.jet-form-builder-repeater__items' ) || repeater;
+
+		if ( ! removedRow || ! repeater || ! itemsRoot ) {
+			return;
+		}
+
+		const rows = Array.from( itemsRoot.querySelectorAll( ':scope > .jet-form-builder-repeater__row' ) );
+		const removedIndex = rows.indexOf( removedRow );
+		const repeaterName = repeater.dataset.fieldName || 'repeater';
+
+		if ( removedIndex < 0 ) {
+			return;
+		}
+
+		this.autoUpdateFields.forEach( ( fieldData ) => {
+			const element = fieldData?.element;
+			const config  = fieldData?.config;
+			const row     = element?.closest( '.jet-form-builder-repeater__row' );
+
+			if ( ! element || ! config || ! row || row === removedRow || ! repeater.contains( row ) ) {
+				return;
+			}
+
+			const rowIndex = rows.indexOf( row );
+
+			if ( rowIndex < 0 ) {
+				return;
+			}
+
+			const preservedValue = this.readValueFromSourceElement( element );
+
+			if ( ! this.isContextValueFilled( preservedValue ) ) {
+				return;
+			}
+
+			const nextIndex = rowIndex > removedIndex ? rowIndex - 1 : rowIndex;
+			const nextKey   = `${ repeaterName }[${ nextIndex }].${ config.fieldName }`;
+
+			this.preservedRepeaterValues.set( nextKey, preservedValue );
+		} );
+	}
+
+	consumePreservedRepeaterValue( fieldKey ) {
+		if ( ! this.preservedRepeaterValues.has( fieldKey ) ) {
+			return undefined;
+		}
+
+		const value = this.preservedRepeaterValues.get( fieldKey );
+		this.preservedRepeaterValues.delete( fieldKey );
+
+		return value;
 	}
 
 	/**
@@ -824,6 +984,11 @@ class FieldWatcher {
 		const { element, config } = fieldData;
 
 		const context = this.collectContext( config, formNode );
+		const contextKey  = this.buildContextMemoryKey( config );
+		const contextHash = this.serializeContext( context );
+
+		this.lastContextHashes.set( contextKey, contextHash );
+
 		const cachedOptions = this.cacheManager.get(
 			config.generatorId,
 			context,

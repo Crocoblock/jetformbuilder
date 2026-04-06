@@ -62,10 +62,10 @@ class Get_From_Users extends Base_V2 {
 				'label'   => __( 'Option Value', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
-					array( 'value' => 'ID',            'label' => 'User ID' ),
-					array( 'value' => 'user_login',    'label' => 'Username (login)' ),
-					array( 'value' => 'user_email',    'label' => 'Email' ),
-					array( 'value' => 'user_nicename', 'label' => 'Nicename (slug)' ),
+					array( 'value' => 'ID',            'label' => __( 'User ID', 'jet-form-builder' ) ),
+					array( 'value' => 'user_login',    'label' => __( 'Username (login)', 'jet-form-builder' ) ),
+					array( 'value' => 'user_email',    'label' => __( 'Email', 'jet-form-builder' ) ),
+					array( 'value' => 'user_nicename', 'label' => __( 'Nicename (slug)', 'jet-form-builder' ) ),
 				),
 			),
 			'label_field'     => array(
@@ -74,9 +74,9 @@ class Get_From_Users extends Base_V2 {
 				'label'   => __( 'Option Label', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
-					array( 'value' => 'display_name', 'label' => 'Display Name' ),
-					array( 'value' => 'user_login',   'label' => 'Username (login)' ),
-					array( 'value' => 'user_email',   'label' => 'Email' ),
+					array( 'value' => 'display_name', 'label' => __( 'Display Name', 'jet-form-builder' ) ),
+					array( 'value' => 'user_login',   'label' => __( 'Username (login)', 'jet-form-builder' ) ),
+					array( 'value' => 'user_email',   'label' => __( 'Email', 'jet-form-builder' ) ),
 				),
 			),
 			'include_current' => array(
@@ -91,10 +91,10 @@ class Get_From_Users extends Base_V2 {
 				'label'   => __( 'Order By', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
-					array( 'value' => 'display_name', 'label' => 'Display Name' ),
-					array( 'value' => 'user_login',   'label' => 'Username' ),
-					array( 'value' => 'registered',   'label' => 'Registration Date' ),
-					array( 'value' => 'ID',           'label' => 'User ID' ),
+					array( 'value' => 'display_name', 'label' => __( 'Display Name', 'jet-form-builder' ) ),
+					array( 'value' => 'user_login',   'label' => __( 'Username', 'jet-form-builder' ) ),
+					array( 'value' => 'registered',   'label' => __( 'Registration Date', 'jet-form-builder' ) ),
+					array( 'value' => 'ID',           'label' => __( 'User ID', 'jet-form-builder' ) ),
 				),
 			),
 			'number'          => array(

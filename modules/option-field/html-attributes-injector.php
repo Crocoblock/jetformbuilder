@@ -78,9 +78,9 @@ class Html_Attributes_Injector {
 
 		// Core auto-update identification
 		$data_attrs['data-jfb-auto-update'] = '1';
-		$data_attrs['data-generator-id']    = esc_attr( $args['generator_function'] );
-		$data_attrs['data-field-name']      = esc_attr( $args['name'] );
-		$data_attrs['data-field-type']      = esc_attr( $render_base->get_name() );
+		$data_attrs['data-generator-id']    = $args['generator_function'];
+		$data_attrs['data-field-name']      = $args['name'];
+		$data_attrs['data-field-type']      = $render_base->get_name();
 
 		// Listen field configuration
 		if ( ! empty( $args['generator_listen_field'] ) ) {
@@ -89,11 +89,11 @@ class Html_Attributes_Injector {
 			// Support both string (single field) and array (multiple fields)
 			if ( is_array( $listen_to ) ) {
 				// Multiple fields: store as JSON
-				$data_attrs['data-listen-to']          = esc_attr( wp_json_encode( $listen_to ) );
+				$data_attrs['data-listen-to']          = wp_json_encode( $listen_to );
 				$data_attrs['data-listen-to-multiple'] = '1';
 			} else {
 				// Single field: store as string (backwards compat)
-				$data_attrs['data-listen-to'] = esc_attr( $listen_to );
+				$data_attrs['data-listen-to'] = $listen_to;
 			}
 		}
 
@@ -105,11 +105,11 @@ class Html_Attributes_Injector {
 
 		// Button trigger configuration
 		if ( ! empty( $args['generator_update_on_button'] ) ) {
-			$data_attrs['data-update-on-button'] = esc_attr( $args['generator_update_on_button'] );
+			$data_attrs['data-update-on-button'] = $args['generator_update_on_button'];
 		}
 
 		if ( ! empty( $args['generator_update_on_button_class'] ) ) {
-			$data_attrs['data-update-on-button-class'] = esc_attr( $args['generator_update_on_button_class'] );
+			$data_attrs['data-update-on-button-class'] = $args['generator_update_on_button_class'];
 		}
 
 		if ( $generator instanceof Base_V2 ) {

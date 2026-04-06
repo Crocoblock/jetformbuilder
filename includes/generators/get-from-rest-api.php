@@ -182,16 +182,17 @@ class Get_From_Rest_Api extends Base_V2 {
 			return array();
 		}
 
-		if ( ! $this->is_safe_url( $endpoint ) ) {
+		if ( ! wp_http_validate_url( $endpoint ) ) {
 			return array();
 		}
 
 		$request_args = array(
-			'timeout' => intval( $args['request_timeout'] ?? 10 ),
-			'headers' => $this->parse_headers( $args['request_headers'] ?? '' ),
+			'timeout'            => intval( $args['request_timeout'] ?? 10 ),
+			'headers'            => $this->parse_headers( $args['request_headers'] ?? '' ),
+			'reject_unsafe_urls' => true,
 		);
 
-		$response = wp_remote_get( $endpoint, $request_args );
+		$response = wp_safe_remote_get( $endpoint, $request_args );
 		if ( is_wp_error( $response ) ) {
 			return array();
 		}
@@ -240,38 +241,6 @@ class Get_From_Rest_Api extends Base_V2 {
 		}
 
 		return $result;
-	}
-
-	/**
-	 * Validates that a URL is safe to request (not a private/loopback address).
-	 *
-	 * @param string $url URL to validate.
-	 *
-	 * @return bool
-	 */
-	private function is_safe_url( string $url ): bool {
-		if ( ! wp_http_validate_url( $url ) ) {
-			return false;
-		}
-
-		$host = wp_parse_url( $url, PHP_URL_HOST );
-
-		if ( empty( $host ) ) {
-			return false;
-		}
-
-		// Resolve hostname to IP for range checking.
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.net_http_http_request
-		$ip = gethostbyname( $host );
-
-		// Block private, loopback, and reserved IP ranges.
-		$is_public = filter_var(
-			$ip,
-			FILTER_VALIDATE_IP,
-			FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
-		);
-
-		return false !== $is_public;
 	}
 
 	/**

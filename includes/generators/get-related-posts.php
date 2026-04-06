@@ -62,9 +62,9 @@ class Get_Related_Posts extends Base_V2 {
 				'label'   => __( 'Filter By', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
-					array( 'value' => 'meta_field',  'label' => 'Match by meta key' ),
-					array( 'value' => 'post_parent', 'label' => 'Match by WordPress parent post' ),
-					array( 'value' => 'taxonomy',    'label' => 'Match by taxonomy term' ),
+					array( 'value' => 'meta_field',  'label' => __( 'Match by meta key', 'jet-form-builder' ) ),
+					array( 'value' => 'post_parent', 'label' => __( 'Match by WordPress parent post', 'jet-form-builder' ) ),
+					array( 'value' => 'taxonomy',    'label' => __( 'Match by taxonomy term', 'jet-form-builder' ) ),
 				),
 				'help'    => __( 'How the listed posts are connected to the value from the watched field.', 'jet-form-builder' ),
 			),

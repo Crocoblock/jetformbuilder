@@ -308,15 +308,10 @@ function AutoUpdateControls( {
 					className="jfb-auto-update-context-hints"
 				>
 					{ contextFields.map( ( hint, i ) => (
-						<p key={ i } className="components-base-control__help">
-							{ hint.description }
-							{ hint.example && (
-								<>
-									<br />
-									<p>{ hint.example }</p>
-								</>
-							) }
-						</p>
+						<div key={ i } className="components-base-control__help">
+							<p>{ hint.description }</p>
+							{ hint.example && <p>{ hint.example }</p> }
+						</div>
 					) ) }
 				</Notice>
 			) }

@@ -68,6 +68,16 @@ function observeDynamicFields( formNode ) {
 
 	formNode.setAttribute( 'data-jfb-au-observed', '1' );
 
+	formNode.addEventListener( 'click', ( event ) => {
+		const removeButton = event.target?.closest?.( '.jet-form-builder-repeater__remove' );
+
+		if ( ! removeButton ) {
+			return;
+		}
+
+		getWatcher().preserveRepeaterValuesBeforeRemoval( removeButton, formNode );
+	}, true );
+
 	const observer = new MutationObserver( ( mutations ) => {
 		mutations.forEach( ( mutation ) => {
 			mutation.removedNodes.forEach( ( node ) => {
@@ -95,7 +105,9 @@ function observeDynamicFields( formNode ) {
 					const fieldName = fieldElement.getAttribute( 'data-field-name' );
 
 					if ( fieldElement.hasAttribute( 'data-jfb-auto-update' ) ) {
-						getWatcher().initField( fieldElement, formNode );
+						getWatcher().initField( fieldElement, formNode, {
+							isDynamicInit: true,
+						} );
 					}
 
 					retryFailedWatchers( fieldName, formNode );

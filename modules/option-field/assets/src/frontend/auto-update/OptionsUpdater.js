@@ -25,7 +25,7 @@ class OptionsUpdater {
 
 		switch ( fieldType ) {
 			case 'select':
-				this.updateSelectOptions( fieldElement, options );
+				this.updateSelectOptions( fieldElement, options, formNode );
 				break;
 			case 'checkbox':
 			case 'radio':
@@ -76,7 +76,7 @@ class OptionsUpdater {
 	 * @param {HTMLSelectElement} selectElement Select element.
 	 * @param {Array}             options       New options array.
 	 */
-	updateSelectOptions( selectElement, options ) {
+	updateSelectOptions( selectElement, options, formNode = null ) {
 		const isAutocompleteSelect = selectElement.classList.contains( 'jet-select-autocomplete' );
 		const isAjaxAutocomplete   = isAutocompleteSelect && selectElement.hasAttribute( 'data-ajax--url' );
 		const $select              = isAutocompleteSelect ? jQuery( selectElement ) : null;
@@ -92,9 +92,15 @@ class OptionsUpdater {
 		}
 
 		const isMultiple    = selectElement.multiple;
-		const currentValues = isMultiple
+		let currentValues = isMultiple
 			? Array.from( selectElement.selectedOptions ).map( ( opt ) => opt.value )
 			: [ selectElement.value ];
+
+		if ( ! currentValues.some( Boolean ) ) {
+			const storedValue = this.getStoredFieldValue( selectElement, 'select', formNode );
+			currentValues = this.normalizeValues( storedValue );
+		}
+
 		const hadSelection  = currentValues.some( Boolean );
 		const nextValues    = [];
 		let fallbackValue   = '';
@@ -140,7 +146,6 @@ class OptionsUpdater {
 		} );
 
 		const hasMatchingSelection = nextValues.length > 0;
-
 		if ( isMultiple ) {
 			Array.from( selectElement.options ).forEach( ( option ) => {
 				option.selected = nextValues.includes( option.value );
@@ -218,9 +223,14 @@ class OptionsUpdater {
 			return;
 		}
 
-		const currentValues = Array.from(
+		let currentValues = Array.from(
 			containerElement.querySelectorAll( `input[type="${ fieldType }"]:checked` )
 		).map( ( input ) => input.value );
+
+		if ( ! currentValues.length ) {
+			const storedValue = this.getStoredFieldValue( containerElement, fieldType, formNode );
+			currentValues = this.normalizeValues( storedValue );
+		}
 
 		// Preserve custom-option rows (e.g. "Add New" button)
 		containerElement
@@ -309,6 +319,80 @@ class OptionsUpdater {
 				firstInput.dispatchEvent( new Event( 'change', { bubbles: true } ) );
 			}
 		}
+	}
+
+	normalizeValues( value ) {
+		if ( Array.isArray( value ) ) {
+			return value.filter( ( item ) => item !== undefined && item !== null && item !== '' ).map( String );
+		}
+
+		if ( value === undefined || value === null || value === '' ) {
+			return [];
+		}
+
+		return [ String( value ) ];
+	}
+
+	getPreservedFieldValue( fieldElement ) {
+		const raw = fieldElement?.dataset?.jfbAuPreservedValue;
+
+		if ( ! raw ) {
+			return null;
+		}
+
+		delete fieldElement.dataset.jfbAuPreservedValue;
+
+		try {
+			return JSON.parse( raw );
+		} catch ( e ) {
+			return raw;
+		}
+	}
+
+	getStoredFieldValue( fieldElement, fieldType, formNode ) {
+		const preservedValue = this.getPreservedFieldValue( fieldElement );
+
+		if ( preservedValue !== null ) {
+			return preservedValue;
+		}
+
+		if ( ! formNode || ! window.JetFormBuilderMain?.inputData ) {
+			return null;
+		}
+
+		const fieldName = fieldElement.getAttribute( 'data-field-name' ) || '';
+		const actualName = this.resolveActualInputName( fieldElement, fieldType ) || fieldName;
+
+		let input = window.JetFormBuilderMain.inputData.findInput?.( actualName, formNode ) ||
+			window.JetFormBuilderMain.inputData.getInput?.( actualName, formNode );
+
+		if ( ! input && fieldName ) {
+			input = window.JetFormBuilderMain.inputData.findInput?.( fieldName, formNode ) ||
+				window.JetFormBuilderMain.inputData.getInput?.( fieldName, formNode );
+		}
+
+		if ( ! input && window.JetFormBuilderMain.inputData.getAll ) {
+			const allInputs = window.JetFormBuilderMain.inputData.getAll( formNode ) || [];
+			input = allInputs.find( ( current ) => current.name === actualName )
+				|| allInputs.find( ( current ) => current.name === fieldName )
+				|| allInputs.find(
+					( current ) => fieldName && (
+						current.name?.endsWith( `[${ fieldName }]` )
+						|| current.name?.endsWith( `[${ fieldName }][]` )
+					)
+				);
+		}
+
+		return input?.value?.current ?? null;
+	}
+
+	resolveActualInputName( fieldElement, fieldType ) {
+		if ( fieldType === 'select' ) {
+			return fieldElement.getAttribute( 'name' ) || fieldElement.dataset.fieldName || '';
+		}
+
+		const firstInput = fieldElement.querySelector( `input[type="${ fieldType }"]` );
+		return firstInput?.getAttribute( 'name' ) || fieldElement.dataset.fieldName || '';
 	}
 
 	/**

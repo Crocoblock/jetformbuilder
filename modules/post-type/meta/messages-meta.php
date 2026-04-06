@@ -95,7 +95,7 @@ class Messages_Meta extends Base_Meta_Type {
 
 
 	public function get_values() {
-		return $this->get_by_key( 'label' );
+		return $this->get_by_key( 'value' );
 	}
 
 	public function get_labels(): array {

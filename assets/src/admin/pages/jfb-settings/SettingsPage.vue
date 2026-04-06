@@ -56,6 +56,7 @@ import * as getResponse from './tabs/getresponse';
 import * as paymentGateways from './tabs/payments-gateways';
 import * as options from './tabs/options';
 import * as userJourney from './tabs/user-journey';
+import * as phoneField from './tabs/phone-field';
 import SettingsSideBar from './sidebar/SettingsSideBar';
 
 const { applyFilters, doAction } = wp.hooks;
@@ -80,6 +81,7 @@ const settingTabs = applyFilters( 'jet.fb.register.settings-page.tabs', [
 	userJourney,
 	paymentGateways,
 	captcha,
+	phoneField,
 	mailchimp,
 	getResponse,
 ] );

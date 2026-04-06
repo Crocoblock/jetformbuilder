@@ -209,7 +209,7 @@ class Get_From_Je_Query extends Base_V2 {
 		return array(
 			array(
 				'description' => __( 'You can pass the Trigger Field value into your JetEngine Query.', 'jet-form-builder' ),
-				'example'     => __( 'In Query Builder, use the Dynamic Tag: "JFB Update Field - Form Field Value".', 'jet-form-builder' ),
+				'example'     => __( 'In Query Builder, use the Dynamic Tag: "JFB Auto-Update - Field Value".', 'jet-form-builder' ),
 			),
 		);
 	}

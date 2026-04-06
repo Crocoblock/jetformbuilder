@@ -26,7 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Values are available in scoped $GLOBALS['jfb_generator_context'] and
  * in legacy $_REQUEST / $GLOBALS keys with 'jfb_update_related_' prefix.
  */
-class Auto_Update_Field_Value extends \Jet_Engine_Base_Macros {
+class Auto_Update_Field_Value extends Base_Field_Context_Macro {
 
 	/**
 	 * Returns macro tag for JetEngine.
@@ -80,57 +80,6 @@ class Auto_Update_Field_Value extends \Jet_Engine_Base_Macros {
 			return '';
 		}
 
-		$request_key = 'jfb_update_related_' . $field_name;
-
-		// 1) Preferred scoped context (set by Generator_Update_Endpoint)
-		if (
-			isset( $GLOBALS['jfb_generator_context'] ) &&
-			is_array( $GLOBALS['jfb_generator_context'] ) &&
-			array_key_exists( $field_name, $GLOBALS['jfb_generator_context'] )
-		) {
-			return $this->sanitize_value( $GLOBALS['jfb_generator_context'][ $field_name ] );
-		}
-
-		// 2) Legacy: $_REQUEST (set by Generator_Update_Endpoint during transition period)
-		if ( isset( $_REQUEST[ $request_key ] ) ) {
-			return $this->sanitize_value( $_REQUEST[ $request_key ] );
-		}
-
-		// 3) Legacy: $GLOBALS key (set by Get_From_Je_Query::generate_with_context)
-		if ( isset( $GLOBALS[ $request_key ] ) ) {
-			return $this->sanitize_value( $GLOBALS[ $request_key ] );
-		}
-
-		// Try jet_fb_context() as final fallback for form submissions
-		if ( function_exists( 'jet_fb_context' ) ) {
-			$request_data = jet_fb_context()->resolve_request();
-			if ( isset( $request_data[ $field_name ] ) ) {
-				return $this->sanitize_value( $request_data[ $field_name ] );
-			}
-		}
-
-		return '';
-	}
-
-	/**
-	 * Sanitize field value based on type.
-	 *
-	 * @param mixed $value Field value.
-	 *
-	 * @return mixed Sanitized value.
-	 */
-	private function sanitize_value( $value ) {
-		if ( is_array( $value ) ) {
-			// For arrays (checkboxes, multi-select), return as comma-separated
-			// or keep as array depending on JetEngine query needs
-			return $value;
-		}
-
-		if ( is_numeric( $value ) ) {
-			return $value;
-		}
-
-		// Sanitize string values
-		return sanitize_text_field( $value );
+		return $this->get_context_value( $field_name );
 	}
 }

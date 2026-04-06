@@ -256,8 +256,24 @@ class Jet_Engine implements
 	 * during cascading field updates (auto-update feature).
 	 */
 	public function register_macros() {
+		require_once $this->get_dir( 'macros/base-field-context-macro.php' );
 		require_once $this->get_dir( 'macros/auto-update-field-value.php' );
+
 		new Macros\Auto_Update_Field_Value();
+
+		if ( function_exists( 'jet_apb' ) ) {
+			require_once $this->get_dir( 'macros/auto-update-appointment-provider.php' );
+			require_once $this->get_dir( 'macros/auto-update-appointment-service.php' );
+
+			new Macros\Auto_Update_Appointment_Provider();
+			new Macros\Auto_Update_Appointment_Service();
+		}
+
+		if ( function_exists( 'jet_abaf' ) ) {
+			require_once $this->get_dir( 'macros/auto-update-available-units.php' );
+
+			new Macros\Auto_Update_Available_Units();
+		}
 	}
 
 	public function add_relation_macro_source_to_macro_args( array $macros ): array {
@@ -273,7 +289,7 @@ class Jet_Engine implements
 	}
 
 	public function add_relation_macro_source( array $sources ): array {
-		$sources['jfbuf_field'] = __( 'JFB Update Field - Form field', 'jet-form-builder' );
+		$sources['jfbuf_field'] = __( 'JFB Auto-Update - Form field', 'jet-form-builder' );
 
 		return $sources;
 	}

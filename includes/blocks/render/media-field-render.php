@@ -75,7 +75,7 @@ class Media_Field_Render extends Base {
 			// preset field
 			$updated = str_replace( '<!-- field -->', $this->get_field_preset( $file ), $updated );
 
-			$image_ext    = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp' );
+			$image_ext    = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'svg', 'webp', 'avif' );
 			$img_ext_preg = '!\.(' . join( '|', $image_ext ) . ')$!i';
 
 			if ( preg_match( $img_ext_preg, $file['url'] ) ) {

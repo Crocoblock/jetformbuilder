@@ -74,7 +74,7 @@ class Get_Related_Posts extends Base_V2 {
 				'label'       => __( 'Relation Key', 'jet-form-builder' ),
 				'control'     => 'text',
 				'placeholder' => 'related_project_id',
-				'help'        => __( 'Custom field name (for "Meta Field") or taxonomy slug (for "Taxonomy Term").', 'jet-form-builder' ),
+				'help'        => __( 'Enter the custom field name for "Match by meta key" or the taxonomy slug for "Match by taxonomy term".', 'jet-form-builder' ),
 				'condition'   => array(
 					'relation_type!' => 'post_parent'
 				),
@@ -85,7 +85,7 @@ class Get_Related_Posts extends Base_V2 {
 				'label'       => __( 'Filter Value', 'jet-form-builder' ),
 				'control'     => 'text',
 				'placeholder' => '42',
-				'help'        => __( 'Static value to filter by.', 'jet-form-builder' ),
+				'help'        => __( 'Static value used when the Trigger Field is empty. To use multiple values, enter them as a comma-separated list, for example: `12,34,56`.', 'jet-form-builder' ),
 				'condition'   => array(
 					'relation_type!' => 'post_parent'
 				),
@@ -214,7 +214,7 @@ class Get_Related_Posts extends Base_V2 {
 	 */
 	public function has_auto_update_static_fallback( array $settings ): bool {
 		$relation_type = $settings['relation_type'] ?? 'meta_field';
-		$filter_value  = $this->normalize_source_values( $this->get_static_source_value( $settings ), 'post_parent' === $relation_type );
+		$filter_value  = $this->normalize_source_values( $this->get_static_source_value( $settings ) );
 
 		if ( 'post_parent' === $relation_type ) {
 			return ! empty( $filter_value );
@@ -246,8 +246,7 @@ class Get_Related_Posts extends Base_V2 {
 		// Take the first context value as the relation source.
 		$settings['_related_value'] = reset( $context );
 		$source_values              = $this->normalize_source_values(
-			$settings['_related_value'],
-			'post_parent' === ( $settings['relation_type'] ?? 'meta_field' )
+			$settings['_related_value']
 		);
 
 		if ( empty( $source_values ) ) {
@@ -280,7 +279,7 @@ class Get_Related_Posts extends Base_V2 {
 
 		// _related_value comes from auto-update context.
 		// Static fallback depends on the selected relation type.
-		$source_values = $this->normalize_source_values( $raw_source_value, 'post_parent' === $relation_type );
+		$source_values = $this->normalize_source_values( $raw_source_value );
 		$source_value  = $source_values[0] ?? null;
 
 		// If the selected relation cannot be resolved to a concrete source value,
@@ -412,14 +411,14 @@ class Get_Related_Posts extends Base_V2 {
 	 *
 	 * @return array
 	 */
-	private function normalize_source_values( $value, bool $split_csv = false ): array {
+	private function normalize_source_values( $value ): array {
 		if ( null === $value ) {
 			return array();
 		}
 
 		if ( is_array( $value ) ) {
 			$values = $value;
-		} elseif ( $split_csv && is_string( $value ) && false !== strpos( $value, ',' ) ) {
+		} elseif ( is_string( $value ) && false !== strpos( $value, ',' ) ) {
 			$values = array_map( 'trim', explode( ',', $value ) );
 		} else {
 			$values = array( $value );

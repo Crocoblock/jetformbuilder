@@ -23,6 +23,9 @@ export default {
 			} catch ( error ) {
 				return this.value;
 			}
+			if ( typeof json === 'number' ) {
+				return this.value;
+			}
 			return JSON.stringify( json, undefined, 4 );
 		},
 	},

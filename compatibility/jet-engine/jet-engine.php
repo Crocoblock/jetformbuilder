@@ -164,6 +164,9 @@ class Jet_Engine implements
 
 		// Register JetEngine macros for auto-update feature
 		add_action( 'jet-engine/register-macros', array( $this, 'register_macros' ) );
+		add_filter( 'jet-engine/listings/macros-list', array( $this, 'add_relation_macro_source_to_macro_args' ), 999 );
+		add_filter( 'jet-engine/relations/sources-list', array( $this, 'add_relation_macro_source' ) );
+		add_filter( 'jet-engine/relations/object-id-by-source/jfbuf_field', array( $this, 'resolve_relation_macro_source' ), 10, 2 );
 	}
 
 	public function remove_hooks() {
@@ -228,6 +231,9 @@ class Jet_Engine implements
 		remove_action( 'jet-engine/rest-api/init-endpoints', array( $this, 'rewrite_map_location_data_endpoint' ), 99 );
 
 		remove_action( 'jet-engine/register-macros', array( $this, 'register_macros' ) );
+		remove_filter( 'jet-engine/listings/macros-list', array( $this, 'add_relation_macro_source_to_macro_args' ), 999 );
+		remove_filter( 'jet-engine/relations/sources-list', array( $this, 'add_relation_macro_source' ) );
+		remove_filter( 'jet-engine/relations/object-id-by-source/jfbuf_field', array( $this, 'resolve_relation_macro_source' ), 10 );
 	}
 
 	/**
@@ -252,6 +258,58 @@ class Jet_Engine implements
 	public function register_macros() {
 		require_once $this->get_dir( 'macros/auto-update-field-value.php' );
 		new Macros\Auto_Update_Field_Value();
+	}
+
+	public function add_relation_macro_source_to_macro_args( array $macros ): array {
+		foreach ( $macros as $key => $macro ) {
+			if ( empty( $macro['args']['rel_object_var']['condition']['rel_object_from'] ) ) {
+				continue;
+			}
+
+			$macros[ $key ]['args']['rel_object_var']['condition']['rel_object_from'][] = 'jfbuf_field';
+		}
+
+		return $macros;
+	}
+
+	public function add_relation_macro_source( array $sources ): array {
+		$sources['jfbuf_field'] = __( 'JFB Update Field - Form field', 'jet-form-builder' );
+
+		return $sources;
+	}
+
+	public function resolve_relation_macro_source( $object_id, $form_field = '' ) {
+		if ( empty( $form_field ) ) {
+			return false;
+		}
+
+		$request_key = 'jfb_update_related_' . $form_field;
+
+		if (
+			isset( $GLOBALS['jfb_generator_context'] ) &&
+			is_array( $GLOBALS['jfb_generator_context'] ) &&
+			array_key_exists( $form_field, $GLOBALS['jfb_generator_context'] )
+		) {
+			return $GLOBALS['jfb_generator_context'][ $form_field ];
+		}
+
+		if ( isset( $_REQUEST[ $request_key ] ) ) {
+			return $_REQUEST[ $request_key ];
+		}
+
+		if ( isset( $GLOBALS[ $request_key ] ) ) {
+			return $GLOBALS[ $request_key ];
+		}
+
+		if ( function_exists( 'jet_fb_context' ) ) {
+			$request_data = jet_fb_context()->resolve_request();
+
+			if ( array_key_exists( $form_field, $request_data ) ) {
+				return $request_data[ $form_field ];
+			}
+		}
+
+		return false;
 	}
 
 	public function register_scripts() {
@@ -386,7 +444,18 @@ class Jet_Engine implements
 		if ( 'custom-content-type' !== $query->query_type ) {
 			return;
 		}
-		$generator->get_block()->block_attrs['je_generator_content_type'] = (
+
+		try {
+			$block = $generator->get_block();
+		} catch ( \Throwable $throwable ) {
+			return;
+		}
+
+		if ( ! $block ) {
+			return;
+		}
+
+		$block->block_attrs['je_generator_content_type'] = (
 			$query->final_query['content_type'] ?? ''
 		);
 	}

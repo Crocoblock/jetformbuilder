@@ -330,6 +330,14 @@ class OptionsUpdater {
 			return false;
 		}
 
+		// Root Observable.observeInput() intentionally skips fields inside repeater
+		// rows, because they belong to row-scoped observables. Calling it here would
+		// return undefined and crash on input.makeReactive(). For repeater targets,
+		// fall back to DOM update + synthetic change event below.
+		if ( fieldElement.closest( '.jet-form-builder-repeater__row' ) ) {
+			return false;
+		}
+
 		const syncNode = fieldElement.hasAttribute( 'data-jfb-sync' )
 			? fieldElement
 			: fieldElement.querySelector( '[data-jfb-sync]' );

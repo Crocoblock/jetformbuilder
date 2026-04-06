@@ -95,7 +95,7 @@ class Get_Related_Posts extends Base_V2 {
 				'default'   => '',
 				'label'     => __( 'Parent Post ID', 'jet-form-builder' ),
 				'control'   => 'text',
-				'help'      => __( 'Static or dynamic parent post ID used to load child posts when auto-update is not active. Enter `current_post_id` to load child posts of the current post.', 'jet-form-builder' ),
+				'help'      => __( 'Static or dynamic parent post ID used to load child posts when auto-update is not active. Enter `current_post_id` to load child posts of the current post. To load child posts from several parents, enter comma-separated IDs, for example: `12,34,56`.', 'jet-form-builder' ),
 				'condition' => array(
 					'relation_type' => 'post_parent'
 				),
@@ -182,7 +182,7 @@ class Get_Related_Posts extends Base_V2 {
 			array(
 				'single'      => true,
 				'description' => __( 'The Trigger Field value overrides the static filter above. If the Trigger Field is empty, the static filter is used when configured. Otherwise, this list will be empty.', 'jet-form-builder' ),
-				'example'     => __( 'Select the field that controls this list.', 'jet-form-builder' ),
+				'example'     => __( 'Select the field that controls this list. Single-value and multi-value trigger fields are supported.', 'jet-form-builder' ),
 			),
 		);
 	}
@@ -193,7 +193,7 @@ class Get_Related_Posts extends Base_V2 {
 	 * @return string
 	 */
 	public function get_auto_update_value_type(): string {
-		return 'scalar';
+		return 'scalar_or_array';
 	}
 
 	/**
@@ -214,15 +214,15 @@ class Get_Related_Posts extends Base_V2 {
 	 */
 	public function has_auto_update_static_fallback( array $settings ): bool {
 		$relation_type = $settings['relation_type'] ?? 'meta_field';
-		$filter_value  = $this->resolve_source_value( $this->get_static_source_value( $settings ) );
+		$filter_value  = $this->normalize_source_values( $this->get_static_source_value( $settings ), 'post_parent' === $relation_type );
 
 		if ( 'post_parent' === $relation_type ) {
-			return null !== $filter_value && '' !== $filter_value;
+			return ! empty( $filter_value );
 		}
 
 		$relation_key = trim( (string) ( $settings['relation_key'] ?? '' ) );
 
-		return '' !== $relation_key && null !== $filter_value && '' !== $filter_value;
+		return '' !== $relation_key && ! empty( $filter_value );
 	}
 
 	/**
@@ -245,9 +245,12 @@ class Get_Related_Posts extends Base_V2 {
 
 		// Take the first context value as the relation source.
 		$settings['_related_value'] = reset( $context );
-		$source_value               = $this->resolve_source_value( $settings['_related_value'] );
+		$source_values              = $this->normalize_source_values(
+			$settings['_related_value'],
+			'post_parent' === ( $settings['relation_type'] ?? 'meta_field' )
+		);
 
-		if ( null === $source_value || '' === $source_value ) {
+		if ( empty( $source_values ) ) {
 			if ( $this->has_auto_update_static_fallback( $settings ) ) {
 				$settings['_related_value'] = $this->get_static_source_value( $settings );
 				return $this->generate( $settings );
@@ -277,10 +280,16 @@ class Get_Related_Posts extends Base_V2 {
 
 		// _related_value comes from auto-update context.
 		// Static fallback depends on the selected relation type.
-		$source_value = $this->resolve_source_value( $raw_source_value );
+		$source_values = $this->normalize_source_values( $raw_source_value, 'post_parent' === $relation_type );
+		$source_value  = $source_values[0] ?? null;
 
-		// If the relation filter is configured but the source value is empty, return nothing.
-		if ( 'post_parent' !== $relation_type && ( null === $source_value || '' === $source_value ) ) {
+		// If the selected relation cannot be resolved to a concrete source value,
+		// return nothing instead of falling back to an unfiltered posts query.
+		if ( empty( $source_values ) ) {
+			if ( 'post_parent' === $relation_type ) {
+				return array();
+			}
+
 			$relation_key = $args['relation_key'] ?? '';
 			if ( $relation_key ) {
 				return array();
@@ -296,35 +305,60 @@ class Get_Related_Posts extends Base_V2 {
 		);
 
 		// Apply relation filter when a source value is present (direct call without context returns all posts).
-		if ( null !== $source_value && '' !== $source_value ) {
+		if ( ! empty( $source_values ) ) {
 			switch ( $relation_type ) {
 				case 'meta_field':
 					$relation_key = $args['relation_key'] ?? '';
 					if ( $relation_key ) {
 						$query_args['meta_query'] = array(
 							array(
-								'key'   => $relation_key,
-								'value' => $source_value,
+								'key'     => $relation_key,
+								'value'   => count( $source_values ) > 1 ? $source_values : $source_value,
+								'compare' => count( $source_values ) > 1 ? 'IN' : '=',
 							),
 						);
 					}
 					break;
 
 				case 'post_parent':
-					if ( '' !== (string) $raw_source_value && ! is_numeric( $source_value ) ) {
+					if ( null !== $raw_source_value && empty( $source_values ) ) {
 						return array();
 					}
 
-					$query_args['post_parent'] = intval( $source_value );
+					$parent_ids = array_values(
+						array_filter(
+							array_map( 'intval', $source_values )
+						)
+					);
+
+					if ( empty( $parent_ids ) ) {
+						return array();
+					}
+
+					if ( 1 === count( $parent_ids ) ) {
+						$query_args['post_parent'] = $parent_ids[0];
+					} else {
+						$query_args['post_parent__in'] = $parent_ids;
+					}
 					break;
 
 				case 'taxonomy':
 					$taxonomy = $args['relation_key'] ?? 'category';
+					$term_ids = array_values(
+						array_filter(
+							array_map( 'intval', $source_values )
+						)
+					);
+
+					if ( empty( $term_ids ) ) {
+						return array();
+					}
+
 					$query_args['tax_query'] = array(
 						array(
 							'taxonomy' => $taxonomy,
 							'field'    => 'term_id',
-							'terms'    => intval( $source_value ),
+							'terms'    => 1 === count( $term_ids ) ? $term_ids[0] : $term_ids,
 						),
 					);
 					break;
@@ -369,6 +403,43 @@ class Get_Related_Posts extends Base_V2 {
 		}
 
 		return $this->resolve_special_source_alias( $value );
+	}
+
+	/**
+	 * Normalize source value to a list of sanitized scalar values.
+	 *
+	 * @param mixed $value Raw source value from settings or context.
+	 *
+	 * @return array
+	 */
+	private function normalize_source_values( $value, bool $split_csv = false ): array {
+		if ( null === $value ) {
+			return array();
+		}
+
+		if ( is_array( $value ) ) {
+			$values = $value;
+		} elseif ( $split_csv && is_string( $value ) && false !== strpos( $value, ',' ) ) {
+			$values = array_map( 'trim', explode( ',', $value ) );
+		} else {
+			$values = array( $value );
+		}
+
+		$values = array_map(
+			function ( $item ) {
+				return $this->resolve_source_value( $item );
+			},
+			$values
+		);
+
+		$values = array_filter(
+			$values,
+			static function ( $item ) {
+				return null !== $item && '' !== $item;
+			}
+		);
+
+		return array_values( array_unique( $values ) );
 	}
 
 	/**

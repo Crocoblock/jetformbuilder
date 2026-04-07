@@ -3,6 +3,7 @@ import metadata from '@blocks/submit-field/block.json';
 
 // action button types variations
 import './submit/main';
+import './update/main';
 import './next.page/main';
 import './prev.page/main';
 import './change.render.state/main';

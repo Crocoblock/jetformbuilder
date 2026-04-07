@@ -270,9 +270,7 @@ class Jet_Engine implements
 		}
 
 		if ( function_exists( 'jet_abaf' ) ) {
-			require_once $this->get_dir( 'macros/auto-update-available-units.php' );
-
-			new Macros\Auto_Update_Available_Units();
+			// Reserved for future JetBooking auto-update macros.
 		}
 	}
 

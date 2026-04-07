@@ -2,6 +2,7 @@
 /**
  * Blocks Styles registry
  */
+
 namespace Crocoblock\Blocks_Style;
 
 class Registry {
@@ -57,7 +58,7 @@ class Registry {
 
 		add_filter(
 			'register_block_type_args',
-			function( $block_args, $block_type ) use ( $block_name, $args ) {
+			function ( $block_args, $block_type ) use ( $block_name, $args ) {
 
 				if ( $block_type !== $block_name ) {
 					return $block_args;
@@ -87,7 +88,8 @@ class Registry {
 
 				return $block_args;
 			},
-			10, 2
+			10,
+			2
 		);
 
 		if ( ! class_exists( 'Crocoblock\Blocks_Style\Block' ) ) {

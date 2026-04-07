@@ -22,7 +22,7 @@ class Post_Handler {
 	/**
 	 * Migrate data.
 	 *
-	 * return bool
+	 * Return bool.
 	 */
 	public function migrate_data() {
 
@@ -60,10 +60,12 @@ class Post_Handler {
 		$post_content = wp_slash( $post_content );
 
 		// Update post content with new controls.
-		wp_update_post( [
-			'ID'           => $this->post_id,
-			'post_content' => $post_content,
-		] );
+		wp_update_post(
+			array(
+				'ID'           => $this->post_id,
+				'post_content' => $post_content,
+			)
+		);
 
 		return true;
 	}
@@ -76,7 +78,7 @@ class Post_Handler {
 	 * @return string JSON encoded controls.
 	 */
 	private function controls_json( array $controls ): string {
-		$controls['_uniqueClassName'] = substr( uniqid('cb-'), 0, 11 );
+		$controls['_uniqueClassName'] = substr( uniqid( 'cb-' ), 0, 11 );
 		return '"crocoblock_styles":' . json_encode( $controls, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 	}
 }

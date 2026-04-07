@@ -2,8 +2,8 @@
 /**
  * CSS parser engine
  */
-namespace Crocoblock\Blocks_Style;
 
+namespace Crocoblock\Blocks_Style;
 
 class Style_Inserter {
 
@@ -93,9 +93,12 @@ class Style_Inserter {
 			if ( ! Style_Cache::get_instance()->is_printed( $this->class_name ) ) {
 				if ( ! did_action( 'wp_head' ) ) {
 					// If the wp_head action isn't called yet, we will add the styles to the head.
-					add_action( 'wp_head', function() use ( $styles ) {
-						echo self::styles_with_tag( $styles );
-					} );
+					add_action(
+						'wp_head',
+						function () use ( $styles ) {
+							echo wp_kses_post( self::styles_with_tag( $styles ) );
+						}
+					);
 				} else {
 					// If the wp_head action is already called, we will add the styles to the content.
 					$content = self::styles_with_tag( $styles ) . $content;
@@ -145,10 +148,12 @@ class Style_Inserter {
 
 		$processor = \WP_HTML_Processor::create_fragment( $content );
 
-		while ( $processor->next_tag( [
-			'breadcrumbs' => [ 'BODY', '*' ],
-			'tag_closers' => 'skip',
-		] ) ) {
+		while ( $processor->next_tag(
+			array(
+				'breadcrumbs' => array( 'BODY', '*' ),
+				'tag_closers' => 'skip',
+			)
+		) ) {
 			$processor->add_class( $this->class_name );
 		}
 
@@ -164,6 +169,6 @@ class Style_Inserter {
 	 * @return string
 	 */
 	public static function styles_with_tag( $css = '' ) {
-		return '<style>' . $css . '</style>';
+		return '<style>' . esc_html( $css ) . '</style>';
 	}
 }

@@ -38,7 +38,7 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 		return array(
 			'field'            => '__field-wrap input[type="tel"].jet-form-builder__field.phone-field-intl.iti__tel-input',
 			'button_arrow'     => ' .iti__selected-country .iti__arrow',
-			'button_dial_code' => '__field-wrap .iti__selected-country .iti__selected-dial-code'
+			'button_dial_code' => '__field-wrap .iti__selected-country .iti__selected-dial-code',
 		);
 	}
 

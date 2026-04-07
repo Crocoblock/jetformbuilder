@@ -4,6 +4,7 @@
  *
  * Version: 2.1.12
  */
+
 namespace Crocoblock\Blocks_Style;
 
 class Manager {
@@ -85,7 +86,7 @@ class Manager {
 			_doing_it_wrong(
 				'Crocoblock\Blocks_Style\Manager::register_block_support',
 				'Block name is required.',
-				$this->version
+				'2.1.12'
 			);
 
 			return;

@@ -268,10 +268,6 @@ class Jet_Engine implements
 			new Macros\Auto_Update_Appointment_Provider();
 			new Macros\Auto_Update_Appointment_Service();
 		}
-
-		if ( function_exists( 'jet_abaf' ) ) {
-			// Reserved for future JetBooking auto-update macros.
-		}
 	}
 
 	public function add_relation_macro_source_to_macro_args( array $macros ): array {
@@ -308,6 +304,7 @@ class Jet_Engine implements
 		}
 
 		if ( isset( $_REQUEST[ $request_key ] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 			return $_REQUEST[ $request_key ];
 		}
 

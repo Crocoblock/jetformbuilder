@@ -145,7 +145,6 @@ class Generator_Update_Endpoint extends Rest_Api_Endpoint_Base {
 				foreach ( $options as &$option ) {
 					$object_id = $option['object_id'] ?? $option['value'] ?? null;
 					if ( $object_id ) {
-						//$option['html'] = $builder_helper->get_custom_template( $object_id, $block_attrs );
 						$raw_html = $builder_helper->get_custom_template( $object_id, $block_attrs );
 						$option['html'] = wp_kses_post( $raw_html );
 					}

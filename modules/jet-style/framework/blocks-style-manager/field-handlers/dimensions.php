@@ -14,28 +14,28 @@ class Dimensions extends Base {
 
 	public function get_parsed_value() {
 		if ( ! $this->raw_value ) {
-			return [
+			return array(
 				'top'    => '',
 				'right'  => '',
 				'bottom' => '',
 				'left'   => '',
-			];
+			);
 		}
 
 		if ( is_array( $this->raw_value ) ) {
-			$value = [
+			$value = array(
 				'top'    => isset( $this->raw_value['top'] ) ? $this->raw_value['top'] : '0',
 				'right'  => isset( $this->raw_value['right'] ) ? $this->raw_value['right'] : '0',
 				'bottom' => isset( $this->raw_value['bottom'] ) ? $this->raw_value['bottom'] : '0',
 				'left'   => isset( $this->raw_value['left'] ) ? $this->raw_value['left'] : '0',
-			];
+			);
 		} else {
-			$value = [
+			$value = array(
 				'top'    => $this->raw_value,
 				'right'  => $this->raw_value,
 				'bottom' => $this->raw_value,
 				'left'   => $this->raw_value,
-			];
+			);
 		}
 
 		/**

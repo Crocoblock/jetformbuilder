@@ -22,12 +22,12 @@ class UI {
 		$this->migrator_dir = plugin_dir_path( __FILE__ );
 
 		// Add admin notice about migration
-		add_action( 'admin_notices', [ $this, 'migration_notice' ] );
+		add_action( 'admin_notices', array( $this, 'migration_notice' ) );
 		// Add admin menu for migration
-		add_action( 'admin_menu', [ $this, 'add_migration_page' ] );
-		add_action( 'admin_init', [ $this, 'process_migration' ] );
-		add_action( 'admin_init', [ $this, 'process_cleanup' ] );
-		add_action( 'admin_init', [ $this, 'process_rollback' ] );
+		add_action( 'admin_menu', array( $this, 'add_migration_page' ) );
+		add_action( 'admin_init', array( $this, 'process_migration' ) );
+		add_action( 'admin_init', array( $this, 'process_cleanup' ) );
+		add_action( 'admin_init', array( $this, 'process_rollback' ) );
 	}
 
 	/**
@@ -39,8 +39,9 @@ class UI {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], $this->page_slug ) ) {
-			wp_send_json_error( esc_html__( 'The link is expired. Please reload the page and try again.', 'jet-engine' ) );
+			wp_send_json_error( esc_html__( 'The link is expired. Please reload the page and try again.', 'jet-form-builder' ) );
 		}
 
 		delete_option( 'jet_sm_migration_completed' );
@@ -55,38 +56,43 @@ class UI {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], $this->page_slug ) ) {
-			wp_send_json_error( esc_html__( 'The link is expired. Please reload the page and try again.', 'jet-engine' ) );
+			wp_send_json_error( esc_html__( 'The link is expired. Please reload the page and try again.', 'jet-form-builder' ) );
 		}
 
 		$migrated = get_option( 'jet_sm_migration_completed', false );
 
 		if ( ! $migrated || 2 == (int) $migrated ) {
-			wp_send_json_error( esc_html__( 'Migration process is not completed or already cleaned up.', 'jet-engine' ) );
+			wp_send_json_error( esc_html__( 'Migration process is not completed or already cleaned up.', 'jet-form-builder' ) );
 		}
 
-		$clear_meta_keys = [
+		$clear_meta_keys = array(
 			'_jet_sm_ready_style',
 			'_jet_sm_style',
 			'_jet_sm_controls_values',
 			'_jet_sm_fonts_collection',
 			'_jet_sm_fonts_links',
-		];
+		);
 
 		global $wpdb;
 
 		foreach ( $clear_meta_keys as $meta_key ) {
-			$wpdb->query( $wpdb->prepare(
-				"DELETE FROM {$wpdb->postmeta} WHERE meta_key = %s",
-				$meta_key
-			) );
+			$wpdb->query(
+				$wpdb->prepare(
+					"DELETE FROM {$wpdb->postmeta} WHERE meta_key = %s",
+					$meta_key
+				)
+			);
 		}
 
 		update_option( 'jet_sm_migration_completed', 2 );
 
-		wp_send_json_success( [
-			'message'   => esc_html__( 'Legacy data cleaned up successfully. You can now deactivate the JetStyleManager plugin to optimize your website performance.', 'jet-engine' ),
-		] );
+		wp_send_json_success(
+			array(
+				'message'   => esc_html__( 'Legacy data cleaned up successfully. You can now deactivate the JetStyleManager plugin to optimize your website performance.', 'jet-form-builder' ),
+			)
+		);
 	}
 
 	/**
@@ -98,18 +104,19 @@ class UI {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], $this->page_slug ) ) {
-			wp_send_json_error( esc_html__( 'The link is expired. Please reload the page and try again.', 'jet-engine' ) );
+			wp_send_json_error( esc_html__( 'The link is expired. Please reload the page and try again.', 'jet-form-builder' ) );
 		}
 
 		global $wpdb;
 		$step = isset( $_REQUEST['step'] ) ? intval( $_REQUEST['step'] ) : 1;
 		$limit = 20;
 		$offset = ( $step - 1 ) * $limit;
-		$items = $wpdb->get_results( "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = '_jet_sm_controls_values' LIMIT $limit OFFSET $offset" );
+		$items = $wpdb->get_results( "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = '_jet_sm_controls_values' LIMIT $limit OFFSET $offset" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		if ( empty( $items ) ) {
-			wp_send_json_error( esc_html__( 'No more posts to migrate.', 'jet-engine' ) );
+			wp_send_json_error( esc_html__( 'No more posts to migrate.', 'jet-form-builder' ) );
 		}
 
 		$total    = $this->total_items_to_migrate();
@@ -133,22 +140,26 @@ class UI {
 
 			update_option( 'jet_sm_migration_completed', 1 );
 
-			wp_send_json_success( [
-				'message'   => sprintf(
-					esc_html__( 'Migrated %d posts successfully. Migration completed.', 'jet-engine' ),
-					$migrated,
-				),
-				'next_step' => 0,
-			] );
+			wp_send_json_success(
+				array(
+					'message'   => sprintf(
+						esc_html__( 'Migrated %d posts successfully. Migration completed.', 'jet-form-builder' ), // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
+						$migrated
+					),
+					'next_step' => 0,
+				)
+			);
 		}
 
-		wp_send_json_success( [
-			'message' => sprintf(
-				esc_html__( 'Migrated %d posts successfully.', 'jet-engine' ),
-				$migrated,
-			),
-			'next_step' => $step + 1,
-		] );
+		wp_send_json_success(
+			array(
+				'message' => sprintf(
+					esc_html__( 'Migrated %d posts successfully.', 'jet-form-builder' ), // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
+					$migrated
+				),
+				'next_step' => $step + 1,
+			)
+		);
 	}
 
 	/**
@@ -157,11 +168,11 @@ class UI {
 	public function add_migration_page() {
 		add_submenu_page(
 			'',
-			esc_html__( 'JetStyleManager Migration', 'jet-engine' ),
-			esc_html__( 'Migration', 'jet-engine' ),
+			esc_html__( 'JetStyleManager Migration', 'jet-form-builder' ),
+			esc_html__( 'Migration', 'jet-form-builder' ),
 			'manage_options',
 			$this->page_slug,
-			[ $this, 'render_migration_page' ]
+			array( $this, 'render_migration_page' )
 		);
 	}
 
@@ -171,15 +182,15 @@ class UI {
 	public function render_migration_page() {
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'jet-engine' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'jet-form-builder' ) );
 		}
 
 		$migration_completed = get_option( 'jet_sm_migration_completed', false );
 		$fonts_manager_url   = esc_url( admin_url( 'site-editor.php?p=/styles&section=/typography' ) );
 
-		$fonts_manager_message  = '<p><b>' . esc_html__( 'Please note:', 'jet-engine' ) . '</b> ';
+		$fonts_manager_message  = '<p><b>' . esc_html__( 'Please note:', 'jet-form-builder' ) . '</b> ';
 		$fonts_manager_message .= sprintf(
-			esc_html__( ' The new Styles Manager uses fonts installed on your website. You can %1$smanage these fonts here%1$s.', 'jet-engine' ),
+			esc_html__( ' The new Styles Manager uses fonts installed on your website. You can %1$smanage these fonts here%1$s.', 'jet-form-builder' ), // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
 			'<a href="' . $fonts_manager_url . '" target="_blank">',
 			'</a>'
 		);
@@ -187,18 +198,18 @@ class UI {
 
 		if ( $migration_completed && 2 == (int) $migration_completed ) {
 			echo '<div class="wrap">';
-			echo '<h1>' . esc_html__( 'JetStyleManager Migration', 'jet-engine' ) . '</h1>';
-			echo '<p>' . esc_html__( 'Migration process is already completed. You can now deactivate the JetStyleManager plugin to optimize your website performance.', 'jet-engine' ) . '</p>';
+			echo '<h1>' . esc_html__( 'JetStyleManager Migration', 'jet-form-builder' ) . '</h1>';
+			echo '<p>' . esc_html__( 'Migration process is already completed. You can now deactivate the JetStyleManager plugin to optimize your website performance.', 'jet-form-builder' ) . '</p>';
 
-			echo $fonts_manager_message;
+			echo $fonts_manager_message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			echo '</div>';
 			exit;
 		}
 
 		echo '<div class="wrap">';
-		echo '<h1>' . esc_html__( 'JetStyleManager Migration', 'jet-engine' ) . '</h1>';
-		echo '<p>' . esc_html__( 'This page allows you to migrate your styling settings to the new Style Manager module.', 'jet-engine' ) . '</p>';
+		echo '<h1>' . esc_html__( 'JetStyleManager Migration', 'jet-form-builder' ) . '</h1>';
+		echo '<p>' . esc_html__( 'This page allows you to migrate your styling settings to the new Style Manager module.', 'jet-form-builder' ) . '</p>';
 
 		$completed_style = 'style="display: none;"';
 		$run_style       = '';
@@ -208,37 +219,37 @@ class UI {
 			$run_style       = 'style="display: none;"';
 		}
 
-		echo '<div id="cleanup_section" ' . $completed_style . '>';
+		echo '<div id="cleanup_section" ' . $completed_style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		echo '<p>' . esc_html__( 'Migration process is completed. Please check your content. If everything is ok, you can click the button below to remove the legacy data and then deactivate JetStyleManager plugin.', 'jet-engine' ) . '</p>';
+		echo '<p>' . esc_html__( 'Migration process is completed. Please check your content. If everything is ok, you can click the button below to remove the legacy data and then deactivate JetStyleManager plugin.', 'jet-form-builder' ) . '</p>';
 
-		echo $fonts_manager_message;
+		echo $fonts_manager_message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		echo '<p><a href="' . $this->page_url( false, true ) . '" class="button button-primary" id="cleanup_button">' . esc_html__( 'Cleanup Legacy Data', 'jet-engine' ) . '</a></p>';
+		echo '<p><a href="' . $this->page_url( false, true ) . '" class="button button-primary" id="cleanup_button">' . esc_html__( 'Cleanup Legacy Data', 'jet-form-builder' ) . '</a></p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		echo '<p>' . esc_html__( 'If something went wrong click the button below to rollback to the legacy JetStyleManager.', 'jet-engine' ) . '</p>';
+		echo '<p>' . esc_html__( 'If something went wrong click the button below to rollback to the legacy JetStyleManager.', 'jet-form-builder' ) . '</p>';
 
-		echo '<p><a href="' . $this->page_url( false, false, true ) . '" class="button button-secondary" id="cleanup_button">' . esc_html__( 'Rollback to legacy JetStyleManager', 'jet-engine' ) . '</a></p>';
+		echo '<p><a href="' . $this->page_url( false, false, true ) . '" class="button button-secondary" id="cleanup_button">' . esc_html__( 'Rollback to legacy JetStyleManager', 'jet-form-builder' ) . '</a></p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		echo '</div>';
 
-		echo '<div id="run_section" ' . $run_style . '>';
+		echo '<div id="run_section" ' . $run_style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		echo '<p>' . esc_html__( 'Click the button below to start the migration process. After migration, you can deactivate the JetStyleManager plugin to optimize your website performance.', 'jet-engine' ) . '</p>';
+		echo '<p>' . esc_html__( 'Click the button below to start the migration process. After migration, you can deactivate the JetStyleManager plugin to optimize your website performance.', 'jet-form-builder' ) . '</p>';
 
 		$total_items = $this->total_items_to_migrate();
 
 		if ( $total_items > 0 ) {
 			echo '<p>' . sprintf(
-				esc_html__( 'Total posts to migrate: %d', 'jet-engine' ),
-				$total_items
+				esc_html__( 'Total posts to migrate: %d', 'jet-form-builder' ), // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
+				$total_items // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			) . '</p>';
 
-			echo '<p><a href="' . $this->page_url( true ) . '" class="button button-primary" id="run_migration">' . esc_html__( 'Start Migration', 'jet-engine' ) . '</a></p>';
+			echo '<p><a href="' . $this->page_url( true ) . '" class="button button-primary" id="run_migration">' . esc_html__( 'Start Migration', 'jet-form-builder' ) . '</a></p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			echo '<div id="migration_progress"></div>';
 		} else {
-			echo '<p><b>' . esc_html__( 'No posts to migrate. You can just disable an old JetStyleManager plugin and use the new functionality.', 'jet-engine' ) . '</b></p>';
+			echo '<p><b>' . esc_html__( 'No posts to migrate. You can just disable an old JetStyleManager plugin and use the new functionality.', 'jet-form-builder' ) . '</b></p>';
 		}
 
 		echo '</div>';
@@ -269,9 +280,15 @@ class UI {
 
 			document.addEventListener( 'DOMContentLoaded', function () {
 
-				const migrationData = <?php echo wp_json_encode( [
-					'confirmMessage' => __( 'Are you sure you want to start the migration? This process cannot be undone.', 'jet-engine' ),
-				] ); ?>;
+				const migrationData = 
+				<?php
+				echo wp_json_encode(
+					array(
+						'confirmMessage' => __( 'Are you sure you want to start the migration? This process cannot be undone.', 'jet-form-builder' ),
+					)
+				);
+				?>
+				;
 
 				const runMigrationButton = document.getElementById( 'run_migration' );
 				const cleanupButton = document.getElementById( 'cleanup_button' );
@@ -344,7 +361,7 @@ class UI {
 
 						event.preventDefault();
 
-						if ( confirm( '<?php echo esc_js( __( 'Are you sure you want to clean up the legacy data?', 'jet-engine' ) ); ?>' ) ) {
+						if ( confirm( '<?php echo esc_js( __( 'Are you sure you want to clean up the legacy data?', 'jet-form-builder' ) ); ?>' ) ) {
 							cleanupButton.style.display = 'none';
 
 							jQuery.ajax({
@@ -379,7 +396,7 @@ class UI {
 	 */
 	public function page_url( $run_migration = false, $cleanup = false, $rollback = false ) {
 
-		$url_args = [ 'page' => $this->page_slug ];
+		$url_args = array( 'page' => $this->page_slug );
 
 		if ( $run_migration ) {
 			$url_args['run_migration'] = 1;
@@ -405,14 +422,14 @@ class UI {
 
 		if (
 			! current_user_can( 'manage_options' )
-			|| isset( $_GET['page'] ) && $_GET['page'] === $this->page_slug
+			|| isset( $_GET['page'] ) && $_GET['page'] === $this->page_slug // phpcs:ignore Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence.MissingParentheses
 		) {
 			return;
 		}
 
 		echo '<div class="notice notice-error is-dismissible">';
-		echo '<p>' . esc_html__( 'JetStyleManager as a separate plugin has been replaced with a built-in Style Manager module for the plugins that support it. You can migrate your styling settings to the new style manager module and deactivate JetStyleManager plugin to optimize your website performance.', 'jet-engine' ) . '</p>';
-		echo '<p><a href="' . $this->page_url() . '" class="button button-primary">' . esc_html__( 'Go to Migration Page', 'jet-engine' ) . '</a></p>';
+		echo '<p>' . esc_html__( 'JetStyleManager as a separate plugin has been replaced with a built-in Style Manager module for the plugins that support it. You can migrate your styling settings to the new style manager module and deactivate JetStyleManager plugin to optimize your website performance.', 'jet-form-builder' ) . '</p>';
+		echo '<p><a href="' . $this->page_url() . '" class="button button-primary">' . esc_html__( 'Go to Migration Page', 'jet-form-builder' ) . '</a></p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</div>';
 	}
 }

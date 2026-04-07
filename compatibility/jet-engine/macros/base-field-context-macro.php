@@ -25,7 +25,8 @@ abstract class Base_Field_Context_Macro extends \Jet_Engine_Base_Macros {
 		}
 
 		if ( isset( $_REQUEST[ $request_key ] ) ) {
-			return $this->sanitize_value( $_REQUEST[ $request_key ] );
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			return $this->sanitize_value( wp_unslash( $_REQUEST[ $request_key ] ) );
 		}
 
 		if ( isset( $GLOBALS[ $request_key ] ) ) {

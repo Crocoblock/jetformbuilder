@@ -93,7 +93,7 @@ class Get_From_Field extends Base_V2 {
 
 				// Check if field has options directly
 				$has_options = ! empty( $field_data['options'] ) ||
-				               'manual_bulk' === ( $field_data['options_source'] ?? '' );
+							   'manual_bulk' === ( $field_data['options_source'] ?? '' );
 
 				// Also check if it's a repeater with sub-fields that have options
 				if ( ! $has_options && ! empty( $field_data['repeater-fields'] ) ) {
@@ -122,7 +122,7 @@ class Get_From_Field extends Base_V2 {
 	private function repeater_has_options( array $repeater_fields ): bool {
 		foreach ( $repeater_fields as $sub_field ) {
 			if ( ! empty( $sub_field['options'] ) ||
-			     'manual_bulk' === ( $sub_field['options_source'] ?? '' ) ) {
+				 'manual_bulk' === ( $sub_field['options_source'] ?? '' ) ) {
 				return true;
 			}
 		}

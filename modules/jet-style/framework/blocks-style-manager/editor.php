@@ -76,17 +76,17 @@ class Editor {
 
 		$fonts_manager_url = esc_url( admin_url( 'site-editor.php?p=/styles&section=/typography' ) );
 		$settings = wp_get_global_settings();
-		$fonts = [];
+		$fonts = array();
 
 		if ( ! empty( $settings['typography']['fontFamilies'] ) ) {
 			foreach ( $settings['typography']['fontFamilies'] as $fonts_set ) {
 				if ( is_array( $fonts_set ) ) {
 					foreach ( $fonts_set as $font ) {
 						if ( ! empty( $font['name'] ) && ! empty( $font['fontFamily'] ) ) {
-							$fonts[] = [
+							$fonts[] = array(
 								'value' => $font['fontFamily'],
 								'label' => $font['name'],
-							];
+							);
 						}
 					}
 				}
@@ -96,7 +96,7 @@ class Editor {
 		/**
 		 * Note!
 		 *
-		 * get_blocks_supports() always must be called before get_block_defaults()
+		 * Get_blocks_supports() always must be called before get_block_defaults()
 		 * because it internally calls extract_children(),
 		 * which extract also defaults of these children.
 		 */

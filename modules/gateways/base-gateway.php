@@ -377,7 +377,6 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 	 *
 	 * By default returns empty array.
 	 * Child gateways may override this to provide required fields.
-	 *
 	 */
 	public function required_credentials_fields(): array {
 		return array();

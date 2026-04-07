@@ -124,9 +124,6 @@ class Module implements
 			array(),
 			$ver
 		);
-
-		// ✅ временно, чтобы проверить что реально грузится
-		//wp_enqueue_style( $this->get_handle() );
 	}
 
 	/**
@@ -146,8 +143,6 @@ class Module implements
 
 		$handler_form_id = (int) $handler->get_form_id();
 
-
-
 		// ADDED: normalize to parent for meta read (_jf_gateways stored on parent form post)
 		$real_form_id = $handler_form_id;
 
@@ -166,13 +161,9 @@ class Module implements
 			$real_form_id = (int) $parent;
 		}
 
-
-
 		$gateways_module = \JFB_Modules\Gateways\Module::instance();
 
 		$gateways = $gateways_module->get_form_gateways_by_id( $real_form_id );
-
-
 
 		$gateways['gateway'] = $selected;
 

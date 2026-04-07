@@ -31,10 +31,10 @@ $raw  = get_post_meta( $form_id, '_jf_gateways', true );
 $meta = is_string( $raw ) ? json_decode( $raw, true ) : (array) $raw;
 $meta = is_array( $meta ) ? $meta : array();
 
-$mode = $meta['mode'] ?? 'single';
+$gateway_mode = $meta['mode'] ?? 'single';
 $list = array();
 
-if ( 'manual' === $mode ) {
+if ( 'manual' === $gateway_mode ) {
 	foreach ( $meta as $key => $value ) {
 		if ( ! is_string( $key ) ) {
 			continue;
@@ -53,7 +53,7 @@ if ( 'manual' === $mode ) {
 	}
 }
 
-$title       = $args['title'] ?? '';
+$block_title = $args['title'] ?? '';
 $description = $args['description'] ?? '';
 
 $field_name = ! empty( $args['name'] ) ? $args['name'] : 'multi_gateway';
@@ -70,25 +70,25 @@ $gw_settings = is_array( $gw_settings ) ? $gw_settings : array();
 
 ?>
 <div class="jfb-multi-gateway">
-    <div class="jfb-multi-gateway__inner">
-		<?php if ( is_string( $title ) && '' !== trim( $title ) ) : ?>
-            <h3 class="jfb-multi-gateway__title">
-				<?php echo wp_kses_post( $title ); ?>
-            </h3>
+	<div class="jfb-multi-gateway__inner">
+		<?php if ( is_string( $block_title ) && '' !== trim( $block_title ) ) : ?>
+			<h3 class="jfb-multi-gateway__title">
+				<?php echo wp_kses_post( $block_title ); ?>
+			</h3>
 		<?php endif; ?>
 
 		<?php if ( is_string( $description ) && '' !== trim( $description ) ) : ?>
-            <p class="jfb-multi-gateway__desc">
+			<p class="jfb-multi-gateway__desc">
 				<?php echo wp_kses_post( $description ); ?>
-            </p>
+			</p>
 		<?php endif; ?>
 
 		<?php if ( empty( $list ) ) : ?>
-            <div class="jfb-multi-gateway__empty">
+			<div class="jfb-multi-gateway__empty">
 				<?php echo esc_html__( 'No gateways selected', 'jet-form-builder' ); ?>
-            </div>
+			</div>
 		<?php else : ?>
-            <div class="jfb-multi-gateway__list">
+			<div class="jfb-multi-gateway__list">
 				<?php foreach ( $list as $index => $gateway_key ) : ?>
 					<?php
 					$settings = $gw_settings[ $gateway_key ] ?? array();
@@ -102,28 +102,28 @@ $gw_settings = is_array( $gw_settings ) ? $gw_settings : array();
 
 					$item_desc = is_string( $item_desc ) ? $item_desc : '';
 					?>
-                    <label class="jfb-multi-gateway__item">
-                        <input
-                                type="radio"
-                                class="jet-form-builder__field checkradio-field"
-                                name="<?php echo esc_attr( $name ); ?>"
-                                value="<?php echo esc_attr( $gateway_key ); ?>"
+					<label class="jfb-multi-gateway__item">
+						<input
+								type="radio"
+								class="jet-form-builder__field checkradio-field"
+								name="<?php echo esc_attr( $name ); ?>"
+								value="<?php echo esc_attr( $gateway_key ); ?>"
 							<?php checked( 0 === $index ); ?>
-                        />
-                        <div class="jfb-multi-gateway__content">
-                            <div class="jfb-multi-gateway__label">
+						/>
+						<div class="jfb-multi-gateway__content">
+							<div class="jfb-multi-gateway__label">
 								<?php echo wp_kses_post( $item_label ); ?>
-                            </div>
+							</div>
 
 							<?php if ( '' !== trim( $item_desc ) ) : ?>
-                                <div class="jfb-multi-gateway__description">
-                                    <div><?php echo wp_kses_post( $item_desc ); ?></div>
-                                </div>
+								<div class="jfb-multi-gateway__description">
+									<div><?php echo wp_kses_post( $item_desc ); ?></div>
+								</div>
 							<?php endif; ?>
-                        </div>
-                    </label>
+						</div>
+					</label>
 				<?php endforeach; ?>
-            </div>
+			</div>
 		<?php endif; ?>
-    </div>
+	</div>
 </div>

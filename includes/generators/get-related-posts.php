@@ -62,9 +62,9 @@ class Get_Related_Posts extends Base_V2 {
 				'label'   => __( 'Filter By', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
-					array( 'value' => 'meta_field',  'label' => __( 'Match by meta key', 'jet-form-builder' ) ),
+					array( 'value' => 'meta_field', 'label' => __( 'Match by meta key', 'jet-form-builder' ) ),
 					array( 'value' => 'post_parent', 'label' => __( 'Match by WordPress parent post', 'jet-form-builder' ) ),
-					array( 'value' => 'taxonomy',    'label' => __( 'Match by taxonomy term', 'jet-form-builder' ) ),
+					array( 'value' => 'taxonomy', 'label' => __( 'Match by taxonomy term', 'jet-form-builder' ) ),
 				),
 				'help'    => __( 'How the listed posts are connected to the value from the watched field.', 'jet-form-builder' ),
 			),
@@ -76,7 +76,7 @@ class Get_Related_Posts extends Base_V2 {
 				'placeholder' => 'related_project_id',
 				'help'        => __( 'Enter the custom field name for "Match by meta key" or the taxonomy slug for "Match by taxonomy term".', 'jet-form-builder' ),
 				'condition'   => array(
-					'relation_type!' => 'post_parent'
+					'relation_type!' => 'post_parent',
 				),
 			),
 			'relation_key_value' => array(
@@ -87,7 +87,7 @@ class Get_Related_Posts extends Base_V2 {
 				'placeholder' => '42',
 				'help'        => __( 'Static value used when the Trigger Field is empty. To use multiple values, enter them as a comma-separated list, for example: `12,34,56`.', 'jet-form-builder' ),
 				'condition'   => array(
-					'relation_type!' => 'post_parent'
+					'relation_type!' => 'post_parent',
 				),
 			),
 			'parent_post_id' => array(
@@ -97,7 +97,7 @@ class Get_Related_Posts extends Base_V2 {
 				'control'   => 'text',
 				'help'      => __( 'Static or dynamic parent post ID used to load child posts when auto-update is not active. Enter `current_post_id` to load child posts of the current post. To load child posts from several parents, enter comma-separated IDs, for example: `12,34,56`.', 'jet-form-builder' ),
 				'condition' => array(
-					'relation_type' => 'post_parent'
+					'relation_type' => 'post_parent',
 				),
 			),
 			'value_field'    => array(
@@ -106,9 +106,9 @@ class Get_Related_Posts extends Base_V2 {
 				'label'   => __( 'Option Value', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
-					array( 'value' => 'ID',         'label' => 'Post ID' ),
+					array( 'value' => 'ID', 'label' => 'Post ID' ),
 					array( 'value' => 'post_title', 'label' => 'Post Title' ),
-					array( 'value' => 'post_name',  'label' => 'Post Slug' ),
+					array( 'value' => 'post_name', 'label' => 'Post Slug' ),
 				),
 			),
 			'label_field'    => array(
@@ -117,8 +117,8 @@ class Get_Related_Posts extends Base_V2 {
 				'label'   => __( 'Option Label', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
-					array( 'value' => 'post_title',   'label' => 'Post Title' ),
-					array( 'value' => 'post_name',    'label' => 'Post Slug' ),
+					array( 'value' => 'post_title', 'label' => 'Post Title' ),
+					array( 'value' => 'post_name', 'label' => 'Post Slug' ),
 					array( 'value' => 'post_excerpt', 'label' => 'Post Excerpt' ),
 				),
 			),
@@ -136,9 +136,9 @@ class Get_Related_Posts extends Base_V2 {
 				'label'   => __( 'Order By', 'jet-form-builder' ),
 				'control' => 'select',
 				'options' => array(
-					array( 'value' => 'title',      'label' => 'Title' ),
-					array( 'value' => 'date',       'label' => 'Date' ),
-					array( 'value' => 'ID',         'label' => 'ID' ),
+					array( 'value' => 'title', 'label' => 'Title' ),
+					array( 'value' => 'date', 'label' => 'Date' ),
+					array( 'value' => 'ID', 'label' => 'ID' ),
 					array( 'value' => 'menu_order', 'label' => 'Menu Order' ),
 				),
 			),

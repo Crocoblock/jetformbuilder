@@ -13,9 +13,9 @@ class Typography extends Base {
 	 */
 	public function parse_variable( $variable = array() ) {
 
-		$prefix = isset($variable['prefix']) ? $variable['prefix'] : '';
-		$name   = isset($variable['name']) ? $variable['name'] : false;
-		$full_name = isset($variable['full_name']) ? $variable['full_name'] : $prefix . '-' . $name;
+		$prefix = isset( $variable['prefix'] ) ? $variable['prefix'] : '';
+		$name   = isset( $variable['name'] ) ? $variable['name'] : false;
+		$full_name = isset( $variable['full_name'] ) ? $variable['full_name'] : $prefix . '-' . $name;
 
 		if ( ! $full_name ) {
 			return array();
@@ -39,7 +39,7 @@ class Typography extends Base {
 				continue; // Skip inherit values.
 			}
 
-			$result[] = $full_name . '__' . $key . ':'.  $value;
+			$result[] = $full_name . '__' . $key . ':' . $value;
 		}
 
 		return $result;
@@ -56,18 +56,18 @@ class Typography extends Base {
 			$this->raw_value['lineheight'] = $this->raw_value['lineHeight'];
 		}
 
-		return [
-			'family'      => isset($this->raw_value['family']) ? $this->raw_value['family'] : 'inherit',
-			'weight'      => isset($this->raw_value['weight']) ? $this->raw_value['weight'] : 'inherit',
-			'transform'   => isset($this->raw_value['transform']) ? $this->raw_value['transform'] : 'inherit',
-			'style'       => isset($this->raw_value['style']) ? $this->raw_value['style'] : 'inherit',
-			'decoration'  => isset($this->raw_value['decoration']) ? $this->raw_value['decoration'] : 'inherit',
-			'lineheight'  => isset($this->raw_value['lineheight']) ? $this->raw_value['lineheight'] : 'inherit',
+		return array(
+			'family'      => isset( $this->raw_value['family'] ) ? $this->raw_value['family'] : 'inherit',
+			'weight'      => isset( $this->raw_value['weight'] ) ? $this->raw_value['weight'] : 'inherit',
+			'transform'   => isset( $this->raw_value['transform'] ) ? $this->raw_value['transform'] : 'inherit',
+			'style'       => isset( $this->raw_value['style'] ) ? $this->raw_value['style'] : 'inherit',
+			'decoration'  => isset( $this->raw_value['decoration'] ) ? $this->raw_value['decoration'] : 'inherit',
+			'lineheight'  => isset( $this->raw_value['lineheight'] ) ? $this->raw_value['lineheight'] : 'inherit',
 			'lh_unit'     => '', // legacy from old SM for style decorations consistency
-			'letterspacing' => isset($this->raw_value['letterSpacing']) ? $this->raw_value['letterSpacing'] : 'inherit',
+			'letterspacing' => isset( $this->raw_value['letterSpacing'] ) ? $this->raw_value['letterSpacing'] : 'inherit',
 			'ls_unit'     => '', // legacy from old SM for style decorations consistency
-			'size'        => isset($this->raw_value['size']) ? $this->raw_value['size'] : 'inherit',
+			'size'        => isset( $this->raw_value['size'] ) ? $this->raw_value['size'] : 'inherit',
 			's_unit'      => '', // legacy from old SM for style decorations consistency
-		];
+		);
 	}
 }

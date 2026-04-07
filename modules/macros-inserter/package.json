@@ -1,0 +1,9 @@
+{
+  "name": "macros-inserter",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+	"build": "npx webpack build --mode production",
+	"dev": "npx webpack build --mode development -w"
+  }
+}

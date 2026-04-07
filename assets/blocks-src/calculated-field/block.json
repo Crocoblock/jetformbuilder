@@ -1,5 +1,5 @@
 {
-	"apiVersion": 2,
+	"apiVersion": 3,
 	"name": "jet-forms/calculated-field",
 	"category": "jet-form-builder-fields",
 	"title": "Calculated Field",

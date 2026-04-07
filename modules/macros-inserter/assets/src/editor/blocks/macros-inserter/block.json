@@ -2,9 +2,8 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "jet-forms/macros-inserter",
-	"title": "Macros Inserter",
+	"title": "Fields Preview",
 	"category": "jet-form-builder-fields",
-	"icon": "editor-code",
 	"supports": {
 		"html": false
 	},

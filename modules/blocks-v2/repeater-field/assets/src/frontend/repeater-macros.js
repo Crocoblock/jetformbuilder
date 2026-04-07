@@ -1,3 +1,5 @@
+const { applyFilters } = JetPlugins.hooks;
+
 function bindRepeaterNotifyOnce( node ) {
 	if ( node.__jfbMacrosRepeaterBound ) {
 		return;
@@ -34,13 +36,25 @@ function bindRepeaterNotifyOnce( node ) {
 function getFieldValue( el ) {
 	if ( el.tagName === 'SELECT' && el.multiple ) {
 		const values = Array.from( el.selectedOptions || [] )
-			.map( opt => String( opt.value ?? '' ).trim() )
+			.map( ( opt ) => String( opt.value ?? '' ).trim() )
 			.filter( Boolean );
 
 		return values.join( ', ' );
 	}
 
 	return String( el.value ?? '' ).trim();
+}
+
+function getRepeaterFieldValue( el, rowEl, rowRepeaterField ) {
+	const current = getFieldValue( el );
+
+	return applyFilters(
+		'jet.fb.macro.inside.repeater.field.value',
+		current,
+		el,
+		rowEl,
+		rowRepeaterField
+	);
 }
 
 function collectRowValues( rowEl ) {
@@ -59,7 +73,7 @@ function collectRowValues( rowEl ) {
 			return;
 		}
 
-		// KEY FIX: ignore hidden (usually stores internal/service values)
+		// ignore hidden (usually stores internal/service values)
 		if ( el.tagName === 'INPUT' && el.type === 'hidden' ) {
 			return;
 		}
@@ -73,7 +87,7 @@ function collectRowValues( rowEl ) {
 			return;
 		}
 
-		const value = getFieldValue( el );
+		const value = getRepeaterFieldValue( el, rowEl, rowRepeaterField );
 		if ( value === '' ) {
 			return;
 		}
@@ -112,7 +126,7 @@ function collectRepeaterLinesFromTemplate( fieldNode, templateHtml ) {
 				return;
 			}
 
-			node.textContent = valuesByName[ macroName ] ?? '';
+			node.innerHTML = String( valuesByName[ macroName ] ?? '' );
 		} );
 
 		const tmp = document.createElement( 'div' );
@@ -122,7 +136,6 @@ function collectRepeaterLinesFromTemplate( fieldNode, templateHtml ) {
 
 	return lines.join( '' );
 }
-
 
 function collectRepeaterLinesPlain( fieldNode, macros ) {
 	const items = fieldNode.querySelector( '.jet-form-builder-repeater__items' );
@@ -155,7 +168,7 @@ function collectRepeaterLinesPlain( fieldNode, macros ) {
 				return;
 			}
 
-			const name  = el.dataset?.fieldName || el.name || '';
+			const name = el.dataset?.fieldName || el.name || '';
 			if ( !name ) {
 				return;
 			}
@@ -164,14 +177,13 @@ function collectRepeaterLinesPlain( fieldNode, macros ) {
 				return;
 			}
 
-			const value = getFieldValue( el );
+			const value = getRepeaterFieldValue( el, rowEl, rowRepeaterField );
 			lines.push( `${ name }: ${ value }` );
 		} );
 	} );
 
 	return lines.join( '<br/>' );
 }
-
 
 export function resolveRepeaterMacrosValue( current, $fieldNode, $macroHost = false ) {
 	const fieldNode = $fieldNode?.[ 0 ];
@@ -184,7 +196,7 @@ export function resolveRepeaterMacrosValue( current, $fieldNode, $macroHost = fa
 	const host = $macroHost?.[ 0 ];
 	const source = host?.__jfbMacroTemplate;
 
-	if ( !host || !source ) { 
+	if ( !host || !source ) {
 		return collectRepeaterLinesPlain( fieldNode, null );
 	}
 

@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 3.5.6.3
+Stable tag: 3.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,20 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.6.0**
+- ADD: Use several payment gateways at once in form
+- ADD: Conditional logic to payment gateway
+- ADD: Phone field
+- ADD: New Style Manager
+- ADD: `jet-form-builder/form-record/export/get-blocks-by-post` filter
+- UPD: Form macros logic
+- UPD: Rewrite Generators UI
+- UPD: Modules loader
+- FIX: Space in the markup of Map Field
+- FIX: Migrate blocks registration to apiVersion 3
+- FIX: Incorrect display of large numbers in Form Records
+- FIX: Fixed an issue where message meta returned labels instead of actual values.
 
 **3.5.6.3**
 - ADD: Support preview for AVIF files in Media Field

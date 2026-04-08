@@ -8,6 +8,20 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.0
+* ADD: Use several payment gateways at once in form
+* ADD: Conditional logic to payment gateway
+* ADD: Phone field
+* ADD: New Style Manager
+* ADD: `jet-form-builder/form-record/export/get-blocks-by-post` filter
+* UPD: Form macros logic
+* UPD: Rewrite Generators UI
+* UPD: Modules loader
+* FIX: Space in the markup of Map Field
+* FIX: Migrate blocks registration to apiVersion 3
+* FIX: Incorrect display of large numbers in Form Records
+* FIX: Fixed an issue where message meta returned labels instead of actual values.
+
 ## 3.5.6.3
 * ADD: Support preview for AVIF files in Media Field
 * ADD: `jet-form-builder/form-record/general-values-columns` filter for Form Record General Values Columns

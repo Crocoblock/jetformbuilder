@@ -27,10 +27,10 @@ class Multiple_Controller extends Base_Export_Controller {
 		$this->form_id = $this->get_form_id();
 
 		// set fields without request
-		$blocks = apply_filters( 
-			'jet-form-builder/form-record/export/get-blocks-by-post', 
-			Block_Helper::get_blocks_by_post( $this->form_id ), 
-			$this->form_id 
+		$blocks = apply_filters(
+			'jet-form-builder/form-record/export/get-blocks-by-post',
+			Block_Helper::get_blocks_by_post( $this->form_id ),
+			$this->form_id
 		);
 		jet_fb_context()->set_parsers( $blocks );
 

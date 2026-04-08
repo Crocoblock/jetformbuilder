@@ -1,5 +1,5 @@
 {
-	"apiVersion": 2,
+	"apiVersion": 3,
 	"name": "jet-forms/multi-gateway",
 	"title": "Payment Gateway",
 	"description": "Field allowing users to choose a payment method on the front end.",

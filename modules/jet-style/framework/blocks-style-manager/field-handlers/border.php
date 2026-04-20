@@ -13,9 +13,9 @@ class Border extends Base {
 	 */
 	public function parse_variable( $variable = array() ) {
 
-		$prefix = isset( $variable['prefix'] ) ? $variable['prefix'] : '';
-		$name   = isset( $variable['name'] ) ? $variable['name'] : false;
-		$full_name = isset( $variable['full_name'] ) ? $variable['full_name'] : $prefix . '-' . $name;
+		$prefix = isset($variable['prefix']) ? $variable['prefix'] : '';
+		$name   = isset($variable['name']) ? $variable['name'] : false;
+		$full_name = isset($variable['full_name']) ? $variable['full_name'] : $prefix . '-' . $name;
 
 		if ( ! $full_name ) {
 			return array();
@@ -35,12 +35,12 @@ class Border extends Base {
 			if ( is_string( $values['radius'] ) ) {
 				$radius = $values['radius'];
 			} else {
-				$props_order = array(
+				$props_order = [
 					'topLeft',
 					'topRight',
 					'bottomRight',
 					'bottomLeft',
-				);
+				];
 
 				foreach ( $props_order as $prop ) {
 					$radius .= isset( $values['radius'][ $prop ] ) ? $values['radius'][ $prop ] . ' ' : '0 ';
@@ -54,13 +54,13 @@ class Border extends Base {
 
 		if ( ! empty( $values['border'] ) && is_array( $values['border'] ) ) {
 
-			$global = isset( $values['border']['global'] ) ? $values['border']['global'] : array();
-			$sides  = array( 'top', 'right', 'bottom', 'left' );
+			$global = isset( $values['border']['global'] ) ? $values['border']['global'] : [];
+			$sides  = [ 'top', 'right', 'bottom', 'left' ];
 
 			foreach ( $sides as $side ) {
 				$side_props = isset( $values['border'][ $side ] ) && is_array( $values['border'][ $side ] )
 					? $values['border'][ $side ]
-					: array();
+					: [];
 
 				$color = isset( $side_props['color'] ) ? $side_props['color'] : ( isset( $global['color'] ) ? $global['color'] : 'transparent' );
 				$width = isset( $side_props['width'] ) ? $side_props['width'] : ( isset( $global['width'] ) ? $global['width'] : '0' );
@@ -80,15 +80,15 @@ class Border extends Base {
 	 */
 	public function get_parsed_value() {
 		if ( ! $this->raw_value ) {
-			return array(
-				'border' => array(),
-				'radius' => array(),
-			);
+			return [
+				'border' => [],
+				'radius' => [],
+			];
 		} else {
-			return array(
-				'border' => $this->parse_border_value( isset( $this->raw_value['border'] ) ? $this->raw_value['border'] : null ),
-				'radius' => isset( $this->raw_value['radius'] ) ? $this->raw_value['radius'] : null,
-			);
+			return [
+				'border' => $this->parse_border_value(isset($this->raw_value['border']) ? $this->raw_value['border'] : null),
+				'radius' => isset($this->raw_value['radius']) ? $this->raw_value['radius'] : null,
+			];
 		}
 	}
 
@@ -98,20 +98,20 @@ class Border extends Base {
 	 * @param mixed $value The raw border value.
 	 * @return array Parsed border value.
 	 */
-	public function parse_border_value( $value ) {
+	public function parse_border_value($value) {
 
 		if ( ! $value ) {
-			return array();
+			return [];
 		}
 
-		if ( isset( $value['color'] ) || isset( $value['width'] ) || isset( $value['style'] ) ) {
-			return array(
-				'global' => array(
-					'color' => isset( $value['color'] ) ? $value['color'] : 'inherit',
-					'width' => isset( $value['width'] ) ? $value['width'] : 'inherit',
-					'style' => isset( $value['style'] ) ? $value['style'] : 'inherit',
-				),
-			);
+		if ( isset($value['color']) || isset($value['width']) || isset($value['style']) ) {
+			return [
+				'global' => [
+					'color' => isset($value['color']) ? $value['color'] : 'inherit',
+					'width' => isset($value['width']) ? $value['width'] : 'inherit',
+					'style' => isset($value['style']) ? $value['style'] : 'inherit',
+				]
+			];
 		} else {
 			return $value;
 		}
@@ -130,28 +130,28 @@ class Border extends Base {
 
 		$result = '';
 
-		if ( isset( $values['border'] ) && is_array( $values['border'] ) ) {
+		if ( isset($values['border']) && is_array($values['border']) ) {
 			foreach ( $values['border'] as $key => $value ) {
-				if ( 'global' === $key ) {
-					$result .= $this->get_border_css( $value );
+				if ( $key === 'global' ) {
+					$result .= $this->get_border_css($value);
 				} else {
-					$result .= $this->get_border_css( $value, $key );
+					$result .= $this->get_border_css($value, $key);
 				}
 			}
 		}
 
-		if ( isset( $values['radius'] ) ) {
-			if ( is_array( $values['radius'] ) ) {
-				$props_map = array(
+		if ( isset($values['radius']) ) {
+			if ( is_array($values['radius']) ) {
+				$props_map = [
 					'border-top-left-radius'     => 'topLeft',
 					'border-top-right-radius'    => 'topRight',
 					'border-bottom-right-radius' => 'bottomRight',
 					'border-bottom-left-radius'  => 'bottomLeft',
-				);
+				];
 
 				foreach ( $props_map as $css_prop => $radius_key ) {
-					if ( isset( $values['radius'][ $radius_key ] ) ) {
-						$result .= $css_prop . ': ' . $values['radius'][ $radius_key ] . ';';
+					if ( isset($values['radius'][$radius_key]) ) {
+						$result .= $css_prop . ': ' . $values['radius'][$radius_key] . ';';
 					}
 				}
 			} else {
@@ -169,7 +169,7 @@ class Border extends Base {
 	 * @param string $key Optional key for specific border side.
 	 * @return string Generated CSS string.
 	 */
-	public function get_border_css( $props, $key = '' ) {
+	public function get_border_css($props, $key = '') {
 		$css = '';
 
 		if ( $key ) {
@@ -178,16 +178,16 @@ class Border extends Base {
 			$key = '';
 		}
 
-		if ( isset( $props['color'] ) ) {
-			$css .= "border{$key}-color: " . $props['color'] . ';';
+		if ( isset($props['color']) ) {
+			$css .= "border{$key}-color: " . $props['color'] . ";";
 		}
 
-		if ( isset( $props['width'] ) ) {
-			$css .= "border{$key}-width: " . $props['width'] . ';';
+		if ( isset($props['width']) ) {
+			$css .= "border{$key}-width: " . $props['width'] . ";";
 		}
 
-		if ( isset( $props['style'] ) ) {
-			$css .= "border{$key}-style: " . $props['style'] . ';';
+		if ( isset($props['style']) ) {
+			$css .= "border{$key}-style: " . $props['style'] . ";";
 		}
 
 		return $css;

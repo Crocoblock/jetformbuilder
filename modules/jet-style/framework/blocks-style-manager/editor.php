@@ -74,19 +74,21 @@ class Editor {
 			true
 		);
 
+		$colors_manager_url = esc_url( admin_url( 'site-editor.php?p=/styles&section=/colors/palette' ) );
+
 		$fonts_manager_url = esc_url( admin_url( 'site-editor.php?p=/styles&section=/typography' ) );
 		$settings = wp_get_global_settings();
-		$fonts = array();
+		$fonts = [];
 
 		if ( ! empty( $settings['typography']['fontFamilies'] ) ) {
 			foreach ( $settings['typography']['fontFamilies'] as $fonts_set ) {
 				if ( is_array( $fonts_set ) ) {
 					foreach ( $fonts_set as $font ) {
 						if ( ! empty( $font['name'] ) && ! empty( $font['fontFamily'] ) ) {
-							$fonts[] = array(
+							$fonts[] = [
 								'value' => $font['fontFamily'],
 								'label' => $font['name'],
-							);
+							];
 						}
 					}
 				}
@@ -96,7 +98,7 @@ class Editor {
 		/**
 		 * Note!
 		 *
-		 * Get_blocks_supports() always must be called before get_block_defaults()
+		 * get_blocks_supports() always must be called before get_block_defaults()
 		 * because it internally calls extract_children(),
 		 * which extract also defaults of these children.
 		 */
@@ -107,12 +109,14 @@ class Editor {
 			'crocoblock-blocks-style-editor',
 			'crocoStyleEditorData',
 			array(
-				'blocks_supports'   => $supports,
-				'support_name'      => Registry::instance()->get_support_name(),
-				'defaults'          => $defaults,
-				'class_prefix'      => 'cb-',
-				'fonts_manager_url' => $fonts_manager_url,
-				'fonts'             => $fonts,
+				'blocks_supports'    => $supports,
+				'support_name'       => Registry::instance()->get_support_name(),
+				'defaults'           => $defaults,
+				'class_prefix'       => 'cb-',
+				'fonts_manager_url'  => $fonts_manager_url,
+				'colors_manager_url' => $colors_manager_url,
+				'global_settings'    => $settings,
+				'fonts'              => $fonts,
 			)
 		);
 

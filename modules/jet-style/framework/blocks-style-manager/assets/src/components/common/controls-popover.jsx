@@ -13,11 +13,12 @@ const ControlsPopover = ( { children, isOpen, onClose, label, anchor } ) => {
 	return (
 		<Popover
 			className="crocoblock-style-manager__popover"
-			placement="left"
+			placement="left-start"
 			onClose={ onClose }
 			shouldCloseOnClickOutside={ true }
 			anchor={ anchor }
 			noArrow={ false }
+			shift={ true }
 			offset={ 10 }
 		>
 			<div className="crocoblock-style-manager__popover">

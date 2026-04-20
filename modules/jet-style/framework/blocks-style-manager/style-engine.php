@@ -2,7 +2,6 @@
 /**
  * CSS parser engine
  */
-
 namespace Crocoblock\Blocks_Style;
 
 class Style_Engine {
@@ -79,7 +78,7 @@ class Style_Engine {
 	public function load_field_handlers() {
 
 		if ( ! class_exists( '\Crocoblock\Blocks_Style\Field_Handlers\Base' ) ) {
-			require_once __DIR__ . '/field-handlers/base.php';
+			require_once dirname( __FILE__ ) . '/field-handlers/base.php';
 		}
 	}
 
@@ -108,15 +107,13 @@ class Style_Engine {
 
 					if ( ! empty( $prop['css_selector'] ) && is_array( $prop['css_selector'] ) ) {
 						foreach ( $prop['css_selector'] as $selector => $definition ) {
-							$this->add_selector_to_styles(
-								array(
+							$this->add_selector_to_styles( array(
 									'prop'       => $prop_id,
 									'type'       => $prop['type'],
 									'selectoor'  => $selector,
 									'definition' => $definition,
 									'value'      => $prop_value,
-								)
-							);
+							) );
 						}
 					}
 
@@ -149,15 +146,13 @@ class Style_Engine {
 
 			if ( ! empty( $prop['css_selector'] ) && is_array( $prop['css_selector'] ) ) {
 				foreach ( $prop['css_selector'] as $selector => $definition ) {
-					$this->add_selector_to_styles(
-						array(
-							'prop'       => $prop_id,
-							'type'       => $prop['type'],
-							'selectoor'  => $selector,
-							'definition' => $definition,
-							'value'      => $prop_value,
-						)
-					);
+					$this->add_selector_to_styles( array(
+						'prop'       => $prop_id,
+						'type'       => $prop['type'],
+						'selectoor'  => $selector,
+						'definition' => $definition,
+						'value'      => $prop_value,
+					) );
 				}
 			}
 
@@ -260,14 +255,10 @@ class Style_Engine {
 
 		return Field_Handlers\Base::replace_data(
 			$selector,
-			apply_filters(
-				'crocoblock/style-manager/css-selector-macros',
-				array(
-					'wrapper' => '.' . $this->class_name,
-					'id'      => $this->class_name,
-				),
-				$this
-			)
+			apply_filters( 'crocoblock/style-manager/css-selector-macros', array(
+				'wrapper' => '.' . $this->class_name,
+				'id'      => $this->class_name,
+			), $this )
 		);
 	}
 
@@ -283,7 +274,7 @@ class Style_Engine {
 	 */
 	public function generate_css_rules( $prop_id, $prop_type, $def = '', $value = array() ) {
 
-		if ( empty( $value ) ) {
+		if ( empty($value ) ) {
 			return;
 		}
 
@@ -308,29 +299,33 @@ class Style_Engine {
 		switch ( $type ) {
 
 			case 'range':
+
 				if ( ! class_exists( '\Crocoblock\Blocks_Style\Field_Handlers\Range' ) ) {
-					require_once __DIR__ . '/field-handlers/range.php';
+					require_once dirname( __FILE__ ) . '/field-handlers/range.php';
 				}
 
 				return new Field_Handlers\Range( $raw_value );
 
 			case 'typography':
+
 				if ( ! class_exists( '\Crocoblock\Blocks_Style\Field_Handlers\Typography' ) ) {
-					require_once __DIR__ . '/field-handlers/typography.php';
+					require_once dirname( __FILE__ ) . '/field-handlers/typography.php';
 				}
 
 				return new Field_Handlers\Typography( $raw_value );
 
 			case 'border':
+
 				if ( ! class_exists( '\Crocoblock\Blocks_Style\Field_Handlers\Border' ) ) {
-					require_once __DIR__ . '/field-handlers/border.php';
+					require_once dirname( __FILE__ ) . '/field-handlers/border.php';
 				}
 
 				return new Field_Handlers\Border( $raw_value );
 
 			case 'dimensions':
+
 				if ( ! class_exists( '\Crocoblock\Blocks_Style\Field_Handlers\Dimensions' ) ) {
-					require_once __DIR__ . '/field-handlers/dimensions.php';
+					require_once dirname( __FILE__ ) . '/field-handlers/dimensions.php';
 				}
 
 				return new Field_Handlers\Dimensions( $raw_value );
@@ -392,14 +387,8 @@ class Style_Engine {
 			return '';
 		}
 
-		return implode(
-			';',
-			array_map(
-				function ( $prop ) {
-					return rtrim( $prop, ';' );
-				},
-				$props
-			)
-		) . ';';
+		return implode( ';', array_map( function( $prop ) {
+			return rtrim( $prop, ';' );
+		}, $props ) ) . ';';
 	}
 }

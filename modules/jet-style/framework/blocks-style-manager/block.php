@@ -47,22 +47,16 @@ class Block {
 
 	/**
 	 * Currently processed section for registration.
-	 *
-	 * @var string|null
 	 */
 	protected $_current_section = null;
 
 	/**
 	 * Currently processed tabs for registration.
-	 *
-	 * @var array|null
 	 */
 	protected $_current_tabs = null;
 
 	/**
 	 * Currently processed tab for registration.
-	 *
-	 * @var string|null
 	 */
 	protected $_current_tab = null;
 
@@ -83,15 +77,13 @@ class Block {
 		add_filter(
 			'rest_request_before_callbacks',
 			array( $this, 'prevent_styles_on_self_render' ),
-			10,
-			3
+			10, 3
 		);
 
 		add_filter(
 			'render_block_' . $this->get_block_name(),
 			array( $this, 'render_block_styles' ),
-			10,
-			3
+			10, 3
 		);
 	}
 
@@ -124,7 +116,11 @@ class Block {
 			}
 
 			if ( $block_name === $this->get_block_name() ) {
-				// Keep the render filter in place and only mark self-render requests.
+				/*remove_filter(
+					'render_block_' . $this->get_block_name(),
+					array( $this, 'render_block_styles' ),
+					10, 3
+				);*/
 				$this->is_rest_render = true;
 			}
 		}
@@ -150,7 +146,7 @@ class Block {
 					$parsed_block['attrs'][ Registry::instance()->get_support_name() ]
 				);
 
-				$style_inserter = new Style_Inserter( $block_class_name, array() );
+				$style_inserter = new Style_Inserter( $block_class_name, [] );
 
 				return $style_inserter->with_class_name( $block_content );
 			}
@@ -500,10 +496,7 @@ class Block {
 			if ( ! isset( $controls['children'][ $parent ] ) ) {
 				_doing_it_wrong(
 					'Block::register_children',
-					sprintf(
-						'Parent control `%s` not found in the controls stack.',
-						esc_html( (string) $parent )
-					),
+					"Parent control `$parent` not found in the controls stack.",
 					'1.0.0'
 				);
 				return;

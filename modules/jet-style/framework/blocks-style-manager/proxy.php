@@ -3,7 +3,6 @@
  * Proxy class to unify the access to the blocks style manager
  * and the legacy style manager plugin.
  */
-
 namespace Crocoblock\Blocks_Style;
 
 class Proxy {

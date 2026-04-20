@@ -44,9 +44,9 @@ class Base {
 	 */
 	public function parse_variable( $variable = array() ) {
 
-		$prefix = isset( $variable['prefix'] ) ? $variable['prefix'] : '';
-		$name   = isset( $variable['name'] ) ? $variable['name'] : false;
-		$full_name = isset( $variable['full_name'] ) ? $variable['full_name'] : $prefix . '-' . $name;
+		$prefix = isset($variable['prefix']) ? $variable['prefix'] : '';
+		$name   = isset($variable['name']) ? $variable['name'] : false;
+		$full_name = isset($variable['full_name']) ? $variable['full_name'] : $prefix . '-' . $name;
 
 		if ( ! $full_name ) {
 			return array();

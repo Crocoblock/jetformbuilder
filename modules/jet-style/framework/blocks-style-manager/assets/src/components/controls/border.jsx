@@ -1,5 +1,7 @@
 import { BorderBoxControl } from '@wordpress/components';
 import { __experimentalBorderRadiusControl as BorderRadiusControl } from '@wordpress/block-editor';
+import { useSelect } from '@wordpress/data';
+import { getColorsList } from '../../helpers/color-palette';
 import { isObject } from '../../helpers/utils';
 
 /**
@@ -38,7 +40,14 @@ import { isObject } from '../../helpers/utils';
  */
 const ControlBorder = ( { control, value, handleChange } ) => {
 
-	const colorsList = wp.data.select( 'core/block-editor' ).getSettings().colors;
+	const colorsList = useSelect(
+		( select ) => {
+			const settings = select( 'core/block-editor' )?.getSettings?.() || {};
+
+			return getColorsList( settings );
+		},
+		[]
+	);
 	const currentValue = value || {};
 
 	const isRadiusAllowed = () => {

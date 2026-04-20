@@ -2,7 +2,6 @@
 /**
  * CSS caching class
  */
-
 namespace Crocoblock\Blocks_Style;
 
 class Style_Cache {

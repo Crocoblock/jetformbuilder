@@ -3,7 +3,7 @@ namespace Crocoblock\Blocks_Style\Migrator;
 
 class Data_Normalizer {
 
-	private const EDGES = array( 'top', 'right', 'bottom', 'left' );
+	private const EDGES = [ 'top', 'right', 'bottom', 'left' ];
 	private $input_data;
 	private $current_key;
 
@@ -15,11 +15,11 @@ class Data_Normalizer {
 	 */
 	public function normalize( array $data ): array {
 
-		$normalized = array();
+		$normalized = [];
 		$this->input_data = $data;
 
-		$normalized_tablet = array();
-		$normalized_mobile = array();
+		$normalized_tablet = [];
+		$normalized_mobile = [];
 
 		foreach ( $data as $key => $item ) {
 			if ( ! isset( $item['value'] ) ) {
@@ -42,7 +42,7 @@ class Data_Normalizer {
 		}
 
 		$this->current_key = null;
-		$this->input_data  = array();
+		$this->input_data  = [];
 
 		if ( ! empty( $normalized_tablet ) ) {
 			$normalized['__tablet'] = $normalized_tablet;
@@ -76,7 +76,7 @@ class Data_Normalizer {
 			return $this->normalize_border( $value );
 		} elseif ( is_array( $value ) && isset( $value['value'] ) && isset( $value['unit'] ) ) {
 			return $value['value'] . $value['unit'];
-		} elseif ( in_array( $key, array( 'icon_size', 'icon_gap' ), true ) ) {
+		} elseif ( in_array( $key, [ 'icon_size', 'icon_gap' ], true ) ) {
 			return isset( $value['value'] ) ? (int) $value['value'] : 0;
 		} else {
 			return $value;
@@ -121,7 +121,7 @@ class Data_Normalizer {
 	 */
 	private function normalize_typography( array $value ): array {
 
-		$typography = array();
+		$typography = [];
 
 		if ( isset( $value['size'] ) ) {
 			$typography['size'] = $value['size'] . ( $value['s_unit'] ?? 'px' );
@@ -135,7 +135,7 @@ class Data_Normalizer {
 			$typography['letterSpacing'] = $value['letterSpacing'] . ( $value['ls_unit'] ?? 'px' );
 		}
 
-		foreach ( array( 'family', 'weight', 'style', 'transform', 'decoration' ) as $attr ) {
+		foreach ( [ 'family', 'weight', 'style', 'transform', 'decoration' ] as $attr ) {
 			if ( isset( $value[ $attr ] ) && 'inherit' !== $value[ $attr ] ) {
 				$typography[ $attr ] = $value[ $attr ];
 			}
@@ -162,8 +162,8 @@ class Data_Normalizer {
 	 */
 	private function normalize_border( array $value ): array {
 
-		$result = array( 'border' => array() );
-		$border = array();
+		$result = [ 'border' => [] ];
+		$border = [];
 
 		if ( isset( $value['width'] ) && is_array( $value['width'] ) ) {
 
@@ -221,21 +221,21 @@ class Data_Normalizer {
 			$next_key = isset( $keys[ $next_index ] ) ? $keys[ $next_index ] : null;
 
 			if ( $next_key && false !== strpos( $next_key, 'radius' ) ) {
-				$next_data = $this->input_data[ $next_key ]['value'] ?? array();
+				$next_data = $this->input_data[ $next_key ]['value'] ?? [];
 
 				if ( ! empty( $next_data ) && is_array( $next_data ) ) {
 					$radius = $this->get_uniform_edge_value( $next_data );
 					if ( null !== $radius ) {
 						$result['radius'] = $radius;
 					} else {
-						$radius_map = array(
+						$radius_map = [
 							'top'    => 'topLeft',
 							'right'  => 'topRight',
 							'bottom' => 'bottomRight',
 							'left'   => 'bottomLeft',
-						);
+						];
 
-						$result['radius'] = array();
+						$result['radius'] = [];
 
 						foreach ( self::EDGES as $edge ) {
 

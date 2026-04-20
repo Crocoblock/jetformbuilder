@@ -2,9 +2,8 @@
 /**
  * Blocks Style Manager
  *
- * Version: 2.1.12
+ * Version: 2.1.21
  */
-
 namespace Crocoblock\Blocks_Style;
 
 class Manager {
@@ -32,7 +31,7 @@ class Manager {
 	 *
 	 * @var string
 	 */
-	protected $version = '2.1.12';
+	protected $version = '2.1.21';
 
 	public static $migrator_registered = false;
 
@@ -70,7 +69,7 @@ class Manager {
 	}
 
 	/**
-	 * Regsiter new block to supported blocks registry.
+	 * Register new block to supported blocks registry.
 	 *
 	 * Should be called before after init hook but wp_loaded hook with 999 priority.
 	 *
@@ -86,7 +85,7 @@ class Manager {
 			_doing_it_wrong(
 				'Crocoblock\Blocks_Style\Manager::register_block_support',
 				'Block name is required.',
-				'2.1.12'
+				$this->version
 			);
 
 			return;

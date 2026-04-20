@@ -96,7 +96,13 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 
 	public function set_from_array( array $upload ): Uploaded_File {
 		if ( isset( $upload['file'] ) ) {
-			$this->file = self::normalize_allowed_upload_file_path( (string) $upload['file'] );
+			$file = wp_normalize_path( (string) $upload['file'] );
+
+			// Validate the path against uploads, but keep the original non-realpath
+			// value so WordPress can correctly relativize symlinked upload paths.
+			if ( '' !== self::normalize_allowed_upload_file_path( $file ) ) {
+				$this->file = $file;
+			}
 		}
 		if ( isset( $upload['url'] ) ) {
 			$this->url = esc_url_raw( (string) $upload['url'] );

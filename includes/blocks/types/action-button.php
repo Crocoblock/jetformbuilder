@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Blocks\Types;
 
 use Jet_Form_Builder\Blocks\Action_Buttons_Manager;
+use Jet_Form_Builder\Blocks\Button_Types\Button_Update;
 use Jet_Form_Builder\Blocks\Button_Types\Button_Next;
 use Jet_Form_Builder\Blocks\Button_Types\Button_Prev;
 use Jet_Form_Builder\Blocks\Button_Types\Button_Submit;
@@ -28,6 +29,11 @@ class Action_Button extends Base {
 		parent::register_block_type();
 
 		$this->set_button_type( new Button_Submit() );
+
+		if ( ! class_exists( '\JFB_Update_Field\Plugin' ) ) {
+			$this->set_button_type( new Button_Update() );
+		}
+
 		$this->set_button_type( new Button_Prev() );
 		$this->set_button_type( new Button_Next() );
 		$this->set_button_type( new Button_Switch_State() );
@@ -102,12 +108,7 @@ class Action_Button extends Base {
 					),
 				),
 				'css_selector' => array(
-					$this->selector( '__action-button' ) => 'width: {{VALUE}}%; max-width: {{VALUE}}%',
-				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => 20,
-					),
+					$this->selector( '__action-button' ) => 'width: {{VALUE}}{{UNIT}}; max-width: {{VALUE}}{{UNIT}};',
 				),
 			)
 		);
@@ -228,7 +229,7 @@ class Action_Button extends Base {
 			array(
 				'id'           => 'submit_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( '__action-button' ) => 'background-color: {{VALUE}}',
 				),
@@ -261,7 +262,7 @@ class Action_Button extends Base {
 			array(
 				'id'           => 'submit_hover_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( '__action-button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),

@@ -52,6 +52,9 @@ class Module implements
 	}
 
 	public function on_install() {
+
+		Style_Manager::instance();
+
 		$this->compiler = new Css_Compiler_Manager();
 
 		\WP_Block_Supports::get_instance()->register(

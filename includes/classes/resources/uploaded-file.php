@@ -96,17 +96,23 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 
 	public function set_from_array( array $upload ): Uploaded_File {
 		if ( isset( $upload['file'] ) ) {
-			$this->file = $upload['file'];
+			$file = wp_normalize_path( (string) $upload['file'] );
+
+			// Validate the path against uploads, but keep the original non-realpath
+			// value so WordPress can correctly relativize symlinked upload paths.
+			if ( '' !== self::normalize_allowed_upload_file_path( $file ) ) {
+				$this->file = $file;
+			}
 		}
 		if ( isset( $upload['url'] ) ) {
-			$this->url = $upload['url'];
+			$this->url = esc_url_raw( (string) $upload['url'] );
 		}
 		if ( isset( $upload['type'] ) ) {
-			$this->type = $upload['type'];
+			$this->type = sanitize_mime_type( (string) $upload['type'] );
 		}
 		if ( isset( $upload['id'] ) ) {
 
-			$this->set_attachment_id( (string) $upload['id'] );
+			$this->set_attachment_id( (string) absint( $upload['id'] ) );
 		}
 
 		return $this;
@@ -185,7 +191,10 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 		$file = $this->get_file();
 
 		if ( $file ) {
-			return $file;
+			$file = self::normalize_allowed_upload_file_path( $file );
+			if ( $file ) {
+				return $file;
+			}
 		}
 
 		$id  = $this->get_attachment_id();
@@ -197,13 +206,59 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 
 		$file = get_attached_file( $id );
 
-		return is_string( $file ) ? $file : '';
+		if ( ! is_string( $file ) ) {
+			return '';
+		}
+
+		return self::normalize_allowed_upload_file_path( $file );
 	}
 
 	/**
 	 * @param string $url
 	 */
 	public function set_url( string $url ) {
-		$this->url = $url;
+		$this->url = esc_url_raw( $url );
+	}
+
+	/**
+	 * Normalize path and allow only existing files inside wp-content uploads directory.
+	 *
+	 * @return string Normalized realpath to a file in uploads, or empty string.
+	 */
+	public static function normalize_allowed_upload_file_path( string $file ): string {
+		if ( '' === $file ) {
+			return '';
+		}
+
+		$path = wp_normalize_path( $file );
+		$real = realpath( $path );
+
+		if ( false === $real ) {
+			return '';
+		}
+
+		$real = wp_normalize_path( $real );
+		$real = untrailingslashit( $real );
+
+		$uploads = wp_get_upload_dir();
+		$base    = (string) ( $uploads['basedir'] ?? '' );
+
+		if ( '' === $base ) {
+			return '';
+		}
+
+		$base_real = realpath( $base );
+		if ( false === $base_real ) {
+			return '';
+		}
+
+		$base = wp_normalize_path( $base_real );
+		$base = untrailingslashit( $base );
+
+		if ( 0 === strpos( $real, $base . '/' ) && is_file( $real ) ) {
+			return $real;
+		}
+
+		return '';
 	}
 }

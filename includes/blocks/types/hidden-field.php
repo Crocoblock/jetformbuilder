@@ -33,6 +33,16 @@ class Hidden_Field extends Base {
 		return 'hidden-field';
 	}
 
+	/**
+	 * Initialize style manager for the block
+	 *
+	 * @param Object $style_manager Actual style manager instance.
+	 */
+	public function maybe_init_style_manager( $style_manager ) {
+		// Hidden Field does not use style manager
+		return;
+	}
+
 	public function render_row_layout() {
 		return false;
 	}

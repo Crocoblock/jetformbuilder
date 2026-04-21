@@ -1,12 +1,15 @@
 import { listFrom } from './sources';
 import FromManualFields from './FromManual/FromManualFields';
 import FromPostTermsFields from './FromPostTermsFields';
-import FromGeneratorsFields from './FromGeneratorsFields';
+// Use new GeneratorSettings component with schema support
+import { GeneratorSettings } from '../generators';
 
 const {
 	      TextControl,
 	      SelectControl,
+	      Notice,
       } = wp.components;
+const { __ }             = wp.i18n;
 
 const { jetEngineVersion } = window.JetFormEditorData;
 const { applyFilters }     = wp.hooks;
@@ -38,7 +41,7 @@ function getFieldOptionsForm( optionsFrom, props ) {
 				} }
 			/>;
 		case 'generate':
-			return <FromGeneratorsFields
+			return <GeneratorSettings
 				key="form_generators"
 				{ ...props }
 			/>;
@@ -83,6 +86,19 @@ function SelectRadioCheck( props ) {
 			} }
 			options={ listFrom }
 		/>
+		{ 'generate' === field_options_from && (
+			<Notice status="info" isDismissible={ false }>
+				{ __( 'Need a custom generator? Create one with this ', 'jet-form-builder' ) }
+				<a
+					href="https://chatgpt.com/g/g-69ae892a8fe88191aeae6578c07d6211-jetformbuilder-create-custom-options-generators"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					{ __( 'assistant', 'jet-form-builder' ) }
+				</a>
+				.
+			</Notice>
+		) }
 		{ getFieldOptionsForm( field_options_from, props ) }
 		{ children }
 	</div>;

@@ -211,7 +211,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'label_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( '__label' ) => 'background-color: {{VALUE}}',
 				),
@@ -265,7 +265,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'required_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'required' ) => 'background-color: {{VALUE}}',
 				),
@@ -368,7 +368,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'description_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( '__desc' ) => 'background-color: {{VALUE}}',
 				),
@@ -445,7 +445,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'input_normal_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'attributes'   => array(
 					'default' => array(
 						'value' => '#FFFFFF',
@@ -550,7 +550,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'textarea_normal_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'field' ) => 'background-color: {{VALUE}}',
 				),
@@ -590,7 +590,7 @@ class Form implements Style_Block_It {
 				'css_selector' => array(
 					$this->selector(
 						'-row.field-type-select-field %1$s__field-wrap'
-					) => 'max-width: {{VALUE}}%',
+					) => 'max-width: {{VALUE}}{{UNIT}};',
 				),
 			)
 		);
@@ -647,7 +647,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'item_normal_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'select' ) => 'background-color: {{VALUE}}',
 				),
@@ -774,7 +774,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'checkradio_fields_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'front-label' ) => 'background-color: {{VALUE}}',
 				),
@@ -812,7 +812,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'checkradio_control_bg_color__normal',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'front-label' ) . ' > span::before' => 'background-color: {{VALUE}};',
 				),
@@ -844,7 +844,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'checkradio_control_bg_color__checked',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'front-label' ) . ' :checked + span::before' => 'background-color: {{VALUE}};',
 				),
@@ -1142,7 +1142,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'calc_fields_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( '__calculated-field' ) => 'background-color: {{VALUE}}',
 				),
@@ -1508,7 +1508,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'repeater_new_button_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'new-button' ) => 'background-color: {{VALUE}}',
 				),
@@ -1541,7 +1541,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'repeater_new_button_hover_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'new-button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),
@@ -1628,7 +1628,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'repeater_remove_button_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'remove-button' ) => 'background-color: {{VALUE}}',
 				),
@@ -1661,7 +1661,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'repeater_remove_button_hover_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'remove-button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),
@@ -1717,7 +1717,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'conditional_bg_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( '__conditional' ) => 'background-color: {{VALUE}}',
 				),
@@ -1832,7 +1832,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'action_button_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector() => 'background-color: {{VALUE}}',
 				),
@@ -1865,7 +1865,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'action_button_hover_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector() . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),
@@ -1974,7 +1974,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'success_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'attributes'   => array(
 					'default' => array(
@@ -2098,7 +2098,7 @@ class Form implements Style_Block_It {
 			array(
 				'id'           => 'error_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'attributes'   => array(
 					'default' => array(

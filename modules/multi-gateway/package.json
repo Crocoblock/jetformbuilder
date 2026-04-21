@@ -1,0 +1,11 @@
+{
+	"name": "jet-form-builder-multi-gateway",
+	"description": "Multi gateway module for JetFormBuilder Plugin",
+	"version": "1.0.0",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"build": "npx webpack build --mode production",
+		"dev": "npx webpack build --mode development -w"
+	}
+}

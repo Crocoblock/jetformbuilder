@@ -102,7 +102,6 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @see \Jet_Form_Builder\Blocks\Blocks_Repository_Base::rep_before_install_item
 	 */
 	public function register_block_type() {
-		$this->maybe_init_style_manager();
 		$this->register_block();
 	}
 
@@ -170,7 +169,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				static::class . '::' . __FUNCTION__,
 				esc_html__(
-					'Unsuccessful field (block) registration. 
+					'Unsuccessful field (block) registration.
 				Perhaps the path to the block scheme (block.json) is incorrectly specified',
 					'jet-form-builder'
 				),
@@ -199,16 +198,23 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		return $this->provides_context;
 	}
 
-	private function maybe_init_style_manager() {
-		if ( ! Compatibility::has_jet_sm() || ! $this->use_style_manager ) {
-			return;
-		}
+	/**
+	 * Initialize style manager for the block
+	 *
+	 * @param Object $style_manager Actual style manager instance.
+	 */
+	public function maybe_init_style_manager( $style_manager ) {
 
+		$style_manager->register_block_support(
+			$this->block_name()
+		);
+
+		$proxy = $style_manager->get_proxy( $this->block_name() );
+
+		$this->controls_manager = $proxy;
 		$this->css_scheme       = array_merge( $this->general_css_scheme(), $this->get_css_scheme() );
-		$this->controls_manager = new Controls_Manager( $this->block_name() );
 
 		$this->run_jsm_controls();
-
 		$this->general_style_manager_options();
 	}
 

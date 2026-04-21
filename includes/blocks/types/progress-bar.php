@@ -16,10 +16,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Progress_Bar extends Base {
 
-	public function general_style_unregister() {
-		return array( 'input', 'label', 'description', 'required' );
-	}
-
 	/**
 	 * Returns block name
 	 *
@@ -35,6 +31,16 @@ class Progress_Bar extends Base {
 
 	public function render_row_layout() {
 		return false;
+	}
+
+	/**
+	 * Initialize style manager for the block
+	 *
+	 * @param Object $style_manager Actual style manager instance.
+	 */
+	public function maybe_init_style_manager( $style_manager ) {
+		// At the moment Progress Bar does not use style manager
+		return;
 	}
 
 	public function after_set_pages( Form_Break $form_break ) {

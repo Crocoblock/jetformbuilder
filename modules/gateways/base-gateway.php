@@ -372,4 +372,14 @@ abstract class Base_Gateway extends Legacy_Base_Gateway {
 		);
 	}
 
+	/**
+	 * Self-declare required credentials fields for this gateway. (secret, public)
+	 *
+	 * By default returns empty array.
+	 * Child gateways may override this to provide required fields.
+	 */
+	public function required_credentials_fields(): array {
+		return array();
+	}
+
 }

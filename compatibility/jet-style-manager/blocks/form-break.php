@@ -199,7 +199,7 @@ class Form_Break implements Style_Block_It {
 			array(
 				'id'           => 'next_button_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'next-button' ) => 'background-color: {{VALUE}}',
 				),
@@ -232,7 +232,7 @@ class Form_Break implements Style_Block_It {
 			array(
 				'id'           => 'next_button_hover_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'next-button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),
@@ -321,7 +321,7 @@ class Form_Break implements Style_Block_It {
 			array(
 				'id'           => 'prev_button_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'prev-button' ) => 'background-color: {{VALUE}}',
 				),
@@ -354,7 +354,7 @@ class Form_Break implements Style_Block_It {
 			array(
 				'id'           => 'prev_button_hover_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'prev-button' ) . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),
@@ -471,7 +471,7 @@ class Form_Break implements Style_Block_It {
 			array(
 				'id'           => 'form_progress_pages_wrapper--bg_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( '-progress-pages' ) => 'background-color: {{VALUE}}',
 				),
@@ -876,7 +876,7 @@ class Form_Break implements Style_Block_It {
 			array(
 				'id'           => 'form_progress_pages_current_circle--bg_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'active-circle' ) => 'background-color: {{VALUE}};',
 				),
@@ -934,7 +934,7 @@ class Form_Break implements Style_Block_It {
 			array(
 				'id'           => 'form_progress_pages_next_circle--bg_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'next-circle' ) => 'background-color: {{VALUE}};',
 				),
@@ -992,7 +992,7 @@ class Form_Break implements Style_Block_It {
 			array(
 				'id'           => 'form_progress_pages_prev_circle--bg_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					$this->selector( 'prev-circle' ) => 'background-color: {{VALUE}};',
 				),

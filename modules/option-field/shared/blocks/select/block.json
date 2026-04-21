@@ -1,5 +1,5 @@
 {
-	"apiVersion": 2,
+	"apiVersion": 3,
 	"name": "jet-forms/select-field",
 	"category": "jet-form-builder-fields",
 	"keywords": [
@@ -80,6 +80,34 @@
 		"generator_field": {
 			"type": "string",
 			"default": ""
+		},
+		"generator_args": {
+			"type": "object",
+			"default": {}
+		},
+		"generator_auto_update": {
+			"type": "boolean",
+			"default": false
+		},
+		"generator_listen_field": {
+			"type": ["string", "array"],
+			"default": ""
+		},
+		"generator_require_all_filled": {
+			"type": "boolean",
+			"default": false
+		},
+		"generator_update_on_button": {
+			"type": "string",
+			"default": ""
+		},
+		"generator_update_on_button_class": {
+			"type": "string",
+			"default": ""
+		},
+		"generator_cache_timeout": {
+			"type": "number",
+			"default": 60
 		},
 		"calculated_value_from_key": {
 			"type": "string",

@@ -16,6 +16,7 @@ module.exports = {
 		'checkbox': './frontend/blocks/checkbox/main.js',
 		'radio': './frontend/blocks/radio/main.js',
 		'custom.options.restrictions': './frontend/custom.options.restrictions/main.js',
+		'auto-update': './frontend/auto-update/index.js',
 	},
 	output: {
 		path: path.resolve( __dirname, 'assets/build' ),

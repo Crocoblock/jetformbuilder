@@ -3,6 +3,7 @@
 namespace Jet_Form_Builder\Classes;
 
 use Jet_Form_Builder\Plugin;
+use Jet_Form_Builder\Generators\Registry as GeneratorRegistry;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -142,6 +143,24 @@ class Tools {
 		$generators = Plugin::instance()->form->get_generators_list();
 
 		return self::prepare_list_for_js( $generators );
+	}
+
+	/**
+	 * Get generator schemas for JS localization.
+	 *
+	 * @return array
+	 */
+	public static function get_generator_schemas_for_js(): array {
+		if ( ! class_exists( GeneratorRegistry::class ) ) {
+			return array();
+		}
+
+		try {
+			$registry = GeneratorRegistry::instance();
+			return $registry->get_schemas_for_js();
+		} catch ( \Exception $e ) {
+			return array();
+		}
 	}
 
 	public static function get_allowed_mimes_list_for_js(): array {

@@ -161,6 +161,12 @@ class Jet_Engine implements
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/12555
 		 */
 		add_action( 'jet-engine/rest-api/init-endpoints', array( $this, 'rewrite_map_location_data_endpoint' ), 99 );
+
+		// Register JetEngine macros for auto-update feature
+		add_action( 'jet-engine/register-macros', array( $this, 'register_macros' ) );
+		add_filter( 'jet-engine/listings/macros-list', array( $this, 'add_relation_macro_source_to_macro_args' ), 999 );
+		add_filter( 'jet-engine/relations/sources-list', array( $this, 'add_relation_macro_source' ) );
+		add_filter( 'jet-engine/relations/object-id-by-source/jfbuf_field', array( $this, 'resolve_relation_macro_source' ), 10, 2 );
 	}
 
 	public function remove_hooks() {
@@ -223,6 +229,11 @@ class Jet_Engine implements
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/12555
 		 */
 		remove_action( 'jet-engine/rest-api/init-endpoints', array( $this, 'rewrite_map_location_data_endpoint' ), 99 );
+
+		remove_action( 'jet-engine/register-macros', array( $this, 'register_macros' ) );
+		remove_filter( 'jet-engine/listings/macros-list', array( $this, 'add_relation_macro_source_to_macro_args' ), 999 );
+		remove_filter( 'jet-engine/relations/sources-list', array( $this, 'add_relation_macro_source' ) );
+		remove_filter( 'jet-engine/relations/object-id-by-source/jfbuf_field', array( $this, 'resolve_relation_macro_source' ), 10 );
 	}
 
 	/**
@@ -236,6 +247,80 @@ class Jet_Engine implements
 			require_once $this->get_dir( 'map-field/get-map-location-data-endpoint.php' );
 			$api_manager->register_endpoint( new Map_Field\Get_Map_Location_Data_Endpoint() );
 		}
+	}
+
+	/**
+	 * Register JetEngine macros for auto-update feature.
+	 *
+	 * Registers macro that allows JetEngine Query Builder to access form field values
+	 * during cascading field updates (auto-update feature).
+	 */
+	public function register_macros() {
+		require_once $this->get_dir( 'macros/base-field-context-macro.php' );
+		require_once $this->get_dir( 'macros/auto-update-field-value.php' );
+
+		new Macros\Auto_Update_Field_Value();
+
+		if ( function_exists( 'jet_apb' ) ) {
+			require_once $this->get_dir( 'macros/auto-update-appointment-provider.php' );
+			require_once $this->get_dir( 'macros/auto-update-appointment-service.php' );
+
+			new Macros\Auto_Update_Appointment_Provider();
+			new Macros\Auto_Update_Appointment_Service();
+		}
+	}
+
+	public function add_relation_macro_source_to_macro_args( array $macros ): array {
+		foreach ( $macros as $key => $macro ) {
+			if ( empty( $macro['args']['rel_object_var']['condition']['rel_object_from'] ) ) {
+				continue;
+			}
+
+			$macros[ $key ]['args']['rel_object_var']['condition']['rel_object_from'][] = 'jfbuf_field';
+		}
+
+		return $macros;
+	}
+
+	public function add_relation_macro_source( array $sources ): array {
+		$sources['jfbuf_field'] = __( 'JFB Auto-Update - Form field', 'jet-form-builder' );
+
+		return $sources;
+	}
+
+	public function resolve_relation_macro_source( $object_id, $form_field = '' ) {
+		if ( empty( $form_field ) ) {
+			return false;
+		}
+
+		$request_key = 'jfb_update_related_' . $form_field;
+
+		if (
+			isset( $GLOBALS['jfb_generator_context'] ) &&
+			is_array( $GLOBALS['jfb_generator_context'] ) &&
+			array_key_exists( $form_field, $GLOBALS['jfb_generator_context'] )
+		) {
+			return $GLOBALS['jfb_generator_context'][ $form_field ];
+		}
+
+		if ( isset( $_REQUEST[ $request_key ] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			return $_REQUEST[ $request_key ];
+		}
+
+		if ( isset( $GLOBALS[ $request_key ] ) ) {
+			return $GLOBALS[ $request_key ];
+		}
+
+		if ( function_exists( 'jet_fb_context' ) ) {
+			$request_data = jet_fb_context()->resolve_request();
+
+			if ( array_key_exists( $form_field, $request_data ) ) {
+				return $request_data[ $form_field ];
+			}
+		}
+
+		return false;
 	}
 
 	public function register_scripts() {
@@ -370,7 +455,18 @@ class Jet_Engine implements
 		if ( 'custom-content-type' !== $query->query_type ) {
 			return;
 		}
-		$generator->get_block()->block_attrs['je_generator_content_type'] = (
+
+		try {
+			$block = $generator->get_block();
+		} catch ( \Throwable $throwable ) {
+			return;
+		}
+
+		if ( ! $block ) {
+			return;
+		}
+
+		$block->block_attrs['je_generator_content_type'] = (
 			$query->final_query['content_type'] ?? ''
 		);
 	}

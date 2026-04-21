@@ -30,7 +30,13 @@ class File_Tools {
 	}
 
 	protected static function is_same_file( File $file, Uploaded_File $uploaded_file ): bool {
-		$info = pathinfo( $uploaded_file->get_url() );
+		$preset_path = $uploaded_file->get_attachment_file();
+
+		if ( ! $preset_path ) {
+			return false;
+		}
+
+		$info = pathinfo( $preset_path );
 
 		return $file->get_name() === ( $info['basename'] ?? '' );
 	}

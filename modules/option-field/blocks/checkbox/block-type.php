@@ -36,7 +36,7 @@ class Block_Type extends Base implements Support_Option_Query_It {
 			'item'            => '.jet-form-builder__field-wrap.checkboxes-wrap',
 			'option-label'    => '.jet-form-builder__field-wrap label',
 			'checkbox-editor' => '.jet-form-builder__field-wrap .components-checkbox-control__input-container',
-			'checkbox-front'  => '.jet-form-builder__field-wrap span::before',
+			'checkbox-front'  => '.jet-form-builder__field-wrap .jet-form-builder__field-label.for-checkbox>span::before',
 			'wrapper'         => '.jet-form-builder__fields-group',
 		);
 	}
@@ -188,7 +188,7 @@ class Block_Type extends Base implements Support_Option_Query_It {
 			array(
 				'id'           => 'item_normal_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['item'] . ' > .components-base-control__field label' => 'background-color: {{VALUE}}',
 					'{{WRAPPER}} ' . $this->css_scheme['option-label']                                      => 'background-color: {{VALUE}}',
@@ -246,7 +246,7 @@ class Block_Type extends Base implements Support_Option_Query_It {
 					),
 				),
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['checkbox-front']             => 'font-size: {{VALUE}}{{UNIT}};',
+					'{{WRAPPER}} ' . $this->css_scheme['checkbox-front']             => 'font-size: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}}; height: {{VALUE}}{{UNIT}};',
 					'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor']            => 'height: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}};',
 					'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input' => 'height: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}}; min-width: {{VALUE}}{{UNIT}};',
 				),
@@ -285,7 +285,7 @@ class Block_Type extends Base implements Support_Option_Query_It {
 			array(
 				'id'           => 'checkbox_normal_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'attributes'   => array(
 					'default' => array(
 						'value' => '#FFFFFF',
@@ -325,7 +325,7 @@ class Block_Type extends Base implements Support_Option_Query_It {
 			array(
 				'id'           => 'checkbox_checked_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'attributes'   => array(
 					'default' => array(
 						'value' => '#398ffc',

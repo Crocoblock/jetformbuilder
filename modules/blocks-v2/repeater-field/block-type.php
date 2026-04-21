@@ -180,7 +180,7 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 			array(
 				'id'           => 'new_button_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['new-button'] => 'background-color: {{VALUE}}',
 				),
@@ -213,7 +213,7 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 			array(
 				'id'           => 'new_button_hover_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['new-button'] . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),
@@ -300,7 +300,7 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 			array(
 				'id'           => 'remove_button_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['remove-button'] => 'background-color: {{VALUE}}',
 				),
@@ -333,7 +333,7 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 			array(
 				'id'           => 'remove_button_hover_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['remove-button'] . ':hover:not(:disabled)' => 'background-color: {{VALUE}}',
 				),

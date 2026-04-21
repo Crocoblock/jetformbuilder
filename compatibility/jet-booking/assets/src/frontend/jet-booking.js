@@ -1,10 +1,7 @@
 import CheckOutInput from './CheckOutInput';
 import CheckOutSignal from './CheckOutSignal';
 
-const {
-	      addAction,
-	      addFilter,
-      } = JetPlugins.hooks;
+const { addAction, addFilter } = JetPlugins.hooks;
 
 addAction(
 	'jet.fb.observe.before',
@@ -79,30 +76,45 @@ addFilter(
 	 * @return {*}
 	 */
 	function ( macroPart, formula ) {
-
 		if ( 'string' !== typeof macroPart ) {
 			return macroPart;
 		}
 
-		const matches = macroPart.match( /ADVANCED_PRICE::([\w\-]+)/ );
-
-		if ( !matches?.length || !formula?.input ) {
+		if ( ! formula?.input  ) {
 			return macroPart;
 		}
-		const [ , fieldName ] = matches;
 
-		const checkoutField = formula.input.root.getInput( fieldName );
+		const matches = macroPart.match( /(ADVANCED_PRICE|BOOKING_TIME)::([\w\-]+)/ );
 
-		if ( !checkoutField ) {
-			return 0;
+		if ( ! matches?.length ) {
+			return macroPart;
 		}
+		const [ , macros, fieldName ] = matches;
 
-		formula.cachedFields = formula.cachedFields || [];
+		if ( 'ADVANCED_PRICE' === macros ) {
+			const checkoutField = formula.input.root.getInput( fieldName );
 
-		if ( !formula.cachedFields.includes( checkoutField.name ) ) {
-			formula.cachedFields.push( checkoutField.name );
+			if ( ! checkoutField ) {
+				return 0;
+			}
 
-			checkoutField.watch( () => formula.setResult() );
+			formula.cachedFields = formula.cachedFields || [];
+
+			if ( ! formula.cachedFields.includes( checkoutField.name ) ) {
+				formula.cachedFields.push( checkoutField.name );
+
+				checkoutField.watch( () => formula.setResult() );
+			}
+		} else {
+			const timeField = document.getElementById( fieldName );
+
+			if ( ! timeField ) {
+				return 0;
+			}
+
+			timeField.addEventListener( 'change', () => {
+				formula.setResult()
+			} );
 		}
 
 		return macroPart;

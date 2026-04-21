@@ -78,15 +78,6 @@ class Number_Field extends Base {
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['front-field']        => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 					'{{WRAPPER}} ' . $this->css_scheme['field']              => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-					'{{WRAPPER}} ' . $this->css_scheme['backdrop']           => 'border: unset;',
-					'{{WRAPPER}} ' . $this->css_scheme['container_backdrop'] => 'border-radius:{{RADIUS}};',
-				),
-				'attributes'   => array(
-					'default' => array(
-						'value' => array(
-							'borderStyle' => 'solid',
-						),
-					),
 				),
 			)
 		);
@@ -109,7 +100,7 @@ class Number_Field extends Base {
 			array(
 				'id'           => 'item_normal_background_color',
 				'type'         => 'color-picker',
-				'label'        => __( 'Background Color', 'jet-form-builder' ),
+				'label'        => __( 'Background', 'jet-form-builder' ),
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['field']       => 'background-color: {{VALUE}}',
 					'{{WRAPPER}} ' . $this->css_scheme['front-field'] => 'background-color: {{VALUE}}',

@@ -3,6 +3,7 @@
 	"apiVersion": 3,
 	"name": "jet-forms/macros-inserter",
 	"title": "Fields Preview",
+	"description": "Build a custom preview of filled form data with HTML, CSS, and macros that display field values.",
 	"category": "jet-form-builder-fields",
 	"supports": {
 		"html": false

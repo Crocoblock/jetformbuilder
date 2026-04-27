@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.0.1
+* FIX: Prevent PHP errors appears in some cases and related to the Style Manager module.
+
 ## 3.6.0
 * ADD: Use several payment gateways at once in form
 * ADD: Conditional logic to payment gateway

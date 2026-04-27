@@ -33,6 +33,7 @@ final class Module implements Base_Module_It, Base_Module_After_Install_It, Base
 			array(
 				$this->get_dir( 'vue-ui/cherry-x-vue-ui.php' ),
 				$this->get_dir( 'admin-bar/jet-admin-bar.php' ),
+				$this->get_dir( 'blocks-style-manager/style-manager.php' ),
 			)
 		);
 	}

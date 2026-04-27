@@ -12,13 +12,13 @@ class Style_Manager {
 
 	public function __construct() {
 
-		$framework = new Framework\Loader(
-			array(
-				JET_FORM_BUILDER_PATH . 'modules/jet-style/framework/blocks-style-manager/style-manager.php',
-			)
-		);
+		$framework   = jet_form_builder()->module( 'framework' );
+		$loader      = $framework->get_loader();
+		$module_data = $loader->get_included_module_data( 'style-manager.php' );
 
-		$module_data = $framework->get_included_module_data( 'style-manager.php' );
+		if ( ! class_exists( '\Crocoblock\Blocks_Style\Manager' ) ) {
+			return;
+		}
 
 		$this->manager = new \Crocoblock\Blocks_Style\Manager(
 			array(
@@ -27,7 +27,7 @@ class Style_Manager {
 			)
 		);
 
-		add_action( 'jet-form-builder/block-type/before-intall', array( $this, 'register_block' ) );
+		add_action( 'jet-form-builder/block-type/before-install', array( $this, 'register_block' ) );
 	}
 
 	/**

@@ -18,3 +18,12 @@ package-lock.json
 /vendor/bin
 /vendor/composer/installed.json
 /.artifacts
+
+.codex/
+tests/
+test-results/
+AGENTS.md
+package.json
+.env.e2e
+.env.e2e.example
+bootstrap-project.js

@@ -385,7 +385,11 @@ CalculatedFormula.prototype = {
 			return this.formula;
 		}
 
-		const formula = this.calculateString();
+		let formula = this.calculateString();
+
+		if ('string' === typeof formula) {
+			formula = formula.replace(/\r\n|\r|\n/g, ' ');
+		}
 
 		try {
 			return (

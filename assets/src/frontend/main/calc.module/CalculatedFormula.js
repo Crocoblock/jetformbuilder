@@ -388,7 +388,7 @@ CalculatedFormula.prototype = {
 		let formula = this.calculateString();
 
 		if ('string' === typeof formula) {
-			formula = formula.replace(/\r\n|\r|\n/g, ' ');
+			formula = formula.replace(/\r\n|\r|\n/g, '\\n');
 		}
 
 		try {

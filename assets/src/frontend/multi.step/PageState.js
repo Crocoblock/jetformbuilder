@@ -236,6 +236,10 @@ PageState.prototype.changePage          = async function ( isBack ) {
 		return;
 	}
 
+	if ( this.isLast() ) {
+		return;
+	}
+
 	if ( this.getLockState().current ) {
 		return;
 	}

@@ -1,4 +1,6 @@
-import { loadCurrentLocaleTranslations } from './i18n-loader';
+import {
+	loadCurrentLocaleTranslations,
+} from './i18n-loader';
 
 const {
 	InputData,
@@ -17,6 +19,7 @@ function PhoneFieldData() {
 
 	/**
 	 * Check if this handler supports the field
+	 * @param node
 	 */
 	this.isSupported = function ( node ) {
 		const supported = node.classList.contains( 'phone-field' );
@@ -54,7 +57,6 @@ function PhoneFieldData() {
 		const excludeCountries   = this.parseCountryList( node.dataset.excludeCountries );
 		const separateDialCode   = node.dataset.separateDialCode || false;
 		const ipinfoToken        = node.dataset.ipinfoToken || '';
-
 		// Determine initial country
 		let initialCountry = defaultCountry;
 
@@ -69,8 +71,8 @@ function PhoneFieldData() {
 
 		// Build config object, only include arrays if they have items
 		const config = {
-			initialCountry: initialCountry,
-			separateDialCode: 1 == separateDialCode ? true : false,
+			initialCountry,
+			separateDialCode: separateDialCode === '1',
 			strictMode: true,
 			nationalMode: true,
 			formatAsYouType: true,
@@ -104,8 +106,8 @@ function PhoneFieldData() {
 	this.normalizeIfInternational = function( input ) {
 		const value = input.value.trim();
 
-		if ( !value ) return;
-		if ( value[0] === '+' ) {
+		if ( !value ) { return; }
+		if ( '+' === value[ 0 ] ) {
 			this.itiInstance.setNumber( value );
 
 			this.setValue();
@@ -114,6 +116,7 @@ function PhoneFieldData() {
 
 	/**
 	 * Parse comma-separated country list
+	 * @param str
 	 */
 	this.parseCountryList = function ( str ) {
 		if ( ! str ) {
@@ -124,6 +127,7 @@ function PhoneFieldData() {
 
 	/**
 	 * Detect country by IP using ipinfo.io
+	 * @param token
 	 */
 	this.detectCountryByIP = function ( token ) {
 		// Use cached value if available
@@ -151,7 +155,7 @@ function PhoneFieldData() {
 					}
 				}
 			} )
-			.catch( error => {
+			.catch( () => {
 			} );
 
 		return null;
@@ -214,7 +218,7 @@ function PhoneFieldData() {
 		let libraryTranslations = {};
 		try {
 			libraryTranslations = await loadCurrentLocaleTranslations();
-		} catch ( error ) {
+		} catch {
 		}
 
 		// Merge translations: WordPress overrides library translations
@@ -252,7 +256,7 @@ function PhoneFieldData() {
 				this.syncFromIntlInput( input, node );
 
 				// Validate and show error before submit
-				const isValid = this.validateAndShowError();
+				this.validateAndShowError();
 			}, true); // Use capture phase to run before JetFormBuilder
 		}
 
@@ -289,6 +293,8 @@ function PhoneFieldData() {
 
 	/**
 	 * Sync value from intl-tel-input field to main field
+	 * @param intlInput
+	 * @param mainField
 	 */
 	// eslint-disable-next-line no-unused-vars
 	this.syncFromIntlInput = function ( intlInput, mainField ) {
@@ -322,6 +328,7 @@ function PhoneFieldData() {
 
 	/**
 	 * Show error message under the phone field
+	 * @param message
 	 */
 	this.showError = function ( message ) {
 		const wrapper = this.getWrapperNode();
@@ -388,6 +395,7 @@ function PhoneFieldData() {
 
 	/**
 	 * Get validation message from data-attributes or fallback
+	 * @param type
 	 */
 	this.getValidationMessage = function ( type ) {
 		const mainField = this.nodes[ 0 ];

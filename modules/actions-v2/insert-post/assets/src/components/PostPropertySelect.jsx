@@ -1,6 +1,8 @@
 import { useContext } from '@wordpress/element';
-import { ToggleControl } from '@wordpress/components';
-import { CurrentActionEditContext } from 'jet-form-builder-actions';
+import {
+	CurrentActionEditContext,
+	SingleValueAsArrayToggle,
+} from 'jet-form-builder-actions';
 import { StyledSelectControl, StyledTextControl } from 'jet-form-builder-components';
 
 const {
@@ -8,47 +10,47 @@ const {
 	CurrentPropertyMapContext,
 } = JetFBComponents;
 
-const FLAGS_SOURCE = 'single_value_as_array'; 
-
 function PostPropertySelect() {
-	const { FieldSelect, property } = useContext( CurrentPropertyMapContext );
-	const { source, setMapField, getMapField } = useContext( CurrentActionEditContext );
-	const { name, index } = useContext( ActionFieldsMapContext );
+	const { FieldSelect, property } = useContext(CurrentPropertyMapContext);
+	const { source, setMapField, getMapField } = useContext(CurrentActionEditContext);
+	const { name, index } = useContext(ActionFieldsMapContext);
 
-	const mapValue   = getMapField({ name }) ?? '';
-	const flagValue  = !!getMapField({ source: FLAGS_SOURCE, name });
+	const mapValue = getMapField({ name }) ?? '';
 
-	const setMapValue  = (value) => setMapField({ nameField: name, value });
-	const setFlagValue = (value) => setMapField({ source: FLAGS_SOURCE, nameField: name, value: !!value });
+	const setMapValue = value => setMapField({
+		nameField: name,
+		value,
+	});
 
-	switch ( property ) {
+	switch (property) {
 		case 'meta_input':
 			return (
 				<div className="components-base-control jet-margin-bottom-wrapper">
-					{ FieldSelect }
+					{FieldSelect}
+
 					<StyledTextControl
-						key={ name + index + '_text' }
-						value={ mapValue }
-						onChange={ setMapValue }
+						key={name + index + '_text'}
+						value={mapValue}
+						onChange={setMapValue}
 					/>
-					<ToggleControl
-						className="jet-margin-top-xs"
-						label="Save single value as array"
-						checked={ flagValue }
-						onChange={ setFlagValue }
+
+					<SingleValueAsArrayToggle
+						fieldName={name}
+						getMapField={getMapField}
+						setMapField={setMapField}
 					/>
-				</div>
+				</div> 
 			);
 
 		case 'post_terms':
 			return (
 				<div className="components-base-control jet-margin-bottom-wrapper">
-					{ FieldSelect }
+					{FieldSelect}
 					<StyledSelectControl
-						key={ name + index + '_select' }
-						value={ mapValue }
-						onChange={ setMapValue }
-						options={ source.taxonomies }
+						key={name + index + '_select'}
+						value={mapValue}
+						onChange={setMapValue}
+						options={source.taxonomies}
 					/>
 				</div>
 			);

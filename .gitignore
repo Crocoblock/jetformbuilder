@@ -23,7 +23,6 @@ package-lock.json
 tests/
 test-results/
 AGENTS.md
-package.json
 .env.e2e
 .env.e2e.example
 bootstrap-project.js

@@ -38,9 +38,23 @@ class Preset_Source_Post extends Base_Source {
 		if ( 'current_post' === $post_from ) {
 			$post_id = get_the_ID();
 		} else {
-			$var = ! empty( $this->preset_data['query_var'] ) ? $this->preset_data['query_var'] : '';
+			$var = ! empty($this->preset_data['query_var']) ? $this->preset_data['query_var'] : '';
+
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$post_id = ( $var && isset( $_REQUEST[ $var ] ) ) ? absint( $_REQUEST[ $var ] ) : false;
+			$post_id = ($var && isset($_REQUEST[$var])) ? absint($_REQUEST[$var]) : false;
+
+			// ADDED: fallback for submit, where original query var is stored in referer URL.
+			if (! $post_id && $var && ! empty($_REQUEST['_wp_http_referer'])) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$referer = wp_unslash($_REQUEST['_wp_http_referer']);
+				$query   = wp_parse_url($referer, PHP_URL_QUERY);
+				if ($query) {
+					parse_str($query, $query_args);
+					if (isset($query_args[$var])) {
+						$post_id = absint($query_args[$var]);
+					}
+				}
+			}
 		}
 
 		if ( ! $post_id ) {
@@ -61,6 +75,7 @@ class Preset_Source_Post extends Base_Source {
 	}
 
 	public function source__post_meta() {
+		
 		if ( empty( $this->field_data['key'] ) ) {
 			return '';
 		}

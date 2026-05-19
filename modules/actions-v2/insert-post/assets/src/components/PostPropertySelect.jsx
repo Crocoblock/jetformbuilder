@@ -38,6 +38,7 @@ function PostPropertySelect() {
 						fieldName={name}
 						getMapField={getMapField}
 						setMapField={setMapField}
+						showHelp={true}
 					/>
 				</div> 
 			);

@@ -21,8 +21,17 @@ function UserFieldsRow( { getMapField, setMapField } ) {
 		<Label className={ TableListStyle.Label }>
 			{ __( `User Meta`, 'jet-form-builder' ) }
 		</Label>
-		<Help className={ TableListStyle.WhiteSpaceNormal }>
-			Map form fields to custom user meta fields (e.g., "Phone") not included in WordPress by default.
+		<Help className={TableListStyle.WhiteSpaceNormal}>
+			{__(
+				'Map form fields to custom user meta fields (e.g., "Phone") not included in WordPress by default.',
+				'jet-form-builder',
+			)}
+		</Help>
+		<Help className={TableListStyle.WhiteSpaceNormal}>
+			{__(
+				'Other settings of the target meta field may affect whether the value is saved as an array.',
+				'jet-form-builder',
+			)}
 		</Help>
 		<TableListContainer>
 			<TableListHead

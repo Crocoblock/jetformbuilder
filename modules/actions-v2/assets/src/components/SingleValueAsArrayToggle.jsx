@@ -8,11 +8,17 @@ function SingleValueAsArrayToggle({
     fieldName,
     getMapField,
     setMapField,
+    showHelp = false,
 }) {
 
     return (
         <ToggleControl
             label={__('Save single value as array', 'jet-form-builder')}
+            help={
+                showHelp
+                    ? __('Other target field settings may affect whether the value is saved as an array.', 'jet-form-builder')
+                    : undefined
+            }
             checked={!!getMapField({
                 source: FLAGS_SOURCE,
                 name: fieldName,

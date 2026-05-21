@@ -38,6 +38,7 @@ final class Module implements
 
 	public function init_hooks() {
 		add_filter( 'jet-form-builder/blocks/items', array( $this, 'add_blocks_types' ) );
+		add_action('init', array($this, 'register_editor_styles'));
 		add_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_admin_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		add_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
@@ -45,6 +46,7 @@ final class Module implements
 
 	public function remove_hooks() {
 		remove_filter( 'jet-form-builder/blocks/items', array( $this, 'add_blocks_types' ) );
+		remove_action('init', array($this, 'register_editor_styles'));
 		remove_action( 'jet-form-builder/editor-assets/before', array( $this, 'enqueue_admin_assets' ) );
 		remove_action( 'wp_enqueue_scripts', array( $this, 'register_frontend_scripts' ) );
 		remove_action( 'jet_plugins/frontend/register_scripts', array( $this, 'register_frontend_scripts' ) );
@@ -56,8 +58,28 @@ final class Module implements
 		return $block_types;
 	}
 
+	public function register_editor_styles()
+	{
+
+		$editor_asset = require $this->get_dir('assets/build/editor.asset.php');
+		wp_register_style(
+			$this->get_handle('lightgray-skin'),
+			includes_url('js/tinymce/skins/lightgray/skin.min.css'),
+			array(),
+			$editor_asset['version']
+		);
+		wp_register_style(
+			$this->get_handle(),
+			$this->get_url('assets/build/wysiwyg.css'),
+			array(
+				'editor-buttons',
+			),
+			$editor_asset['version']
+		);
+	}
+
 	public function enqueue_admin_assets() {
-		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
+		$script_asset = require $this->get_dir( 'assets/build/editor.asset.php' );
 
 		wp_enqueue_script(
 			$this->get_handle(),
@@ -67,25 +89,10 @@ final class Module implements
 			true
 		);
 
-		wp_enqueue_style(
-			$this->get_handle( 'lightgray-skin' ),
-			includes_url( 'js/tinymce/skins/lightgray/skin.min.css' ),
-			array(),
-			$script_asset['version']
-		);
-
-		wp_enqueue_style(
-			$this->get_handle(),
-			$this->get_url( 'assets/build/wysiwyg.css' ),
-			array(
-				'editor-buttons',
-			),
-			$script_asset['version']
-		);
 	}
 
 	public function register_frontend_scripts() {
-		$script_asset = require_once $this->get_dir( 'assets/build/wysiwyg.asset.php' );
+		$script_asset = require $this->get_dir( 'assets/build/wysiwyg.asset.php' );
 
 		if ( true === $script_asset ) {
 			return;

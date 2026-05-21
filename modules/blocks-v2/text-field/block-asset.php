@@ -16,6 +16,10 @@ class Block_Asset implements Block_Asset_Interface {
 			array( $this, 'enqueue_editor_assets' )
 		);
 		add_action(
+			'enqueue_block_assets',
+			array( $this, 'enqueue_editor_canvas_styles' )
+		);
+		add_action(
 			'wp_enqueue_scripts',
 			array( $this, 'register_frontend_assets' )
 		);
@@ -100,12 +104,7 @@ class Block_Asset implements Block_Asset_Interface {
 			$asset['version'],
 			true
 		);
-		wp_enqueue_style(
-			$blocks_v2->get_handle( 'text-field-editor' ),
-			$blocks_v2->get_url( 'text-field/assets/build/editor.css' ),
-			array(),
-			$asset['version']
-		);
+		$this->enqueue_editor_style( $asset['version'] );
 
 		$block_render = new Block_Render( new Block_Type() );
 
@@ -121,5 +120,33 @@ class Block_Asset implements Block_Asset_Interface {
 
 	public function enqueue_required_assets() {
 		wp_enqueue_script( Base_Module_Handle_It::HANDLE_PREFIX . 'blocks-v2-text-field' );
+	}
+
+	public function enqueue_editor_canvas_styles() {
+		if ( ! is_admin() || ! jet_form_builder()->post_type->is_form_editor ) {
+			return;
+		}
+
+		/** @var Module $blocks_v2 */
+		$blocks_v2 = jet_form_builder()->module( 'blocks-v2' );
+		$asset     = require $blocks_v2->get_dir( 'text-field/assets/build/editor.asset.php' );
+
+		if ( true === $asset ) {
+			return;
+		}
+
+		$this->enqueue_editor_style( $asset['version'] );
+	}
+
+	private function enqueue_editor_style( $version ) {
+		/** @var Module $blocks_v2 */
+		$blocks_v2 = jet_form_builder()->module( 'blocks-v2' );
+
+		wp_enqueue_style(
+			$blocks_v2->get_handle( 'text-field-editor' ),
+			$blocks_v2->get_url( 'text-field/assets/build/editor.css' ),
+			array(),
+			$version
+		);
 	}
 }

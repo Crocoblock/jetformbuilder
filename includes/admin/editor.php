@@ -28,6 +28,7 @@ class Editor {
 
 	public function __construct() {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'admin_assets' ) );
+		add_action( 'enqueue_block_assets', array( $this, 'enqueue_editor_canvas_assets' ) );
 	}
 
 	/**
@@ -453,18 +454,7 @@ class Editor {
 			true
 		);
 
-		wp_enqueue_style(
-			self::EDITOR_HANDLE,
-			Plugin::instance()->plugin_url( 'assets/build/editor/form.builder.css' ),
-			array(
-				'media',
-				'l10n',
-				'buttons',
-				'wp-edit-blocks',
-				'wp-editor',
-			),
-			$script_asset['version']
-		);
+		$this->enqueue_editor_style( $script_asset['version'] );
 
 		$conditions_settings = ( new Action_Condition_Manager() )->get_settings();
 		$exclude_events      = array(
@@ -559,6 +549,35 @@ class Editor {
 		);
 
 		do_action( 'jet-form-builder/other-editor-assets/after', $this, $handle );
+	}
+
+	public function enqueue_editor_canvas_assets() {
+		if ( ! is_admin() || ! jet_form_builder()->post_type->is_form_editor ) {
+			return;
+		}
+
+		$script_asset = require jet_form_builder()->plugin_dir( 'assets/build/editor/form.builder.asset.php' );
+
+		if ( true === $script_asset ) {
+			return;
+		}
+
+		$this->enqueue_editor_style( $script_asset['version'] );
+	}
+
+	private function enqueue_editor_style( $version ) {
+		wp_enqueue_style(
+			self::EDITOR_HANDLE,
+			Plugin::instance()->plugin_url( 'assets/build/editor/form.builder.css' ),
+			array(
+				'media',
+				'l10n',
+				'buttons',
+				'wp-edit-blocks',
+				'wp-editor',
+			),
+			$version
+		);
 	}
 
 }

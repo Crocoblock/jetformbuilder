@@ -5,12 +5,13 @@ function createMultiStep( rootOrBlock ) {
 	multistep.setScope( rootOrBlock );
 
 	const pages = [];
+	const scopeNode = multistep.getScopeNode();
 
-	for ( const child of multistep.getScopeNode().childNodes ) {
-		if ( !child?.classList?.contains( 'jet-form-builder-page' ) ) {
+	for ( const page of scopeNode.querySelectorAll( '.jet-form-builder-page' ) ) {
+		if ( !isPageBelongScope( page, scopeNode ) ) {
 			continue;
 		}
-		pages.push( child );
+		pages.push( page );
 	}
 
 	if ( !pages.length ) {
@@ -21,6 +22,18 @@ function createMultiStep( rootOrBlock ) {
 	multistep.setPages( pages );
 
 	return multistep;
+}
+
+function isPageBelongScope( page, scopeNode ) {
+	const parentConditional = page.parentElement.closest(
+		'.jet-form-builder__conditional',
+	);
+
+	if ( scopeNode.classList.contains( 'jet-form-builder__conditional' ) ) {
+		return scopeNode.isEqualNode( parentConditional );
+	}
+
+	return null === parentConditional;
 }
 
 export { createMultiStep };

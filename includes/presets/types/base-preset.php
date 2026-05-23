@@ -58,6 +58,8 @@ abstract class Base_Preset {
 	        $this->data = array_merge( $this->data, $data );
 	    }
 	    return $this;
+
+		
 	}
 
 	/**

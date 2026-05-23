@@ -49,13 +49,15 @@ abstract class Base_Preset {
 	abstract public function is_active_preset( $args );
 
 	public function set_init_data( $data = array() ): Base_Preset {
-		if ( empty( $this->data ) ) {
-			$this->data = $data;
-		} else {
-			$this->data = array_merge( $this->data, $data );
-		}
-
-		return $this;
+	    if ( ! is_array( $data ) ) {
+	        $data = array();
+	    }
+	    if ( empty( $this->data ) ) {
+	        $this->data = $data;
+	    } else {
+	        $this->data = array_merge( $this->data, $data );
+	    }
+	    return $this;
 	}
 
 	/**

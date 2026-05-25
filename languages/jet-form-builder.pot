@@ -168,7 +168,7 @@ msgstr ""
 #: assets/src/editor/plugins/actions/action.item.js:91
 #: assets/src/package/components/fields/repeater-with-state.js:269
 #: assets/src/package/components/fields/repeater.js:84
-#: assets/js/package.js:1476
+#: assets/build/editor/package.js:1476
 msgid "Delete"
 msgstr ""
 
@@ -2851,14 +2851,14 @@ msgstr ""
 #: assets/src/editor/blocks/form-break-field/edit.js:54
 #: assets/src/editor/blocks/select-field/edit.js:72
 #: assets/src/package/components/fields/controls.js:51
-#: assets/js/package.js:552
+#: assets/build/editor/package.js:552
 msgid "Add Prev Page Button"
 msgstr ""
 
 #: assets/src/editor/blocks/form-break-field/edit.js:60
 #: assets/src/editor/blocks/select-field/edit.js:78
 #: assets/src/package/components/fields/controls.js:58
-#: assets/js/package.js:559
+#: assets/build/editor/package.js:559
 msgid "Prev Page Button Label"
 msgstr ""
 
@@ -2880,7 +2880,7 @@ msgstr ""
 #: assets/src/editor/blocks/form-break-start/edit.js:22
 #: assets/src/editor/blocks/select-field/edit.js:56
 #: assets/src/package/components/fields/controls.js:41
-#: assets/js/package.js:542
+#: assets/build/editor/package.js:542
 msgid "Advanced"
 msgstr ""
 
@@ -2888,7 +2888,7 @@ msgstr ""
 #: assets/src/editor/blocks/form-break-start/edit.js:25
 #: assets/src/editor/blocks/select-field/edit.js:103
 #: assets/src/package/components/fields/controls.js:83
-#: assets/js/package.js:584
+#: assets/build/editor/package.js:584
 msgid "CSS Class Name"
 msgstr ""
 
@@ -2957,7 +2957,7 @@ msgstr ""
 
 #: assets/src/editor/blocks/select-field/edit.js:60
 #: assets/src/package/components/fields/controls.js:46
-#: assets/js/package.js:547
+#: assets/build/editor/package.js:547
 msgid "Placeholder"
 msgstr ""
 
@@ -2967,25 +2967,25 @@ msgstr ""
 
 #: assets/src/editor/blocks/select-field/edit.js:84
 #: assets/src/package/components/fields/controls.js:63
-#: assets/js/package.js:564
+#: assets/build/editor/package.js:564
 msgid "Field Visibility"
 msgstr ""
 
 #: assets/src/editor/blocks/select-field/edit.js:89
 #: assets/src/package/components/fields/controls.js:68
-#: assets/js/package.js:569
+#: assets/build/editor/package.js:569
 msgid "For all"
 msgstr ""
 
 #: assets/src/editor/blocks/select-field/edit.js:93
 #: assets/src/package/components/fields/controls.js:72
-#: assets/js/package.js:573
+#: assets/build/editor/package.js:573
 msgid "Only for logged in users"
 msgstr ""
 
 #: assets/src/editor/blocks/select-field/edit.js:97
 #: assets/src/package/components/fields/controls.js:76
-#: assets/js/package.js:577
+#: assets/build/editor/package.js:577
 msgid "Only for NOT-logged in users"
 msgstr ""
 
@@ -3236,64 +3236,64 @@ msgid "Form Schedule"
 msgstr ""
 
 #: assets/src/package/components/fields/controls.js:6
-#: assets/js/package.js:507
+#: assets/build/editor/package.js:507
 msgid "General"
 msgstr ""
 
 #: assets/src/package/components/fields/controls.js:11
-#: assets/js/package.js:512
+#: assets/build/editor/package.js:512
 msgid "Field Label"
 msgstr ""
 
 #: assets/src/package/components/fields/controls.js:16
-#: assets/js/package.js:517
+#: assets/build/editor/package.js:517
 msgid "Form field name"
 msgstr ""
 
 #: assets/src/package/components/fields/controls.js:17
-#: assets/js/package.js:518
+#: assets/build/editor/package.js:518
 msgid "Should contain only Latin letters, numbers, `-` or `_` chars, no spaces only lower case"
 msgstr ""
 
 #: assets/src/package/components/fields/controls.js:22
-#: assets/js/package.js:523
+#: assets/build/editor/package.js:523
 msgid "Field Description"
 msgstr ""
 
 #: assets/src/package/components/fields/controls.js:27
-#: assets/js/package.js:528
+#: assets/build/editor/package.js:528
 msgid "Default Value"
 msgstr ""
 
 #: assets/src/package/components/fields/controls.js:36
-#: assets/js/package.js:537
+#: assets/build/editor/package.js:537
 msgid "Is Required"
 msgstr ""
 
 #: assets/src/package/components/fields/field-wrapper.js:59
-#: assets/js/package.js:1070
+#: assets/build/editor/package.js:1070
 msgid "input label:"
 msgstr ""
 
 #: assets/src/package/components/fields/field-wrapper.js:77
-#: assets/js/package.js:1088
+#: assets/build/editor/package.js:1088
 msgid "input description:"
 msgstr ""
 
 #: assets/src/package/components/fields/repeater-with-state.js:186
 #: assets/src/package/components/fields/safe.delete.toggle.js:12
-#: assets/js/package.js:1393
+#: assets/build/editor/package.js:1393
 msgid "Safe deleting"
 msgstr ""
 
 #: assets/src/package/components/fields/repeater-with-state.js:261
 #: assets/src/package/components/fields/repeater.js:76
-#: assets/js/package.js:1468
+#: assets/build/editor/package.js:1468
 msgid "Clone"
 msgstr ""
 
 #: assets/src/package/helpers/blocks/blocks-helper.js:113
-#: assets/js/package.js:2554
+#: assets/build/editor/package.js:2554
 msgid "Available fields: "
 msgstr ""
 

@@ -8,6 +8,14 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.1
+* FIX: Dynamic Value not working for the Advanced Choices field
+* FIX: Multiline text values are not displayed in calculated fields
+* FIX: Save checkbox field doesn't saved data (Register User Action)
+* FIX: Cloudflare Turnstile Issue - Invalid input for optional parameter "action"
+* FIX: Fatal error Uncaught Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception
+* FIX: input styles after update WP 7.0
+
 ## 3.6.0.1
 * FIX: Prevent PHP errors appears in some cases and related to the Style Manager module.
 

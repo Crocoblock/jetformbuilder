@@ -87,7 +87,7 @@ class Verify_Token_Action extends Base_Gateway_Action implements
 	 * @return Verify_Token_Action
 	 */
 	public function set_action( $action ): Verify_Token_Action {
-		$this->action = is_numeric( $action ) ? Module::PREFIX . $action : $action;
+		$this->action = is_numeric( $action ) ? Module::PREFIX_TURNSTILE . $action : $action;
 
 		return $this;
 	}

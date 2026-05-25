@@ -27,6 +27,7 @@ function PageState( node, state ) {
 	this.offset    = +node.dataset.pageOffset;
 	this.state     = state;
 	this.inputs    = [];
+	this.inputBindings = new Map();
 	this.canSwitch = new ReactiveVar( null );
 	this.isShow    = new ReactiveVar( 1 === this.index );
 
@@ -117,25 +118,7 @@ PageState.prototype.observeInput = function ( node ) {
 	 */
 	const input = node.jfbSync;
 
-	this.handleInputEnter( input );
-
-	input.loading.watch( () => {
-		if ( input.loading.current ) {
-			this.canSwitch.current = false;
-		}
-		else {
-			this.updateState();
-		}
-	} );
-
-	if ( !input.reporting.restrictions.length ) {
-		return input;
-	}
-
-	this.inputs.push( input );
-	input.watchValidity( () => this.updateState() );
-
-	return input;
+	return this.registerInput( input );
 };
 /**
  * Buttons for switching between pages are hidden conditional blocks
@@ -307,6 +290,64 @@ PageState.prototype.handleInputEnter = function ( input ) {
 		// prevent submit
 		return false;
 	} );
+};
+
+PageState.prototype.registerInput = function (
+	input,
+	{ includeInValidation = true } = {},
+) {
+	if ( !input || this.inputBindings.has( input ) ) {
+		return input;
+	}
+
+	this.handleInputEnter( input );
+
+	const clearLoadingWatch = input.loading.watch( () => {
+		if ( input.loading.current ) {
+			this.canSwitch.current = false;
+		}
+		else {
+			this.updateState();
+		}
+	} );
+
+	const binding = {
+		clearLoadingWatch,
+		clearValidityWatch: null,
+	};
+
+	if ( input.reporting.restrictions.length ) {
+		this.inputs.push( input );
+		binding.clearValidityWatch = input.watchValidity(
+			() => this.updateState(),
+		);
+
+		if ( !includeInValidation ) {
+			this.inputs = this.inputs.filter( current => current !== input );
+		}
+	}
+
+	this.inputBindings.set( input, binding );
+
+	return input;
+};
+
+PageState.prototype.unregisterInput = function ( input ) {
+	if ( !this.inputBindings.has( input ) ) {
+		return;
+	}
+
+	const binding = this.inputBindings.get( input );
+
+	binding?.clearLoadingWatch?.();
+	binding?.clearValidityWatch?.();
+
+	this.inputBindings.delete( input );
+	this.inputs = this.inputs.filter( current => current !== input );
+};
+
+PageState.prototype.getTrackedInputs = function () {
+	return Array.from( this.inputBindings.keys() );
 };
 
 PageState.prototype.getOffsetTop = function () {

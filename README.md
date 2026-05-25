@@ -15,6 +15,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * FIX: Cloudflare Turnstile Issue - Invalid input for optional parameter "action"
 * FIX: Fatal error Uncaught Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception
 * FIX: input styles after update WP 7.0
+* FIX: Friendly Captcha fatal error during token verification
+* FIX: Advanced Choice block background color handling
+* FIX: editor package translation references
+* FIX: Advanced Choice fixed width style output
+* FIX: Switcher field styles
+* FIX: toDateTime default timezone handling
 
 ## 3.6.0.1
 * FIX: Prevent PHP errors appears in some cases and related to the Style Manager module.

@@ -29,8 +29,11 @@
 			"default": ""
 		},
 		"backgroundColor": {
-			"type": "string",
-			"default": "#f0f4f9"
+			"type": "string"
+		},
+		"style": {
+			"type": "object",
+			"default": {}
 		},
 		"isPreview": {
 			"type": "boolean",

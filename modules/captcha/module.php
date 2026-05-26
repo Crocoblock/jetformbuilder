@@ -54,6 +54,11 @@ final class Module implements
 	use Repository_Pattern_Trait;
 
 	const PREFIX = 'jet_form_builder_captcha__';
+	/**
+	 * Cloudflare Turnstile limits the "action" parameter to 32 characters.
+	 * Use a shorter prefix to keep the generated action within this limit.
+	 */
+	const PREFIX_TURNSTILE = 'jfb_turnstile__';
 	const SPAM_EXCEPTION = 'captcha_failed';
 
 	/**

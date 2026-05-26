@@ -1049,8 +1049,22 @@ class Form extends Widget_Base implements Widget_Base_It {
 	 * @access protected
 	 */
 	protected function register_controls() {
+		do_action(
+			'jfb/elementor/form/before-form-settings',
+			$this
+		);
 
 		$this->section_form_settings();
+
+		do_action(
+			'jfb/elementor/form/after-form-settings',
+			$this
+		);
+
+		do_action(
+			'jfb/elementor/form/before-style-sections',
+			$this
+		);
 
 		/** Form Row */
 		$this->section_form_style();
@@ -1104,6 +1118,11 @@ class Form extends Widget_Base implements Widget_Base_It {
 
 		/** Messages */
 		$this->section_message_error_style();
+
+		do_action(
+			'jfb/elementor/form/after-style-sections',
+			$this
+		);
 	}
 
 	private function section_form_settings() {
@@ -1114,6 +1133,13 @@ class Form extends Widget_Base implements Widget_Base_It {
 			array(
 				'label' => __( 'Form Settings', 'jet-form-builder' ),
 			)
+		);
+
+		do_action(
+			'jfb/elementor/form/settings/before-controls',
+			$this,
+			array(),
+			$this
 		);
 
 		$this->add_control(
@@ -1212,6 +1238,13 @@ class Form extends Widget_Base implements Widget_Base_It {
 				'return_value' => 'yes',
 				'default'      => '',
 			)
+		);
+
+		do_action(
+			'jfb/elementor/form/settings/after-controls',
+			$this,
+			array(),
+			$this
 		);
 
 		$this->end_controls_section();

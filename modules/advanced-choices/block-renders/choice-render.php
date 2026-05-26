@@ -53,11 +53,19 @@ class Choice_Render extends Base {
 			'tabindex'     => '0',
 		);
 
+		$choice_attrs = array(
+			'class' => 'jet-form-builder-choice--item' . ( $is_checked ? ' is-checked' : '' ),
+		);
+
+		$fixed_width_style = $this->get_fixed_width_style();
+
+		if ( $fixed_width_style ) {
+			$choice_attrs['style'] = $fixed_width_style;
+		}
+
 		$attrs = get_block_wrapper_attributes(
 			array_merge(
-				array(
-					'class' => 'jet-form-builder-choice--item' . ( $is_checked ? ' is-checked' : '' ),
-				),
+				$choice_attrs,
 				$accessibility_attrs
 			)
 		);
@@ -67,6 +75,25 @@ class Choice_Render extends Base {
 			$attrs,
 			( $this->block_type->block_content .
 				( $this->has_choice_control() ? '' : $this->get_hidden_input_control() )
+			)
+		);
+	}
+
+	protected function get_fixed_width_style(): string {
+		$layout = $this->block_type->block_attrs['style']['layout'] ?? array();
+
+		if (
+			empty( $layout['selfStretch'] ) ||
+			'fixed' !== $layout['selfStretch'] ||
+			empty( $layout['flexSize'] )
+		) {
+			return '';
+		}
+
+		return safecss_filter_attr(
+			sprintf(
+				'flex-basis:auto;width:%s;',
+				$layout['flexSize']
 			)
 		);
 	}

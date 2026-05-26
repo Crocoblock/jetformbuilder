@@ -18,7 +18,11 @@ class Litespeed implements Base_Module_It {
 	}
 
 	public function condition(): bool {
-		return defined( 'LSCWP_V' );
+		if ( ! defined( 'LSCWP_V' ) ) {
+			return false;
+		}
+
+		return (bool) apply_filters( 'litespeed_esi_status', false );
 	}
 
 	public function init_hooks() {

@@ -51,7 +51,7 @@ class Turnstile extends Base_Captcha_From_Options implements
 			'jet-form-builder/turnstile/options',
 			array(
 				'sitekey' => $this->options['key'] ?? '',
-				'action'  => Module::PREFIX . jet_fb_live()->form_id,
+				'action'  => Module::PREFIX_TURNSTILE . jet_fb_live()->form_id,
 			)
 		);
 

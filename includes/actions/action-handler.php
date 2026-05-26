@@ -141,6 +141,7 @@ class Action_Handler {
 		 */
 		$action->_id      = $id;
 		$action->settings = $settings;
+		$action->editor_name = $form_action['editor_name'] ?? '';
 
 		$this->save_action( $action, $form_action );
 

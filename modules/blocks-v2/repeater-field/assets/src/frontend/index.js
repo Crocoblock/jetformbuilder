@@ -61,32 +61,47 @@ addAction(
 			return;
 		}
 
-		/**
-		 * @type {ObservableRow[]}
-		 */
-		const current = input.value.current || [];
-
-		input.watch( () => pageState.updateState() );
+		const getCurrentInputs = () => (
+			( input.value.current || [] ).flatMap(
+				observableRow => observableRow.getInputs(),
+			)
+		);
 
 		/**
 		 * @param currentInput {InputData}
 		 */
 		function observeInnerInput( currentInput ) {
-			pageState.handleInputEnter( currentInput );
-
-			if ( !currentInput.reporting?.restrictions?.length ) {
-				return;
-			}
-
-			currentInput.watchValidity( () => pageState.updateState() );
+			pageState.registerInput(
+				currentInput,
+				{ includeInValidation: false },
+			);
 		}
 
-		for ( const observableRow of current ) {
-			observableRow.getInputs().forEach( observeInnerInput );
+		function syncCurrentInputs() {
+			const currentInputs = getCurrentInputs();
+			const currentSet = new Set( currentInputs );
+			const currentRows = new Set( input.value.current || [] );
+			const repeaterTrackedInputs = pageState.getTrackedInputs().filter(
+				currentInput => currentInput.root?.parent === input,
+			);
+			const staleTrackedInputs = repeaterTrackedInputs.filter(
+				currentInput => (
+					!currentRows.has( currentInput.root ) ||
+					currentInput._observeVersion !==
+						currentInput.root?._observeVersion
+				) && !currentSet.has( currentInput ),
+			);
+
+			staleTrackedInputs.forEach(
+				currentInput => pageState.unregisterInput( currentInput ),
+			);
+			currentInputs.forEach( observeInnerInput );
+			pageState.updateState();
 		}
-		input.lastObserved.watch( () => {
-			input.lastObserved.current.getInputs().forEach( observeInnerInput );
-		} );
+
+		syncCurrentInputs();
+		input.watch( syncCurrentInputs );
+		input.lastObserved.watch( syncCurrentInputs );
 	},
 );
 
@@ -96,5 +111,3 @@ addFilter(
 	( current, $fieldNode, $macroHost ) =>
 		resolveRepeaterMacrosValue( current, $fieldNode, $macroHost ),
 );
-
-

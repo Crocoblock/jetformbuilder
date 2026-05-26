@@ -1,4 +1,5 @@
 import CheckboxData from './CheckboxData';
+import '../../default-value/main';
 import './index.pcss';
 
 const {

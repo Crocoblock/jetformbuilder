@@ -1,5 +1,6 @@
 import MultiSelectData from './input';
 import SignalSelect from './signal';
+import '../../default-value/main';
 import './main.pcss';
 
 const { addFilter } = JetPlugins.hooks;

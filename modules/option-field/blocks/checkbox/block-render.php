@@ -28,10 +28,53 @@ class Block_Render extends Base {
 
 	public function render_options(): string {
 		$required = $this->block_type->get_required_val();
+		$default  = $this->args['default'] ?? array();
+		$is_array_like_string = static function ( $value ) {
+			if ( ! is_string( $value ) ) {
+				return false;
+			}
+
+			$value = trim( $value );
+
+			return '[' === substr( $value, 0, 1 ) && ']' === substr( $value, -1 );
+		};
 
 		$this->add_attribute( 'class', 'jet-form-builder__field checkboxes-field checkradio-field' );
 		$this->add_attribute( 'class', $this->args['class_name'] );
 		$this->add_attribute( 'required', $required );
+		$dynamic_default = null;
+
+		if (
+			is_string( $default ) && (
+				jet_form_builder()->regexp->has_macro( $default ) ||
+				$is_array_like_string( $default )
+			)
+		) {
+			$dynamic_default = $default;
+		} elseif ( is_array( $default ) ) {
+			$normalized_default = array_values( $default );
+			$single_default     = $normalized_default[0] ?? '';
+
+			if (
+				1 === count( $normalized_default ) &&
+				is_string( $single_default ) &&
+				'[' === substr( trim( $single_default ), 0, 1 )
+			) {
+				$dynamic_default = $single_default;
+			} else {
+				$dynamic_default = wp_json_encode( $normalized_default );
+			}
+		}
+
+		if (
+			is_string( $dynamic_default ) && (
+				jet_form_builder()->regexp->has_macro( $dynamic_default ) ||
+				$is_array_like_string( $dynamic_default )
+			)
+		) {
+			wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
+			$this->add_attribute( 'data-default-val', $dynamic_default );
+		}
 
 		$auto_update_attrs = Html_Attributes_Injector::render_data_attributes( $this->args );
 		$auto_update_attrs = $auto_update_attrs ? ' ' . $auto_update_attrs : '';

@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Migrations;
 
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Migrations\Versions\Version_3_1_7;
+use Jet_Form_Builder\Migrations\Versions\Version_3_6_1;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
@@ -45,6 +46,7 @@ class Migrator {
 			new Version_2_1_7(),
 			new Version_2_1_8(),
 			new Version_3_1_7(),
+			new Version_3_6_1(),
 		);
 	}
 

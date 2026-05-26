@@ -14,16 +14,20 @@ function SignalRadio() {
 
 	this.runSignal = function () {
 		this.input.calcValue = 0;
+		const currentValue   = this.input.value.current;
+		let hasMatch         = false;
 
 		for ( const node of this.input.nodes ) {
 			if ( node.dataset.custom ) {
 				continue;
 			}
-			node.checked = this.input.value.current === node.value;
+			node.checked = '' + currentValue === node.value;
 
 			if ( !node.checked ) {
 				continue;
 			}
+
+			hasMatch = true;
 
 			this.input.calcValue += parseFloat(
 				node.dataset?.calculate ?? node.value,
@@ -39,12 +43,20 @@ function SignalRadio() {
 
 		const lastNode = this.input.lastNode();
 		const input    = this.input.getCustomInput();
+		const useCustom = (
+			!hasMatch &&
+			'' !== currentValue &&
+			null !== currentValue &&
+			undefined !== currentValue
+		);
+
+		lastNode.checked = useCustom;
 
 		if ( input.disabled === lastNode.checked ) {
 			input.disabled = !lastNode.checked;
 		}
 
-		const value = this.input.value.current;
+		const value = '' + currentValue;
 
 		if ( !lastNode.checked || input.value === value ) {
 			return;

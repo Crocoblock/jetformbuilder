@@ -168,6 +168,43 @@ function isResolved( value ) {
 	);
 }
 
+function canOverrideAutoSelectedSingleSelect( input ) {
+	if ( input.isArray() || 'select' !== input.inputType ) {
+		return false;
+	}
+
+	const [ node ] = input.nodes;
+
+	if (
+		!node ||
+		'select-one' !== node.type ||
+		node.multiple ||
+		!node.options?.length
+	) {
+		return false;
+	}
+
+	const options = Array.from( node.options );
+	const [ firstOption ] = options;
+
+	if ( !firstOption ) {
+		return false;
+	}
+
+	if ( options.some( option => '' === option.value ) ) {
+		return false;
+	}
+
+	if ( options.some( option => option.defaultSelected ) ) {
+		return false;
+	}
+
+	return (
+		0 === node.selectedIndex &&
+		node.value === firstOption.value
+	);
+}
+
 function applyResolvedValue( input, value ) {
 	if ( Array.isArray( value ) ) {
 		input.value.setIfEmpty(
@@ -182,6 +219,12 @@ function applyResolvedValue( input, value ) {
 	const normalized = stripWrappingQuotes( '' + value );
 
 	if ( !input.isArray() ) {
+		if ( canOverrideAutoSelectedSingleSelect( input ) ) {
+			input.value.current = normalized;
+
+			return;
+		}
+
 		input.value.setIfEmpty( normalized );
 
 		return;

@@ -15,5 +15,10 @@
 			"selector": "div",
 			"default": ""
 		}
-	}
+	},
+	"editorScript": "jet-fb-macros-inserter-editor",
+	"editorStyle": [
+		"wp-codemirror",
+		"jet-fb-macros-inserter-editor"
+	]
 }

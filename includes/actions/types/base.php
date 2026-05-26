@@ -45,6 +45,13 @@ abstract class Base implements Repository_Item_Instance_Trait {
 	public $option_name;
 
 	/**
+	 * Stores the editor-facing action name for admin surfaces
+	 *
+	 * @var string
+	 */
+	public $editor_name = '';
+
+	/**
 	 * Contains slugs of events
 	 *
 	 * @var array

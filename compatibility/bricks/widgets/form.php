@@ -53,7 +53,26 @@ class Form extends Base {
 
 	// Set builder control groups
 	public function set_control_groups() {
+		do_action(
+			'jfb/bricks/form/before-form-settings',
+			$this,
+			'control_groups'
+		);
+
 		$this->control_group_form_settings();
+
+		do_action(
+			'jfb/bricks/form/after-form-settings',
+			$this,
+			'control_groups'
+		);
+
+		do_action(
+			'jfb/bricks/form/before-style-sections',
+			$this,
+			'control_groups'
+		);
+
 		$this->control_group_form_style();
 		$this->control_group_label_style();
 		$this->control_group_description_style();
@@ -71,6 +90,12 @@ class Form extends Base {
 		$this->control_group_form_progress_wrap_style();
 		$this->control_group_form_progress_pages_style();
 		$this->control_group_message_style();
+
+		do_action(
+			'jfb/bricks/form/after-style-sections',
+			$this,
+			'control_groups'
+		);
 	}
 
 	// Set builder controls
@@ -110,6 +135,11 @@ class Form extends Base {
 		$options = Form_Arguments::get_options( true );
 
 		$this->start_jet_control_group( 'form_settings' );
+
+		do_action(
+			'jfb/bricks/form/settings/before-controls',
+			$this
+		);
 
 		$this->register_jet_control(
 			'form_id',
@@ -203,6 +233,11 @@ class Form extends Base {
 				'type'    => 'checkbox',
 				'default' => false,
 			)
+		);
+
+		do_action(
+			'jfb/bricks/form/settings/after-controls',
+			$this
 		);
 
 		$this->end_jet_control_group();

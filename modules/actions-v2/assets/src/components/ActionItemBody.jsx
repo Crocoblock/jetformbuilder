@@ -7,6 +7,7 @@ import ToggleActionExecutionButton from './ToggleActionExecutionButton';
 import DeleteActionButton from './DeleteActionButton';
 import { styled } from '@linaria/react';
 import { useSelect } from '@wordpress/data';
+import { useState } from '@wordpress/element';
 import useLoopedAction from '../hooks/useLoopedAction';
 
 const CursoredIcon = styled( Icon )`
@@ -42,33 +43,51 @@ const FlexActionButtons = styled( Flex )`
 const ActionCardBody = styled( CardBody )`
 	position: relative;
 
-	&:hover {
+	&:hover:not([data-title-editing="true"]) {
 		${ FlexActionButtons } {
 			opacity: 1;
+			pointer-events: auto;
+		}
+	}
+
+	&[data-title-editing="true"] {
+		${ FlexActionButtons } {
+			opacity: 0;
+			pointer-events: none;
 		}
 	}
 `;
 
+const ActionTitleWrap = styled( Flex )`
+	flex: 1;
+	min-width: 0;
+`;
+
 function ActionItemBody() {
 	const { action } = useLoopedAction();
+	const [ isTitleEditing, setIsTitleEditing ] = useState( false );
 
 	const actionType = useSelect( select => (
 		select( 'jet-forms/actions' ).getAction( action.type )
 	), [ action.type ] );
 
-	return <ActionCardBody>
+	return <ActionCardBody data-title-editing={ isTitleEditing ? 'true' : undefined }>
 		{ undefined === actionType && <Flex align="center" justify="space-between">
-			<small>Action <b>"{ action.type }"</b> is not supported</small>
+			<small>Action <b>&quot;{ action.type }&quot;</b> is not supported</small>
 			<DeleteActionButton/>
 		</Flex> }
+
 		{ undefined !== actionType && <>
 			<Flex align="center" justify="flex-start" gap={ 1 }>
 				<CursoredIcon
 					className={ 'jfb-action-handle' }
 					icon={ dragHandle }
 				/>
-				<ActionTitle/>
+				<ActionTitleWrap align="center" justify="flex-start">
+					<ActionTitle onEditingChange={ setIsTitleEditing }/>
+				</ActionTitleWrap>
 			</Flex>
+
 			<FlexActionButtons justify="flex-end">
 				<EditActionSettingsButton/>
 				{ !actionType.disableConditions && <EditActionConditionsButton/> }

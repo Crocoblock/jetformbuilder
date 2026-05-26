@@ -9,6 +9,8 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 ## ChangeLog
 
 ## 3.6.1
+* ADD: Ability to rename form actions [Crocoblock/suggestions#7857](https://github.com/Crocoblock/suggestions/issues/7857)
+* ADD: Hooks for adding custom controls to Elementor and Bricks form widgets
 * FIX: Dynamic Value not working for the Advanced Choices field
 * FIX: Multiline text values are not displayed in calculated fields
 * FIX: Save checkbox field doesn't saved data (Register User Action)
@@ -21,6 +23,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * FIX: Advanced Choice fixed width style output
 * FIX: Switcher field styles
 * FIX: toDateTime default timezone handling
+* FIX: Option fields apply dynamic and multi-value defaults
+* FIX: Radio field auto page switch stays scoped to enabled fields
+* FIX: Phone Field translations follow current WordPress page locale
+* FIX: Repeater required validation after row removal [Crocoblock/jetformbuilder#564](https://github.com/Crocoblock/jetformbuilder/issues/564)
+* FIX: Litespeed Cache plugin compatibility [Crocoblock/jetformbuilder#603](https://github.com/Crocoblock/jetformbuilder/issues/603)
 
 ## 3.6.0.1
 * FIX: Prevent PHP errors appears in some cases and related to the Style Manager module.

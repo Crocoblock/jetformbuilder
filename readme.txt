@@ -2,9 +2,9 @@
 Contributors: crocoblock, mjhead, hugreed
 Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, multi step form.
 Requires at least: 6.1
-Tested up to: 6.7.1
+Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 3.6.0.1
+Stable tag: 3.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,27 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.6.1**
+- ADD: Ability to rename form actions [Crocoblock/suggestions#7857](https://github.com/Crocoblock/suggestions/issues/7857)
+- ADD: Hooks for adding custom controls to Elementor and Bricks form widgets
+- FIX: Dynamic Value not working for the Advanced Choices field
+- FIX: Multiline text values are not displayed in calculated fields
+- FIX: Save checkbox field doesn't saved data (Register User Action)
+- FIX: Cloudflare Turnstile Issue - Invalid input for optional parameter "action"
+- FIX: Fatal error Uncaught Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception
+- FIX: input styles after update WP 7.0
+- FIX: Friendly Captcha fatal error during token verification
+- FIX: Advanced Choice block background color handling
+- FIX: editor package translation references
+- FIX: Advanced Choice fixed width style output
+- FIX: Switcher field styles
+- FIX: toDateTime default timezone handling
+- FIX: Option fields apply dynamic and multi-value defaults
+- FIX: Radio field auto page switch stays scoped to enabled fields
+- FIX: Phone Field translations follow current WordPress page locale
+- FIX: Repeater required validation after row removal [Crocoblock/jetformbuilder#564](https://github.com/Crocoblock/jetformbuilder/issues/564)
+- FIX: Litespeed Cache plugin compatibility [Crocoblock/jetformbuilder#603](https://github.com/Crocoblock/jetformbuilder/issues/603)
 
 **3.6.0.1**
 - FIX: Prevent PHP errors appears in some cases and related to the Style Manager module.

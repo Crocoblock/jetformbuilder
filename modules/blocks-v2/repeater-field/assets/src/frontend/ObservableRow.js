@@ -3,6 +3,32 @@ const {
 	      CalculatedFormula,
       } = JetFormBuilderAbstract;
 
+function cloneObservedValue( value ) {
+	if ( Array.isArray( value ) ) {
+		return [ ...value ];
+	}
+
+	if ( value && 'object' === typeof value ) {
+		return { ...value };
+	}
+
+	return value;
+}
+
+function isNativeDateLikeInput( input ) {
+	const [ node ] = input?.nodes ?? [];
+
+	return [ 'date', 'time', 'datetime-local' ].includes( node?.type );
+}
+
+function stampObservedInputs( row ) {
+	row._observeVersion = ( row._observeVersion || 0 ) + 1;
+
+	for ( const input of row.getInputs() ) {
+		input._observeVersion = row._observeVersion;
+	}
+}
+
 function ObservableRow( parent ) {
 	Observable.call( this, parent );
 
@@ -17,16 +43,54 @@ ObservableRow.prototype.initedCalc = false;
 
 ObservableRow.prototype.reObserve = function ( root ) {
 	this.isObserved = false;
+	const prevValues = {};
+	const prevNodeValues = {};
 
-	const prevValues = { ...this.value.current };
+	for ( const [ fieldName, value ] of Object.entries( this.value?.current || {} ) ) {
+		prevValues[ fieldName ] = cloneObservedValue( value );
+	}
+
+	for ( const input of this.getInputs() ) {
+		const fieldName = input.getName();
+
+		prevValues[ input.getName() ] = cloneObservedValue( input.getValue() );
+
+		if ( isNativeDateLikeInput( input ) ) {
+			prevNodeValues[ fieldName ] = input.nodes?.[ 0 ]?.value ?? '';
+		}
+	}
+
 	this.dataInputs  = {};
 	Observable.prototype.observe.call( this, root );
+	stampObservedInputs( this );
 
-	this.value.current = prevValues;
+	for ( const input of this.getInputs() ) {
+		const fieldName = input.getName();
+
+		if ( !Object.prototype.hasOwnProperty.call( prevValues, fieldName ) ) {
+			continue;
+		}
+
+		if ( isNativeDateLikeInput( input ) ) {
+			const [ node ] = input.nodes;
+
+			if ( Object.prototype.hasOwnProperty.call( prevNodeValues, fieldName ) && node ) {
+				node.value = prevNodeValues[ fieldName ];
+			}
+
+			input.reQueryValue();
+			continue;
+		}
+
+		input.silenceSet( cloneObservedValue( prevValues[ fieldName ] ) );
+	}
+
+	this.parent.lastObserved.current = this;
 };
 
 ObservableRow.prototype.observe = function ( root ) {
 	Observable.prototype.observe.call( this, root );
+	stampObservedInputs( this );
 
 	this.parent.lastObserved.current = this;
 };

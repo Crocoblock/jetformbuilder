@@ -48,7 +48,9 @@ function AddActionModal() {
 			return;
 		}
 		const newAction = {
-			...new BaseAction( { type: action.type } ),
+			...new BaseAction( {
+				type: action.type,
+			} ),
 		};
 
 		setActions( [
@@ -68,7 +70,7 @@ function AddActionModal() {
 			setSearch( '' );
 			setCategory( '' );
 		};
-	}, [] );
+	}, [ setCategory, setSearch ] );
 
 	return <Modal
 		size="large"

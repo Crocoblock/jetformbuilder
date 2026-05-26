@@ -59,13 +59,21 @@ class Choices_Field_Render extends Base {
 		$content   = '';
 		$full_name = $this->block_type->get_field_name() . ( $this->block_type->is_allowed_multiple() ? '[]' : '' );
 
+		$default = $this->block_type->block_attrs['default'] ?? array();
+
+		if ( is_array( $default ) ) {
+			$default = array_map( array( $this, 'maybe_resolve_default_macro' ), $default );
+		}
+
+
 		foreach ( $wp_block['innerBlocks'] as $inner_block ) {
+
 			$content .= Block_Helper::render_with_context(
 				$inner_block,
 				$this->block_type->block_context + array(
 					Choices_Field::CONTEXT_RAW_NAME => $this->block_type->block_attrs['name'] ?? '',
 					Choices_Field::CONTEXT_NAME     => $full_name,
-					Choices_Field::CONTEXT_DEFAULT  => $this->block_type->block_attrs['default'],
+					Choices_Field::CONTEXT_DEFAULT  => $default,
 					Choices_Field::CONTEXT_MULTIPLE => $this->block_type->is_allowed_multiple(),
 					Choices_Field::CONTEXT_REQUIRED => $this->block_type->block_attrs['required'] ?? false,
 				)
@@ -88,6 +96,29 @@ class Choices_Field_Render extends Base {
 		$module->remove_native_layout();
 
 		return parent::render( null, $html );
+	}
+
+	protected function maybe_resolve_default_macro( $default ) {
+		if ( ! is_string( $default ) ) {
+			return $default;
+		}
+		$raw_default = $default;
+		$default     = trim( $default );
+		$default     = trim( $default, '\'"' );
+		if ( ! preg_match( '/^%(.+?)%$/', $default, $matches ) ) {
+			return $raw_default;
+		}
+		$field_name = $matches[1];
+
+		$blocks     = jet_fb_live()->blocks ?? array();
+		foreach ( $blocks as $block ) {
+			if ( empty( $block['attrs']['name'] ) || $field_name !== $block['attrs']['name'] ) {
+				continue;
+			}
+			return $block['attrs']['default'] ?? $raw_default;
+		}
+		return $raw_default;
+
 	}
 
 	/**

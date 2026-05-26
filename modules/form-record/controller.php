@@ -276,10 +276,17 @@ class Controller {
 				continue;
 			}
 			foreach ( $action->get_executed_events() as $on_event ) {
+				$action_name = '';
+
+				if ( isset( $action->editor_name ) && is_string( $action->editor_name ) ) {
+					$action_name = trim( $action->editor_name );
+				}
+
 				$actions[] = array(
 					'record_id'   => $this->record_id,
 					'action_slug' => $action->get_id(),
 					'action_id'   => $action->_id,
+					'action_name' => $action_name ? $action_name : $action->get_name(),
 					'on_event'    => $on_event,
 					'status'      => $status,
 				);

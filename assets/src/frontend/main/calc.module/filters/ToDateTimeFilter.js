@@ -14,7 +14,7 @@ function ToDateTimeFilter() {
 			const cleaned = isUTC.trim().replace( /^['"]|['"]$/g, '' );
 			const lower   = cleaned.toLowerCase();
 
-			isUTC = lower !== 'false';
+			isUTC = '' === lower ? false : lower !== 'false';
 		} else {
 			isUTC = Boolean( isUTC );
 		}

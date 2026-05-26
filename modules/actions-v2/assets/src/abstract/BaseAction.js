@@ -10,6 +10,7 @@ BaseAction.prototype.initData = function ( props ) {
 	this.id         = props?.id ?? getRandomID();
 	this.settings   = props?.settings ?? {};
 	this.type       = props?.type ?? 'send_email';
+	this.editor_name = props?.editor_name ?? '';
 	this.conditions = props?.conditions ?? [];
 	this.events     = props?.events ?? [];
 
@@ -78,4 +79,3 @@ window.JetFBComponents = window.JetFBComponents || {};
 window.JetFBComponents.BaseAction = BaseAction;
 
 export default BaseAction;
-

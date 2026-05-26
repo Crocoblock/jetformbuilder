@@ -64,6 +64,7 @@ export default function IntlPhoneEdit( props ) {
 					/>
 
 					<BaseControl
+						id={ uniqKey( 'preferredCountries' ) }
 						label={ __( 'Preferred Countries', 'jet-form-builder' ) }
 						help={ __( 'Comma-separated country codes (e.g., "US, GB, UA").', 'jet-form-builder' ) }
 					>
@@ -77,6 +78,7 @@ export default function IntlPhoneEdit( props ) {
 					</BaseControl>
 
 					<BaseControl
+						id={ uniqKey( 'onlyCountries' ) }
 						label={ __( 'Only Countries', 'jet-form-builder' ) }
 						help={ __( 'Show only these countries (e.g., "US, CA, MX").', 'jet-form-builder' ) }
 					>
@@ -91,6 +93,7 @@ export default function IntlPhoneEdit( props ) {
 
 					{ attributes.only_countries.length <= 0 && (
 						<BaseControl
+							id={ uniqKey( 'excludeCountries' ) }
 							label={ __( 'Exclude Countries', 'jet-form-builder' ) }
 							help={ __( 'Exclude these countries (e.g., "US, BY")', 'jet-form-builder' ) }
 						>
@@ -128,6 +131,7 @@ export default function IntlPhoneEdit( props ) {
 							'jet-form-builder'
 						) }
 					/>
+
 				</PanelBody>
 
 				<PanelBody

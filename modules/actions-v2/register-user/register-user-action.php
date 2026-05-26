@@ -165,28 +165,28 @@ class Register_User_Action extends Base {
 			$user_url = ! empty( $request[ $fields_map['user_url'] ] ) ? $request[ $fields_map['user_url'] ] : false;
 		}
 
-		$metafields_map = ! empty($this->settings['meta_fields_map']) ? $this->settings['meta_fields_map'] : array();
+		$metafields_map = ! empty( $this->settings['meta_fields_map'] ) ? $this->settings['meta_fields_map'] : array();
 		$single_value_as_array = Single_Value_As_Array::prepare_flags(
 			$this->settings['single_value_as_array'] ?? array()
 		);
 
 		$metadata = array();
 
-		if (! empty($metafields_map)) {
-			foreach ($metafields_map as $form_field => $meta_field) {
+		if ( ! empty( $metafields_map ) ) {
+			foreach ( $metafields_map as $form_field => $meta_field ) {
 				/**
 				 * We need this because WordPress automatically use this on insert to the database
 				 */
-				$meta_field = remove_accents($meta_field);
+				$meta_field = remove_accents( $meta_field );
 				/**
 				 * @since 3.1.6
 				 */
-				if (in_array($meta_field, User_Meta_Property::get_restricted_keys(), true)) {
+				if ( in_array( $meta_field, User_Meta_Property::get_restricted_keys(), true ) ) {
 					continue;
 				}
-				if (array_key_exists($form_field, $request)) {
-					$metadata[$meta_field] = Single_Value_As_Array::maybe_wrap(
-						$request[$form_field],
+				if ( array_key_exists( $form_field, $request ) ) {
+					$metadata[ $meta_field ] = Single_Value_As_Array::maybe_wrap(
+						$request[ $form_field ],
 						$form_field,
 						$single_value_as_array
 					);

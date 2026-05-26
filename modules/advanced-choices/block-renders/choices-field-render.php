@@ -65,7 +65,6 @@ class Choices_Field_Render extends Base {
 			$default = array_map( array( $this, 'maybe_resolve_default_macro' ), $default );
 		}
 
-
 		foreach ( $wp_block['innerBlocks'] as $inner_block ) {
 
 			$content .= Block_Helper::render_with_context(
@@ -118,7 +117,6 @@ class Choices_Field_Render extends Base {
 			return $block['attrs']['default'] ?? $raw_default;
 		}
 		return $raw_default;
-
 	}
 
 	/**

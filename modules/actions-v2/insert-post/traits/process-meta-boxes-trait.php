@@ -133,23 +133,23 @@ trait Process_Meta_Boxes_Trait {
 				}
 			}
 
-			if (isset($values[$field_key]) && ('checkbox' === ($field_data['type'] ?? ''))) {
+			if ( isset( $values[ $field_key ] ) && ( 'checkbox' === ( $field_data['type'] ?? '' ) ) ) {
 
 				$options    = $field_data['options'] ?? array();
 				$normalized = array();
 				// Changed: normalize JetEngine checkbox value even if it comes as a scalar.
-				$checkbox_values = (array) $values[$field_key];
-				foreach ($checkbox_values as $checkbox_key => $checkbox_value) {
-					if (! empty($checkbox_value)) {
-						$normalized[$checkbox_value] = 'true';
+				$checkbox_values = (array) $values[ $field_key ];
+				foreach ( $checkbox_values as $checkbox_key => $checkbox_value ) {
+					if ( ! empty( $checkbox_value ) ) {
+						$normalized[ $checkbox_value ] = 'true';
 					}
 				}
-				foreach ($options as $option_key => $option_value) {
-					if (! isset($normalized[$option_key])) {
-						$normalized[$option_key] = 'false';
+				foreach ( $options as $option_key => $option_value ) {
+					if ( ! isset( $normalized[ $option_key ] ) ) {
+						$normalized[ $option_key ] = 'false';
 					}
 				}
-				$values[$field_key] = $normalized;
+				$values[ $field_key ] = $normalized;
 			}
 		}
 

@@ -28,13 +28,13 @@ abstract class Abstract_Post_Modifier extends Abstract_Modifier {
 		$this->set( 'post_status', $post_status );
 
 		/** @var Post_Meta_Property $meta */
-		$meta = $this->get('meta_input');
+		$meta = $this->get( 'meta_input' );
 
 		$this->single_value_as_array = Single_Value_As_Array::prepare_flags(
 			$action->settings['single_value_as_array'] ?? array()
 		);
 
-		$meta->set_meta(Post_Meta_Property::prepare_meta($default_meta));
+		$meta->set_meta( Post_Meta_Property::prepare_meta( $default_meta ) );
 
 		$this->set_fields_map( $fields_map );
 		$this->set_request( $request );

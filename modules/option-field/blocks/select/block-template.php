@@ -87,18 +87,18 @@ if (
 	<select <?php $this->render_attributes_string(); ?>>
 		<?php
 
-	if ( $placeholder ) {
-		$additional_attrs = ( $args['is_disabled_placeholder'] ?? false ) ? 'disabled' : '';
+		if ( $placeholder ) {
+			$additional_attrs = ( $args['is_disabled_placeholder'] ?? false ) ? 'disabled' : '';
 
-		if (
+			if (
 			! $default ||
 			(
 				$has_dynamic_default &&
 				! $this->block_type->is_multiple()
 			)
-		) {
-			$additional_attrs .= ' selected';
-		}
+			) {
+				$additional_attrs .= ' selected';
+			}
 			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 			printf( '<option value="" %1$s>%2$s</option>', $additional_attrs, $placeholder );
 		}

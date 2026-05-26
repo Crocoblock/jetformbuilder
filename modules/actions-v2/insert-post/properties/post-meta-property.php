@@ -12,37 +12,33 @@ use Jet_Form_Builder\Exceptions\Silence_Exception;
 use JFB_Modules\Actions_V2\Insert_Post\Traits\Process_Meta_Boxes_Trait;
 
 // If this file is called directly, abort.
-if (! defined('WPINC')) {
+if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
 class Post_Meta_Property extends Base_Object_Property implements
-	Object_Dynamic_Property
-{
+	Object_Dynamic_Property {
+
 
 	use Process_Meta_Boxes_Trait;
 
-	public function get_id(): string
-	{
+	public function get_id(): string {
 		return 'meta_input';
 	}
 
-	public function get_label(): string
-	{
-		return __('Post Meta', 'jet-form-builder');
+	public function get_label(): string {
+		return __( 'Post Meta', 'jet-form-builder' );
 	}
 
-	public function is_supported(string $key, $value): bool
-	{
+	public function is_supported( string $key, $value ): bool {
 		return true;
 	}
 
 	/**
 	 * @param Abstract_Modifier|Post_Modifier $modifier
 	 */
-	public function do_before(string $key, $value, Abstract_Modifier $modifier)
-	{
-		if (! Tools::is_repeater_val($value)) {
+	public function do_before( string $key, $value, Abstract_Modifier $modifier ) {
+		if ( ! Tools::is_repeater_val( $value ) ) {
 			$this->set_meta(
 				array(
 					$key => $value,
@@ -54,18 +50,17 @@ class Post_Meta_Property extends Base_Object_Property implements
 
 		$this->set_meta(
 			array(
-				$key => Tools::prepare_repeater_value($value, $modifier->fields_map),
+				$key => Tools::prepare_repeater_value( $value, $modifier->fields_map ),
 			)
 		);
 	}
 
-	public function do_after(Abstract_Modifier $modifier)
-	{
+	public function do_after( Abstract_Modifier $modifier ) {
 		/** @var Base_Post_Action $action */
 		$action = $modifier->get_action();
 		$id     = $action->get_inserted();
 
-		if (! $id) {
+		if ( ! $id ) {
 			return;
 		}
 
@@ -80,7 +75,7 @@ class Post_Meta_Property extends Base_Object_Property implements
 		$single_as_array_fields = array_keys(
 			array_filter(
 				$single_value_as_array,
-				static function ($val) {
+				static function ( $val ) {
 					return (bool) $val;
 				}
 			)
@@ -88,49 +83,49 @@ class Post_Meta_Property extends Base_Object_Property implements
 
 		$meta_keys_to_array = array();
 
-		if (! empty($single_as_array_fields) && ! empty($modifier->fields_map)) {
+		if ( ! empty( $single_as_array_fields ) && ! empty( $modifier->fields_map ) ) {
 			$meta_keys_to_array = array_values(
 				array_intersect_key(
 					$modifier->fields_map,
-					array_flip($single_as_array_fields)
+					array_flip( $single_as_array_fields )
 				)
 			);
 		}
 
-		$meta_box_fields = $this->get_meta_box_fields($id, $modifier);
+		$meta_box_fields = $this->get_meta_box_fields( $id, $modifier );
 
-		foreach ($this->value as $meta_key => $value) {
-			if (! in_array($meta_key, $meta_keys_to_array, true)) {
+		foreach ( $this->value as $meta_key => $value ) {
+			if ( ! in_array( $meta_key, $meta_keys_to_array, true ) ) {
 				continue;
 			}
 
-			$this->value[$meta_key] = Single_Value_As_Array::maybe_wrap(
+			$this->value[ $meta_key ] = Single_Value_As_Array::maybe_wrap(
 				$value,
 				$meta_key,
-				array_fill_keys($meta_keys_to_array, true)
+				array_fill_keys( $meta_keys_to_array, true )
 			);
 		}
 
-		$prepared_value = $this->normalize_checkboxes($meta_box_fields, $this->value);
+		$prepared_value = $this->normalize_checkboxes( $meta_box_fields, $this->value );
 
-		foreach ($single_as_array_fields as $field_name) {
+		foreach ( $single_as_array_fields as $field_name ) {
 
 			// By form field name.
-			if (array_key_exists($field_name, $prepared_value)) {
-				$prepared_value[$field_name] = Single_Value_As_Array::maybe_wrap(
-					$prepared_value[$field_name],
+			if ( array_key_exists( $field_name, $prepared_value ) ) {
+				$prepared_value[ $field_name ] = Single_Value_As_Array::maybe_wrap(
+					$prepared_value[ $field_name ],
 					$field_name,
 					$single_value_as_array
 				);
 			}
 
 			// By meta key fallback.
-			if (isset($modifier->fields_map[$field_name])) {
-				$meta_key = $modifier->fields_map[$field_name];
+			if ( isset( $modifier->fields_map[ $field_name ] ) ) {
+				$meta_key = $modifier->fields_map[ $field_name ];
 
-				if (array_key_exists($meta_key, $prepared_value)) {
-					$prepared_value[$meta_key] = Single_Value_As_Array::maybe_wrap(
-						$prepared_value[$meta_key],
+				if ( array_key_exists( $meta_key, $prepared_value ) ) {
+					$prepared_value[ $meta_key ] = Single_Value_As_Array::maybe_wrap(
+						$prepared_value[ $meta_key ],
 						$field_name,
 						$single_value_as_array
 					);
@@ -139,44 +134,41 @@ class Post_Meta_Property extends Base_Object_Property implements
 		}
 
 		// Push processed values into $_POST. JetEngine reads from here.
-		$_POST = array_merge($_POST, $prepared_value); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$_POST = array_merge( $_POST, $prepared_value ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		foreach ($this->value as $key => $value) {
-			if (in_array($key, $meta_keys_to_array, true)) {
-				update_post_meta($id, $key, array_values((array) $value));
+		foreach ( $this->value as $key => $value ) {
+			if ( in_array( $key, $meta_keys_to_array, true ) ) {
+				update_post_meta( $id, $key, array_values( (array) $value ) );
 				continue;
 			}
 
-			update_post_meta($id, $key, $value);
+			update_post_meta( $id, $key, $value );
 		}
 
 		// JetEngine meta boxes processing.
-		$this->process_meta_boxes($id, $modifier);
+		$this->process_meta_boxes( $id, $modifier );
 	}
 
-	public function set_meta(array $meta)
-	{
-		if (! is_array($this->value)) {
+	public function set_meta( array $meta ) {
+		if ( ! is_array( $this->value ) ) {
 			$this->value = array();
 		}
 
-		$this->value = array_merge($this->value, $meta);
+		$this->value = array_merge( $this->value, $meta );
 	}
 
-	public static function prepare_meta(array $meta): array
-	{
-		foreach ($meta as $meta_key => $meta_row) {
-			if (! empty($meta_row['key'])) {
-				$meta[$meta_row['key']] = $meta_row['value'];
-				unset($meta[$meta_key]);
+	public static function prepare_meta( array $meta ): array {
+		foreach ( $meta as $meta_key => $meta_row ) {
+			if ( ! empty( $meta_row['key'] ) ) {
+				$meta[ $meta_row['key'] ] = $meta_row['value'];
+				unset( $meta[ $meta_key ] );
 			}
 		}
 
 		return $meta;
 	}
 
-	public function get_value(Abstract_Modifier $modifier)
-	{
+	public function get_value( Abstract_Modifier $modifier ) {
 		throw new Silence_Exception();
 	}
 }

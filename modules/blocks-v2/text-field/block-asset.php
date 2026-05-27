@@ -13,7 +13,7 @@ class Block_Asset implements Block_Asset_Interface {
 	public function init_hooks() {
 		add_action(
 			'jet-form-builder/editor-assets/before',
-			array($this, 'register_editor_styles')
+			array( $this, 'register_editor_styles' )
 		);
 		add_action(
 			'jet-form-builder/editor-assets/before',
@@ -37,16 +37,15 @@ class Block_Asset implements Block_Asset_Interface {
 
 	 * @throws Repository_Exception
 	 */
-	public function register_editor_styles()
-	{
+	public function register_editor_styles() {
 		/** @var Module $blocks_v2 */
-		$blocks_v2 = jet_form_builder()->module('blocks-v2');
-		$asset     = require $blocks_v2->get_dir('text-field/assets/build/editor.asset.php');
+		$blocks_v2 = jet_form_builder()->module( 'blocks-v2' );
+		$asset     = require $blocks_v2->get_dir( 'text-field/assets/build/editor.asset.php' );
 		wp_register_style(
-			$blocks_v2->get_handle('text-field-editor-style'),
-			$blocks_v2->get_url('text-field/assets/build/editor.css'),
+			$blocks_v2->get_handle( 'text-field-editor-style' ),
+			$blocks_v2->get_url( 'text-field/assets/build/editor.css' ),
 			array(),
-			$asset['version'].'afd'
+			$asset['version'] . 'afd'
 		);
 	}
 
@@ -78,7 +77,6 @@ class Block_Asset implements Block_Asset_Interface {
 			array(),
 			$asset['version']
 		);
-		
 
 		$asset_mask = require $blocks_v2->get_dir( 'text-field/assets/build/frontend/field.mask.asset.php' );
 

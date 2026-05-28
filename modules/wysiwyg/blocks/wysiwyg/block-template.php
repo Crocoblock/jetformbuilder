@@ -17,7 +17,11 @@ if ( empty( $args['default'] ) ) {
 
 $keep_format = $this->args['keep_format'] ?? false;
 
-$editor_id = 'wp_editor_' . $this->block_type->get_field_id( $args['name'] );
+$editor_id = sprintf(
+	'wp_editor_%1$s_%2$s',
+	absint( $this->form_id ),
+	$this->block_type->get_field_id( $args['name'], 'wysiwyg_editor' )
+);
 $editor    = apply_filters(
 	'jet-form-builder/fields/wysiwyg-field/config',
 	array(

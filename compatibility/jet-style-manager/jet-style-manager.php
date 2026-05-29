@@ -41,10 +41,14 @@ class Jet_Style_Manager implements Base_Module_It, Base_Module_After_Install_It,
 
 	public function init_hooks() {
 		add_action( 'init', array( $this, 'register_block_styles' ), 9 );
+		add_filter( 'jet_style_manager/gutenberg/prevent_block_wrap/jet-forms/form-break-start', '__return_true' );
+		add_filter( 'jet_style_manager/gutenberg/prevent_block_wrap/jet-forms/form-break-field', '__return_true' );
 	}
 
 	public function remove_hooks() {
-		add_action( 'init', array( $this, 'register_block_styles' ), 9 );
+		remove_action( 'init', array( $this, 'register_block_styles' ), 9 );
+		remove_filter( 'jet_style_manager/gutenberg/prevent_block_wrap/jet-forms/form-break-start', '__return_true' );
+		remove_filter( 'jet_style_manager/gutenberg/prevent_block_wrap/jet-forms/form-break-field', '__return_true' );
 	}
 
 

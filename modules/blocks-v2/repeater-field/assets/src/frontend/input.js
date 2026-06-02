@@ -43,6 +43,9 @@ function RepeaterData() {
 			row => row.querySelector('.wysiwyg-field'),
 		);
 
+		// WYSIWYG inside initially rendered repeater rows needs the same init path
+		// as rows added via Add New. Add New goes through SignalRepeater.runItem(),
+		// which rebuilds the row from template and includes the editor-related CSS.
 		if (hasWysiwyg) {
 			const currentRows = renderedRows.map(row => {
 				row.remove();
@@ -51,6 +54,7 @@ function RepeaterData() {
 
 			this.value.current = currentRows;
 		} else {
+			// Old behavior for repeaters without WYSIWYG.
 			this.value.current = [];
 
 			for (const row of renderedRows) {

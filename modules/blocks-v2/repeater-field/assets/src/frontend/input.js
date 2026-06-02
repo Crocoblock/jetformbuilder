@@ -32,23 +32,40 @@ function RepeaterData() {
 	};
 
 	this.setValue = function () {
-		const [ node ]     = this.nodes;
-		this.value.current = [];
+		const [node] = this.nodes;
+		const renderedRows = [
+			...node.querySelectorAll(
+				'.jet-form-builder-repeater__row',
+			),
+		];
 
-		for ( const row of node.querySelectorAll(
-			'.jet-form-builder-repeater__row',
-		) ) {
-			const current    = new ObservableRow( this );
-			current.rootNode = row;
+		const hasWysiwyg = renderedRows.some(
+			row => row.querySelector('.wysiwyg-field'),
+		);
 
-			this.value.current.push( current );
+		if (hasWysiwyg) {
+			const currentRows = renderedRows.map(row => {
+				row.remove();
+				return new ObservableRow(this);
+			});
+
+			this.value.current = currentRows;
+		} else {
+			this.value.current = [];
+
+			for (const row of renderedRows) {
+				const current = new ObservableRow(this);
+				current.rootNode = row;
+
+				this.value.current.push(current);
+			}
+
+			for ( const currentElement of this.value.current) {
+				currentElement.observe();
+			}
 		}
 
-		for ( const currentElement of this.value.current ) {
-			currentElement.observe();
-		}
-
-		for ( const currentElement of this.value.current ) {
+		for (const currentElement of this.value.current) {
 			currentElement.initCalc();
 		}
 
@@ -56,38 +73,38 @@ function RepeaterData() {
 			'.jet-form-builder-repeater__remove',
 		);
 
-		for ( const button of removeButtons ) {
-			const row = this.closestRow( button );
+		for (const button of removeButtons) {
+			const row = this.closestRow(button);
 
 			if ( !row ) {
 				continue;
 			}
 
-			button.addEventListener( 'click', () => row.removeManually() );
+			button.addEventListener('click', () => row.removeManually());
 		}
 
-		if ( this.isManualCount ) {
-			if ( ! this.addEventAttached && ! this.buttonNode.hasListener) {
-				this.buttonNode.addEventListener( 'click', () => this.addNew() );
+		if (this.isManualCount) {
+			if (!this.addEventAttached && !this.buttonNode.hasListener) {
+				this.buttonNode.addEventListener('click', () => this.addNew());
 				this.addEventAttached = true;
 				this.buttonNode.hasListener = true;
 			}
 			return;
 		}
 
-		const input = this.root.getInput( this.itemsField );
+		const input = this.root.getInput(this.itemsField);
 
-		if ( !input ) {
+		if (!input) {
 			// eslint-disable-next-line no-console
 			console.error(
-				`JetFormBuilder error: undefined input by name [${ this.itemsField }]`,
+				`JetFormBuilder error: undefined input by name [${this.itemsField}]`,
 			);
 
 			return;
 		}
 
-		input.watch( () => this.recalculateItems( input ) );
-		this.recalculateItems( input );
+		input.watch(() => this.recalculateItems(input));
+		this.recalculateItems(input);
 	};
 	this.setNode  = function ( node ) {
 		InputData.prototype.setNode.call( this, node );

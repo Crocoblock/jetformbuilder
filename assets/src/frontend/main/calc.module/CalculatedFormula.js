@@ -20,6 +20,55 @@ addFilter(
 	attachConstNamespace,
 );
 
+function escapeStringLineBreaks( value ) {
+	if ( 'string' !== typeof value ) {
+		return value;
+	}
+
+	let quote = '';
+	let escaped = false;
+	let result = '';
+
+	for ( let index = 0; index < value.length; index++ ) {
+		const current = value[ index ];
+
+		if ( '\r' === current || '\n' === current ) {
+			result += quote ? '\\n' : current;
+			escaped = false;
+
+			if ( '\r' === current && '\n' === value[ index + 1 ] ) {
+				index++;
+			}
+
+			continue;
+		}
+
+		result += current;
+
+		if ( escaped ) {
+			escaped = false;
+			continue;
+		}
+
+		if ( quote ) {
+			if ( '\\' === current ) {
+				escaped = true;
+			}
+			else if ( quote === current ) {
+				quote = '';
+			}
+
+			continue;
+		}
+
+		if ( '"' === current || '\'' === current || '`' === current ) {
+			quote = current;
+		}
+	}
+
+	return result;
+}
+
 /**
  * @param root    {InputData|Observable}
  * @param options {{forceFunction: boolean}}
@@ -385,11 +434,7 @@ CalculatedFormula.prototype = {
 			return this.formula;
 		}
 
-		let formula = this.calculateString();
-
-		if ('string' === typeof formula) {
-			formula = formula.replace(/\r\n|\r|\n/g, '\\n');
-		}
+		const formula = escapeStringLineBreaks( this.calculateString() );
 
 		try {
 			return (

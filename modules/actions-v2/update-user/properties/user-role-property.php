@@ -75,13 +75,24 @@ class User_Role_Property extends Base_Object_Property {
 				: Tools::get_registered_roles_safe();
 
 			if ( empty( $available_roles ) ) {
-				throw new Action_Exception( 'internal_error' );
+				$this->exclude();
+
+				return;
 			}
 
-			foreach ( $this->value as $role ) {
-				if ( 'administrator' === $role || ! isset( $available_roles[ $role ] ) ) {
-					throw new Action_Exception( 'internal_error' );
-				}
+			$this->value = array_values(
+				array_filter(
+					$this->value,
+					function ( string $role ) use ( $available_roles ): bool {
+						return 'administrator' !== $role && isset( $available_roles[ $role ] );
+					}
+				)
+			);
+
+			if ( empty( $this->value ) ) {
+				$this->exclude();
+
+				return;
 			}
 		}
 
@@ -122,13 +133,6 @@ class User_Role_Property extends Base_Object_Property {
 		return $roles;
 	}
 
-	private function normalize_roles_for_compare( $roles ): array {
-		$roles = $this->normalize_roles( $roles );
-		sort( $roles );
-
-		return $roles;
-	}
-
 	private function is_noop_role_update( Abstract_Modifier $modifier, array $requested_roles ): bool {
 		if ( ! $modifier instanceof User_Modifier ) {
 			return false;
@@ -141,8 +145,8 @@ class User_Role_Property extends Base_Object_Property {
 			return false;
 		}
 
-		return $this->normalize_roles_for_compare( $id->user->roles )
-			=== $this->normalize_roles_for_compare( $requested_roles );
+		return $this->normalize_roles( $id->user->roles )
+			=== $this->normalize_roles( $requested_roles );
 	}
 
 	private function can_self_promote_to_roles( Abstract_Modifier $modifier, array $roles ): bool {
@@ -150,13 +154,29 @@ class User_Role_Property extends Base_Object_Property {
 			return false;
 		}
 
-		$allowed_roles = $modifier->get_self_promotable_roles();
+		/** @var User_Id_Property $id */
+		$id = $modifier->get( 'ID' );
 
-		if ( empty( $allowed_roles ) ) {
+		if ( ! is_a( $id->user ?? null, \WP_User::class ) ) {
+			return false;
+		}
+
+		if ( get_current_user_id() !== (int) $id->user->ID ) {
+			return false;
+		}
+
+		$allowed_roles = $modifier->get_self_promotable_roles();
+		$current_roles = $this->normalize_roles( $id->user->roles );
+
+		if ( empty( $allowed_roles ) && empty( $current_roles ) ) {
 			return false;
 		}
 
 		foreach ( $roles as $role ) {
+			if ( in_array( $role, $current_roles, true ) ) {
+				continue;
+			}
+
 			if ( ! in_array( $role, $allowed_roles, true ) ) {
 				return false;
 			}

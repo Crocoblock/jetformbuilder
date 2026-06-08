@@ -95,7 +95,7 @@ function UpdateUserRender( props ) {
 				<a
 					href={ source.globalSettingsUrl }
 					target="_blank"
-					rel="noreferrer"
+					rel="noopener noreferrer"
 				>
 					{ __( 'Manage in JetFormBuilder Settings.', 'jet-form-builder' ) }
 				</a>

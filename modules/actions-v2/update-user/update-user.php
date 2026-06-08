@@ -30,6 +30,9 @@ class Update_User implements Action_Integration_Interface {
 			array( $this, 'editor_assets' )
 		);
 
+		add_action( 'jet-form-builder/update-user/invalidate-role-scan', array( $this, 'invalidate_scan_cache' ) );
+		add_action( 'save_post_' . Post_Type_Module::SLUG, array( $this, 'invalidate_scan_cache' ) );
+
 		if ( ! is_admin() ) {
 			return;
 		}
@@ -72,27 +75,61 @@ class Update_User implements Action_Integration_Interface {
 			return;
 		}
 
+		if (
+			wp_doing_ajax() ||
+			wp_doing_cron() ||
+			( defined( 'REST_REQUEST' ) && REST_REQUEST )
+		) {
+			return;
+		}
+
 		$version = $this->get_scan_version();
+		$notice  = get_option( self::NOTICE_OPTION, array() );
 
 		if ( $version === get_option( self::SCAN_VERSION_OPTION, '' ) ) {
 			return;
 		}
 
-		$forms = $this->scan_affected_forms();
+		$tracked_ids = array_values(
+			array_unique(
+				array_filter(
+					array_map( 'intval', $notice['tracked_ids'] ?? array() )
+				)
+			)
+		);
 
-		update_option( self::SCAN_VERSION_OPTION, $version, false );
+		if ( array_key_exists( 'tracked_ids', $notice ) ) {
+			$forms = empty( $tracked_ids )
+				? array()
+				: $this->scan_specific_forms( $tracked_ids );
 
-		if ( empty( $forms ) ) {
-			delete_option( self::NOTICE_OPTION );
+			update_option( self::SCAN_VERSION_OPTION, $version, false );
+			update_option(
+				self::NOTICE_OPTION,
+				array(
+					'version'      => $version,
+					'notice_token' => wp_generate_uuid4(),
+					'tracked_ids' => $tracked_ids,
+					'forms'        => $forms,
+				),
+				false
+			);
 
 			return;
 		}
 
+		$forms       = $this->scan_affected_forms();
+		$tracked_ids = array_values( array_unique( array_map( 'intval', wp_list_pluck( $forms, 'id' ) ) ) );
+
+		update_option( self::SCAN_VERSION_OPTION, $version, false );
+
 		update_option(
 			self::NOTICE_OPTION,
 			array(
-				'version' => $version,
-				'forms'   => $forms,
+				'version'      => $version,
+				'notice_token' => wp_generate_uuid4(),
+				'tracked_ids' => array_values( array_unique( array_map( 'intval', wp_list_pluck( $forms, 'id' ) ) ) ),
+				'forms'        => $forms,
 			),
 			false
 		);
@@ -112,7 +149,7 @@ class Update_User implements Action_Integration_Interface {
 		update_user_meta(
 			get_current_user_id(),
 			self::DISMISS_META_KEY,
-			$this->get_scan_version()
+			$this->get_notice_dismiss_token( get_option( self::NOTICE_OPTION, array() ) )
 		);
 
 		wp_safe_redirect(
@@ -124,6 +161,10 @@ class Update_User implements Action_Integration_Interface {
 			)
 		);
 		exit;
+	}
+
+	public function invalidate_scan_cache() {
+		delete_option( self::SCAN_VERSION_OPTION );
 	}
 
 	public function render_affected_forms_notice() {
@@ -141,7 +182,7 @@ class Update_User implements Action_Integration_Interface {
 			return;
 		}
 
-		if ( get_user_meta( get_current_user_id(), self::DISMISS_META_KEY, true ) === $notice['version'] ) {
+		if ( get_user_meta( get_current_user_id(), self::DISMISS_META_KEY, true ) === $this->get_notice_dismiss_token( $notice ) ) {
 			return;
 		}
 
@@ -249,6 +290,37 @@ class Update_User implements Action_Integration_Interface {
 		return $affected_forms;
 	}
 
+	private function scan_specific_forms( array $form_ids ): array {
+		$affected_forms = array();
+
+		foreach ( $form_ids as $form_id ) {
+			$form_id = (int) $form_id;
+
+			if ( $form_id <= 0 || Post_Type_Module::SLUG !== get_post_type( $form_id ) ) {
+				continue;
+			}
+
+			$issues = $this->get_form_issues( $form_id );
+
+			if ( empty( $issues ) ) {
+				continue;
+			}
+
+			$affected_forms[] = array(
+				'id'        => $form_id,
+				'title'     => get_the_title( $form_id ) ?: sprintf(
+					/* translators: %d: form ID */
+					__( 'Form #%d', 'jet-form-builder' ),
+					$form_id
+				),
+				'edit_link' => get_edit_post_link( $form_id, 'raw' ) ?: admin_url( 'post.php?post=' . absint( $form_id ) . '&action=edit' ),
+				'issues'    => array_values( array_unique( $issues ) ),
+			);
+		}
+
+		return $affected_forms;
+	}
+
 	private function get_form_issues( int $form_id ): array {
 		$actions = jet_form_builder()->post_type->get_actions( $form_id );
 		$issues  = array();
@@ -315,5 +387,9 @@ class Update_User implements Action_Integration_Interface {
 
 	private function get_scan_version(): string {
 		return jet_form_builder()->get_version() . ':' . self::SCAN_SCHEMA_VERSION;
+	}
+
+	private function get_notice_dismiss_token( array $notice ): string {
+		return (string) ( $notice['notice_token'] ?? $notice['version'] ?? '' );
 	}
 }

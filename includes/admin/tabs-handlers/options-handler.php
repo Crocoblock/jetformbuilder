@@ -29,6 +29,7 @@ class Options_Handler extends Base_Handler {
 
 	public function on_get_request() {
 		$options = array();
+		$prev_options = $this->get_options();
 
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		foreach ( self::OPTIONS as $name => $default ) {
@@ -59,6 +60,13 @@ class Options_Handler extends Base_Handler {
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 		$result = $this->update_options( $options );
+
+		if (
+			array_key_exists( 'self_promotable_roles', $options ) &&
+			( $prev_options['self_promotable_roles'] ?? array() ) !== $options['self_promotable_roles']
+		) {
+			do_action( 'jet-form-builder/update-user/invalidate-role-scan' );
+		}
 
 		$this->send_response( $result );
 	}

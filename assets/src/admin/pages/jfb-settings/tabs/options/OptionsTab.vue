@@ -49,7 +49,7 @@
 			:disabled="isLoading"
 			:wrapper-css="[ 'equalwidth' ]"
 			:size="'fullwidth'"
-			@on-change="changeVal( 'self_promotable_roles', $event )"
+			@on-change="changeSelfPromotableRoles( $event )"
 		></cx-vui-f-select>
 		<cx-vui-component-wrapper
 			:label="__( 'Form Accessibility', 'jet-form-builder' )"
@@ -241,6 +241,13 @@ export default {
 
 			this.$set( this.errors, name, '' );
 			return true;
+		},
+		changeSelfPromotableRoles( value ) {
+			if ( ! Array.isArray( value ) ) {
+				return;
+			}
+
+			this.changeVal( 'self_promotable_roles', value );
 		},
 		changeVal( name, value ) {
 			this.$set( this.storage, name, value );

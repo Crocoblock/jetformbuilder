@@ -46,7 +46,13 @@ class Options_Handler extends Base_Handler {
 				$roles = is_array( $roles ) ? $roles : array();
 				$roles = array_map( 'sanitize_key', $roles );
 				$roles = array_filter( $roles );
-				$options[ $name ] = array_values( array_unique( $roles ) );
+				$roles = array_values( array_unique( $roles ) );
+
+				$registered_roles = array_keys( Tools::get_registered_roles_safe() );
+				$roles            = array_values( array_intersect( $roles, $registered_roles ) );
+				$roles            = array_values( array_diff( $roles, array( 'administrator' ) ) );
+
+				$options[ $name ] = $roles;
 			} else {
 				$options[ $name ] = sanitize_text_field( wp_unslash( $_POST[ $name ] ?? '' ) );
 			}
@@ -62,10 +68,14 @@ class Options_Handler extends Base_Handler {
 		$options = $this->get_options();
 		$options['available_roles'] = array();
 
-		foreach ( Tools::get_user_roles() as $role => $label ) {
+		foreach ( Tools::get_registered_roles_safe() as $role => $data ) {
+			if ( 'administrator' === $role ) {
+				continue;
+			}
+
 			$options['available_roles'][] = array(
 				'value' => $role,
-				'label' => $label,
+				'label' => $data['name'] ?? $role,
 			);
 		}
 

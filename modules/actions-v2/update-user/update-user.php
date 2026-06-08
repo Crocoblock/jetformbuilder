@@ -18,6 +18,7 @@ class Update_User implements Action_Integration_Interface {
 	const DISMISS_META_KEY    = 'jet_fb_update_user_role_notice_dismissed';
 	const NOTICE_QUERY_ARG    = 'jet_fb_dismiss_update_user_role_notice';
 	const SCAN_SCHEMA_VERSION = '1';
+	const SCAN_BATCH_SIZE     = 30;
 
 	public function rep_item_id() {
 		return 'update-user';
@@ -196,39 +197,53 @@ class Update_User implements Action_Integration_Interface {
 	}
 
 	private function scan_affected_forms(): array {
-		$form_ids = get_posts(
-			array(
-				'post_type'              => Post_Type_Module::SLUG,
-				'post_status'            => array( 'publish', 'draft', 'pending', 'future', 'private' ),
-				'posts_per_page'         => -1,
-				'fields'                 => 'ids',
-				'orderby'                => 'ID',
-				'order'                  => 'ASC',
-				'no_found_rows'          => true,
-				'update_post_meta_cache' => false,
-				'update_post_term_cache' => false,
-			)
-		);
-
 		$affected_forms = array();
+		$offset         = 0;
 
-		foreach ( $form_ids as $form_id ) {
-			$issues = $this->get_form_issues( $form_id );
+		while ( true ) {
+			$form_ids = get_posts(
+				array(
+					'post_type'              => Post_Type_Module::SLUG,
+					'post_status'            => array( 'publish', 'draft', 'pending', 'future', 'private' ),
+					'posts_per_page'         => self::SCAN_BATCH_SIZE,
+					'offset'                 => $offset,
+					'fields'                 => 'ids',
+					'orderby'                => 'ID',
+					'order'                  => 'ASC',
+					'no_found_rows'          => true,
+					'update_post_meta_cache' => false,
+					'update_post_term_cache' => false,
+				)
+			);
 
-			if ( empty( $issues ) ) {
-				continue;
+			if ( empty( $form_ids ) ) {
+				break;
 			}
 
-			$affected_forms[] = array(
-				'id'        => (int) $form_id,
-				'title'     => get_the_title( $form_id ) ?: sprintf(
-					/* translators: %d: form ID */
-					__( 'Form #%d', 'jet-form-builder' ),
-					$form_id
-				),
-				'edit_link' => get_edit_post_link( $form_id, 'raw' ) ?: admin_url( 'post.php?post=' . absint( $form_id ) . '&action=edit' ),
-				'issues'    => array_values( array_unique( $issues ) ),
-			);
+			foreach ( $form_ids as $form_id ) {
+				$issues = $this->get_form_issues( $form_id );
+
+				if ( empty( $issues ) ) {
+					continue;
+				}
+
+				$affected_forms[] = array(
+					'id'        => (int) $form_id,
+					'title'     => get_the_title( $form_id ) ?: sprintf(
+						/* translators: %d: form ID */
+						__( 'Form #%d', 'jet-form-builder' ),
+						$form_id
+					),
+					'edit_link' => get_edit_post_link( $form_id, 'raw' ) ?: admin_url( 'post.php?post=' . absint( $form_id ) . '&action=edit' ),
+					'issues'    => array_values( array_unique( $issues ) ),
+				);
+			}
+
+			if ( count( $form_ids ) < self::SCAN_BATCH_SIZE ) {
+				break;
+			}
+
+			$offset += self::SCAN_BATCH_SIZE;
 		}
 
 		return $affected_forms;

@@ -18,27 +18,39 @@
 			:disabled="isLoading"
 			@input="changeVal( 'clear_on_uninstall', $event )"
 		></cx-vui-switcher>
-    <cx-vui-input
-        name="form_records_access_capability"
-        :wrapper-css="[ 'equalwidth' ]"
-        :size="'fullwidth'"
-        :label="loading.form_records_access_capability ? `${label.form_records_access_capability} (loading...)` : label.form_records_access_capability"
-        :description="help.form_records_access_capability"
-        :value="storage.hasOwnProperty( 'form_records_access_capability' ) ? storage.form_records_access_capability : 'manage_options'"
-        :disabled="isLoading"
-        @input="changeVal( 'form_records_access_capability', $event )"
-    />
-    <cx-vui-select
-        name="ssr_validation_method"
-        :wrapper-css="[ 'equalwidth' ]"
-        :size="'fullwidth'"
-        :label="loading.ssr_validation_method ? `${label.ssr_validation_method} (loading...)` : label.ssr_validation_method"
-        :description="help.ssr_validation_method"
-        :value="storage.hasOwnProperty( 'ssr_validation_method' ) ? storage.ssr_validation_method : 'rest'"
-        :options-list="selectOptions"
-        :disabled="isLoading"
-        @input="changeVal( 'ssr_validation_method', $event )"
-    ></cx-vui-select>
+		<cx-vui-input
+			name="form_records_access_capability"
+			:wrapper-css="[ 'equalwidth' ]"
+			:size="'fullwidth'"
+			:label="loading.form_records_access_capability ? `${label.form_records_access_capability} (loading...)` : label.form_records_access_capability"
+			:description="help.form_records_access_capability"
+			:value="storage.hasOwnProperty( 'form_records_access_capability' ) ? storage.form_records_access_capability : 'manage_options'"
+			:disabled="isLoading"
+			@input="changeVal( 'form_records_access_capability', $event )"
+		/>
+		<cx-vui-select
+			name="ssr_validation_method"
+			:wrapper-css="[ 'equalwidth' ]"
+			:size="'fullwidth'"
+			:label="loading.ssr_validation_method ? `${label.ssr_validation_method} (loading...)` : label.ssr_validation_method"
+			:description="help.ssr_validation_method"
+			:value="storage.hasOwnProperty( 'ssr_validation_method' ) ? storage.ssr_validation_method : 'rest'"
+			:options-list="selectOptions"
+			:disabled="isLoading"
+			@input="changeVal( 'ssr_validation_method', $event )"
+		></cx-vui-select>
+		<cx-vui-f-select
+			name="self_promotable_roles"
+			:label="loading.self_promotable_roles ? `${label.self_promotable_roles} (loading...)` : label.self_promotable_roles"
+			:description="help.self_promotable_roles"
+			:value="selectedSelfPromotableRoles"
+			:options-list="availableRoles"
+			:multiple="true"
+			:disabled="isLoading"
+			:wrapper-css="[ 'equalwidth' ]"
+			:size="'fullwidth'"
+			@on-change="changeVal( 'self_promotable_roles', $event )"
+		></cx-vui-f-select>
 		<cx-vui-component-wrapper
 			:label="__( 'Form Accessibility', 'jet-form-builder' )"
 			:wrapper-css="[ 'equalwidth' ]"
@@ -132,25 +144,63 @@ export default {
 			label, help,
 			storage: JSON.parse( JSON.stringify( this.incoming ) ),
 			isLoading: false,
-      loading: {},
-      errors: {
-        gfb_request_args_key: '',
-        gfb_request_args_value: '',
-      },
-      selectOptions: [
-        { value: 'rest', label: ( 'Rest API' ) },
-        { value: 'admin_ajax', label: ( 'Admin Ajax' ) },
-        { value: 'self', label: ( 'Self' ) },
-      ],
+			loading: {},
+			pendingSave: false,
+			errors: {
+				gfb_request_args_key: '',
+				gfb_request_args_value: '',
+			},
+			selectOptions: [
+				{ value: 'rest', label: ( 'Rest API' ) },
+				{ value: 'admin_ajax', label: ( 'Admin Ajax' ) },
+				{ value: 'self', label: ( 'Self' ) },
+			],
 		};
+	},
+	computed: {
+		availableRoles() {
+			return this.storage.available_roles || [];
+		},
+		selectedSelfPromotableRoles() {
+			return this.storage.self_promotable_roles || [];
+		},
 	},
 	created() {
 		jfbEventBus.$on( 'request-state', this.onChangeState.bind( this ) );
 	},
 	methods: {
+		getSavableData() {
+			const {
+				enable_dev_mode,
+				clear_on_uninstall,
+				form_records_access_capability,
+				ssr_validation_method,
+				self_promotable_roles,
+				disable_next_button,
+				scroll_on_next,
+				auto_focus,
+				gfb_request_args_key,
+				gfb_request_args_value,
+			} = this.storage;
+
+			return {
+				enable_dev_mode,
+				clear_on_uninstall,
+				form_records_access_capability,
+				ssr_validation_method,
+				self_promotable_roles: Array.isArray( self_promotable_roles ) && ! self_promotable_roles.length
+					? [ '' ]
+					: self_promotable_roles,
+				disable_next_button,
+				scroll_on_next,
+				auto_focus,
+				gfb_request_args_key,
+				gfb_request_args_value,
+			};
+		},
 		getRequestOnSave() {
 			return {
-				data: { ...this.storage },
+				data: this.getSavableData(),
 			};
 		},
 		onChangeState( { state, slug } ) {
@@ -160,47 +210,57 @@ export default {
 
 			if ( 'end' === state ) {
 				this.loading = {};
+				this.$set( this, 'isLoading', false );
+
+				if ( this.pendingSave ) {
+					this.pendingSave = false;
+					this.saveByAjax( this, this.$options.name );
+				}
+
+				return;
 			}
 
 			this.$set( this, 'isLoading', state === 'begin' );
 		},
-    validateField( name, value ) {
-      if ( name !== 'gfb_request_args_key' && name !== 'gfb_request_args_value' ) {
-        return true;
-      }
+		validateField( name, value ) {
+			if ( name !== 'gfb_request_args_key' && name !== 'gfb_request_args_value' ) {
+				return true;
+			}
 
-      const val = String( value ?? '' );
-      const onlyDigits = /^\d+$/.test( val );
+			const val = String( value ?? '' );
+			const onlyDigits = /^\d+$/.test( val );
 
-      if ( onlyDigits ) {
-        const msg = this.__(
-            'Must contain at least one letter (A–Z). Numbers only are not allowed.',
-            'jet-form-builder'
-        );
-        this.$set( this.errors, name, msg );
-        return false;
-      }
+			if ( onlyDigits ) {
+				const msg = this.__(
+					'Must contain at least one letter (A–Z). Numbers only are not allowed.',
+					'jet-form-builder'
+				);
+				this.$set( this.errors, name, msg );
+				return false;
+			}
 
-      this.$set( this.errors, name, '' );
-      return true;
-    },
-    changeVal( name, value ) {
-      if ( this.isLoading ) {
-        return;
-      }
+			this.$set( this.errors, name, '' );
+			return true;
+		},
+		changeVal( name, value ) {
+			this.$set( this.storage, name, value );
 
-      this.$set( this.storage, name, value );
+			if ( name === 'gfb_request_args_key' || name === 'gfb_request_args_value' ) {
+				const ok = this.validateField( name, value );
+				if ( ! ok ) {
+					return;
+				}
+			}
 
-      if ( name === 'gfb_request_args_key' || name === 'gfb_request_args_value' ) {
-        const ok = this.validateField( name, value );
-        if ( ! ok ) {
-          return;
-        }
-      }
+			this.$set( this.loading, name, true );
 
-      this.$set( this.loading, name, true );
-      this.saveByAjax( this, this.$options.name );
-    },
+			if ( this.isLoading ) {
+				this.pendingSave = true;
+				return;
+			}
+
+			this.saveByAjax( this, this.$options.name );
+		},
 	},
 };
 

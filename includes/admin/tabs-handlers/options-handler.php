@@ -6,6 +6,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+use Jet_Form_Builder\Classes\Tools;
+
 class Options_Handler extends Base_Handler {
 
 	const OPTIONS = array(
@@ -18,6 +20,7 @@ class Options_Handler extends Base_Handler {
 		'gfb_request_args_key'  => '',
 		'gfb_request_args_value' => '',
 		'ssr_validation_method' => 'rest',
+		'self_promotable_roles' => array(),
 	);
 
 	public function slug() {
@@ -38,6 +41,12 @@ class Options_Handler extends Base_Handler {
 					sanitize_key( $_POST[ $name ] ),
 					defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN
 				);
+			} elseif ( is_array( $default ) ) {
+				$roles = wp_unslash( $_POST[ $name ] ?? array() );
+				$roles = is_array( $roles ) ? $roles : array();
+				$roles = array_map( 'sanitize_key', $roles );
+				$roles = array_filter( $roles );
+				$options[ $name ] = array_values( array_unique( $roles ) );
 			} else {
 				$options[ $name ] = sanitize_text_field( wp_unslash( $_POST[ $name ] ?? '' ) );
 			}
@@ -50,7 +59,17 @@ class Options_Handler extends Base_Handler {
 
 	public function on_load() {
 		$this->set_jfb_request_args();
-		return $this->get_options();
+		$options = $this->get_options();
+		$options['available_roles'] = array();
+
+		foreach ( Tools::get_user_roles() as $role => $label ) {
+			$options['available_roles'][] = array(
+				'value' => $role,
+				'label' => $label,
+			);
+		}
+
+		return $options;
 	}
 
 	public function set_jfb_request_args() {

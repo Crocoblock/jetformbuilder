@@ -23,6 +23,10 @@ const label = {
 		'Server side validation method',
 		'jet-form-builder',
 	),
+	self_promotable_roles: __(
+		'Self-Promotable Roles',
+		'jet-form-builder',
+	),
 };
 
 const help = {
@@ -52,6 +56,10 @@ const help = {
 	),
 	ssr_validation_method: __(
 		'Select how the server-side validation request will be made – via WP REST API, admin-ajax.php, or through the URL of the current page.',
+		'jet-form-builder',
+	),
+	self_promotable_roles: __(
+		'Users without the `promote_users` capability can keep their current role or switch only to roles from this list in Update User actions. Leave it empty to skip self-service role changes.',
 		'jet-form-builder',
 	),
 };

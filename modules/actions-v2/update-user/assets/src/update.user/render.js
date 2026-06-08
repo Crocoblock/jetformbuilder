@@ -8,7 +8,7 @@ import {
 	useActionValidatorProvider,
 	ActionMessages,
 } from 'jet-form-builder-actions';
-import { Flex } from '@wordpress/components';
+import { Flex, Notice } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import {
 	IconText,
@@ -47,6 +47,17 @@ function UpdateUserRender( props ) {
 		isSupported: error => 'field_id' === error?.property,
 	} );
 
+	const hasRoleMapping = Object.values( settings?.fields_map ?? {} )
+		.includes( 'role' );
+	const staticRoles = Array.isArray( settings?.user_role )
+		? settings.user_role
+		: ( settings?.user_role ? [ settings.user_role ] : [] );
+	const selectedStaticRoles = staticRoles.filter( Boolean );
+	const configuredSelfPromotableRoles = source.globalSelfPromotableRoles ?? [];
+	const hasStaticRoleOutsideAllowlist = selectedStaticRoles.some(
+		role => ! configuredSelfPromotableRoles.includes( role )
+	);
+
 	return (
 		<Flex direction="column">
 			<ActionFieldsMap
@@ -67,6 +78,28 @@ function UpdateUserRender( props ) {
 					</DynamicPropertySelect>
 				</WrapperRequiredControl>
 			</ActionFieldsMap>
+			{ ( hasRoleMapping || hasStaticRoleOutsideAllowlist ) && <Notice
+				status="warning"
+				isDismissible={ false }
+			>
+				{ hasRoleMapping && __(
+					'Role values from Fields Map, including User Meta with the key "role", only work for users who can promote users, or when the submitted role is already allowed for self-promotion.',
+					'jet-form-builder',
+				) }
+				{ hasRoleMapping && hasStaticRoleOutsideAllowlist && ' ' }
+				{ hasStaticRoleOutsideAllowlist && __(
+					'Selected User Role values outside the global Self-Promotable Roles list may be skipped for users without the promote_users capability.',
+					'jet-form-builder',
+				) }
+				{ ' ' }
+				<a
+					href={ source.globalSettingsUrl }
+					target="_blank"
+					rel="noreferrer"
+				>
+					{ __( 'Manage in JetFormBuilder Settings.', 'jet-form-builder' ) }
+				</a>
+			</Notice> }
 			<WideLine/>
 			<RowControl>
 				{ ( { id } ) => <>

@@ -15,6 +15,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class User_Modifier extends Abstract_Modifier {
 
+	private $self_promotable_roles = array();
+
 	protected function get_properties(): Object_Properties_Collection {
 		return new Object_Properties_Collection(
 			array(
@@ -57,5 +59,19 @@ class User_Modifier extends Abstract_Modifier {
 		}
 
 		parent::run();
+	}
+
+	public function set_self_promotable_roles( array $roles ): self {
+		$roles = array_map( 'strval', $roles );
+		$roles = array_filter( $roles );
+		$roles = array_values( array_unique( $roles ) );
+
+		$this->self_promotable_roles = $roles;
+
+		return $this;
+	}
+
+	public function get_self_promotable_roles(): array {
+		return $this->self_promotable_roles;
 	}
 }

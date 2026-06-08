@@ -5,6 +5,8 @@ namespace JFB_Modules\Actions_V2\Update_User;
 use Jet_Form_Builder\Actions\Action_Handler;
 use JFB_Modules\Actions_V2\Update_User\Properties\User_Modifier;
 use Jet_Form_Builder\Actions\Types\Base;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
@@ -29,10 +31,10 @@ class Update_User_Action extends Base {
 
 	public function action_attributes() {
 		return array(
-			'fields_map' => array(
+			'fields_map'            => array(
 				'default' => array(),
 			),
-			'user_role'  => array(
+			'user_role'             => array(
 				'default' => '',
 			),
 		);
@@ -48,7 +50,8 @@ class Update_User_Action extends Base {
 	public function do_action( array $request, Action_Handler $handler ) {
 		$modifier = ( new User_Modifier() )
 			->set_request( $request )
-			->set_fields_map( $this->settings['fields_map'] ?? array() );
+			->set_fields_map( $this->settings['fields_map'] ?? array() )
+			->set_self_promotable_roles( $this->get_self_promotable_roles() );
 
 		$user_roles = isset( $this->settings['user_role'] ) ? Tools::get_array_of_user_roles( $this->settings['user_role'] ) : '';
 
@@ -85,10 +88,23 @@ class Update_User_Action extends Base {
 	 */
 	public function action_data() {
 		return array(
-			'userRoles'  => Tools::get_user_roles_for_js(),
-			'properties' => Tools::with_placeholder(
+			'userRoles'                  => Tools::get_user_roles_for_js(),
+			'globalSelfPromotableRoles'  => $this->get_self_promotable_roles(),
+			'globalSettingsUrl'          => Pages_Manager::instance()->get_stable_url( 'jfb-settings' ) . '#options-tab',
+			'properties'                 => Tools::with_placeholder(
 				Array_Tools::to_array( ( new User_Modifier() )->properties->all() )
 			),
+		);
+	}
+
+	private function get_self_promotable_roles(): array {
+		$options = Tab_Handler_Manager::get_options( 'options-tab' );
+		$roles   = Tools::get_array_of_user_roles( $options['self_promotable_roles'] ?? array() );
+
+		return array_values(
+			array_filter(
+				array_map( 'strval', $roles )
+			)
 		);
 	}
 

@@ -13,6 +13,7 @@ function SignalSelect() {
 		const isMultiple = 'select-one' !== node?.type;
 		const { value }  = this.input;
 
+		this.input.calcValue = 0;
 		for ( const option of node.options ) {
 			option.selected = isMultiple
 			                  ? value.current?.includes( option.value )
@@ -21,8 +22,6 @@ function SignalSelect() {
 			if ( !option.selected ) {
 				continue;
 			}
-
-			this.input.calcValue = 0;
 
 			this.input.calcValue += parseFloat(
 				option.dataset?.calculate ?? option.value,

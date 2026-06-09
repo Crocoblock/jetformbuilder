@@ -6,6 +6,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+use Jet_Form_Builder\Classes\Tools;
+
 class Options_Handler extends Base_Handler {
 
 	const OPTIONS = array(
@@ -18,6 +20,7 @@ class Options_Handler extends Base_Handler {
 		'gfb_request_args_key'  => '',
 		'gfb_request_args_value' => '',
 		'ssr_validation_method' => 'rest',
+		'self_promotable_roles' => array(),
 	);
 
 	public function slug() {
@@ -26,6 +29,7 @@ class Options_Handler extends Base_Handler {
 
 	public function on_get_request() {
 		$options = array();
+		$prev_options = $this->get_options();
 
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		foreach ( self::OPTIONS as $name => $default ) {
@@ -38,6 +42,18 @@ class Options_Handler extends Base_Handler {
 					sanitize_key( $_POST[ $name ] ),
 					defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN
 				);
+			} elseif ( is_array( $default ) ) {
+				$roles = wp_unslash( $_POST[ $name ] ?? array() );
+				$roles = is_array( $roles ) ? $roles : array();
+				$roles = array_map( 'sanitize_key', $roles );
+				$roles = array_filter( $roles );
+				$roles = array_values( array_unique( $roles ) );
+
+				$registered_roles = array_keys( Tools::get_registered_roles_safe() );
+				$roles            = array_values( array_intersect( $roles, $registered_roles ) );
+				$roles            = array_values( array_diff( $roles, array( 'administrator' ) ) );
+
+				$options[ $name ] = $roles;
 			} else {
 				$options[ $name ] = sanitize_text_field( wp_unslash( $_POST[ $name ] ?? '' ) );
 			}
@@ -45,12 +61,33 @@ class Options_Handler extends Base_Handler {
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 		$result = $this->update_options( $options );
 
+		if (
+			array_key_exists( 'self_promotable_roles', $options ) &&
+			( $prev_options['self_promotable_roles'] ?? array() ) !== $options['self_promotable_roles']
+		) {
+			do_action( 'jet-form-builder/update-user/invalidate-role-scan' );
+		}
+
 		$this->send_response( $result );
 	}
 
 	public function on_load() {
 		$this->set_jfb_request_args();
-		return $this->get_options();
+		$options = $this->get_options();
+		$options['available_roles'] = array();
+
+		foreach ( Tools::get_registered_roles_safe() as $role => $data ) {
+			if ( 'administrator' === $role ) {
+				continue;
+			}
+
+			$options['available_roles'][] = array(
+				'value' => $role,
+				'label' => $data['name'] ?? $role,
+			);
+		}
+
+		return $options;
 	}
 
 	public function set_jfb_request_args() {

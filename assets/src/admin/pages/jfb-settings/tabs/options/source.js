@@ -59,7 +59,7 @@ const help = {
 		'jet-form-builder',
 	),
 	self_promotable_roles: __(
-		'Users without the `promote_users` capability can keep their current role or switch only to roles from this list in Update User actions. Leave it empty to skip self-service role changes.',
+		'Select roles that regular users are allowed to assign to themselves via the Update User action. Leave empty to completely disable self-service role changes.',
 		'jet-form-builder',
 	),
 };

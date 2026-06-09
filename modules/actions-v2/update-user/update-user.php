@@ -196,10 +196,10 @@ class Update_User implements Action_Integration_Interface {
 		?>
 		<div class="notice notice-warning">
 			<p>
-				<strong><?php esc_html_e( 'JetFormBuilder: review Update User role transitions after this update.', 'jet-form-builder' ); ?></strong>
+				<strong><?php esc_html_e('JetFormBuilder: Review Update User actions after the latest security update.', 'jet-form-builder' ); ?></strong>
 			</p>
 			<p>
-				<?php esc_html_e( 'Some forms use Update User role changes that may now be skipped for users without the promote_users capability. Review the forms below and update the global Self-Promotable Roles setting or the action flow if needed.', 'jet-form-builder' ); ?>
+				<?php esc_html_e('To prevent unauthorized privilege escalation, non-admin users can now only change roles to those explicitly allowed. The forms below use Update User actions that might be blocked for regular users. Please review them and add safe roles to the Self-Promotable Roles list in JetFormBuilder settings, otherwise role changes will be skipped.', 'jet-form-builder' ); ?>
 			</p>
 			<ul style="list-style: disc; margin-left: 1.5em;">
 				<?php foreach ( $forms as $form ) : ?>

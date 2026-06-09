@@ -83,7 +83,7 @@ function UpdateUserRender( props ) {
 				isDismissible={ false }
 			>
 				{ hasRoleMapping && __(
-					'Role values from Fields Map, including User Meta with the key "role", only work for users who can promote users, or when the submitted role is already allowed for self-promotion.',
+					'Note: The selected roles are not in the global Self-Promotable Roles list. Regular users will not receive this role upon form submission.',
 					'jet-form-builder',
 				) }
 				{ hasRoleMapping && hasStaticRoleOutsideAllowlist && ' ' }

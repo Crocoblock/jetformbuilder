@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.1.1
+* FIX: Vulnerability allowing Privilege Escalation
+
 ## 3.6.1
 * ADD: Ability to rename form actions [Crocoblock/suggestions#7857](https://github.com/Crocoblock/suggestions/issues/7857)
 * ADD: Hooks for adding custom controls to Elementor and Bricks form widgets

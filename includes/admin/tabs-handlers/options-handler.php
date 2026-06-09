@@ -43,8 +43,9 @@ class Options_Handler extends Base_Handler {
 					defined( 'FILTER_VALIDATE_BOOL' ) ? FILTER_VALIDATE_BOOL : FILTER_VALIDATE_BOOLEAN
 				);
 			} elseif ( is_array( $default ) ) {
-				$roles = wp_unslash( $_POST[ $name ] ?? array() );
-				$roles = is_array( $roles ) ? $roles : array();
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below with sanitize_key for each submitted role.
+				$raw_roles = wp_unslash( $_POST[ $name ] );
+				$roles     = is_array( $raw_roles ) ? $raw_roles : array();
 				$roles = array_map( 'sanitize_key', $roles );
 				$roles = array_filter( $roles );
 				$roles = array_values( array_unique( $roles ) );

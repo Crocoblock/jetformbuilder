@@ -86,7 +86,7 @@ class Update_User implements Action_Integration_Interface {
 		$version = $this->get_scan_version();
 		$notice  = get_option( self::NOTICE_OPTION, array() );
 
-		if ( $version === get_option( self::SCAN_VERSION_OPTION, '' ) ) {
+		if ( get_option( self::SCAN_VERSION_OPTION, '' ) === $version ) {
 			return;
 		}
 

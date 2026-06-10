@@ -809,13 +809,15 @@ class Tools {
 	}
 
 	public static function get_array_of_user_roles( $settings ) {
-		$user_roles = $settings ?? array();
-		if ( ! empty( $user_roles ) ) {
-			if ( is_string( $user_roles ) ) {
-				$user_roles = array( $user_roles );
-			}
+		if ( is_string( $settings ) ) {
+			return '' === $settings ? array() : array( $settings );
 		}
-		return $user_roles;
+
+		if ( ! is_array( $settings ) ) {
+			return array();
+		}
+
+		return $settings;
 	}
 
 	public static function get_main_user_role_by_priority( $roles ): string {

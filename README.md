@@ -19,6 +19,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * FIX: Prevented false Undefined view errors after email verification.
 * FIX: Restored StyleManager opt-out handling for form blocks.
 * FIX: Skipped Phone Field validation when changing the selected country.
+* FIX: Prevented a fatal error in the Update User action when the User Role setting is empty.
 
 
 ## 3.6.1.1

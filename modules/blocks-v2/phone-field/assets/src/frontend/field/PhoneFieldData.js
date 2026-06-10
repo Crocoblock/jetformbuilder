@@ -263,7 +263,10 @@ function PhoneFieldData() {
 		// Listen for country change
 		input.addEventListener( 'countrychange', () => {
 			this.syncFromIntlInput( input, node );
-			this.validateAndShowError();
+
+			if ( wrapper.classList.contains( 'field-has-error' ) ) {
+				this.validateAndShowError();
+			}
 		} );
 
 		// Listen for input

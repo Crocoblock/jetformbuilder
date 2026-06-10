@@ -22,7 +22,7 @@ class Module implements Base_Module_It
 
 	const SPAM_EXCEPTION = 'honeypot';
 
-	const HONEYPOT_STYLE_HANDLE = 'jet-form-builder-honeypot';
+	const FRONTEND_STYLE_HANDLE = 'jet-form-builder-frontend';
 
 	public function __construct()
 	{
@@ -99,7 +99,7 @@ class Module implements Base_Module_It
 	public function enqueue_styles()
 	{
 		wp_add_inline_style(
-			self::HONEYPOT_STYLE_HANDLE,
+			self::FRONTEND_STYLE_HANDLE,
 			'
 			.jfb-user-info {
 				position: absolute;

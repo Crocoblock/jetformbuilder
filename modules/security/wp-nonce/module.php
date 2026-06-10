@@ -78,7 +78,14 @@ class Module implements Base_Module_It {
 	}
 
 	public function get_nonce_field(): string {
-		return wp_nonce_field( $this->get_nonce_id(), self::KEY, true, false );
+		$form_id  = jet_fb_live()->form_id;
+		$field_id = self::KEY . '_' . $form_id;
+		return sprintf(
+			'<input type="hidden" id="%1$s" name="%2$s" value="%3$s" />',
+			esc_attr( $field_id ),
+			esc_attr( self::KEY ),
+			esc_attr( wp_create_nonce( $this->get_nonce_id() ) )
+		);
 	}
 
 	public function verify( $nonce ): bool {

@@ -8,6 +8,15 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.2
+* FIX: Resolved validation errors when using dynamic values for the Media Field “Maximum Files” setting.
+* FIX: Prevented duplicate _wpnonce field IDs when multiple forms with form safety enabled are rendered on the same page.
+* FIX: Corrected calculated field updates when changing selected options.
+* UPD: Improved Honeypot field markup to make the anti-spam protection less detectable and more accessibility-friendly.
+* FIX: Fixed WYSIWYG field link handling in popups and repeaters, including issues with adding and preserving links.
+* FIX: Fixed calculated fields not displaying a value until a multiple-select field option is selected.
+
+
 ## 3.6.1.1
 * FIX: Vulnerability allowing Privilege Escalation
 

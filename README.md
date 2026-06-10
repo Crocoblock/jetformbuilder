@@ -15,6 +15,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * UPD: Improved Honeypot field markup to make the anti-spam protection less detectable and more accessibility-friendly.
 * FIX: Fixed WYSIWYG field link handling in popups and repeaters, including issues with adding and preserving links.
 * FIX: Fixed calculated fields not displaying a value until a multiple-select field option is selected.
+* FIX: Prevented duplicate WYSIWYG editor IDs when multiple WYSIWYG fields are rendered.
+* FIX: Prevented false Undefined view errors after email verification.
+* FIX: Restored StyleManager opt-out handling for form blocks.
+* FIX: Skipped Phone Field validation when changing the selected country.
 
 
 ## 3.6.1.1

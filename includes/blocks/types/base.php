@@ -204,6 +204,9 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @param Object $style_manager Actual style manager instance.
 	 */
 	public function maybe_init_style_manager( $style_manager ) {
+		if ( ! $this->use_style_manager ) {
+			return;
+		}
 
 		$style_manager->register_block_support(
 			$this->block_name()

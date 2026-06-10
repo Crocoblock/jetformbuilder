@@ -1,19 +1,19 @@
 import ConditionsBlockList from './ConditionsBlockList';
 
 const {
-	      doAction,
-      } = JetPlugins.hooks;
+	doAction,
+} = JetPlugins.hooks;
 const {
-	      ReactiveVar,
-      } = JetFormBuilderAbstract;
+	ReactiveVar,
+} = JetFormBuilderAbstract;
 const {
-	      validateInputsAll,
-      } = JetFormBuilderFunctions;
+	validateInputsAll,
+} = JetFormBuilderFunctions;
 
 const __reInited = new WeakSet();
 
-function ConditionalBlock( node, observable ) {
-	this.node           = node;
+function ConditionalBlock(node, observable) {
+	this.node = node;
 	node.jfbConditional = this;
 	/**
 	 * @type {Observable}
@@ -52,26 +52,26 @@ function ConditionalBlock( node, observable ) {
 	 */
 	this.inputs = [];
 
-	this.isRight = new ReactiveVar( null );
+	this.isRight = new ReactiveVar(null);
 	this.isRight.make();
 
 	this.setConditions();
 	this.setInputs();
 	this.setFunction();
 
-	if ( !window?.JetFormBuilderSettings?.devmode ) {
+	if (!window?.JetFormBuilderSettings?.devmode) {
 		delete this.node.dataset.jfbConditional;
 		delete this.node.dataset.jfbFunc;
 	}
 
-	doAction( 'jet.fb.conditional.init', this );
+	doAction('jet.fb.conditional.init', this);
 }
 
 ConditionalBlock.prototype = {
 	setConditions() {
 		const { jfbConditional } = this.node.dataset;
 
-		this.list       = new ConditionsBlockList( jfbConditional, this.root );
+		this.list = new ConditionsBlockList(jfbConditional, this.root);
 		this.list.block = this;
 
 		this.list.onChangeRelated = () => {
@@ -80,7 +80,7 @@ ConditionalBlock.prototype = {
 	},
 	setInputs() {
 		this.inputs = Array.from(
-			this.node.querySelectorAll( '[data-jfb-sync]' ),
+			this.node.querySelectorAll('[data-jfb-sync]'),
 		).map(
 			item => item.jfbSync,
 		).filter(
@@ -88,11 +88,11 @@ ConditionalBlock.prototype = {
 		);
 	},
 	insertComment() {
-		if ( !this.settings?.dom ) {
+		if (!this.settings?.dom) {
 			return;
 		}
 
-		this.comment = document.createComment( '' );
+		this.comment = document.createComment('');
 
 		// insert comment after conditional block
 		this.node.parentElement.insertBefore(
@@ -101,28 +101,28 @@ ConditionalBlock.prototype = {
 		);
 	},
 	observe() {
-		if ( this.isObserved ) {
+		if (this.isObserved) {
 			return;
 		}
 		this.isObserved = true;
 		this.insertComment();
 
-		this.isRight.watch( () => this.runFunction() );
-		this.isRight.watch( () => this.validateInputs() );
+		this.isRight.watch(() => this.runFunction());
+		this.isRight.watch(() => this.validateInputs());
 		this.list.observe();
 	},
 	runFunction() {
 		const result = this.isRight.current;
 
-		switch ( this.function ) {
+		switch (this.function) {
 			case 'show':
-				this.showBlock( result );
+				this.showBlock(result);
 				break;
 			case 'hide':
-				this.showBlock( !result );
+				this.showBlock(!result);
 				break;
 			case 'disable':
-				this.disableBlock( result );
+				this.disableBlock(result);
 				break;
 			default:
 				doAction(
@@ -142,17 +142,17 @@ ConditionalBlock.prototype = {
 	 * @see https://github.com/Crocoblock/issues-tracker/issues/1553
 	 */
 	validateInputs() {
-		setTimeout( () => {
-			validateInputsAll( this.inputs, true ).
-				then( () => {} ).
-				catch( () => {} );
-		} );
+		setTimeout(() => {
+			validateInputsAll(this.inputs, true).
+				then(() => { }).
+				catch(() => { });
+		});
 	},
-	showBlock( result ) {
-		this.node.classList.remove( 'jet-form-builder--hidden' );
+	showBlock(result) {
+		this.node.classList.remove('jet-form-builder--hidden');
 
-		if ( this.settings?.dom ) {
-			this.showBlockDom( result );
+		if (this.settings?.dom) {
+			this.showBlockDom(result);
 			if (result) {
 				requestAnimationFrame(() => this.reinitChildren());
 			}
@@ -172,21 +172,23 @@ ConditionalBlock.prototype = {
 			requestAnimationFrame(() => this.reinitChildren());
 		}
 	},
-	showBlockDom( result ) {
+	clearInputs() { 
+		this.inputs.forEach(input => {
+			input.onClear();
+		});
+	},
+	showBlockDom(result) {
 		const inputsList = this.root.dataInputs;
-
-		if ( !result ) {
+		if (!result) {
+			this.clearInputs();
 			this.node.remove();
-
-			this.reCalculateFields( inputsList );
-
+			this.reCalculateFields(inputsList);
 			return;
 		}
-		this.comment.parentElement.insertBefore( this.node, this.comment );
-
-		this.reCalculateFields( inputsList );
+		this.comment.parentElement.insertBefore(this.node, this.comment);
+		this.reCalculateFields(inputsList);
 	},
-	disableBlock( result ) {
+	disableBlock(result) {
 		this.node.disabled = result;
 	},
 	setFunction() {
@@ -194,12 +196,12 @@ ConditionalBlock.prototype = {
 
 		let parsed;
 		try {
-			parsed = JSON.parse( this.function );
+			parsed = JSON.parse(this.function);
 		}
-		catch ( error ) {
+		catch (error) {
 			return;
 		}
-		const [ [ name, settings ] ] = Object.entries( parsed );
+		const [[name, settings]] = Object.entries(parsed);
 
 		this.function = name;
 		this.settings = settings;
@@ -229,63 +231,63 @@ ConditionalBlock.prototype = {
 	 * Recalculation of formulas
 	 * @param {Object} inputsList - List of fields
 	 */
-	reCalculateFields( inputsList ) {
+	reCalculateFields(inputsList) {
 		// Get only fields that are in the current block
-		const affectedFields = this.getAffectedFields( inputsList );
+		const affectedFields = this.getAffectedFields(inputsList);
 
 		// Cache for visibility checks
 		const visibilityCache = new Map();
 
-		affectedFields.forEach( key => {
-			if ( inputsList[key] && inputsList[key].formula ) {
+		affectedFields.forEach(key => {
+			if (inputsList[key] && inputsList[key].formula) {
 				const fieldNode = inputsList[key].nodes?.[0];
 
 				// Use cache for visibility checks
 				let shouldRecalculate = false;
-				if ( fieldNode ) {
+				if (fieldNode) {
 					const cacheKey = fieldNode;
-					if ( !visibilityCache.has( cacheKey ) ) {
-						const isVisible = this.isFieldVisible( fieldNode );
-						const isInDOM   = document.contains( fieldNode );
-						visibilityCache.set( cacheKey, isVisible || isInDOM );
+					if (!visibilityCache.has(cacheKey)) {
+						const isVisible = this.isFieldVisible(fieldNode);
+						const isInDOM = document.contains(fieldNode);
+						visibilityCache.set(cacheKey, isVisible || isInDOM);
 					}
-					shouldRecalculate = visibilityCache.get( cacheKey );
+					shouldRecalculate = visibilityCache.get(cacheKey);
 				}
 
-				if ( shouldRecalculate ) {
+				if (shouldRecalculate) {
 					try {
 						inputsList[key].reCalculateFormula();
-					} catch ( error ) {
-						console.warn( `Error recalculating formula for field ${key}:`, error );
+					} catch (error) {
+						console.warn(`Error recalculating formula for field ${key}:`, error);
 					}
 				}
 			}
-		} );
+		});
 	},
 	/**
 	 * Checks if field is visible on the page
 	 * @param {HTMLElement} fieldNode - DOM element of the field
 	 * @returns {boolean} - true if field is visible
 	 */
-	isFieldVisible( fieldNode ) {
-		if ( ! fieldNode ) return false;
+	isFieldVisible(fieldNode) {
+		if (!fieldNode) return false;
 
 		// Check if element is in DOM
-		if ( ! document.contains( fieldNode ) ) return false;
+		if (!document.contains(fieldNode)) return false;
 
 		// Check visibility styles
-		const computedStyle = window.getComputedStyle( fieldNode );
+		const computedStyle = window.getComputedStyle(fieldNode);
 
-		if ( 'none' === computedStyle.display || 'hidden' === computedStyle.visibility ) {
+		if ('none' === computedStyle.display || 'hidden' === computedStyle.visibility) {
 			return false;
 		}
 
 		// Check if element is not hidden by parent elements
 		let parent = fieldNode.parentElement;
 
-		while ( parent && parent !== document.body ) {
-			const parentStyle = window.getComputedStyle( parent );
-			if ( 'none' === parentStyle.display || 'hidden' === parentStyle.visibility ) {
+		while (parent && parent !== document.body) {
+			const parentStyle = window.getComputedStyle(parent);
+			if ('none' === parentStyle.display || 'hidden' === parentStyle.visibility) {
 				return false;
 			}
 			parent = parent.parentElement;
@@ -298,48 +300,49 @@ ConditionalBlock.prototype = {
 	 * @param {Object} inputsList - List of all fields
 	 * @returns {Array} - Array of affected field keys
 	 */
-	getAffectedFields( inputsList ) {
+	getAffectedFields(inputsList) {
 		const affectedFields = [];
 
 		// Get all fields inside current block
-		const blockFields     = Array.from( this.node.querySelectorAll( '[data-jfb-sync]' ) );
+		const blockFields = Array.from(this.node.querySelectorAll('[data-jfb-sync]'));
 		const blockFieldNames = new Set();
 
 		// Collect field names inside block
-		blockFields.forEach( fieldNode => {
-			const fieldName = fieldNode.getAttribute( 'name' );
-
-			if ( fieldName ) {
-				blockFieldNames.add( fieldName );
+		blockFields.forEach(fieldNode => {
+			const fieldName = fieldNode.jfbSync?.name
+				?? fieldNode.getAttribute('name')
+				?? fieldNode.querySelector('[name]')?.getAttribute('name');
+			if (fieldName) {
+				blockFieldNames.add(fieldName);
 			}
-		} );
+		});
 
-		Object.keys( inputsList ).forEach( key => {
+		Object.keys(inputsList).forEach(key => {
 			const field = inputsList[key];
 
-			if ( ! field || ! field.formula ) return;
+			if (!field || !field.formula) return;
 
 			const fieldNode = field.nodes?.[0];
 			let shouldRecalculate = false;
 
 			// 1. Field is inside the block
-			if ( fieldNode && blockFields.includes( fieldNode ) ) {
+			if (fieldNode && blockFields.includes(fieldNode)) {
 				shouldRecalculate = true;
 			}
 
 			// 2. Field depends on fields inside block (check formula)
-			if ( ! shouldRecalculate && field.formula ) {
-				blockFieldNames.forEach( blockFieldName => {
-					if ( field.formula.includes( `%${blockFieldName}%` ) ) {
+			if (!shouldRecalculate && field.formula) {
+				blockFieldNames.forEach(blockFieldName => {
+					if (field.formula.includes(`%${blockFieldName}%`)) {
 						shouldRecalculate = true;
 					}
-				} );
+				});
 			}
 
-			if ( shouldRecalculate ) {
-				affectedFields.push( key );
+			if (shouldRecalculate) {
+				affectedFields.push(key);
 			}
-		} );
+		});
 
 		return affectedFields;
 	},

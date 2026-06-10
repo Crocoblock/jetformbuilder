@@ -51,6 +51,7 @@ class Query_Conditions_Builder {
 	private $conditions = array();
 
 	private $relation_type = 'AND';
+	private $inherit_view_only = false;
 
 	/**
 	 * @var array
@@ -138,6 +139,10 @@ class Query_Conditions_Builder {
 	}
 
 	public function after_set_view() {
+		if ( $this->inherit_view_only ) {
+			return;
+		}
+
 		try {
 			$view = $this->view();
 		} catch ( Query_Builder_Exception $exception ) {
@@ -145,6 +150,18 @@ class Query_Conditions_Builder {
 		}
 
 		$this->set_conditions( $view->conditions() );
+	}
+
+	private function inherit_view( Views\View_Base $view ): Query_Conditions_Builder {
+		if ( $this->view ) {
+			return $this;
+		}
+
+		$this->inherit_view_only = true;
+		$this->set_view( $view );
+		$this->inherit_view_only = false;
+
+		return $this;
 	}
 
 	/**
@@ -182,6 +199,10 @@ class Query_Conditions_Builder {
 		$condition = $this->generator->current();
 
 		if ( $condition instanceof Query_Conditions_Builder ) {
+			if ( $this->view ) {
+				$condition->inherit_view( $this->view );
+			}
+
 			return sprintf( "(\r\n%s\r\n)", $condition->prepare_conditions() );
 		}
 

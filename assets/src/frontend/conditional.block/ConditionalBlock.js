@@ -172,20 +172,44 @@ ConditionalBlock.prototype = {
 			requestAnimationFrame(() => this.reinitChildren());
 		}
 	},
-	clearInputs() { 
+	notifyInputs() {
 		this.inputs.forEach(input => {
-			input.onClear();
+			input.value?.notify?.();
+		});
+	},
+	clearChoiceInputs() {
+		this.inputs.forEach(input => {
+			const nodes = Array.isArray(input.nodes)
+				? input.nodes
+				: Object.values(input.nodes ?? {});
+			const isChoiceInput = nodes.some(node => {
+				if (!node) {
+					return false;
+				}
+				return (
+					'SELECT' === node.tagName ||
+					'checkbox' === node.type ||
+					'radio' === node.type
+				);
+			});
+			if (!isChoiceInput) {
+				return;
+			}
+			input.onClear?.();
+			input.value?.notify?.();
 		});
 	},
 	showBlockDom(result) {
 		const inputsList = this.root.dataInputs;
 		if (!result) {
-			this.clearInputs();
+			this.clearChoiceInputs();
 			this.node.remove();
+			this.notifyInputs();
 			this.reCalculateFields(inputsList);
 			return;
 		}
 		this.comment.parentElement.insertBefore(this.node, this.comment);
+		this.notifyInputs();
 		this.reCalculateFields(inputsList);
 	},
 	disableBlock(result) {

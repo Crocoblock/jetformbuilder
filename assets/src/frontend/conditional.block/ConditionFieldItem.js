@@ -25,14 +25,26 @@ function ConditionFieldItem() {
 	this.getInput = function () {
 		return this.list.root.getInput( this.field );
 	};
-	this.isPassed   = function () {
-		const input = this.getInput();
-
-		if ( !input ) {
+	this.isInputInDOM = function (input) {
+		if (!input?.nodes) {
 			return false;
 		}
+		const nodes = Array.isArray(input.nodes)
+			? input.nodes
+			: Object.values(input.nodes);
+		return nodes.some(node => node && document.contains(node));
 
-		return input.checker.check( this, input );
+	};
+	this.isPassed = function () {
+		const input = this.getInput();
+		if (!input) {
+			return false;
+		}
+		if (!this.isInputInDOM(input)) {
+
+			return false;
+		}
+		return input.checker.check(this, input);
 	};
 	this.setOptions = function ( options ) {
 		this.field        = options.field;

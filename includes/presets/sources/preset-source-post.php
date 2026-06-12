@@ -46,7 +46,7 @@ class Preset_Source_Post extends Base_Source {
 			// ADDED: fallback for submit, where original query var is stored in referer URL.
 			if (! $post_id && $var && ! empty($_REQUEST['_wp_http_referer'])) {
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$referer = wp_unslash($_REQUEST['_wp_http_referer']);
+				$referer = esc_url_raw(wp_unslash($_REQUEST['_wp_http_referer']));
 				$query   = wp_parse_url($referer, PHP_URL_QUERY);
 				if ($query) {
 					parse_str($query, $query_args);

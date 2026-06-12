@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 3.6.1.1
+Stable tag: 3.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,19 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.6.2**
+- FIX: Resolved validation errors when using dynamic values for the Media Field “Maximum Files” setting.
+- FIX: Prevented duplicate _wpnonce field IDs when multiple forms with form safety enabled are rendered on the same page.
+- FIX: Corrected calculated field updates when changing selected options.
+- UPD: Improved Honeypot field markup to make the anti-spam protection less detectable and more accessibility-friendly.
+- FIX: Fixed WYSIWYG field link handling in popups and repeaters, including issues with adding and preserving links.
+- FIX: Fixed calculated fields not displaying a value until a multiple-select field option is selected.
+- FIX: Prevented duplicate WYSIWYG editor IDs when multiple WYSIWYG fields are rendered.
+- FIX: Prevented false Undefined view errors after email verification.
+- FIX: Restored StyleManager opt-out handling for form blocks.
+- FIX: Skipped Phone Field validation when changing the selected country.
+- FIX: Prevented a fatal error in the Update User action when the User Role setting is empty.
 
 **3.6.1.1**
 - FIX: Vulnerability allowing Privilege Escalation

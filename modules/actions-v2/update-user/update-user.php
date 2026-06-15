@@ -149,7 +149,7 @@ class Update_User implements Action_Integration_Interface {
 		update_user_meta(
 			get_current_user_id(),
 			self::DISMISS_META_KEY,
-			$this->get_notice_dismiss_token( get_option( self::NOTICE_OPTION, array() ) )
+			$this->get_scan_version()
 		);
 
 		wp_safe_redirect(
@@ -182,7 +182,7 @@ class Update_User implements Action_Integration_Interface {
 			return;
 		}
 
-		if ( get_user_meta( get_current_user_id(), self::DISMISS_META_KEY, true ) === $this->get_notice_dismiss_token( $notice ) ) {
+		if ( $this->is_notice_dismissed( $notice ) ) {
 			return;
 		}
 
@@ -387,6 +387,20 @@ class Update_User implements Action_Integration_Interface {
 
 	private function get_scan_version(): string {
 		return jet_form_builder()->get_version() . ':' . self::SCAN_SCHEMA_VERSION;
+	}
+
+	private function is_notice_dismissed( array $notice ): bool {
+		$dismissed = (string) get_user_meta( get_current_user_id(), self::DISMISS_META_KEY, true );
+
+		if ( '' === $dismissed ) {
+			return false;
+		}
+
+		if ( $dismissed === $this->get_scan_version() ) {
+			return true;
+		}
+
+		return $dismissed === $this->get_notice_dismiss_token( $notice );
 	}
 
 	private function get_notice_dismiss_token( array $notice ): string {

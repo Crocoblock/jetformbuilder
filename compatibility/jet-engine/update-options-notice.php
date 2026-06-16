@@ -1,36 +1,23 @@
 <?php
 
-namespace JFB_Modules\Actions_V2\Update_User;
+namespace JFB_Compatibility\Jet_Engine;
 
-use Jet_Form_Builder\Actions\Manager;
-use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
-use Jet_Form_Builder\Classes\Tools;
-use JFB_Modules\Actions_V2\Interfaces\Action_Integration_Interface;
-use JFB_Modules\Actions_V2\Traits\Action_Integration_Trait;
 use JFB_Modules\Post_Type\Module as Post_Type_Module;
 
-class Update_User implements Action_Integration_Interface {
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
-	use Action_Integration_Trait;
+class Update_Options_Notice {
 
-	const SCAN_VERSION_OPTION = 'jet_fb_update_user_role_scan_version';
-	const NOTICE_OPTION       = 'jet_fb_update_user_role_notice';
-	const DISMISS_META_KEY    = 'jet_fb_update_user_role_notice_dismissed';
-	const NOTICE_QUERY_ARG    = 'jet_fb_dismiss_update_user_role_notice';
+	const SCAN_VERSION_OPTION = 'jet_fb_jet_engine_update_options_scan_version';
+	const NOTICE_OPTION       = 'jet_fb_jet_engine_update_options_notice';
+	const DISMISS_META_KEY    = 'jet_fb_jet_engine_update_options_notice_dismissed';
+	const NOTICE_QUERY_ARG    = 'jet_fb_dismiss_jet_engine_update_options_notice';
 	const SCAN_SCHEMA_VERSION = '1';
 	const SCAN_BATCH_SIZE     = 30;
 
-	public function rep_item_id() {
-		return 'update-user';
-	}
-
 	public function init_hooks() {
-		add_action(
-			'jet-form-builder/editor-assets/after',
-			array( $this, 'editor_assets' )
-		);
-
-		add_action( 'jet-form-builder/update-user/invalidate-role-scan', array( $this, 'invalidate_scan_cache' ) );
 		add_action( 'save_post_' . Post_Type_Module::SLUG, array( $this, 'invalidate_scan_cache' ) );
 
 		if ( ! is_admin() ) {
@@ -42,32 +29,15 @@ class Update_User implements Action_Integration_Interface {
 		add_action( 'admin_notices', array( $this, 'render_affected_forms_notice' ) );
 	}
 
-	public function on_install() {
-		// TODO: Implement on_install() method.
+	public function remove_hooks() {
+		remove_action( 'save_post_' . Post_Type_Module::SLUG, array( $this, 'invalidate_scan_cache' ) );
+		remove_action( 'admin_init', array( $this, 'maybe_scan_affected_forms' ) );
+		remove_action( 'admin_init', array( $this, 'maybe_dismiss_notice' ) );
+		remove_action( 'admin_notices', array( $this, 'render_affected_forms_notice' ) );
 	}
 
-	public function register_actions( Manager $manager ) {
-		$manager->register_action_type( new Update_User_Action() );
-	}
-
-	public function editor_assets() {
-		$script_asset = require_once $this->get_dir( 'assets/build/editor.asset.php' );
-
-		array_push(
-			$script_asset['dependencies'],
-			'jet-fb-components',
-			'jet-fb-data',
-			'jet-fb-actions-v2',
-			'jet-fb-blocks-v2-to-actions-v2'
-		);
-
-		wp_enqueue_script(
-			$this->get_handle(),
-			$this->get_url( 'assets/build/editor.js' ),
-			$script_asset['dependencies'],
-			$script_asset['version'],
-			true
-		);
+	public function invalidate_scan_cache() {
+		delete_option( self::SCAN_VERSION_OPTION );
 	}
 
 	public function maybe_scan_affected_forms() {
@@ -109,7 +79,7 @@ class Update_User implements Action_Integration_Interface {
 				array(
 					'version'      => $version,
 					'notice_token' => wp_generate_uuid4(),
-					'tracked_ids' => $tracked_ids,
+					'tracked_ids'  => $tracked_ids,
 					'forms'        => $forms,
 				),
 				false
@@ -122,13 +92,12 @@ class Update_User implements Action_Integration_Interface {
 		$tracked_ids = array_values( array_unique( array_map( 'intval', wp_list_pluck( $forms, 'id' ) ) ) );
 
 		update_option( self::SCAN_VERSION_OPTION, $version, false );
-
 		update_option(
 			self::NOTICE_OPTION,
 			array(
 				'version'      => $version,
 				'notice_token' => wp_generate_uuid4(),
-				'tracked_ids' => array_values( array_unique( array_map( 'intval', wp_list_pluck( $forms, 'id' ) ) ) ),
+				'tracked_ids'  => $tracked_ids,
 				'forms'        => $forms,
 			),
 			false
@@ -163,10 +132,6 @@ class Update_User implements Action_Integration_Interface {
 		exit;
 	}
 
-	public function invalidate_scan_cache() {
-		delete_option( self::SCAN_VERSION_OPTION );
-	}
-
 	public function render_affected_forms_notice() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
@@ -196,10 +161,13 @@ class Update_User implements Action_Integration_Interface {
 		?>
 		<div class="notice notice-warning">
 			<p>
-				<strong><?php esc_html_e( 'JetFormBuilder: review Update User role transitions after this update.', 'jet-form-builder' ); ?></strong>
+				<strong><?php esc_html_e( 'JetFormBuilder: review JetEngine Update Options actions after this update.', 'jet-form-builder' ); ?></strong>
 			</p>
 			<p>
-				<?php esc_html_e( 'Some forms use Update User role changes that may now be skipped for users without the promote_users capability. Review the forms below and update the global Self-Promotable Roles setting or the action flow if needed.', 'jet-form-builder' ); ?>
+				<?php esc_html_e( 'JetEngine Update Options actions now require the manage_options capability before they can modify an Options Page. Review the forms below if you expected these updates to run for public or lower-privilege submissions.', 'jet-form-builder' ); ?>
+			</p>
+			<p>
+				<?php esc_html_e( 'If you intentionally need a non-admin flow, replace this action with Call Hook and update the option in custom code where you can enforce your own capability and request validation rules.', 'jet-form-builder' ); ?>
 			</p>
 			<ul style="list-style: disc; margin-left: 1.5em;">
 				<?php foreach ( $forms as $form ) : ?>
@@ -226,9 +194,6 @@ class Update_User implements Action_Integration_Interface {
 				</p>
 			<?php endif; ?>
 			<p>
-				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . Post_Type_Module::SLUG ) ); ?>" class="button button-primary">
-					<?php esc_html_e( 'Review Forms', 'jet-form-builder' ); ?>
-				</a>
 				<a href="<?php echo esc_url( $dismiss_url ); ?>" class="button button-secondary">
 					<?php esc_html_e( 'Dismiss', 'jet-form-builder' ); ?>
 				</a>
@@ -262,7 +227,7 @@ class Update_User implements Action_Integration_Interface {
 			}
 
 			foreach ( $form_ids as $form_id ) {
-				$issues = $this->get_form_issues( $form_id );
+				$issues = $this->get_form_issues( (int) $form_id );
 
 				if ( empty( $issues ) ) {
 					continue;
@@ -326,63 +291,34 @@ class Update_User implements Action_Integration_Interface {
 		$issues  = array();
 
 		foreach ( $actions as $action ) {
-			if ( 'update_user' !== ( $action['type'] ?? '' ) ) {
+			if ( 'update_options' !== ( $action['type'] ?? '' ) ) {
 				continue;
 			}
 
-			$issues = array_merge( $issues, $this->get_update_user_action_issues( $action ) );
+			$issues = array_merge( $issues, $this->get_update_options_action_issues( $action ) );
 		}
 
 		return array_values( array_unique( $issues ) );
 	}
 
-	private function get_update_user_action_issues( array $action ): array {
-		$settings        = $action['settings']['update_user'] ?? $action['settings'] ?? array();
-		$fields_map      = $settings['fields_map'] ?? array();
-		$mapped_values   = array_map( 'strval', array_values( (array) $fields_map ) );
-		$static_roles    = array_values(
-			array_filter(
-				array_map(
-					'strval',
-					Tools::get_array_of_user_roles( $settings['user_role'] ?? array() )
-				)
-			)
-		);
-		$allowed_roles   = $this->get_self_promotable_roles();
-		$issues          = array();
+	private function get_update_options_action_issues( array $action ): array {
+		$settings     = $action['settings']['update_options'] ?? $action['settings'] ?? array();
+		$options_page = (string) ( $settings['options_page'] ?? '' );
+		$issues       = array();
 
-		if ( in_array( 'role', $mapped_values, true ) ) {
+		if ( '' !== $options_page ) {
 			$issues[] = __(
-				'maps a form field to the user role, so self-service role changes now depend on the global Self-Promotable Roles list',
+				'updates the JetEngine Options Page, which now requires manage_options during form submission',
 				'jet-form-builder'
 			);
-		}
-
-		if ( empty( $static_roles ) ) {
-			return $issues;
-		}
-
-		$outside_allowlist = array_values( array_diff( $static_roles, $allowed_roles ) );
-
-		if ( ! empty( $outside_allowlist ) ) {
+		} else {
 			$issues[] = __(
-				'assigns static User Role values outside the global Self-Promotable Roles list, so they may be skipped for users without the promote_users capability',
+				'uses the JetEngine Update Options action, which now requires manage_options during form submission',
 				'jet-form-builder'
 			);
 		}
 
 		return $issues;
-	}
-
-	private function get_self_promotable_roles(): array {
-		$options = Tab_Handler_Manager::get_options( 'options-tab' );
-		$roles   = Tools::get_array_of_user_roles( $options['self_promotable_roles'] ?? array() );
-
-		return array_values(
-			array_filter(
-				array_map( 'strval', $roles )
-			)
-		);
 	}
 
 	private function get_scan_version(): string {

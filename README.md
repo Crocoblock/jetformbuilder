@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.2.1
+* FIX: Prevent unauthorized JetEngine Update Options writes
+
 ## 3.6.2
 * FIX: Resolved validation errors when using dynamic values for the Media Field “Maximum Files” setting.
 * FIX: Prevented duplicate _wpnonce field IDs when multiple forms with form safety enabled are rendered on the same page.
@@ -20,7 +23,6 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * FIX: Restored StyleManager opt-out handling for form blocks.
 * FIX: Skipped Phone Field validation when changing the selected country.
 * FIX: Prevented a fatal error in the Update User action when the User Role setting is empty.
-
 
 ## 3.6.1.1
 * FIX: Vulnerability allowing Privilege Escalation

@@ -9,6 +9,7 @@ use Jet_Form_Builder\Classes\Builder_Helper;
 use Jet_Form_Builder\Classes\Post\Not_Found_Post_Exception;
 use Jet_Form_Builder\Classes\Post\Post_Tools;
 use Jet_Form_Builder\Classes\Tools;
+use JFB_Modules\Post_Type\Module as Post_Type_Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -117,6 +118,10 @@ class Form extends Base {
 		try {
 			$form = Post_Tools::get_post( $form_id );
 		} catch ( Not_Found_Post_Exception $exception ) {
+			return $this->get_placeholder();
+		}
+
+		if ( Post_Type_Module::SLUG !== $form->post_type ) {
 			return $this->get_placeholder();
 		}
 

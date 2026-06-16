@@ -13,12 +13,12 @@
 		--isLTR: -1;
 	}
 
-	input.jet-form-builder__field {
+	input.jet-form-builder__field[role="switch"][type="checkbox"] {
 		padding: var(--c-track-padding, var(--track-padding) );
 		inline-size: var(--c-track-size, var(--track-size) );
 		block-size: var(--c-thumb-size, var(--thumb-size) );
 		border-radius: var(--c-track-size, var(--track-size) );
-		background: var(--c-track-bg-color, var(--track-bg-color, #ddd));
+		background: none;
 		appearance: none;
 		outline-offset: 5px;
 		transition: background-color 0.4s;
@@ -29,6 +29,10 @@
 		display: grid;
 		align-items: center;
 		grid: [track] 1fr/[track] 1fr;
+
+		&:not(:checked) {
+			background: var(--c-track-bg-color, var(--track-bg-color, #ddd));
+		}
 
 		&:not(:disabled):hover {
 			&::before {
@@ -59,7 +63,7 @@
 
 // compatibility with wp-admin/css/forms.css
 .block-editor-block-list__block.field-type-switcher {
-	input.jet-form-builder__field {
+	input.jet-form-builder__field[role="switch"][type="checkbox"] {
 		padding: var(--track-padding) !important; // To rewrite "padding: 0 !important;"
 		border: unset;
 		margin: unset;

@@ -21,6 +21,7 @@ class Module implements
 	Base_Module_Dir_It {
 
 
+
 	use Base_Module_Handle_Trait;
 	use Base_Module_Url_Trait;
 	use Base_Module_Dir_Trait;
@@ -34,20 +35,22 @@ class Module implements
 	}
 
 	public function init_hooks() {
+		add_action( 'init', array( $this, 'register_editor_assets' ), 0 );
 		add_action( 'init', array( $this, 'register_block_type' ) );
 
 		add_action(
 			'jet-form-builder/editor-assets/before',
-			array( $this, 'register_editor_assets' )
+			array( $this, 'enqueue_code_editor_assets' )
 		);
 	}
 
 	public function remove_hooks() {
+		remove_action( 'init', array( $this, 'register_editor_assets' ), 0 );
 		remove_action( 'init', array( $this, 'register_block_type' ) );
 
 		remove_action(
 			'jet-form-builder/editor-assets/before',
-			array( $this, 'register_editor_assets' )
+			array( $this, 'enqueue_code_editor_assets' )
 		);
 	}
 
@@ -62,23 +65,13 @@ class Module implements
 	}
 
 	public function register_editor_assets() {
-		// CodeMirror for wp.codeEditor.initialize(...)
-		wp_enqueue_code_editor(
-			array(
-				'type' => 'text/html',
-			)
-		);
-
-		// Styles for CodeMirror in WP
-		wp_enqueue_style( 'wp-codemirror' );
-
 		$asset_path = $this->get_dir( 'assets/build/editor.asset.php' );
 
 		$asset = file_exists( $asset_path )
 			? require $asset_path
 			: array(
 				'dependencies' => array(),
-				'version' => jet_form_builder()->get_version(),
+				'version'      => jet_form_builder()->get_version(),
 			);
 
 		$deps = array_unique(
@@ -88,12 +81,28 @@ class Module implements
 			)
 		);
 
-		wp_enqueue_script(
+		wp_register_script(
 			$this->get_handle( 'editor' ),
 			$this->get_url( 'assets/build/editor.js' ),
 			$deps,
 			$asset['version'] ?? jet_form_builder()->get_version(),
 			true
+		);
+
+		wp_register_style(
+			$this->get_handle( 'editor' ),
+			$this->get_url( 'assets/build/editor.css' ),
+			array( 'wp-codemirror' ),
+			$asset['version'] ?? jet_form_builder()->get_version()
+		);
+	}
+
+	public function enqueue_code_editor_assets() {
+		// Required for wp.codeEditor.initialize(...).
+		wp_enqueue_code_editor(
+			array(
+				'type' => 'text/html',
+			)
 		);
 	}
 }

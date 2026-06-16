@@ -6,6 +6,7 @@ import { useActionErrors } from 'jet-form-builder-actions';
 /* eslint-disable import/no-extraneous-dependencies */
 import { Icon } from '@wordpress/icons';
 import { styled } from '@linaria/react';
+import getActionDisplayName from '../../../../../modules/actions-v2/assets/src/utils/getActionDisplayName';
 /* eslint-enable import/no-extraneous-dependencies */
 
 const {
@@ -60,6 +61,10 @@ function EditSettingsModal() {
 		return null;
 	}
 
+	const actionName = getActionDisplayName(
+		currentAction,
+		actionType?.label ?? '',
+	);
 	const showErrors = (
 		Boolean( errors.length ) && isShowErrorNotice
 	);
@@ -83,7 +88,7 @@ function EditSettingsModal() {
 					{ sprintf(
 						// translators: %s - action type label
 						__( 'Edit %s', 'jet-form-builder' ),
-						actionType.label,
+						actionName,
 					) }
 				</h1>
 				<ActionModalHeaderSlotFill.Slot/>

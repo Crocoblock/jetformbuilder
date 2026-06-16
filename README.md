@@ -8,6 +8,45 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.2
+* FIX: Resolved validation errors when using dynamic values for the Media Field “Maximum Files” setting.
+* FIX: Prevented duplicate _wpnonce field IDs when multiple forms with form safety enabled are rendered on the same page.
+* FIX: Corrected calculated field updates when changing selected options.
+* UPD: Improved Honeypot field markup to make the anti-spam protection less detectable and more accessibility-friendly.
+* FIX: Fixed WYSIWYG field link handling in popups and repeaters, including issues with adding and preserving links.
+* FIX: Fixed calculated fields not displaying a value until a multiple-select field option is selected.
+* FIX: Prevented duplicate WYSIWYG editor IDs when multiple WYSIWYG fields are rendered.
+* FIX: Prevented false Undefined view errors after email verification.
+* FIX: Restored StyleManager opt-out handling for form blocks.
+* FIX: Skipped Phone Field validation when changing the selected country.
+* FIX: Prevented a fatal error in the Update User action when the User Role setting is empty.
+
+
+## 3.6.1.1
+* FIX: Vulnerability allowing Privilege Escalation
+
+## 3.6.1
+* ADD: Ability to rename form actions [Crocoblock/suggestions#7857](https://github.com/Crocoblock/suggestions/issues/7857)
+* ADD: Hooks for adding custom controls to Elementor and Bricks form widgets
+* FIX: Dynamic Value not working for the Advanced Choices field
+* FIX: Multiline text values are not displayed in calculated fields
+* FIX: Save checkbox field doesn't saved data (Register User Action)
+* FIX: Cloudflare Turnstile Issue - Invalid input for optional parameter "action"
+* FIX: Fatal error Uncaught Jet_Form_Builder\Admin\Exceptions\Not_Found_Page_Exception
+* FIX: input styles after update WP 7.0
+* FIX: Friendly Captcha fatal error during token verification
+* FIX: Advanced Choice block background color handling
+* FIX: editor package translation references
+* FIX: Advanced Choice fixed width style output
+* FIX: Switcher field styles
+* FIX: toDateTime default timezone handling
+* FIX: Option fields apply dynamic and multi-value defaults
+* FIX: Radio field auto page switch stays scoped to enabled fields
+* FIX: Phone Field translations follow current WordPress page locale
+* FIX: Repeater required validation after row removal [Crocoblock/jetformbuilder#564](https://github.com/Crocoblock/jetformbuilder/issues/564)
+* FIX: Litespeed Cache plugin compatibility [Crocoblock/jetformbuilder#603](https://github.com/Crocoblock/jetformbuilder/issues/603)
+* FIX: XSS vulnerability
+
 ## 3.6.0.1
 * FIX: Prevent PHP errors appears in some cases and related to the Style Manager module.
 

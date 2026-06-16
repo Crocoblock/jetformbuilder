@@ -31,6 +31,8 @@
 		"compatibility/jet-engine/blocks/*"
 	],
 	"devDependencies": {
+		"@playwright/test": "^1.54.2",
+		"terminal-kit": "^3.1.2",
 		"@babel/eslint-parser": "^7.23.10",
 		"@stylistic/eslint-plugin": "^2.3.0",
 		"@wordpress/babel-preset-default": "^7.35.0",
@@ -86,6 +88,7 @@
 		"v-click-outside-x": "^4.1.3"
 	},
 	"scripts": {
+		"codex:menu:2": "node .codex/scripts/codex-menu-tk.js",
 		"postinstall": "npx husky install"
 	}
 }

@@ -28,10 +28,18 @@ class Block_Render extends Base {
 
 	public function render_options(): string {
 		$required = $this->block_type->get_required_val();
+		$default  = $this->args['default'] ?? '';
 
 		$this->add_attribute( 'class', 'jet-form-builder__field radio-field checkradio-field' );
 		$this->add_attribute( 'class', $this->args['class_name'] );
 		$this->add_attribute( 'required', $required );
+		if (
+			is_string( $default ) &&
+			jet_form_builder()->regexp->has_macro( $default )
+		) {
+			wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
+			$this->add_attribute( 'data-default-val', $default );
+		}
 
 		$auto_update_attrs = Html_Attributes_Injector::render_data_attributes( $this->args );
 		$auto_update_attrs = $auto_update_attrs ? ' ' . $auto_update_attrs : '';

@@ -37,8 +37,51 @@ if ( ! empty( $args['_jfb_data_attrs'] ) ) {
 
 $placeholder = $args['placeholder'] ?? false;
 $default     = $args['default'] ?? false;
+$has_dynamic_default = false;
+$is_array_like_string = static function ( $value ) {
+	if ( ! is_string( $value ) ) {
+		return false;
+	}
 
-$this->add_attribute( 'data-default-val', $default );
+	$value = trim( $value );
+
+	return '[' === substr( $value, 0, 1 ) && ']' === substr( $value, -1 );
+};
+
+if (
+	is_string( $default ) && (
+		jet_form_builder()->regexp->has_macro( $default ) ||
+		$is_array_like_string( $default )
+	)
+) {
+	$has_dynamic_default = true;
+	wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
+	$this->add_attribute( 'data-default-val', $default );
+} elseif ( is_array( $default ) ) {
+	$normalized_default = array_values( $default );
+	$single_default     = $normalized_default[0] ?? '';
+
+	if (
+		1 === count( $normalized_default ) &&
+		is_string( $single_default ) &&
+		'[' === substr( trim( $single_default ), 0, 1 )
+	) {
+		$dynamic_default = $single_default;
+	} else {
+		$dynamic_default = wp_json_encode( $normalized_default );
+	}
+
+	if (
+		is_string( $dynamic_default ) && (
+			jet_form_builder()->regexp->has_macro( $dynamic_default ) ||
+			$is_array_like_string( $dynamic_default )
+		)
+	) {
+		$has_dynamic_default = true;
+		wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
+		$this->add_attribute( 'data-default-val', $dynamic_default );
+	}
+}
 ?>
 <div class="jet-form-builder__field-wrap">
 	<select <?php $this->render_attributes_string(); ?>>
@@ -47,7 +90,13 @@ $this->add_attribute( 'data-default-val', $default );
 		if ( $placeholder ) {
 			$additional_attrs = ( $args['is_disabled_placeholder'] ?? false ) ? 'disabled' : '';
 
-			if ( ! $default ) {
+			if (
+			! $default ||
+			(
+				$has_dynamic_default &&
+				! $this->block_type->is_multiple()
+			)
+			) {
 				$additional_attrs .= ' selected';
 			}
 			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped

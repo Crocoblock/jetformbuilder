@@ -61,6 +61,8 @@ export { default as FieldsMapField } from './components/FieldsMapField';
 export { default as ValidatedTextControl, } from './components/ValidatedTextControl';
 export { default as ValidatedSelectControl, } from './components/ValidatedSelectControl';
 export { TableListRow, TableListContainer, TableListHead } from './components/TableList';
+export { default as SingleValueAsArrayToggle, } from './components/SingleValueAsArrayToggle';
+
 
 /**
  * Hooks

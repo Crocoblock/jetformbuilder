@@ -11,20 +11,26 @@ jobs:
       - name: Send release info to Discord
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RELEASE_BODY: ${{ github.event.release.body }}
         run: |
+          CLEAN_CHANGELOG=$(echo "$RELEASE_BODY" | tr "'\"" '`')
+
+          if [ ${#CLEAN_CHANGELOG} -gt 3000 ]; then
+            CLEAN_CHANGELOG="${CLEAN_CHANGELOG:0:3000}..."
+          fi
+
           VERSION="${{ github.event.release.tag_name }}"
-          CHANGELOG="${{ github.event.release.body }}"
           PLUGIN_NAME="JetFormBuilder"
           TITLE="🚀 $PLUGIN_NAME $VERSION"
 
           JSON=$(jq -n \
             --arg title "$TITLE" \
-            --arg description "$CHANGELOG" \
+            --arg desc "$CLEAN_CHANGELOG" \
             '{
               embeds: [
                 {
                   title: $title,
-                  description: $description,
+                  description: ($desc + "\n\n**https://crocoblock.com/changelog/**"),
                   color: 5814783
                 }
               ]

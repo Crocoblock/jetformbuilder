@@ -85,6 +85,17 @@ class Block_Asset implements Block_Asset_Interface {
 					$this->get_localized_country_names()
 				);
 
+				wp_localize_script(
+					$handle,
+					'jfbPhoneFieldLocaleContext',
+					array(
+						'pageLocale' => determine_locale(),
+						'pageLang'   => get_bloginfo( 'language' ),
+						'siteLocale' => get_locale(),
+						'siteLang'   => str_replace( '_', '-', get_locale() ),
+					)
+				);
+
 				wp_register_style(
 					$blocks_v2->get_handle( 'phone-field' ),
 					$blocks_v2->get_url( 'phone-field/assets/build/frontend/field.css' ),

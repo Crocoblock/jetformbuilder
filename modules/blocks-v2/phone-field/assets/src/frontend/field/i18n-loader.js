@@ -6,49 +6,46 @@
  */
 
 /**
- * Map WordPress locale codes to intl-tel-input i18n folder names
+ * Map normalized locale codes to intl-tel-input i18n folder names.
  */
 const localeMap = {
-	// WordPress locale => intl-tel-input i18n folder
-	'uk': 'uk',        // Ukrainian
-	'ru_RU': 'ru',     // Russian
-	'de_DE': 'de',     // German
-	'fr_FR': 'fr',     // French
-	'es_ES': 'es',     // Spanish
-	'it_IT': 'it',     // Italian
-	'pl_PL': 'pl',     // Polish
-	'pt_PT': 'pt',     // Portuguese
-	'pt_BR': 'pt',     // Portuguese (Brazil)
-	'nl_NL': 'nl',     // Dutch
-	'ja': 'ja',        // Japanese
-	'zh_CN': 'zh',     // Chinese
-	'ko_KR': 'ko',     // Korean
-	'ar': 'ar',        // Arabic
-	'tr_TR': 'tr',     // Turkish
-	'sv_SE': 'sv',     // Swedish
-	'da_DK': 'da',     // Danish
-	'fi': 'fi',        // Finnish
-	'no': 'no',        // Norwegian
-	'cs_CZ': 'cs',     // Czech
-	'hu_HU': 'hu',     // Hungarian
-	'ro_RO': 'ro',     // Romanian
-	'bg_BG': 'bg',     // Bulgarian
-	'hr': 'hr',        // Croatian
-	'sk_SK': 'sk',     // Slovak
-	'el': 'el',        // Greek
-	'th': 'th',        // Thai
-	'vi': 'vi',        // Vietnamese
-	'id_ID': 'id',     // Indonesian
-	'hi_IN': 'hi',     // Hindi
-	'bn_BD': 'bn',     // Bengali
-	'ur': 'ur',        // Urdu
-	'fa_IR': 'fa',     // Persian
-	'mr': 'mr',        // Marathi
-	'te': 'te',        // Telugu
-	'bs_BA': 'bs',     // Bosnian
-	'ca': 'ca',        // Catalan
-	'en_US': 'en',     // English (US)
-	'en': 'en',        // English (generic)
+	ar: 'ar',
+	bg: 'bg',
+	bn: 'bn',
+	bs: 'bs',
+	ca: 'ca',
+	cs: 'cs',
+	da: 'da',
+	de: 'de',
+	el: 'el',
+	en: 'en',
+	es: 'es',
+	fa: 'fa',
+	fi: 'fi',
+	fr: 'fr',
+	hi: 'hi',
+	hr: 'hr',
+	hu: 'hu',
+	id: 'id',
+	it: 'it',
+	ja: 'ja',
+	ko: 'ko',
+	mr: 'mr',
+	nl: 'nl',
+	no: 'no',
+	pl: 'pl',
+	pt: 'pt',
+	ro: 'ro',
+	ru: 'ru',
+	sk: 'sk',
+	sv: 'sv',
+	te: 'te',
+	th: 'th',
+	tr: 'tr',
+	uk: 'uk',
+	ur: 'ur',
+	vi: 'vi',
+	zh: 'zh',
 };
 
 /**
@@ -100,6 +97,59 @@ const loaders = {
  */
 const translationCache = {};
 
+const getWindowLocaleContext = () => {
+	return typeof window.jfbPhoneFieldLocaleContext === 'object' &&
+		window.jfbPhoneFieldLocaleContext !== null
+		? window.jfbPhoneFieldLocaleContext
+		: {};
+};
+
+const getFirstNormalizedLocale = ( candidates = [] ) => {
+	for ( const locale of candidates ) {
+		const normalizedLocale = normalizeLocale( locale );
+
+		if ( normalizedLocale ) {
+			return normalizedLocale;
+		}
+	}
+
+	return '';
+};
+
+export function normalizeLocale( locale ) {
+	if ( ! locale || 'string' !== typeof locale ) {
+		return '';
+	}
+
+	const sanitized = locale.trim().replace( /-/g, '_' );
+
+	if ( ! sanitized ) {
+		return '';
+	}
+
+	const [ language = '', region = '' ] = sanitized.split( '_' );
+
+	if ( ! language ) {
+		return '';
+	}
+
+	return region
+		? `${ language.toLowerCase() }_${ region.toUpperCase() }`
+		: language.toLowerCase();
+}
+
+export function resolveIntlLocale( locale ) {
+	const normalizedLocale = normalizeLocale( locale );
+
+	if ( ! normalizedLocale ) {
+		return 'en';
+	}
+
+	const [ language ] = normalizedLocale.split( '_' );
+
+	return localeMap[ normalizedLocale ] || localeMap[ language ] || 'en';
+}
+
 /**
  * Load translations for intl-tel-input (ESM import approach)
  *
@@ -107,8 +157,7 @@ const translationCache = {};
  * @return {Promise<Object>} - Promise that resolves to translations object
  */
 export async function loadIntlTelInputLocale( wpLocale ) {
-	// Get intl-tel-input locale code
-	const locale = localeMap[ wpLocale ] || 'en';
+	const locale = resolveIntlLocale( wpLocale );
 
 	// English is built-in to intl-tel-input, no need to load
 	if ( locale === 'en' ) {
@@ -140,8 +189,7 @@ export async function loadIntlTelInputLocale( wpLocale ) {
 		translationCache[ locale ] = translations;
 
 		return translations;
-	} catch ( error ) {
-		console.error( `[PhoneField] Failed to load locale "${ locale }":`, error );
+	} catch {
 		return {};
 	}
 }
@@ -151,34 +199,29 @@ export async function loadIntlTelInputLocale( wpLocale ) {
  *
  * @return {string} WordPress locale code
  */
-export function getWordPressLocale() {
-	let locale = '';
+export function getPageLocale() {
+	const localeContext = getWindowLocaleContext();
 
-	// Try to get from HTML lang attribute
-	const htmlLang = document.documentElement.lang;
+	return getFirstNormalizedLocale( [
+		localeContext.pageLocale,
+		localeContext.pageLang,
+		document.documentElement?.lang,
+		localeContext.siteLocale,
+		localeContext.siteLang,
+	] );
+}
 
-	if ( htmlLang ) {
-		// Convert 'uk-UA' to 'uk', 'en-US' to 'en_US'
-		// But keep simple codes like 'uk' as is
-		if ( htmlLang.includes( '-' ) ) {
-			locale = htmlLang.replace( '-', '_' );
-		} else {
-			locale = htmlLang;
-		}
-	}
+export function getSiteLocale() {
+	const localeContext = getWindowLocaleContext();
 
-	// Try to get from WordPress global variables
-	if ( ! locale && typeof window.wp !== 'undefined' && window.wp.i18n ) {
-		// WordPress 5.0+ has locale info
-		locale = window.wp.i18n.getLocaleData?.()?.locale || '';
-	}
+	return getFirstNormalizedLocale( [
+		localeContext.siteLocale,
+		localeContext.siteLang,
+	] );
+}
 
-	// Fallback to English
-	if ( ! locale ) {
-		locale = 'en';
-	}
-
-	return locale;
+export function resolveCurrentLocale() {
+	return getPageLocale() || 'en';
 }
 
 /**
@@ -187,7 +230,7 @@ export function getWordPressLocale() {
  * @return {Promise<Object>} Country translations
  */
 export async function loadCurrentLocaleTranslations() {
-	const locale = getWordPressLocale();
+	const locale = resolveCurrentLocale();
 
 	return await loadIntlTelInputLocale( locale );
 }
@@ -195,6 +238,10 @@ export async function loadCurrentLocaleTranslations() {
 export default {
 	loadIntlTelInputLocale,
 	loadCurrentLocaleTranslations,
-	getWordPressLocale,
+	getPageLocale,
+	getSiteLocale,
+	resolveCurrentLocale,
+	resolveIntlLocale,
+	normalizeLocale,
 	localeMap,
 };

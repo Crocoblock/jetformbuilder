@@ -2,29 +2,29 @@ import { isRepeater } from './functions';
 import ObservableRow from './ObservableRow';
 
 const {
-	      InputData,
-	      ReactiveVar,
-      } = JetFormBuilderAbstract;
+	InputData,
+	ReactiveVar,
+} = JetFormBuilderAbstract;
 
 // eslint-disable-next-line max-lines-per-function
 function RepeaterData() {
-	InputData.call( this );
+	InputData.call(this);
 
-	this.buttonNode   = false;
-	this.template     = null;
-	this.container    = null;
+	this.buttonNode = false;
+	this.template = null;
+	this.container = null;
 	this.lastObserved = new ReactiveVar();
 	this.lastObserved.make();
 
 	this.addEventAttached = false;
 
-	this.isSupported  = function ( node ) {
-		return isRepeater( node );
+	this.isSupported = function (node) {
+		return isRepeater(node);
 	};
 	this.addListeners = function () {
 		// disable aria attributes
-		this.reporting.makeInvalid = () => {};
-		this.reporting.makeValid   = () => {};
+		this.reporting.makeInvalid = () => { };
+		this.reporting.makeValid = () => { };
 	};
 
 	this.hasAutoScroll = function () {
@@ -32,23 +32,23 @@ function RepeaterData() {
 	};
 
 	this.setValue = function () {
-		const [ node ]     = this.nodes;
+		const [node] = this.nodes;
 		this.value.current = [];
 
-		for ( const row of node.querySelectorAll(
+		for (const row of node.querySelectorAll(
 			'.jet-form-builder-repeater__row',
-		) ) {
-			const current    = new ObservableRow( this );
+		)) {
+			const current = new ObservableRow(this);
 			current.rootNode = row;
 
-			this.value.current.push( current );
+			this.value.current.push(current);
 		}
 
-		for ( const currentElement of this.value.current ) {
+		for (const currentElement of this.value.current) {
 			currentElement.observe();
 		}
 
-		for ( const currentElement of this.value.current ) {
+		for (const currentElement of this.value.current) {
 			currentElement.initCalc();
 		}
 
@@ -56,50 +56,50 @@ function RepeaterData() {
 			'.jet-form-builder-repeater__remove',
 		);
 
-		for ( const button of removeButtons ) {
-			const row = this.closestRow( button );
+		for (const button of removeButtons) {
+			const row = this.closestRow(button);
 
-			if ( !row ) {
+			if (!row) {
 				continue;
 			}
 
-			button.addEventListener( 'click', () => row.removeManually() );
+			button.addEventListener('click', () => row.removeManually());
 		}
 
-		if ( this.isManualCount ) {
-			if ( ! this.addEventAttached && ! this.buttonNode.hasListener) {
-				this.buttonNode.addEventListener( 'click', () => this.addNew() );
+		if (this.isManualCount) {
+			if (!this.addEventAttached && !this.buttonNode.hasListener) {
+				this.buttonNode.addEventListener('click', () => this.addNew());
 				this.addEventAttached = true;
 				this.buttonNode.hasListener = true;
 			}
 			return;
 		}
 
-		const input = this.root.getInput( this.itemsField );
+		const input = this.root.getInput(this.itemsField);
 
-		if ( !input ) {
+		if (!input) {
 			// eslint-disable-next-line no-console
 			console.error(
-				`JetFormBuilder error: undefined input by name [${ this.itemsField }]`,
+				`JetFormBuilder error: undefined input by name [${this.itemsField}]`,
 			);
 
 			return;
 		}
 
-		input.watch( () => this.recalculateItems( input ) );
-		this.recalculateItems( input );
+		input.watch(() => this.recalculateItems(input));
+		this.recalculateItems(input);
 	};
-	this.setNode  = function ( node ) {
-		InputData.prototype.setNode.call( this, node );
+	this.setNode = function (node) {
+		InputData.prototype.setNode.call(this, node);
 
-		this.nodes     = [ node ];
-		this.name      = node.dataset.fieldName;
-		this.rawName   = this.name;
+		this.nodes = [node];
+		this.name = node.dataset.fieldName;
+		this.rawName = this.name;
 		this.inputType = 'repeater';
 
 		this.manageItems = node.dataset?.manageItems || 'manually';
-		this.calcType    = node.dataset?.calcType || 'default';
-		this.itemsField  = node.dataset?.itemsField;
+		this.calcType = node.dataset?.calcType || 'default';
+		this.itemsField = node.dataset?.itemsField;
 
 		this.isManualCount = (
 			!this.itemsField || 'manually' === this.manageItems
@@ -109,10 +109,10 @@ function RepeaterData() {
 		this.buttonNode = node.querySelector(
 			'.jet-form-builder-repeater__new',
 		);
-		this.template   = node.querySelector(
+		this.template = node.querySelector(
 			'.jet-form-builder-repeater__initial',
 		);
-		this.container  = node.querySelector(
+		this.container = node.querySelector(
 			'.jet-form-builder-repeater__items',
 		);
 	};
@@ -122,7 +122,7 @@ function RepeaterData() {
 	};
 
 	this.populateInner = function () {
-		if ( !this.value.current?.length ) {
+		if (!this.value.current?.length) {
 			return false;
 		}
 
@@ -130,15 +130,15 @@ function RepeaterData() {
 		/**
 		 * @type {ObservableRow[]}
 		 */
-		const rows   = this.value.current;
+		const rows = this.value.current;
 
-		for ( const row of rows ) {
-			for ( const input of row.getInputs() ) {
+		for (const row of rows) {
+			for (const input of row.getInputs()) {
 				// eslint-disable-next-line max-depth
-				if ( !input.reporting?.restrictions?.length ) {
+				if (!input.reporting?.restrictions?.length) {
 					continue;
 				}
-				inputs.push( input );
+				inputs.push(input);
 			}
 		}
 
@@ -151,13 +151,13 @@ function RepeaterData() {
 		 */
 		const rows = this.value.current;
 
-		for ( const row of rows ) {
+		for (const row of rows) {
 			row.remove();
 		}
 	};
 
 	this.reQueryValue = function () {
-		if ( !this.value.current?.length ) {
+		if (!this.value.current?.length) {
 			return;
 		}
 
@@ -166,39 +166,39 @@ function RepeaterData() {
 		 */
 		const repeaterRows = this.value.current
 
-		repeaterRows.forEach( row => {
-			row.getInputs().forEach( input => {
+		repeaterRows.forEach(row => {
+			row.getInputs().forEach(input => {
 				input.setValue();
 				input.initNotifyValue();
-			} );
-		} )
+			});
+		})
 	}
 }
 
-RepeaterData.prototype = Object.create( InputData.prototype );
+RepeaterData.prototype = Object.create(InputData.prototype);
 
 RepeaterData.prototype.buttonNode = null;
-RepeaterData.prototype.template   = null;
-RepeaterData.prototype.container  = null;
+RepeaterData.prototype.template = null;
+RepeaterData.prototype.container = null;
 RepeaterData.prototype.itemsField = false;
 /**
  * @type {ReactiveVar}
  */
 RepeaterData.prototype.lastObserved = null;
 
-RepeaterData.prototype.addNew = function ( count = 1 ) {
+RepeaterData.prototype.addNew = function (count = 1) {
 	this.value.current = [
 		...this.value?.current ?? [],
 		...(
-			new Array( count )
-		).fill( null ).map(
-			() => new ObservableRow( this ),
+			new Array(count)
+		).fill(null).map(
+			() => new ObservableRow(this),
 		),
 	];
 };
 
-RepeaterData.prototype.findIndex = function ( observableRow ) {
-	if ( !Array.isArray( this.value.current ) ) {
+RepeaterData.prototype.findIndex = function (observableRow) {
+	if (!Array.isArray(this.value.current)) {
 		return -1;
 	}
 	return this.value.current.findIndex(
@@ -210,10 +210,10 @@ RepeaterData.prototype.findIndex = function ( observableRow ) {
  * @param  node {Element}
  * @return {boolean|ObservableRow}
  */
-RepeaterData.prototype.closestRow = function ( node ) {
-	const rowNode = node.closest( '.jet-form-builder-repeater__row' );
+RepeaterData.prototype.closestRow = function (node) {
+	const rowNode = node.closest('.jet-form-builder-repeater__row');
 
-	if ( !rowNode ) {
+	if (!rowNode) {
 		return false;
 	}
 
@@ -222,8 +222,8 @@ RepeaterData.prototype.closestRow = function ( node ) {
 	 */
 	const rows = this.value.current;
 
-	for ( const row of rows ) {
-		if ( row.rootNode === rowNode ) {
+	for (const row of rows) {
+		if (row.rootNode === rowNode) {
 			return row;
 		}
 	}
@@ -231,30 +231,30 @@ RepeaterData.prototype.closestRow = function ( node ) {
 	return false;
 };
 
-RepeaterData.prototype.remove = function ( observableRow ) {
+RepeaterData.prototype.remove = function (observableRow) {
 	this.value.current = this.value.current.filter(
 		current => current !== observableRow,
 	);
 };
 
-RepeaterData.prototype.recalculateItems = function ( input ) {
+RepeaterData.prototype.recalculateItems = function (input) {
 	const currentCount = this.value.current?.length ?? 0;
 
 	// if it < 0 ==> we should add {diff} new repeater items
 	// if it > 0 ==> we should remove last {diff} items
 	const diff = currentCount - input.calcValue;
 
-	if ( 0 === diff ) {
+	if (0 === diff) {
 		return;
 	}
 
-	if ( diff < 0 ) {
-		this.addNew( -1 * diff );
+	if (diff < 0) {
+		this.addNew(-1 * diff);
 
 		return;
 	}
 
-	this.value.current = this.value.current.slice( 0, -1 * diff );
+	this.value.current = this.value.current.slice(0, -1 * diff);
 };
 
 export default RepeaterData;

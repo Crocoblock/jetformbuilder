@@ -1,6 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/WordPress/gutenberg/trunk/schemas/json/block.json",
-	"apiVersion": 3,
+	"apiVersion": 3, 
 	"name": "jet-forms/text-field",
 	"category": "jet-form-builder-fields",
 	"keywords": [
@@ -150,5 +150,6 @@
 		"jet-forms/repeater-row--current-index"
 	],
 	"viewScript": "jet-fb-blocks-v2-text-field",
-	"viewStyle": "jet-fb-blocks-v2-text-field"
+	"viewStyle": "jet-fb-blocks-v2-text-field",
+	"editorStyle": "jet-fb-blocks-v2-text-field-editor-style"
 }

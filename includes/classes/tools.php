@@ -273,6 +273,108 @@ class Tools {
 	}
 
 	/**
+	 * Returns editable roles and ensures the core helper is loaded.
+	 *
+	 * @return array
+	 */
+	public static function get_editable_roles_safe(): array {
+		if ( ! function_exists( 'get_editable_roles' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/user.php';
+		}
+
+		if ( ! function_exists( 'get_editable_roles' ) ) {
+			return array();
+		}
+
+		return get_editable_roles();
+	}
+
+	/**
+	 * Returns all registered roles without filtering by the current user's capabilities.
+	 *
+	 * @return array
+	 */
+	public static function get_registered_roles_safe(): array {
+		$wp_roles = wp_roles();
+
+		if ( ! is_a( $wp_roles, \WP_Roles::class ) ) {
+			return array();
+		}
+
+		return $wp_roles->roles ?? array();
+	}
+
+	/**
+	 * Returns auto-detected low-privilege roles that can be used as
+	 * a starting point for self-service role transitions.
+	 *
+	 * @return string[]
+	 */
+	public static function get_default_self_promotable_roles(): array {
+		$editable_roles = self::get_registered_roles_safe();
+
+		if ( empty( $editable_roles ) ) {
+			return array();
+		}
+
+		$roles = array();
+
+		foreach ( array_keys( $editable_roles ) as $role ) {
+			if ( self::is_safe_self_promotable_role( $role ) ) {
+				$roles[] = $role;
+			}
+		}
+
+		return array_values( array_unique( $roles ) );
+	}
+
+	public static function is_safe_self_promotable_role( string $role ): bool {
+		if ( 'administrator' === $role ) {
+			return false;
+		}
+
+		$wp_roles = wp_roles();
+
+		if ( ! isset( $wp_roles->roles[ $role ] ) ) {
+			return false;
+		}
+
+		$caps = array_filter( $wp_roles->roles[ $role ]['capabilities'] ?? array() );
+
+		$dangerous_caps = array(
+			'activate_plugins',
+			'create_users',
+			'delete_users',
+			'edit_users',
+			'list_users',
+			'promote_users',
+			'remove_users',
+			'manage_options',
+			'edit_theme_options',
+			'switch_themes',
+			'install_plugins',
+			'update_plugins',
+			'delete_plugins',
+			'install_themes',
+			'update_themes',
+			'delete_themes',
+			'unfiltered_html',
+			'edit_others_posts',
+			'delete_others_posts',
+			'publish_posts',
+			'manage_categories',
+		);
+
+		foreach ( $dangerous_caps as $cap ) {
+			if ( ! empty( $caps[ $cap ] ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Prepare passed array for using in JS options
 	 *
 	 * @param array $array
@@ -707,13 +809,15 @@ class Tools {
 	}
 
 	public static function get_array_of_user_roles( $settings ) {
-		$user_roles = $settings ?? array();
-		if ( ! empty( $user_roles ) ) {
-			if ( is_string( $user_roles ) ) {
-				$user_roles = array( $user_roles );
-			}
+		if ( is_string( $settings ) ) {
+			return '' === $settings ? array() : array( $settings );
 		}
-		return $user_roles;
+
+		if ( ! is_array( $settings ) ) {
+			return array();
+		}
+
+		return $settings;
 	}
 
 	public static function get_main_user_role_by_priority( $roles ): string {

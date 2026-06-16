@@ -44,7 +44,13 @@ abstract class Base_Page implements
 	 * @throws Not_Found_Page_Exception
 	 */
 	public function render() {
-		Pages_Manager::instance()->get_current()->render_page();
+		try {
+			Pages_Manager::instance()->get_current()->render_page();
+		} catch ( Not_Found_Page_Exception $exception ) {
+			wp_die(
+				esc_html__( 'You do not have access to view this page.', 'jet-form-builder' )
+			);
+		}
 	}
 
 	/**

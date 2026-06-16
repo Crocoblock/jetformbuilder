@@ -642,11 +642,13 @@ class Module implements
 		}
 
 		foreach ( $journey_data as $step => $item ) {
+			$journey_query = urldecode( $item['query'] ?? '' );
+
 			$journey_results[] = array(
 				'record_id'     => $record_id,
 				'journey_step'  => $step,
 				'journey_url'   => sanitize_text_field( $item['url'] ),
-				'journey_query' => urldecode( $item['query'] ?? '' ),
+				'journey_query' => sanitize_textarea_field( $journey_query ),
 				'timestamp'     => $item['timestamp'],
 			);
 		}

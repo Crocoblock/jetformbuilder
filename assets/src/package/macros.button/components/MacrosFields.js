@@ -3,6 +3,16 @@ import MacrosFieldsTemplate from './MacrosFieldsTemplate';
 import MacroFieldItem from './MacroFieldItem';
 import { useFields } from 'jet-form-builder-blocks-to-actions';
 
+const OPTION_LABEL_BLOCKS = [
+	'jet-forms/checkbox-field',
+	'jet-forms/radio-field',
+	'jet-forms/select-field',
+];
+
+function supportsOptionLabel(block) {
+	return OPTION_LABEL_BLOCKS.includes(block?.name);
+}
+
 function getFieldNameFromAttrs( attrs = {} ) {
 	return (
 		attrs.name ||
@@ -27,6 +37,7 @@ function buildFieldsContextMap( blocks = [] ) {
 					repeater_name: repeaterParent
 						? getFieldNameFromAttrs( repeaterParent.attributes )
 						: '',
+					supports_option_label: supportsOptionLabel(block), 
 				};
 			}
 

@@ -20,6 +20,46 @@ addFilter(
 	attachConstNamespace,
 );
 
+function getOptionLabelFromNode(node) {
+	if (!node) {
+		return '';
+	}
+	if (node.tagName === 'SELECT') {
+		return Array.from(node.selectedOptions || [])
+			.map(option => String(
+				option.label || option.textContent || option.value || ''
+			).trim())
+			.filter(Boolean)
+			.join(', ');
+	}
+	if (
+		(node.type === 'checkbox' || node.type === 'radio') &&
+		!node.checked
+	) {
+		return '';
+	}
+	if (node.type === 'checkbox' || node.type === 'radio') {
+		const label = node.closest('label');
+		if (!label) {
+			return '';
+		}
+		const textNode = label.querySelector('span');
+		return String(
+			textNode?.textContent || label.textContent || node.value || ''
+		).trim();
+	}
+	return '';
+}
+
+function getRelatedInputOptionLabel(relatedInput) {
+	const labels = Array.from(relatedInput.nodes || [])
+		.map(getOptionLabelFromNode)
+		.filter(Boolean);
+	return labels.length
+		? labels.join(', ')
+		: relatedInput.value.current;
+}
+
 /**
  * @param root    {InputData|Observable}
  * @param options {{forceFunction: boolean}}
@@ -77,6 +117,9 @@ CalculatedFormula.prototype = {
 	 */
 	relatedCallback( relatedInput ) {
 		return relatedInput.value.current;
+	},
+	relatedLabelCallback(relatedInput) {
+		return getRelatedInputOptionLabel(relatedInput);
 	},
 	/**
 	 *
@@ -213,7 +256,6 @@ CalculatedFormula.prototype = {
 	 */
 	// eslint-disable-next-line max-lines-per-function
 	observeMacro( current ) {
-
 		if ( null === this.formula ) {
 			this.formula = current;
 		}
@@ -228,7 +270,15 @@ CalculatedFormula.prototype = {
 			return false;
 		}
 
-		const [ fieldName, ...params ] = parsedName;
+		let [ fieldName, ...params ] = parsedName;
+
+		if (name.includes('::')) {
+			const [possibleFieldName, ...possibleParams] = name.split('::');
+			if (this.root.getInput(possibleFieldName)) {
+				fieldName = possibleFieldName;
+				params = possibleParams;
+			}
+		}
 
 		/**
 		 * @see   https://github.com/Crocoblock/issues-tracker/issues/13730
@@ -318,6 +368,13 @@ CalculatedFormula.prototype = {
 		}
 
 		const [ attrName ] = params;
+
+		if ('label' === attrName) {
+			return () => applyFilters(
+				this.relatedLabelCallback(relatedInput),
+				filtersList,
+			);
+		}
 
 		if ( !relatedInput.attrs.hasOwnProperty( attrName ) ) {
 			return false;

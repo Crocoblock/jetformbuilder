@@ -234,6 +234,7 @@ class Jet_Engine implements
 		}
 
 		$this->option_query->remove_hooks();
+		$this->update_options_notice->remove_hooks();
 
 		/**
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/12555

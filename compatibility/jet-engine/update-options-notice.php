@@ -29,6 +29,13 @@ class Update_Options_Notice {
 		add_action( 'admin_notices', array( $this, 'render_affected_forms_notice' ) );
 	}
 
+	public function remove_hooks() {
+		remove_action( 'save_post_' . Post_Type_Module::SLUG, array( $this, 'invalidate_scan_cache' ) );
+		remove_action( 'admin_init', array( $this, 'maybe_scan_affected_forms' ) );
+		remove_action( 'admin_init', array( $this, 'maybe_dismiss_notice' ) );
+		remove_action( 'admin_notices', array( $this, 'render_affected_forms_notice' ) );
+	}
+
 	public function invalidate_scan_cache() {
 		delete_option( self::SCAN_VERSION_OPTION );
 	}
@@ -47,12 +54,42 @@ class Update_Options_Notice {
 		}
 
 		$version = $this->get_scan_version();
+		$notice  = get_option( self::NOTICE_OPTION, array() );
 
 		if ( get_option( self::SCAN_VERSION_OPTION, '' ) === $version ) {
 			return;
 		}
 
-		$forms = $this->scan_affected_forms();
+		$tracked_ids = array_values(
+			array_unique(
+				array_filter(
+					array_map( 'intval', $notice['tracked_ids'] ?? array() )
+				)
+			)
+		);
+
+		if ( array_key_exists( 'tracked_ids', $notice ) ) {
+			$forms = empty( $tracked_ids )
+				? array()
+				: $this->scan_specific_forms( $tracked_ids );
+
+			update_option( self::SCAN_VERSION_OPTION, $version, false );
+			update_option(
+				self::NOTICE_OPTION,
+				array(
+					'version'      => $version,
+					'notice_token' => wp_generate_uuid4(),
+					'tracked_ids'  => $tracked_ids,
+					'forms'        => $forms,
+				),
+				false
+			);
+
+			return;
+		}
+
+		$forms       = $this->scan_affected_forms();
+		$tracked_ids = array_values( array_unique( array_map( 'intval', wp_list_pluck( $forms, 'id' ) ) ) );
 
 		update_option( self::SCAN_VERSION_OPTION, $version, false );
 		update_option(
@@ -60,6 +97,7 @@ class Update_Options_Notice {
 			array(
 				'version'      => $version,
 				'notice_token' => wp_generate_uuid4(),
+				'tracked_ids'  => $tracked_ids,
 				'forms'        => $forms,
 			),
 			false
@@ -212,6 +250,37 @@ class Update_Options_Notice {
 			}
 
 			$offset += self::SCAN_BATCH_SIZE;
+		}
+
+		return $affected_forms;
+	}
+
+	private function scan_specific_forms( array $form_ids ): array {
+		$affected_forms = array();
+
+		foreach ( $form_ids as $form_id ) {
+			$form_id = (int) $form_id;
+
+			if ( $form_id <= 0 || Post_Type_Module::SLUG !== get_post_type( $form_id ) ) {
+				continue;
+			}
+
+			$issues = $this->get_form_issues( $form_id );
+
+			if ( empty( $issues ) ) {
+				continue;
+			}
+
+			$affected_forms[] = array(
+				'id'        => $form_id,
+				'title'     => get_the_title( $form_id ) ?: sprintf(
+					/* translators: %d: form ID */
+					__( 'Form #%d', 'jet-form-builder' ),
+					$form_id
+				),
+				'edit_link' => get_edit_post_link( $form_id, 'raw' ) ?: admin_url( 'post.php?post=' . absint( $form_id ) . '&action=edit' ),
+				'issues'    => array_values( array_unique( $issues ) ),
+			);
 		}
 
 		return $affected_forms;

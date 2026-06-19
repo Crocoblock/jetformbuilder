@@ -1,4 +1,6 @@
 import CalculatedFormula from '../calc.module/CalculatedFormula';
+import getFilters from '../calc.module/getFilters';
+import applyValueFilters from '../calc.module/applyFilters';
 
 const { applyFilters } = JetPlugins.hooks;
 
@@ -41,6 +43,85 @@ function CalculatedHtmlString(
 }
 
 CalculatedHtmlString.prototype = Object.create( CalculatedFormula.prototype );
+
+CalculatedHtmlString.prototype.observeMacro = function ( current ) {
+	if ( null === this.formula ) {
+		this.formula = current;
+	}
+
+	const [ name, ...filters ] = current.split( '|' );
+	const parsedName           = name.match( /[\w\-:]+/g );
+
+	if ( ! parsedName ) {
+		return false;
+	}
+
+	const [ fieldName, ...params ] = parsedName;
+	const existNode                = this.isFieldNodeExists( fieldName );
+
+	if ( undefined === existNode ) {
+		return false;
+	}
+
+	const relatedInput = fieldName !== 'this'
+		? this.root.getInput( fieldName )
+		: this.input;
+
+	if ( ! relatedInput && ! fieldName.includes( '::' ) ) {
+		return false;
+	}
+
+	const filtersList = getFilters( filters );
+
+	if ( fieldName.includes( '::' ) ) {
+		return CalculatedFormula.prototype.observeMacro.call( this, current );
+	}
+
+	if ( ! this.related.includes( relatedInput.name ) ) {
+		this.related.push( relatedInput.name );
+		this.watchers.push(
+			relatedInput.watch( () => this.setResult() ),
+		);
+	}
+
+	if ( ! params?.length ) {
+		return () => {
+			if ( 'repeater' === relatedInput.inputType && filtersList?.length ) {
+				// Preserve repeater macro side effects like inner input change binding.
+				const relatedValue = this.relatedCallback( relatedInput );
+				relatedInput.reQueryValue?.();
+
+				return applyValueFilters(
+					relatedValue,
+					filtersList,
+					{ rawRepeaterValue: relatedInput.value.current },
+				);
+			}
+
+			return applyValueFilters(
+				this.relatedCallback( relatedInput ),
+				filtersList,
+			);
+		};
+	}
+
+	const [ attrName ] = params;
+
+	if ( ! relatedInput.attrs.hasOwnProperty( attrName ) ) {
+		return false;
+	}
+
+	const htmlAttr = relatedInput.attrs[ attrName ];
+
+	if ( ! this.relatedAttrs.includes( relatedInput.name + attrName ) ) {
+		this.relatedAttrs.push( relatedInput.name + attrName );
+		this.watchers.push(
+			htmlAttr.value.watch( () => this.setResult() ),
+		);
+	}
+
+	return () => applyValueFilters( htmlAttr.value.current, filtersList );
+};
 
 CalculatedHtmlString.prototype.calculateString = function () {
 	if ( !this.parts.length ) {

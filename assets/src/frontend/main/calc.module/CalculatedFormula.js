@@ -25,18 +25,22 @@ function escapeStringLineBreaks( value ) {
 		return value;
 	}
 
-	let quote = '';
-	let escaped = false;
 	let result = '';
+	let escaped = false;
+	let state = 'code';
+	let templateExpressionDepth = 0;
 
 	for ( let index = 0; index < value.length; index++ ) {
 		const current = value[ index ];
+		const next    = value[ index + 1 ];
 
 		if ( '\r' === current || '\n' === current ) {
-			result += quote ? '\\n' : current;
+			result += [ 'single', 'double', 'template' ].includes( state )
+				? '\\n'
+				: current;
 			escaped = false;
 
-			if ( '\r' === current && '\n' === value[ index + 1 ] ) {
+			if ( '\r' === current && '\n' === next ) {
 				index++;
 			}
 
@@ -50,19 +54,77 @@ function escapeStringLineBreaks( value ) {
 			continue;
 		}
 
-		if ( quote ) {
+		if ( 'single' === state ) {
 			if ( '\\' === current ) {
 				escaped = true;
 			}
-			else if ( quote === current ) {
-				quote = '';
+			else if ( '\'' === current ) {
+				state = 'code';
 			}
 
 			continue;
 		}
 
-		if ( '"' === current || '\'' === current || '`' === current ) {
-			quote = current;
+		if ( 'double' === state ) {
+			if ( '\\' === current ) {
+				escaped = true;
+			}
+			else if ( '"' === current ) {
+				state = 'code';
+			}
+
+			continue;
+		}
+
+		if ( 'template' === state ) {
+			if ( '\\' === current ) {
+				escaped = true;
+				continue;
+			}
+
+			if ( '`' === current ) {
+				state = 'code';
+				continue;
+			}
+
+			if ( '$' === current && '{' === next ) {
+				result += next;
+				index++;
+				state = 'template-expression';
+				templateExpressionDepth = 1;
+			}
+
+			continue;
+		}
+
+		if ( '\'' === current ) {
+			state = 'single';
+			continue;
+		}
+
+		if ( '"' === current ) {
+			state = 'double';
+			continue;
+		}
+
+		if ( '`' === current ) {
+			state = 'template';
+			continue;
+		}
+
+		if ( 'template-expression' === state ) {
+			if ( '{' === current ) {
+				templateExpressionDepth++;
+				continue;
+			}
+
+			if ( '}' === current ) {
+				templateExpressionDepth--;
+
+				if ( 0 === templateExpressionDepth ) {
+					state = 'template';
+				}
+			}
 		}
 	}
 

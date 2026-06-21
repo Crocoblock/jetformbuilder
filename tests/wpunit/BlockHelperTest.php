@@ -26,6 +26,8 @@ class BlockHelperTest extends \Codeception\TestCase\WPTestCase
     public function tearDown(): void
     {
         // Your tear down methods here.
+	    unset( $_REQUEST[ Block_Helper::PREVIEW_NONCE_FIELD ] );
+	    wp_set_current_user( 0 );
 
         // Then...
         parent::tearDown();
@@ -120,6 +122,83 @@ class BlockHelperTest extends \Codeception\TestCase\WPTestCase
 		$this->assertSame( array(), Block_Helper::get_blocks_by_post( $form_id ) );
 	}
 
+	public function testGetBlocksByPostParsesDraftFormInAuthorizedPreview() {
+		$user_id = $this->factory()->user->create( array( 'role' => 'administrator' ) );
+		$user    = get_user_by( 'id', $user_id );
+		$user->add_cap( 'edit_jet_fb_form' );
+		wp_set_current_user( $user_id );
+
+		$form_id = wp_insert_post(
+			array(
+				'post_type'    => 'jet-form-builder',
+				'post_status'  => 'draft',
+				'post_title'   => 'Preview form',
+				'post_content' => '<!-- wp:jet-forms/text-field {"name":"preview_field"} /-->',
+			)
+		);
+
+		$_REQUEST[ Block_Helper::PREVIEW_NONCE_FIELD ] = wp_create_nonce( Block_Helper::PREVIEW_NONCE_ACTION );
+
+		$blocks = Block_Helper::get_blocks_by_post( $form_id, true, true );
+
+		$this->assertCount( 1, $blocks );
+		$this->assertEquals( 'preview_field', $blocks[0]['attrs']['name'] );
+	}
+
+	public function testGetBlocksByPostRejectsRevisionWithoutPreviewAuthorization() {
+		$form_id = wp_insert_post(
+			array(
+				'post_type'    => 'jet-form-builder',
+				'post_status'  => 'publish',
+				'post_title'   => 'Revision parent form',
+				'post_content' => '',
+			)
+		);
+		$revision_id = wp_insert_post(
+			array(
+				'post_type'    => 'revision',
+				'post_status'  => 'inherit',
+				'post_parent'  => $form_id,
+				'post_title'   => 'Revision form',
+				'post_content' => '<!-- wp:jet-forms/text-field {"name":"revision_field"} /-->',
+			)
+		);
+
+		$this->assertSame( array(), Block_Helper::get_blocks_by_post( $revision_id, true, true ) );
+	}
+
+	public function testGetBlocksByPostParsesRevisionInAuthorizedPreview() {
+		$user_id = $this->factory()->user->create( array( 'role' => 'administrator' ) );
+		$user    = get_user_by( 'id', $user_id );
+		$user->add_cap( 'edit_jet_fb_form' );
+		wp_set_current_user( $user_id );
+
+		$form_id = wp_insert_post(
+			array(
+				'post_type'    => 'jet-form-builder',
+				'post_status'  => 'publish',
+				'post_title'   => 'Revision parent form',
+				'post_content' => '',
+			)
+		);
+		$revision_id = wp_insert_post(
+			array(
+				'post_type'    => 'revision',
+				'post_status'  => 'inherit',
+				'post_parent'  => $form_id,
+				'post_title'   => 'Revision form',
+				'post_content' => '<!-- wp:jet-forms/text-field {"name":"revision_field"} /-->',
+			)
+		);
+
+		$_REQUEST[ Block_Helper::PREVIEW_NONCE_FIELD ] = wp_create_nonce( Block_Helper::PREVIEW_NONCE_ACTION );
+
+		$blocks = Block_Helper::get_blocks_by_post( $revision_id, true, true );
+
+		$this->assertCount( 1, $blocks );
+		$this->assertEquals( 'revision_field', $blocks[0]['attrs']['name'] );
+	}
+
 	public function testGetBlocksByPostKeepsReusableBlocksInPublishedForm() {
 		$reusable_id = wp_insert_post(
 			array(
@@ -177,6 +256,38 @@ class BlockHelperTest extends \Codeception\TestCase\WPTestCase
 		$handler->set_form_id( $form_id );
 
 		$this->assertSame( $form_id, $handler->get_form_id() );
+	}
+
+	public function testFormHandlerAcceptsRevisionFormIdInAuthorizedPreview() {
+		$user_id = $this->factory()->user->create( array( 'role' => 'administrator' ) );
+		$user    = get_user_by( 'id', $user_id );
+		$user->add_cap( 'edit_jet_fb_form' );
+		wp_set_current_user( $user_id );
+
+		$form_id = wp_insert_post(
+			array(
+				'post_type'    => 'jet-form-builder',
+				'post_status'  => 'publish',
+				'post_title'   => 'Revision parent form',
+				'post_content' => '',
+			)
+		);
+		$revision_id = wp_insert_post(
+			array(
+				'post_type'    => 'revision',
+				'post_status'  => 'inherit',
+				'post_parent'  => $form_id,
+				'post_title'   => 'Revision form',
+				'post_content' => '',
+			)
+		);
+
+		$_REQUEST[ Block_Helper::PREVIEW_NONCE_FIELD ] = wp_create_nonce( Block_Helper::PREVIEW_NONCE_ACTION );
+
+		$handler = new Form_Handler();
+		$handler->set_form_id( $revision_id );
+
+		$this->assertSame( $revision_id, $handler->get_form_id() );
 	}
 
 	public function testServerSideRuleRejectsUserMutationCallbacks() {

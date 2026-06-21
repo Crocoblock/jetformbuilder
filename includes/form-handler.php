@@ -151,7 +151,7 @@ class Form_Handler {
 	public function set_form_id( $form_id ) {
 		$form_id = absint( $form_id );
 
-		$this->form_id = Block_Helper::is_valid_form_post( $form_id ) ? $form_id : 0;
+		$this->form_id = Block_Helper::is_valid_form_post( $form_id, true ) ? $form_id : 0;
 
 		return $this;
 	}

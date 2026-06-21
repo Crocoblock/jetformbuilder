@@ -19,6 +19,9 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Block_Helper {
 
+	const PREVIEW_NONCE_FIELD  = 'jfb_preview_nonce';
+	const PREVIEW_NONCE_ACTION = 'jfb-preview-form';
+
 	/**
 	 * @since 3.1.1
 	 *
@@ -184,27 +187,76 @@ class Block_Helper {
 		}
 	}
 
-	public static function is_valid_form_post( $post_id ): bool {
+	public static function is_valid_form_post( $post_id, bool $allow_preview = false ): bool {
 		$post = get_post( $post_id );
 
 		if ( ! is_a( $post, \WP_Post::class ) ) {
 			return false;
 		}
 
-		return (
+		if (
 			Post_Type_Module::SLUG === $post->post_type
 			&& 'publish' === $post->post_status
-		);
+		) {
+			return true;
+		}
+
+		return $allow_preview && self::is_valid_preview_form_post( $post );
 	}
 
-	public static function get_blocks_by_post( $post_id, bool $require_form_post = true ): array {
+	public static function is_valid_preview_form_post( $post_id ): bool {
+		$post = get_post( $post_id );
+
+		if ( ! is_a( $post, \WP_Post::class ) ) {
+			return false;
+		}
+
+		$nonce = self::get_preview_nonce();
+
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, self::PREVIEW_NONCE_ACTION ) ) {
+			return false;
+		}
+
+		if ( Post_Type_Module::SLUG === $post->post_type ) {
+			return current_user_can( 'edit_jet_fb_form', $post->ID );
+		}
+
+		if ( 'revision' !== $post->post_type ) {
+			return false;
+		}
+
+		$parent_form_id = (int) $post->post_parent;
+		$parent_form    = $parent_form_id ? get_post( $parent_form_id ) : null;
+
+		if ( ! $parent_form || Post_Type_Module::SLUG !== $parent_form->post_type ) {
+			return false;
+		}
+
+		return current_user_can( 'edit_jet_fb_form', $parent_form_id );
+	}
+
+	public static function get_preview_nonce(): string {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( empty( $_REQUEST[ self::PREVIEW_NONCE_FIELD ] ) ) {
+			return '';
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return sanitize_text_field( wp_unslash( $_REQUEST[ self::PREVIEW_NONCE_FIELD ] ) );
+	}
+
+	public static function get_blocks_by_post(
+		$post_id,
+		bool $require_form_post = true,
+		bool $allow_preview = false
+	): array {
 		$post = get_post( $post_id );
 
 		if ( ! is_a( $post, \WP_Post::class ) ) {
 			return array();
 		}
 
-		if ( $require_form_post && ! self::is_valid_form_post( $post ) ) {
+		if ( $require_form_post && ! self::is_valid_form_post( $post, $allow_preview ) ) {
 			return array();
 		}
 

@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.2.2
+* FIX: SSR validation privilege escalation hardening
+
 ## 3.6.2.1
 * FIX: Prevent unauthorized JetEngine Update Options writes
 

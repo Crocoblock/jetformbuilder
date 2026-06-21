@@ -7,6 +7,8 @@ use JFB_Modules\Validation\Ssr;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Components\Repository\Repository_Pattern_Trait;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
+use JFB_Modules\Validation\Handlers\Validation_Handler;
+use Jet_Form_Builder\Request\Request_Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -56,6 +58,9 @@ class Server_Side_Rule extends Rule {
 		'uksort',
 		'array_walk',
 		'array_walk_recursive',
+		// User mutations
+		'wp_insert_user',
+		'wp_update_user',
 		// File inclusion
 		'include',
 		'include_once',
@@ -157,6 +162,13 @@ class Server_Side_Rule extends Rule {
 
 	public function validate_field( Field_Data_Parser $parser ) {
 		$function_name = $this->get_setting( 'value' );
+
+		if ( ! $this->validate_submission_signature( $parser ) ) {
+			$parser->collect_error( 'rule:ssr:invalid_signature', $this->get_setting( 'message' ) );
+
+			return;
+		}
+
 		$is_valid      = $this->validate( $parser, $function_name );
 
 		if ( $is_valid ) {
@@ -182,6 +194,21 @@ class Server_Side_Rule extends Rule {
 		}
 
 		return $callback->is_valid( $parser->get_value(), $parser->get_context() );
+	}
+
+	protected function validate_submission_signature( Field_Data_Parser $parser ): bool {
+		$rule_index = $this->get_setting( '_rule_index' );
+
+		if ( false === $rule_index ) {
+			return true;
+		}
+
+		return Validation_Handler::validate_main_signature(
+			Request_Tools::get_request(),
+			jet_fb_handler()->get_form_id(),
+			explode( '.', $parser->get_scoped_name() ),
+			absint( $rule_index )
+		);
 	}
 
 	protected function validate_custom( Field_Data_Parser $parser, string $function_name ): bool {

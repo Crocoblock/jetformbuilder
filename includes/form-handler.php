@@ -307,7 +307,9 @@ class Form_Handler {
 	}
 
 	/**
-	 * @throws Request_Exception|Action_Exception|Spam_Exception
+	 * @throws Request_Exception
+	 * @throws Action_Exception
+	 * @throws Spam_Exception
 	 */
 	public function send_form() {
 		if ( ! $this->form_id ) {

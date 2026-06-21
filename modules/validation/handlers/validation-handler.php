@@ -1,6 +1,7 @@
 <?php
 namespace JFB_Modules\Validation\Handlers;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use JFB_Modules\Validation\Rest_Api\Rest_Validation_Endpoint;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use Jet_Form_Builder\Request\Exceptions\Plain_Value_Exception;
@@ -8,58 +9,19 @@ use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 
 class Validation_Handler {
 
-	/**
-	 * Form post type constant for validation.
-	 *
-	 * @since 3.5.6.2
-	 */
-	const FORM_POST_TYPE = 'jet-form-builder';
+	const MAIN_SIGNATURES_KEY = '_jfb_validation_sigs';
 
 	/**
 	 * Validate that the given ID belongs to a published JetFormBuilder form.
-	 * Supports revision IDs by resolving them to their parent form.
 	 *
 	 * @since 3.5.6.2
 	 *
-	 * @param int $form_id The form ID to validate (can be a revision ID).
+	 * @param int $form_id The form ID to validate.
 	 *
 	 * @return bool True if valid, false otherwise.
 	 */
 	public static function validate_form_post_type( int $form_id ): bool {
-		if ( ! $form_id ) {
-			return false;
-		}
-
-		$post = get_post( $form_id );
-
-		if ( ! $post ) {
-			return false;
-		}
-
-		// Handle revisions: resolve to parent form and validate the parent
-		if ( 'revision' === $post->post_type ) {
-			$parent_id = wp_get_post_parent_id( $form_id );
-			if ( ! $parent_id ) {
-				return false;
-			}
-
-			$post = get_post( $parent_id );
-			if ( ! $post ) {
-				return false;
-			}
-		}
-
-		// Must be a JetFormBuilder form
-		if ( self::FORM_POST_TYPE !== $post->post_type ) {
-			return false;
-		}
-
-		// Only allow published forms
-		if ( 'publish' !== $post->post_status ) {
-			return false;
-		}
-
-		return true;
+		return Block_Helper::is_valid_form_post( $form_id );
 	}
 
 	/**
@@ -102,7 +64,7 @@ class Validation_Handler {
 	 *
 	 * @return string|array Normalized path without row indexes.
 	 */
-	protected static function normalize_field_path( $field_path ) {
+	public static function normalize_field_path( $field_path ) {
 		if ( ! is_array( $field_path ) ) {
 			return sanitize_text_field( (string) $field_path );
 		}
@@ -117,6 +79,36 @@ class Validation_Handler {
 		}
 
 		return $normalized;
+	}
+
+	public static function get_signature_key( $field_path, int $rule_index ): string {
+		$normalized  = self::normalize_field_path( $field_path );
+		$path_string = is_array( $normalized ) ? implode( '.', $normalized ) : (string) $normalized;
+
+		return md5( $path_string . '|' . $rule_index );
+	}
+
+	public static function validate_main_signature( array $body, int $form_id, $field_path, int $rule_index ): bool {
+		$signatures = $body[ self::MAIN_SIGNATURES_KEY ] ?? array();
+
+		if ( ! is_array( $signatures ) ) {
+			return false;
+		}
+
+		$key       = self::get_signature_key( $field_path, $rule_index );
+		$signature = sanitize_text_field( $signatures[ $key ] ?? '' );
+
+		if ( empty( $signature ) || empty( $form_id ) ) {
+			return false;
+		}
+
+		$expected = Rest_Validation_Endpoint::generate_signature(
+			$form_id,
+			self::normalize_field_path( $field_path ),
+			$rule_index
+		);
+
+		return hash_equals( $expected, $signature );
 	}
 
 	public static function validate( $body ) {

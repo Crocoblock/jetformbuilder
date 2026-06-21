@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks;
 
 use Jet_Form_Builder\Blocks\Types\Base;
 use Jet_Form_Builder\Form_Manager;
+use JFB_Modules\Post_Type\Module as Post_Type_Module;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -183,10 +184,27 @@ class Block_Helper {
 		}
 	}
 
-	public static function get_blocks_by_post( $post_id ): array {
+	public static function is_valid_form_post( $post_id ): bool {
 		$post = get_post( $post_id );
 
 		if ( ! is_a( $post, \WP_Post::class ) ) {
+			return false;
+		}
+
+		return (
+			Post_Type_Module::SLUG === $post->post_type
+			&& 'publish' === $post->post_status
+		);
+	}
+
+	public static function get_blocks_by_post( $post_id, bool $require_form_post = true ): array {
+		$post = get_post( $post_id );
+
+		if ( ! is_a( $post, \WP_Post::class ) ) {
+			return array();
+		}
+
+		if ( $require_form_post && ! self::is_valid_form_post( $post ) ) {
 			return array();
 		}
 
@@ -214,7 +232,7 @@ class Block_Helper {
 		}
 
 		$reusable_id          = $block['attrs']['ref'] ?? 0;
-		$block['innerBlocks'] = self::get_blocks_by_post( $reusable_id );
+		$block['innerBlocks'] = self::get_blocks_by_post( $reusable_id, false );
 	}
 
 	public static function delete_namespace( $block ): string {

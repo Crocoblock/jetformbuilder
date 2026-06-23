@@ -7,6 +7,7 @@ use JFB_Modules\Form_Record\Query_Views\Record_View_Count;
 use JFB_Modules\Form_Record\Admin\Table_Views\Records_Table_View;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use JFB_Components\Rest_Api;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -26,7 +27,8 @@ class Fetch_Records_Page_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 	}
 
 	public function check_permission(): bool {
-		return current_user_can( 'manage_options' );
+		$capability = Tab_Handler_Manager::get_form_records_access_capability();
+		return current_user_can( 'manage_options' ) || current_user_can($capability);
 	}
 
 	public function run_callback( \WP_REST_Request $request ) {

@@ -9,6 +9,7 @@ use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Rest_Api\Dynamic_Rest_Url_Trait;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
 use Jet_Form_Builder\Rest_Api\Traits;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -38,7 +39,8 @@ class Fetch_Records_Fields_Box_Endpoint extends Rest_Api_Endpoint_Base {
 	}
 
 	public function check_permission(): bool {
-		return current_user_can( 'manage_options' );
+		$capability = Tab_Handler_Manager::get_form_records_access_capability();
+		return current_user_can('manage_options') || current_user_can($capability);
 	}
 
 	public function run_callback( \WP_REST_Request $request ) {

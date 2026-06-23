@@ -94,7 +94,12 @@ const registerFormField = block => {
 		settings.__experimentalLabel = ( attributes, { context } ) => {
 			switch ( context ) {
 				case 'list-view':
-					return attributes.name || metadata.title;
+					const name = attributes.name?.trim?.() || '';
+					const label = attributes.label?.trim?.() || '';
+					if (name && label && name !== label) {
+						return `${name} (${label})`;
+					}
+					return name || label || metadata.title;
 				case 'accessibility':
 					return !!attributes.name?.length
 					       ? `${ metadata.title } (${ attributes.name })`

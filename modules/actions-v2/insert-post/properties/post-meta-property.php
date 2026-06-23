@@ -161,12 +161,7 @@ class Post_Meta_Property extends Base_Object_Property implements
 			$meta_keys_for_cleanup
 		);
 
-		$attachment_ids_to_delete = Media_Cleanup::diff_attachment_ids(
-			$old_attachment_ids,
-			$new_attachment_ids
-		);
-
-		Media_Cleanup::maybe_delete_attachments($attachment_ids_to_delete);
+		Media_Cleanup::maybe_delete_attachments($old_attachment_ids, $new_attachment_ids);
 	}
 
 	public function set_meta( array $meta ) {

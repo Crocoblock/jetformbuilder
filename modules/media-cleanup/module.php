@@ -36,11 +36,18 @@ class Module implements Base_Module_It {
 		return self::normalize_attachment_ids( $attachment_ids );
 	}
 
-	public static function maybe_delete_attachments( array $attachment_ids ): void {
-		if ( empty($attachment_ids) ) {
+	public static function maybe_delete_attachments(
+		array $old_attachment_ids,
+		array $new_attachment_ids = array()
+	): void {
+		$attachment_ids_to_delete = self::diff_attachment_ids(
+			$old_attachment_ids,
+			$new_attachment_ids
+		);
+		if (empty($attachment_ids_to_delete)) {
 			return;
 		}
-        self::delete_attachments($attachment_ids);
+		self::delete_attachments($attachment_ids_to_delete);
 	}
 
 	public static function diff_attachment_ids(array $old_attachment_ids, array $new_attachment_ids): array

@@ -109,7 +109,7 @@ class Live_Form {
 	public function setup_fields(): array {
 		$this->blocks = apply_filters(
 			'jet-form-builder/setup-blocks',
-			Block_Helper::get_blocks_by_post( $this->form_id )
+			Block_Helper::get_blocks_by_post( $this->form_id, true, true )
 		);
 
 		jet_form_builder()->regexp->set_field_names(

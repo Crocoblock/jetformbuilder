@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 3.6.1.1
+Stable tag: 3.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -123,11 +123,11 @@ Allows adding map coordinates, longitude and latitude, and physical address itse
 - **Spam filtering & protection.** Add a Google reCAPTCHA to your form easily.
 - **File uploads.** Decide which users you would authorize to attach files to your website forms: registered, not-registered, or all users.
 - **Form submit type.** Choose between the page reload and AJAX options.
-- **Drag-and-drop editor.** Grab the form block and place it where you want in a matter of seconds. 
+- **Drag-and-drop editor.** Grab the form block and place it where you want in a matter of seconds.
 - **Input mask.** Three mask types are available – numeric, alphabetical, and alphanumeric. Just copy and paste the needed one to make it work.
 - **Numbers range generator.** Dynamically generate a range of numbers to be used in Checkbox, Select & Radio Fields.
 - **Inline fields editing.** Edit the field labels and descriptions in-place.
-- **Form validation.** Check if the entered user data is correct and whether to let them proceed with the form submission or not. 
+- **Form validation.** Check if the entered user data is correct and whether to let them proceed with the form submission or not.
 - **Form patterns.** Save time while creating a form layout? It’s possible! JetFormBuilder grants access to Form Patterns, which you can use to build contact, login & register, application, profile, booking, and subscription forms.
 
 <a href="https://jetformbuilder.com/?utm_source=wp_org&utm_medium=referral&utm_campaign=jetformbuilder" target="_blank">Read more about all JetFormBuilder features here</a>
@@ -220,7 +220,7 @@ JetFormBuilder uses the WordPress native blocks editor, also known as Gutenberg,
 Yes. You can use the **Insert/Update Post** post-submit Action to add and edit posts of any type from the frontend. Besides that, you’re able to assign and modify any metadata of the given post.
 
 = Can I create a user registration form? =
-Absolutely. You can use the **Register User** post-submit Action to create a custom registration form. This post-submit action allows you to set user metadata, as well. 
+Absolutely. You can use the **Register User** post-submit Action to create a custom registration form. This post-submit action allows you to set user metadata, as well.
 
 = Can the form be integrated with Zapier, Integromat, or similar third-party services? =
 Sure. You can create a script that runs on a webhook in either Zapier or Integromat and then use the **Call Webhook** post-submit Action to launch it when the form is being submitted.
@@ -274,6 +274,33 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.6.3**
+- FIX: Restore repeater macro filter compatibility without breaking formatted output
+- FIX: Calculated Field now correctly processes empty Multi Select values
+- FIX: Require User Access selection in Media Field settings
+- ADD: Support option labels in Fields Preview macros
+- ADD: Auto-focus search in the “New Action” modal and fix Undo (Cmd/Ctrl+Z) behavior inside action popups
+- ADD: Delete removed Media Field attachments from the Media Library on form submission
+
+**3.6.2.2**
+- FIX: SSR validation privilege escalation hardening
+
+**3.6.2.1**
+- FIX: Prevent unauthorized JetEngine Update Options writes
+
+**3.6.2**
+- FIX: Resolved validation errors when using dynamic values for the Media Field “Maximum Files” setting.
+- FIX: Prevented duplicate _wpnonce field IDs when multiple forms with form safety enabled are rendered on the same page.
+- FIX: Corrected calculated field updates when changing selected options.
+- UPD: Improved Honeypot field markup to make the anti-spam protection less detectable and more accessibility-friendly.
+- FIX: Fixed WYSIWYG field link handling in popups and repeaters, including issues with adding and preserving links.
+- FIX: Fixed calculated fields not displaying a value until a multiple-select field option is selected.
+- FIX: Prevented duplicate WYSIWYG editor IDs when multiple WYSIWYG fields are rendered.
+- FIX: Prevented false Undefined view errors after email verification.
+- FIX: Restored StyleManager opt-out handling for form blocks.
+- FIX: Skipped Phone Field validation when changing the selected country.
+- FIX: Prevented a fatal error in the Update User action when the User Role setting is empty.
 
 **3.6.1.1**
 - FIX: Vulnerability allowing Privilege Escalation
@@ -1233,6 +1260,6 @@ through the Media Field
 
 **1.0.1**
  - FiX: render wysiwyg on front-end
- 
+
 **1.0.0**
  - Initial release

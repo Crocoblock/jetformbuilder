@@ -14,6 +14,7 @@ function observeNode( node, root ) {
 	const formula = new CalculatedHtmlString( root, {
 		withPrefix: false,
 		macroHost: node,
+		macroFormat: node.dataset.jfbMacroFormat || '',
 	} );
 	formula.observe( `%${ node.dataset.jfbMacro }%` );
 

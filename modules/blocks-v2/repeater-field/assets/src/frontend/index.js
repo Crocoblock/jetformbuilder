@@ -105,9 +105,9 @@ addAction(
 	},
 );
 
-addFilter(
+addFilter( 
 	'jet.fb.macro.field.value',
 	'jet-form-builder/repeater-field',
-	( current, $fieldNode, $macroHost ) =>
-		resolveRepeaterMacrosValue( current, $fieldNode, $macroHost ),
+	(current, $fieldNode, $macroHost, macroFormat ) =>
+		resolveRepeaterMacrosValue(current, $fieldNode, $macroHost, macroFormat ),
 );

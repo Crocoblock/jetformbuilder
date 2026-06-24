@@ -65,6 +65,10 @@ export default function MediaEdit(props) {
 	} = props;
 
 	const isUserAccessEmpty = !attributes.allowed_user_cap;
+	const attachmentIdFormats = ['id', 'ids', 'both'];
+
+	const canDeleteUploadedAttachment = attributes.insert_attachment &&
+		attachmentIdFormats.includes(attributes.value_format);
 
 	if (attributes.isPreview) {
 		return <div style={{
@@ -100,7 +104,7 @@ export default function MediaEdit(props) {
 							label={__('User access', 'jet-form-builder')}
 							labelPosition="top"
 							value={attributes.allowed_user_cap}
-							onChange={(newValue) => { 
+							onChange={(newValue) => {
 								setAttributes({
 									allowed_user_cap: newValue,
 								});
@@ -127,26 +131,56 @@ export default function MediaEdit(props) {
 							checked={attributes.insert_attachment}
 							help={attrHelp('insert_attachment')}
 							onChange={(newValue) => {
+								const insertAttachment = Boolean(newValue);
+
 								setAttributes({
-									insert_attachment: Boolean(newValue),
+									insert_attachment: insertAttachment,
+									delete_uploaded_attachment: insertAttachment
+										? attributes.delete_uploaded_attachment
+										: false,
 								});
 							}}
 						/>
-						{attributes.insert_attachment && <SelectControl
-							key="value_format"
-							label={__('Field value', 'jet-form-builder')}
-							labelPosition="top"
-							value={attributes.value_format}
-							onChange={(newValue) => {
-								props.setAttributes(
-									{ value_format: newValue });
-							}}
-							options={valueFormats}
-							help={__(
-								'If you\'re using this field for an ACF Gallery, always select **Array of attachment IDs**. For JetEngine, match the format used in the corresponding JetEngine meta field.',
-								'jet-form-builder'
+						{attributes.insert_attachment && <>
+							<SelectControl
+								key="value_format"
+								label={__('Field value', 'jet-form-builder')}
+								labelPosition="top"
+								value={attributes.value_format}
+								onChange={(newValue) => {
+									setAttributes({
+										value_format: newValue,
+										delete_uploaded_attachment: attachmentIdFormats.includes(newValue)
+											? attributes.delete_uploaded_attachment
+											: false,
+									});
+								}}
+								options={valueFormats}
+								help={__(
+									'If you\'re using this field for an ACF Gallery, always select **Array of attachment IDs**. For JetEngine, match the format used in the corresponding JetEngine meta field.',
+									'jet-form-builder'
+								)}
+							/>
+							{canDeleteUploadedAttachment && (
+								<ToggleControl
+									key="delete_uploaded_attachment"
+									label={__(
+										'Delete removed attachments',
+										'jet-form-builder'
+									)}
+									checked={attributes.delete_uploaded_attachment}
+									help={__(
+										'Permanently deletes old attachments from the Media Library after the form is submitted. Enable only if these files are not used anywhere else.',
+										'jet-form-builder'
+									)}
+									onChange={(newValue) => {
+										setAttributes({
+											delete_uploaded_attachment: Boolean(newValue),
+										});
+									}}
+								/>
 							)}
-						/>}
+						</>}
 					</>}
 					<AdvancedInspectorControl
 						value={attributes.max_files}

@@ -44,18 +44,17 @@ class Module implements Base_Module_It {
 			$old_attachment_ids,
 			$new_attachment_ids
 		);
-		if (empty($attachment_ids_to_delete)) {
+		if ( empty( $attachment_ids_to_delete ) ) {
 			return;
 		}
-		self::delete_attachments($attachment_ids_to_delete);
+		self::delete_attachments( $attachment_ids_to_delete );
 	}
 
-	public static function diff_attachment_ids(array $old_attachment_ids, array $new_attachment_ids): array
-	{
-		$old_attachment_ids = self::normalize_attachment_ids($old_attachment_ids);
-		$new_attachment_ids = self::normalize_attachment_ids($new_attachment_ids);
+	public static function diff_attachment_ids( array $old_attachment_ids, array $new_attachment_ids ): array {
+		$old_attachment_ids = self::normalize_attachment_ids( $old_attachment_ids );
+		$new_attachment_ids = self::normalize_attachment_ids( $new_attachment_ids );
 		return array_values(
-			array_diff($old_attachment_ids, $new_attachment_ids)
+			array_diff( $old_attachment_ids, $new_attachment_ids )
 		);
 	}
 
@@ -114,51 +113,49 @@ class Module implements Base_Module_It {
 	public function remove_hooks() {
 	}
 
-	public static function get_post_meta_keys_for_cleanup($modifier): array
-	{
+	public static function get_post_meta_keys_for_cleanup( $modifier ): array {
 		$form_id = jet_fb_action_handler()->get_form_id();
-		if (! $form_id || empty($modifier->fields_map)) {
+		if ( ! $form_id || empty( $modifier->fields_map ) ) {
 			return array();
 		}
 		$meta_keys = array();
-		foreach ($modifier->fields_map as $field_name => $meta_key) {
-			if (empty($field_name) || empty($meta_key)) {
+		foreach ( $modifier->fields_map as $field_name => $meta_key ) {
+			if ( empty( $field_name ) || empty( $meta_key ) ) {
 				continue;
 			}
 			$field = jet_form_builder()->form->get_field_by_name(
 				$form_id,
 				$field_name
 			);
-			if (! self::is_cleanup_enabled_media_field($field)) {
+			if ( ! self::is_cleanup_enabled_media_field( $field ) ) {
 				continue;
 			}
 			$meta_keys[] = $meta_key;
 		}
 		return array_values(
 			array_unique(
-				array_filter($meta_keys)
+				array_filter( $meta_keys )
 			)
 		);
 	}
 
-	private static function is_cleanup_enabled_media_field($field): bool
-	{
-		if (! is_array($field) || empty($field)) {
+	private static function is_cleanup_enabled_media_field( $field ): bool {
+		if ( ! is_array( $field ) || empty( $field ) ) {
 			return false;
 		}
-		if ('jet-forms/media-field' !== ($field['blockName'] ?? '')) {
+		if ( 'jet-forms/media-field' !== ( $field['blockName'] ?? '' ) ) {
 			return false;
 		}
 		$attrs = $field['attrs'] ?? array();
-		if (empty($attrs['delete_uploaded_attachment'])) {
+		if ( empty( $attrs['delete_uploaded_attachment'] ) ) {
 			return false;
 		}
-		if (empty($attrs['insert_attachment'])) {
+		if ( empty( $attrs['insert_attachment'] ) ) {
 			return false;
 		}
 		return in_array(
 			$attrs['value_format'] ?? 'url',
-			array('id', 'ids', 'both'),
+			array( 'id', 'ids', 'both' ),
 			true
 		);
 	}

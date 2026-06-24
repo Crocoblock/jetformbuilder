@@ -137,12 +137,11 @@ class Post_Meta_Property extends Base_Object_Property implements
 		// Push processed values into $_POST. JetEngine reads from here.
 		$_POST = array_merge( $_POST, $prepared_value ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		$meta_keys_for_cleanup = Media_Cleanup::get_post_meta_keys_for_cleanup($modifier);
+		$meta_keys_for_cleanup = Media_Cleanup::get_post_meta_keys_for_cleanup( $modifier );
 		$old_attachment_ids = Media_Cleanup::collect_post_meta_attachment_ids(
 			$id,
 			$meta_keys_for_cleanup
 		);
-
 
 		foreach ( $this->value as $key => $value ) {
 			if ( in_array( $key, $meta_keys_to_array, true ) ) {
@@ -161,7 +160,7 @@ class Post_Meta_Property extends Base_Object_Property implements
 			$meta_keys_for_cleanup
 		);
 
-		Media_Cleanup::maybe_delete_attachments($old_attachment_ids, $new_attachment_ids);
+		Media_Cleanup::maybe_delete_attachments( $old_attachment_ids, $new_attachment_ids );
 	}
 
 	public function set_meta( array $meta ) {

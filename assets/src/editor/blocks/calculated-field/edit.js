@@ -39,6 +39,8 @@ const help = {
 		'jet-form-builder' ),
 };
 
+const MACRO_FORMAT_OPTION_LABEL = 'option-label';
+
 // eslint-disable-next-line max-lines-per-function
 export default function EditCalculated( props ) {
 	const blockProps = useBlockProps();
@@ -53,7 +55,11 @@ export default function EditCalculated( props ) {
 
 	const textareaRef = useRef( null );
 
-	const insertMacros = ( macros ) => {
+	const insertMacros = ( macros, field, format ) => {
+
+		const preparedMacros = MACRO_FORMAT_OPTION_LABEL === format
+			? macros.replace(/%$/, '::label%')
+			: macros;
 
 		const currentValue = attributes.calc_formula || '';
 
@@ -62,18 +68,18 @@ export default function EditCalculated( props ) {
 		if ( textarea ) {
 			const start    = textarea.selectionStart;
 			const end      = textarea.selectionEnd;
-			const newValue = currentValue.slice( 0, start ) + macros + currentValue.slice( end );
+			const newValue = currentValue.slice(0, start) + preparedMacros + currentValue.slice( end );
 
 			setAttributes( { calc_formula: newValue } );
 
 			setTimeout( () => {
 				textarea.focus();
-				textarea.selectionStart = textarea.selectionEnd = start + macros.length;
+				textarea.selectionStart = textarea.selectionEnd = start + preparedMacros.length;
 			} );
 		}
 	};
 
-	if ( attributes.isPreview ) {
+	if ( attributes.isPreview ) {  
 		return <div style={ {
 			width: '100%',
 			display: 'flex',

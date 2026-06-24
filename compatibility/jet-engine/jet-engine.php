@@ -19,6 +19,7 @@ use JFB_Compatibility\Jet_Engine\Methods\Post_Modification\Post_Je_Relation_Prop
 use JFB_Compatibility\Jet_Engine\Option_Query\Inner_Module;
 use JFB_Compatibility\Jet_Engine\Preset_Sources\Preset_Source_Options_Page;
 use JFB_Compatibility\Jet_Engine\Preset_Sources\Preset_User;
+use JFB_Compatibility\Jet_Engine\Update_Options_Notice;
 use JFB_Components\Compatibility\Base_Compat_Dir_Trait;
 use JFB_Components\Compatibility\Base_Compat_Handle_Trait;
 use JFB_Components\Compatibility\Base_Compat_Url_Trait;
@@ -64,6 +65,11 @@ class Jet_Engine implements
 	 */
 	private $bricks;
 
+	/**
+	 * @var Update_Options_Notice
+	 */
+	private $update_options_notice;
+
 	public function rep_item_id() {
 		return 'jet-engine';
 	}
@@ -76,12 +82,14 @@ class Jet_Engine implements
 		$this->option_query = new Inner_Module();
 		$this->elementor    = new Elementor();
 		$this->bricks       = new Bricks();
+		$this->update_options_notice = new Update_Options_Notice();
 	}
 
 	public function on_uninstall() {
 		$this->option_query = null;
 		$this->elementor    = null;
 		$this->bricks       = null;
+		$this->update_options_notice = null;
 	}
 
 	public function init_hooks() {
@@ -157,6 +165,8 @@ class Jet_Engine implements
 			$this->bricks->init_hooks();
 		}
 
+		$this->update_options_notice->init_hooks();
+
 		/**
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/12555
 		 */
@@ -224,6 +234,7 @@ class Jet_Engine implements
 		}
 
 		$this->option_query->remove_hooks();
+		$this->update_options_notice->remove_hooks();
 
 		/**
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/12555

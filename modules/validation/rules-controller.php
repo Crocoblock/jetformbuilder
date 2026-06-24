@@ -39,12 +39,13 @@ class Rules_Controller implements Repository_Pattern_Interface {
 
 		$this->prepare_rules( $rules );
 
-		foreach ( $rules as $rule_attrs ) {
+		foreach ( $rules as $index => $rule_attrs ) {
 			try {
 				$rule = $this->get_item( $rule_attrs['type'] ?? '' );
 			} catch ( Repository_Exception $exception ) {
 				continue;
 			}
+			$rule_attrs['_rule_index'] = $index;
 			$rule->set_settings( $rule_attrs );
 			$rule->validate_field( $parser );
 		}

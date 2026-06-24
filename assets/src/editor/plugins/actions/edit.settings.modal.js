@@ -7,6 +7,7 @@ import { useActionErrors } from 'jet-form-builder-actions';
 import { Icon } from '@wordpress/icons';
 import { styled } from '@linaria/react';
 import getActionDisplayName from '../../../../../modules/actions-v2/assets/src/utils/getActionDisplayName';
+import usePreventEditorUndoInModal from '../../../../../modules/actions-v2/assets/src/hooks/usePreventEditorUndoInModal';
 /* eslint-enable import/no-extraneous-dependencies */
 
 const {
@@ -34,6 +35,7 @@ const ModalHeader = styled.div`
 
 // eslint-disable-next-line max-lines-per-function
 function EditSettingsModal() {
+	usePreventEditorUndoInModal();
 	const ActionCallback                     = useActionCallback();
 	const updateAction                       = useUpdateCurrentActionMeta();
 	const { setTypeSettings, clearCurrent }  = useUpdateCurrentAction();

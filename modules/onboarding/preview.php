@@ -2,19 +2,20 @@
 
 namespace JFB_Modules\Onboarding;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Module;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Components\Wp_Nonce\Wp_Nonce;
 
 class Preview {
 
-	const NONCE_FIELD = 'jfb_preview_nonce';
+	const NONCE_FIELD = Block_Helper::PREVIEW_NONCE_FIELD;
 
 	private $nonce;
 
 	public function __construct() {
 		$this->nonce = new Wp_Nonce(
-			'jfb-preview-form',
+			Block_Helper::PREVIEW_NONCE_ACTION,
 			array(
 				'name' => self::NONCE_FIELD,
 			)

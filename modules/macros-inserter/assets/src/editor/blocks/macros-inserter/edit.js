@@ -1,7 +1,9 @@
 import { Fragment, useEffect, useRef } from '@wordpress/element';
 import { useBlockProps, BlockControls } from '@wordpress/block-editor';
 
-function toHtmlMacro( name, field ) {
+const MACRO_FORMAT_OPTION_LABEL = 'option-label';
+
+function toHtmlMacro( name, field, format ) {
 	const macro = String( name ).replace( /^%|%$/g, '' ).trim();
 
 	let repeaterNote = '';
@@ -9,9 +11,13 @@ function toHtmlMacro( name, field ) {
 	if ( field?.is_repeater_child ) { 
 		repeaterNote =
 			'this field can be used only inside repeater - ' + field.repeater_name;
-	}
+	} 
 
-	return `<span data-jfb-macro="${ macro }">${ repeaterNote }</span>`;
+	const formatAttr = MACRO_FORMAT_OPTION_LABEL === format
+		? ` data-jfb-macro-format="${MACRO_FORMAT_OPTION_LABEL}"`
+		: '';
+
+	return `<span data-jfb-macro="${macro}"${formatAttr}>${repeaterNote}</span>`;
 }
 
 function insertAtCursor( cm, text ) {
@@ -37,7 +43,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		}
 		if ( ! window?.wp?.codeEditor?.initialize ) {
 			return;
-		}
+		} 
 
 		const instance = wp.codeEditor.initialize( textareaRef.current, {
 			codemirror: {
@@ -81,12 +87,12 @@ export default function Edit( { attributes, setAttributes } ) {
 				<BlockControls group="other">
 					<MacrosFields
 						withCurrent
-						onClick={ ( macroName, field ) => {
+						onClick={(macroName, field, format) => {
 							insertAtCursor(
 								cmRef.current,
-								toHtmlMacro( macroName, field )
+								toHtmlMacro(macroName, field, format)
 							);
-						} }
+						}}
 					/>
 				</BlockControls>
 			) : null }

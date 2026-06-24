@@ -65,6 +65,7 @@ class Modules_Controller implements Module_Controller_It {
 			new User_Journey\Module(),
 			new Multi_Gateway\Module(),
 			new Macros_Inserter\Module(),
+			new Media_Cleanup\Module(),
 		);
 	}
 

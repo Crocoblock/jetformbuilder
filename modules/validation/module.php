@@ -19,6 +19,7 @@ use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
 use JFB_Modules\Validation\Class_Validation_Handlers;
+use JFB_Modules\Validation\Handlers\Validation_Handler;
 use JFB_Modules\Validation\Rest_Api\Rest_Validation_Endpoint;
 
 // If this file is called directly, abort.
@@ -262,6 +263,13 @@ final class Module implements
 						(int) $form_id,
 						$signature_path,
 						(int) $index
+					);
+
+					printf(
+						'<input type="hidden" name="%1$s[%2$s]" value="%3$s" />',
+						esc_attr( Validation_Handler::MAIN_SIGNATURES_KEY ),
+						esc_attr( Validation_Handler::get_signature_key( $signature_path, (int) $index ) ),
+						esc_attr( $rule['_sig'] )
 					);
 				}
 			}

@@ -37,6 +37,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"delete_uploaded_attachment": {
+			"type": "boolean",
+			"default": false
+		},
 		"max_files": {
 			"type": [
 				"number",

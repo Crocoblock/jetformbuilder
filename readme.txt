@@ -282,6 +282,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 - ADD: Support option labels in Fields Preview macros
 - ADD: Auto-focus search in the “New Action” modal and fix Undo (Cmd/Ctrl+Z) behavior inside action popups
 - ADD: Delete removed Media Field attachments from the Media Library on form submission
+- FIX: Prevent broken widget rendering for non-form form IDs
+- FIX: Normalize media field files after repeater re-observe
+- FIX: Duplicate HTML macro processing
+- FIX: Escape line breaks only inside calculated string values
+- FIX: Recalculate multistep page break state after binding page
 
 **3.6.2.2**
 - FIX: SSR validation privilege escalation hardening

@@ -20,6 +20,117 @@ addFilter(
 	attachConstNamespace,
 );
 
+function escapeStringLineBreaks( value ) {
+	if ( 'string' !== typeof value ) {
+		return value;
+	}
+
+	let result = '';
+	let escaped = false;
+	let state = 'code';
+	let templateExpressionDepth = 0;
+
+	for ( let index = 0; index < value.length; index++ ) {
+		const current = value[ index ];
+		const next    = value[ index + 1 ];
+
+		if ( '\r' === current || '\n' === current ) {
+			result += [ 'single', 'double', 'template' ].includes( state )
+				? '\\n'
+				: current;
+			escaped = false;
+
+			if ( '\r' === current && '\n' === next ) {
+				index++;
+			}
+
+			continue;
+		}
+
+		result += current;
+
+		if ( escaped ) {
+			escaped = false;
+			continue;
+		}
+
+		if ( 'single' === state ) {
+			if ( '\\' === current ) {
+				escaped = true;
+			}
+			else if ( '\'' === current ) {
+				state = 'code';
+			}
+
+			continue;
+		}
+
+		if ( 'double' === state ) {
+			if ( '\\' === current ) {
+				escaped = true;
+			}
+			else if ( '"' === current ) {
+				state = 'code';
+			}
+
+			continue;
+		}
+
+		if ( 'template' === state ) {
+			if ( '\\' === current ) {
+				escaped = true;
+				continue;
+			}
+
+			if ( '`' === current ) {
+				state = 'code';
+				continue;
+			}
+
+			if ( '$' === current && '{' === next ) {
+				result += next;
+				index++;
+				state = 'template-expression';
+				templateExpressionDepth = 1;
+			}
+
+			continue;
+		}
+
+		if ( '\'' === current ) {
+			state = 'single';
+			continue;
+		}
+
+		if ( '"' === current ) {
+			state = 'double';
+			continue;
+		}
+
+		if ( '`' === current ) {
+			state = 'template';
+			continue;
+		}
+
+		if ( 'template-expression' === state ) {
+			if ( '{' === current ) {
+				templateExpressionDepth++;
+				continue;
+			}
+
+			if ( '}' === current ) {
+				templateExpressionDepth--;
+
+				if ( 0 === templateExpressionDepth ) {
+					state = 'template';
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
 function getOptionLabelFromNode(node) {
 	if (!node) {
 		return '';
@@ -442,11 +553,7 @@ CalculatedFormula.prototype = {
 			return this.formula;
 		}
 
-		let formula = this.calculateString();
-
-		if ('string' === typeof formula) {
-			formula = formula.replace(/\r\n|\r|\n/g, '\\n');
-		}
+		const formula = escapeStringLineBreaks( this.calculateString() );
 
 		try {
 			return (

@@ -32,37 +32,39 @@ const { applyFilters } = JetPlugins.hooks;
  */
 let filters = [];
 
+const coreFilterItems = [
+	SetYearFilter,
+	SetMonthFilter,
+	SetDayFilter,
+	SetHourFilter,
+	SetMinFilter,
+	SubtractYearFilter,
+	SubtractMonthFilter,
+	SubtractDayFilter,
+	SubtractHourFilter,
+	SubtractMinFilter,
+	AddYearFilter,
+	AddMonthFilter,
+	AddDayFilter,
+	AddHourFilter,
+	AddMinFilter,
+	LengthFilter,
+	FallBackFilter,
+	ToDateFilter,
+	ToTimeFilter,
+	ToDateTimeFilter,
+	TimestampFilter,
+	ToDayInMsFilter,
+	ToMonthInMsFilter,
+	ToYearInMsFilter,
+	ToHourInMsFilter,
+	ToMinuteInMsFilter,
+	ToWeekInMsFilter,
+];
+
 const getFilterItems = () => applyFilters(
 	'jet.fb.filters',
-	[
-		SetYearFilter,
-		SetMonthFilter,
-		SetDayFilter,
-		SetHourFilter,
-		SetMinFilter,
-		SubtractYearFilter,
-		SubtractMonthFilter,
-		SubtractDayFilter,
-		SubtractHourFilter,
-		SubtractMinFilter,
-		AddYearFilter,
-		AddMonthFilter,
-		AddDayFilter,
-		AddHourFilter,
-		AddMinFilter,
-		LengthFilter,
-		FallBackFilter,
-		ToDateFilter,
-		ToTimeFilter,
-		ToDateTimeFilter,
-		TimestampFilter,
-		ToDayInMsFilter,
-		ToMonthInMsFilter,
-		ToYearInMsFilter,
-		ToHourInMsFilter,
-		ToMinuteInMsFilter,
-		ToWeekInMsFilter,
-	],
+	[ ...coreFilterItems ],
 );
 let response         = [];
 
@@ -74,9 +76,11 @@ function pushFilter( name, props = '' ) {
 	let filter;
 
 	for ( let current of filters ) {
-		current = new current();
+		const FilterItem = current;
+		current          = new FilterItem();
 
 		if ( name === current.getSlug() ) {
+			current.isCoreFilter = coreFilterItems.includes( FilterItem );
 			filter = current;
 
 			break;

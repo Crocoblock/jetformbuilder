@@ -277,6 +277,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 **3.6.3**
 - FIX: Restore repeater macro filter compatibility without breaking formatted output
+- FIX: Calculated Field now correctly processes empty Multi Select values
+- FIX: Require User Access selection in Media Field settings
+- ADD: Support option labels in Fields Preview macros
+- ADD: Auto-focus search in the “New Action” modal and fix Undo (Cmd/Ctrl+Z) behavior inside action popups
+- ADD: Delete removed Media Field attachments from the Media Library on form submission
 
 **3.6.2.2**
 - FIX: SSR validation privilege escalation hardening

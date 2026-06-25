@@ -50,8 +50,20 @@ class Form_Hidden_Fields {
 		$fields .= Live_Form::force_render_field(
 			'hidden-field',
 			array(
-				'field_value' => Live_Form::instance()->post->ID ?? - 1,
+				'field_value' => Live_Form::instance()->post->ID ?? 0,
 				'name'        => jet_fb_handler()->post_id_key,
+			)
+		);
+
+		$fields .= Live_Form::force_render_field(
+			'hidden-field',
+			array(
+				'field_value' => jet_fb_handler()->get_post_context_signature(
+					Live_Form::instance()->post->ID ?? 0,
+					jet_fb_live()->form_id,
+					Http_Tools::get_form_refer_url()
+				),
+				'name'        => jet_fb_handler()->post_id_sig_key,
 			)
 		);
 

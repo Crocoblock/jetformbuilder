@@ -6,6 +6,7 @@ namespace JFB_Modules\Form_Record\Rest_Endpoints;
 use JFB_Modules\Form_Record\Query_Views\Record_View;
 use JFB_Modules\Form_Record\Query_Views\Record_View_Count;
 use JFB_Modules\Form_Record\Admin\Table_Views\Records_Table_View;
+use JFB_Modules\Form_Record\Rest_Endpoints\Traits\Records_Access_Trait;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
@@ -20,13 +21,10 @@ if ( ! defined( 'WPINC' ) ) {
 abstract class Mark_View_Record_Base_Endpoint extends Rest_Api_Endpoint_Base {
 
 	use Traits\Paginated_Args;
+	use Records_Access_Trait;
 
 	public static function get_methods() {
 		return \WP_REST_Server::CREATABLE;
-	}
-
-	public function check_permission(): bool {
-		return current_user_can( 'manage_options' );
 	}
 
 	abstract protected function is_viewed(): bool;

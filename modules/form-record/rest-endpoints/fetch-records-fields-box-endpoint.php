@@ -4,6 +4,7 @@
 namespace JFB_Modules\Form_Record\Rest_Endpoints;
 
 use JFB_Modules\Form_Record\Admin\Meta_Boxes\Form_Record_Fields_Box;
+use JFB_Modules\Form_Record\Rest_Endpoints\Traits\Records_Access_Trait;
 use Jet_Form_Builder\Admin\Exceptions\Empty_Box_Exception;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
 use Jet_Form_Builder\Rest_Api\Dynamic_Rest_Url_Trait;
@@ -19,6 +20,7 @@ class Fetch_Records_Fields_Box_Endpoint extends Rest_Api_Endpoint_Base {
 
 	use Traits\Paginated_Args;
 	use Dynamic_Rest_Url_Trait;
+	use Records_Access_Trait;
 
 	public static function get_rest_base() {
 		return 'records/fields-box/(?P<id>[\d]+)';
@@ -35,10 +37,6 @@ class Fetch_Records_Fields_Box_Endpoint extends Rest_Api_Endpoint_Base {
 
 	public static function get_methods() {
 		return \WP_REST_Server::READABLE;
-	}
-
-	public function check_permission(): bool {
-		return current_user_can( 'manage_options' );
 	}
 
 	public function run_callback( \WP_REST_Request $request ) {

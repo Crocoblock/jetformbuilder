@@ -2,6 +2,7 @@
 
 namespace Jet_Form_Builder\Blocks\Types;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Blocks\Render\Form_Builder;
 use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
@@ -121,7 +122,12 @@ class Form extends Base {
 			return $this->get_placeholder();
 		}
 
-		if ( Post_Type_Module::SLUG !== $form->post_type ) {
+		$is_preview_revision = (
+			'revision' === $form->post_type &&
+			Block_Helper::is_valid_preview_form_post( $form )
+		);
+
+		if ( Post_Type_Module::SLUG !== $form->post_type && ! $is_preview_revision ) {
 			return $this->get_placeholder();
 		}
 

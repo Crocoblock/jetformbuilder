@@ -97,6 +97,10 @@ class Csrf_Tools {
 		}
 	}
 
+	public static function consume( string $token, string $client_id ): bool {
+		return (bool) static::delete( $token, $client_id );
+	}
+
 	public static function generate( int $bytes = 16 ): string {
 		try {
 			return \bin2hex( \random_bytes( $bytes ) );

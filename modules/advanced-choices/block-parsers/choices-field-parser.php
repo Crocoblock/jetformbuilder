@@ -15,4 +15,8 @@ class Choices_Field_Parser extends Field_Data_Parser {
 	public function type() {
 		return 'choices-field';
 	}
+
+	protected function allows_array_value(): bool {
+		return (bool) $this->get_setting( 'allow_multiple' );
+	}
 }

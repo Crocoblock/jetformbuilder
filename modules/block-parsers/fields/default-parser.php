@@ -16,4 +16,15 @@ class Default_Parser extends Field_Data_Parser {
 		return 'default';
 	}
 
+	protected function allows_array_value(): bool {
+		switch ( $this->get_type() ) {
+			case 'checkbox-field':
+				return true;
+			case 'select-field':
+				return (bool) $this->get_setting( 'multiple' );
+			default:
+				return false;
+		}
+	}
+
 }

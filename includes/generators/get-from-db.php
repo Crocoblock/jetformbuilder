@@ -74,8 +74,8 @@ class Get_From_DB extends Base_V2 {
 		return array(
 			array(
 				'single'      => true,
-				'description' => __( 'The Trigger Field value is used as the Meta Key and overrides the static setting above. If the Trigger Field is empty, the static Meta Key is used.', 'jet-form-builder' ),
-				'example'     => __( 'Choose the field whose value will be used as the dynamic Meta Key.', 'jet-form-builder' ),
+				'description' => __( 'The Trigger Field value can switch the Meta Key when it matches a saved Trigger Field choice or an allowed server-side key. Otherwise the static Meta Key is used.', 'jet-form-builder' ),
+				'example'     => __( 'Choose the field whose saved option values should be allowed as dynamic Meta Keys.', 'jet-form-builder' ),
 			),
 		);
 	}
@@ -100,7 +100,8 @@ class Get_From_DB extends Base_V2 {
 
 	/**
 	 * Generate options with context from dependent fields.
-	 * Uses the watched field value as meta key.
+	 * Context may override the meta key only when the candidate value is
+	 * explicitly allowed by saved field choices or server-side filters.
 	 *
 	 * @param array $settings Parsed settings.
 	 * @param array $context  ['field_name' => 'value'] from listened fields.
@@ -112,14 +113,70 @@ class Get_From_DB extends Base_V2 {
 			$context_value = reset( $context );
 			$meta_key      = is_scalar( $context_value ) ? trim( sanitize_text_field( (string) $context_value ) ) : '';
 
-			// Use watched field value as override only when it is non-empty.
-			// Otherwise keep static meta_key from generator settings.
 			if ( '' !== $meta_key ) {
-				$settings['meta_key'] = $meta_key;
+				$runtime          = $settings['_jfb_runtime'] ?? array();
+				$block_attrs      = $settings['_jfb_block_attrs'] ?? array();
+				$validate_dynamic = apply_filters(
+					'jet-form-builder/generators/get-from-db/validate_dynamic_meta_key',
+					true,
+					$meta_key,
+					$settings,
+					$context,
+					$runtime,
+					$block_attrs
+				);
+
+				if ( ! $validate_dynamic ) {
+					$settings['meta_key'] = $meta_key;
+
+					return $this->generate( $settings );
+				}
+
+				$allowed_meta_keys = $runtime['allowed_meta_keys'] ?? array();
+				$allowed_meta_keys = apply_filters(
+					'jet-form-builder/generators/get-from-db/allowed-meta-keys',
+					$allowed_meta_keys,
+					$meta_key,
+					$settings,
+					$context,
+					$runtime,
+					$block_attrs
+				);
+				$allowed_meta_keys = $this->sanitize_meta_keys_allowlist( $allowed_meta_keys );
+
+				if ( in_array( $meta_key, $allowed_meta_keys, true ) ) {
+					$settings['meta_key'] = $meta_key;
+				}
 			}
 		}
 
 		return $this->generate( $settings );
+	}
+
+	/**
+	 * Sanitize an allowlist of meta keys received from runtime or filters.
+	 *
+	 * @param mixed $allowed_meta_keys Meta keys allowlist.
+	 *
+	 * @return array
+	 */
+	private function sanitize_meta_keys_allowlist( $allowed_meta_keys ): array {
+		if ( ! is_array( $allowed_meta_keys ) ) {
+			return array();
+		}
+
+		$allowed_meta_keys = array_filter(
+			array_map(
+				static function ( $meta_key ) {
+					return is_scalar( $meta_key )
+						? trim( sanitize_text_field( (string) $meta_key ) )
+						: '';
+				},
+				$allowed_meta_keys
+			)
+		);
+
+		return array_values( array_unique( $allowed_meta_keys ) );
 	}
 
 	/**

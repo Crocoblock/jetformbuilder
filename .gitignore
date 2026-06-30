@@ -21,6 +21,11 @@ package-lock.json
 
 .codex/
 tests/
+!tests/
+tests/*
+!tests/wpunit/
+tests/wpunit/*
+!tests/wpunit/GeneratorContextSecurityTest.php
 test-results/
 AGENTS.md
 .env.e2e

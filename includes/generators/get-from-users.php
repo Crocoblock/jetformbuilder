@@ -127,8 +127,8 @@ class Get_From_Users extends Base_V2 {
 		return array(
 			array(
 				'single'      => true,
-				'description' => __( 'The Trigger Field value overrides the static "Filter by Roles" setting above. If the Trigger Field is empty, the static roles are used.', 'jet-form-builder' ),
-				'example'     => __( 'Select the field that returns one or more user role slugs, for example: administrator, editor, subscriber.', 'jet-form-builder' ),
+				'description' => __( 'The Trigger Field value can narrow the configured "Filter by Roles" setting when it matches a saved Trigger Field choice or an allowed server-side role. If validation fails, the static roles are used.', 'jet-form-builder' ),
+				'example'     => __( 'Select the field whose saved option values should be allowed as dynamic user roles, for example: editor or subscriber.', 'jet-form-builder' ),
 			),
 		);
 	}
@@ -153,7 +153,7 @@ class Get_From_Users extends Base_V2 {
 
 	/**
 	 * Generates options with context from a dependent field.
-	 * Overrides the roles setting with the value from the listened field.
+	 * Narrows the saved roles setting with the value from the listened field.
 	 *
 	 * @param array $settings Parsed settings from block attributes.
 	 * @param array $context  Associative array ['field_name' => 'value'] from dependent fields.
@@ -163,30 +163,123 @@ class Get_From_Users extends Base_V2 {
 	public function generate_with_context( array $settings, array $context = array() ): array {
 		if ( ! empty( $context ) ) {
 			$context_value = reset( $context );
+			$context_roles = array();
 
 			// Support both single role (scalar) and multi-role (checkbox/multi-select array).
 			if ( is_array( $context_value ) ) {
-				$roles = array_filter(
-					array_map(
-						static function ( $role ) {
-							return sanitize_key( (string) $role );
-						},
-						$context_value
-					)
-				);
-
-				if ( ! empty( $roles ) ) {
-					$settings['roles'] = array_values( $roles );
-				}
+				$context_roles = $this->sanitize_roles_list( $context_value );
 			} else {
 				$role = sanitize_key( (string) $context_value );
 				if ( $role ) {
-					$settings['roles'] = array( $role );
+					$context_roles = array( $role );
+				}
+			}
+
+			if ( ! empty( $context_roles ) ) {
+				$runtime          = $settings['_jfb_runtime'] ?? array();
+				$block_attrs      = $settings['_jfb_block_attrs'] ?? array();
+				$validate_dynamic = apply_filters(
+					'jet-form-builder/generators/get-from-users/validate_dynamic_roles',
+					true,
+					$context_roles,
+					$settings,
+					$context,
+					$runtime,
+					$block_attrs
+				);
+
+				if ( ! $validate_dynamic ) {
+					$settings['roles'] = array_values( $context_roles );
+
+					return $this->generate( $settings );
+				}
+
+				$registered_roles = $this->get_registered_roles();
+				$allowed_roles    = $runtime['allowed_roles'] ?? array();
+				$allowed_roles    = apply_filters(
+					'jet-form-builder/generators/get-from-users/allowed-roles',
+					$allowed_roles,
+					$context_roles,
+					$settings,
+					$context,
+					$runtime,
+					$block_attrs
+				);
+				$allowed_roles    = $this->sanitize_roles_list( $allowed_roles );
+				$context_roles    = array_intersect( $context_roles, $registered_roles );
+
+				if ( ! empty( $allowed_roles ) ) {
+					$context_roles = array_intersect( $context_roles, $allowed_roles );
+				} else {
+					$context_roles = array();
+				}
+
+				$saved_roles = $this->normalize_saved_roles( $settings['roles'] ?? array() );
+				$roles       = empty( $saved_roles ) ? $context_roles : array_intersect( $context_roles, $saved_roles );
+
+				if ( ! empty( $roles ) ) {
+					$settings['roles'] = array_values( $roles );
 				}
 			}
 		}
 
 		return $this->generate( $settings );
+	}
+
+	/**
+	 * Normalize configured roles into a sanitized list.
+	 *
+	 * @param mixed $saved_roles Configured roles.
+	 *
+	 * @return array
+	 */
+	private function normalize_saved_roles( $saved_roles ): array {
+		if ( is_array( $saved_roles ) ) {
+			return $this->sanitize_roles_list( $saved_roles );
+		}
+
+		return $this->sanitize_roles_list(
+			array_map( 'trim', explode( ',', (string) $saved_roles ) )
+		);
+	}
+
+	/**
+	 * Sanitize a list of role slugs.
+	 *
+	 * @param mixed $roles List of roles.
+	 *
+	 * @return array
+	 */
+	private function sanitize_roles_list( $roles ): array {
+		if ( ! is_array( $roles ) ) {
+			return array();
+		}
+
+		$roles = array_filter(
+			array_map(
+				static function ( $role ) {
+					return sanitize_key( (string) $role );
+				},
+				$roles
+			)
+		);
+
+		return array_values( array_unique( $roles ) );
+	}
+
+	/**
+	 * Return the registered WordPress role slugs.
+	 *
+	 * @return array
+	 */
+	private function get_registered_roles(): array {
+		$roles = wp_roles();
+
+		if ( ! $roles || empty( $roles->roles ) || ! is_array( $roles->roles ) ) {
+			return array();
+		}
+
+		return $this->sanitize_roles_list( array_keys( $roles->roles ) );
 	}
 
 	/**

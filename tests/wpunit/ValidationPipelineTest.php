@@ -9,6 +9,7 @@ use JFB_Modules\Block_Parsers\Fields\Media_Field_Parser;
 use JFB_Modules\Block_Parsers\Fields\Repeater_Field_Parser;
 use JFB_Modules\Block_Parsers\Fields\Text_Field_Parser;
 use JFB_Modules\Validation\Module;
+use JFB_Modules\Validation\Ssr\Is_Field_Value_Unique;
 
 class ValidationPipelineTest extends \Codeception\TestCase\WPTestCase {
 
@@ -162,7 +163,134 @@ class ValidationPipelineTest extends \Codeception\TestCase\WPTestCase {
 		$this->assertSame( $repeater_value, $repeater->get_value() );
 	}
 
+	public function testSsrUniqueCallbackUsesScopedRepeaterFieldName(): void {
+		$form_id   = $this->factory()->post->create( array( 'post_type' => 'jet-form-builder' ) );
+		$record_id = $this->insert_success_record( $form_id );
+
+		$this->insert_record_field(
+			$record_id,
+			'repeater',
+			wp_json_encode(
+				array(
+					array(
+						'email' => 'duplicate@example.com',
+					),
+					array(
+						'email' => 'other@example.com',
+					),
+				)
+			),
+			'repeater-field',
+			wp_json_encode( array( 'is_encoded' => true ) )
+		);
+
+		$callback = new Is_Field_Value_Unique();
+		$context  = $this->make_context(
+			array(
+				jet_fb_handler()->form_key => $form_id,
+				'_jfb_validation_path'     => array( 'repeater', '0', 'email' ),
+			)
+		);
+
+		$this->assertFalse( $callback->is_valid( 'duplicate@example.com', $context ) );
+		$this->assertTrue( $callback->is_valid( 'unique@example.com', $context ) );
+	}
+
+	public function testSsrUniqueCallbackRejectsRepeaterDuplicatesAcrossRowIndexes(): void {
+		$form_id   = $this->factory()->post->create( array( 'post_type' => 'jet-form-builder' ) );
+		$record_id = $this->insert_success_record( $form_id );
+
+		$this->insert_record_field(
+			$record_id,
+			'repeater',
+			wp_json_encode(
+				array(
+					array(
+						'email' => 'row-zero@example.com',
+					),
+					array(
+						'email' => 'duplicate@example.com',
+					),
+				)
+			),
+			'repeater-field',
+			wp_json_encode( array( 'is_encoded' => true ) )
+		);
+
+		$callback = new Is_Field_Value_Unique();
+		$context  = $this->make_context(
+			array(
+				jet_fb_handler()->form_key => $form_id,
+				'_jfb_validation_path'     => array( 'repeater', '0', 'email' ),
+			)
+		);
+
+		$this->assertFalse( $callback->is_valid( 'duplicate@example.com', $context ) );
+		$this->assertTrue( $callback->is_valid( 'unique@example.com', $context ) );
+	}
+
+	public function testSsrUniqueCallbackKeepsTopLevelFieldLookup(): void {
+		$form_id   = $this->factory()->post->create( array( 'post_type' => 'jet-form-builder' ) );
+		$record_id = $this->insert_success_record( $form_id );
+
+		$this->insert_record_field( $record_id, 'email', 'duplicate@example.com' );
+
+		$callback = new Is_Field_Value_Unique();
+		$context  = $this->make_context(
+			array(
+				jet_fb_handler()->form_key => $form_id,
+				'_jfb_validation_path'     => 'email',
+			)
+		);
+
+		$this->assertFalse( $callback->is_valid( 'duplicate@example.com', $context ) );
+		$this->assertTrue( $callback->is_valid( 'unique@example.com', $context ) );
+	}
+
 	private function make_context( array $request ): Parser_Context {
 		return ( new Parser_Context() )->set_request( $request );
+	}
+
+	private function insert_success_record( int $form_id ): int {
+		global $wpdb;
+
+		$inserted = $wpdb->insert(
+			$wpdb->prefix . 'jet_fb_records',
+			array(
+				'form_id'           => $form_id,
+				'user_id'           => 0,
+				'from_content_id'   => 0,
+				'from_content_type' => '',
+				'status'            => 'success',
+				'submit_type'       => 'ajax',
+			)
+		);
+
+		$this->assertNotFalse( $inserted );
+
+		return (int) $wpdb->insert_id;
+	}
+
+	private function insert_record_field(
+		int $record_id,
+		string $field_name,
+		string $field_value,
+		string $field_type = 'text-field',
+		string $field_attrs = '{}'
+	): void {
+		global $wpdb;
+
+		$inserted = $wpdb->insert(
+			$wpdb->prefix . 'jet_fb_records_fields',
+			array(
+				'record_id'   => $record_id,
+				'field_name'  => $field_name,
+				'field_value' => $field_value,
+				'field_type'  => $field_type,
+				'field_attrs' => $field_attrs,
+			)
+		);
+
+		$this->assertNotFalse( $inserted );
 	}
 }

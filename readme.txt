@@ -275,6 +275,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+**3.6.3.1**
+- FIX: get_from_db, get_from_users options generators. Make sure the generator options is correctly santized to prevent context injecting.
+
 **3.6.3**
 - FIX: Restore repeater macro filter compatibility without breaking formatted output
 - FIX: Calculated Field now correctly processes empty Multi Select values

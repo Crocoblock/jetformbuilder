@@ -122,6 +122,7 @@ class Generator_Update_Endpoint extends Rest_Api_Endpoint_Base {
 		}
 
 		$context = $this->sanitize_context( $context );
+		$block_attrs['_jfb_runtime'] = $this->build_generator_runtime( $block_attrs, $form_post, $field_name );
 
 		// Scoped context storage for integrations (preferred over $_REQUEST).
 		$had_scoped_context = array_key_exists( 'jfb_generator_context', $GLOBALS );
@@ -265,5 +266,131 @@ class Generator_Update_Endpoint extends Rest_Api_Endpoint_Base {
 		}
 
 		return $sanitized;
+	}
+
+	/**
+	 * Build server-side runtime metadata for generator context validation.
+	 *
+	 * @param array    $block_attrs Target field block attributes.
+	 * @param \WP_Post $form_post   Form post containing the target field.
+	 * @param string   $field_name  Target field name.
+	 *
+	 * @return array
+	 */
+	private function build_generator_runtime( array $block_attrs, \WP_Post $form_post, string $field_name ): array {
+		$runtime = array(
+			'form_id'    => (int) $form_post->ID,
+			'field_name' => $field_name,
+		);
+
+		$generator_id   = $block_attrs['generator_function'] ?? '';
+		$saved_choices  = $this->get_saved_listened_field_choice_values( $block_attrs, $form_post );
+
+		if ( 'get_from_db' === $generator_id ) {
+			$runtime['allowed_meta_keys'] = $saved_choices;
+		}
+
+		if ( 'get_from_users' === $generator_id ) {
+			$runtime['allowed_roles'] = $saved_choices;
+		}
+
+		return $runtime;
+	}
+
+	/**
+	 * Extract saved choice values from all listened source fields.
+	 *
+	 * @param array    $block_attrs Target field block attributes.
+	 * @param \WP_Post $form_post   Form post containing the target field.
+	 *
+	 * @return array
+	 */
+	private function get_saved_listened_field_choice_values( array $block_attrs, \WP_Post $form_post ): array {
+		$choice_values = array();
+
+		foreach ( $this->get_listened_field_names( $block_attrs ) as $listen_field_name ) {
+			$listened_block = Plugin::instance()->form->get_field_by_name( $form_post->ID, $listen_field_name );
+
+			if ( empty( $listened_block ) ) {
+				continue;
+			}
+
+			$choice_values = array_merge(
+				$choice_values,
+				$this->get_saved_choice_values( $listened_block )
+			);
+		}
+
+		return array_values( array_unique( $choice_values ) );
+	}
+
+	/**
+	 * Normalize saved listened field names from block attributes.
+	 *
+	 * @param array $block_attrs Target field block attributes.
+	 *
+	 * @return array
+	 */
+	private function get_listened_field_names( array $block_attrs ): array {
+		$listened = $block_attrs['generator_listen_field'] ?? array();
+
+		if ( is_string( $listened ) ) {
+			$listened = '' === $listened ? array() : array( $listened );
+		}
+
+		if ( ! is_array( $listened ) ) {
+			return array();
+		}
+
+		return array_values(
+			array_filter(
+				array_map(
+					static function ( $field_name ) {
+						return sanitize_text_field( (string) $field_name );
+					},
+					$listened
+				)
+			)
+		);
+	}
+
+	/**
+	 * Extract saved option values from a source field block.
+	 *
+	 * Custom option fields are intentionally excluded because they accept
+	 * arbitrary user input and cannot provide a safe static allowlist.
+	 *
+	 * @param array $field_block Source field block.
+	 *
+	 * @return array
+	 */
+	private function get_saved_choice_values( array $field_block ): array {
+		$attrs = $field_block['attrs'] ?? array();
+
+		if ( empty( $attrs['field_options'] ) || ! is_array( $attrs['field_options'] ) ) {
+			return array();
+		}
+
+		if ( ! empty( $attrs['custom_option'] ) ) {
+			return array();
+		}
+
+		$values = array();
+
+		foreach ( $attrs['field_options'] as $option ) {
+			if ( ! is_array( $option ) || ! isset( $option['value'] ) || ! is_scalar( $option['value'] ) ) {
+				continue;
+			}
+
+			$value = trim( sanitize_text_field( (string) $option['value'] ) );
+
+			if ( '' === $value ) {
+				continue;
+			}
+
+			$values[] = $value;
+		}
+
+		return $values;
 	}
 }

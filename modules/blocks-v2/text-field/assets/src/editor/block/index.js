@@ -3,6 +3,7 @@ import metadata from '../../../../block.json';
 import { __ } from "@wordpress/i18n";
 import { createBlock } from "@wordpress/blocks";
 import '../../shared/eye.icon.scss';
+import variations from './variations';
 
 const { name, icon = '' } = metadata;
 
@@ -18,7 +19,8 @@ const settings = {
 	description: __(
 		`Add a single narrow text bar to the form and gather short text information like names, emails, titles, etc.`,
 		'jet-form-builder',
-	),
+	), 
+	variations,
 	edit: TextEdit,
 	jfbResolveBlock () {
 		const base = {

@@ -22,6 +22,10 @@ class Media_Field_Parser extends Field_Data_Parser {
 		return 'media-field';
 	}
 
+	protected function allows_array_value(): bool {
+		return true;
+	}
+
 	/**
 	 * @since 3.0.4 Added `jet-form-builder/media-field/before-upload` hook
 	 *

@@ -351,7 +351,7 @@ final class Module implements
 	public function validate_block( Field_Data_Parser $parser ) {
 		if (
 			! $this->is_advanced( $parser->get_settings() ) ||
-			! $parser->get_value() ||
+			Tools::is_empty( $parser->get_value() ) ||
 			$parser->is_inside_conditional()
 		) {
 			return;

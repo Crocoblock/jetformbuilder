@@ -31,3 +31,11 @@ AGENTS.md
 .env.e2e
 .env.e2e.example
 bootstrap-project.js
+
+# Local test environment overrides
+tests/_envs/.env.local
+
+# Codeception runtime artifacts
+tests/_output/*
+!tests/_output/.gitignore
+tests/_support/_generated/

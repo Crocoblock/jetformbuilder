@@ -72,6 +72,11 @@ function AjaxSubmit( form ) {
 
 		this.lastResponse = response;
 		const $form       = jQuery( rootNode );
+		const csrfToken   = response?._jfb_csrf_token;
+
+		if ( csrfToken ) {
+			this.refreshCsrfToken( csrfToken );
+		}
 
 		switch ( response.status ) {
 			case 'success':
@@ -128,6 +133,26 @@ function AjaxSubmit( form ) {
 		node.innerHTML = message;
 
 		rootNode.appendChild( node );
+	};
+	this.refreshCsrfToken = function ( csrfToken ) {
+		const formId = this.form.getFormId();
+		const forms  = document.querySelectorAll(
+			'form.jet-form-builder[data-form-id]',
+		);
+
+		for ( const formNode of forms ) {
+			if ( +formNode.dataset.formId !== formId ) {
+				continue;
+			}
+
+			const csrfFields = formNode.querySelectorAll(
+				'input[name="_jfb_csrf_token"]',
+			);
+
+			for ( const field of csrfFields ) {
+				field.value = csrfToken;
+			}
+		}
 	};
 }
 

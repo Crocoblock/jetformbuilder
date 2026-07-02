@@ -7,8 +7,10 @@ const variations = [
 		description: __('Text field for email address.', 'jet-form-builder'),
 		attributes: {
 			field_type: 'email',
+			name: 'email',
+			label: __('Email', 'jet-form-builder'),
 		},
-		isActive: ['field_type'],
+		isActive: ['field_type', 'name'],
 	},
 	{
 		name: 'password',
@@ -16,8 +18,10 @@ const variations = [
 		description: __('Text field for password.', 'jet-form-builder'),
 		attributes: {
 			field_type: 'password',
+			name: 'password',
+			label: __('Password', 'jet-form-builder'),
 		},
-		isActive: ['field_type'],
+		isActive: ['field_type', 'name'],
 	},
 	{
 		name: 'url',
@@ -25,8 +29,10 @@ const variations = [
 		description: __('Text field for URL.', 'jet-form-builder'),
 		attributes: {
 			field_type: 'url',
+			name: 'url',
+			label: __('URL', 'jet-form-builder'),
 		},
-		isActive: ['field_type'],
+		isActive: ['field_type', 'name'],
 	},
 	{
 		name: 'first-name',
@@ -46,7 +52,7 @@ const variations = [
 			name: 'last_name',
 			label: __('Last Name', 'jet-form-builder'),
 		},
-		isActive: ['name'],
+		isActive: ['name'], 
 	},
 ];
 

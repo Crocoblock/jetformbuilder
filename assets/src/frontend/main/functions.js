@@ -62,6 +62,14 @@ const getInputHtmlAttr = () => applyFilters(
  */
 let inputHtmlAttrs = [];
 
+function getPreparedInputHtmlAttrs() {
+	if ( !inputHtmlAttrs.length ) {
+		inputHtmlAttrs = getInputHtmlAttr();
+	}
+
+	return [ ...inputHtmlAttrs ];
+}
+
 /**
  * @param name {String}
  */
@@ -76,11 +84,7 @@ function getDefaultAttrByName( name ) {
  * @param input {InputData}
  */
 function setAttrs( input ) {
-	if ( !inputHtmlAttrs.length ) {
-		inputHtmlAttrs = getInputHtmlAttr();
-	}
-
-	for ( const inputHtmlAttr of inputHtmlAttrs ) {
+	for ( const inputHtmlAttr of getPreparedInputHtmlAttrs() ) {
 		let current;
 		if ( 'string' === typeof inputHtmlAttr ) {
 			current = getDefaultAttrByName( inputHtmlAttr );
@@ -97,6 +101,10 @@ function setAttrs( input ) {
 		current.setInput( input );
 		current.observe();
 	}
+}
+
+function resetInputHtmlAttrsRegistry() {
+	inputHtmlAttrs = [];
 }
 
 function toHTML( text ) {
@@ -210,4 +218,5 @@ export {
 	getScrollParent,
 	isUA,
 	applyUserAgents,
+	resetInputHtmlAttrsRegistry,
 };

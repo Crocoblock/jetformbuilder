@@ -24,16 +24,21 @@ const getDataTypes = () => applyFilters(
 
 let dataTypes = [];
 
+function getPreparedDataTypes() {
+	if ( !dataTypes.length ) {
+		dataTypes = getDataTypes();
+	}
+
+	return [ ...dataTypes ];
+}
+
 /**
  * @param  node
  * @param  observable {Observable}
  * @return {*}
  */
 function createInput( node, observable ) {
-	if ( !dataTypes.length ) {
-		dataTypes = getDataTypes();
-	}
-	for ( const dataType of dataTypes ) {
+	for ( const dataType of getPreparedDataTypes() ) {
 		const current = new dataType();
 
 		if ( !current.isSupported( node ) ) {
@@ -49,6 +54,10 @@ function createInput( node, observable ) {
 	}
 
 	throw new Error( 'Something went wrong' );
+}
+
+function resetInputRegistry() {
+	dataTypes = [];
 }
 
 function getParsedName( name ) {
@@ -89,4 +98,4 @@ function populateInputs( inputs ) {
 	return list;
 }
 
-export { getParsedName, createInput, populateInputs };
+export { getParsedName, createInput, populateInputs, resetInputRegistry };

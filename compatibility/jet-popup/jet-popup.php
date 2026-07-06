@@ -14,6 +14,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Jet_Popup implements Base_Module_It {
 
+	private $include_jet_engine_map_assets = false;
+
 	public function rep_item_id() {
 		return 'jet-popup';
 	}
@@ -40,8 +42,25 @@ class Jet_Popup implements Base_Module_It {
 	}
 
 	public function append_runtime_assets( $content_data, $popup_data, $content_type, $content ) {
+		$this->include_jet_engine_map_assets = false;
+
+		if ( empty( $content_data ) || ! is_array( $content_data ) ) {
+			return $content_data;
+		}
+
 		$content_data = $this->normalize_content_data( $content_data );
-		$this->append_popup_validation_assets( $content_data );
+		$form_ids     = $this->extract_form_ids_from_content( $content_data['content'] );
+
+		if ( empty( $form_ids ) ) {
+			return $content_data;
+		}
+
+		if ( false !== strpos( $content_data['content'], 'jet-fb-map-field' ) ) {
+			$this->include_jet_engine_map_assets = true;
+			$this->enqueue_jet_engine_map_provider_assets();
+		}
+
+		$this->append_popup_validation_assets( $content_data, $form_ids );
 		$runtime_assets = $this->get_runtime_assets();
 
 		if (
@@ -121,15 +140,9 @@ class Jet_Popup implements Base_Module_It {
 		if ( ! wp_script_is( Blocks_Module::MAIN_SCRIPT_HANDLE, 'registered' ) ) {
 			$blocks->register_form_scripts();
 		}
-
-		if ( ! wp_script_is( Blocks_Module::MAIN_SCRIPT_HANDLE, 'enqueued' ) ) {
-			wp_enqueue_script( Blocks_Module::MAIN_SCRIPT_HANDLE );
-		}
 	}
 
-	private function append_popup_validation_assets( array &$content_data ): void {
-		$form_ids = $this->extract_form_ids_from_content( $content_data['content'] );
-
+	private function append_popup_validation_assets( array &$content_data, array $form_ids ): void {
 		if (
 			empty( $form_ids ) ||
 			$this->content_data_has_script( $content_data, 'jet-form-builder-popup-validation' ) ||
@@ -173,6 +186,9 @@ class Jet_Popup implements Base_Module_It {
 
 		$script_handles = apply_filters( 'jet-form-builder/jet-popup/runtime-script-handles', $script_handles );
 		$style_handles  = apply_filters( 'jet-form-builder/jet-popup/runtime-style-handles', $style_handles );
+
+		$script_handles = $this->prepend_jet_engine_map_provider_handles( $script_handles, $scripts );
+		$style_handles  = $this->prepend_jet_engine_map_provider_handles( $style_handles, $styles );
 
 		$script_handles = $this->expand_dependency_handles( $script_handles, $scripts );
 		$style_handles  = $this->expand_dependency_handles( $style_handles, $styles );
@@ -348,6 +364,100 @@ class Jet_Popup implements Base_Module_It {
 			false !== strpos( $src, '/jetformbuilder/' )
 			|| false !== strpos( $src, 'jet-form-builder' )
 		);
+	}
+
+	private function prepend_jet_engine_map_provider_handles( array $handles, $dependencies ): array {
+		if ( ! $this->include_jet_engine_map_assets ) {
+			return $handles;
+		}
+
+		$provider_handles = $this->get_jet_engine_map_provider_handles( $dependencies );
+
+		if ( empty( $provider_handles ) ) {
+			return $handles;
+		}
+
+		$map_field_handle = 'jet-fb-compat-jet-engine-map-field';
+		$prepared_handles = array();
+
+		foreach ( $handles as $handle ) {
+			if ( $map_field_handle === $handle ) {
+				foreach ( $provider_handles as $provider_handle ) {
+					if ( ! in_array( $provider_handle, $prepared_handles, true ) ) {
+						$prepared_handles[] = $provider_handle;
+					}
+				}
+			}
+
+			if ( ! in_array( $handle, $prepared_handles, true ) ) {
+				$prepared_handles[] = $handle;
+			}
+		}
+
+		return $prepared_handles;
+	}
+
+	private function get_jet_engine_map_provider_handles( $dependencies ): array {
+		$provider = $this->get_jet_engine_map_provider();
+
+		if ( ! $provider ) {
+			return array();
+		}
+
+		if ( $dependencies instanceof \WP_Scripts && method_exists( $provider, 'get_script_handles' ) ) {
+			return array_values( array_intersect( $provider->get_script_handles(), $dependencies->queue ) );
+		}
+
+		if ( ! $dependencies instanceof \WP_Styles || ! method_exists( $provider, 'get_id' ) ) {
+			return array();
+		}
+
+		switch ( $provider->get_id() ) {
+			case 'leaflet':
+				$handles = array(
+					'jet-leaflet-map',
+					'jet-leaflet-markercluster',
+					'jet-leaflet-markerclusterdefault',
+				);
+				break;
+
+			case 'mapbox':
+				$handles = array( 'jet-mapbox' );
+				break;
+
+			default:
+				$handles = array();
+		}
+
+		return array_values( array_intersect( $handles, $dependencies->queue ) );
+	}
+
+	private function enqueue_jet_engine_map_provider_assets(): void {
+		$provider = $this->get_jet_engine_map_provider();
+
+		if ( ! $provider || ! method_exists( $provider, 'public_assets' ) ) {
+			return;
+		}
+
+		if ( method_exists( $provider, 'register_public_assets' ) ) {
+			$provider->register_public_assets();
+		}
+
+		$provider->public_assets( null, array( 'marker_clustering' => false ), null );
+	}
+
+	private function get_jet_engine_map_provider() {
+		if ( ! class_exists( '\Jet_Engine\Modules\Maps_Listings\Module' ) ) {
+			return false;
+		}
+
+		$maps_module = \Jet_Engine\Modules\Maps_Listings\Module::instance();
+
+		if ( empty( $maps_module->providers ) ) {
+			return false;
+		}
+
+		return $maps_module->providers->get_active_map_provider();
 	}
 
 	private function expand_dependency_handles( $handles, $dependencies, $exclude = array() ): array {
@@ -526,6 +636,11 @@ class Jet_Popup implements Base_Module_It {
 			}
 
 			const existing = window.JetFormBuilder[ formId ];
+
+			if ( existing?.rootNode === form ) {
+				form.setAttribute( 'data-jfb-popup-initialized', '1' );
+				return;
+			}
 
 			if ( existing?.rootNode?.isConnected === false && 'function' === typeof existing.remove ) {
 				existing.remove();

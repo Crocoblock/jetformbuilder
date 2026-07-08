@@ -39,6 +39,7 @@ final class Module implements
 			new Insert_Term\Insert_Term(),
 			new Register_User\Register_User(),
 			new Update_User\Update_User(),
+			new Delete_User\Delete_User(),
 			new Redirect_To_Page\Redirect_To_Page(),
 			new Call_Hook\Call_Hook(),
 			new Call_Webhook\Call_Webhook(),

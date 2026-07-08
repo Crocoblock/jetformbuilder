@@ -4,10 +4,14 @@
 			let script         = document.querySelector(
 				'script#jet-form-builder-recaptcha-js',
 			);
-			const captchaField = formNode.querySelector(
+
+
+			const captchaFields = formNode.querySelectorAll(
 				'[name="_captcha_token"]',
 			);
-			const formID       = +formNode.dataset.formId;
+
+			const captchaField = captchaFields[0];
+			const formID       = +formNode.dataset.formId;  
 
 			function setFormToken() {
 				if ( window.grecaptcha ) {
@@ -17,13 +21,20 @@
 							action: 'jet_form_builder_captcha__' + formID,
 						},
 					).then( function ( token ) {
-						captchaField.value = token;
+						captchaFields.forEach(function (field) {
+							field.value = token;
+						});
 						resolve();
 					} );
 				}
 				else {
 					resolve();
 				}
+			}
+
+			if (!captchaField) {
+				resolve();
+				return;
 			}
 
 			if ( !script ) {

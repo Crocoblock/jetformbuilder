@@ -143,11 +143,7 @@ class Jet_Popup implements Base_Module_It {
 	}
 
 	private function append_popup_validation_assets( array &$content_data, array $form_ids ): void {
-		if (
-			empty( $form_ids ) ||
-			$this->content_data_has_script( $content_data, 'jet-form-builder-popup-validation' ) ||
-			$this->content_data_has_script( $content_data, 'jet-form-builder-popup-validation', 'afterScripts' )
-		) {
+		if ( empty( $form_ids ) ) {
 			return;
 		}
 
@@ -167,14 +163,18 @@ class Jet_Popup implements Base_Module_It {
 			return;
 		}
 
-		$content_data['afterScripts'][] = array(
-			'handle' => 'jet-form-builder-popup-validation',
-			'src'    => $this->make_data_uri(
-				'text/javascript',
-				$this->get_popup_validation_script( $validation_map )
-			),
-			'obj'    => null,
+		$script_data = $this->make_inline_script_entry(
+			'jet-form-builder-popup-validation',
+			'after',
+			0,
+			$this->get_popup_validation_script( $validation_map )
 		);
+
+		if ( $this->content_data_has_script( $content_data, $script_data['handle'], 'afterScripts' ) ) {
+			return;
+		}
+
+		$content_data['afterScripts'][] = $script_data;
 	}
 
 	private function get_runtime_assets(): array {

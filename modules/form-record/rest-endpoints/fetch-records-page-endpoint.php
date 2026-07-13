@@ -35,19 +35,9 @@ class Fetch_Records_Page_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 
 		$records = $view->get_raw_list( $args );
 
-		if ( ! $records ) {
-			return new \WP_REST_Response(
-				array(
-					'message' => __( 'Records not found', 'jet-form-builder' ),
-					'code'    => 'not_found',
-				),
-				404
-			);
-		}
-
 		return new \WP_REST_Response(
 			array(
-				'list'  => $view->get_prepared_list( $records ),
+				'list'  => $records ? $view->get_prepared_list( $records ) : array(),
 				'total' => Record_View_Count::count( $args ),
 			)
 		);

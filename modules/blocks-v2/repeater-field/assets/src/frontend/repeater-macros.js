@@ -52,9 +52,9 @@ function bindRepeaterNotifyOnce(node) {
 		repeaterInput?.value?.notify?.();
 	};
 
-	node.addEventListener('input', notify, true);
-	node.addEventListener('change', notify, true);
-
+	node.addEventListener('input', notify, false);
+	node.addEventListener('change', notify, false);
+	
 	node.addEventListener(
 		'click',
 		(e) => {

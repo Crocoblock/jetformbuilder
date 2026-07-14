@@ -27,28 +27,31 @@ class Delete_User_Action extends Base {
 
 	public function action_attributes() {
 		return array(
-			'target_user'        => array(
+			'target_user'            => array(
 				'default' => self::TARGET_CURRENT_USER,
 			),
-			'user_id_field'      => array(
+			'user_id_field'          => array(
 				'default' => '',
 			),
-			'confirmation_field' => array(
+			'confirmation_field'     => array(
 				'default' => '',
 			),
-			'delete_content'     => array(
+			'current_password_field' => array(
+				'default' => '',
+			),
+			'delete_content'         => array(
 				'default' => false,
 			),
-			'post_types'         => array(
+			'post_types'             => array(
 				'default' => array(),
 			),
-			'delete_media'       => array(
+			'delete_media'           => array(
 				'default' => false,
 			),
-			'delete_cct'         => array(
+			'delete_cct'             => array(
 				'default' => false,
 			),
-			'cct_types'          => array(
+			'cct_types'              => array(
 				'default' => array(),
 			),
 		);
@@ -66,6 +69,7 @@ class Delete_User_Action extends Base {
 
 		$this->guard_user_deletion( $user_id );
 		$this->ensure_deletion_confirmed( $request );
+		$this->ensure_current_password_confirmed( $request );
 
 		if ( ! empty( $this->settings['delete_media'] ) ) {
 			$this->delete_authored_attachments( $user_id );
@@ -139,6 +143,44 @@ class Delete_User_Action extends Base {
 
 		if ( empty( $request[ $field ] ) || ! $this->is_truthy_confirmation_value( $request[ $field ] ) ) {
 			throw new Action_Exception( 'confirmation_required' );
+		}
+	}
+
+	/**
+	 * @throws Action_Exception
+	 */
+	private function ensure_current_password_confirmed( array $request ) {
+		$field = $this->settings['current_password_field'] ?? '';
+
+		if ( ! $field ) {
+			return;
+		}
+
+		$current_user_id = get_current_user_id();
+
+		if ( ! $current_user_id ) {
+			throw new Action_Exception( 'not_logged_in' );
+		}
+
+		$password = $request[ $field ] ?? '';
+
+		if ( is_array( $password ) ) {
+			$password = reset( $password );
+		}
+
+		$password = is_scalar( $password ) ? (string) $password : '';
+
+		if ( '' === $password ) {
+			throw new Action_Exception( 'empty_field', 'Current password' );
+		}
+
+		$current_user = get_user_by( 'ID', $current_user_id );
+
+		if (
+			! is_a( $current_user, \WP_User::class ) ||
+			! wp_check_password( $password, $current_user->user_pass, $current_user->ID )
+		) {
+			throw new Action_Exception( 'incorrect_current_password' );
 		}
 	}
 
@@ -488,27 +530,29 @@ class Delete_User_Action extends Base {
 
 	public function editor_labels() {
 		return array(
-			'target_user'        => __( 'User to delete:', 'jet-form-builder' ),
-			'user_id_field'      => __( 'User ID field:', 'jet-form-builder' ),
-			'confirmation_field' => __( 'Confirmation field:', 'jet-form-builder' ),
-			'delete_content'     => __( 'Delete posts:', 'jet-form-builder' ),
-			'post_types'         => __( 'Post types to delete:', 'jet-form-builder' ),
-			'delete_media'       => __( 'Delete media:', 'jet-form-builder' ),
-			'delete_cct'         => __( 'Delete JetEngine CCT items:', 'jet-form-builder' ),
-			'cct_types'          => __( 'CCT types:', 'jet-form-builder' ),
+			'target_user'            => __( 'User to delete:', 'jet-form-builder' ),
+			'user_id_field'          => __( 'User ID field:', 'jet-form-builder' ),
+			'confirmation_field'     => __( 'Confirmation field:', 'jet-form-builder' ),
+			'current_password_field' => __( 'Current password field:', 'jet-form-builder' ),
+			'delete_content'         => __( 'Delete posts:', 'jet-form-builder' ),
+			'post_types'             => __( 'Post types to delete:', 'jet-form-builder' ),
+			'delete_media'           => __( 'Delete media:', 'jet-form-builder' ),
+			'delete_cct'             => __( 'Delete JetEngine CCT items:', 'jet-form-builder' ),
+			'cct_types'              => __( 'CCT types:', 'jet-form-builder' ),
 		);
 	}
 
 	public function editor_labels_help() {
 		return array(
-			'target_user'        => __( 'Select the current user or a user ID submitted with the form.', 'jet-form-builder' ),
-			'user_id_field'      => __( 'Choose the form field that contains the user ID to delete.', 'jet-form-builder' ),
-			'confirmation_field' => __( 'Choose a confirmation field. Checkbox, radio, or switcher fields are recommended. Use 1 as the checked value.', 'jet-form-builder' ),
-			'delete_content'     => __( 'Permanently deletes WordPress posts authored by the user.', 'jet-form-builder' ),
-			'post_types'         => __( 'Only posts from selected post types will be deleted.', 'jet-form-builder' ),
-			'delete_media'       => __( 'Permanently deletes Media Library attachments authored by the user.', 'jet-form-builder' ),
-			'delete_cct'         => __( 'Permanently deletes JetEngine CCT items authored by the user.', 'jet-form-builder' ),
-			'cct_types'          => __( 'Only items from selected CCT types will be deleted.', 'jet-form-builder' ),
+			'target_user'            => __( 'Select the current user or a user ID submitted with the form.', 'jet-form-builder' ),
+			'user_id_field'          => __( 'Choose the form field that contains the user ID to delete.', 'jet-form-builder' ),
+			'confirmation_field'     => __( 'Choose a confirmation field. Checkbox, radio, or switcher fields are recommended. Use 1 as the checked value.', 'jet-form-builder' ),
+			'current_password_field' => __( 'Choose the field where the user submitting the form enters their current password.', 'jet-form-builder' ),
+			'delete_content'         => __( 'Permanently deletes WordPress posts authored by the user.', 'jet-form-builder' ),
+			'post_types'             => __( 'Only posts from selected post types will be deleted.', 'jet-form-builder' ),
+			'delete_media'           => __( 'Permanently deletes Media Library attachments authored by the user.', 'jet-form-builder' ),
+			'delete_cct'             => __( 'Permanently deletes JetEngine CCT items authored by the user.', 'jet-form-builder' ),
+			'cct_types'              => __( 'Only items from selected CCT types will be deleted.', 'jet-form-builder' ),
 		);
 	}
 

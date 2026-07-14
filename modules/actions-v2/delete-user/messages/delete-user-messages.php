@@ -19,21 +19,25 @@ class Delete_User_Messages extends Base_Action_Messages {
 
 	protected function messages(): array {
 		return array(
-			'not_logged_in'          => array(
+			'not_logged_in'              => array(
 				'label' => __( 'Not logged in', 'jet-form-builder' ),
 				'value' => 'Log in before deleting this account.',
 			),
-			'user_not_found'         => array(
+			'user_not_found'             => array(
 				'label' => __( 'User not found', 'jet-form-builder' ),
 				'value' => 'User account was not found.',
 			),
-			'not_enough_cap'         => array(
-				'label' => __( 'Not enough permissions', 'jet-form-builder' ),
-				'value' => 'You do not have permission to delete this user.',
+			'not_enough_cap'             => array(
+				'label' => __( 'Not enough capabilities', 'jet-form-builder' ),
+				'value' => 'Not enough capabilities to delete this user.',
 			),
-			'confirmation_required'  => array(
+			'confirmation_required'      => array(
 				'label' => __( 'Confirmation required', 'jet-form-builder' ),
 				'value' => 'Confirm the deletion before submitting the form.',
+			),
+			'incorrect_current_password' => array(
+				'label' => __( 'Incorrect current password', 'jet-form-builder' ),
+				'value' => 'The current password is incorrect.',
 			),
 		);
 	}

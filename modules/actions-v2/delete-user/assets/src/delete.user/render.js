@@ -142,6 +142,23 @@ function ConfirmationControl( { settings, onChangeSettingObj, label, help } ) {
 				/>
 			</> }
 		</RowControl>
+		<WideLine/>
+		<RowControl>
+			{ ( { id } ) => <>
+				<Label htmlFor={ id }>
+					{ label( 'current_password_field' ) }
+				</Label>
+				<StyledSelectControl
+					id={ id }
+					value={ settings.current_password_field }
+					options={ formFields }
+					help={ help( 'current_password_field' ) }
+					onChange={ value => onChangeSettingObj( {
+						current_password_field: value,
+					} ) }
+				/>
+			</> }
+		</RowControl>
 	</>;
 }
 

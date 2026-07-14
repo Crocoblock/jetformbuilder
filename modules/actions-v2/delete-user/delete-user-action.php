@@ -16,6 +16,7 @@ class Delete_User_Action extends Base {
 
 	const TARGET_CURRENT_USER = 'current_user';
 	const TARGET_FIELD        = 'field';
+	const DELETE_BATCH_SIZE   = 100;
 
 	public function get_name() {
 		return __( 'Delete User', 'jet-form-builder' );
@@ -123,12 +124,36 @@ class Delete_User_Action extends Base {
 			throw new Action_Exception( 'empty_field', 'User ID' );
 		}
 
-		$user_id = absint( $request[ $field ] ?? 0 );
+		$user_id = $this->parse_user_id( $request[ $field ] ?? 0 );
 		if ( ! $user_id ) {
 			throw new Action_Exception( 'empty_field', 'User ID' );
 		}
 
 		return $user_id;
+	}
+
+	private function parse_user_id( $value ): int {
+		if ( ! is_scalar( $value ) ) {
+			return 0;
+		}
+
+		$value = is_string( $value ) ? trim( $value ) : $value;
+
+		if ( '' === $value ) {
+			return 0;
+		}
+
+		$user_id = filter_var(
+			$value,
+			FILTER_VALIDATE_INT,
+			array(
+				'options' => array(
+					'min_range' => 1,
+				),
+			)
+		);
+
+		return false === $user_id ? 0 : (int) $user_id;
 	}
 
 	/**
@@ -335,23 +360,13 @@ class Delete_User_Action extends Base {
 			throw new Action_Exception( 'empty_field', 'Post types' );
 		}
 
-		$post_ids = get_posts(
-			array(
-				'author'         => $user_id,
-				'fields'         => 'ids',
-				'post_status'    => $this->get_all_post_statuses(),
-				'post_type'      => $post_types,
-				'posts_per_page' => -1,
-			)
-		);
-
-		foreach ( $post_ids as $post_id ) {
-			$post_id = absint( $post_id );
-
-			if ( ! wp_delete_post( $post_id, true ) ) {
-				throw new Action_Exception( 'failed' );
+		$this->delete_authored_posts_in_batches(
+			$user_id,
+			$post_types,
+			function ( int $post_id ) {
+				return wp_delete_post( $post_id, true );
 			}
-		}
+		);
 	}
 
 	private function get_selected_post_types(): array {
@@ -501,27 +516,47 @@ class Delete_User_Action extends Base {
 	 * @throws Action_Exception
 	 */
 	private function delete_authored_attachments( int $user_id ) {
-		$attachment_ids = get_posts(
-			array(
-				'author'         => $user_id,
-				'fields'         => 'ids',
-				'post_status'    => $this->get_all_post_statuses(),
-				'post_type'      => 'attachment',
-				'posts_per_page' => -1,
-			)
+		$this->delete_authored_posts_in_batches(
+			$user_id,
+			array( 'attachment' ),
+			function ( int $attachment_id ) {
+				return wp_delete_attachment( $attachment_id, true );
+			}
 		);
+	}
 
-		foreach ( $attachment_ids as $attachment_id ) {
-			$attachment_id = absint( $attachment_id );
+	/**
+	 * @throws Action_Exception
+	 */
+	private function delete_authored_posts_in_batches( int $user_id, array $post_types, callable $delete_callback ) {
+		do {
+			$post_ids = get_posts(
+				array(
+					'author'                 => $user_id,
+					'fields'                 => 'ids',
+					'no_found_rows'          => true,
+					'orderby'                => 'ID',
+					'order'                  => 'ASC',
+					'post_status'            => $this->get_all_post_statuses(),
+					'post_type'              => $post_types,
+					'posts_per_page'         => self::DELETE_BATCH_SIZE,
+					'update_post_meta_cache' => false,
+					'update_post_term_cache' => false,
+				)
+			);
 
-			if ( ! $attachment_id ) {
-				continue;
+			foreach ( $post_ids as $post_id ) {
+				$post_id = absint( $post_id );
+
+				if ( ! $post_id ) {
+					continue;
+				}
+
+				if ( ! $delete_callback( $post_id ) ) {
+					throw new Action_Exception( 'failed' );
+				}
 			}
-
-			if ( ! wp_delete_attachment( $attachment_id, true ) ) {
-				throw new Action_Exception( 'failed' );
-			}
-		}
+		} while ( self::DELETE_BATCH_SIZE === count( $post_ids ) );
 	}
 
 	private function get_all_post_statuses(): array {

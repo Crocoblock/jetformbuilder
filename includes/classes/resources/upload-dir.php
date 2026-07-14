@@ -44,7 +44,11 @@ class Upload_Dir {
 
 		self::create_htaccess( $path );
 
-		return $pathdata;
+		return apply_filters(
+			'jet-form-builder/file-upload/upload-dir',
+			$pathdata,
+			jet_fb_context()->get_request()
+		);
 	}
 
 	public static function apply_temp_dir( $pathdata ) {

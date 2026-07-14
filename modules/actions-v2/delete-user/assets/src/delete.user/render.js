@@ -1,4 +1,4 @@
-import { Flex, Notice, ToggleControl } from '@wordpress/components';
+import { Flex, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useFields } from 'jet-form-builder-blocks-to-actions';
 import {
@@ -29,17 +29,6 @@ const targetOptions = [
 	{
 		value: 'field',
 		label: __( 'User ID from form field', 'jet-form-builder' ),
-	},
-];
-
-const contentOptions = [
-	{
-		value: 'delete',
-		label: __( 'Permanently delete selected posts', 'jet-form-builder' ),
-	},
-	{
-		value: 'trash',
-		label: __( 'Move selected posts to trash', 'jet-form-builder' ),
 	},
 ];
 
@@ -156,49 +145,6 @@ function ConfirmationControl( { settings, onChangeSettingObj, label, help } ) {
 	</>;
 }
 
-function ReassignControl( { settings, onChangeSettingObj, label, help } ) {
-	const formFields = useFields( {
-		withInner: false,
-		placeholder: '--',
-	} );
-
-	return <>
-		<WideLine/>
-		<RequiredSelectControl
-			label={ label( 'reassign_id' ) }
-			value={ settings.reassign_id }
-			property="reassign_id"
-			options={ formFields }
-			help={ help( 'reassign_id' ) }
-			onChange={ value => onChangeSettingObj( {
-				reassign_id: value,
-			} ) }
-		/>
-	</>;
-}
-
-function ContentActionControl( { contentAction, onChangeSettingObj, label, help } ) {
-	return <>
-		<WideLine/>
-		<RowControl>
-			{ ( { id } ) => <>
-				<Label htmlFor={ id }>
-					{ label( 'content_action' ) }
-				</Label>
-				<StyledSelectControl
-					id={ id }
-					value={ contentAction }
-					options={ contentOptions }
-					help={ help( 'content_action' ) }
-					onChange={ value => onChangeSettingObj( {
-						content_action: value,
-					} ) }
-				/>
-			</> }
-		</RowControl>
-	</>;
-}
-
 function WordPressContentControls( props ) {
 	const {
 		      settings,
@@ -207,8 +153,7 @@ function WordPressContentControls( props ) {
 		      label,
 		      help,
 	      } = props;
-	const contentAction = settings?.content_action ?? 'delete';
-	const postTypes     = settings?.post_types ?? [];
+	const postTypes = settings?.post_types ?? [];
 
 	return <>
 		<WideLine/>
@@ -236,13 +181,6 @@ function WordPressContentControls( props ) {
 					post_types: value,
 				} ) }
 			/>
-			<ContentActionControl
-				contentAction={ contentAction }
-				onChangeSettingObj={ onChangeSettingObj }
-				label={ label }
-				help={ help }
-			/>
-			{ 'trash' === contentAction && <ReassignControl { ...props }/> }
 		</> }
 	</>;
 }
@@ -305,12 +243,6 @@ function CctControls( { settings, onChangeSettingObj, source, label, help } ) {
 
 function DeleteUserRender( props ) {
 	return <Flex direction="column">
-		<Notice status="warning" isDismissible={ false }>
-			{ __(
-				'This action permanently deletes a user account. Use a confirmation field and action conditions before this action in front-end forms.',
-				'jet-form-builder',
-			) }
-		</Notice>
 		<TargetUserControls { ...props }/>
 		<ConfirmationControl { ...props }/>
 		<WordPressContentControls { ...props }/>

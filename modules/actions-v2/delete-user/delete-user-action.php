@@ -17,9 +17,6 @@ class Delete_User_Action extends Base {
 	const TARGET_CURRENT_USER = 'current_user';
 	const TARGET_FIELD        = 'field';
 
-	const CONTENT_DELETE = 'delete';
-	const CONTENT_TRASH  = 'trash';
-
 	public function get_name() {
 		return __( 'Delete User', 'jet-form-builder' );
 	}
@@ -39,17 +36,11 @@ class Delete_User_Action extends Base {
 			'confirmation_field' => array(
 				'default' => '',
 			),
-			'reassign_id'        => array(
-				'default' => '',
-			),
 			'delete_content'     => array(
 				'default' => false,
 			),
 			'post_types'         => array(
 				'default' => array(),
-			),
-			'content_action'     => array(
-				'default' => self::CONTENT_DELETE,
 			),
 			'delete_media'       => array(
 				'default' => false,
@@ -76,10 +67,6 @@ class Delete_User_Action extends Base {
 		$this->guard_user_deletion( $user_id );
 		$this->ensure_deletion_confirmed( $request );
 
-		$reassign_user_id = $this->should_reassign_content()
-			? $this->resolve_reassign_user_id( $user_id, $request )
-			: null;
-
 		if ( ! empty( $this->settings['delete_media'] ) ) {
 			$this->delete_authored_attachments( $user_id );
 		}
@@ -89,7 +76,7 @@ class Delete_User_Action extends Base {
 		}
 
 		if ( ! empty( $this->settings['delete_content'] ) ) {
-			$this->process_authored_posts( $user_id, $reassign_user_id );
+			$this->process_authored_posts( $user_id );
 		}
 
 		$result = $this->delete_user( $user_id );
@@ -187,10 +174,6 @@ class Delete_User_Action extends Base {
 			! Tools::is_webhook()
 		) {
 			throw new Action_Exception( 'not_enough_cap' );
-		}
-
-		if ( is_multisite() && is_super_admin( $user_id ) ) {
-			throw new Action_Exception( 'super_admin' );
 		}
 
 		if ( $this->is_last_administrator( $user ) ) {
@@ -303,37 +286,7 @@ class Delete_User_Action extends Base {
 	/**
 	 * @throws Action_Exception
 	 */
-	private function resolve_reassign_user_id( int $deleted_user_id, array $request ): int {
-		$field = $this->settings['reassign_id'] ?? '';
-
-		if ( ! $field ) {
-			throw new Action_Exception( 'empty_field', 'Reassign user ID' );
-		}
-
-		$reassign_user_id = absint( $request[ $field ] ?? 0 );
-
-		if (
-			! $reassign_user_id ||
-			$deleted_user_id === $reassign_user_id ||
-			! is_a( get_user_by( 'ID', $reassign_user_id ), \WP_User::class )
-		) {
-			throw new Action_Exception( 'invalid_reassign_user' );
-		}
-
-		return $reassign_user_id;
-	}
-
-	private function should_reassign_content(): bool {
-		return (
-			! empty( $this->settings['delete_content'] ) &&
-			self::CONTENT_TRASH === ( $this->settings['content_action'] ?? self::CONTENT_DELETE )
-		);
-	}
-
-	/**
-	 * @throws Action_Exception
-	 */
-	private function process_authored_posts( int $user_id, ?int $reassign_user_id = null ) {
+	private function process_authored_posts( int $user_id ) {
 		$post_types = $this->get_selected_post_types();
 
 		if ( empty( $post_types ) ) {
@@ -350,44 +303,12 @@ class Delete_User_Action extends Base {
 			)
 		);
 
-		$content_action = $this->settings['content_action'] ?? self::CONTENT_DELETE;
-
 		foreach ( $post_ids as $post_id ) {
 			$post_id = absint( $post_id );
-
-			if ( self::CONTENT_TRASH === $content_action ) {
-				$this->trash_authored_post( $post_id, $reassign_user_id );
-				continue;
-			}
 
 			if ( ! wp_delete_post( $post_id, true ) ) {
 				throw new Action_Exception( 'failed' );
 			}
-		}
-	}
-
-	/**
-	 * @throws Action_Exception
-	 */
-	private function trash_authored_post( int $post_id, ?int $reassign_user_id = null ) {
-		if ( 'trash' !== get_post_status( $post_id ) && ! wp_trash_post( $post_id ) ) {
-			throw new Action_Exception( 'failed' );
-		}
-
-		if ( ! $reassign_user_id ) {
-			return;
-		}
-
-		$result = wp_update_post(
-			array(
-				'ID'          => $post_id,
-				'post_author' => $reassign_user_id,
-			),
-			true
-		);
-
-		if ( is_wp_error( $result ) || ! $result ) {
-			throw new Action_Exception( 'failed' );
 		}
 	}
 
@@ -570,28 +491,24 @@ class Delete_User_Action extends Base {
 			'target_user'        => __( 'User to delete:', 'jet-form-builder' ),
 			'user_id_field'      => __( 'User ID field:', 'jet-form-builder' ),
 			'confirmation_field' => __( 'Confirmation field:', 'jet-form-builder' ),
-			'reassign_id'        => __( 'Reassign to user ID field:', 'jet-form-builder' ),
-			'delete_content'     => __( 'Handle WordPress posts:', 'jet-form-builder' ),
-			'post_types'         => __( 'Post types:', 'jet-form-builder' ),
-			'content_action'     => __( 'Selected post types action:', 'jet-form-builder' ),
-			'delete_media'       => __( 'Delete media attachments:', 'jet-form-builder' ),
+			'delete_content'     => __( 'Delete posts:', 'jet-form-builder' ),
+			'post_types'         => __( 'Post types to delete:', 'jet-form-builder' ),
+			'delete_media'       => __( 'Delete media:', 'jet-form-builder' ),
 			'delete_cct'         => __( 'Delete JetEngine CCT items:', 'jet-form-builder' ),
-			'cct_types'          => __( 'CCT types to delete:', 'jet-form-builder' ),
+			'cct_types'          => __( 'CCT types:', 'jet-form-builder' ),
 		);
 	}
 
 	public function editor_labels_help() {
 		return array(
-			'target_user'        => __( 'Current user is the safe default for front-end account deletion forms.', 'jet-form-builder' ),
-			'user_id_field'      => __( 'Use only in trusted flows. Users without permission cannot delete another account.', 'jet-form-builder' ),
-			'confirmation_field' => __( 'Optional. Choose a checkbox, radio, or switcher field that must be checked before deletion.', 'jet-form-builder' ),
-			'reassign_id'        => __( 'Choose a form field with the user ID that should become the author of trashed posts.', 'jet-form-builder' ),
-			'delete_content'     => __( 'Delete or trash authored posts from selected post types.', 'jet-form-builder' ),
-			'post_types'         => __( 'Choose authored post types to delete or move to trash.', 'jet-form-builder' ),
-			'content_action'     => __( 'Choose whether selected posts should be permanently deleted or moved to trash.', 'jet-form-builder' ),
-			'delete_media'       => __( 'Permanently deletes media library attachments authored by the deleted user.', 'jet-form-builder' ),
-			'delete_cct'         => __( 'Delete authored JetEngine Custom Content Type items.', 'jet-form-builder' ),
-			'cct_types'          => __( 'Deletes selected CCT items where cct_author_id matches the deleted user.', 'jet-form-builder' ),
+			'target_user'        => __( 'Select the current user or a user ID submitted with the form.', 'jet-form-builder' ),
+			'user_id_field'      => __( 'Choose the form field that contains the user ID to delete.', 'jet-form-builder' ),
+			'confirmation_field' => __( 'Choose a confirmation field. Checkbox, radio, or switcher fields are recommended. Use 1 as the checked value.', 'jet-form-builder' ),
+			'delete_content'     => __( 'Permanently deletes WordPress posts authored by the user.', 'jet-form-builder' ),
+			'post_types'         => __( 'Only posts from selected post types will be deleted.', 'jet-form-builder' ),
+			'delete_media'       => __( 'Permanently deletes Media Library attachments authored by the user.', 'jet-form-builder' ),
+			'delete_cct'         => __( 'Permanently deletes JetEngine CCT items authored by the user.', 'jet-form-builder' ),
+			'cct_types'          => __( 'Only items from selected CCT types will be deleted.', 'jet-form-builder' ),
 		);
 	}
 

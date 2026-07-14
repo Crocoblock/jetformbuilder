@@ -21,31 +21,19 @@ class Delete_User_Messages extends Base_Action_Messages {
 		return array(
 			'not_logged_in'          => array(
 				'label' => __( 'Not logged in', 'jet-form-builder' ),
-				'value' => 'You must be logged in to delete your account.',
+				'value' => 'Log in before deleting this account.',
 			),
 			'user_not_found'         => array(
 				'label' => __( 'User not found', 'jet-form-builder' ),
 				'value' => 'User account was not found.',
 			),
 			'not_enough_cap'         => array(
-				'label' => __( 'Not enough capabilities', 'jet-form-builder' ),
-				'value' => 'You are not allowed to delete this account.',
+				'label' => __( 'Not enough permissions', 'jet-form-builder' ),
+				'value' => 'You do not have permission to delete this user.',
 			),
 			'confirmation_required'  => array(
 				'label' => __( 'Confirmation required', 'jet-form-builder' ),
-				'value' => 'Please confirm that you understand this action before deleting the account.',
-			),
-			'super_admin'            => array(
-				'label' => __( 'Super admin account', 'jet-form-builder' ),
-				'value' => 'Super administrator accounts cannot be deleted from this form.',
-			),
-			'last_administrator'     => array(
-				'label' => __( 'Last administrator', 'jet-form-builder' ),
-				'value' => 'The last administrator account cannot be deleted.',
-			),
-			'invalid_reassign_user'   => array(
-				'label' => __( 'Invalid reassign user', 'jet-form-builder' ),
-				'value' => 'Set a valid user ID to reassign trashed posts.',
+				'value' => 'Confirm the deletion before submitting the form.',
 			),
 		);
 	}

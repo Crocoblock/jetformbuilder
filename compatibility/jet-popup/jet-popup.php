@@ -500,6 +500,8 @@ class Jet_Popup implements Base_Module_It {
 
 		if ( 0 === strpos( $src, '//' ) || preg_match( '#^[a-z][a-z0-9+.-]*://#i', $src ) ) {
 			$url = $src;
+		} elseif ( 0 === strpos( $src, '/wp-' ) ) {
+			$url = site_url( $src );
 		} elseif ( 0 === strpos( $src, '/' ) ) {
 			$url = $src;
 		} else {

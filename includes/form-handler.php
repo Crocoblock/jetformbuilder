@@ -179,12 +179,14 @@ class Form_Handler {
 	}
 
 	public function set_current_post_context( $post_id ) {
-		$post_id = $this->normalize_post_id( $post_id );
+		$post_id  = $this->normalize_post_id( $post_id );
+		$is_valid = $this->is_valid_post_context_signature( $post_id );
 
-		if ( ! $this->is_valid_post_context_signature( $post_id ) ) {
-			$post_id = $this->resolve_referrer_post_id();
+		if ( ! $is_valid ) {
+			$post_id = $this->resolve_unsigned_post_context_fallback();
 		}
 
+		Live_Form::instance()->set_ajax_post_fallback_allowed( $is_valid );
 		Tools::set_current_post( $post_id );
 
 		return $this;
@@ -224,12 +226,8 @@ class Form_Handler {
 		return hash_equals( $expected, $signature );
 	}
 
-	private function resolve_referrer_post_id(): int {
-		if ( ! $this->refer ) {
-			return 0;
-		}
-
-		return $this->normalize_post_id( url_to_postid( $this->refer ) );
+	private function resolve_unsigned_post_context_fallback(): int {
+		return 0;
 	}
 
 	/**
@@ -260,6 +258,9 @@ class Form_Handler {
 		if ( $this->form_id ) {
 			return;
 		}
+
+		// Submission post context is untrusted until the signed field is processed.
+		Live_Form::instance()->set_ajax_post_fallback_allowed( false );
 
 		$fields = $this->core_fields();
 

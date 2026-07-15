@@ -40,7 +40,8 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options implements
 	public function verify( array $request ) {
 		$action = ( new Verify_Token_Action() )
 			->set_secret( $this->options['secret'] ?? '' )
-			->set_token( $request[ self::FIELD ] ?? '' );
+			->set_token( $request[ self::FIELD ] ?? '' )
+			->set_threshold( self::sanitize_threshold( $this->options['threshold'] ?? null ) );
 
 		try {
 			$action->send_request();
@@ -119,10 +120,8 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options implements
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		$secret    = sanitize_text_field( $post_request['secret'] ?? '' );
 		$key       = sanitize_text_field( $post_request['key'] ?? '' );
-		$threshold = filter_var( $post_request['threshold'] ?? '', FILTER_VALIDATE_FLOAT );
+		$threshold = self::sanitize_threshold( $post_request['threshold'] ?? null );
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
-
-		$threshold = false === $threshold ? self::OPTIONS['threshold'] : $threshold;
 
 		return array(
 			'secret'    => $secret,
@@ -148,6 +147,16 @@ class Re_Captcha_V3 extends Base_Captcha_From_Options implements
 		$options = Tab_Handler_Manager::get_options( 'captcha-tab', self::OPTIONS );
 
 		return wp_array_slice_assoc( $options, array_keys( self::OPTIONS ) );
+	}
+
+	private static function sanitize_threshold( $threshold ): float {
+		$threshold = filter_var( $threshold, FILTER_VALIDATE_FLOAT );
+
+		if ( false === $threshold || 0 > $threshold || 1 < $threshold ) {
+			return self::OPTIONS['threshold'];
+		}
+
+		return (float) $threshold;
 	}
 
 	public function enqueue_editor_script() {

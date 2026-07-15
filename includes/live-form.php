@@ -44,6 +44,7 @@ class Live_Form {
 	public $field_names = array();
 
 	private $ajax_post_id;
+	private $is_ajax_post_fallback_allowed = true;
 
 	/**
 	 * Create form instance
@@ -206,10 +207,22 @@ class Live_Form {
 		}
 	}
 
+	public function set_ajax_post_fallback_allowed( bool $is_allowed ): Live_Form {
+		$this->is_ajax_post_fallback_allowed = $is_allowed;
+		$this->ajax_post_id                   = 0;
+
+		return $this;
+	}
+
 	private function current_post() {
 		global $post;
 
-		if ( wp_doing_ajax() && empty( $post->ID ) && ! $this->ajax_post_id ) {
+		if (
+			wp_doing_ajax() &&
+			$this->is_ajax_post_fallback_allowed &&
+			empty( $post->ID ) &&
+			! $this->ajax_post_id
+		) {
 			$url = wp_get_referer();
 
 			$this->ajax_post_id = url_to_postid( $url );

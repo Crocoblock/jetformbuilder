@@ -688,8 +688,10 @@ class Tools {
 	public static function set_current_post( $post_id ) {
 		global $post;
 
+		$post_id = absint( $post_id );
+
 		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$post = get_post( absint( $post_id ) );
+		$post = $post_id ? get_post( $post_id ) : null;
 	}
 
 	public static function prepare_repeater_value( $value, $fields_map ): array {

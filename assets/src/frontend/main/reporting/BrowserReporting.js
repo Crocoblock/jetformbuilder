@@ -26,7 +26,13 @@ function BrowserReporting() {
 		// browser automatically hide tooltip messages
 	};
 	this.validateOnChange = function () {
-		this.validate().then( () => {} ).catch( () => {} );
+		this.getErrors().then( errors => {
+			this.validityState.current = !Boolean( errors.length );
+
+			if ( !errors.length ) {
+				this.clearReport();
+			}
+		} ).catch( () => {} );
 	};
 
 	this.getErrorsRaw = async function ( promises ) {

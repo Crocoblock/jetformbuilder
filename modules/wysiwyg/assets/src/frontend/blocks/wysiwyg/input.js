@@ -6,10 +6,6 @@ const {
 	getParsedName,
 } = JetFormBuilderFunctions;
 
-// ADDED:
-// WYSIWYG inside initial repeater rows can miss editor-related styles
-// that are present in repeater template and loaded correctly after Add New.
-// We copy only missing stylesheet links from the repeater template to <head>.
 function appendMissingRepeaterTemplateStyles(node) {
 	const repeater = node.closest('.jet-form-builder-repeater');
 
@@ -47,12 +43,45 @@ function appendMissingRepeaterTemplateStyles(node) {
 	}
 }
 
+// During repeater reindexing, the old row may still contain a textarea
+// with the same ID as the newly created row.
+//
+// TinyMCE and wp.editor work globally by element ID, so the old textarea
+// must release that ID before the new editor is initialized.
+function releaseStaleEditorId(textArea) {
+	const editorId = textArea.id;
+	const existingEditor = window.tinymce.get(editorId);
+	const existingEditorElement = existingEditor?.getElement?.();
+
+	if (
+		existingEditor &&
+		existingEditorElement !== textArea
+	) {
+		existingEditor.remove();
+	}
+
+	const duplicateElement = document.getElementById(editorId);
+
+	if (
+		duplicateElement &&
+		duplicateElement !== textArea
+	) {
+		duplicateElement.id = [
+			editorId,
+			'stale',
+			Date.now(),
+			Math.random().toString(36).slice(2),
+		].join('_');
+	}
+}
+
 function WysiwygData() {
 	InputData.call(this);
 
 	this.isSupported = function (node) {
 		return node.classList.contains('wysiwyg-field');
 	};
+
 	this.setNode = function (node) {
 		InputData.prototype.setNode.call(this, node);
 
@@ -66,52 +95,74 @@ function WysiwygData() {
 		this.textArea = node.querySelector('.wp-editor-area');
 		const editorConfig = JSON.parse(node.dataset.editor);
 
-
 		this.rawName = editorConfig.textarea_name;
 		this.name = getParsedName(this.rawName);
 
 		const editor = () => window.tinymce.get(this.textArea.id);
-		editor()?.remove?.();
 
-		// ADDED:
-		// Before initializing WYSIWYG, ensure editor styles from repeater template
-		// are available for initially rendered repeater rows.
+		// Remove a stale TinyMCE instance and release the duplicated textarea ID
+		// before initializing the editor on the current textarea.
+		releaseStaleEditorId(this.textArea);
+
 		appendMissingRepeaterTemplateStyles(node);
 
-		window.wp.editor.initialize(this.textArea.id, editorConfig);
+		window.wp.editor.initialize(
+			this.textArea.id,
+			editorConfig,
+		);
+
 		this.editor = editor();
 		this.getEditor = editor;
 
-		document.addEventListener('jet-form-builder/conditional-block/block-toggle-hidden-dom', (event) => {
-			if (event.detail.block.contains(node)) {
-				const block = event.detail.block;
-				if (block.contains(node)) {
-					if (!block.__initialized) {
-						editor()?.remove?.();
-
-						// ADDED:
-						// Same styles check before conditional block re-initialization.
-						appendMissingRepeaterTemplateStyles(node);
-
-						window.wp.editor.initialize(this.textArea.id, editorConfig);
-						this.editor = editor();
-						this.getEditor = editor;
-						block.__initialized = true;
-					} else if (event.detail.result) {
-						editor()?.remove?.();
-
-						// ADDED:
-						// Same styles check before conditional block re-initialization.
-						appendMissingRepeaterTemplateStyles(node);
-
-						window.wp.editor.initialize(this.textArea.id, editorConfig);
-						this.editor = editor();
-						this.getEditor = editor;
-					}
+		document.addEventListener(
+			'jet-form-builder/conditional-block/block-toggle-hidden-dom',
+			event => {
+				if (!event.detail.block.contains(node)) {
+					return;
 				}
-			}
-		});
 
+				const block = event.detail.block;
+
+				if (!block.contains(node)) {
+					return;
+				}
+
+				if (!block.__initialized) {
+					// Use the same stale-editor protection before
+					// conditional block initialization.
+					releaseStaleEditorId(this.textArea);
+
+					appendMissingRepeaterTemplateStyles(node);
+
+					window.wp.editor.initialize(
+						this.textArea.id,
+						editorConfig,
+					);
+
+					this.editor = editor();
+					this.getEditor = editor;
+					block.__initialized = true;
+
+					return;
+				}
+
+				if (event.detail.result) {
+					// Use the same stale-editor protection before
+					// conditional block reinitialization.
+					releaseStaleEditorId(this.textArea);
+
+					appendMissingRepeaterTemplateStyles(node);
+
+					window.wp.editor.initialize(
+						this.textArea.id,
+						editorConfig,
+					);
+
+					this.editor = editor();
+					this.getEditor = editor;
+				}
+			},
+		);
 	};
 
 	this.addListeners = function () {
@@ -123,7 +174,9 @@ function WysiwygData() {
 			this.value.current = this.editor.getContent();
 		};
 
-		this.getEditor()?.on?.('input', update)?.on?.('change', update);
+		this.getEditor()
+			?.on?.('input', update)
+			?.on?.('change', update);
 	};
 
 	this.setValue = function () {
@@ -150,8 +203,9 @@ function WysiwygData() {
 		const node = this.getWrapperNode();
 		const iframeBody = this.editor.iframeElement.contentDocument.body;
 
-		const cssDeclarations = node.style.cssText.split(';').
-			filter(Boolean);
+		const cssDeclarations = node.style.cssText
+			.split(';')
+			.filter(Boolean);
 
 		for (const cssDeclaration of cssDeclarations) {
 			const [varName, value] = cssDeclaration.split(':');
@@ -160,10 +214,10 @@ function WysiwygData() {
 				case '--jfb-wysiwyg-container-bg':
 					iframeBody.style.backgroundColor = value;
 					break;
+
 				case '--jfb-wysiwyg-container-text':
 					iframeBody.style.color = value;
 					break;
-
 			}
 		}
 	};

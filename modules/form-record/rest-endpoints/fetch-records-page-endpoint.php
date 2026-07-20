@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Form_Record\Rest_Endpoints;
 
+use JFB_Modules\Form_Record\Rest_Endpoints\Traits\Records_Access_Trait;
 use JFB_Modules\Form_Record\Query_Views\Record_View_Count;
 use JFB_Modules\Form_Record\Admin\Table_Views\Records_Table_View;
 use Jet_Form_Builder\Db_Queries\Views\View_Base;
@@ -16,6 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 class Fetch_Records_Page_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 
 	use Rest_Api\Traits\Paginated_Args;
+	use Records_Access_Trait;
 
 	public static function get_rest_base() {
 		return 'records/fetch-page';
@@ -23,10 +25,6 @@ class Fetch_Records_Page_Endpoint extends Rest_Api\Rest_Api_Endpoint_Base {
 
 	public static function get_methods() {
 		return \WP_REST_Server::READABLE;
-	}
-
-	public function check_permission(): bool {
-		return current_user_can( 'manage_options' );
 	}
 
 	public function run_callback( \WP_REST_Request $request ) {

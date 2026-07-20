@@ -17,7 +17,7 @@ import {
 	isEmpty,
 	getOffsetTop,
 	focusOnInvalidInput,
-	isVisible, getScrollParent, applyUserAgents, isUA,
+	isVisible, getScrollParent, applyUserAgents, isUA, resetInputHtmlAttrsRegistry,
 } from './functions';
 import Restriction from './reporting/restrictions/Restriction';
 import RestrictionError from './reporting/RestrictionError';
@@ -25,12 +25,14 @@ import {
 	validateInputs,
 	validateInputsAll,
 	getValidateCallbacks,
+	resetReportingRegistry,
 } from './reporting/functions';
 
 import './calc.module/main';
 import {
 	getParsedName,
 	populateInputs,
+	resetInputRegistry,
 } from './inputs/functions';
 import initForm from './init/initForm';
 import BaseHtmlAttr from './attrs/BaseHtmlAttr';
@@ -40,6 +42,14 @@ import iterateJfbComments from './html.macro/iterateJfbComments';
 import observeComment from './html.macro/observeComment';
 import observeMacroAttr from './html.macro/observeMacroAttr';
 import RequiredRestriction from './reporting/restrictions/RequiredRestriction';
+import { resetSignalRegistry } from './signals/functions';
+
+function resetRuntimeRegistries() {
+	resetInputHtmlAttrsRegistry();
+	resetInputRegistry();
+	resetSignalRegistry();
+	resetReportingRegistry();
+}
 
 window.JetFormBuilderAbstract = {
 	...(
@@ -82,6 +92,7 @@ window.JetFormBuilderFunctions = {
 	iterateJfbComments,
 	getScrollParent,
 	isUA,
+	resetRuntimeRegistries,
 };
 
 document.addEventListener( 'DOMContentLoaded', applyUserAgents );
@@ -111,4 +122,3 @@ addEventListener( 'load', () => {
 		root.reQueryValues();
 	}
 } );
-

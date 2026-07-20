@@ -38,7 +38,7 @@ class Get_Form_Fields extends Rest_Api_Endpoint_Base {
 
 	public function check_permission(): bool {
 		$capability = Tab_Handler_Manager::get_form_records_access_capability();
-		return current_user_can('edit_jet_fb_forms') || current_user_can($capability);
+		return current_user_can( 'edit_jet_fb_forms' ) || current_user_can( $capability );
 	}
 
 	public function run_callback( \WP_REST_Request $request ) {
@@ -46,7 +46,7 @@ class Get_Form_Fields extends Rest_Api_Endpoint_Base {
 		$form    = get_post( $form_id );
 		$capability = Tab_Handler_Manager::get_form_records_access_capability();
 
-		if (! current_user_can($capability) 
+		if ( ! current_user_can( $capability )
 			&& absint( $form->post_author ) !== get_current_user_id()
 			&& ! current_user_can( 'edit_post', $form->ID )
 		) {

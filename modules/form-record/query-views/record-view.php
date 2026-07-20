@@ -148,13 +148,13 @@ class Record_View extends View_Base {
 		$conditions->set_condition(
 			array(
 				'type'   => Query_Conditions_Builder::TYPE_EQUAL,
-				'values' => array( 'status' , 'success' ),
+				'values' => array( 'status', 'success' ),
 			)
 		);
 		$conditions->set_condition(
 			array(
 				'type'   => Query_Conditions_Builder::TYPE_LIKE_END,
-				'values' => array( 'status' , 'dsuccess' ),
+				'values' => array( 'status', 'dsuccess' ),
 			)
 		);
 

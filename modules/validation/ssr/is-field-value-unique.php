@@ -3,9 +3,9 @@
 
 namespace JFB_Modules\Validation\Ssr;
 
-use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Request\Parser_Context;
+use JFB_Modules\Block_Parsers\Field_Data_Parser;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -23,13 +23,31 @@ class Is_Field_Value_Unique extends Base_Validation_Callback {
 	}
 
 	public function is_valid( $value, Parser_Context $context ): bool {
-		$request     = $context->get_request();
-		$field_path  = $this->get_field_path( $request['_jfb_validation_path'] ?? '' );
+		$request    = $context->get_request();
+		$field_path = $this->get_field_path( $request['_jfb_validation_path'] ?? '' );
+		$form_id    = absint( $request['_jet_engine_booking_form_id'] ?? 0 );
+
+		return $this->is_value_unique( $value, $field_path, $form_id );
+	}
+
+	public function is_valid_with_parser( Field_Data_Parser $parser ): bool {
+		// The parser path is the same path authenticated by the submission signature.
+		$field_path = $this->get_field_path( explode( '.', $parser->get_scoped_name() ) );
+		$form_id    = absint( jet_fb_handler()->get_form_id() );
+
+		return $this->is_value_unique( $parser->get_value(), $field_path, $form_id );
+	}
+
+	private function is_value_unique( $value, array $field_path, int $form_id ): bool {
 		$field_name  = $field_path[0] ?? '';
 		$nested_path = array_slice( $field_path, 1 );
-		$form_id     = $request['_jet_engine_booking_form_id'];
+
+		if ( ! $form_id || '' === $field_name || is_numeric( $field_name ) ) {
+			return false;
+		}
 
 		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$record_ids = $wpdb->get_col(
 			$wpdb->prepare(
 				'SELECT id FROM ' . $wpdb->prefix . 'jet_fb_records WHERE form_id = %d AND status = %s',
@@ -38,7 +56,7 @@ class Is_Field_Value_Unique extends Base_Validation_Callback {
 			)
 		);
 
-		if ( empty( $record_ids ) || '' === $field_name ) {
+		if ( empty( $record_ids ) ) {
 			return true;
 		}
 
@@ -54,7 +72,8 @@ class Is_Field_Value_Unique extends Base_Validation_Callback {
 			);
 
 			$params = array_merge( $record_ids, array( $field_name, $value ) );
-			$exists = $wpdb->get_var( $wpdb->prepare( $sql, $params ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			$exists = $wpdb->get_var( $wpdb->prepare( $sql, $params ) );
 
 			return ! $exists;
 		}
@@ -67,7 +86,8 @@ class Is_Field_Value_Unique extends Base_Validation_Callback {
 		);
 
 		$params = array_merge( $record_ids, array( $field_name ) );
-		$rows   = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+		$rows = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A );
 
 		foreach ( $rows as $row ) {
 			if ( ! $this->matches_nested_value( $row, $nested_path, $value ) ) {
@@ -89,13 +109,13 @@ class Is_Field_Value_Unique extends Base_Validation_Callback {
 
 		foreach ( $field_path as $segment ) {
 			if ( ! is_scalar( $segment ) ) {
-				continue;
+				return array();
 			}
 
 			$segment = sanitize_text_field( (string) $segment );
 
 			if ( '' === $segment ) {
-				continue;
+				return array();
 			}
 
 			$segments[] = $segment;
@@ -117,27 +137,42 @@ class Is_Field_Value_Unique extends Base_Validation_Callback {
 			return false;
 		}
 
-		if ( Array_Tools::get( $decoded, $nested_path, null ) === $value ) {
-			return true;
-		}
+		$normalized_path = $this->normalize_nested_path( $nested_path );
 
-		$wildcard_path = $this->normalize_nested_path( $nested_path );
-
-		if ( $wildcard_path === $nested_path ) {
+		if ( empty( $normalized_path ) ) {
 			return false;
 		}
 
-		foreach ( $decoded as $item ) {
-			if ( ! is_array( $item ) ) {
-				continue;
-			}
+		return $this->matches_path( $decoded, $normalized_path, $value );
+	}
 
-			if ( Array_Tools::get( $item, $wildcard_path, null ) === $value ) {
-				return true;
-			}
+	private function matches_path( $current, array $path, $value ): bool {
+		if ( empty( $path ) ) {
+			return $current === $value;
 		}
 
-		return false;
+		if ( ! is_array( $current ) ) {
+			return false;
+		}
+
+		// Repeater indexes are not signature-bound, so scan every row at each depth.
+		if ( wp_is_numeric_array( $current ) ) {
+			foreach ( $current as $item ) {
+				if ( $this->matches_path( $item, $path, $value ) ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		$segment = array_shift( $path );
+
+		if ( ! array_key_exists( $segment, $current ) ) {
+			return false;
+		}
+
+		return $this->matches_path( $current[ $segment ], $path, $value );
 	}
 
 	private function normalize_nested_path( array $nested_path ): array {

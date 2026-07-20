@@ -3,6 +3,7 @@ import GatewaysEditor from '../components/gateways-editor';
 const {
 	Button,
 	ToggleControl,
+	BaseControl,
 	Notice,
 	__experimentalItemGroup: ItemGroup,
 	__experimentalItem: Item,
@@ -152,6 +153,9 @@ function PluginGateways( props ) {
 		}
 	};
 
+	const labels = gatewaysData.labels || {};
+	const isPriceProtectionEnabled = !!meta?.protect_price_field;
+
 	return (
 		<>
 			<ItemGroup className="jfb-gateways" isBordered isSeparated>
@@ -267,6 +271,33 @@ function PluginGateways( props ) {
 					);
 				} ) }
 			</ItemGroup>
+
+			<div className="jfb-gateways__common" style={ { marginTop: '12px' } }>
+				<ToggleControl
+					label={ labels.protect_price_field || __( 'Secure payment amount', 'jet-form-builder' ) }
+					checked={ isPriceProtectionEnabled }
+					onChange={ ( value ) => {
+						setMeta( {
+							...meta,
+							protect_price_field: value,
+						} );
+					} }
+				/>
+				<BaseControl
+					help={
+						labels.protect_price_field_help
+						|| __( 'Applies to all payment gateways that use this amount field.', 'jet-form-builder' )
+					}
+				/>
+				<Notice
+					status={ isPriceProtectionEnabled ? 'info' : 'warning' }
+					isDismissible={ false }
+				>
+					{ isPriceProtectionEnabled
+						? labels.protect_price_field_safe
+						: labels.protect_price_field_risk }
+				</Notice>
+			</div>
 
 			{ isEdit && (
 				<ActionModal

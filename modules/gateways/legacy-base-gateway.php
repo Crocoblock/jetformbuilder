@@ -242,9 +242,26 @@ abstract class Legacy_Base_Gateway {
 	}
 
 	protected function get_price_from_request() {
-		$number = jet_fb_context()->get_value( $this->price_field );
+		if ( ! $this->is_price_field_protection_enabled() ) {
+			$number = jet_fb_context()->get_value( $this->price_field );
 
-		return $this->get_price( is_numeric( $number ) ? $number : 0 );
+			return $this->get_price( is_numeric( $number ) ? $number : 0 );
+		}
+
+		$number = ( new Trusted_Price_Resolver( (int) jet_fb_handler()->form_id ) )
+			->resolve( $this->price_field );
+
+		return $this->get_price( $number );
+	}
+
+	public function is_price_field_protection_enabled(): bool {
+		return filter_var(
+			$this->gateway(
+				'protect_price_field',
+				$this->current_scenario( 'protect_price_field', false )
+			),
+			FILTER_VALIDATE_BOOLEAN
+		);
 	}
 
 	protected function get_price( $price ) {

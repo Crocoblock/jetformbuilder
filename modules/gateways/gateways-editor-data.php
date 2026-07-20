@@ -16,12 +16,28 @@ trait Gateways_Editor_Data {
 				'notifications_success'     => _x( 'On successful payment:', 'Gateways editor data', 'jet-form-builder' ),
 				'notifications_failed'      => _x( 'On failed payment:', 'Gateways editor data', 'jet-form-builder' ),
 				'price_field'               => _x( 'Price/amount field', 'Gateways editor data', 'jet-form-builder' ),
+				'protect_price_field'       => _x( 'Secure payment amount', 'Gateways editor data', 'jet-form-builder' ),
 				'message_success'           => _x( 'Payment success message', 'Gateways editor data', 'jet-form-builder' ),
 				'message_failed'            => _x( 'Payment failed message', 'Gateways editor data', 'jet-form-builder' ),
 				'use_success_redirect'      => _x( 'Redirect to a page', 'Gateways editor data', 'jet-form-builder' ),
 				'action_order'              => _x( 'Create payment order notification:', 'Gateways editor data', 'jet-form-builder' ),
 				'use_success_redirect_help' => _x(
 					'Enable this toggle to redirect a user after successful payment.',
+					'Gateways editor data',
+					'jet-form-builder'
+				),
+				'protect_price_field_help'  => _x(
+					'Applies to all payment gateways that use this amount field.',
+					'Gateways editor data',
+					'jet-form-builder'
+				),
+				'protect_price_field_risk'  => _x(
+					'Disabled: the submitted amount is trusted as-is.',
+					'Gateways editor data',
+					'jet-form-builder'
+				),
+				'protect_price_field_safe'  => _x(
+					'Valid: Calculated (Number), server-only Hidden, static options, Posts/Terms options with calculate values. Invalid: Text/Number/Date, visible Hidden, post/request-context sources, %META%, Meta Field or generated options.',
 					'Gateways editor data',
 					'jet-form-builder'
 				),

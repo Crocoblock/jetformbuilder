@@ -16,114 +16,137 @@ import { useDispatch } from '@wordpress/data';
 import { STORE_NAME } from '../../store';
 import { styled } from '@linaria/react';
 import useCategoriesAndActionTypes from './useCategoriesAndActionTypes';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useRef } from '@wordpress/element';
 import { StyledFlexControl } from 'jet-form-builder-components';
+import usePreventEditorUndoInModal from '../../hooks/usePreventEditorUndoInModal';
 
 const StyledPlaceholder = styled.div`
     text-align: center;
 `;
 
 // eslint-disable-next-line max-lines-per-function
-function AddActionModal() {
+function AddActionModal() {  
+
+	usePreventEditorUndoInModal();
+
+	const searchInputRef = useRef(null);
 
 	const { actions, setActions } = useActionsEdit();
 
 	const {
-		      openActionSettings,
-		      showActionsInserterModal,
-	      } = useDispatch( STORE_NAME );
+		openActionSettings,
+		showActionsInserterModal,
+	} = useDispatch(STORE_NAME);
 
 	const {
-		      search,
-		      setSearch,
-		      category,
-		      categories,
-		      actionTypes,
-		      setCategory,
-	      }           = useCategoriesAndActionTypes();
-	const onAddAction = ( event, action ) => {
-		const nodeClasses = Array.from( event.target?.classList );
+		search,
+		setSearch,
+		category,
+		categories,
+		actionTypes,
+		setCategory,
+	} = useCategoriesAndActionTypes();
 
-		if ( nodeClasses?.[ 0 ]?.includes?.( 'components-external-link' ) ) {
+	const onAddAction = (event, action) => {
+		const nodeClasses = Array.from(event.target?.classList);
+
+		if (nodeClasses?.[0]?.includes?.('components-external-link')) {
 			return;
 		}
+
 		const newAction = {
-			...new BaseAction( {
+			...new BaseAction({
 				type: action.type,
-			} ),
+			}),
 		};
 
-		setActions( [
+		setActions([
 			...actions,
 			newAction,
-		] );
-		showActionsInserterModal( false );
-		openActionSettings( {
+		]);
+
+		showActionsInserterModal(false);
+
+		openActionSettings({
 			item: newAction,
 			index: actions.length,
 			scenario: 'inserter',
-		} );
+		});
 	};
 
-	useEffect( () => {
+	// ADDED: focus search input right after modal is rendered.
+	useEffect(() => {
+		const frame = window.requestAnimationFrame(() => {
+			searchInputRef.current?.focus?.();
+		});
+
 		return () => {
-			setSearch( '' );
-			setCategory( '' );
+			window.cancelAnimationFrame(frame);
 		};
-	}, [ setCategory, setSearch ] );
+	}, []);
+
+	useEffect(() => {
+		return () => {
+			setSearch('');
+			setCategory('');
+		};
+	}, [setCategory, setSearch]);
 
 	return <Modal
 		size="large"
-		title={ __( 'Add new action', 'jet-form-builder' ) }
-		onRequestClose={ () => showActionsInserterModal( false ) }
-		headerActions={ <StyledFlexControl expanded={ false }>
+		title={__('Add new action', 'jet-form-builder')}
+		onRequestClose={() => showActionsInserterModal(false)}
+		headerActions={<StyledFlexControl expanded={false}>
 			<TextControl
-				placeholder={ __(
+				ref={searchInputRef}
+				placeholder={__(
 					'Search action by name…',
 					'jet-form-builder',
-				) }
-				value={ search }
-				onChange={ setSearch }
+				)}
+				value={search}
+				onChange={setSearch}
 			/>
 			<SelectControl
-				value={ category }
-				onChange={ setCategory }
-				options={ categories }
+				value={category}
+				onChange={setCategory}
+				options={categories}
 			/>
-		</StyledFlexControl> }
+		</StyledFlexControl>}
 	>
-		{ !Boolean( actionTypes?.length ) && <StyledPlaceholder>
-			<h3>{ __(
+		{!Boolean(actionTypes?.length) && <StyledPlaceholder>
+			<h3>{__(
 				'No actions were found by your search parameters.',
 				'jet-form-builder',
-			) }</h3>
+			)}</h3>
 			<Button
 				variant="secondary"
-				icon={ closeSmall }
-				onClick={ () => {
-					setSearch( '' );
-					setCategory( '' );
-				} }
+				icon={closeSmall}
+				onClick={() => {
+					setSearch('');
+					setCategory('');
+				}}
 			>
-				{ __(
+				{__(
 					'Clear search & category fields',
 					'jet-form-builder',
-				) }
+				)}
 			</Button>
-		</StyledPlaceholder> }
-		<Grid columns={ 4 } className="jfb-actions-grid">
-			{ actionTypes.map( action => (
+		</StyledPlaceholder>}
+
+		<Grid columns={4} className="jfb-actions-grid">
+			{actionTypes.map(action => (
 				<ActionGridItem
-					key={ action.type }
-					action={ action }
-					onClick={ event => {
-						if ( action.disabled ) {
+					key={action.type}
+					action={action}
+					onClick={event => {
+						if (action.disabled) {
 							return;
 						}
-						onAddAction( event, action );
-					} }
+
+						onAddAction(event, action);
+					}}
 				/>
-			) ) }
+			))}
 		</Grid>
 	</Modal>;
 }

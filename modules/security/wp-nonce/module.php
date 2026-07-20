@@ -85,7 +85,7 @@ class Module implements Base_Module_It {
 			esc_attr( $field_id ),
 			esc_attr( self::KEY ),
 			esc_attr( wp_create_nonce( $this->get_nonce_id() ) )
-		);
+		) . wp_referer_field( false );
 	}
 
 	public function verify( $nonce ): bool {

@@ -10,6 +10,7 @@ use Jet_Form_Builder\Classes\Value_Normalizers\Single_Value_As_Array;
 use Jet_Form_Builder\Actions\Methods\Base_Object_Property;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
 use JFB_Modules\Actions_V2\Insert_Post\Traits\Process_Meta_Boxes_Trait;
+use JFB_Modules\Media_Cleanup\Module as Media_Cleanup;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -136,6 +137,12 @@ class Post_Meta_Property extends Base_Object_Property implements
 		// Push processed values into $_POST. JetEngine reads from here.
 		$_POST = array_merge( $_POST, $prepared_value ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
+		$meta_keys_for_cleanup = Media_Cleanup::get_post_meta_keys_for_cleanup( $modifier );
+		$old_attachment_ids = Media_Cleanup::collect_post_meta_attachment_ids(
+			$id,
+			$meta_keys_for_cleanup
+		);
+
 		foreach ( $this->value as $key => $value ) {
 			if ( in_array( $key, $meta_keys_to_array, true ) ) {
 				update_post_meta( $id, $key, array_values( (array) $value ) );
@@ -147,6 +154,13 @@ class Post_Meta_Property extends Base_Object_Property implements
 
 		// JetEngine meta boxes processing.
 		$this->process_meta_boxes( $id, $modifier );
+
+		$new_attachment_ids = Media_Cleanup::collect_post_meta_attachment_ids(
+			$id,
+			$meta_keys_for_cleanup
+		);
+
+		Media_Cleanup::maybe_delete_attachments( $old_attachment_ids, $new_attachment_ids );
 	}
 
 	public function set_meta( array $meta ) {

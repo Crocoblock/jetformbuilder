@@ -18,17 +18,45 @@ function MacroFieldItem( { onClick } ) {
 	const isChild    = Boolean( field.is_repeater_child );
 
 	const label = isRepeater
-		? `${ baseLabel } (repeater)`
-		: ( isChild ? `— ${ baseLabel }` : baseLabel );
+		? `${baseLabel} (repeater)`
+		: baseLabel;
+	const prefix = isChild ? '- ' : '';
+
+	if (field.supports_option_label) {
+		return (
+			<div className="jet-fb-macro-field-item" style={{ whiteSpace: 'nowrap' }}>
+				<div className="jet-fb-macro-field-item__label">
+					{label}
+				</div>
+				<div className="jet-fb-macro-field-item__formats">
+					- <Button
+						isLink
+						onClick={() => onClick(value, field)}
+					>
+						Format: value
+					</Button> <br/>
+					- <Button
+						isLink
+						onClick={() => onClick(value, field, 'option-label')}
+					>
+						Format: label value
+					</Button>
+				</div>
+			</div>
+		);
+	}
 
 	return (
-		<Button
-			style={{ whiteSpace: 'nowrap' }}
-			isLink
-			onClick={ () => onClick( value, field ) }
-		>
-			{ label }
-		</Button>
+		<>
+		{ prefix }
+			<Button
+				style={{ whiteSpace: 'nowrap' }}
+				isLink
+				onClick={ () => onClick( value, field ) }
+			>
+				{ label }
+			</Button>
+		</>
 	);
 }
 

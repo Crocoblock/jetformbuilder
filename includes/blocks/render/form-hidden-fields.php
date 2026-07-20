@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Blocks\Render;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_State;
 use Jet_Form_Builder\Classes\Http\Http_Tools;
 use Jet_Form_Builder\Classes\Security\Csrf_Tools;
@@ -35,6 +36,17 @@ class Form_Hidden_Fields {
 				'name'        => jet_fb_handler()->refer_key,
 			)
 		);
+
+		if ( Block_Helper::is_valid_preview_form_post( jet_fb_live()->form_id ) ) {
+			$fields .= Live_Form::force_render_field(
+				'hidden-field',
+				array(
+					'field_value' => Block_Helper::get_preview_nonce(),
+					'name'        => Block_Helper::PREVIEW_NONCE_FIELD,
+				)
+			);
+		}
+
 		$fields .= Live_Form::force_render_field(
 			'hidden-field',
 			array(

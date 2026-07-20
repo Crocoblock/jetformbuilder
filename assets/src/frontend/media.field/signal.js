@@ -202,7 +202,11 @@ function uniqueByName( files ) {
 	const seen   = new Set();
 	const result = [];
 
-	for ( const file of files ) {
+	for ( const file of normalizeFiles( files ) ) {
+		if ( !file?.name ) {
+			continue;
+		}
+
 		if ( seen.has( file.name ) ) {
 			continue;
 		}
@@ -211,4 +215,24 @@ function uniqueByName( files ) {
 	}
 
 	return result;
+}
+
+function normalizeFiles( files ) {
+	if ( !files ) {
+		return [];
+	}
+
+	if ( Array.isArray( files ) ) {
+		return files;
+	}
+
+	if ( 'function' === typeof files[ Symbol.iterator ] ) {
+		return Array.from( files );
+	}
+
+	if ( 'object' === typeof files ) {
+		return Object.values( files );
+	}
+
+	return [];
 }

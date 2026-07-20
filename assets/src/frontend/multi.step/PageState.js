@@ -145,6 +145,7 @@ PageState.prototype.observeConditionalBlocks = function () {
 			if ( condition instanceof ConditionPageStateItem ) {
 				block.page = this;
 				this.canSwitch.watch( () => block.list.onChangeRelated() );
+				block.list.onChangeRelated();
 
 				break;
 			}

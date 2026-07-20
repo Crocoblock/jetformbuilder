@@ -14,7 +14,6 @@ function SignalSelect() {
 		const { value }  = this.input;
 
 		this.input.calcValue = 0;
-
 		for ( const option of node.options ) {
 			option.selected = isMultiple
 			                  ? value.current?.includes( option.value )

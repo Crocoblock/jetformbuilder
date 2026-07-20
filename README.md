@@ -8,6 +8,35 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.4
+* ADD: Add Text Field variations for Email, Password, URL, First Name, Last Name
+* ADD: Show field names in the List View
+* FIX: Hide Honeypot protection fields in the editor after updating to 3.6.2
+* ADD: Add customizable autocomplete attribute for Text Fields
+
+## 3.6.3.1
+* FIX: get_from_db, get_from_users options generators. Make sure the generator options is correctly santized to prevent context injecting.
+
+## 3.6.3
+* FIX: Restore repeater macro filter compatibility without breaking formatted output
+* FIX: Calculated Field now correctly processes empty Multi Select values
+* FIX: Require User Access selection in Media Field settings
+* ADD: Support option labels in Fields Preview macros
+* ADD: Auto-focus search in the “New Action” modal and fix Undo (Cmd/Ctrl+Z) behavior inside action popups
+* ADD: Delete removed Media Field attachments from the Media Library on form submission
+* FIX: Prevent broken widget rendering for non-form form IDs
+* FIX: Normalize media field files after repeater re-observe
+* FIX: Duplicate HTML macro processing
+* FIX: Escape line breaks only inside calculated string values
+* FIX: Recalculate multistep page break state after binding page
+
+
+## 3.6.2.2
+* FIX: SSR validation privilege escalation hardening
+
+## 3.6.2.1
+* FIX: Prevent unauthorized JetEngine Update Options writes
+
 ## 3.6.2
 * FIX: Resolved validation errors when using dynamic values for the Media Field “Maximum Files” setting.
 * FIX: Prevented duplicate _wpnonce field IDs when multiple forms with form safety enabled are rendered on the same page.
@@ -19,7 +48,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * FIX: Prevented false Undefined view errors after email verification.
 * FIX: Restored StyleManager opt-out handling for form blocks.
 * FIX: Skipped Phone Field validation when changing the selected country.
-
+* FIX: Prevented a fatal error in the Update User action when the User Role setting is empty.
 
 ## 3.6.1.1
 * FIX: Vulnerability allowing Privilege Escalation

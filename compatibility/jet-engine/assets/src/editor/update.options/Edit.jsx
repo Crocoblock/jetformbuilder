@@ -6,7 +6,7 @@ import {
 	Label,
 	RowControlEnd,
 } from 'jet-form-builder-components';
-import { Flex } from '@wordpress/components';
+import { Flex, Notice } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import OptionRow from './OptionRow';
 
@@ -21,6 +21,12 @@ function UpdateOptionsEdit( props ) {
 	const formFields = useFields( { withInner: false } );
 
 	return <Flex direction="column">
+		<Notice status="warning" isDismissible={ false }>
+			{ __(
+				'This action can update a JetEngine Options Page only for users with the manage_options capability. If you need a public or lower-privilege flow, replace it with Call Hook and save the option in custom code with your own capability and request validation checks.',
+				'jet-form-builder',
+			) }
+		</Notice>
 		<ValidatedSelectControl
 			value={ settings.options_page }
 			label={ __( 'Options page', 'jet-form-builder' ) }

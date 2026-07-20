@@ -48,6 +48,10 @@ class Update_Options extends Base {
 	}
 
 	public function do_action( array $request, Action_Handler $handler ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
 		$fields_map   = ! empty( $this->settings['meta_fields_map'] ) ? $this->settings['meta_fields_map'] : array();
 		$options_data = array();
 

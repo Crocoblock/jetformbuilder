@@ -281,6 +281,13 @@ class Registry {
 			} else {
 				$settings = $generator->parse_settings( $block_attrs );
 			}
+
+			if ( isset( $block_attrs['_jfb_runtime'] ) && is_array( $block_attrs['_jfb_runtime'] ) ) {
+				$settings['_jfb_runtime'] = $block_attrs['_jfb_runtime'];
+			}
+
+			$settings['_jfb_block_attrs'] = $block_attrs;
+
 			return $generator->generate_with_context( $settings, $context );
 		}
 

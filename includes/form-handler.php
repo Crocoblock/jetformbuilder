@@ -7,6 +7,7 @@ use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
 use Jet_Form_Builder\Actions\Events\Default_Required\Default_Required_Event;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Options_Handler;
+use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
@@ -148,7 +149,9 @@ class Form_Handler {
 	}
 
 	public function set_form_id( $form_id ) {
-		$this->form_id = absint( $form_id );
+		$form_id = absint( $form_id );
+
+		$this->form_id = Block_Helper::is_valid_form_post( $form_id, true ) ? $form_id : 0;
 
 		return $this;
 	}
@@ -252,6 +255,8 @@ class Form_Handler {
 				)
 			);
 			$this->send_raw_response();
+
+			return;
 		}
 
 		$this->try_send();
@@ -302,9 +307,13 @@ class Form_Handler {
 	}
 
 	/**
-	 * @throws Request_Exception|Action_Exception|Spam_Exception
+	 * @throws Request_Exception
 	 */
 	public function send_form() {
+		if ( ! $this->form_id ) {
+			throw new Request_Exception( 'failed' );
+		}
+
 		$this->action_handler->set_form_id( $this->form_id );
 		$this->request_handler->set_form_data();
 

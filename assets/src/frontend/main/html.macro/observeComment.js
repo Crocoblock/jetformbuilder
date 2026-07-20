@@ -10,6 +10,10 @@ const {
  * @param root    {Observable}
  */
 function observeComment( comment, root ) {
+	if ( comment.jfbObserved ) {
+		return;
+	}
+
 	const formula = new CalculatedHtmlString( root );
 	formula.observe( comment.textContent );
 

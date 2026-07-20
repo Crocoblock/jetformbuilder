@@ -20,6 +20,157 @@ addFilter(
 	attachConstNamespace,
 );
 
+function escapeStringLineBreaks( value ) {
+	if ( 'string' !== typeof value ) {
+		return value;
+	}
+
+	let result = '';
+	let escaped = false;
+	let state = 'code';
+	let templateExpressionDepth = 0;
+
+	for ( let index = 0; index < value.length; index++ ) {
+		const current = value[ index ];
+		const next    = value[ index + 1 ];
+
+		if ( '\r' === current || '\n' === current ) {
+			result += [ 'single', 'double', 'template' ].includes( state )
+				? '\\n'
+				: current;
+			escaped = false;
+
+			if ( '\r' === current && '\n' === next ) {
+				index++;
+			}
+
+			continue;
+		}
+
+		result += current;
+
+		if ( escaped ) {
+			escaped = false;
+			continue;
+		}
+
+		if ( 'single' === state ) {
+			if ( '\\' === current ) {
+				escaped = true;
+			}
+			else if ( '\'' === current ) {
+				state = 'code';
+			}
+
+			continue;
+		}
+
+		if ( 'double' === state ) {
+			if ( '\\' === current ) {
+				escaped = true;
+			}
+			else if ( '"' === current ) {
+				state = 'code';
+			}
+
+			continue;
+		}
+
+		if ( 'template' === state ) {
+			if ( '\\' === current ) {
+				escaped = true;
+				continue;
+			}
+
+			if ( '`' === current ) {
+				state = 'code';
+				continue;
+			}
+
+			if ( '$' === current && '{' === next ) {
+				result += next;
+				index++;
+				state = 'template-expression';
+				templateExpressionDepth = 1;
+			}
+
+			continue;
+		}
+
+		if ( '\'' === current ) {
+			state = 'single';
+			continue;
+		}
+
+		if ( '"' === current ) {
+			state = 'double';
+			continue;
+		}
+
+		if ( '`' === current ) {
+			state = 'template';
+			continue;
+		}
+
+		if ( 'template-expression' === state ) {
+			if ( '{' === current ) {
+				templateExpressionDepth++;
+				continue;
+			}
+
+			if ( '}' === current ) {
+				templateExpressionDepth--;
+
+				if ( 0 === templateExpressionDepth ) {
+					state = 'template';
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+function getOptionLabelFromNode(node) {
+	if (!node) {
+		return '';
+	}
+	if (node.tagName === 'SELECT') {
+		return Array.from(node.selectedOptions || [])
+			.map(option => String(
+				option.label || option.textContent || option.value || ''
+			).trim())
+			.filter(Boolean)
+			.join(', ');
+	}
+	if (
+		(node.type === 'checkbox' || node.type === 'radio') &&
+		!node.checked
+	) {
+		return '';
+	}
+	if (node.type === 'checkbox' || node.type === 'radio') {
+		const label = node.closest('label');
+		if (!label) {
+			return '';
+		}
+		const textNode = label.querySelector('span');
+		return String(
+			textNode?.textContent || label.textContent || node.value || ''
+		).trim();
+	}
+	return '';
+}
+
+function getRelatedInputOptionLabel(relatedInput) {
+	const labels = Array.from(relatedInput.nodes || [])
+		.map(getOptionLabelFromNode)
+		.filter(Boolean);
+	return labels.length
+		? labels.join(', ')
+		: relatedInput.value.current;
+}
+
 /**
  * @param root    {InputData|Observable}
  * @param options {{forceFunction: boolean}}
@@ -77,6 +228,9 @@ CalculatedFormula.prototype = {
 	 */
 	relatedCallback( relatedInput ) {
 		return relatedInput.value.current;
+	},
+	relatedLabelCallback(relatedInput) {
+		return getRelatedInputOptionLabel(relatedInput);
 	},
 	/**
 	 *
@@ -213,7 +367,6 @@ CalculatedFormula.prototype = {
 	 */
 	// eslint-disable-next-line max-lines-per-function
 	observeMacro( current ) {
-
 		if ( null === this.formula ) {
 			this.formula = current;
 		}
@@ -228,7 +381,15 @@ CalculatedFormula.prototype = {
 			return false;
 		}
 
-		const [ fieldName, ...params ] = parsedName;
+		let [ fieldName, ...params ] = parsedName;
+
+		if (name.includes('::')) {
+			const [possibleFieldName, ...possibleParams] = name.split('::');
+			if (this.root.getInput(possibleFieldName)) {
+				fieldName = possibleFieldName;
+				params = possibleParams;
+			}
+		}
 
 		/**
 		 * @see   https://github.com/Crocoblock/issues-tracker/issues/13730
@@ -319,6 +480,13 @@ CalculatedFormula.prototype = {
 
 		const [ attrName ] = params;
 
+		if ('label' === attrName) {
+			return () => applyFilters(
+				this.relatedLabelCallback(relatedInput),
+				filtersList,
+			);
+		}
+
 		if ( !relatedInput.attrs.hasOwnProperty( attrName ) ) {
 			return false;
 		}
@@ -385,11 +553,7 @@ CalculatedFormula.prototype = {
 			return this.formula;
 		}
 
-		let formula = this.calculateString();
-
-		if ('string' === typeof formula) {
-			formula = formula.replace(/\r\n|\r|\n/g, '\\n');
-		}
+		const formula = escapeStringLineBreaks( this.calculateString() );
 
 		try {
 			return (

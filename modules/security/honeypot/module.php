@@ -22,7 +22,7 @@ class Module implements Base_Module_It {
 
 	const SPAM_EXCEPTION = 'honeypot';
 
-	const FRONTEND_STYLE_HANDLE = 'jet-form-builder-frontend';
+	const HONEYPOT_STYLE_HANDLE = 'jet-form-builder-honeypot';
 
 	public function __construct() {
 		add_filter( 'jet-form-builder/security/spam-statuses', array( $this, 'add_spam_statuses' ) );
@@ -90,23 +90,33 @@ class Module implements Base_Module_It {
 		);
 	}
 
-	public function enqueue_styles() {
+	public function enqueue_styles()
+	{
+		wp_register_style(
+			self::HONEYPOT_STYLE_HANDLE,
+			false,
+			array(),
+			jet_form_builder()->get_version()
+		);
+		wp_enqueue_style(self::HONEYPOT_STYLE_HANDLE);
 		wp_add_inline_style(
-			self::FRONTEND_STYLE_HANDLE,
+			self::HONEYPOT_STYLE_HANDLE,
 			'
-			.jfb-user-info {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 1px;
-				height: 1px;
-				overflow: hidden;
-				clip-path: inset(50%);
-				white-space: nowrap;
-				user-select: none;
-				-webkit-user-select: none;
-			}
-			'
+		.jfb-user-info,
+		.jfb-user-info input {
+			position: absolute !important;
+			top: 0 !important;
+			left: 0 !important;
+			width: 1px !important;
+			height: 1px !important;
+			overflow: hidden !important;
+			clip-path: inset(50%) !important;
+			white-space: nowrap !important;
+			user-select: none !important;
+			-webkit-user-select: none !important;
+			pointer-events: none !important;
+		}
+		'
 		);
 	}
 

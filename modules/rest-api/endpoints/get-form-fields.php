@@ -10,6 +10,7 @@ use Jet_Form_Builder\Form_Manager;
 use Jet_Form_Builder\Request\Exceptions\Plain_Value_Exception;
 use JFB_Components\Rest_Api\Rest_Api_Endpoint_Base;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -36,14 +37,17 @@ class Get_Form_Fields extends Rest_Api_Endpoint_Base {
 	}
 
 	public function check_permission(): bool {
-		return current_user_can( 'edit_jet_fb_forms' );
+		$capability = Tab_Handler_Manager::get_form_records_access_capability();
+		return current_user_can('edit_jet_fb_forms') || current_user_can($capability);
 	}
 
 	public function run_callback( \WP_REST_Request $request ) {
 		$form_id = $request->get_param( 'id' );
 		$form    = get_post( $form_id );
+		$capability = Tab_Handler_Manager::get_form_records_access_capability();
 
-		if ( absint( $form->post_author ) !== get_current_user_id()
+		if (! current_user_can($capability) 
+			&& absint( $form->post_author ) !== get_current_user_id()
 			&& ! current_user_can( 'edit_post', $form->ID )
 		) {
 			return new \WP_REST_Response(

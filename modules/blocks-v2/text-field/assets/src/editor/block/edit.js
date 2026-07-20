@@ -4,6 +4,7 @@ import {
 	maskPlaceholdersList,
 	maskTypesList,
 	maskVisibilitiesList,
+	autocompleteValuesList,
 } from './options';
 import preview from './preview';
 import { __ } from '@wordpress/i18n';
@@ -143,6 +144,30 @@ export default function TextEdit( props ) {
 						{ label: __( 'On', 'jet-form-builder' ), value: 'on' },
 					] }
 				/>
+				{attributes.autocomplete === 'on' && (
+
+					<SelectControl
+						label={__('Autocomplete value', 'jet-form-builder')}
+						labelPosition="top"
+						value={attributes.autocomplete_value || 'on'}
+						onChange={autocomplete_value => 
+							setAttributes({ autocomplete_value })
+						}
+						options={autocompleteValuesList}
+					/>
+
+				)}
+				{attributes.autocomplete === 'on' &&
+					attributes.autocomplete_value === 'custom' && (
+						<TextControl
+							label={__('Custom autocomplete value', 'jet-form-builder')}
+							value={attributes.autocomplete_custom || ''}
+							onChange={autocomplete_custom =>
+								setAttributes({ autocomplete_custom })
+							}
+						/>
+
+				)}
 				<AdvancedInspectorControl
 					value={ attributes.minlength }
 					label={ __( 'Min length (symbols)', 'jet-form-builder' ) }

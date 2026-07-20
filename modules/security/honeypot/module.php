@@ -90,15 +90,14 @@ class Module implements Base_Module_It {
 		);
 	}
 
-	public function enqueue_styles()
-	{
+	public function enqueue_styles() {
 		wp_register_style(
 			self::HONEYPOT_STYLE_HANDLE,
 			false,
 			array(),
 			jet_form_builder()->get_version()
 		);
-		wp_enqueue_style(self::HONEYPOT_STYLE_HANDLE);
+		wp_enqueue_style( self::HONEYPOT_STYLE_HANDLE );
 		wp_add_inline_style(
 			self::HONEYPOT_STYLE_HANDLE,
 			'

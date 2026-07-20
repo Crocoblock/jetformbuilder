@@ -28,9 +28,9 @@ $this->add_attribute( 'maxlength', $this->args['maxlength'] ?? '' );
 $this->add_attribute( 'data-jfb-sync' );
 
 $autocomplete = $this->args['autocomplete'] ?? 'off';
-if ('on' === $autocomplete) {
+if ( 'on' === $autocomplete ) {
 	$autocomplete_value = $this->args['autocomplete_value'] ?? 'on';
-	if ('custom' === $autocomplete_value) {
+	if ( 'custom' === $autocomplete_value ) {
 		$autocomplete_value = $this->args['autocomplete_custom'] ?? '';
 	}
 	$autocomplete = $autocomplete_value ?: 'on';
@@ -39,7 +39,7 @@ if ('on' === $autocomplete) {
 $this->add_attribute(
 	'autocomplete',
 	'off' === $autocomplete
-		? 'off_' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8)
+		? 'off_' . substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' ), 0, 8 )
 		: $autocomplete
 );
 

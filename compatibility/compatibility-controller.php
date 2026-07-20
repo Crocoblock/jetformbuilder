@@ -24,6 +24,7 @@ class Compatibility_Controller implements Module_Controller_It {
 			new Jet_Engine\Jet_Engine(),
 			new Jet_Appointment\Jet_Appointment(),
 			new Jet_Booking\Jet_Booking(),
+			new Jet_Popup\Jet_Popup(),
 			new Polylang\Polylang(),
 			new Wpml\Wpml(),
 			new Jet_Style_Manager\Jet_Style_Manager(),

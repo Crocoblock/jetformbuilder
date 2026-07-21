@@ -320,9 +320,15 @@ final class Module implements
 	public function is_advanced( array $block_attrs ): bool {
 		$type = $block_attrs['validation']['type'] ?? '';
 
-		return $type
-			? self::FORMAT_ADVANCED === $type
-			: $this->is_advanced_form();
+		if ( self::FORMAT_ADVANCED === $type ) {
+			return true;
+		}
+
+		if ( self::FORMAT_BROWSER === $type ) {
+			return false;
+		}
+
+		return $this->is_advanced_form();
 	}
 
 	public function is_advanced_form(): bool {

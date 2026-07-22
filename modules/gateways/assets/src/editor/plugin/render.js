@@ -293,9 +293,18 @@ function PluginGateways( props ) {
 					status={ isPriceProtectionEnabled ? 'info' : 'warning' }
 					isDismissible={ false }
 				>
-					{ isPriceProtectionEnabled
-						? labels.protect_price_field_safe
-						: labels.protect_price_field_risk }
+					{ isPriceProtectionEnabled ? (
+						<>
+							<div>
+								<strong>{ __( 'Valid:', 'jet-form-builder' ) }</strong>{ ' ' }
+								{ labels.protect_price_field_safe?.valid }
+							</div>
+							<div>
+								<strong>{ __( 'Invalid:', 'jet-form-builder' ) }</strong>{ ' ' }
+								{ labels.protect_price_field_safe?.invalid }
+							</div>
+						</>
+					) : labels.protect_price_field_risk }
 				</Notice>
 			</div>
 

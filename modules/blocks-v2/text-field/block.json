@@ -39,10 +39,18 @@
 			"type": "string",
 			"default": "off"
 		},
+		"autocomplete_value": {
+			"type": "string",
+			"default": "on"
+		},
+		"autocomplete_custom": {
+			"type": "string",
+			"default": ""
+		},
 		"enable_input_mask": {
 			"type": "boolean",
 			"default": false
-		},
+		}, 
 		"clear_on_submit": {
 			"type": "boolean",
 			"default": false

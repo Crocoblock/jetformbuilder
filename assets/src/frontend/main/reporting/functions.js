@@ -30,17 +30,29 @@ const getDefaultRestrictions = () => applyFilters(
 
 let defaultRestrictions = [];
 
+function getPreparedReportTypes() {
+	if ( !reportTypes.length ) {
+		reportTypes = getReportTypes();
+	}
+
+	return [ ...reportTypes ];
+}
+
+function getPreparedDefaultRestrictions() {
+	if ( !defaultRestrictions.length ) {
+		defaultRestrictions = getDefaultRestrictions();
+	}
+
+	return [ ...defaultRestrictions ];
+}
+
 /**
  * @param  reporting {BrowserReporting}
  * @param  node
  * @return {*}
  */
 function createDefaultRestrictions( reporting, node ) {
-	if ( !defaultRestrictions.length ) {
-		defaultRestrictions = getDefaultRestrictions();
-	}
-
-	for ( const restriction of defaultRestrictions ) {
+	for ( const restriction of getPreparedDefaultRestrictions() ) {
 		const current = new restriction();
 
 		if ( !current.isSupported( node, reporting ) ) {
@@ -58,11 +70,7 @@ function createDefaultRestrictions( reporting, node ) {
  * @return {AdvancedReporting|BrowserReporting}
  */
 function createReport( input ) {
-	if ( !reportTypes.length ) {
-		reportTypes = getReportTypes();
-	}
-
-	for ( const reportType of reportTypes ) {
+	for ( const reportType of getPreparedReportTypes() ) {
 		const current = new reportType();
 
 		if ( !current.isSupported( input.nodes[ 0 ], input ) ) {
@@ -74,6 +82,11 @@ function createReport( input ) {
 	}
 
 	throw new Error( 'Something went wrong' );
+}
+
+function resetReportingRegistry() {
+	reportTypes         = [];
+	defaultRestrictions = [];
 }
 
 /**
@@ -132,4 +145,5 @@ export {
 	validateInputsAll,
 	createDefaultRestrictions,
 	getValidateCallbacks,
+	resetReportingRegistry,
 };

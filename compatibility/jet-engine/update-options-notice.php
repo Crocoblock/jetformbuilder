@@ -347,7 +347,7 @@ class Update_Options_Notice {
 		$legacy_suffix = ':' . self::SCAN_SCHEMA_VERSION;
 
 		return strlen( $dismissed ) > strlen( $legacy_suffix )
-			&& $legacy_suffix === substr( $dismissed, -strlen( $legacy_suffix ) );
+			&& substr( $dismissed, -strlen( $legacy_suffix ) ) === $legacy_suffix;
 	}
 
 	private function get_notice_dismiss_token( array $notice ): string {

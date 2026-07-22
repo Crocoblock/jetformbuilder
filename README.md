@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.4.1
+* FIX: Broken Access Control vulnerability
+
 ## 3.6.4
 * ADD: Add Text Field variations for Email, Password, URL, First Name, Last Name
 * ADD: Show field names in the List View

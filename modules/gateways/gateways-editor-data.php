@@ -16,12 +16,28 @@ trait Gateways_Editor_Data {
 				'notifications_success'     => _x( 'On successful payment:', 'Gateways editor data', 'jet-form-builder' ),
 				'notifications_failed'      => _x( 'On failed payment:', 'Gateways editor data', 'jet-form-builder' ),
 				'price_field'               => _x( 'Price/amount field', 'Gateways editor data', 'jet-form-builder' ),
+				'protect_price_field'       => _x( 'Secure payment amount', 'Gateways editor data', 'jet-form-builder' ),
 				'message_success'           => _x( 'Payment success message', 'Gateways editor data', 'jet-form-builder' ),
 				'message_failed'            => _x( 'Payment failed message', 'Gateways editor data', 'jet-form-builder' ),
 				'use_success_redirect'      => _x( 'Redirect to a page', 'Gateways editor data', 'jet-form-builder' ),
 				'action_order'              => _x( 'Create payment order notification:', 'Gateways editor data', 'jet-form-builder' ),
 				'use_success_redirect_help' => _x(
 					'Enable this toggle to redirect a user after successful payment.',
+					'Gateways editor data',
+					'jet-form-builder'
+				),
+				'protect_price_field_help'  => _x(
+					'Applies to all gateways linked to the price field.',
+					'Gateways editor data',
+					'jet-form-builder'
+				),
+				'protect_price_field_risk'  => _x(
+					'Disabled: the gateway strictly trusts the price submitted by the browser(Unsecure).',
+					'Gateways editor data',
+					'jet-form-builder'
+				),
+				'protect_price_field_safe'  => _x(
+					'Valid: Calculated Field, Hidden Field (Render in HTML disabled), Select/Radio/Checkbox fields with calculate values, Booking price macros (e.g. %ADVANCED_PRICE::...%). Invalid: Text/Number/Date fields, Hidden Field (Render in HTML enabled), post meta macros (e.g. %META::...%).',
 					'Gateways editor data',
 					'jet-form-builder'
 				),

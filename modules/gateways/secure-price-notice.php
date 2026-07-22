@@ -1,6 +1,6 @@
 <?php
 
-namespace JFB_Compatibility\Jet_Engine;
+namespace JFB_Modules\Gateways;
 
 use JFB_Modules\Post_Type\Module as Post_Type_Module;
 
@@ -8,12 +8,12 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class Update_Options_Notice {
+class Secure_Price_Notice {
 
-	const SCAN_VERSION_OPTION = 'jet_fb_jet_engine_update_options_scan_version';
-	const NOTICE_OPTION       = 'jet_fb_jet_engine_update_options_notice';
-	const DISMISS_META_KEY    = 'jet_fb_jet_engine_update_options_notice_dismissed';
-	const NOTICE_QUERY_ARG    = 'jet_fb_dismiss_jet_engine_update_options_notice';
+	const SCAN_VERSION_OPTION = 'jet_fb_secure_price_scan_version';
+	const NOTICE_OPTION       = 'jet_fb_secure_price_notice';
+	const DISMISS_META_KEY    = 'jet_fb_secure_price_notice_dismissed';
+	const NOTICE_QUERY_ARG    = 'jet_fb_dismiss_secure_price_notice';
 	const SCAN_SCHEMA_VERSION = '1';
 	const SCAN_BATCH_SIZE     = 30;
 
@@ -73,17 +73,7 @@ class Update_Options_Notice {
 				? array()
 				: $this->scan_specific_forms( $tracked_ids );
 
-			update_option( self::SCAN_VERSION_OPTION, $version, false );
-			update_option(
-				self::NOTICE_OPTION,
-				array(
-					'version'      => $version,
-					'notice_token' => wp_generate_uuid4(),
-					'tracked_ids'  => $tracked_ids,
-					'forms'        => $forms,
-				),
-				false
-			);
+			$this->save_scan( $version, $tracked_ids, $forms );
 
 			return;
 		}
@@ -91,17 +81,7 @@ class Update_Options_Notice {
 		$forms       = $this->scan_affected_forms();
 		$tracked_ids = array_values( array_unique( array_map( 'intval', wp_list_pluck( $forms, 'id' ) ) ) );
 
-		update_option( self::SCAN_VERSION_OPTION, $version, false );
-		update_option(
-			self::NOTICE_OPTION,
-			array(
-				'version'      => $version,
-				'notice_token' => wp_generate_uuid4(),
-				'tracked_ids'  => $tracked_ids,
-				'forms'        => $forms,
-			),
-			false
-		);
+		$this->save_scan( $version, $tracked_ids, $forms );
 	}
 
 	public function maybe_dismiss_notice() {
@@ -143,11 +123,7 @@ class Update_Options_Notice {
 			return;
 		}
 
-		if ( $this->get_scan_version() !== $notice['version'] ) {
-			return;
-		}
-
-		if ( $this->is_notice_dismissed( $notice ) ) {
+		if ( $this->get_scan_version() !== $notice['version'] || $this->is_notice_dismissed( $notice ) ) {
 			return;
 		}
 
@@ -161,13 +137,13 @@ class Update_Options_Notice {
 		?>
 		<div class="notice notice-warning">
 			<p>
-				<strong><?php esc_html_e( 'JetFormBuilder: review JetEngine Update Options actions after this update.', 'jet-form-builder' ); ?></strong>
+				<strong><?php esc_html_e( 'JetFormBuilder: enable Secure payment amount for existing payment forms.', 'jet-form-builder' ); ?></strong>
 			</p>
 			<p>
-				<?php esc_html_e( 'JetEngine Update Options actions now require the manage_options capability before they can modify an Options Page. Review the forms below if you expected these updates to run for public or lower-privilege submissions.', 'jet-form-builder' ); ?>
+				<?php esc_html_e( 'This update adds server-side payment amount validation, but it is disabled for existing forms to preserve compatibility. The forms below still trust the submitted amount, which visitors may be able to modify.', 'jet-form-builder' ); ?>
 			</p>
 			<p>
-				<?php esc_html_e( 'If you intentionally need a non-admin flow, replace this action with Call Hook and update the option in custom code where you can enforce your own capability and request validation rules.', 'jet-form-builder' ); ?>
+				<?php esc_html_e( 'Open each form, enable Secure payment amount in Gateways Settings, verify that its price source is supported, and test the payment flow. Unsupported client-controlled price sources will be rejected after protection is enabled.', 'jet-form-builder' ); ?>
 			</p>
 			<ul style="list-style: disc; margin-left: 1.5em;">
 				<?php foreach ( $forms as $form ) : ?>
@@ -176,7 +152,15 @@ class Update_Options_Notice {
 							<?php echo esc_html( $form['title'] ); ?>
 						</a>
 						<?php echo esc_html( ' (#' . $form['id'] . ')' ); ?>:
-						<?php echo esc_html( implode( '; ', $form['issues'] ) ); ?>
+						<?php
+						echo esc_html(
+							sprintf(
+								/* translators: %s: comma-separated payment gateway IDs */
+								__( 'payment gateway(s): %s', 'jet-form-builder' ),
+								implode( ', ', $form['gateways'] )
+							)
+						);
+						?>
 					</li>
 				<?php endforeach; ?>
 			</ul>
@@ -194,12 +178,29 @@ class Update_Options_Notice {
 				</p>
 			<?php endif; ?>
 			<p>
+				<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . Post_Type_Module::SLUG ) ); ?>" class="button button-primary">
+					<?php esc_html_e( 'Review Forms', 'jet-form-builder' ); ?>
+				</a>
 				<a href="<?php echo esc_url( $dismiss_url ); ?>" class="button button-secondary">
 					<?php esc_html_e( 'Dismiss', 'jet-form-builder' ); ?>
 				</a>
 			</p>
 		</div>
 		<?php
+	}
+
+	private function save_scan( string $version, array $tracked_ids, array $forms ) {
+		update_option( self::SCAN_VERSION_OPTION, $version, false );
+		update_option(
+			self::NOTICE_OPTION,
+			array(
+				'version'      => $version,
+				'notice_token' => wp_generate_uuid4(),
+				'tracked_ids'  => $tracked_ids,
+				'forms'        => $forms,
+			),
+			false
+		);
 	}
 
 	private function scan_affected_forms(): array {
@@ -227,22 +228,11 @@ class Update_Options_Notice {
 			}
 
 			foreach ( $form_ids as $form_id ) {
-				$issues = $this->get_form_issues( (int) $form_id );
+				$form = $this->get_affected_form( (int) $form_id );
 
-				if ( empty( $issues ) ) {
-					continue;
+				if ( $form ) {
+					$affected_forms[] = $form;
 				}
-
-				$affected_forms[] = array(
-					'id'        => (int) $form_id,
-					'title'     => get_the_title( $form_id ) ?: sprintf(
-						/* translators: %d: form ID */
-						__( 'Form #%d', 'jet-form-builder' ),
-						$form_id
-					),
-					'edit_link' => get_edit_post_link( $form_id, 'raw' ) ?: admin_url( 'post.php?post=' . absint( $form_id ) . '&action=edit' ),
-					'issues'    => array_values( array_unique( $issues ) ),
-				);
 			}
 
 			if ( count( $form_ids ) < self::SCAN_BATCH_SIZE ) {
@@ -265,60 +255,66 @@ class Update_Options_Notice {
 				continue;
 			}
 
-			$issues = $this->get_form_issues( $form_id );
+			$form = $this->get_affected_form( $form_id );
 
-			if ( empty( $issues ) ) {
-				continue;
+			if ( $form ) {
+				$affected_forms[] = $form;
 			}
-
-			$affected_forms[] = array(
-				'id'        => $form_id,
-				'title'     => get_the_title( $form_id ) ?: sprintf(
-					/* translators: %d: form ID */
-					__( 'Form #%d', 'jet-form-builder' ),
-					$form_id
-				),
-				'edit_link' => get_edit_post_link( $form_id, 'raw' ) ?: admin_url( 'post.php?post=' . absint( $form_id ) . '&action=edit' ),
-				'issues'    => array_values( array_unique( $issues ) ),
-			);
 		}
 
 		return $affected_forms;
 	}
 
-	private function get_form_issues( int $form_id ): array {
-		$actions = jet_form_builder()->post_type->get_actions( $form_id );
-		$issues  = array();
+	private function get_affected_form( int $form_id ): array {
+		$settings = jet_form_builder()->post_type->get_gateways( $form_id );
+		$gateways = $this->get_active_gateways( $settings );
 
-		foreach ( $actions as $action ) {
-			if ( 'update_options' !== ( $action['type'] ?? '' ) ) {
-				continue;
-			}
-
-			$issues = array_merge( $issues, $this->get_update_options_action_issues( $action ) );
+		if ( empty( $gateways ) || $this->is_price_protection_enabled( $settings ) ) {
+			return array();
 		}
 
-		return array_values( array_unique( $issues ) );
+		return array(
+			'id'        => $form_id,
+			'title'     => get_the_title( $form_id ) ?: sprintf(
+				/* translators: %d: form ID */
+				__( 'Form #%d', 'jet-form-builder' ),
+				$form_id
+			),
+			'edit_link' => get_edit_post_link( $form_id, 'raw' ) ?: admin_url( 'post.php?post=' . absint( $form_id ) . '&action=edit' ),
+			'gateways'  => $gateways,
+		);
 	}
 
-	private function get_update_options_action_issues( array $action ): array {
-		$settings     = $action['settings']['update_options'] ?? $action['settings'] ?? array();
-		$options_page = (string) ( $settings['options_page'] ?? '' );
-		$issues       = array();
+	private function get_active_gateways( array $settings ): array {
+		$gateways = array();
 
-		if ( '' !== $options_page ) {
-			$issues[] = __(
-				'updates the JetEngine Options Page, which now requires manage_options during form submission',
-				'jet-form-builder'
-			);
+		if ( 'manual' === ( $settings['mode'] ?? 'single' ) ) {
+			foreach ( $settings as $gateway_id => $gateway_settings ) {
+				if (
+					! is_string( $gateway_id ) ||
+					! is_array( $gateway_settings ) ||
+					! filter_var( $gateway_settings['show_on_front'] ?? false, FILTER_VALIDATE_BOOLEAN )
+				) {
+					continue;
+				}
+
+				$gateways[] = sanitize_key( $gateway_id );
+			}
 		} else {
-			$issues[] = __(
-				'uses the JetEngine Update Options action, which now requires manage_options during form submission',
-				'jet-form-builder'
-			);
+			$gateway_id = is_string( $settings['gateway'] ?? null )
+				? sanitize_key( $settings['gateway'] )
+				: '';
+
+			if ( $gateway_id && ! in_array( $gateway_id, array( 'none', 'manual' ), true ) ) {
+				$gateways[] = $gateway_id;
+			}
 		}
 
-		return $issues;
+		return array_values( array_unique( array_filter( $gateways ) ) );
+	}
+
+	private function is_price_protection_enabled( array $settings ): bool {
+		return filter_var( $settings['protect_price_field'] ?? false, FILTER_VALIDATE_BOOLEAN );
 	}
 
 	private function get_scan_version(): string {

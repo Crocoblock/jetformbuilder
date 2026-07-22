@@ -149,7 +149,7 @@ class Update_User implements Action_Integration_Interface {
 		update_user_meta(
 			get_current_user_id(),
 			self::DISMISS_META_KEY,
-			$this->get_scan_version()
+			$this->get_dismiss_version()
 		);
 
 		wp_safe_redirect(
@@ -389,6 +389,10 @@ class Update_User implements Action_Integration_Interface {
 		return jet_form_builder()->get_version() . ':' . self::SCAN_SCHEMA_VERSION;
 	}
 
+	private function get_dismiss_version(): string {
+		return 'schema:' . self::SCAN_SCHEMA_VERSION;
+	}
+
 	private function is_notice_dismissed( array $notice ): bool {
 		$dismissed = (string) get_user_meta( get_current_user_id(), self::DISMISS_META_KEY, true );
 
@@ -396,11 +400,18 @@ class Update_User implements Action_Integration_Interface {
 			return false;
 		}
 
-		if ( $dismissed === $this->get_scan_version() ) {
+		if (
+			$dismissed === $this->get_dismiss_version() ||
+			$dismissed === $this->get_notice_dismiss_token( $notice )
+		) {
 			return true;
 		}
 
-		return $dismissed === $this->get_notice_dismiss_token( $notice );
+		// Older builds stored "<plugin-version>:<schema>" in user meta.
+		$legacy_suffix = ':' . self::SCAN_SCHEMA_VERSION;
+
+		return strlen( $dismissed ) > strlen( $legacy_suffix )
+			&& $legacy_suffix === substr( $dismissed, -strlen( $legacy_suffix ) );
 	}
 
 	private function get_notice_dismiss_token( array $notice ): string {

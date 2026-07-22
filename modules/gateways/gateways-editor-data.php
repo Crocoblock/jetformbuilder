@@ -27,17 +27,17 @@ trait Gateways_Editor_Data {
 					'jet-form-builder'
 				),
 				'protect_price_field_help'  => _x(
-					'Applies to all payment gateways that use this amount field.',
+					'Applies to all gateways linked to the price field.',
 					'Gateways editor data',
 					'jet-form-builder'
 				),
 				'protect_price_field_risk'  => _x(
-					'Disabled: the submitted amount is trusted as-is.',
+					'Disabled: the gateway strictly trusts the price submitted by the browser(Unsecure).',
 					'Gateways editor data',
 					'jet-form-builder'
 				),
 				'protect_price_field_safe'  => _x(
-					'Valid: Calculated (Number), server-only Hidden, static options, Posts/Terms options with calculate values. Invalid: Text/Number/Date, visible Hidden, post/request-context sources, %META%, Meta Field or generated options.',
+					'Valid: Calculated Field, Hidden Field (Render in HTML disabled), Select/Radio/Checkbox fields with calculate values, Booking price macros (e.g. %ADVANCED_PRICE::...%). Invalid: Text/Number/Date fields, Hidden Field (Render in HTML enabled), post meta macros (e.g. %META::...%).',
 					'Gateways editor data',
 					'jet-form-builder'
 				),

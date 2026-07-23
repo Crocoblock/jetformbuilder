@@ -154,7 +154,9 @@ function PluginGateways( props ) {
 	};
 
 	const labels = gatewaysData.labels || {};
-	const isPriceProtectionEnabled = !!meta?.protect_price_field;
+	const hasSelectedGateway = selectedGateway !== 'none';
+	const isPriceProtectionEnabled =
+		hasSelectedGateway && !!meta?.protect_price_field;
 
 	return (
 		<>
@@ -272,41 +274,43 @@ function PluginGateways( props ) {
 				} ) }
 			</ItemGroup>
 
-			<div className="jfb-gateways__common" style={ { marginTop: '12px' } }>
-				<ToggleControl
-					label={ labels.protect_price_field || __( 'Secure payment amount', 'jet-form-builder' ) }
-					checked={ isPriceProtectionEnabled }
-					onChange={ ( value ) => {
-						setMeta( {
-							...meta,
-							protect_price_field: value,
-						} );
-					} }
-				/>
-				<BaseControl
-					help={
-						labels.protect_price_field_help
-						|| __( 'Applies to all payment gateways that use this amount field.', 'jet-form-builder' )
-					}
-				/>
-				<Notice
-					status={ isPriceProtectionEnabled ? 'info' : 'warning' }
-					isDismissible={ false }
-				>
-					{ isPriceProtectionEnabled ? (
-						<>
-							<div>
-								<strong>{ __( 'Valid:', 'jet-form-builder' ) }</strong>{ ' ' }
-								{ labels.protect_price_field_safe?.valid }
-							</div>
-							<div>
-								<strong>{ __( 'Invalid:', 'jet-form-builder' ) }</strong>{ ' ' }
-								{ labels.protect_price_field_safe?.invalid }
-							</div>
-						</>
-					) : labels.protect_price_field_risk }
-				</Notice>
-			</div>
+			{ hasSelectedGateway && (
+				<div className="jfb-gateways__common" style={ { marginTop: '12px' } }>
+					<ToggleControl
+						label={ labels.protect_price_field || __( 'Secure payment amount', 'jet-form-builder' ) }
+						checked={ isPriceProtectionEnabled }
+						onChange={ ( value ) => {
+							setMeta( {
+								...meta,
+								protect_price_field: value,
+							} );
+						} }
+					/>
+					<BaseControl
+						help={
+							labels.protect_price_field_help
+							|| __( 'Applies to all payment gateways that use this amount field.', 'jet-form-builder' )
+						}
+					/>
+					<Notice
+						status={ isPriceProtectionEnabled ? 'info' : 'warning' }
+						isDismissible={ false }
+					>
+						{ isPriceProtectionEnabled ? (
+							<>
+								<div>
+									<strong>{ __( 'Valid:', 'jet-form-builder' ) }</strong>{ ' ' }
+									{ labels.protect_price_field_safe?.valid }
+								</div>
+								<div>
+									<strong>{ __( 'Invalid:', 'jet-form-builder' ) }</strong>{ ' ' }
+									{ labels.protect_price_field_safe?.invalid }
+								</div>
+							</>
+						) : labels.protect_price_field_risk }
+					</Notice>
+				</div>
+			) }
 
 			{ isEdit && (
 				<ActionModal

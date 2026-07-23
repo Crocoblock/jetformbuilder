@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.4.2
+* FIX: Secure payment amount toggle behavior
+
 ## 3.6.4.1
 * FIX: Broken Access Control vulnerability
 

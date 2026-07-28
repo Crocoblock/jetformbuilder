@@ -395,6 +395,8 @@ class Secure_Price_Notice {
 			|| 'number' !== ( $attributes['value_type'] ?? 'number' )
 			|| ! is_string( $formula )
 			|| '' === trim( $formula )
+			|| strlen( $formula ) > Trusted_Price_Resolver::MAX_FORMULA_LENGTH
+			|| substr_count( $formula, '%' ) / 2 > Trusted_Price_Resolver::MAX_MACRO_TOKENS
 			|| ! is_numeric( $precision )
 			|| (float) (int) $precision !== (float) $precision
 			|| (int) $precision < 0
@@ -571,7 +573,10 @@ class Secure_Price_Notice {
 	): bool {
 		$attributes = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : array();
 
-		if ( 'manual_input' !== ( $attributes['field_options_from'] ?? 'manual_input' ) ) {
+		if (
+			$this->has_custom_option( $block )
+			|| 'manual_input' !== ( $attributes['field_options_from'] ?? 'manual_input' )
+		) {
 			return false;
 		}
 
@@ -608,6 +613,23 @@ class Secure_Price_Notice {
 		}
 
 		return true;
+	}
+
+	private function has_custom_option( array $block ): bool {
+		$type = Block_Helper::delete_namespace( $block['blockName'] ?? '' );
+
+		if ( ! in_array( $type, array( 'radio-field', 'checkbox-field' ), true ) ) {
+			return false;
+		}
+
+		$attributes    = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : array();
+		$custom_option = $attributes['custom_option'] ?? false;
+
+		if ( is_array( $custom_option ) ) {
+			$custom_option = $custom_option['allow'] ?? false;
+		}
+
+		return filter_var( $custom_option, FILTER_VALIDATE_BOOLEAN );
 	}
 
 	private function is_positive_number( $value ): bool {

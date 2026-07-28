@@ -508,6 +508,10 @@ class Secure_Price_Notice {
 			);
 		}
 
+		if ( 'hidden-field' === $type ) {
+			return $this->is_safe_static_hidden_field( $block );
+		}
+
 		if ( in_array( $type, array( 'select-field', 'radio-field', 'checkbox-field' ), true ) ) {
 			return $this->has_safe_static_option_configuration( $block, false );
 		}

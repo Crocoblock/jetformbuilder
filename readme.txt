@@ -277,6 +277,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 **3.6.4.2**
 - FIX: Secure payment amount toggle behavior
+- FIX: Safely enable payment amount protection for eligible existing forms
 
 **3.6.4.1**
 - FIX: Broken Access Control vulnerability

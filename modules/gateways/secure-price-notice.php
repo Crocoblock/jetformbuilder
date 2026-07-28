@@ -365,7 +365,7 @@ class Secure_Price_Notice {
 
 			$attributes = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : array();
 
-			if ( $field_name === ( $attributes['name'] ?? '' ) ) {
+			if ( ( $attributes['name'] ?? '' ) === $field_name ) {
 				$matches[] = $block;
 			}
 
@@ -537,7 +537,7 @@ class Secure_Price_Notice {
 			);
 			$attributes     = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : array();
 
-			if ( $field_name === ( $attributes['name'] ?? '' ) ) {
+			if ( ( $attributes['name'] ?? '' ) === $field_name ) {
 				return $inside_current;
 			}
 

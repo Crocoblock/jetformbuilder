@@ -2,6 +2,8 @@
 
 namespace JFB_Modules\Gateways;
 
+use Jet_Form_Builder\Blocks\Block_Helper;
+use JFB_Modules\Post_Type\Meta\Gateways_Meta;
 use JFB_Modules\Post_Type\Module as Post_Type_Module;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -14,8 +16,14 @@ class Secure_Price_Notice {
 	const NOTICE_OPTION       = 'jet_fb_secure_price_notice';
 	const DISMISS_META_KEY    = 'jet_fb_secure_price_notice_dismissed';
 	const NOTICE_QUERY_ARG    = 'jet_fb_dismiss_secure_price_notice';
-	const SCAN_SCHEMA_VERSION = '1';
+	const SCAN_SCHEMA_VERSION = '2';
 	const SCAN_BATCH_SIZE     = 30;
+
+	const CALCULATED_MACRO_PATTERN = '/%'
+		. '((?:[a-zA-Z0-9_-]+::)?'
+		. '[a-zA-Z0-9_-]+'
+		. '(?:\|[a-zA-Z][a-zA-Z0-9]*(?:\([^%|()]*\))?)*)'
+		. '%/';
 
 	public function init_hooks() {
 		add_action( 'save_post_' . Post_Type_Module::SLUG, array( $this, 'invalidate_scan_cache' ) );
@@ -68,7 +76,10 @@ class Secure_Price_Notice {
 			)
 		);
 
-		if ( array_key_exists( 'tracked_ids', $notice ) ) {
+		if (
+			array_key_exists( 'tracked_ids', $notice )
+			&& $this->notice_uses_current_scan_schema( $notice )
+		) {
 			$forms = empty( $tracked_ids )
 				? array()
 				: $this->scan_specific_forms( $tracked_ids );
@@ -140,7 +151,7 @@ class Secure_Price_Notice {
 				<strong><?php esc_html_e( 'JetFormBuilder: enable Secure payment amount for existing payment forms.', 'jet-form-builder' ); ?></strong>
 			</p>
 			<p>
-				<?php esc_html_e( 'This update adds server-side payment amount validation, but it is disabled for existing forms to preserve compatibility. The forms below still trust the submitted amount, which visitors may be able to modify.', 'jet-form-builder' ); ?>
+				<?php esc_html_e( 'Secure payment amount was enabled automatically only for existing forms with static price sources that can be safely verified. The forms below still trust the submitted amount, which visitors may be able to modify.', 'jet-form-builder' ); ?>
 			</p>
 			<p>
 				<?php esc_html_e( 'Open each form, enable Secure payment amount in Gateways Settings, verify that its price source is supported, and test the payment flow. Unsupported client-controlled price sources will be rejected after protection is enabled.', 'jet-form-builder' ); ?>
@@ -273,6 +284,14 @@ class Secure_Price_Notice {
 			return array();
 		}
 
+		if (
+			! $this->has_explicit_price_protection_setting( $settings )
+			&& $this->has_safe_static_price_source( $form_id, $settings )
+			&& $this->enable_price_protection( $form_id, $settings )
+		) {
+			return array();
+		}
+
 		return array(
 			'id'        => $form_id,
 			'title'     => get_the_title( $form_id ) ?: sprintf(
@@ -282,6 +301,358 @@ class Secure_Price_Notice {
 			),
 			'edit_link' => get_edit_post_link( $form_id, 'raw' ) ?: admin_url( 'post.php?post=' . absint( $form_id ) . '&action=edit' ),
 			'gateways'  => $gateways,
+		);
+	}
+
+	private function has_explicit_price_protection_setting( array $settings ): bool {
+		if ( array_key_exists( 'protect_price_field', $settings ) ) {
+			return true;
+		}
+
+		foreach ( $settings as $value ) {
+			if (
+				is_array( $value )
+				&& $this->has_explicit_price_protection_setting( $value )
+			) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private function has_safe_static_price_source( int $form_id, array $settings ): bool {
+		$field_name = is_string( $settings['price_field'] ?? null )
+			? sanitize_key( $settings['price_field'] )
+			: '';
+
+		if ( ! $field_name ) {
+			return false;
+		}
+
+		$blocks  = Block_Helper::get_blocks_by_post( $form_id, true, true );
+		$matches = $this->find_price_field_blocks( $field_name, $blocks );
+
+		if ( 1 !== count( $matches ) ) {
+			return false;
+		}
+
+		$block = $matches[0];
+		$type  = Block_Helper::delete_namespace( $block['blockName'] ?? '' );
+
+		if ( 'calculated-field' === $type ) {
+			return $this->is_safe_static_calculated_field( $field_name, $block, $blocks );
+		}
+
+		if ( 'hidden-field' === $type ) {
+			return $this->is_safe_static_hidden_field( $block );
+		}
+
+		if ( in_array( $type, array( 'select-field', 'radio-field', 'checkbox-field' ), true ) ) {
+			return $this->is_safe_static_option_field( $block );
+		}
+
+		return false;
+	}
+
+	private function find_price_field_blocks( string $field_name, array $blocks ): array {
+		$matches = array();
+
+		foreach ( $blocks as $block ) {
+			if ( ! is_array( $block ) ) {
+				continue;
+			}
+
+			$attributes = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : array();
+
+			if ( $field_name === ( $attributes['name'] ?? '' ) ) {
+				$matches[] = $block;
+			}
+
+			if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+				$matches = array_merge(
+					$matches,
+					$this->find_price_field_blocks( $field_name, $block['innerBlocks'] )
+				);
+			}
+		}
+
+		return $matches;
+	}
+
+	private function is_safe_static_calculated_field(
+		string $field_name,
+		array $block,
+		array $blocks,
+		array $resolving_fields = array()
+	): bool {
+		$attributes = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : array();
+		$formula    = $attributes['calc_formula'] ?? '';
+		$precision  = $attributes['precision'] ?? 2;
+
+		if (
+			isset( $resolving_fields[ $field_name ] )
+			|| 'number' !== ( $attributes['value_type'] ?? 'number' )
+			|| ! is_string( $formula )
+			|| '' === trim( $formula )
+			|| strlen( $formula ) > Trusted_Price_Resolver::MAX_FORMULA_LENGTH
+			|| substr_count( $formula, '%' ) / 2 > Trusted_Price_Resolver::MAX_MACRO_TOKENS
+			|| ! is_numeric( $precision )
+			|| (float) (int) $precision !== (float) $precision
+			|| (int) $precision < 0
+			|| (int) $precision > 100
+		) {
+			return false;
+		}
+
+		$formula = html_entity_decode( $formula, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+
+		if (
+			false !== strpos( $formula, '^' )
+			|| $this->is_field_inside_dynamic_container( $field_name, $blocks )
+		) {
+			return false;
+		}
+
+		$resolving_fields[ $field_name ] = true;
+
+		return $this->is_safe_calculated_formula( $formula, $blocks, $resolving_fields );
+	}
+
+	private function is_safe_calculated_formula(
+		string $formula,
+		array $blocks,
+		array $resolving_fields
+	): bool {
+		$replacements = array();
+		$dependencies = array();
+		$match        = preg_match_all(
+			self::CALCULATED_MACRO_PATTERN,
+			$formula,
+			$macros,
+			PREG_SET_ORDER
+		);
+
+		if ( false === $match ) {
+			return false;
+		}
+
+		foreach ( $macros as $macro ) {
+			$token = $macro[1];
+
+			if ( false !== strpos( $token, '|' ) ) {
+				return false;
+			}
+
+			$parts = explode( '::', $token, 2 );
+
+			if ( 2 === count( $parts ) ) {
+				if ( 'field' !== strtolower( $parts[0] ) ) {
+					return false;
+				}
+
+				$dependency = $parts[1];
+			} else {
+				$dependency = $parts[0];
+			}
+
+			if (
+				! isset( $dependencies[ $dependency ] )
+				&& ! $this->is_safe_calculated_dependency(
+					$dependency,
+					$blocks,
+					$resolving_fields
+				)
+			) {
+				return false;
+			}
+
+			$dependencies[ $dependency ] = true;
+			$replacements[ $macro[0] ]   = '1';
+		}
+
+		try {
+			( new Trusted_Price_Resolver_Expression_Parser(
+				strtr( $formula, $replacements )
+			) )->validate();
+		} catch ( \Throwable $exception ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private function is_safe_calculated_dependency(
+		string $field_name,
+		array $blocks,
+		array $resolving_fields
+	): bool {
+		$matches = $this->find_price_field_blocks( $field_name, $blocks );
+
+		if (
+			1 !== count( $matches )
+			|| $this->is_field_inside_dynamic_container( $field_name, $blocks )
+		) {
+			return false;
+		}
+
+		$block = $matches[0];
+		$type  = Block_Helper::delete_namespace( $block['blockName'] ?? '' );
+
+		if ( 'calculated-field' === $type ) {
+			return $this->is_safe_static_calculated_field(
+				$field_name,
+				$block,
+				$blocks,
+				$resolving_fields
+			);
+		}
+
+		if ( 'hidden-field' === $type ) {
+			return $this->is_safe_static_hidden_field( $block );
+		}
+
+		if ( in_array( $type, array( 'select-field', 'radio-field', 'checkbox-field' ), true ) ) {
+			return $this->has_safe_static_option_configuration( $block, false );
+		}
+
+		return false;
+	}
+
+	private function is_field_inside_dynamic_container(
+		string $field_name,
+		array $blocks,
+		bool $inside_dynamic_container = false
+	): bool {
+		foreach ( $blocks as $block ) {
+			if ( ! is_array( $block ) ) {
+				continue;
+			}
+
+			$type           = Block_Helper::delete_namespace( $block['blockName'] ?? '' );
+			$inside_current = $inside_dynamic_container || in_array(
+				$type,
+				array( 'repeater-field', 'conditional-block' ),
+				true
+			);
+			$attributes     = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : array();
+
+			if ( $field_name === ( $attributes['name'] ?? '' ) ) {
+				return $inside_current;
+			}
+
+			if (
+				! empty( $block['innerBlocks'] )
+				&& is_array( $block['innerBlocks'] )
+				&& $this->is_field_inside_dynamic_container(
+					$field_name,
+					$block['innerBlocks'],
+					$inside_current
+				)
+			) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private function is_safe_static_hidden_field( array $block ): bool {
+		$attributes = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : array();
+		$default    = $attributes['default'] ?? '';
+
+		return false === ( $attributes['render'] ?? true )
+			&& 'manual_input' === ( $attributes['field_value'] ?? '' )
+			&& '' === $default
+			&& $this->is_positive_number( $attributes['hidden_value'] ?? null );
+	}
+
+	private function is_safe_static_option_field( array $block ): bool {
+		return $this->has_safe_static_option_configuration( $block, true );
+	}
+
+	private function has_safe_static_option_configuration(
+		array $block,
+		bool $require_positive_amount
+	): bool {
+		$attributes = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : array();
+
+		if (
+			$this->has_custom_option( $block )
+			|| 'manual_input' !== ( $attributes['field_options_from'] ?? 'manual_input' )
+		) {
+			return false;
+		}
+
+		$options = $attributes['field_options'] ?? array();
+
+		if ( empty( $options ) || ! is_array( $options ) ) {
+			return false;
+		}
+
+		$values = array();
+
+		foreach ( $options as $option ) {
+			if ( ! is_array( $option ) || ! isset( $option['value'] ) || ! is_scalar( $option['value'] ) ) {
+				return false;
+			}
+
+			$value = (string) $option['value'];
+
+			if ( '' === $value || isset( $values[ $value ] ) ) {
+				return false;
+			}
+
+			$calculate = $option['calculate'] ?? null;
+			$amount    = null !== $calculate && '' !== $calculate ? $calculate : $value;
+
+			if (
+				! $this->is_finite_number( $amount )
+				|| ( $require_positive_amount && (float) $amount <= 0 )
+			) {
+				return false;
+			}
+
+			$values[ $value ] = true;
+		}
+
+		return true;
+	}
+
+	private function has_custom_option( array $block ): bool {
+		$type = Block_Helper::delete_namespace( $block['blockName'] ?? '' );
+
+		if ( ! in_array( $type, array( 'radio-field', 'checkbox-field' ), true ) ) {
+			return false;
+		}
+
+		$attributes    = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : array();
+		$custom_option = $attributes['custom_option'] ?? false;
+
+		if ( is_array( $custom_option ) ) {
+			$custom_option = $custom_option['allow'] ?? false;
+		}
+
+		return filter_var( $custom_option, FILTER_VALIDATE_BOOLEAN );
+	}
+
+	private function is_positive_number( $value ): bool {
+		return $this->is_finite_number( $value ) && (float) $value > 0;
+	}
+
+	private function is_finite_number( $value ): bool {
+		return is_scalar( $value )
+			&& is_numeric( $value )
+			&& is_finite( (float) $value );
+	}
+
+	private function enable_price_protection( int $form_id, array $settings ): bool {
+		$settings['protect_price_field'] = true;
+
+		return false !== update_post_meta(
+			$form_id,
+			Gateways_Meta::META_KEY,
+			wp_json_encode( $settings )
 		);
 	}
 
@@ -319,6 +690,14 @@ class Secure_Price_Notice {
 
 	private function get_scan_version(): string {
 		return jet_form_builder()->get_version() . ':' . self::SCAN_SCHEMA_VERSION;
+	}
+
+	private function notice_uses_current_scan_schema( array $notice ): bool {
+		$version = (string) ( $notice['version'] ?? '' );
+		$suffix  = ':' . self::SCAN_SCHEMA_VERSION;
+
+		return strlen( $version ) > strlen( $suffix )
+			&& substr( $version, -strlen( $suffix ) ) === $suffix;
 	}
 
 	private function get_dismiss_version(): string {

@@ -144,8 +144,8 @@ class Module implements
 	/**
 	 * Enable payment amount protection for newly created forms only.
 	 *
-	 * Existing or imported gateway settings are preserved for backward
-	 * compatibility and require an explicit opt-in.
+	 * Existing or imported gateway settings are preserved here. A separate
+	 * migration enables protection for strictly verified static price sources.
 	 *
 	 * @param int      $post_id Form post ID.
 	 * @param \WP_Post $post    Form post object.

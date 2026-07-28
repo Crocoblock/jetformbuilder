@@ -35,9 +35,33 @@ class Trusted_Price_Resolver_Expression_Parser {
 	 * @throws Gateway_Exception
 	 */
 	public function parse(): float {
+		$result = $this->evaluate_node( $this->parse_tree() );
+
+		if ( ! is_finite( $result ) ) {
+			throw new Gateway_Exception( 'Calculated price expression produced a non-finite value.' );
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Validate the expression grammar without evaluating its runtime result.
+	 *
+	 * @throws Gateway_Exception
+	 */
+	public function validate(): void {
+		$this->validate_node( $this->parse_tree() );
+	}
+
+	/**
+	 * @throws Gateway_Exception
+	 */
+	private function parse_tree(): array {
 		if ( '' === $this->expression ) {
 			throw new Gateway_Exception( 'Calculated price expression is empty.' );
 		}
+
+		$this->position = 0;
 
 		$tree = $this->parse_conditional();
 
@@ -45,13 +69,7 @@ class Trusted_Price_Resolver_Expression_Parser {
 			throw new Gateway_Exception( 'Calculated price expression contains invalid syntax.' );
 		}
 
-		$result = $this->evaluate_node( $tree );
-
-		if ( ! is_finite( $result ) ) {
-			throw new Gateway_Exception( 'Calculated price expression produced a non-finite value.' );
-		}
-
-		return $result;
+		return $tree;
 	}
 
 	/**
@@ -322,6 +340,45 @@ class Trusted_Price_Resolver_Expression_Parser {
 	/**
 	 * @throws Gateway_Exception
 	 */
+	private function validate_node( array $node ): void {
+		switch ( $node[0] ) {
+			case 'number':
+				return;
+
+			case 'constant':
+				$this->assert_supported_constant( $node[1] );
+				return;
+
+			case 'call':
+				$this->assert_supported_math_call( $node[1], $node[2] );
+
+				foreach ( $node[2] as $argument ) {
+					$this->validate_node( $argument );
+				}
+				return;
+
+			case 'unary':
+				$this->validate_node( $node[2] );
+				return;
+
+			case 'conditional':
+				$this->validate_node( $node[1] );
+				$this->validate_node( $node[2] );
+				$this->validate_node( $node[3] );
+				return;
+
+			case 'binary':
+				$this->validate_node( $node[2] );
+				$this->validate_node( $node[3] );
+				return;
+		}
+
+		throw new Gateway_Exception( 'Calculated price expression contains an invalid node.' );
+	}
+
+	/**
+	 * @throws Gateway_Exception
+	 */
 	private function evaluate_binary( string $operator, array $left_node, array $right_node ): float {
 		$left = $this->evaluate_node( $left_node );
 
@@ -415,7 +472,15 @@ class Trusted_Price_Resolver_Expression_Parser {
 	 * @throws Gateway_Exception
 	 */
 	private function evaluate_constant( string $name ): float {
-		$constants = array(
+		$constants = $this->get_supported_constants();
+
+		$this->assert_supported_constant( $name );
+
+		return (float) $constants[ $name ];
+	}
+
+	private function get_supported_constants(): array {
+		return array(
 			'true'        => 1.0,
 			'false'       => 0.0,
 			'Math.E'      => M_E,
@@ -427,18 +492,23 @@ class Trusted_Price_Resolver_Expression_Parser {
 			'Math.SQRT1_2' => M_SQRT1_2,
 			'Math.SQRT2'  => M_SQRT2,
 		);
+	}
 
-		if ( ! array_key_exists( $name, $constants ) ) {
+	/**
+	 * @throws Gateway_Exception
+	 */
+	private function assert_supported_constant( string $name ): void {
+		if ( ! array_key_exists( $name, $this->get_supported_constants() ) ) {
 			throw new Gateway_Exception( 'Calculated price expression contains an unsupported identifier.' );
 		}
-
-		return (float) $constants[ $name ];
 	}
 
 	/**
 	 * @throws Gateway_Exception
 	 */
 	private function evaluate_math_call( string $name, array $argument_nodes ): float {
+		$this->assert_supported_math_call( $name, $argument_nodes );
+
 		$arguments = array_map(
 			function ( $node ) {
 				return $this->evaluate_node( $node );
@@ -448,52 +518,42 @@ class Trusted_Price_Resolver_Expression_Parser {
 
 		switch ( $name ) {
 			case 'Math.abs':
-				$this->assert_argument_count( $name, $arguments, 1 );
 				$result = abs( $arguments[0] );
 				break;
 
 			case 'Math.ceil':
-				$this->assert_argument_count( $name, $arguments, 1 );
 				$result = ceil( $arguments[0] );
 				break;
 
 			case 'Math.floor':
-				$this->assert_argument_count( $name, $arguments, 1 );
 				$result = floor( $arguments[0] );
 				break;
 
 			case 'Math.round':
-				$this->assert_argument_count( $name, $arguments, 1 );
 				$result = $this->js_math_round( $arguments[0] );
 				break;
 
 			case 'Math.trunc':
-				$this->assert_argument_count( $name, $arguments, 1 );
 				$result = $arguments[0] < 0 ? ceil( $arguments[0] ) : floor( $arguments[0] );
 				break;
 
 			case 'Math.sign':
-				$this->assert_argument_count( $name, $arguments, 1 );
 				$result = $arguments[0] <=> 0;
 				break;
 
 			case 'Math.sqrt':
-				$this->assert_argument_count( $name, $arguments, 1 );
 				$result = sqrt( $arguments[0] );
 				break;
 
 			case 'Math.pow':
-				$this->assert_argument_count( $name, $arguments, 2 );
 				$result = $arguments[0] ** $arguments[1];
 				break;
 
 			case 'Math.min':
-				$this->assert_argument_count( $name, $arguments, 1, PHP_INT_MAX );
 				$result = min( $arguments );
 				break;
 
 			case 'Math.max':
-				$this->assert_argument_count( $name, $arguments, 1, PHP_INT_MAX );
 				$result = max( $arguments );
 				break;
 
@@ -506,6 +566,34 @@ class Trusted_Price_Resolver_Expression_Parser {
 		}
 
 		return (float) $result;
+	}
+
+	/**
+	 * @throws Gateway_Exception
+	 */
+	private function assert_supported_math_call( string $name, array $arguments ): void {
+		switch ( $name ) {
+			case 'Math.abs':
+			case 'Math.ceil':
+			case 'Math.floor':
+			case 'Math.round':
+			case 'Math.trunc':
+			case 'Math.sign':
+			case 'Math.sqrt':
+				$this->assert_argument_count( $name, $arguments, 1 );
+				return;
+
+			case 'Math.pow':
+				$this->assert_argument_count( $name, $arguments, 2 );
+				return;
+
+			case 'Math.min':
+			case 'Math.max':
+				$this->assert_argument_count( $name, $arguments, 1, PHP_INT_MAX );
+				return;
+		}
+
+		throw new Gateway_Exception( 'Calculated price expression contains an unsupported function.' );
 	}
 
 	/**

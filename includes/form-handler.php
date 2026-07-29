@@ -51,7 +51,6 @@ class Form_Handler {
 	public $form_key         = '_jet_engine_booking_form_id';
 	public $refer_key        = '_jet_engine_refer';
 	public $post_id_key      = '__queried_post_id';
-	public $post_id_sig_key  = '__queried_post_sig';
 	public $user_journey_key = '_user_journey';
 	/**
 	 * @var Request_Handler
@@ -102,7 +101,7 @@ class Form_Handler {
 					'callback' => array( $this, 'set_referrer' ),
 				),
 				$this->post_id_key => array(
-					'callback' => array( $this, 'set_current_post_context' ),
+					'callback' => array( Tools::class, 'set_current_post' ),
 				),
 				$this->user_journey_key => array(
 					'callback' => array( $this, 'set_user_journey_data' ),
@@ -135,22 +134,18 @@ class Form_Handler {
 
 
 	public function set_referrer( $url ): Form_Handler {
-		$this->refer = $this->normalize_referrer( $url );
+		$refer = remove_query_arg(
+			array( 'values', 'status', 'fields' ),
+			esc_url_raw( $url )
+		);
+
+		$this->refer = wp_validate_redirect( $refer );
 
 		return $this;
 	}
 
 	public function get_referrer() {
 		return $this->refer;
-	}
-
-	private function normalize_referrer( $url ): string {
-		$refer = remove_query_arg(
-			array( 'values', 'status', 'fields' ),
-			esc_url_raw( $url )
-		);
-
-		return (string) wp_validate_redirect( $refer, '' );
 	}
 
 	public function set_form_id( $form_id ) {
@@ -163,71 +158,6 @@ class Form_Handler {
 
 	public function get_form_id() {
 		return $this->form_id;
-	}
-
-	public function get_post_context_signature( int $post_id, int $form_id, string $referrer ): string {
-		$data = implode(
-			'|',
-			array(
-				$form_id,
-				$post_id,
-				$this->normalize_referrer( $referrer ),
-			)
-		);
-
-		return wp_hash( $data, 'nonce' );
-	}
-
-	public function set_current_post_context( $post_id ) {
-		$post_id  = $this->normalize_post_id( $post_id );
-		$is_valid = $this->is_valid_post_context_signature( $post_id );
-
-		if ( ! $is_valid ) {
-			$post_id = $this->resolve_unsigned_post_context_fallback();
-		}
-
-		Live_Form::instance()->set_ajax_post_fallback_allowed( $is_valid );
-		Tools::set_current_post( $post_id );
-
-		return $this;
-	}
-
-	private function normalize_post_id( $post_id ): int {
-		if ( is_numeric( $post_id ) ) {
-			$post_id = (int) $post_id;
-
-			return $post_id > 0 ? $post_id : 0;
-		}
-
-		return 0;
-	}
-
-	private function is_valid_post_context_signature( int $post_id ): bool {
-		if ( ! $post_id || ! $this->form_id || ! $this->refer ) {
-			return false;
-		}
-
-		// phpcs:disable WordPress.Security.NonceVerification.Missing
-		$signature = sanitize_text_field(
-			wp_unslash( $_POST[ $this->post_id_sig_key ] ?? '' )
-		);
-		// phpcs:enable WordPress.Security.NonceVerification.Missing
-
-		if ( '' === $signature ) {
-			return false;
-		}
-
-		$expected = $this->get_post_context_signature(
-			$post_id,
-			(int) $this->form_id,
-			(string) $this->refer
-		);
-
-		return hash_equals( $expected, $signature );
-	}
-
-	private function resolve_unsigned_post_context_fallback(): int {
-		return 0;
 	}
 
 	/**
@@ -258,9 +188,6 @@ class Form_Handler {
 		if ( $this->form_id ) {
 			return;
 		}
-
-		// Submission post context is untrusted until the signed field is processed.
-		Live_Form::instance()->set_ajax_post_fallback_allowed( false );
 
 		$fields = $this->core_fields();
 

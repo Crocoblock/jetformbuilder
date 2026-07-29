@@ -20,17 +20,21 @@ const getSignalTypes = () => applyFilters(
  */
 let signalTypes = [];
 
+function getPreparedSignalTypes() {
+	if ( !signalTypes.length ) {
+		signalTypes = getSignalTypes();
+	}
+
+	return [ ...signalTypes ];
+}
+
 /**
  * @param  node  {HTMLElement}
  * @param  input {InputData}
  * @return {BaseSignal}
  */
 function getSignal( node, input ) {
-	if ( !signalTypes.length ) {
-		signalTypes = getSignalTypes();
-	}
-
-	for ( const signalType of signalTypes ) {
+	for ( const signalType of getPreparedSignalTypes() ) {
 		const current = new signalType();
 
 		if ( !current.isSupported( node, input ) ) {
@@ -43,4 +47,8 @@ function getSignal( node, input ) {
 	return null;
 }
 
-export { getSignal };
+function resetSignalRegistry() {
+	signalTypes = [];
+}
+
+export { getSignal, resetSignalRegistry };

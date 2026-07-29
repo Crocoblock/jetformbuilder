@@ -27,13 +27,21 @@ $this->add_attribute( 'minlength', $this->args['minlength'] ?? '' );
 $this->add_attribute( 'maxlength', $this->args['maxlength'] ?? '' );
 $this->add_attribute( 'data-jfb-sync' );
 
+$autocomplete = $this->args['autocomplete'] ?? 'off';
+if ( 'on' === $autocomplete ) {
+	$autocomplete_value = $this->args['autocomplete_value'] ?? 'on';
+	if ( 'custom' === $autocomplete_value ) {
+		$autocomplete_value = $this->args['autocomplete_custom'] ?? '';
+	}
+	$autocomplete = $autocomplete_value ?: 'on';
+}
+
 $this->add_attribute(
 	'autocomplete',
-	'off' === $this->args['autocomplete']
+	'off' === $autocomplete
 		? 'off_' . substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' ), 0, 8 )
-		: $this->args['autocomplete']
+		: $autocomplete
 );
-
 
 if ( ! empty( $args['enable_input_mask'] ) && ! empty( $args['input_mask'] ) ) {
 	$this->add_attribute( 'class', 'jet-form-builder__masked-field' );

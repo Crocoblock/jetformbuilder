@@ -8,13 +8,30 @@ import './next.page/main';
 import './prev.page/main';
 import './change.render.state/main';
 
-const { createBlock } = wp.blocks;
+const { createBlock, getBlockVariations } = wp.blocks;
 
 const { name, icon = '' } = metadata;
 
 metadata.attributes.isPreview = {
 	'type': 'boolean',
 	'default': false,
+};
+
+const getActionButtonPurposeLabel = (attributes) => {
+	const variations = getBlockVariations?.(name) ?? [];
+	const variation = variations.find(({ attributes: variationAttributes = {} }) => (
+		variationAttributes.action_type === attributes.action_type
+	));
+	return variation?.title || metadata.title;
+};
+
+const getActionButtonListViewLabel = (attributes) => {
+	const purpose = getActionButtonPurposeLabel(attributes);
+	const label = attributes.label?.trim?.() || '';
+	if (label && label !== purpose) {
+		return `${purpose} (${label})`;
+	}
+	return purpose || label || metadata.title;
 };
 
 const settings = {
@@ -64,6 +81,12 @@ const settings = {
 				priority: 0,
 			},
 		],
+	},
+	__experimentalLabel: (attributes, { context }) => {
+		if (context !== 'list-view') {
+			return;
+		}
+		return getActionButtonListViewLabel(attributes);
 	},
 };
 

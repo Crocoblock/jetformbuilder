@@ -37,7 +37,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	}
 
 	public function get_failed_statuses() {
-		return array( 'VOIDED' );
+		return array( 'VOIDED', 'AMOUNT_MISMATCH' );
 	}
 
 	/**
@@ -77,6 +77,13 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 * @throws Repository_Exception|Gateway_Exception
 	 */
 	public function create_resource() {
+		$units = array(
+			array(
+				'currency_code' => jet_fb_gateway_current()->current_gateway( 'currency' ),
+				'value'         => jet_fb_gateway_current()->get_price_var(),
+			),
+		);
+
 		$action = ( new Api_Actions\Pay_Now_Action() )
 			->set_bearer_auth( jet_fb_gateway_current()->get_current_token() )
 			->set_app_context(
@@ -85,14 +92,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 					'cancel_url' => $this->get_referrer_url( Base_Gateway::FAILED_TYPE ),
 				)
 			)
-			->set_units(
-				array(
-					array(
-						'currency_code' => jet_fb_gateway_current()->current_gateway( 'currency' ),
-						'value'         => jet_fb_gateway_current()->get_price_var(),
-					),
-				)
-			);
+			->set_units( $units );
 
 		do_action( 'jet-form-builder/gateways/before-create', $action );
 
@@ -198,17 +198,92 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 			$this->on_error( $payment );
 		}
 
+		$this->process_captured_payment(
+			$payment,
+			jet_fb_gateway_current()->is_price_field_protection_enabled()
+		);
+	}
+
+	/**
+	 * @throws Gateway_Exception
+	 */
+	private function process_captured_payment( array $payment, bool $verify_amount ) {
 		try {
 			Execution_Builder::instance()->transaction_start();
+
+			if ( $verify_amount ) {
+				$this->assert_captured_amount( $payment );
+			}
 
 			$this->save_payment( $payment );
 
 			Execution_Builder::instance()->transaction_commit();
 
+		} catch ( Gateway_Exception $exception ) {
+			Execution_Builder::instance()->transaction_rollback();
+
+			if ( 'AMOUNT_MISMATCH' === $this->get_scenario_row( 'status' ) ) {
+				$this->persist_amount_mismatch();
+			}
+
+			throw $exception;
+
 		} catch ( Sql_Exception $exception ) {
 			Execution_Builder::instance()->transaction_rollback();
 
 			throw new Gateway_Exception( esc_html( $exception->getMessage() ) );
+		}
+	}
+
+	/**
+	 * @throws Gateway_Exception
+	 */
+	private function assert_captured_amount( array $payment ) {
+		$captured = $this->get_captured_amount( $payment );
+		$expected = array(
+			'value'         => (string) $this->get_scenario_row( 'amount_value', '' ),
+			'currency_code' => (string) $this->get_scenario_row( 'amount_code', '' ),
+		);
+
+		if (
+			$captured['currency_code'] !== $expected['currency_code'] ||
+			round( (float) $captured['value'], 2 ) !== round( (float) $expected['value'], 2 )
+		) {
+			$this->scenario_row(
+				array(
+					'status' => 'AMOUNT_MISMATCH',
+				)
+			);
+
+			throw new Gateway_Exception( 'Captured payment amount does not match the expected amount.' );
+		}
+	}
+
+	/**
+	 * @throws Gateway_Exception
+	 */
+	private function get_captured_amount( array $payment ): array {
+		$capture = $payment['purchase_units'][0]['payments']['captures'][0]['amount'] ?? array();
+
+		if ( empty( $capture['value'] ) || empty( $capture['currency_code'] ) ) {
+			throw new Gateway_Exception( 'Unable to verify captured payment amount.' );
+		}
+
+		return $capture;
+	}
+
+	private function persist_amount_mismatch() {
+		try {
+			( new Payment_Model() )->update(
+				array(
+					'status' => 'AMOUNT_MISMATCH',
+				),
+				array(
+					'id' => $this->get_scenario_row( 'id' ),
+				)
+			);
+		} catch ( Sql_Exception $exception ) {
+			return;
 		}
 	}
 
@@ -245,7 +320,7 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 	 *
 	 * @throws Sql_Exception
 	 */
-	private function save_payment( array $payment ) {
+	protected function save_payment( array $payment ) {
 		( new Payment_Model() )->update(
 			array(
 				'status' => $payment['status'],

@@ -27,7 +27,7 @@ class Hidden_Field_Parser extends Field_Data_Parser {
 		}
 
 		/** @var Hidden_Field $hidden_type */
-		$hidden_type = jet_form_builder()->blocks->get_field_by_name( $this->type() );
+		$hidden_type = clone jet_form_builder()->blocks->get_field_by_name( $this->type() );
 
 		$hidden_type->set_rendering( false );
 		// the exception will never be thrown

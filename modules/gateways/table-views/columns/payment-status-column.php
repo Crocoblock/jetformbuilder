@@ -21,17 +21,21 @@ class Payment_Status_Column extends Column_Advanced_Base {
 
 	public function get_replace_map(): array {
 		return array(
-			'COMPLETED' => array(
+			'COMPLETED'       => array(
 				'type' => self::STATUS_SUCCESS,
 				'text' => __( 'Completed', 'jet-form-builder' ),
 			),
-			'CREATED'   => array(
+			'CREATED'         => array(
 				'type' => self::STATUS_INFO,
 				'text' => __( 'Created', 'jet-form-builder' ),
 			),
-			'VOIDED'    => array(
+			'VOIDED'          => array(
 				'type' => self::STATUS_FAILED,
 				'text' => __( 'Voided', 'jet-form-builder' ),
+			),
+			'AMOUNT_MISMATCH' => array(
+				'type' => self::STATUS_FAILED,
+				'text' => __( 'Amount mismatch', 'jet-form-builder' ),
 			),
 		);
 	}

@@ -324,11 +324,11 @@ final class Module implements
 			return true;
 		}
 
-		if ( self::FORMAT_BROWSER === $type ) {
-			return false;
+		if ( '' === $type || 'inherit' === $type ) {
+			return $this->is_advanced_form();
 		}
 
-		return $this->is_advanced_form();
+		return false;
 	}
 
 	public function is_advanced_form(): bool {

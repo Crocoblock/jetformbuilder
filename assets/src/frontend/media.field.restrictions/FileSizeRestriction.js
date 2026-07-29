@@ -8,7 +8,7 @@ function FileSizeRestriction() {
 	this.validate = function () {
 		const { max_size: maxSize } = this.reporting.input.attrs;
 
-		return this.file.size < maxSize.value.current;
+		return this.file.size <= maxSize.value.current;
 	};
 
 	this.getRawMessage = function () {

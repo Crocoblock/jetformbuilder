@@ -17,6 +17,8 @@ import {
 	ActionListItemContext,
 	ActionsAfterNewButtonSlotFill,
 	useActions,
+	getActionGroups,
+	flattenActionGroups,
 } from 'jet-form-builder-actions';
 
 const ListActionItemFiltered = withFilters( 'jet.fb.action.item' )(
@@ -74,8 +76,19 @@ const StyledFlex = styled(Flex)`
 	}
 `;
 
+const ActionGroup = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+
+	> .jet-form-action:not(:first-child) {
+		margin-left: 24px;
+	}
+`;
+
 function PluginActions() {
 	const [ actions, setActions ] = useActions();
+	const actionGroups = getActionGroups( actions );
 
 	const isBuddypress = document.body.classList.contains( 'wp-admin' ) && ( document.body.classList.contains( 'buddypress' ) || document.body.classList.contains( 'theme-buddyboss-theme' ) );
 
@@ -84,20 +97,24 @@ function PluginActions() {
 	>
 		<StyledFlex direction="column" gap={ 3 } className={ `${isBuddypress ? 'buddypress-active' : ''}` }>
 			<FlexSortable
-				list={ actions }
-				setList={ setActions }
+				list={ actionGroups }
+				setList={ groups => setActions( flattenActionGroups( groups ) ) }
 				direction="vertical"
 				handle=".jfb-action-handle"
-				draggable=".jet-form-action.draggable"
+				draggable=".jet-form-action-group"
 			>
-				{ actions.map( ( action, index ) => <Fragment key={ action.id }>
+				{ actionGroups.map( group => <ActionGroup
+					key={ group.id }
+					className="jet-form-action-group"
+				>
+					{ group.items.map( ( { action, index } ) => <Fragment key={ action.id }>
 						<ActionListItemContext.Provider
 							value={ { index, action } }
 						>
 							<ListActionItemFiltered/>
 						</ActionListItemContext.Provider>
-					</Fragment>,
-				) }
+					</Fragment> ) }
+				</ActionGroup> ) }
 			</FlexSortable>
 			<ActionsAfterNewButtonSlotFill.Slot>
 				{ fills => <Flex className="jfb-actions-panel--buttons">

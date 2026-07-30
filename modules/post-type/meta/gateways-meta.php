@@ -10,8 +10,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Gateways_Meta extends Base_Meta_Type {
 
+	const META_KEY = '_jf_gateways';
+
 	public function get_id(): string {
-		return '_jf_gateways';
+		return self::META_KEY;
 	}
 
 	public function get_type(): string {

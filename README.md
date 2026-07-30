@@ -8,6 +8,13 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.4.2
+* FIX: Secure payment amount toggle behavior
+* FIX: Safely enable payment amount protection for eligible existing forms
+
+## 3.6.4.1
+* FIX: Broken Access Control vulnerability
+
 ## 3.6.4
 * ADD: Add Text Field variations for Email, Password, URL, First Name, Last Name
 * ADD: Show field names in the List View

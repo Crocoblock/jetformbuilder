@@ -89,6 +89,7 @@ class Module implements
 	public function init_hooks() {
 		add_action( 'init', array( $this, 'register_post_type' ) );
 		add_action( 'current_screen', array( $this, 'set_current_screen' ) );
+		add_action( 'save_post_' . self::SLUG, array( $this, 'set_new_form_gateway_defaults' ), 10, 3 );
 
 		/**
 		 * @since 3.0.1
@@ -109,6 +110,7 @@ class Module implements
 	public function remove_hooks() {
 		remove_action( 'init', array( $this, 'register_post_type' ) );
 		remove_action( 'current_screen', array( $this, 'set_current_screen' ) );
+		remove_action( 'save_post_' . self::SLUG, array( $this, 'set_new_form_gateway_defaults' ), 10 );
 
 		/**
 		 * @since 3.0.1
@@ -137,6 +139,36 @@ class Module implements
 		} elseif ( self::SLUG !== $screen->id ) {
 			$this->is_form_editor = false;
 		}
+	}
+
+	/**
+	 * Enable payment amount protection for newly created forms only.
+	 *
+	 * Existing or imported gateway settings are preserved here. A separate
+	 * migration enables protection for strictly verified static price sources.
+	 *
+	 * @param int      $post_id Form post ID.
+	 * @param \WP_Post $post    Form post object.
+	 * @param bool     $update  Whether an existing form is being updated.
+	 */
+	public function set_new_form_gateway_defaults( $post_id, $post, $update ) {
+		if (
+			$update ||
+			! $post instanceof \WP_Post ||
+			metadata_exists( 'post', $post_id, Meta\Gateways_Meta::META_KEY )
+		) {
+			return;
+		}
+
+		update_post_meta(
+			$post_id,
+			Meta\Gateways_Meta::META_KEY,
+			wp_json_encode(
+				array(
+					'protect_price_field' => true,
+				)
+			)
+		);
 	}
 
 	public static function is_form_list_page(): bool {

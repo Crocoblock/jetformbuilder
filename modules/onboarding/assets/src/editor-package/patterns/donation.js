@@ -29,7 +29,7 @@ export default {
 		],
 	],
 	meta: {
-		_jf_gateways: '{"gateway":"paypal","paypal":{"use_global":true,"currency":"USD","scenario":{"id":"PAY_NOW"}},"price_field":"price"}',
+		_jf_gateways: '{"gateway":"paypal","paypal":{"use_global":true,"currency":"USD","scenario":{"id":"PAY_NOW"}},"price_field":"price","protect_price_field":false}',
 	},
 	applyText: __(
 		'2 blocks and PayPal Gateway have been added',

@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 3.6.3.1
+Stable tag: 3.6.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,13 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.6.4.2**
+- FIX: Secure payment amount toggle behavior
+- FIX: Safely enable payment amount protection for eligible existing forms
+
+**3.6.4.1**
+- FIX: Broken Access Control vulnerability
 
 **3.6.4**
 - ADD: Add Text Field variations for Email, Password, URL, First Name, Last Name

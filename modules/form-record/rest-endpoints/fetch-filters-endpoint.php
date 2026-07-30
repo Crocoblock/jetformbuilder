@@ -8,6 +8,7 @@ use JFB_Modules\Form_Record\Rest_Endpoints\Traits\Records_Access_Trait;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Rest_Api\Rest_Api_Endpoint_Base;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {

@@ -63,6 +63,7 @@ class Module implements
 	private $current_gateway_type;
 
 	private $rest;
+	private $secure_price_notice;
 
 	public static function get_instance_id(): string {
 		return 'gateways';
@@ -109,6 +110,8 @@ class Module implements
 			array( $this, 'add_executor_to_default_process' )
 		);
 		add_filter( 'jet-form-builder/editor/config', array( $this, 'on_localize_editor_config' ) );
+
+		$this->secure_price_notice->init_hooks();
 	}
 
 	public function remove_hooks() {
@@ -133,6 +136,8 @@ class Module implements
 			array( $this, 'add_executor_to_default_process' )
 		);
 		remove_filter( 'jet-form-builder/editor/config', array( $this, 'on_localize_editor_config' ) );
+
+		$this->secure_price_notice->remove_hooks();
 	}
 
 	public function on_install() {
@@ -153,7 +158,8 @@ class Module implements
 		}
 
 		// rest api
-		$this->rest = new Rest_Api_Controller();
+		$this->rest                = new Rest_Api_Controller();
+		$this->secure_price_notice = new Secure_Price_Notice();
 
 		// catch webhook by get param
 		$this->catch_payment_result();
@@ -164,6 +170,7 @@ class Module implements
 		Tab_Handler_Manager::instance()->uninstall( new Tab_Handlers\Payments_Gateways_Handler() );
 
 		unset( $this->is_sandbox, $this->rest );
+		$this->secure_price_notice = null;
 	}
 
 	public function rep_instances(): array {

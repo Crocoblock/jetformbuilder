@@ -24,8 +24,7 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 	use Base_Module_Url_Trait;
 	use Base_Module_Handle_Trait;
 
-	private $token;
-	private $client;
+	private $client_id = '';
 
 	public function rep_item_id() {
 		return 'csrf';
@@ -75,29 +74,40 @@ class Module implements Base_Module_It, Base_Module_Url_It, Base_Module_Handle_I
 			return $request;
 		}
 
-		$this->token  = $request[ Csrf_Tools::FIELD ] ?? false;
-		$this->client = Csrf_Tools::client_id( jet_fb_live()->form_id );
+		$token           = $request[ Csrf_Tools::FIELD ] ?? false;
+		$this->client_id = Csrf_Tools::client_id( jet_fb_live()->form_id );
 
 		// delete all old tokens
 		Csrf_Token_Model::clear();
 
-		if ( ! Csrf_Tools::verify( $this->token, $this->client ) ) {
+		if ( ! Csrf_Tools::consume( $token, $this->client_id ) ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new Spam_Exception( self::SPAM_EXCEPTION );
 		}
 
-		// delete verified token only on success
-		add_action( 'jet-form-builder/form-handler/after-send', array( $this, 'handle_after_send' ) );
+		add_action( 'jet-form-builder/form-handler/after-send', array( $this, 'handle_after_send' ), 10, 2 );
 
 		return $request;
 	}
 
-	public function handle_after_send() {
-		if ( ! jet_fb_handler()->is_success ) {
+	public function handle_after_send( $handler, bool $is_success ) {
+		remove_action( 'jet-form-builder/form-handler/after-send', array( $this, 'handle_after_send' ), 10 );
+
+		if ( ! $handler->is_ajax() ) {
 			return;
 		}
 
-		Csrf_Tools::delete( $this->token, $this->client );
+		try {
+			$token = Csrf_Tools::add( Csrf_Tools::generate(), $this->client_id );
+		} catch ( \Exception $exception ) {
+			return;
+		}
+
+		$handler->add_response_data(
+			array(
+				Csrf_Tools::FIELD => $token,
+			)
+		);
 	}
 
 	public function handle_messages( array $messages ): array {

@@ -169,7 +169,7 @@ class Server_Side_Rule extends Rule {
 			return;
 		}
 
-		$is_valid      = $this->validate( $parser, $function_name );
+		$is_valid = $this->validate( $parser, $function_name );
 
 		if ( $is_valid ) {
 			return;
@@ -193,7 +193,7 @@ class Server_Side_Rule extends Rule {
 			return $this->validate_custom( $parser, $function_name );
 		}
 
-		return $callback->is_valid( $parser->get_value(), $parser->get_context() );
+		return $callback->is_valid_with_parser( $parser );
 	}
 
 	protected function validate_submission_signature( Field_Data_Parser $parser ): bool {

@@ -1,8 +1,10 @@
 import MacrosButtonTemplate from './MacrosButtonTemplate';
 import ExtraMacroContext from '../context/ExtraMacroContext';
 import GroupItemsPopover from './GroupItemsPopover';
+import { applyFilters } from '@wordpress/hooks';
 
 const {
+	      Children,
 	      useContext,
       } = wp.element;
 const {
@@ -12,6 +14,8 @@ const {
 function MacrosFieldsTemplate( {
 	children,
 	fields,
+	macroScope = '',
+	onMacroClick = () => {},
 	...props
 } ) {
 
@@ -35,9 +39,23 @@ function MacrosFieldsTemplate( {
 		),
 	];
 
+	const filteredGroups = applyFilters(
+		'jet.fb.macros.fields.additional-groups',
+		[],
+		{
+			macroScope,
+			onClick: onMacroClick,
+			fields: fullFields,
+		},
+	);
+	const additionalGroups = Array.isArray( filteredGroups )
+		? Children.toArray( filteredGroups )
+		: [];
+
 	if ( !fullFields.length &&
 		!macros?.extra?.length &&
-		!macros?.filters?.length
+		!macros?.filters?.length &&
+		!additionalGroups.length
 	) {
 		return null;
 	}
@@ -50,6 +68,7 @@ function MacrosFieldsTemplate( {
 		>
 			{ children }
 		</GroupItemsPopover> }
+		{ additionalGroups }
 		{ Boolean( macros?.extra?.length ) && <GroupItemsPopover
 			title={ __( 'Extra macros:', 'jet-form-builder' ) }
 			items={ macros.extra }

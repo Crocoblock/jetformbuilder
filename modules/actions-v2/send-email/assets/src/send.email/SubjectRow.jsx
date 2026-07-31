@@ -23,6 +23,7 @@ function SubjectRow( { settings, onChangeSettingObj } ) {
 							settings.subject ?? ''
 						) + name,
 					} ) }
+					macroScope="send-email.subject"
 					withCurrent
 				/>
 			</LabelWithActions>

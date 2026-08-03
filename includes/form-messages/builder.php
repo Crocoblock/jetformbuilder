@@ -49,7 +49,7 @@ class Builder {
 		return $this->status;
 	}
 
-	public function prepare_message_content(string $message): string {
+	public function prepare_message_content( string $message ): string {
 		return jet_fb_handler()->parser->parse_macros(
 			$message,
 			jet_fb_context()->get_request()
@@ -58,7 +58,7 @@ class Builder {
 
 	public function render_empty_field_message() {
 		$message_content = $this->prepare_message_content(
-			$this->get_manager()->get_message('empty_field')
+			$this->get_manager()->get_message( 'empty_field' )
 		);
 
 		include $this->get_global_template( 'common/field-message.php' );
@@ -80,7 +80,7 @@ class Builder {
 
 		$message_content = Rich_Content\Module::rich(
 			$this->prepare_message_content(
-				$this->get_manager()->get_message_by_info($info)
+				$this->get_manager()->get_message_by_info( $info )
 			)
 		);
 

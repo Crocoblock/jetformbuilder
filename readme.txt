@@ -285,6 +285,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 - FIX: Correct WYSIWYG behavior when removing Repeater items out of order
 - FIX: Restore the first Repeater image in Fields Preview
 - ADD: Allow customization of the Image Upload directory via filter
+- FIX: Prevent 404 error when Form Records filters match no records
+- FIX: Late-registered form messages displayed status codes
+- FIX: Prevent Insert/Update Post from clearing JetEngine meta for removed fields
+- FIX: Correct Advanced Validation inheritance for form fields
+- FIX: Prevent premature browser validation notices
 
 **3.6.4.2**
 - FIX: Secure payment amount toggle behavior

@@ -5,7 +5,6 @@
 				'script#jet-form-builder-recaptcha-js',
 			);
 
-
 			const captchaFields = formNode.querySelectorAll(
 				'[name="_captcha_token"]',
 			);
@@ -14,23 +13,34 @@
 			const formID       = +formNode.dataset.formId;  
 
 			function setFormToken() {
-				if ( window.grecaptcha ) {
-					window.grecaptcha.execute(
+				if (!window.grecaptcha) {
+					resolve();
+					return;
+				}
+				let captchaPromise;
+				try {
+					captchaPromise = window.grecaptcha.execute(
 						key,
 						{
 							action: 'jet_form_builder_captcha__' + formID,
 						},
-					).then( function ( token ) {
+					);
+				}
+				catch (error) {
+					resolve();
+					return;
+				}
+				captchaPromise
+					.then(function (token) {
 						captchaFields.forEach(function (field) {
 							field.value = token;
 						});
 						resolve();
-					} );
-				}
-				else {
-					resolve();
-				}
-			}
+					})
+					.catch(function (error) {
+						resolve();
+					});
+			}    
 
 			if (!captchaField) {
 				resolve();

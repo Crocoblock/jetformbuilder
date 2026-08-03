@@ -278,6 +278,13 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 **3.6.5**
 - FIX: Prevent validation bypasses in core and SSR flows
 - FIX: Harden request lifecycle, CSRF, and CAPTCHA validation
+- FIX: Prevent Login Form submission when CAPTCHA validation fails
+- FIX: Restore form submission after correcting CAPTCHA validation errors
+- ADD: Support field macros in Action messages
+- FIX: Prevent JavaScript console error when adding fields in the editor
+- FIX: Correct WYSIWYG behavior when removing Repeater items out of order
+- FIX: Restore the first Repeater image in Fields Preview
+- ADD: Allow customization of the Image Upload directory via filter
 
 **3.6.4.2**
 - FIX: Secure payment amount toggle behavior

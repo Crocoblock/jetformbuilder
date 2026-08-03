@@ -8,6 +8,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.5
+* FIX: Prevent validation bypasses in core and SSR flows
+* FIX: Harden request lifecycle, CSRF, and CAPTCHA validation
+
 ## 3.6.4.2
 * FIX: Secure payment amount toggle behavior
 * FIX: Safely enable payment amount protection for eligible existing forms

@@ -30,6 +30,96 @@ class TrustedPriceResolverTest extends \Codeception\TestCase\WPTestCase {
 		( new Trusted_Price_Resolver( $form_id ) )->resolve( 'meta_price' );
 	}
 
+	public function testCalculatedFieldUsesTrustedVirtualFieldResolver(): void {
+		$form_id = $this->create_form(
+			array( $this->calculated_block( 'virtual_total', '%FIELD::virtual_level% * 2', 2 ) )
+		);
+		$callback = function ( $value, $field_name, $blocks, $resolver ) {
+			$this->assertSame( 'virtual_level', $field_name );
+			$this->assertNotEmpty( $blocks );
+			$this->assertInstanceOf( Trusted_Price_Resolver::class, $resolver );
+
+			return 12.5;
+		};
+
+		add_filter(
+			'jet-form-builder/gateways/trusted-price/resolve-virtual-field',
+			$callback,
+			10,
+			4
+		);
+
+		try {
+			$this->assertSame(
+				25.0,
+				( new Trusted_Price_Resolver( $form_id ) )->resolve( 'virtual_total' )
+			);
+		} finally {
+			remove_filter(
+				'jet-form-builder/gateways/trusted-price/resolve-virtual-field',
+				$callback,
+				10
+			);
+		}
+	}
+
+	public function testVirtualFieldResolverRejectsNonNumericValues(): void {
+		$form_id = $this->create_form(
+			array( $this->calculated_block( 'virtual_total', '%FIELD::virtual_level%', 2 ) )
+		);
+		$callback = function ( $value, $field_name ) {
+			return 'virtual_level' === $field_name ? 'not-a-price' : $value;
+		};
+
+		add_filter(
+			'jet-form-builder/gateways/trusted-price/resolve-virtual-field',
+			$callback,
+			10,
+			2
+		);
+
+		try {
+			$this->expectException( Gateway_Exception::class );
+			$this->expectExceptionMessage( 'produced a non-numeric value' );
+
+			( new Trusted_Price_Resolver( $form_id ) )->resolve( 'virtual_total' );
+		} finally {
+			remove_filter(
+				'jet-form-builder/gateways/trusted-price/resolve-virtual-field',
+				$callback,
+				10
+			);
+		}
+	}
+
+	public function testVirtualFieldResolverDetectsCircularDependencies(): void {
+		$form_id  = $this->create_form( array( $this->calculated_block( 'total', '%virtual_level%', 2 ) ) );
+		$resolver = new Trusted_Price_Resolver( $form_id );
+		$callback = function ( $value, $field_name ) use ( $resolver ) {
+			return 'virtual_level' === $field_name ? $resolver->resolve( $field_name ) : $value;
+		};
+
+		add_filter(
+			'jet-form-builder/gateways/trusted-price/resolve-virtual-field',
+			$callback,
+			10,
+			2
+		);
+
+		try {
+			$this->expectException( Gateway_Exception::class );
+			$this->expectExceptionMessage( 'Circular price field dependency detected' );
+
+			$resolver->resolve( 'total' );
+		} finally {
+			remove_filter(
+				'jet-form-builder/gateways/trusted-price/resolve-virtual-field',
+				$callback,
+				10
+			);
+		}
+	}
+
 	public function testPostMetaHiddenFieldIsRejectedWithoutTrustedPostContext(): void {
 		$field_name = 'post_meta_price';
 		$form_id    = $this->create_form(

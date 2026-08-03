@@ -59,16 +59,16 @@ class Trusted_Price_Resolver {
 			throw new Gateway_Exception( 'Circular price field dependency detected.' );
 		}
 
-		$block = Block_Helper::find_block_by_name( $field_name, $this->blocks );
-
-		if ( empty( $block ) ) {
-			throw new Gateway_Exception( 'Invalid price field.' );
-		}
-
 		$this->resolving[ $field_name ] = true;
 
 		try {
-			$price = $this->resolve_block( $field_name, $block );
+			$block = Block_Helper::find_block_by_name( $field_name, $this->blocks );
+
+			if ( empty( $block ) ) {
+				$price = $this->resolve_virtual_field( $field_name );
+			} else {
+				$price = $this->resolve_block( $field_name, $block );
+			}
 		} finally {
 			unset( $this->resolving[ $field_name ] );
 		}
@@ -76,6 +76,31 @@ class Trusted_Price_Resolver {
 		$this->resolved[ $field_name ] = $price;
 
 		return $price;
+	}
+
+	/**
+	 * Allow integrations to resolve virtual fields that are represented by a
+	 * parent block but exposed as independent fields in the request.
+	 *
+	 * @throws Gateway_Exception
+	 */
+	private function resolve_virtual_field( string $field_name ): float {
+		$unresolved = new \stdClass();
+
+		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		$price = apply_filters(
+			'jet-form-builder/gateways/trusted-price/resolve-virtual-field',
+			$unresolved,
+			$field_name,
+			$this->blocks,
+			$this
+		);
+
+		if ( $unresolved === $price ) {
+			throw new Gateway_Exception( 'Invalid price field.' );
+		}
+
+		return $this->normalize_numeric( $price, $field_name );
 	}
 
 	/**

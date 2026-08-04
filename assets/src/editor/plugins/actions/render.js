@@ -7,6 +7,7 @@ import {
 import { __ } from '@wordpress/i18n';
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { Sortable } from 'jet-form-builder-components';
+import { Fragment } from '@wordpress/element';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { styled } from '@linaria/react';
 import {
@@ -28,6 +29,16 @@ const FlexSortable = styled(Sortable)`
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
+
+	/* CHANGED: тень применяется к каждому action внутри выбранной группы */
+	.sortable-chosen > .jet-form-action {
+		box-shadow:
+			var(
+				--wp-components-color-accent,
+				var(--wp-admin-theme-color, #3858e9)
+			)
+			0 1px 4px;
+	}
 `;
 
 const ActionsPanel = styled(PluginDocumentSettingPanel)`
@@ -84,26 +95,9 @@ const ActionGroup = styled.div`
 	flex-direction: column;
 	gap: 8px;
 
-	&.has-children {
-		padding: 8px;
-		background-color: #fff;
-		border: 1px solid #ddd;
-		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16);
-	}
-
-	&.has-children > .jet-form-action:not(:first-child) {
+	> .jet-form-action:not(:first-child) {
 		margin-left: 24px;
-		padding-left:5px;
-		width: calc(100% - 24px);
-	}
-
-	&.sortable-chosen {
-		box-shadow:
-			var(
-				--wp-components-color-accent,
-				var(--wp-admin-theme-color, #3858e9)
-			)
-			0 1px 5px;
+		padding-left: 5px;
 	}
 `;
 
@@ -135,30 +129,22 @@ function PluginActions() {
 					handle=".jfb-action-handle"
 					draggable=".jet-form-action-group"
 				>
-					{actionGroups.map(group => {
-						const hasChildren = 1 < group.items.length;
-
-						return (
-							<ActionGroup
-								key={group.id}
-								className={[
-									'jet-form-action-group',
-									hasChildren && 'has-children',
-								].filter(Boolean).join(' ')}
-							>
-								{group.items.map(
-									({ action, index }) => (
-										<ActionListItemContext.Provider
-											key={action.id}
-											value={{ index, action }}
-										>
-											<ListActionItemFiltered />
-										</ActionListItemContext.Provider>
-									),
-								)}
-							</ActionGroup>
-						);
-					})}
+					{actionGroups.map(group => (
+						<ActionGroup
+							key={group.id}
+							className="jet-form-action-group"
+						>
+							{group.items.map(({ action, index }) => (
+								<Fragment key={action.id}>
+									<ActionListItemContext.Provider
+										value={{ index, action }}
+									>
+										<ListActionItemFiltered />
+									</ActionListItemContext.Provider>
+								</Fragment>
+							))}
+						</ActionGroup>
+					))}
 				</FlexSortable>
 
 				<ActionsAfterNewButtonSlotFill.Slot>

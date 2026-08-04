@@ -30,7 +30,6 @@ const FlexSortable = styled(Sortable)`
 	flex-direction: column;
 	gap: 12px;
 
-	/* CHANGED: тень применяется к каждому action внутри выбранной группы */
 	.sortable-chosen > .jet-form-action {
 		box-shadow:
 			var(

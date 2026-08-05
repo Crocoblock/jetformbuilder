@@ -276,6 +276,8 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 == Changelog ==
 
 **3.6.5**
+- ADD: Parent/child support for Post Submit Actions
+- FIX: Default Reset Password email is now sent correctly when using Reset Password actions
 - FIX: Prevent validation bypasses in core and SSR flows
 - FIX: Harden request lifecycle, CSRF, and CAPTCHA validation
 - FIX: Prevent Login Form submission when CAPTCHA validation fails

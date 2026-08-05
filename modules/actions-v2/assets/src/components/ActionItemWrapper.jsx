@@ -7,6 +7,7 @@ import { css, cx } from '@linaria/core';
 import useActionErrors from '../hooks/useActionErrors';
 import { __ } from '@wordpress/i18n';
 import { Fragment } from '@wordpress/element';
+import { isChildAction } from '../helpers/actionRelations';
 
 const MarginLessCard = styled( Card )`
     margin-bottom: unset;
@@ -73,7 +74,7 @@ function ActionItemWrapper( { className = '', ...props } = {} ) {
 			className={ cx(
 				'jet-form-action',
 				className,
-				!isFixed && 'draggable',
+				!isFixed && !isChildAction( action ) && 'draggable',
 				!isExecute && disabledStyle,
 				currentAction?.id === action.id && currentStyle,
 				errors.length && errorStyle,

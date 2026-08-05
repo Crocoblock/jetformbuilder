@@ -1,10 +1,93 @@
 import useActions from './useActions';
+import {
+	getActionRelation,
+} from '../helpers/actionRelations';
+
+function withoutActionBranch( actions, action ) {
+	const idsToDelete = new Set( [ action.id ] );
+	const collectChildren = actionId => {
+		const current = actions.find( item => item.id === actionId );
+
+		for ( const childId of getActionRelation( current ).children ?? [] ) {
+			if ( idsToDelete.has( childId ) ) {
+				continue;
+			}
+			idsToDelete.add( childId );
+			collectChildren( childId );
+		}
+	};
+
+	collectChildren( action.id );
+
+	return actions
+		.filter( current => !idsToDelete.has( current.id ) )
+		.map( current => {
+			const relation = getActionRelation( current );
+
+			if ( !relation.children?.some(
+				childId => idsToDelete.has( childId ),
+			) ) {
+				return current;
+			}
+
+			return {
+				...current,
+				settings: {
+					...current.settings,
+					_relation: {
+						...relation,
+						children: relation.children.filter(
+							childId => !idsToDelete.has( childId ),
+						),
+					},
+				},
+			};
+		} );
+}
+
+function getSyncedChild( current, source, props ) {
+	if ( !source ) {
+		return current;
+	}
+
+	const relation = getActionRelation( current );
+	const sourceRelation = getActionRelation( source );
+
+	if (
+		!sourceRelation.children?.includes( current.id ) ||
+		relation.parent !== source.id
+	) {
+		return current;
+	}
+
+	const syncedProps = {};
+
+	if ( props.hasOwnProperty( 'events' ) ) {
+		syncedProps.events = [ ...( props.events ?? [] ) ];
+	}
+	if ( props.hasOwnProperty( 'conditions' ) ) {
+		syncedProps.conditions = JSON.parse(
+			JSON.stringify( props.conditions ?? [] ),
+		);
+	}
+	if ( props.hasOwnProperty( 'condition_operator' ) ) {
+		syncedProps.condition_operator = props.condition_operator;
+	}
+	if ( props.hasOwnProperty( 'is_execute' ) ) {
+		syncedProps.is_execute = props.is_execute;
+	}
+
+	return Object.keys( syncedProps ).length
+		? { ...current, ...syncedProps }
+		: current;
+}
 
 /**
  * @return {{moveAction: moveAction, updateActionObj: updateActionObj,
  *     setActions: (function(*=): void), toggleExecute: toggleExecute, actions:
  *     *, deleteAction: deleteAction, addActionProps: addActionProps}}
  */
+// eslint-disable-next-line max-lines-per-function
 export const useActionsEdit = () => {
 	const [ actions, setActions ] = useActions();
 
@@ -20,15 +103,20 @@ export const useActionsEdit = () => {
 	};
 
 	const deleteAction = ( index ) => {
-		actions.splice( index, 1 );
+		const action = actions[ index ];
 
-		setActions( [ ...actions ] );
+		if ( !action ) {
+			return;
+		}
+
+		setActions( withoutActionBranch( actions, action ) );
 	};
 
 	const updateActionObj = ( id, props ) => {
+		const source = actions.find( action => action.id === id );
 		const newActions = actions.map( current => {
 			if ( id !== current.id ) {
-				return current;
+				return getSyncedChild( current, source, props );
 			}
 			return {
 				...JSON.parse( JSON.stringify( current ) ),

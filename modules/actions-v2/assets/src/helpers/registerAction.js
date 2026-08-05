@@ -14,7 +14,9 @@ import { STORE_NAME } from '../store';
  *                        disableConditions: Boolean|null,
  *                        disabled: Boolean|null,
  *                        fixed: Boolean|null,
- *                        validators: Function[]|null
+ *                        validators: Function[]|null,
+ *                        children: Object[]|null,
+ *                        initialSettings: Object|null
  *                        }}
  * @return {(function({select: *, dispatch: *}): void)|*}
  */

@@ -57,6 +57,7 @@ function buildFieldsContextMap( blocks = [] ) {
 function MacrosFields( {
 	   onClick = () => {},
 	   withCurrent = false,
+	   macroScope = '',
 	   ...props
    } ) {
 	const fields = useFields( { excludeCurrent: !withCurrent } );
@@ -80,6 +81,8 @@ function MacrosFields( {
 		<MacrosFieldsTemplate
 			withCurrent={ withCurrent }
 			fields={ enrichedFields }
+			macroScope={ macroScope }
+			onMacroClick={ onClick }
 			{ ...props }
 		>
 			<MacroFieldItem onClick={ onClick } />

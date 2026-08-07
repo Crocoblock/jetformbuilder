@@ -35,6 +35,7 @@ function ContentRow( { settings, onChangeSettingObj } ) {
 							settings.content ?? ''
 						) + name,
 					} ) }
+					macroScope="send-email.content"
 					withCurrent
 				/>
 			</LabelWithActions>

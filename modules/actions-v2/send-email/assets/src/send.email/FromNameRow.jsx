@@ -22,6 +22,7 @@ function FromNameRow( { settings, onChangeSettingObj } ) {
 							settings.from_name ?? ''
 						) + name,
 					} ) }
+					macroScope="send-email.from-name"
 					withCurrent
 				/>
 			</LabelWithActions>

@@ -22,6 +22,7 @@ function EmailReplyToRow( { settings, onChangeSettingObj } ) {
 							settings.reply_to_email ?? ''
 						) + name,
 					} ) }
+					macroScope="send-email.reply-to"
 					withCurrent
 				/>
 			</LabelWithActions>

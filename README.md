@@ -8,6 +8,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.5.1
+* ADD: Allow extending macro groups in Send Email fields
+* FIX: Support Hierarchical Select in protected price calculations
+
 ## 3.6.5
 * ADD: Parent/child support for Post Submit Actions
 * FIX: Default Reset Password email is now sent correctly when using Reset Password actions

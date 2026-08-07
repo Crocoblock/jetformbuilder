@@ -8,6 +8,24 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.5
+* ADD: Parent/child support for Post Submit Actions
+* FIX: Default Reset Password email is now sent correctly when using Reset Password actions
+* FIX: Prevent validation bypasses in core and SSR flows
+* FIX: Harden request lifecycle, CSRF, and CAPTCHA validation
+* FIX: Prevent Login Form submission when CAPTCHA validation fails
+* FIX: Restore form submission after correcting CAPTCHA validation errors
+* ADD: Support field macros in Action messages
+* FIX: Prevent JavaScript console error when adding fields in the editor
+* FIX: Correct WYSIWYG behavior when removing Repeater items out of order
+* FIX: Restore the first Repeater image in Fields Preview
+* ADD: Allow customization of the Image Upload directory via filter
+* FIX: Prevent 404 error when Form Records filters match no records
+* FIX: Late-registered form messages displayed status codes
+* FIX: Prevent Insert/Update Post from clearing JetEngine meta for removed fields
+* FIX: Correct Advanced Validation inheritance for form fields
+* FIX: Prevent premature browser validation notices
+
 ## 3.6.4.2
 * FIX: Secure payment amount toggle behavior
 * FIX: Safely enable payment amount protection for eligible existing forms

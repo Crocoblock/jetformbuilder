@@ -28,6 +28,7 @@ class Hcaptcha extends Base_Captcha_From_Options implements
 		$action = ( new Verify_Token_Action() )
 			->set_secret( $this->options['secret'] ?? '' )
 			->set_token( $request[ self::FIELD ] ?? '' )
+			->set_site_key( $this->get_captcha_args()['sitekey'] )
 			->set_action( jet_fb_live()->form_id );
 
 		try {
@@ -45,12 +46,7 @@ class Hcaptcha extends Base_Captcha_From_Options implements
 	 * @return string
 	 */
 	public function render(): string {
-		$captcha_args = apply_filters(
-			'jet-form-builder/h-captcha/options',
-			array(
-				'sitekey' => $this->options['key'] ?? '',
-			)
-		);
+		$captcha_args = $this->get_captcha_args();
 
 		if ( empty( $captcha_args['sitekey'] ) ) {
 			return '';
@@ -73,6 +69,24 @@ class Hcaptcha extends Base_Captcha_From_Options implements
 			self::FIELD_CLASS,
 			self::FIELD
 		);
+	}
+
+	private function get_captcha_args(): array {
+		$captcha_args = apply_filters(
+			'jet-form-builder/h-captcha/options',
+			array(
+				'sitekey' => $this->options['key'] ?? '',
+			)
+		);
+
+		if ( ! is_array( $captcha_args ) ) {
+			$captcha_args = array();
+		}
+
+		$site_key                = $captcha_args['sitekey'] ?? '';
+		$captcha_args['sitekey'] = is_scalar( $site_key ) ? sanitize_text_field( (string) $site_key ) : '';
+
+		return $captcha_args;
 	}
 
 	public function on_save_options( array $post_request ): array {

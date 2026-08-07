@@ -15,11 +15,7 @@ class Messages_Meta extends Base_Meta_Type {
 	private $messages;
 
 	public function __construct() {
-		$this->messages = apply_filters(
-		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
-			'jet-form-builder/message-types',
-			$this->get_messages()
-		);
+		$this->messages = $this->get_filtered_messages();
 	}
 
 	public function get_id(): string {
@@ -79,18 +75,29 @@ class Messages_Meta extends Base_Meta_Type {
 		);
 	}
 
+	private function get_filtered_messages(): array {
+		return apply_filters(
+		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+			'jet-form-builder/message-types',
+			$this->get_messages()
+		);
+	}
+
 	public function messages(): array {
+		$this->messages = $this->get_filtered_messages();
+
 		return $this->messages;
 	}
 
 	public function query( $form_id ) {
 		$messages = parent::query( $form_id );
+		$defaults = $this->messages();
 
 		if ( empty( $messages ) ) {
-			return $this->messages;
+			return $defaults;
 		}
 
-		return array_merge( $this->messages, $messages );
+		return array_merge( $defaults, $messages );
 	}
 
 
@@ -105,7 +112,7 @@ class Messages_Meta extends Base_Meta_Type {
 	public function get_by_key( $key ): array {
 		$messages = array();
 
-		foreach ( $this->messages as $type => $message ) {
+		foreach ( $this->messages() as $type => $message ) {
 			if ( ! isset( $message[ $key ] ) ) {
 				break;
 			}

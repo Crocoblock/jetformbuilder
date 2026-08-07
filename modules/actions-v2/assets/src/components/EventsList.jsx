@@ -4,6 +4,7 @@ import { styled } from '@linaria/react';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { useContext } from '@wordpress/element';
+import { isChildAction } from '../helpers/actionRelations';
 
 const EventButton = styled.button`
     padding: 0 4px;
@@ -16,10 +17,14 @@ const EventButton = styled.button`
     border: 0;
     font-family: monospace;
 
-    &:after {
+    &:not(:disabled):after {
         content: ' X';
         font-weight: bold;
     }
+
+	&:disabled {
+		cursor: default;
+	}
 
     &:focus {
         outline: 1px solid #5c5c5c;
@@ -35,6 +40,7 @@ function EventItem( props ) {
 	const {
 		      action,
 	      } = useContext( ActionListItemContext );
+	const isReadOnly = isChildAction( action );
 
 	const event = useSelect(
 		select => select( 'jet-forms/events' ).getType( slug ),
@@ -57,7 +63,8 @@ function EventItem( props ) {
 	return <EventButton
 		type={ 'button' }
 		title={ title }
-		onClick={ onDelete }
+		onClick={ isReadOnly ? undefined : onDelete }
+		disabled={ isReadOnly }
 	>
 		{ event?.value ?? slug }
 	</EventButton>;

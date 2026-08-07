@@ -28,6 +28,7 @@ class Elementor implements
 	Base_Module_Dir_It,
 	Base_Module_After_Install_It {
 
+
 	use Base_Compat_Handle_Trait;
 	use Base_Compat_Url_Trait;
 	use Base_Compat_Dir_Trait;
@@ -51,8 +52,7 @@ class Elementor implements
 		$this->onboarding_builder = new Onboarding_Builder();
 	}
 
-	public function on_uninstall() {
-	}
+	public function on_uninstall() {}
 
 	public function init_hooks() {
 		add_action( 'elementor/init', array( $this, 'init_widgets' ) );
@@ -134,7 +134,6 @@ class Elementor implements
 		);
 	}
 
-
 	public function register_widgets( $manager ) {
 		foreach ( $this->types as $widget ) {
 			// compatibility with 3.7
@@ -152,10 +151,20 @@ class Elementor implements
 	public function enqueue_form_scripts() {
 		/** @var Blocks\Module $blocks */
 		$blocks = jet_form_builder()->module( 'blocks' );
+
 		/** @var Deprecated\Module $deprecated */
 		$deprecated = jet_form_builder()->module( 'deprecated' );
 
 		$blocks->enqueue_frontend_assets();
+
+		// Elementor renders the selected form dynamically inside the preview.
+		// At this point, block view scripts enqueued while rendering the form
+		// are not automatically added to the already loaded preview document.
+		$this->enqueue_form_block_scripts();
+
+		// The WYSIWYG block requires WordPress editor scripts and settings.
+		// They must be loaded before the form is dynamically rendered.
+		wp_enqueue_editor();
 
 		// appointment/booking compatibility
 		$deprecated->register_scripts();
@@ -164,6 +173,70 @@ class Elementor implements
 
 	public function enqueue_form_styles() {
 		wp_enqueue_style( 'jet-form-builder-frontend' );
+
+		// Load frontend styles of all JetFormBuilder blocks in the
+		// Elementor preview before a form is selected dynamically.
+		$this->enqueue_form_block_styles();
+	}
+
+	/**
+	 * Enqueue frontend scripts of all registered JetFormBuilder blocks.
+	 *
+	 * Elementor can render or replace a form dynamically after the preview
+	 * document has already loaded. Therefore, block scripts must be available
+	 * before the form initialization is triggered.
+	 *
+	 * @return void
+	 */
+	private function enqueue_form_block_scripts() {
+		$registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();
+
+		foreach ( $registered_blocks as $block_type ) {
+			if ( 0 !== strpos( $block_type->name, 'jet-forms/' ) ) {
+				continue;
+			}
+
+			$script_handles = array_merge(
+				$block_type->script_handles,
+				$block_type->view_script_handles
+			);
+
+			foreach ( array_unique( $script_handles ) as $handle ) {
+				if ( ! $handle ) {
+					continue;
+				}
+
+				wp_enqueue_script( $handle );
+			}
+		}
+	}
+
+	/**
+	 * Enqueue frontend styles of all registered JetFormBuilder blocks.
+	 *
+	 * @return void
+	 */
+	private function enqueue_form_block_styles() {
+		$registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();
+
+		foreach ( $registered_blocks as $block_type ) {
+			if ( 0 !== strpos( $block_type->name, 'jet-forms/' ) ) {
+				continue;
+			}
+
+			$style_handles = array_merge(
+				$block_type->style_handles,
+				$block_type->view_style_handles
+			);
+
+			foreach ( array_unique( $style_handles ) as $handle ) {
+				if ( ! $handle ) {
+					continue;
+				}
+
+				wp_enqueue_style( $handle );
+			}
+		}
 	}
 
 	/**

@@ -10,8 +10,8 @@ import {
 } from '@wordpress/components';
 import { closeSmall } from '@wordpress/icons';
 import ActionGridItem from './ActionGridItem';
-import BaseAction from '../../abstract/BaseAction';
 import useActionsEdit from '../../hooks/useActionsEdit';
+import { createActionGroup } from '../../helpers/actionRelations';
 import { useDispatch } from '@wordpress/data';
 import { STORE_NAME } from '../../store';
 import { styled } from '@linaria/react';
@@ -50,19 +50,19 @@ function AddActionModal() {
 	const onAddAction = (event, action) => {
 		const nodeClasses = Array.from(event.target?.classList);
 
-		if (nodeClasses?.[0]?.includes?.('components-external-link')) {
+		if (nodeClasses?.[ 0 ]?.includes?.('components-external-link')) {
 			return;
 		}
 
-		const newAction = {
-			...new BaseAction({
-				type: action.type,
-			}),
-		};
+		const {
+			parent: newAction,
+			children,
+		} = createActionGroup( action, actions );
 
 		setActions([
 			...actions,
 			newAction,
+			...children,
 		]);
 
 		showActionsInserterModal(false);
@@ -90,7 +90,7 @@ function AddActionModal() {
 			setSearch('');
 			setCategory('');
 		};
-	}, [setCategory, setSearch]);
+	}, [ setCategory, setSearch ]);
 
 	return <Modal
 		size="large"

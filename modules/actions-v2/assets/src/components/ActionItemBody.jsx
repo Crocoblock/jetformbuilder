@@ -9,6 +9,7 @@ import { styled } from '@linaria/react';
 import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import useLoopedAction from '../hooks/useLoopedAction';
+import { isChildAction } from '../helpers/actionRelations';
 
 const CursoredIcon = styled( Icon )`
 	cursor: not-allowed;
@@ -65,6 +66,7 @@ const ActionTitleWrap = styled( Flex )`
 
 function ActionItemBody() {
 	const { action } = useLoopedAction();
+	const isChild = isChildAction( action );
 	const [ isTitleEditing, setIsTitleEditing ] = useState( false );
 
 	const actionType = useSelect( select => (
@@ -79,10 +81,10 @@ function ActionItemBody() {
 
 		{ undefined !== actionType && <>
 			<Flex align="center" justify="flex-start" gap={ 1 }>
-				<CursoredIcon
+				{ !isChild && <CursoredIcon
 					className={ 'jfb-action-handle' }
 					icon={ dragHandle }
-				/>
+				/> }
 				<ActionTitleWrap align="center" justify="flex-start">
 					<ActionTitle onEditingChange={ setIsTitleEditing }/>
 				</ActionTitleWrap>
@@ -90,9 +92,11 @@ function ActionItemBody() {
 
 			<FlexActionButtons justify="flex-end">
 				<EditActionSettingsButton/>
-				{ !actionType.disableConditions && <EditActionConditionsButton/> }
-				<ToggleActionExecutionButton/>
-				<DeleteActionButton/>
+				{ !isChild && <>
+					{ !actionType.disableConditions && <EditActionConditionsButton/> }
+					<ToggleActionExecutionButton/>
+					<DeleteActionButton/>
+				</> }
 			</FlexActionButtons>
 		</> }
 	</ActionCardBody>;

@@ -691,16 +691,16 @@ class TrustedPriceResolverTest extends \Codeception\TestCase\WPTestCase {
 		}
 	}
 
-	public function testRadioRejectsArraySelection(): void {
-		$this->expectInvalidSelection(
+	public function testRadioArraySelectionIsRejectedByValidationPipeline(): void {
+		$this->expectInvalidScalarSelection(
 			'jet-forms/radio-field',
 			'radio_secure_price',
 			array( 'discount', 'discount' )
 		);
 	}
 
-	public function testSingleSelectRejectsArraySelection(): void {
-		$this->expectInvalidSelection(
+	public function testSingleSelectArraySelectionIsRejectedByValidationPipeline(): void {
+		$this->expectInvalidScalarSelection(
 			'jet-forms/select-field',
 			'single_select_secure_price',
 			array( 'discount', 'fee' )
@@ -864,6 +864,24 @@ class TrustedPriceResolverTest extends \Codeception\TestCase\WPTestCase {
 		$this->expectException( Gateway_Exception::class );
 
 		( new Trusted_Price_Resolver( $form_id ) )->resolve( $field_name );
+	}
+
+	private function expectInvalidScalarSelection(
+		string $block_name,
+		string $field_name,
+		array $submitted
+	): void {
+		$block   = $this->option_block( $block_name, $field_name );
+		$form_id = $this->create_form( array( $block ) );
+
+		$this->apply_request(
+			array( $field_name => $submitted ),
+			array( $block )
+		);
+
+		$this->assertContains( 'invalid_value', jet_fb_context()->get_errors( $field_name ) );
+		$this->assertSame( '', jet_fb_context()->get_value( $field_name ) );
+		$this->assertSame( 0.0, ( new Trusted_Price_Resolver( $form_id ) )->resolve( $field_name ) );
 	}
 
 	private function option_block( string $block_name, string $field_name, array $attributes = array() ): array {

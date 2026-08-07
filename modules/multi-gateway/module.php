@@ -133,18 +133,57 @@ class Module implements
 	 */
 	public function set_gateway_from_submitted_multi_gateway( Form_Handler $handler ) {
 
-		$selected = jet_fb_context()->get_request( 'multi_gateway' );
+		$handler_form_id = (int) $handler->get_form_id();
+		$selected        = $this->get_allowed_gateway_for_submission(
+			jet_fb_context()->get_request( 'multi_gateway' ),
+			$handler_form_id
+		);
 
-		if ( ! is_string( $selected ) || '' === $selected ) {
+		// ADDED: normalize to parent for meta read (_jf_gateways stored on parent form post)
+		$real_form_id = $this->get_real_form_id( $handler_form_id );
+
+		$gateways_module = \JFB_Modules\Gateways\Module::instance();
+
+		$gateways  = $gateways_module->get_form_gateways_by_id( $real_form_id );
+		$is_manual = 'manual' === ( $gateways['mode'] ?? 'single' );
+
+		if ( '' === $selected && ! $is_manual ) {
 			return;
+		}
+
+		$gateways['gateway'] = $selected ?: 'none';
+
+		// IMPORTANT: set module form_id to handler form id (revision),
+		// so Default_With_Gateway_Executor won't overwrite our runtime selection.
+		$gateways_module->set_form_id( $handler_form_id );
+		$gateways_module->save_gateways_form_data( $gateways );
+	}
+
+	public function get_allowed_gateway_for_submission( $selected, int $form_id ): string {
+		if ( ! is_string( $selected ) || '' === $selected ) {
+			return '';
 		}
 
 		$selected = sanitize_key( $selected );
 
-		$handler_form_id = (int) $handler->get_form_id();
+		if ( '' === $selected ) {
+			return '';
+		}
 
-		// ADDED: normalize to parent for meta read (_jf_gateways stored on parent form post)
-		$real_form_id = $handler_form_id;
+		$real_form_id = $this->get_real_form_id( $form_id );
+		$gateways     = \JFB_Modules\Gateways\Module::instance()->get_form_gateways_by_id( $real_form_id );
+
+		if ( ! is_array( $gateways ) ) {
+			return '';
+		}
+
+		$allowed = $this->get_allowed_gateways_for_frontend( $gateways );
+
+		return in_array( $selected, $allowed, true ) ? $selected : '';
+	}
+
+	private function get_real_form_id( int $form_id ): int {
+		$real_form_id = $form_id;
 
 		$parent = wp_is_post_revision( $real_form_id );
 		if ( $parent ) {
@@ -161,15 +200,33 @@ class Module implements
 			$real_form_id = (int) $parent;
 		}
 
-		$gateways_module = \JFB_Modules\Gateways\Module::instance();
+		return $real_form_id;
+	}
 
-		$gateways = $gateways_module->get_form_gateways_by_id( $real_form_id );
+	private function get_allowed_gateways_for_frontend( array $gateways ): array {
+		$mode    = $gateways['mode'] ?? 'single';
+		$allowed = array();
 
-		$gateways['gateway'] = $selected;
+		if ( 'manual' === $mode ) {
+			foreach ( $gateways as $key => $value ) {
+				if ( ! is_string( $key ) || in_array( $key, array( 'mode', 'gateway' ), true ) ) {
+					continue;
+				}
 
-		// IMPORTANT: set module form_id to handler form id (revision),
-		// so Default_With_Gateway_Executor won't overwrite our runtime selection.
-		$gateways_module->set_form_id( $handler_form_id );
-		$gateways_module->save_gateways_form_data( $gateways );
+				if ( is_array( $value ) && ! empty( $value['show_on_front'] ) ) {
+					$allowed[] = sanitize_key( $key );
+				}
+			}
+
+			return array_filter( $allowed );
+		}
+
+		$gateway = $gateways['gateway'] ?? 'none';
+
+		if ( is_string( $gateway ) && '' !== $gateway && 'none' !== $gateway ) {
+			$allowed[] = sanitize_key( $gateway );
+		}
+
+		return array_filter( $allowed );
 	}
 }

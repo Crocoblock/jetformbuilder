@@ -146,7 +146,17 @@ abstract class Field_Data_Parser implements Repository_Item_Instance_Trait {
 	}
 
 	public function parse_value( $value ) {
+		if ( is_array( $value ) && ! $this->allows_array_value() ) {
+			$this->collect_error( 'invalid_value' );
+
+			return '';
+		}
+
 		return $value;
+	}
+
+	protected function allows_array_value(): bool {
+		return false;
 	}
 
 	public function check_response() {

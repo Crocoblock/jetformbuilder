@@ -17,6 +17,7 @@ extensions:
         - Codeception\Command\GenerateWPCanonical
         - Codeception\Command\GenerateWPXMLRPC
 params:
+    - tests/_envs/.env.local
     - tests/_envs/.env
 settings:
     colors: true
@@ -80,5 +81,3 @@ modules:
             mu-plugins: '/wp-content/mu-plugins'
             themes: '/wp-content/themes'
             uploads: '/wp-content/uploads'
-
-

@@ -49,8 +49,17 @@ class Builder {
 		return $this->status;
 	}
 
+	public function prepare_message_content( string $message ): string {
+		return jet_fb_handler()->parser->parse_macros(
+			$message,
+			jet_fb_context()->get_request()
+		);
+	}
+
 	public function render_empty_field_message() {
-		$message_content = $this->get_manager()->get_message( 'empty_field' );
+		$message_content = $this->prepare_message_content(
+			$this->get_manager()->get_message( 'empty_field' )
+		);
 
 		include $this->get_global_template( 'common/field-message.php' );
 	}
@@ -68,7 +77,12 @@ class Builder {
 		}
 
 		$info            = new Status_Info( $status );
-		$message_content = Rich_Content\Module::rich( $this->get_manager()->get_message_by_info( $info ) );
+
+		$message_content = Rich_Content\Module::rich(
+			$this->prepare_message_content(
+				$this->get_manager()->get_message_by_info( $info )
+			)
+		);
 
 		$class  = 'jet-form-builder-message';
 		$class .= ' jet-form-builder-message--' . $info->get_css_class();

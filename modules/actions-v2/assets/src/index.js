@@ -120,3 +120,10 @@ export {
 	default as convertListToFieldsMap,
 } from './helpers/convertListToFieldsMap';
 export { default as globalTab } from './helpers/globalTab';
+export {
+	createActionGroup,
+	flattenActionGroups,
+	getActionGroups,
+	getActionRelation,
+	isChildAction,
+} from './helpers/actionRelations';

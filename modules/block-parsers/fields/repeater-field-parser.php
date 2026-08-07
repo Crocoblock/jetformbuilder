@@ -17,6 +17,10 @@ class Repeater_Field_Parser extends Field_Data_Parser {
 		return 'repeater-field';
 	}
 
+	protected function allows_array_value(): bool {
+		return true;
+	}
+
 	/**
 	 * @return int|void
 	 * @throws Sanitize_Value_Exception

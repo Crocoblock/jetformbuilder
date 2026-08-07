@@ -90,6 +90,7 @@ jobs:
                 run: |
                     rm tests/_envs/.env
                     mv tests/_envs/.env.testing tests/_envs/.env
+                    touch tests/_envs/.env.local
 
             -   name: Run PHP tests
                 run: composer test:wpunit

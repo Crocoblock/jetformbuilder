@@ -320,9 +320,15 @@ final class Module implements
 	public function is_advanced( array $block_attrs ): bool {
 		$type = $block_attrs['validation']['type'] ?? '';
 
-		return $type
-			? self::FORMAT_ADVANCED === $type
-			: $this->is_advanced_form();
+		if ( self::FORMAT_ADVANCED === $type ) {
+			return true;
+		}
+
+		if ( '' === $type || 'inherit' === $type ) {
+			return $this->is_advanced_form();
+		}
+
+		return false;
 	}
 
 	public function is_advanced_form(): bool {
@@ -351,7 +357,7 @@ final class Module implements
 	public function validate_block( Field_Data_Parser $parser ) {
 		if (
 			! $this->is_advanced( $parser->get_settings() ) ||
-			! $parser->get_value() ||
+			Tools::is_empty( $parser->get_value() ) ||
 			$parser->is_inside_conditional()
 		) {
 			return;

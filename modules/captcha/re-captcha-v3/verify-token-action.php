@@ -35,7 +35,7 @@ class Verify_Token_Action extends Base_Gateway_Action implements
 		$action = $response['action'] ?? '';
 		$score  = $response['score'] ?? 0;
 
-		if ( $this->action === $action && $score > $this->threshold ) {
+		if ( $this->action === $action && $score >= $this->threshold ) {
 			return $response;
 		}
 

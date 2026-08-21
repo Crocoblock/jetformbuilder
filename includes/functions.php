@@ -16,6 +16,9 @@ function jet_form_builder_init() {
 
 	jet_form_builder()->get_modules()->install( new JFB_Modules\Cli\Module() );
 	jet_form_builder()->get_modules()->install( new JFB_Modules\Framework\Module() );
+
+	// Auto-run outstanding DB migrations after a plugin update (see class docblock).
+	\Jet_Form_Builder\Migrations\Auto_Migrator::instance()->init_hooks();
 }
 
 function jet_form_builder() {

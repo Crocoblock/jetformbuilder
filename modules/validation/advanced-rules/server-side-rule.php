@@ -134,10 +134,96 @@ class Server_Side_Rule extends Rule {
 		'getmyuid',
 		'getmypid',
 		'getenv',
+		// WordPress data/state mutation (added 3.6.5.3 — not blocked by the allowlist
+		// alone, since the allowlist only records what an editor once typed, not what
+		// is actually safe to expose to an unauthenticated caller's argument).
+		'wp_delete_file',
+		'wp_delete_post',
+		'wp_delete_attachment',
+		'wp_trash_post',
+		'delete_option',
+		'delete_site_option',
+		'delete_post_meta',
+		'delete_user_meta',
+		'delete_metadata',
+		'update_option',
+		'add_option',
+		'update_site_option',
+		'update_post_meta',
+		'update_user_meta',
+		'wp_set_password',
+		'wp_delete_user',
+		'add_user_meta',
+		'add_role',
+		'remove_role',
+		'wp_update_post',
+		'wp_insert_post',
+		'do_shortcode',
+		'do_action',
+		'apply_filters',
+		'deactivate_plugins',
+		'activate_plugin',
+		'switch_to_blog',
+		'restore_current_blog',
+		'wp_remote_get',
+		'wp_remote_post',
+		'wp_remote_request',
+		'wp_safe_remote_get',
+		'wp_safe_remote_post',
+		'wp_safe_remote_request',
+		'wp_remote_head',
+		'delete_transient',
+		'delete_site_transient',
+		'set_transient',
+		'set_site_transient',
+		'wp_cache_add',
+		'wp_cache_set',
+		'wp_cache_replace',
+		'wp_cache_delete',
+		'wp_cache_flush',
+		'wp_cache_flush_group',
+		'wp_cache_flush_runtime',
+		'wp_cache_incr',
+		'wp_cache_decr',
+		'clean_post_cache',
+		'clean_term_cache',
+		'clean_comment_cache',
+		'flush_rewrite_rules',
+		'wp_delete_comment',
+		'wp_trash_comment',
+		'wp_delete_term',
+		'wp_remove_object_terms',
+		'wp_die',
 	);
+
+	/**
+	 * Function names that ship with the plugin as selectable "Server-Side callback"
+	 * options and are safe by construction — they never reach `call_user_func()`,
+	 * `validate()` resolves them straight to a `Ssr\Base_Validation_Callback` instance.
+	 * Kept separate from the allowlist option so a fresh install already offers them.
+	 *
+	 * @since 3.6.5.2
+	 */
+	const BUILTIN_ALLOWED = array();
 
 	public function __construct() {
 		$this->rep_install();
+	}
+
+	/**
+	 * Whether $function_name resolves to one of the built-in callbacks (registered via
+	 * `rep_instances()`/`get_id()`), i.e. it will never be passed to `call_user_func()`.
+	 *
+	 * @since 3.6.5.2
+	 */
+	public static function is_builtin_callback( string $function_name ): bool {
+		foreach ( ( new self() )->rep_instances() as $callback ) {
+			if ( $callback->get_id() === $function_name ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public function rep_instances(): array {
@@ -224,7 +310,18 @@ class Server_Side_Rule extends Rule {
 	/**
 	 * Validate callback function name for security.
 	 *
-	 * @since 3.5.6.2
+	 * Two checks apply, both must pass:
+	 * 1. Denylist (`NOT_ALLOWED`) — kept as defense in depth, blocks known-catastrophic
+	 *    functions outright even if the allowlist below is ever misconfigured.
+	 * 2. Allowlist — a function must be explicitly known-safe: either shipped with the
+	 *    plugin, collected from a form an editor actually saved with this callback
+	 *    configured (`Ssr_Callback_Allowlist`), or added by a site via the
+	 *    `jet-form-builder/ssr-validation/allowed-callbacks` filter. A denylist alone
+	 *    cannot enumerate every dangerous function in PHP core + WordPress core + active
+	 *    plugins, so functions unknown to either list are rejected by default.
+	 *
+	 * @since 3.5.6.2 Denylist introduced.
+	 * @since 3.6.5.2 Allowlist enforcement added.
 	 *
 	 * @param string $function_name The function name to validate.
 	 *
@@ -237,14 +334,46 @@ class Server_Side_Rule extends Rule {
 			return '';
 		}
 
-		// Case-insensitive blacklist check (PHP function names are case-insensitive)
+		// Case-insensitive checks (PHP function names are case-insensitive).
 		$name_lower = strtolower( $name );
 
 		if ( in_array( $name_lower, self::NOT_ALLOWED, true ) ) {
 			return '';
 		}
 
+		if ( ! in_array( $name_lower, $this->get_allowed_callbacks(), true ) ) {
+			return '';
+		}
+
 		return function_exists( $name ) ? $name : '';
+	}
+
+	/**
+	 * Scoped to the form actually being submitted — a function name configured on one
+	 * form is never usable from another form, even though both may have been saved by
+	 * the same (already admin-gated) capability. See `Ssr_Callback_Allowlist` for why
+	 * this matters: the allowlist only records "some editor typed this name once", not
+	 * "this function is safe everywhere", so it must not widen past the form an editor
+	 * actually approved it on.
+	 *
+	 * @since 3.6.5.2
+	 * @since 3.6.5.3 Scoped per-form instead of site-wide.
+	 *
+	 * @return string[] Lowercased function names allowed to run via `call_user_func()`.
+	 */
+	protected function get_allowed_callbacks(): array {
+		$allowed = array_merge(
+			self::BUILTIN_ALLOWED,
+			Ssr_Callback_Allowlist::get_allowed_callbacks_for_form(
+				(int) jet_fb_handler()->get_form_id()
+			)
+		);
+
+		return (array) apply_filters(
+			'jet-form-builder/ssr-validation/allowed-callbacks',
+			array_values( array_unique( array_map( 'strtolower', $allowed ) ) ),
+			(int) jet_fb_handler()->get_form_id()
+		);
 	}
 
 }

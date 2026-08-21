@@ -65,10 +65,10 @@ class Media_Field_Render extends Base {
 				$file = $file['id'];
 			}
 			$file_url = isset( $file['url'] ) ? $file['url'] : wp_get_attachment_url( $file );
-			$updated = str_replace( '%file_url%', $file_url, $preview );
+			$updated = str_replace( '%file_url%', esc_attr( $file_url ), $preview );
 			$updated = str_replace(
 				'%file_name%',
-				$this->get_name_from_file( $file['url'] ),
+				esc_attr( $this->get_name_from_file( $file['url'] ) ),
 				$updated
 			);
 
@@ -79,7 +79,7 @@ class Media_Field_Render extends Base {
 			$img_ext_preg = '!\.(' . join( '|', $image_ext ) . ')$!i';
 
 			if ( preg_match( $img_ext_preg, $file['url'] ) ) {
-				$replace = sprintf( '<img src="%s" alt="" width="100px" height="100px">', $file['url'] );
+				$replace = sprintf( '<img src="%s" alt="" width="100px" height="100px">', esc_url( $file['url'] ) );
 
 				$updated = str_replace( '<!-- preview -->', $replace, $updated );
 			}

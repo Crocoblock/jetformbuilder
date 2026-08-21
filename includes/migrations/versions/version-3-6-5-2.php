@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Migrations\Versions;
 
+use Jet_Form_Builder\Migrations\Auto_Migrator;
 use JFB_Modules\Validation\Advanced_Rules\Ssr_Callback_Allowlist;
 
 // If this file is called directly, abort.
@@ -27,8 +28,10 @@ class Version_3_6_5_2 extends Base_Migration {
 	}
 
 	public function down( \wpdb $wpdb ) {
+		delete_post_meta_by_key( Ssr_Callback_Allowlist::META_KEY );
 		delete_option( Ssr_Callback_Allowlist::OPTION_KEY );
 		delete_option( Ssr_Callback_Allowlist::REBUILD_PROGRESS_OPTION );
 		delete_transient( Ssr_Callback_Allowlist::REBUILD_LOCK_TRANSIENT );
+		delete_option( Auto_Migrator::DB_VERSION_OPTION );
 	}
 }

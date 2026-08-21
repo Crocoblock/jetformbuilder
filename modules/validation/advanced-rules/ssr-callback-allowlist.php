@@ -14,9 +14,9 @@ if ( ! defined( 'WPINC' ) ) {
  * Builds and stores the allowlist of function names that the "Server-Side callback"
  * validation rule (`Server_Side_Rule`) is permitted to invoke via `call_user_func()`.
  *
- * The list is collected from function names actually configured in saved forms, so
- * saving a form is the only way to add an entry, and only a user who can edit that
- * form can do so.
+ * The list is collected from function names actually configured in saved forms and
+ * their reusable blocks. Only trusted saved content participates in collection, and
+ * only users allowed to edit that content can cause the derived list to change.
  *
  * Storage is per-form (post meta on the form itself), not a single site-wide list —
  * a function name typed into form A never becomes callable from form B just because
@@ -40,12 +40,14 @@ class Ssr_Callback_Allowlist {
 
 	public function __construct() {
 		add_action( 'save_post_jet-form-builder', array( $this, 'collect_on_save' ), 20, 2 );
+		add_action( 'save_post_wp_block', array( $this, 'rebuild_on_reusable_save' ), 20, 2 );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_rebuild_runner' ) );
 		add_action( 'wp_ajax_' . self::REBUILD_AJAX_ACTION, array( __CLASS__, 'process_rebuild_ajax' ) );
 	}
 
 	public function remove_hooks() {
 		remove_action( 'save_post_jet-form-builder', array( $this, 'collect_on_save' ), 20 );
+		remove_action( 'save_post_wp_block', array( $this, 'rebuild_on_reusable_save' ), 20 );
 		remove_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_rebuild_runner' ) );
 		remove_action( 'wp_ajax_' . self::REBUILD_AJAX_ACTION, array( __CLASS__, 'process_rebuild_ajax' ) );
 	}
@@ -70,8 +72,35 @@ class Ssr_Callback_Allowlist {
 	}
 
 	/**
-	 * Parses the given form `post_content` and returns every function name configured
-	 * as the "value" of an SSR ('ssr') validation rule, excluding names that:
+	 * Reusable blocks are resolved by the runtime validation pipeline. When one changes,
+	 * every per-form allowlist is potentially stale, so invalidate the derived state and
+	 * start a fresh bounded rebuild. Forms remain protected by lazy initialization while
+	 * the remaining batches are pending.
+	 *
+	 * @param int      $post_id
+	 * @param \WP_Post $post
+	 */
+	public function rebuild_on_reusable_save( $post_id, $post ) {
+		if (
+			! $post instanceof \WP_Post ||
+			wp_is_post_autosave( $post_id ) ||
+			wp_is_post_revision( $post_id ) ||
+			! current_user_can( 'edit_post', $post_id )
+		) {
+			return;
+		}
+
+		delete_post_meta_by_key( self::META_KEY );
+		delete_option( self::OPTION_KEY );
+		delete_option( self::REBUILD_PROGRESS_OPTION );
+
+		self::start_rebuild();
+	}
+
+	/**
+	 * Parses the given form `post_content`, including referenced reusable blocks, and
+	 * returns every function name configured as the "value" of an SSR ('ssr') validation
+	 * rule, excluding names that:
 	 * - resolve to one of the built-in callbacks (those never reach `call_user_func()`);
 	 * - are on the `NOT_ALLOWED` denylist (they can never pass validation anyway, so
 	 *   storing them here is pure noise that makes the stored allowlist confusing to
@@ -88,7 +117,7 @@ class Ssr_Callback_Allowlist {
 		}
 
 		$found  = array();
-		$blocks = parse_blocks( $post_content );
+		$blocks = Block_Helper::get_blocks_from_content( $post_content );
 
 		foreach ( Block_Helper::generate_blocks_in_space( $blocks ) as $block ) {
 			$rules = $block['attrs']['validation']['rules'] ?? array();

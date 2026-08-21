@@ -3,6 +3,8 @@
 namespace JFB_Tests\Wpunit;
 
 use Jet_Form_Builder\Request\Parser_Context;
+use Jet_Form_Builder\Migrations\Auto_Migrator;
+use Jet_Form_Builder\Migrations\Versions\Version_3_6_5_2;
 use JFB_Modules\Block_Parsers\Fields\Text_Field_Parser;
 use JFB_Modules\Validation\Advanced_Rules\Server_Side_Rule;
 use JFB_Modules\Validation\Advanced_Rules\Ssr_Callback_Allowlist;
@@ -161,6 +163,87 @@ class SsrCallbackAllowlistTest extends \Codeception\TestCase\WPTestCase {
 
 		$this->assertFalse( function_exists( 'jfb_20361_callback_that_does_not_exist' ) );
 		$this->assertSame( array(), Ssr_Callback_Allowlist::collect_from_content( $content ) );
+	}
+
+	public function testCollectFromContentExpandsReusableBlocks(): void {
+		$reusable_id = $this->factory()->post->create(
+			array(
+				'post_type'    => 'wp_block',
+				'post_status'  => 'publish',
+				'post_content' => '<!-- wp:jet-forms/text-field {"name":"f","validation":{"type":"advanced","rules":[{"type":"ssr","value":"is_email"}]}} /-->',
+			)
+		);
+		$content     = sprintf( '<!-- wp:block {"ref":%d} /-->', $reusable_id );
+
+		$this->assertSame(
+			array( 'is_email' ),
+			Ssr_Callback_Allowlist::collect_from_content( $content )
+		);
+	}
+
+	public function testPreexistingReusableBlockFormWorksBeforeMigration(): void {
+		$reusable_id = $this->factory()->post->create(
+			array(
+				'post_type'    => 'wp_block',
+				'post_status'  => 'publish',
+				'post_content' => '<!-- wp:jet-forms/text-field {"name":"f","validation":{"type":"advanced","rules":[{"type":"ssr","value":"is_email"}]}} /-->',
+			)
+		);
+		$form_id     = $this->factory()->post->create(
+			array(
+				'post_type'    => 'jet-form-builder',
+				'post_status'  => 'publish',
+				'post_content' => sprintf( '<!-- wp:block {"ref":%d} /-->', $reusable_id ),
+			)
+		);
+
+		delete_post_meta( $form_id, Ssr_Callback_Allowlist::META_KEY );
+
+		$parser = $this->run_ssr_validation( 'is_email', 'test@example.com', null, $form_id );
+
+		$this->assertSame( array(), $parser->get_errors() );
+		$this->assertSame(
+			array( 'is_email' ),
+			get_post_meta( $form_id, Ssr_Callback_Allowlist::META_KEY, true )
+		);
+	}
+
+	public function testReusableBlockSaveRebuildsFormAllowlist(): void {
+		$this->run_as_form_editor(
+			function () {
+				$reusable_id = $this->factory()->post->create(
+					array(
+						'post_type'    => 'wp_block',
+						'post_status'  => 'publish',
+						'post_content' => '<!-- wp:jet-forms/text-field {"name":"f","validation":{"type":"advanced","rules":[{"type":"ssr","value":"is_email"}]}} /-->',
+					)
+				);
+				$form_id     = $this->factory()->post->create(
+					array(
+						'post_type'    => 'jet-form-builder',
+						'post_status'  => 'publish',
+						'post_content' => sprintf( '<!-- wp:block {"ref":%d} /-->', $reusable_id ),
+					)
+				);
+
+				$this->assertSame(
+					array( 'is_email' ),
+					get_post_meta( $form_id, Ssr_Callback_Allowlist::META_KEY, true )
+				);
+
+				wp_update_post(
+					array(
+						'ID'           => $reusable_id,
+						'post_content' => '<!-- wp:jet-forms/text-field {"name":"f","validation":{"type":"advanced","rules":[{"type":"ssr","value":"is_numeric"}]}} /-->',
+					)
+				);
+
+				$this->assertSame(
+					array( 'is_numeric' ),
+					get_post_meta( $form_id, Ssr_Callback_Allowlist::META_KEY, true )
+				);
+			}
+		);
 	}
 
 	public function testPreexistingFormWorksBeforeAdminMigrationRuns(): void {
@@ -387,6 +470,34 @@ class SsrCallbackAllowlistTest extends \Codeception\TestCase\WPTestCase {
 			array(),
 			Ssr_Callback_Allowlist::get_allowed_callbacks_for_form( $form_id )
 		);
+	}
+
+	public function testMigrationDownRemovesDerivedAllowlistStateAndVersionStamp(): void {
+		global $wpdb;
+
+		$form_id = $this->factory()->post->create(
+			array(
+				'post_type'   => 'jet-form-builder',
+				'post_status' => 'publish',
+			)
+		);
+
+		update_post_meta( $form_id, Ssr_Callback_Allowlist::META_KEY, array( 'is_email' ) );
+		update_post_meta( $form_id, '_unrelated_meta', 'keep-me' );
+		update_option( Ssr_Callback_Allowlist::OPTION_KEY, array( 'is_email' ), false );
+		update_option( Ssr_Callback_Allowlist::REBUILD_PROGRESS_OPTION, array( 'last_id' => $form_id ), false );
+		set_transient( Ssr_Callback_Allowlist::REBUILD_LOCK_TRANSIENT, 1, MINUTE_IN_SECONDS );
+		update_option( Auto_Migrator::DB_VERSION_OPTION, JET_FORM_BUILDER_VERSION, false );
+
+		( new Version_3_6_5_2() )->down( $wpdb );
+
+		$this->assertFalse( metadata_exists( 'post', $form_id, Ssr_Callback_Allowlist::META_KEY ) );
+		$this->assertSame( 'keep-me', get_post_meta( $form_id, '_unrelated_meta', true ) );
+		$this->assertFalse( get_option( Ssr_Callback_Allowlist::OPTION_KEY, false ) );
+		$this->assertFalse( get_option( Ssr_Callback_Allowlist::REBUILD_PROGRESS_OPTION, false ) );
+		$this->assertFalse( get_transient( Ssr_Callback_Allowlist::REBUILD_LOCK_TRANSIENT ) );
+		$this->assertFalse( get_option( Auto_Migrator::DB_VERSION_OPTION, false ) );
+		$this->assertTrue( ( new Auto_Migrator() )->needs_upgrade() );
 	}
 
 	private function assertValidationRejectsCallback(

@@ -99,11 +99,15 @@ class Auto_Migrator {
 		}
 
 		try {
-			$this->transaction_start();
+			if ( false === $this->transaction_start() ) {
+				throw new \RuntimeException( 'Failed to start the auto-migration transaction.' );
+			}
 
 			$this->install_migrations();
 
-			$this->transaction_commit();
+			if ( false === $this->transaction_commit() ) {
+				throw new \RuntimeException( 'Failed to commit the auto-migration transaction.' );
+			}
 		} catch ( \Throwable $exception ) {
 			$this->transaction_rollback();
 
@@ -165,14 +169,14 @@ class Auto_Migrator {
 	}
 
 	protected function transaction_start() {
-		Execution_Builder::instance()->transaction_start();
+		return Execution_Builder::instance()->transaction_start();
 	}
 
 	protected function transaction_commit() {
-		Execution_Builder::instance()->transaction_commit();
+		return Execution_Builder::instance()->transaction_commit();
 	}
 
 	protected function transaction_rollback() {
-		Execution_Builder::instance()->transaction_rollback();
+		return Execution_Builder::instance()->transaction_rollback();
 	}
 }

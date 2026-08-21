@@ -74,6 +74,28 @@ class AutoMigratorTest extends \Codeception\TestCase\WPTestCase {
 		);
 	}
 
+	public function testFailedTransactionStartDoesNotInstallOrStampVersion(): void {
+		$spy               = $this->makeSpy( false );
+		$spy->start_result = false;
+
+		$spy->run_public();
+
+		$this->assertSame( 0, $spy->install_calls );
+		$this->assertSame( 1, $spy->rollback_calls );
+		$this->assertFalse( get_option( Auto_Migrator::DB_VERSION_OPTION ) );
+	}
+
+	public function testFailedTransactionCommitRollsBackAndDoesNotStampVersion(): void {
+		$spy                = $this->makeSpy( false );
+		$spy->commit_result = false;
+
+		$spy->run_public();
+
+		$this->assertSame( 1, $spy->install_calls );
+		$this->assertSame( 1, $spy->rollback_calls );
+		$this->assertFalse( get_option( Auto_Migrator::DB_VERSION_OPTION ) );
+	}
+
 	public function testRunWithNothingOutstandingStampsWithoutInstalling(): void {
 		$spy = $this->makeSpy( true /* everything already installed */ );
 
@@ -128,6 +150,9 @@ class AutoMigratorTest extends \Codeception\TestCase\WPTestCase {
 		return new class( $all_installed ) extends Auto_Migrator {
 			public $install_calls    = 0;
 			public $throw_on_install = false;
+			public $start_result     = 0;
+			public $commit_result    = 0;
+			public $rollback_calls   = 0;
 			private $all_installed;
 
 			public function __construct( bool $all_installed ) {
@@ -151,9 +176,17 @@ class AutoMigratorTest extends \Codeception\TestCase\WPTestCase {
 			}
 
 			// Stub out the real DB transaction so the branching logic is tested in isolation.
-			protected function transaction_start() {}
-			protected function transaction_commit() {}
-			protected function transaction_rollback() {}
+			protected function transaction_start() {
+				return $this->start_result;
+			}
+
+			protected function transaction_commit() {
+				return $this->commit_result;
+			}
+
+			protected function transaction_rollback() {
+				$this->rollback_calls++;
+			}
 		};
 	}
 }

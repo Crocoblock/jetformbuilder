@@ -107,7 +107,9 @@ class SsrCallbackAllowlistTest extends \Codeception\TestCase\WPTestCase {
 
 	public function testFilterCanExtendAllowlist(): void {
 		$add_filter = function ( array $allowed ): array {
+			$allowed[] = 'IS_EMAIL';
 			$allowed[] = 'is_email';
+			$allowed[] = null;
 
 			return $allowed;
 		};
@@ -163,6 +165,33 @@ class SsrCallbackAllowlistTest extends \Codeception\TestCase\WPTestCase {
 
 		$this->assertFalse( function_exists( 'jfb_20361_callback_that_does_not_exist' ) );
 		$this->assertSame( array(), Ssr_Callback_Allowlist::collect_from_content( $content ) );
+	}
+
+	public function testAllowlistRefreshesWhenSavedCallbackBecomesAvailable(): void {
+		$callback = 'jfb_20361_late_loaded_callback';
+		$content  = '<!-- wp:jet-forms/text-field {"name":"f","validation":{"type":"advanced","rules":[' .
+			'{"type":"ssr","value":"' . $callback . '"}' .
+			']}} /-->';
+		$form_id  = $this->factory()->post->create(
+			array(
+				'post_type'    => 'jet-form-builder',
+				'post_status'  => 'publish',
+				'post_content' => $content,
+			)
+		);
+
+		$this->assertFalse( function_exists( $callback ) );
+		update_post_meta( $form_id, Ssr_Callback_Allowlist::META_KEY, array() );
+
+		require_once dirname( __DIR__ ) . '/_data/late-ssr-callback.php';
+
+		$parser = $this->run_ssr_validation( $callback, 'test@example.com', null, $form_id );
+
+		$this->assertSame( array(), $parser->get_errors() );
+		$this->assertSame(
+			array( $callback ),
+			get_post_meta( $form_id, Ssr_Callback_Allowlist::META_KEY, true )
+		);
 	}
 
 	public function testCollectFromContentExpandsReusableBlocks(): void {
@@ -292,6 +321,42 @@ class SsrCallbackAllowlistTest extends \Codeception\TestCase\WPTestCase {
 					Ssr_Callback_Allowlist::get_allowed_callbacks_for_form( $form_id )
 				);
 			}
+		);
+	}
+
+	public function testProgrammaticFormSaveInvalidatesDerivedAllowlist(): void {
+		$form_id = $this->factory()->post->create(
+			array(
+				'post_type'    => 'jet-form-builder',
+				'post_status'  => 'publish',
+				'post_content' => '<!-- wp:jet-forms/text-field {"name":"f","validation":{"type":"advanced","rules":[{"type":"ssr","value":"is_string"}]}} /-->',
+			)
+		);
+
+		update_post_meta( $form_id, Ssr_Callback_Allowlist::META_KEY, array( 'is_string' ) );
+		$previous_user_id = get_current_user_id();
+
+		wp_set_current_user( 0 );
+
+		try {
+			wp_update_post(
+				array(
+					'ID'           => $form_id,
+					'post_content' => '<!-- wp:jet-forms/text-field {"name":"f","validation":{"type":"advanced","rules":[{"type":"ssr","value":"is_email"}]}} /-->',
+				)
+			);
+		} finally {
+			wp_set_current_user( $previous_user_id );
+		}
+
+		$this->assertFalse( metadata_exists( 'post', $form_id, Ssr_Callback_Allowlist::META_KEY ) );
+
+		$parser = $this->run_ssr_validation( 'is_email', 'test@example.com', null, $form_id );
+
+		$this->assertSame( array(), $parser->get_errors() );
+		$this->assertSame(
+			array( 'is_email' ),
+			get_post_meta( $form_id, Ssr_Callback_Allowlist::META_KEY, true )
 		);
 	}
 

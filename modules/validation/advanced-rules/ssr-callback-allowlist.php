@@ -15,8 +15,9 @@ if ( ! defined( 'WPINC' ) ) {
  * validation rule (`Server_Side_Rule`) is permitted to invoke via `call_user_func()`.
  *
  * The list is collected from function names actually configured in saved forms and
- * their reusable blocks. Only trusted saved content participates in collection, and
- * only users allowed to edit that content can cause the derived list to change.
+ * their reusable blocks. Only trusted saved content participates in collection. Saves
+ * by capable editors refresh the derived list immediately; programmatic saves invalidate
+ * it so the next request can safely re-collect from the new saved content.
  *
  * Storage is per-form (post meta on the form itself), not a single site-wide list —
  * a function name typed into form A never becomes callable from form B just because
@@ -60,9 +61,14 @@ class Ssr_Callback_Allowlist {
 		if (
 			! $post instanceof \WP_Post ||
 			wp_is_post_autosave( $post_id ) ||
-			wp_is_post_revision( $post_id ) ||
-			! current_user_can( 'edit_post', $post_id )
+			wp_is_post_revision( $post_id )
 		) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			delete_post_meta( $post_id, self::META_KEY );
+
 			return;
 		}
 
@@ -73,9 +79,9 @@ class Ssr_Callback_Allowlist {
 
 	/**
 	 * Reusable blocks are resolved by the runtime validation pipeline. When one changes,
-	 * every per-form allowlist is potentially stale, so invalidate the derived state and
-	 * start a fresh bounded rebuild. Forms remain protected by lazy initialization while
-	 * the remaining batches are pending.
+	 * every per-form allowlist is potentially stale, so invalidate the derived state. A
+	 * capable editor also starts a fresh bounded rebuild; programmatic updates rely on safe
+	 * lazy initialization. Forms remain protected while the remaining batches are pending.
 	 *
 	 * @param int      $post_id
 	 * @param \WP_Post $post
@@ -84,8 +90,7 @@ class Ssr_Callback_Allowlist {
 		if (
 			! $post instanceof \WP_Post ||
 			wp_is_post_autosave( $post_id ) ||
-			wp_is_post_revision( $post_id ) ||
-			! current_user_can( 'edit_post', $post_id )
+			wp_is_post_revision( $post_id )
 		) {
 			return;
 		}
@@ -93,6 +98,10 @@ class Ssr_Callback_Allowlist {
 		delete_post_meta_by_key( self::META_KEY );
 		delete_option( self::OPTION_KEY );
 		delete_option( self::REBUILD_PROGRESS_OPTION );
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
 
 		self::start_rebuild();
 	}
@@ -203,6 +212,38 @@ class Ssr_Callback_Allowlist {
 		$stored = get_post_meta( $form_id, self::META_KEY, true );
 
 		return is_array( $stored ) ? $stored : array();
+	}
+
+	/**
+	 * Re-collects a form's allowlist from its current saved content.
+	 *
+	 * This is used after a runtime allowlist miss for a callback that exists now but
+	 * was unavailable when the form was migrated or last saved. The submitted callback
+	 * name never participates in collection, so only names already present in trusted
+	 * saved form content can be promoted.
+	 *
+	 * @since 3.6.5.3
+	 *
+	 * @param int $form_id
+	 *
+	 * @return string[] Lowercased function names allowed for this form.
+	 */
+	public static function refresh_allowed_callbacks_for_form( int $form_id ): array {
+		if ( ! $form_id ) {
+			return array();
+		}
+
+		$post = get_post( $form_id );
+
+		if ( ! $post instanceof \WP_Post || 'jet-form-builder' !== $post->post_type ) {
+			return array();
+		}
+
+		$found = self::collect_from_content( $post->post_content );
+
+		update_post_meta( $form_id, self::META_KEY, $found );
+
+		return $found;
 	}
 
 	/**

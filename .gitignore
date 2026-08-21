@@ -23,6 +23,9 @@ package-lock.json
 tests/
 !tests/
 tests/*
+!tests/_data/
+tests/_data/*
+!tests/_data/late-ssr-callback.php
 !tests/wpunit/
 tests/wpunit/*
 !tests/wpunit/GeneratorContextSecurityTest.php

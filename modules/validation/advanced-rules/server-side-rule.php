@@ -341,11 +341,20 @@ class Server_Side_Rule extends Rule {
 			return '';
 		}
 
-		if ( ! in_array( $name_lower, $this->get_allowed_callbacks(), true ) ) {
+		if ( ! function_exists( $name ) ) {
 			return '';
 		}
 
-		return function_exists( $name ) ? $name : '';
+		$allowed = $this->get_allowed_callbacks();
+
+		if ( ! in_array( $name_lower, $allowed, true ) ) {
+			Ssr_Callback_Allowlist::refresh_allowed_callbacks_for_form(
+				(int) jet_fb_handler()->get_form_id()
+			);
+			$allowed = $this->get_allowed_callbacks();
+		}
+
+		return in_array( $name_lower, $allowed, true ) ? $name : '';
 	}
 
 	/**
@@ -369,11 +378,20 @@ class Server_Side_Rule extends Rule {
 			)
 		);
 
-		return (array) apply_filters(
+		$allowed = (array) apply_filters(
 			'jet-form-builder/ssr-validation/allowed-callbacks',
 			array_values( array_unique( array_map( 'strtolower', $allowed ) ) ),
 			(int) jet_fb_handler()->get_form_id()
 		);
+
+		$allowed = array_map(
+			static function ( $callback ): string {
+				return is_string( $callback ) ? strtolower( $callback ) : '';
+			},
+			$allowed
+		);
+
+		return array_values( array_unique( array_filter( $allowed ) ) );
 	}
 
 }

@@ -58,15 +58,15 @@ let DynamicPreset = function ( {
 			help={ (
 				       stateValue.restricted ?? true
 			       ) ? __(
-				`Will set default value from preset only for users who allowed to edit this value`,
+				`Will set value from preset only for users who are allowed to read it. Others get an empty value.`,
 				'jet-form-builder',
 			) : __(
-				`Always set default value from preset. Make sure it can't be accidentally changed from form Actions`,
+				`Always set value from preset, for every visitor including logged out ones. Only turn this off for data that is safe to make public.`,
 				'jet-form-builder',
 			) }
 			checked={ stateValue.restricted ?? true }
 			onChange={ ( restricted ) => {
-				let newResticted = restricted ? undefined : restricted;
+				const newResticted = restricted ? undefined : restricted;
 				onChangeValue( newResticted, 'restricted' );
 			} }
 		/> }

@@ -28,6 +28,7 @@ tests/wpunit/*
 !tests/wpunit/GeneratorContextSecurityTest.php
 !tests/wpunit/PaypalPayNowTransactionTest.php
 !tests/wpunit/TrustedPriceResolverTest.php
+!tests/wpunit/PresetAccessControlTest.php
 test-results/
 AGENTS.md
 .env.e2e

@@ -15,7 +15,8 @@ class Date_Tools {
 	const DATETIME = 3;
 
 	public static function time_to_string( string $value, int $stamp_format = self::DATE ): string {
-		$value = jet_fb_parse_dynamic( $value );
+		// Min/max come from the field block's own attributes (admin-authored).
+		$value = jet_fb_parse_dynamic_trusted( $value );
 
 		if ( ! is_scalar( $value ) ) {
 			return '';

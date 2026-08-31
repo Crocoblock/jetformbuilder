@@ -84,14 +84,15 @@ class Dynamic_Value {
 		wp_enqueue_script( self::HANDLE );
 
 		foreach ( $groups as &$group ) {
-			$group['to_set'] = jet_fb_parse_dynamic( $group['to_set'] ?? '' );
+			// Groups come from the block's own attributes (admin-authored).
+			$group['to_set'] = jet_fb_parse_dynamic_trusted( $group['to_set'] ?? '' );
 
 			if ( ! isset( $group['conditions'] ) ) {
 				continue;
 			}
 
 			foreach ( $group['conditions'] as &$condition ) {
-				$condition['value'] = jet_fb_parse_dynamic( $condition['value'] ?? '' );
+				$condition['value'] = jet_fb_parse_dynamic_trusted( $condition['value'] ?? '' );
 			}
 		}
 

@@ -210,7 +210,8 @@ class Condition_Instance {
 	}
 
 	public function get_parsed_value( $maybe_json_string ) {
-		return ( new Dynamic_Preset() )->parse_json( $maybe_json_string );
+		// Action conditions are stored in the form's `_jf_actions` meta.
+		return jet_fb_parse_dynamic_trusted( (string) $maybe_json_string );
 	}
 
 	public function get_compare_as_array(): array {

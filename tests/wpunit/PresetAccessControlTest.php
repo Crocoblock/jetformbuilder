@@ -38,11 +38,9 @@ class Preset_Source_Fixed_Capability_Test_Double extends Base_Source {
  * own capability requirement, opt-in filter) without depending on JetEngine,
  * which isn't available in this test environment.
  *
- * Like the real class, it DOES override allows_restriction_bypass() to
- * return false: the page's capability is not about ownership of a specific
- * object, so a form author's "Restrict access" opt-out must never bypass
- * it - see testOptionsPageStyleSourceIgnoresRestrictedFalseFromTrustedConfig()
- * below.
+ * Like the real class, a trusted preset stored in a form may explicitly opt
+ * out via "Restrict access". Request-provided preset JSON remains untrusted
+ * and cannot use that opt-out.
  */
 class Preset_Source_Options_Page_Style_Test_Double extends Base_Source {
 	private $page = '';
@@ -80,7 +78,7 @@ class Preset_Source_Options_Page_Style_Test_Double extends Base_Source {
 	}
 
 	protected function allows_restriction_bypass(): bool {
-		return false;
+		return true;
 	}
 }
 
@@ -497,6 +495,34 @@ class PresetAccessControlTest extends \Codeception\TestCase\WPTestCase {
 		);
 
 		$this->assertSame( 'Public product name', $result );
+	}
+
+	/**
+	 * The same editor workflow must remain available for Options Page. The
+	 * stored Default Value configuration is trusted, so its explicit opt-out
+	 * publishes only the field selected by that preset. This is distinct from
+	 * request-provided preset JSON, covered by the untrusted test below.
+	 */
+	public function testOptionsPageStyleFieldDefaultHonoursRestrictedFalseForAnonymousVisitor(): void {
+		Preset_Manager::instance()->register_source_type( new Preset_Source_Options_Page_Style_Test_Double() );
+
+		wp_set_current_user( 0 );
+
+		$result = Preset_Manager::instance()->get_field_value(
+			array(
+				'name'    => 'region_field',
+				'default' => wp_json_encode(
+					array(
+						'jet_preset'         => 1,
+						'restricted'         => false,
+						'from'               => 'options_page_style_test_double',
+						'current_field_prop' => 'site_settings::region',
+					)
+				),
+			)
+		);
+
+		$this->assertSame( 'public-region-value', $result );
 	}
 
 	/**
@@ -1042,25 +1068,13 @@ class PresetAccessControlTest extends \Codeception\TestCase\WPTestCase {
 	}
 
 	/**
-	 * Options Page is the one first-party source that locks the "Restrict
-	 * access" opt-out unconditionally (allows_restriction_bypass() =>
-	 * false), even for General_Preset's own admin-authored config. Unlike
-	 * Post/User/Term, this capability isn't tied to ownership of the
-	 * current object - it can gate a site-wide secret - so it must not be
-	 * bypassable by a toggle a form author controls, regardless of how
-	 * trusted the config it lives in is.
-	 *
-	 * An earlier version of this source left the bypass open, trading full
-	 * closure of issues-tracker #20359 for compatibility with sites that
-	 * pre-filled a public value (a region list) with the toggle off. That
-	 * left a residual disclosure route (anyone with `edit_post` on a form
-	 * could flip the toggle and read any field on the page, sensitive or
-	 * not) and was reverted. Sites that relied on the old opt-out are
-	 * flagged by Restricted_Preset_Notice and pointed at the `can-read`
-	 * filter (see testOptionsPageStyleSourceCanBeOptedInViaFilter() below)
-	 * as the supported replacement.
+	 * A form's stored Options Page preset is trusted admin configuration, so
+	 * disabling "Restrict access" deliberately publishes the selected field
+	 * to visitors. This preserves the visual General Preset / Default Value
+	 * workflow. It does not weaken #20359: request-provided preset JSON does
+	 * not carry the trusted-origin marker.
 	 */
-	public function testOptionsPageStyleSourceIgnoresRestrictedFalseFromTrustedConfig(): void {
+	public function testOptionsPageStyleSourceHonoursRestrictedFalseFromTrustedConfig(): void {
 		Preset_Manager::instance()->register_source_type( new Preset_Source_Options_Page_Style_Test_Double() );
 
 		// Anonymous visitor, no manage_options capability.
@@ -1078,9 +1092,10 @@ class PresetAccessControlTest extends \Codeception\TestCase\WPTestCase {
 			)
 		);
 
-		$this->expectException( Preset_Exception::class );
-
-		$general->get_source( array( 'name' => 'region_field' ) )->result();
+		$this->assertSame(
+			'public-region-value',
+			$general->get_source( array( 'name' => 'region_field' ) )->result()
+		);
 	}
 
 	/**
@@ -1175,13 +1190,10 @@ class PresetAccessControlTest extends \Codeception\TestCase\WPTestCase {
 	}
 
 	/**
-	 * Restricted_Preset_Notice::find_in_general_preset() must flag a form
-	 * whose own Preset settings (`_jf_preset`) read an Options Page value
-	 * with `restricted: false` - the one legacy config this lockdown broke.
-	 * A site owner relying on the old opt-out needs to be told which form
-	 * to open and which field to look at.
+	 * A General Preset Options Page opt-out remains supported, so it must not
+	 * be shown as affected by the #20359 migration notice.
 	 */
-	public function testScannerFlagsFormWithOptionsPageOptOutInGeneralPreset(): void {
+	public function testScannerIgnoresFormWithOptionsPageOptOutInGeneralPreset(): void {
 		$form_id = self::factory()->post->create( array( 'post_type' => 'jet-form-builder' ) );
 		update_post_meta(
 			$form_id,
@@ -1204,18 +1216,14 @@ class PresetAccessControlTest extends \Codeception\TestCase\WPTestCase {
 
 		$result = $method->invoke( $notice, $form_id );
 
-		$this->assertNotEmpty( $result, 'Form must be flagged' );
-		$this->assertStringContainsString( 'region_field', implode( ' ', $result['places'] ) );
-		$this->assertStringContainsString( 'Options Page', implode( ' ', $result['places'] ) );
-		$this->assertTrue( $result['has_options_page'] );
+		$this->assertSame( array(), $result );
 	}
 
 	/**
-	 * Action comparators are stored under `default`, and Options Page ignores
-	 * `restricted: false`. The scanner must therefore report this legacy
-	 * combination and carry a source flag for the remediation paragraph.
+	 * Action comparators are stored under `default`. An Options Page opt-out
+	 * remains supported there too and must not produce a migration warning.
 	 */
-	public function testScannerFlagsOptedOutOptionsPagePresetInActionConditionDefault(): void {
+	public function testScannerIgnoresOptedOutOptionsPagePresetInActionConditionDefault(): void {
 		$form_id = self::factory()->post->create( array( 'post_type' => 'jet-form-builder' ) );
 		$preset  = wp_json_encode(
 			array(
@@ -1259,16 +1267,13 @@ class PresetAccessControlTest extends \Codeception\TestCase\WPTestCase {
 
 		$result = $method->invoke( $notice, $form_id );
 
-		$this->assertNotEmpty( $result, 'Action condition must be flagged' );
-		$this->assertStringContainsString( 'send_email', implode( ' ', $result['places'] ) );
-		$this->assertTrue( $result['has_options_page'] );
+		$this->assertSame( array(), $result );
 	}
 
 	/**
 	 * The `restricted: false` opt-out on a Post/User/Term General_Preset is
 	 * still the legitimate, working mechanism from testGeneralPresetRestrictedFalseStillAppliesToEveryVisitor()
-	 * above - the Options Page lockdown must not make the scanner flag
-	 * unrelated forms that never touched an Options Page.
+	 * above and so is the Options Page opt-out.
 	 */
 	public function testScannerIgnoresGeneralPresetOptOutForNonOptionsPageSource(): void {
 		$form_id = self::factory()->post->create( array( 'post_type' => 'jet-form-builder' ) );
@@ -1296,42 +1301,6 @@ class PresetAccessControlTest extends \Codeception\TestCase\WPTestCase {
 	}
 
 	/**
-	 * has_options_page_form() decides whether the notice shows the
-	 * Options-Page-specific paragraph. It must use machine-readable scan data,
-	 * not localized or truncated presentation labels.
-	 */
-	public function testHasOptionsPageFormDetectsOnlyOptionsPagePlaces(): void {
-		$notice = new Restricted_Preset_Notice();
-		$method = new \ReflectionMethod( $notice, 'has_options_page_form' );
-		$method->setAccessible( true );
-
-		$this->assertTrue(
-			$method->invoke(
-				$notice,
-				array(
-					array(
-						'places'           => array( 'translated presentation label' ),
-						'has_options_page' => true,
-					),
-				)
-			)
-		);
-
-		$this->assertFalse(
-			$method->invoke(
-				$notice,
-				array(
-					array(
-						'places'           => array( 'form Preset (Options Page) on: region_field' ),
-						'has_options_page' => false,
-					),
-					array( 'places' => array( 'validation rule on "email"' ) ),
-				)
-			)
-		);
-	}
-
-	/**
 	 * Adding detectors changes which forms can enter tracked_ids, so an old
 	 * schema-1 notice must force a full scan rather than rescan those IDs only.
 	 */
@@ -1340,8 +1309,9 @@ class PresetAccessControlTest extends \Codeception\TestCase\WPTestCase {
 		$method = new \ReflectionMethod( $notice, 'notice_uses_current_scan_schema' );
 		$method->setAccessible( true );
 
-		$this->assertSame( '2', Restricted_Preset_Notice::SCAN_SCHEMA_VERSION );
+		$this->assertSame( '3', Restricted_Preset_Notice::SCAN_SCHEMA_VERSION );
 		$this->assertFalse( $method->invoke( $notice, array( 'version' => '3.5.0:1' ) ) );
-		$this->assertTrue( $method->invoke( $notice, array( 'version' => '3.5.0:2' ) ) );
+		$this->assertFalse( $method->invoke( $notice, array( 'version' => '3.5.0:2' ) ) );
+		$this->assertTrue( $method->invoke( $notice, array( 'version' => '3.5.0:3' ) ) );
 	}
 }

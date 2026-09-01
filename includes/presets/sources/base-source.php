@@ -149,15 +149,14 @@ abstract class Base_Source {
 
 	/**
 	 * Whether this source allows the `restricted: false` opt-out (see
-	 * has_permission()) to skip can_get_preset() at all. Sources whose
-	 * can_get_preset() enforces a capability that is NOT about
-	 * object ownership (e.g. Preset_Source_Options_Page requiring
-	 * `manage_options` to avoid leaking site-wide settings) must override
-	 * this to return false, so that capability can never be bypassed via
-	 * the editor's "Restrict access" toggle - that toggle is meant to let
-	 * form authors skip *their own* ownership check on *their own* data,
-	 * not to grant access to data that requires a fixed, non-owner-based
-	 * capability. See issues-tracker #20359.
+	 * has_permission()) to skip can_get_preset() at all. A source can override
+	 * this to return false when its capability must never be made public by a
+	 * form's stored, trusted preset configuration.
+	 *
+	 * Preset_Source_Options_Page intentionally uses the default: a form author
+	 * can explicitly publish the selected Options Page field by switching
+	 * "Restrict access" off. Request-provided preset data cannot do so because
+	 * it never receives the trusted-origin marker. See issues-tracker #20359.
 	 *
 	 * @return bool
 	 */

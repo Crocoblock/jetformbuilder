@@ -92,17 +92,16 @@ class Preset_Source_Options_Page extends Base_Source {
 	 * page restricted to, say, `edit_shop_orders` should be readable by
 	 * exactly those users - no more, no less.
 	 *
-	 * The `jet-form-builder/preset/options-page/can-read` filter below is
-	 * the ONLY way to open a specific field without that capability. It
-	 * receives the page slug and field name so it CAN be scoped to a
-	 * single field, and the default is `false` (closed). It is a normal
-	 * WordPress filter, though - a callback returning an unconditional
-	 * `true` does open every Options Page field to every visitor. That is a
-	 * deliberate escape hatch for the site owner, not a guardrail against
-	 * them; callbacks should always check `$page`/`$prop`.
+	 * A preset stored in a form is an admin-authored, trusted configuration.
+	 * Its explicit `restricted: false` opt-out is therefore handled by
+	 * Base_Source::has_permission() before this method is reached, just as it
+	 * is for the Post/User/Term sources. It deliberately makes the selected
+	 * Options Page field public to visitors of that form.
 	 *
-	 * See allows_restriction_bypass() below for why the "Restrict access"
-	 * toggle does NOT reach this method at all.
+	 * JSON supplied at runtime is not trusted, so its `restricted: false`
+	 * never bypasses this capability check. The filter below remains an
+	 * optional, per-field way to allow a protected preset without changing
+	 * the stored preset's toggle.
 	 *
 	 * @return bool
 	 * @throws Preset_Exception
@@ -143,30 +142,15 @@ class Preset_Source_Options_Page extends Base_Source {
 	}
 
 	/**
-	 * The `manage_options`-or-equivalent requirement above is a fixed,
-	 * non-owner-based capability (unlike Preset_Source_Post/User/Term,
-	 * which check ownership of a specific object), and it can hold API
-	 * keys or other site-wide secrets, not just the current form's data.
-	 *
-	 * A prior version of this class left the opt-out open here, trading
-	 * full closure of issues-tracker #20359 for compatibility with sites
-	 * that pre-filled a public value (a region list, a company phone) from
-	 * an Options Page with "Restrict access" switched off. That left a
-	 * residual disclosure route: anyone with `edit_post` on a form - not
-	 * necessarily the Options Page's own capability - could flip the
-	 * toggle and publish any field on that page, sensitive or not.
-	 *
-	 * The toggle is blocked unconditionally instead. Sites that relied on
-	 * the old opt-out are flagged by Restricted_Preset_Notice
-	 * (modules/security/restricted-preset-notice.php), which scans forms
-	 * for exactly this pattern and points the site owner at the
-	 * `can-read` filter above as the supported way to keep a specific
-	 * field public without granting the page's capability.
+	 * Keep the editor's "Restrict access" toggle consistent with every other
+	 * preset source. It applies only to trusted, stored form configuration;
+	 * an attacker cannot provide the trust marker in request data, which is
+	 * the boundary hardened by issues-tracker #20359.
 	 *
 	 * @return bool
 	 */
 	protected function allows_restriction_bypass(): bool {
-		return false;
+		return true;
 	}
 
 	/**

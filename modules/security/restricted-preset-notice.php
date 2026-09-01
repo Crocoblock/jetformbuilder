@@ -171,13 +171,14 @@ class Restricted_Preset_Notice {
 		?>
 		<div class="notice notice-warning">
 			<p>
-				<strong><?php esc_html_e( 'JetFormBuilder: review presets flagged by a recent security hardening.', 'jet-form-builder' ); ?></strong>
+				<strong><?php esc_html_e( 'JetFormBuilder - Security Update: Review Presets in Forms', 'jet-form-builder' ); ?></strong>
 			</p>
 			<p>
-				<?php esc_html_e( 'Presets used in validation rules, value limits (Number/Range min-max-step, Textarea min-max length, Media file limits, Switcher active value), date limits, conditional blocks and action conditions now check whether the visitor is allowed to read the data they point at. Previously they did not. In the forms below such a preset reads data an anonymous visitor cannot access, so it will resolve to an empty value for them.', 'jet-form-builder' ); ?>
+				<?php esc_html_e( 'Presets used in validation rules, field limits (Number/Range min-max-step, Textarea min-max length, Media limits, Switcher active value), date limits, conditional blocks, and action conditions are now restricted for guest visitors by default.', 'jet-form-builder' ); ?>
 			</p>
 			<p>
-				<?php esc_html_e( 'This does not blank a visible field - it changes a decision: a rule may start blocking the form or stop matching, a limit or date may disappear, a conditional block may flip, or an action may run when it should not. Open each form, check the listed places, and if the data is meant to be public, switch "Restrict access" off on that preset.', 'jet-form-builder' ); ?>
+				<strong><?php esc_html_e( 'Action required:', 'jet-form-builder' ); ?></strong>
+				<?php esc_html_e( 'If the preset data is intended to be public, edit the affected forms below and turn off "Restrict access" in the preset settings:', 'jet-form-builder' ); ?>
 			</p>
 			<ul style="list-style: disc; margin-left: 1.5em;">
 				<?php foreach ( $forms as $form ) : ?>
@@ -438,13 +439,15 @@ class Restricted_Preset_Notice {
 			}
 
 			if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+				$block_slug = Block_Helper::delete_namespace( $block['blockName'] ?? '' );
+
 				$places = array_merge(
 					$places,
 					$this->find_in_blocks(
 						$block['innerBlocks'],
-						'repeater-field' === Block_Helper::delete_namespace( $block['blockName'] ?? '' )
+						'repeater-field' === $block_slug
 							? $label
-							: $repeater,
+							: $repeater
 					)
 				);
 			}
@@ -537,15 +540,17 @@ class Restricted_Preset_Notice {
 	}
 
 	private function is_notice_dismissed( array $notice ): bool {
-		$dismissed = (string) get_user_meta( get_current_user_id(), self::DISMISS_META_KEY, true );
+		$dismissed       = (string) get_user_meta( get_current_user_id(), self::DISMISS_META_KEY, true );
+		$dismiss_version = $this->get_dismiss_version();
+		$notice_token    = (string) ( $notice['notice_token'] ?? $notice['version'] ?? '' );
 
 		if ( '' === $dismissed ) {
 			return false;
 		}
 
 		return (
-			$dismissed === $this->get_dismiss_version() ||
-			$dismissed === (string) ( $notice['notice_token'] ?? $notice['version'] ?? '' )
+			$dismiss_version === $dismissed ||
+			$notice_token === $dismissed
 		);
 	}
 }

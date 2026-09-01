@@ -66,8 +66,8 @@ let DynamicPreset = function ( {
 			) }
 			checked={ stateValue.restricted ?? true }
 			onChange={ ( restricted ) => {
-				const newResticted = restricted ? undefined : restricted;
-				onChangeValue( newResticted, 'restricted' );
+				const newRestricted = restricted ? undefined : restricted;
+				onChangeValue( newRestricted, 'restricted' );
 			} }
 		/> }
 	</StyledFlexControl>;

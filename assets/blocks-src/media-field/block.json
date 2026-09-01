@@ -48,7 +48,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"rich": true
+				"rich-trusted": true
 			}
 		},
 		"max_size": {
@@ -58,7 +58,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"rich": true
+				"rich-trusted": true
 			}
 		},
 		"allowed_mimes": {

@@ -10,22 +10,32 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Finds forms whose presets in *settings* (validation rules, date min/max,
- * conditional blocks, action conditions, dynamic value) read data the visitor
- * may not be allowed to see.
+ * Finds forms affected by the issues-tracker #20359 hardening, in two
+ * distinct ways:
  *
- * Before issues-tracker #20359 those places never checked permissions at all.
- * They do now, so a preset pointing at another user's post/user/term data
- * silently resolves to an empty string - which does not blank a field on
- * screen but *changes a decision*: `Equals` starts blocking the form,
- * `Must contain characters` stops matching anything, a date loses its min/max,
- * a conditional block flips, an action fires when it shouldn't.
+ * 1. Settings that never checked permissions before (validation rules, date
+ *    min/max, conditional blocks, action conditions, dynamic value, and the
+ *    rich-trusted value limits on Number/Range/Textarea/Media/Switcher) now
+ *    do. A preset pointing at another user's post/user/term data silently
+ *    resolves to an empty string - which does not blank a field on screen
+ *    but *changes a decision*: `Equals` starts blocking the form,
+ *    `Must contain characters` stops matching anything, a date loses its
+ *    min/max, a conditional block flips, an action fires when it shouldn't.
+ *    The form author can restore the old behaviour per preset by switching
+ *    "Restrict access" off, but they have to know which forms to look at -
+ *    hence this notice.
  *
- * The form author can restore the old behaviour per preset by switching
- * "Restrict access" off, but they have to know which forms to look at - hence
- * this notice. Presets that are safe for everyone anyway (query_var, which
- * only reads the visitor's own $_GET) are opted out automatically and never
- * reported.
+ * 2. The form's own Preset settings (`_jf_preset`, General_Preset) reading a
+ *    JetEngine Options Page with "Restrict access" switched off. That
+ *    opt-out used to work for Options Page the same as for Post/User/Term,
+ *    but Preset_Source_Options_Page now locks it unconditionally - the
+ *    page's capability can gate site-wide secrets, not just data owned by
+ *    the current visitor, so it must not be bypassable by a toggle. Unlike
+ *    case 1, "switch Restrict access off" is NOT the fix here; the notice
+ *    points these forms at the `can-read` filter instead.
+ *
+ * Presets that are safe for everyone anyway (query_var, which only reads the
+ * visitor's own $_GET) are opted out automatically and never reported.
  *
  * Modelled on JFB_Modules\Gateways\Secure_Price_Notice.
  */
@@ -35,7 +45,7 @@ class Restricted_Preset_Notice {
 	const NOTICE_OPTION       = 'jet_fb_restricted_preset_notice';
 	const DISMISS_META_KEY    = 'jet_fb_restricted_preset_notice_dismissed';
 	const NOTICE_QUERY_ARG    = 'jet_fb_dismiss_restricted_preset_notice';
-	const SCAN_SCHEMA_VERSION = '1';
+	const SCAN_SCHEMA_VERSION = '2';
 	const SCAN_BATCH_SIZE     = 30;
 
 	/**
@@ -171,21 +181,30 @@ class Restricted_Preset_Notice {
 		?>
 		<div class="notice notice-warning">
 			<p>
-				<strong><?php esc_html_e( 'JetFormBuilder: review presets used in validation rules and conditions.', 'jet-form-builder' ); ?></strong>
+				<strong><?php esc_html_e( 'JetFormBuilder: review presets flagged by a recent security hardening.', 'jet-form-builder' ); ?></strong>
 			</p>
 			<p>
-				<?php esc_html_e( 'Presets used in validation rules, date limits, conditional blocks and action conditions now check whether the visitor is allowed to read the data they point at. Previously they did not. In the forms below such a preset reads data an anonymous visitor cannot access, so it will resolve to an empty value for them.', 'jet-form-builder' ); ?>
+				<?php esc_html_e( 'Presets used in validation rules, value limits (Number/Range min-max-step, Textarea min-max length, Media file limits, Switcher active value), date limits, conditional blocks and action conditions now check whether the visitor is allowed to read the data they point at. Previously they did not. In the forms below such a preset reads data an anonymous visitor cannot access, so it will resolve to an empty value for them.', 'jet-form-builder' ); ?>
 			</p>
 			<p>
-				<?php esc_html_e( 'This does not blank a visible field - it changes a decision: a rule may start blocking the form or stop matching, a date may lose its limits, a conditional block may flip, or an action may run when it should not. Open each form, check the listed places, and if the data is meant to be public, switch "Restrict access" off on that preset.', 'jet-form-builder' ); ?>
+				<?php esc_html_e( 'This does not blank a visible field - it changes a decision: a rule may start blocking the form or stop matching, a limit or date may disappear, a conditional block may flip, or an action may run when it should not. Open each form, check the listed places, and if the data is meant to be public, switch "Restrict access" off on that preset.', 'jet-form-builder' ); ?>
 			</p>
+			<?php if ( $this->has_options_page_form( $notice['forms'] ) ) : ?>
+				<p>
+					<strong><?php esc_html_e( 'Exception: JetEngine Options Page.', 'jet-form-builder' ); ?></strong>
+					<?php esc_html_e( 'Forms marked "Options Page preset" below cannot be fixed with "Restrict access" - that toggle no longer opens Options Page values, on purpose, because that capability can gate site-wide secrets rather than data owned by the current visitor. If a specific field is genuinely public (a region list, a phone number), allow just that field with the jet-form-builder/preset/options-page/can-read filter instead.', 'jet-form-builder' ); ?>
+				</p>
+			<?php endif; ?>
 			<ul style="list-style: disc; margin-left: 1.5em;">
 				<?php foreach ( $forms as $form ) : ?>
 					<li>
 						<a href="<?php echo esc_url( $form['edit_link'] ); ?>">
 							<?php echo esc_html( $form['title'] ); ?>
 						</a>
-						<?php echo esc_html( ' (#' . $form['id'] . ')' ); ?>:
+						<?php echo esc_html( ' (#' . $form['id'] . ')' ); ?>
+						<?php if ( ! empty( $form['has_options_page'] ) ) : ?>
+							<strong><?php esc_html_e( '(Options Page preset)', 'jet-form-builder' ); ?></strong>
+						<?php endif; ?>:
 						<?php echo esc_html( implode( '; ', $form['places'] ) ); ?>
 					</li>
 				<?php endforeach; ?>
@@ -292,9 +311,11 @@ class Restricted_Preset_Notice {
 	}
 
 	private function get_affected_form( int $form_id ): array {
+		$has_options_page = false;
 		$places = array_merge(
-			$this->find_in_blocks( Block_Helper::get_blocks_by_post( $form_id, true, true ) ),
-			$this->find_in_actions( $form_id )
+			$this->find_in_blocks( Block_Helper::get_blocks_by_post( $form_id, true, true ), '', $has_options_page ),
+			$this->find_in_actions( $form_id, $has_options_page ),
+			$this->find_in_general_preset( $form_id, $has_options_page )
 		);
 
 		$places = array_values( array_unique( $places ) );
@@ -304,14 +325,15 @@ class Restricted_Preset_Notice {
 		}
 
 		return array(
-			'id'        => $form_id,
-			'title'     => get_the_title( $form_id ) ?: sprintf(
+			'id'               => $form_id,
+			'title'            => get_the_title( $form_id ) ?: sprintf(
 				/* translators: %d: form ID */
 				__( 'Form #%d', 'jet-form-builder' ),
 				$form_id
 			),
-			'edit_link' => get_edit_post_link( $form_id, 'raw' ) ?: admin_url( 'post.php?post=' . absint( $form_id ) . '&action=edit' ),
-			'places'    => array_slice( $places, 0, 6 ),
+			'edit_link'        => get_edit_post_link( $form_id, 'raw' ) ?: admin_url( 'post.php?post=' . absint( $form_id ) . '&action=edit' ),
+			'places'           => array_slice( $places, 0, 6 ),
+			'has_options_page' => $has_options_page,
 		);
 	}
 
@@ -322,10 +344,11 @@ class Restricted_Preset_Notice {
 	 *
 	 * @param array $blocks
 	 * @param string $repeater
+	 * @param bool $has_options_page
 	 *
 	 * @return string[] Human-readable "where" labels.
 	 */
-	private function find_in_blocks( array $blocks, string $repeater = '' ): array {
+	private function find_in_blocks( array $blocks, string $repeater = '', bool &$has_options_page = false ): array {
 		$places = array();
 
 		foreach ( $blocks as $block ) {
@@ -342,60 +365,98 @@ class Restricted_Preset_Notice {
 			}
 
 			// Advanced validation rules.
+			$has_validation_rule = false;
+
 			foreach ( $attrs['validation']['rules'] ?? array() as $rule ) {
-				if ( is_array( $rule ) && $this->is_restricted_preset( $rule['value'] ?? '' ) ) {
-					$places[] = sprintf(
-						/* translators: %s: field name */
-						__( 'validation rule on "%s"', 'jet-form-builder' ),
-						$label
-					);
-					break;
+				if ( is_array( $rule ) && $this->is_restricted_preset( $rule['value'] ?? '', $has_options_page ) ) {
+					$has_validation_rule = true;
 				}
 			}
 
-			// Date / time / datetime limits.
-			foreach ( array( 'min', 'max' ) as $limit ) {
-				if ( $this->is_restricted_preset( $attrs[ $limit ] ?? '' ) ) {
-					$places[] = sprintf(
-						/* translators: %s: field name */
-						__( 'date limits on "%s"', 'jet-form-builder' ),
-						$label
-					);
-					break;
+			if ( $has_validation_rule ) {
+				$places[] = sprintf(
+					/* translators: %s: field name */
+					__( 'validation rule on "%s"', 'jet-form-builder' ),
+					$label
+				);
+			}
+
+			// Trusted-parsed attributes: date/time/datetime min-max (parsed via
+			// Date_Tools::time_to_string(), already trusted) share the same
+			// attribute names as Number/Range min-max-step, Textarea
+			// minlength/maxlength, Media max_files/max_size and Switcher
+			// value_active/calc_value_active (parsed via
+			// Base::apply_attribute()'s `rich-trusted` branch). All of them
+			// only matter here because each has its own "Restrict access"
+			// toggle in the editor for the site owner to act on.
+			$has_value_limit = false;
+
+			foreach (
+				array(
+					'min',
+					'max',
+					'step',
+					'minlength',
+					'maxlength',
+					'max_files',
+					'max_size',
+					'value_active',
+					'calc_value_active',
+				) as $limit
+			) {
+				if ( $this->is_restricted_preset( $attrs[ $limit ] ?? '', $has_options_page ) ) {
+					$has_value_limit = true;
 				}
+			}
+
+			if ( $has_value_limit ) {
+				$places[] = sprintf(
+					/* translators: %s: field name */
+					__( 'value limits on "%s"', 'jet-form-builder' ),
+					$label
+				);
 			}
 
 			// Conditional block conditions.
+			$has_block_condition = false;
+
 			foreach ( $attrs['conditions'] ?? array() as $condition ) {
-				if ( is_array( $condition ) && $this->is_restricted_preset( $condition['value'] ?? '' ) ) {
-					$places[] = __( 'conditional block', 'jet-form-builder' );
-					break;
+				if ( is_array( $condition ) && $this->is_restricted_preset( $condition['value'] ?? '', $has_options_page ) ) {
+					$has_block_condition = true;
 				}
 			}
 
+			if ( $has_block_condition ) {
+				$places[] = __( 'conditional block', 'jet-form-builder' );
+			}
+
 			// Dynamic value groups.
+			$has_dynamic_value = false;
+
 			foreach ( $attrs['value']['groups'] ?? array() as $group ) {
 				if ( ! is_array( $group ) ) {
 					continue;
 				}
 
-				$found = $this->is_restricted_preset( $group['to_set'] ?? '' );
+				$found = $this->is_restricted_preset( $group['to_set'] ?? '', $has_options_page );
 
 				foreach ( $group['conditions'] ?? array() as $condition ) {
-					if ( is_array( $condition ) && $this->is_restricted_preset( $condition['value'] ?? '' ) ) {
+					if ( is_array( $condition ) && $this->is_restricted_preset( $condition['value'] ?? '', $has_options_page ) ) {
 						$found = true;
-						break;
 					}
 				}
 
 				if ( $found ) {
-					$places[] = sprintf(
-						/* translators: %s: field name */
-						__( 'dynamic value on "%s"', 'jet-form-builder' ),
-						$label
-					);
-					break;
+					$has_dynamic_value = true;
 				}
+			}
+
+			if ( $has_dynamic_value ) {
+				$places[] = sprintf(
+					/* translators: %s: field name */
+					__( 'dynamic value on "%s"', 'jet-form-builder' ),
+					$label
+				);
 			}
 
 			if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
@@ -405,7 +466,8 @@ class Restricted_Preset_Notice {
 						$block['innerBlocks'],
 						'repeater-field' === Block_Helper::delete_namespace( $block['blockName'] ?? '' )
 							? $label
-							: $repeater
+							: $repeater,
+						$has_options_page
 					)
 				);
 			}
@@ -416,10 +478,11 @@ class Restricted_Preset_Notice {
 
 	/**
 	 * @param int $form_id
+	 * @param bool $has_options_page
 	 *
 	 * @return string[]
 	 */
-	private function find_in_actions( int $form_id ): array {
+	private function find_in_actions( int $form_id, bool &$has_options_page = false ): array {
 		$places  = array();
 		$actions = jet_form_builder()->post_type->get_actions( $form_id );
 
@@ -432,17 +495,20 @@ class Restricted_Preset_Notice {
 				continue;
 			}
 
-			foreach ( $action['conditions'] ?? array() as $condition ) {
-				if ( ! is_array( $condition ) || ! $this->is_restricted_preset( $condition['value'] ?? '' ) ) {
-					continue;
-				}
+			$has_action_condition = false;
 
+			foreach ( $action['conditions'] ?? array() as $condition ) {
+				if ( is_array( $condition ) && $this->is_restricted_preset( $condition['default'] ?? '', $has_options_page ) ) {
+					$has_action_condition = true;
+				}
+			}
+
+			if ( $has_action_condition ) {
 				$places[] = sprintf(
 					/* translators: %s: action type */
 					__( 'condition on action "%s"', 'jet-form-builder' ),
 					(string) ( $action['type'] ?? __( 'unknown', 'jet-form-builder' ) )
 				);
-				break;
 			}
 		}
 
@@ -450,14 +516,66 @@ class Restricted_Preset_Notice {
 	}
 
 	/**
-	 * True when the value is a preset JSON that reads someone else's data and
-	 * has not been explicitly opted out of the permission check.
+	 * The form's own Preset settings (`_jf_preset` meta, `General_Preset`)
+	 * are a different shape from the other places scanned here: not a JSON
+	 * string embedded in a block attribute, but a decoded config array with
+	 * its own top-level `restricted`/`from` keys, shared by every field the
+	 * form maps in `fields_map`.
+	 *
+	 * Unlike the other scanned places, `restricted: false` here normally
+	 * keeps working after #20359 - General_Preset is a trusted origin (see
+	 * Base_Preset::trusts_restriction_flag_by_default()), so the toggle
+	 * still does what its help text says for Post/User/Term sources. The
+	 * one exception is `option_page`: Preset_Source_Options_Page locks the
+	 * bypass unconditionally (allows_restriction_bypass() => false),
+	 * because unlike Post/User/Term this capability isn't about owning a
+	 * specific object - it can gate site-wide secrets. A form that relied
+	 * on the toggle to publish an Options Page value needs to know that
+	 * stopped working; nothing else in this method's scope does.
+	 *
+	 * @param int $form_id
+	 * @param bool $has_options_page
+	 *
+	 * @return string[]
+	 */
+	private function find_in_general_preset( int $form_id, bool &$has_options_page = false ): array {
+		$preset = jet_form_builder()->post_type->get_preset( $form_id );
+
+		$opted_out = is_array( $preset )
+			&& ! empty( $preset['enabled'] )
+			&& 'option_page' === ( $preset['from'] ?? '' )
+			&& array_key_exists( 'restricted', $preset )
+			&& ! $preset['restricted'];
+
+		if ( ! $opted_out ) {
+			return array();
+		}
+
+		$has_options_page = true;
+
+		$fields = array_keys( $preset['fields_map'] ?? array() );
+
+		return array(
+			sprintf(
+				/* translators: %s: comma-separated field names */
+				__( 'form Preset (Options Page) on: %s', 'jet-form-builder' ),
+				$fields ? implode( ', ', $fields ) : __( 'unknown field', 'jet-form-builder' )
+			),
+		);
+	}
+
+	/**
+	 * True when the value is a preset JSON whose result can change after the
+	 * permission hardening. Owner-based sources are unaffected when the author
+	 * opted out; Options Page is still affected because it disallows that
+	 * bypass unconditionally.
 	 *
 	 * @param mixed $value
+	 * @param bool $has_options_page
 	 *
 	 * @return bool
 	 */
-	private function is_restricted_preset( $value ): bool {
+	private function is_restricted_preset( $value, bool &$has_options_page = false ): bool {
 		if ( ! is_string( $value ) || false === strpos( $value, 'jet_preset' ) ) {
 			return false;
 		}
@@ -468,16 +586,24 @@ class Restricted_Preset_Notice {
 			return false;
 		}
 
-		// Author already opted out - the preset keeps working for everyone.
-		if ( array_key_exists( 'restricted', $preset ) && ! $preset['restricted'] ) {
+		$source = (string) ( $preset['from'] ?? '' );
+
+		if ( ! in_array( $source, self::RESTRICTED_SOURCES, true ) ) {
 			return false;
 		}
 
-		return in_array(
-			(string) ( $preset['from'] ?? '' ),
-			self::RESTRICTED_SOURCES,
-			true
-		);
+		// Options Page no longer allows the restriction bypass, even for a
+		// trusted admin-authored setting. It therefore remains affected when the
+		// author previously saved `restricted: false` and needs source-specific
+		// remediation in the notice.
+		if ( 'option_page' === $source ) {
+			$has_options_page = true;
+
+			return true;
+		}
+
+		// For owner-based sources the author's trusted opt-out keeps working.
+		return ! array_key_exists( 'restricted', $preset ) || $preset['restricted'];
 	}
 
 	private function get_scan_version(): string {
@@ -490,6 +616,25 @@ class Restricted_Preset_Notice {
 
 		return strlen( $version ) > strlen( $suffix )
 			&& substr( $version, -strlen( $suffix ) ) === $suffix;
+	}
+
+	/**
+	 * Whether any listed form contains an affected Options Page preset. The
+	 * source is stored as machine-readable scan data instead of being inferred
+	 * from a translated, potentially truncated presentation label.
+	 *
+	 * @param array $forms
+	 *
+	 * @return bool
+	 */
+	private function has_options_page_form( array $forms ): bool {
+		foreach ( $forms as $form ) {
+			if ( ! empty( $form['has_options_page'] ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private function get_dismiss_version(): string {

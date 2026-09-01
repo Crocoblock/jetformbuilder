@@ -31,7 +31,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"rich": true
+				"rich-trusted": true
 			}
 		},
 		"max": {
@@ -41,7 +41,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"rich": true
+				"rich-trusted": true
 			}
 		},
 		"step": {
@@ -51,7 +51,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"rich": true
+				"rich-trusted": true
 			}
 		},
 		"prefix": {

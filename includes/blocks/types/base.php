@@ -365,11 +365,33 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	protected function apply_attribute( string $name ) {
 		$shortcode      = $this->attrs[ $name ]['jfb']['shortcode'] ?? false;
 		$rich           = $this->attrs[ $name ]['jfb']['rich'] ?? false;
+		$rich_trusted   = $this->attrs[ $name ]['jfb']['rich-trusted'] ?? false;
 		$rich_no_preset = $this->attrs[ $name ]['jfb']['rich-no-preset'] ?? false;
 		$value          = $this->block_attrs[ $name ];
 
 		if ( is_numeric( $value ) ) {
 			return $value;
+		}
+
+		/**
+		 * `rich-trusted` is `rich` for an attribute that is provably
+		 * admin-authored (a block attribute in the form's own post
+		 * content, e.g. Number/Range min-max-step, Textarea
+		 * minlength/maxlength, Media max_files/max_size, Switcher
+		 * value_active) rather than a value that could have come from the
+		 * request. It honours the same explicit `restricted: false` opt-out
+		 * that the field's "Restrict access" toggle already offers for
+		 * these attributes - without it the toggle would render but do
+		 * nothing, since the untrusted `rich` path always ignores that
+		 * flag. See issues-tracker #20359 and
+		 * Rich_Content\Module::rich_trusted().
+		 */
+		if ( $rich_trusted ) {
+			/** @var Rich_Content\Module $rich_module */
+			$rich_module = jet_form_builder()->module( 'rich-content' );
+
+			// immediately return, because rich method also parsing preset and shortcodes
+			return $rich_module->rich_trusted( $value );
 		}
 
 		if ( $rich ) {
@@ -378,27 +400,15 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		}
 
 		/**
-		 * Removes dynamic preset support in rich-content.
-		 * Because it will break preset value for several fields
+		 * Runs rich-content without dynamic preset support, because parsing a
+		 * preset value would break several fields.
 		 */
 		if ( $rich_no_preset ) {
 			/** @var Rich_Content\Module $rich */
 			$rich = jet_form_builder()->module( 'rich-content' );
 
-			remove_filter(
-				'jet-form-builder/rich-content',
-				array( $rich, 'apply_dynamic_preset' )
-			);
-
-			$value = Rich_Content\Module::rich( $value );
-
-			add_filter(
-				'jet-form-builder/rich-content',
-				array( $rich, 'apply_dynamic_preset' )
-			);
-
 			// immediately return, because rich method also parsing preset and shortcodes
-			return $value;
+			return $rich->rich_without_preset( $value );
 		}
 
 		// backward compatibility

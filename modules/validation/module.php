@@ -18,6 +18,7 @@ use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
+use JFB_Modules\Validation\Advanced_Rules\Ssr_Callback_Allowlist;
 use JFB_Modules\Validation\Class_Validation_Handlers;
 use JFB_Modules\Validation\Handlers\Validation_Handler;
 use JFB_Modules\Validation\Rest_Api\Rest_Validation_Endpoint;
@@ -49,6 +50,10 @@ final class Module implements
 	private $rules;
 	private $settings;
 	private $inline_messages = array();
+	/**
+	 * @var Ssr_Callback_Allowlist
+	 */
+	private $ssr_allowlist;
 
 	public function rep_item_id() {
 		return 'validation';
@@ -126,6 +131,8 @@ final class Module implements
 			'jet-form-builder/editor-assets/before',
 			array( $this, 'localize_editor_config' )
 		);
+
+		$this->ssr_allowlist = new Ssr_Callback_Allowlist();
 	}
 
 	public function remove_hooks() {
@@ -158,6 +165,10 @@ final class Module implements
 			'jet-form-builder/editor-assets/before',
 			array( $this, 'localize_editor_config' )
 		);
+
+		if ( $this->ssr_allowlist ) {
+			$this->ssr_allowlist->remove_hooks();
+		}
 	}
 
 	public function register_scripts() {
@@ -259,18 +270,25 @@ final class Module implements
 
 			foreach ( $rules as $index => &$rule ) {
 				if ( 'ssr' === ( $rule['type'] ?? '' ) ) {
-					$rule['_sig'] = Rest_Validation_Endpoint::generate_signature(
+					$signature     = Rest_Validation_Endpoint::generate_signature(
 						(int) $form_id,
 						$signature_path,
 						(int) $index
 					);
+					$signature_key = Validation_Handler::get_signature_key( $signature_path, (int) $index );
 
 					printf(
 						'<input type="hidden" name="%1$s[%2$s]" value="%3$s" />',
 						esc_attr( Validation_Handler::MAIN_SIGNATURES_KEY ),
-						esc_attr( Validation_Handler::get_signature_key( $signature_path, (int) $index ) ),
-						esc_attr( $rule['_sig'] )
+						esc_attr( $signature_key ),
+						esc_attr( $signature )
 					);
+
+					// Security: only the lookup key is exposed here, never the signature
+					// itself — the signature already lives in the hidden input above,
+					// and JS reads it from there instead of duplicating it in this
+					// public JSON blob (https://github.com/Crocoblock/issues-tracker/issues/20361).
+					$rule['_sig_key'] = $signature_key;
 				}
 			}
 			unset( $rule );

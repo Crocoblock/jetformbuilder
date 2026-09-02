@@ -23,12 +23,17 @@ package-lock.json
 tests/
 !tests/
 tests/*
+!tests/_data/
+tests/_data/*
+!tests/_data/late-ssr-callback.php
 !tests/wpunit/
 tests/wpunit/*
 !tests/wpunit/GeneratorContextSecurityTest.php
 !tests/wpunit/PaypalPayNowTransactionTest.php
 !tests/wpunit/TrustedPriceResolverTest.php
 !tests/wpunit/FormMessageShortcodeSecurityTest.php
+!tests/wpunit/SsrCallbackAllowlistTest.php
+!tests/wpunit/AutoMigratorTest.php
 !tests/wpunit/MediaFieldPreviewEscapingTest.php
 test-results/
 AGENTS.md

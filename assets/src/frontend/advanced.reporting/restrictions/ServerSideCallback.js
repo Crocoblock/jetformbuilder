@@ -98,9 +98,16 @@ function ServerSideCallback() {
 			formData.append( '_jfb_validation_path[]', pathElement );
 		}
 
-		// Security: Include signature for SSR validation
-		if ( this.attrs._sig ) {
-			formData.set( '_jfb_validation_sig', this.attrs._sig );
+		// Security: the signature itself is never part of `this.attrs` (it is not
+		// duplicated into the public `data-validation-rules` JSON) — only its lookup
+		// key is. The actual value is read back from the hidden
+		// `_jfb_validation_sigs[key]` input already present in the form markup.
+		if ( this.attrs._sig_key ) {
+			const signature = formData.get( `_jfb_validation_sigs[${ this.attrs._sig_key }]` );
+
+			if ( signature ) {
+				formData.set( '_jfb_validation_sig', signature );
+			}
 		}
 
 		return formData;

@@ -275,6 +275,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+**3.6.5.2**
+- FIX: Advanced Choices compatibility with WordPress 7.1
+
 **3.6.5.1**
 - ADD: Allow extending macro groups in Send Email fields
 - FIX: Support Hierarchical Select in protected price calculations

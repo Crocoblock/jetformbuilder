@@ -3,6 +3,25 @@ import { appendNodes, createFile, createFileList, isFile } from './functions';
 const { BaseSignal } = window.JetFormBuilderAbstract;
 
 /**
+ * Escape a value before it is interpolated into a double-quoted HTML attribute
+ * via innerHTML. The preview template placeholders (%file_url%, %file_name%)
+ * land inside `data-file="…"` / `data-file-name="…"`, and file.name is
+ * attacker-controllable (it is restored from the server-rendered dataset, which
+ * the browser decodes back to raw characters). Without this, a quote in the
+ * value breaks out of the attribute and injects live event handlers. See #20390.
+ *
+ * @param  {*} value
+ * @return {string}
+ */
+function escapeAttr( value ) {
+	return String( value ?? '' )
+		.replaceAll( '&', '&amp;' )
+		.replaceAll( '<', '&lt;' )
+		.replaceAll( '>', '&gt;' )
+		.replaceAll( '"', '&quot;' );
+}
+
+/**
  * @property {FileData} input Related input
  */
 function SignalFile() {
@@ -143,8 +162,8 @@ SignalFile.prototype.getPreview = function ( file ) {
 SignalFile.prototype.createPreview = function ( file ) {
 	const url         = URL.createObjectURL( file );
 	let { innerHTML } = this.input.template;
-	innerHTML         = innerHTML.replace( '%file_url%', url );
-	innerHTML         = innerHTML.replace( '%file_name%', file.name );
+	innerHTML         = innerHTML.replace( '%file_url%', escapeAttr( url ) );
+	innerHTML         = innerHTML.replace( '%file_name%', escapeAttr( file.name ) );
 
 	const wrapper     = document.createElement( 'template' );
 	wrapper.innerHTML = innerHTML;

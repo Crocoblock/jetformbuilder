@@ -5,7 +5,6 @@ namespace Jet_Form_Builder\Form_Messages;
 
 // If this file is called directly, abort.
 use Jet_Form_Builder\Classes\Get_Template_Trait;
-use JFB_Modules\Rich_Content;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -19,6 +18,11 @@ class Builder {
 	use Get_Template_Trait;
 
 	private $status;
+
+	/**
+	 * @var Message_Content_Processor
+	 */
+	private $content_processor;
 
 	/**
 	 * Set form submittion status
@@ -50,15 +54,16 @@ class Builder {
 	}
 
 	public function prepare_message_content( string $message ): string {
-		return jet_fb_handler()->parser->parse_macros(
+		return $this->get_content_processor()->prepare_macros(
 			$message,
 			jet_fb_context()->get_request()
 		);
 	}
 
 	public function render_empty_field_message() {
-		$message_content = $this->prepare_message_content(
-			$this->get_manager()->get_message( 'empty_field' )
+		$message_content = $this->get_content_processor()->prepare_trusted(
+			$this->get_manager()->get_message( 'empty_field' ),
+			jet_fb_context()->get_request()
 		);
 
 		include $this->get_global_template( 'common/field-message.php' );
@@ -76,13 +81,19 @@ class Builder {
 			return;
 		}
 
-		$info            = new Status_Info( $status );
+		$info    = new Status_Info( $status );
+		$manager = $this->get_manager();
+		$message = $manager->get_message_by_info( $info );
 
-		$message_content = Rich_Content\Module::rich(
-			$this->prepare_message_content(
-				$this->get_manager()->get_message_by_info( $info )
-			)
-		);
+		// Only a registered key resolves to a template stored in form/action settings.
+		if ( ! $info->is_dynamic() && $manager->isset_message_type( $info->get_message() ) ) {
+			$message_content = $this->get_content_processor()->prepare_trusted(
+				$message,
+				jet_fb_context()->get_request()
+			);
+		} else {
+			$message_content = $this->get_content_processor()->prepare_untrusted( $message );
+		}
 
 		$class  = 'jet-form-builder-message';
 		$class .= ' jet-form-builder-message--' . $info->get_css_class();
@@ -111,6 +122,14 @@ class Builder {
 		$this->render_messages();
 
 		return ob_get_clean();
+	}
+
+	public function get_content_processor(): Message_Content_Processor {
+		if ( is_null( $this->content_processor ) ) {
+			$this->content_processor = new Message_Content_Processor();
+		}
+
+		return $this->content_processor;
 	}
 
 

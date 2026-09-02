@@ -33,6 +33,7 @@ tests/wpunit/*
 !tests/wpunit/TrustedPriceResolverTest.php
 !tests/wpunit/SsrCallbackAllowlistTest.php
 !tests/wpunit/AutoMigratorTest.php
+!tests/wpunit/MediaFieldPreviewEscapingTest.php
 test-results/
 AGENTS.md
 .env.e2e

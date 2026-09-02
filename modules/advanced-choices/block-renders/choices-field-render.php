@@ -52,7 +52,7 @@ class Choices_Field_Render extends Base {
 		$attrs = get_block_wrapper_attributes(
 			array(
 				'class'         => 'jet-form-builder-choice',
-				'data-jfb-sync' => true,
+				'data-jfb-sync' => '1',
 			)
 		);
 

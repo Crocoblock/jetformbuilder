@@ -281,6 +281,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 - FIX: Shortcode injection in form status messages
 - FIX: Secure Advanced Validation Server-Side Callbacks with per-form allowlists
 - FIX: Escape Media field previews to prevent XSS
+- FIX: Prevented unauthenticated email header injection in the Send Email action
+- FIX: Prevented unauthenticated HTML injection into notification emails through the WYSIWYG field
+- FIX: Prevented unauthenticated blind SQL injection when retrieving forms by payment token
 
 **3.6.5.1**
 - ADD: Allow extending macro groups in Send Email fields

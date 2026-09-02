@@ -341,7 +341,12 @@ class Tracking_Rich_Content_Module extends Rich_Content_Module {
 	public $shortcode_calls       = 0;
 	public $dynamic_preset_result = '';
 
-	public function apply_dynamic_preset( string $content ): string {
+	public function apply_dynamic_preset(
+		string $content,
+		bool $trusted = false,
+		string $trusted_content = '',
+		bool $without_preset = false
+	): string {
 		++$this->dynamic_preset_calls;
 
 		return $this->dynamic_preset_result;

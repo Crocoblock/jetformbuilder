@@ -65,7 +65,10 @@ class Rules_Controller implements Repository_Pattern_Interface {
 
 	public function prepare_rules( array &$rules ) {
 		foreach ( $rules as &$rule ) {
-			$rule['value'] = jet_fb_parse_dynamic( $rule['value'] ?? '' );
+			// Rules live in the form's own blocks (post_content), writable only
+			// with `edit_post` - never taken from the request, even on the REST
+			// validation route, which reloads them via Block_Helper::get_blocks_by_post().
+			$rule['value'] = jet_fb_parse_dynamic_trusted( $rule['value'] ?? '' );
 		}
 	}
 

@@ -51,7 +51,8 @@ class Condition_Field_Item extends Base_Condition_Type {
 		}
 
 		$value = Tools::to_string(
-			jet_fb_parse_dynamic( $this->value )
+			// Condition value is a block attribute of the conditional block.
+			jet_fb_parse_dynamic_trusted( $this->value )
 		);
 
 		$this->use_preset   = $this->value !== $value;

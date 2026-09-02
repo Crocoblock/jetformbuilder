@@ -5,8 +5,6 @@ import useIsHasAttribute from '../../hooks/useIsHasAttribute';
 import ClientSideMacros from '../../macros.button/components/ClientSideMacros';
 import useInsertMacro from '../../macros.button/hooks/useInsertMacro';
 import AttributeHelp from './AttributeHelp';
-import ControlPresetRestrictionContext
-	from '../../preset/context/ControlPresetRestrictionContext';
 
 const {
 	      __,
@@ -27,32 +25,32 @@ function BlockDefaultValue( { label, help, hasMacro = true } ) {
 		return null;
 	}
 
-	return <ControlPresetRestrictionContext.Provider value={ { show: true } }>
-		<ClientSideMacros>
-			<AdvancedInspectorControl
-				value={ attributes.default }
-				label={ label ?? __( 'Default Value', 'jet-form-builder' ) }
-				onChangePreset={ val => setAttributes( { default: val } ) }
-				onChangeMacros={ hasMacro ? updateInput : false }
-			>
-				{ ( { instanceId } ) => {
-					return <>
-						<TextControl
-							ref={ input }
-							id={ instanceId }
-							value={ attributes.default }
-							className="jet-fb m-unset"
-							onChange={ val => setAttributes(
-								{ default: val } ) }
-						/>
-						<AttributeHelp name="default">
-							{ help ?? '' }
-						</AttributeHelp>
-					</>;
-				} }
-			</AdvancedInspectorControl>
-		</ClientSideMacros>
-	</ControlPresetRestrictionContext.Provider>;
+	// The "Restrict access" toggle is provided by PresetButton itself now,
+	// for every preset modal - no local context needed here.
+	return <ClientSideMacros>
+		<AdvancedInspectorControl
+			value={ attributes.default }
+			label={ label ?? __( 'Default Value', 'jet-form-builder' ) }
+			onChangePreset={ val => setAttributes( { default: val } ) }
+			onChangeMacros={ hasMacro ? updateInput : false }
+		>
+			{ ( { instanceId } ) => {
+				return <>
+					<TextControl
+						ref={ input }
+						id={ instanceId }
+						value={ attributes.default }
+						className="jet-fb m-unset"
+						onChange={ val => setAttributes(
+							{ default: val } ) }
+					/>
+					<AttributeHelp name="default">
+						{ help ?? '' }
+					</AttributeHelp>
+				</>;
+			} }
+		</AdvancedInspectorControl>
+	</ClientSideMacros>;
 }
 
 export default BlockDefaultValue;

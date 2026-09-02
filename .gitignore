@@ -31,6 +31,7 @@ tests/wpunit/*
 !tests/wpunit/GeneratorContextSecurityTest.php
 !tests/wpunit/PaypalPayNowTransactionTest.php
 !tests/wpunit/TrustedPriceResolverTest.php
+!tests/wpunit/PresetAccessControlTest.php
 !tests/wpunit/FormMessageShortcodeSecurityTest.php
 !tests/wpunit/SsrCallbackAllowlistTest.php
 !tests/wpunit/AutoMigratorTest.php

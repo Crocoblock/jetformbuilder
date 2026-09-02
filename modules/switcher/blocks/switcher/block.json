@@ -54,7 +54,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"rich": true
+				"rich-trusted": true
 			}
 		},
 		"value_active": {
@@ -64,7 +64,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"rich": true
+				"rich-trusted": true
 			}
 		},
 		"label": {

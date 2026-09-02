@@ -79,7 +79,15 @@ class Dynamic_Preset extends Base_Preset {
 			return false;
 		}
 
-		$this->set_init_data( $dynamic_preset );
+		/**
+		 * Reset rather than merge: a Dynamic_Preset instance is reused
+		 * across calls (Rich_Content\Module::get_dynamic_preset() keeps one
+		 * for the whole request), and set_init_data() merges. Without the
+		 * reset, keys from a previously parsed JSON - notably `restricted`
+		 * and `from` - would survive into the next parse and be evaluated
+		 * against the wrong preset. See issues-tracker #20359.
+		 */
+		$this->reset_init_data( $dynamic_preset );
 
 		return true;
 	}

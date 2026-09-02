@@ -260,20 +260,36 @@ class Block_Helper {
 			return array();
 		}
 
+		return self::get_blocks_from_content( $post->post_content );
+	}
+
+	/**
+	 * Parses block content and expands reusable (`core/block`) references in exactly the
+	 * same way as `get_blocks_by_post()`.
+	 *
+	 * @param string $post_content
+	 *
+	 * @return array
+	 */
+	public static function get_blocks_from_content( string $post_content ): array {
 		return array_map(
 			function ( $block ) {
-				self::walk_by_reusable( $block );
+				self::walk_by_reusable( $block, array() );
 
 				return $block;
 			},
-			parse_blocks( $post->post_content )
+			parse_blocks( $post_content )
 		);
 	}
 
-	private static function walk_by_reusable( array &$block ) {
+	/**
+	 * @param array $block
+	 * @param array $visited_reusable_ids IDs already visited in the current reference path.
+	 */
+	private static function walk_by_reusable( array &$block, array $visited_reusable_ids ) {
 		if ( ! empty( $block['innerBlocks'] ) ) {
 			foreach ( $block['innerBlocks'] as &$current ) {
-				self::walk_by_reusable( $current );
+				self::walk_by_reusable( $current, $visited_reusable_ids );
 			}
 
 			return;
@@ -283,8 +299,31 @@ class Block_Helper {
 			return;
 		}
 
-		$reusable_id          = $block['attrs']['ref'] ?? 0;
-		$block['innerBlocks'] = self::get_blocks_by_post( $reusable_id, false );
+		$reusable_id = (int) ( $block['attrs']['ref'] ?? 0 );
+
+		if ( ! $reusable_id || isset( $visited_reusable_ids[ $reusable_id ] ) ) {
+			$block['innerBlocks'] = array();
+
+			return;
+		}
+
+		$reusable = get_post( $reusable_id );
+
+		if ( ! $reusable instanceof \WP_Post ) {
+			$block['innerBlocks'] = array();
+
+			return;
+		}
+
+		$visited_reusable_ids[ $reusable_id ] = true;
+		$block['innerBlocks']                 = array_map(
+			function ( $inner_block ) use ( $visited_reusable_ids ) {
+				self::walk_by_reusable( $inner_block, $visited_reusable_ids );
+
+				return $inner_block;
+			},
+			parse_blocks( $reusable->post_content )
+		);
 	}
 
 	public static function delete_namespace( $block ): string {

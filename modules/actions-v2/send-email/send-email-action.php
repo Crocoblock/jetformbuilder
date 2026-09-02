@@ -472,11 +472,11 @@ class Send_Email_Action extends Base {
 	/**
 	 * @throws Action_Exception
 	 */
-	private function validate_header_values(array $values)	{
-					
-		foreach ($values as $value) {
-			if (false !== strpos($value, "\r") || false !== strpos($value, "\n")) {
-				throw new Action_Exception('invalid_email');
+	private function validate_header_values( array $values ) {
+
+		foreach ( $values as $value ) {
+			if ( false !== strpos( $value, "\r" ) || false !== strpos( $value, "\n" ) ) {
+				throw new Action_Exception( 'invalid_email' );
 			}
 		}
 	}

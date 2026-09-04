@@ -56,7 +56,27 @@ class Preset_Manager {
 		if ( ! $form_id ) {
 			return $this;
 		}
-		$this->general()->set_init_data( $this->general()->preset_source( $form_id ) );
+
+		// General_Preset is not unique (Preset_Manager::general() always
+		// returns the same shared instance), and Base_Preset::set_init_data()
+		// merges into any existing $data rather than replacing it. Reset the
+		// instance's $data before loading the current form's preset config,
+		// otherwise a page rendering multiple forms could leak one form's
+		// `restricted` flag (or other preset config) into another form's
+		// permission evaluation via array_merge() carrying over keys the
+		// current form's own config doesn't set - see issues-tracker #20359.
+		//
+		// trust_restriction_flag( true ) is set unconditionally here, not
+		// saved/restored like the equivalent call in get_field_value(): this
+		// form's config is always admin-authored (post meta), so General
+		// Preset's own default already resolves to trusted
+		// (trusts_restriction_flag_by_default()). The explicit call exists
+		// only to document that intent at the call site, not to override a
+		// caller-supplied value - unlike get_field_value(), nothing calls
+		// set_form_id() expecting an untrusted evaluation afterwards.
+		$this->general()
+			->trust_restriction_flag( true )
+			->reset_init_data( $this->general()->preset_source( $form_id ) );
 
 		try {
 			$this->general()->get_source();
@@ -175,6 +195,18 @@ class Preset_Manager {
 	/**
 	 * Returns field value
 	 *
+	 * $args here are a form field block's attributes, which live in the
+	 * form's own post content/meta and require `edit_post` on the form to
+	 * write. That makes this a trusted origin: a `restricted: false` set by
+	 * the form author through the editor's "Restrict access" toggle is
+	 * honoured, exactly as that toggle's help text promises.
+	 *
+	 * Untrusted entry points - Rich_Content parsing a submitted field value
+	 * via jet_fb_parse_dynamic() - deliberately do NOT declare trust, so a
+	 * `restricted` flag smuggled through a submitted value is ignored and the
+	 * permission check always runs. Admin-authored call sites use
+	 * jet_fb_parse_dynamic_trusted() instead. See issues-tracker #20359.
+	 *
 	 * @param array $args
 	 *
 	 * @return [type] [description]
@@ -192,12 +224,23 @@ class Preset_Manager {
 			return '';
 		}
 
-		$manager->set_check_restriction( true );
+		/**
+		 * Save & restore: get_preset_type_manager() only clones unique preset
+		 * types, so for a non-unique one (General_Preset) $manager IS the
+		 * process-wide shared instance. Leaving `true` on it would make the
+		 * trust sticky for every later caller that reaches the same instance
+		 * without an intervening reset - see issues-tracker #20359.
+		 */
+		$restore_trust = $manager->trusts_restriction_flag();
+
+		$manager->trust_restriction_flag( true );
 
 		try {
 			return $manager->get_source( $args )->result();
 		} catch ( Preset_Exception $exception ) {
 			return '';
+		} finally {
+			$manager->trust_restriction_flag( $restore_trust );
 		}
 	}
 

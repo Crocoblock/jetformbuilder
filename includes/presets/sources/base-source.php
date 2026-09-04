@@ -148,26 +148,78 @@ abstract class Base_Source {
 	}
 
 	/**
+	 * Whether this source allows the `restricted: false` opt-out (see
+	 * has_permission()) to skip can_get_preset() at all. A source can override
+	 * this to return false when its capability must never be made public by a
+	 * form's stored, trusted preset configuration.
+	 *
+	 * Preset_Source_Options_Page intentionally uses the default: a form author
+	 * can explicitly publish the selected Options Page field by switching
+	 * "Restrict access" off. Request-provided preset data cannot do so because
+	 * it never receives the trusted-origin marker. See issues-tracker #20359.
+	 *
+	 * @return bool
+	 */
+	protected function allows_restriction_bypass(): bool {
+		return true;
+	}
+
+	/**
+	 * The `restricted: false` opt-out below only takes effect when both:
+	 * - `_trusts_restriction_flag` is true - a flag set programmatically by
+	 *   Base_Preset::get_source() (never taken from preset_data itself, so
+	 *   an attacker can't forge it) from whatever the CALL SITE declared via
+	 *   Base_Preset::trust_restriction_flag(). Only origins that are
+	 *   admin-authored declare trust: the form's own preset meta
+	 *   (General_Preset), a field block's attributes
+	 *   (Preset_Manager::get_field_value()) and the settings parsed via
+	 *   jet_fb_parse_dynamic_trusted() (validation rules, date min/max,
+	 *   conditional blocks, action conditions, dynamic value). Parsing a
+	 *   submitted field value - jet_fb_parse_dynamic() via Rich_Content -
+	 *   never does, so a `restricted` flag smuggled through a submitted
+	 *   value is ignored there.
+	 * - allows_restriction_bypass() is true for this source (see above).
+	 *
+	 * This closes the access-control bypass reported in issues-tracker
+	 * #20359 while preserving the documented "Restrict access" editor
+	 * toggle for admin-configured presets.
+	 *
+	 * `jet-form-builder/preset-sanitize` runs on BOTH paths - the opt-out
+	 * result as well as can_get_preset() - so an integrator can always
+	 * further restrict access, including on presets whose author switched
+	 * the toggle off. Returning true from it does not grant access that
+	 * can_get_preset() denied on the checked path, because the filter only
+	 * ever sees an already-computed decision.
+	 *
 	 * @return bool
 	 * @throws Preset_Exception
 	 */
 	protected function has_permission(): bool {
-		if (
-			// not enabled programmatically
-			empty( $this->preset_data['_check_restriction'] ) ||
-			// disabled in preset-editor
-			(
-				array_key_exists( 'restricted', $this->preset_data ) &&
-				! $this->preset_data['restricted']
-			)
-		) {
-			return true;
-		}
 		if ( is_null( $this->permission ) ) {
-			$this->permission = apply_filters( 'jet-form-builder/preset-sanitize', $this->can_get_preset(), $this );
+			$this->permission = apply_filters(
+				'jet-form-builder/preset-sanitize',
+				$this->allows_restriction_bypass_for_data() ? true : $this->can_get_preset(),
+				$this
+			);
 		}
 
 		return $this->permission;
+	}
+
+	/**
+	 * Whether the `restricted: false` opt-out applies to this preset data.
+	 *
+	 * All four conditions must hold, see has_permission() above.
+	 *
+	 * @return bool
+	 */
+	private function allows_restriction_bypass_for_data(): bool {
+		return (
+			! empty( $this->preset_data['_trusts_restriction_flag'] ) &&
+			$this->allows_restriction_bypass() &&
+			array_key_exists( 'restricted', $this->preset_data ) &&
+			! $this->preset_data['restricted']
+		);
 	}
 
 	/**

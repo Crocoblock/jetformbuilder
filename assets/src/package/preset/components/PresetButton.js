@@ -1,20 +1,41 @@
 import DynamicPreset from './DynamicPreset';
+import ControlPresetRestrictionContext
+	from '../context/ControlPresetRestrictionContext';
 import {
 	StickyModalActions,
 	ModalFooterStyle,
 } from 'jet-form-builder-components';
 import { Button, Modal } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useContext, useState } from '@wordpress/element';
 
+// `showRestriction` controls the "Restrict access" toggle inside the modal.
+//
+// It defaults to true so every place that edits a preset can opt that preset
+// out of the permission check: presets in validation rules, date limits,
+// conditional blocks, action conditions and dynamic value all read data
+// through the same permission check as a field's default value, and without
+// the toggle a form author has no way to mark that data as public
+// (issues-tracker #20359).
+//
+// An outer ControlPresetRestrictionContext still wins when it explicitly sets
+// `show`, so a consumer can hide the toggle where the opt-out is meaningless.
+// eslint-disable-next-line max-lines-per-function
 function PresetButton( {
 	value,
 	onChange,
 	title,
+	showRestriction = true,
 } ) {
 
-	const [ showModal, setShowModal ] = useState( false );
+	const [ showModal, setShowModal ]   = useState( false );
 	const [ stateValue, setStateValue ] = useState( value );
+
+	const outerContext = useContext( ControlPresetRestrictionContext );
+
+	const restrictionContext = {
+		show: outerContext?.show ?? showRestriction,
+	};
 
 	const updateClick = () => {
 		onChange( stateValue );
@@ -39,11 +60,15 @@ function PresetButton( {
 			onRequestClose={ () => setShowModal( false ) }
 			className={ ModalFooterStyle }
 		>
-			<DynamicPreset
-				key={ 'dynamic_key_preset' }
-				value={ stateValue }
-				onChange={ setStateValue }
-			/>
+			<ControlPresetRestrictionContext.Provider
+				value={ restrictionContext }
+			>
+				<DynamicPreset
+					key={ 'dynamic_key_preset' }
+					value={ stateValue }
+					onChange={ setStateValue }
+				/>
+			</ControlPresetRestrictionContext.Provider>
 			<StickyModalActions>
 				<Button
 					isPrimary

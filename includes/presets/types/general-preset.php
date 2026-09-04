@@ -37,6 +37,23 @@ class General_Preset extends Base_Preset {
 	}
 
 	/**
+	 * $this->data for General_Preset is populated exclusively from post
+	 * meta (`_jf_preset`, see Preset_Manager::set_form_id() -> preset_source()
+	 * -> Post_Type module -> Preset_Meta::query()), which is admin-authored
+	 * and protected by a register_post_meta `auth_callback` requiring
+	 * `edit_post` on the form. That's why (unlike Dynamic_Preset, whose data
+	 * can be JSON decoded from a request-influenced field value) it's safe
+	 * to let this preset type's own `restricted` flag opt out of the
+	 * permission check - see issues-tracker #20359 and
+	 * Base_Source::has_permission().
+	 *
+	 * @return bool
+	 */
+	protected function trusts_restriction_flag_by_default(): bool {
+		return true;
+	}
+
+	/**
 	 * Sanitize preset source
 	 */
 	public function sanitize_source(): bool {

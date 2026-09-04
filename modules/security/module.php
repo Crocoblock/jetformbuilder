@@ -35,6 +35,11 @@ class Module implements
 
 	private $spam_statuses = array();
 
+	/**
+	 * @var Restricted_Preset_Notice
+	 */
+	private $restricted_preset_notice;
+
 	public function rep_item_id() {
 		return 'security';
 	}
@@ -63,9 +68,14 @@ class Module implements
 	}
 
 	public function init_hooks() {
+		$this->restricted_preset_notice = new Restricted_Preset_Notice();
+		$this->restricted_preset_notice->init_hooks();
 	}
 
 	public function remove_hooks() {
+		if ( $this->restricted_preset_notice ) {
+			$this->restricted_preset_notice->remove_hooks();
+		}
 	}
 
 	public function has_spam(): bool {

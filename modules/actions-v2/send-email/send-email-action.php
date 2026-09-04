@@ -433,14 +433,31 @@ class Send_Email_Action extends Base {
 	 * @since 2.1
 	 */
 	public function get_default_headers(): string {
-		$headers = array(
-			"From: {$this->get_from_name()} <{$this->get_from_address()}>",
-			"Reply-To: {$this->get_reply_to()}",
-			"Content-Type: {$this->get_content_type()}; charset=utf-8",
+		$from_name    = $this->get_from_name();
+		$from_address = $this->get_from_address();
+		$reply_to     = $this->get_reply_to();
+		$content_type = $this->get_content_type();
+		$cc_emails    = $this->get_cc();
+		$bcc_emails   = $this->get_bcc();
+
+		$this->validate_header_values(
+			array_merge(
+				array(
+					$from_name,
+					$from_address,
+					$reply_to,
+					$content_type,
+				),
+				$cc_emails,
+				$bcc_emails
+			)
 		);
 
-		$cc_emails  = $this->get_cc();
-		$bcc_emails = $this->get_bcc();
+		$headers = array(
+			"From: {$from_name} <{$from_address}>",
+			"Reply-To: {$reply_to}",
+			"Content-Type: {$content_type}; charset=utf-8",
+		);
 
 		foreach ( $cc_emails as $cc_email ) {
 			$headers[] = 'Cc: ' . $cc_email;
@@ -450,6 +467,18 @@ class Send_Email_Action extends Base {
 		}
 
 		return implode( "\r\n", $headers );
+	}
+
+	/**
+	 * @throws Action_Exception
+	 */
+	private function validate_header_values( array $values ) {
+
+		foreach ( $values as $value ) {
+			if ( false !== strpos( $value, "\r" ) || false !== strpos( $value, "\n" ) ) {
+				throw new Action_Exception( 'invalid_email' );
+			}
+		}
 	}
 
 	/**

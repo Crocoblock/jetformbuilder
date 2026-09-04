@@ -106,9 +106,9 @@ class Tools {
 	 * @return string
 	 */
 	public static function sanitize_wysiwyg( $input ): string {
-		$input = wp_kses_post( $input );
+		$input = wp_specialchars_decode( stripslashes( $input ), ENT_COMPAT );
 
-		return wp_specialchars_decode( stripslashes( $input ), ENT_COMPAT );
+		return wp_kses_post( $input );
 	}
 
 	/**

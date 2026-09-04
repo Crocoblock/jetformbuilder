@@ -321,7 +321,11 @@ abstract class Legacy_Base_Gateway {
 		}
 
 		global $wpdb;
-		$sql = "SELECT * FROM $wpdb->postmeta WHERE meta_key = '" . self::GATEWAY_META_KEY . "' AND meta_value LIKE '%$payment%';";
+		$sql = $wpdb->prepare(
+			"SELECT * FROM $wpdb->postmeta WHERE meta_key = %s AND meta_value LIKE %s",
+			self::GATEWAY_META_KEY,
+			'%' . $wpdb->esc_like( $payment ) . '%'
+		);
 
 		// phpcs:ignore WordPress.DB
 		return $wpdb->get_row( $sql, ARRAY_A );

@@ -31,7 +31,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"rich": true
+				"rich-trusted": true
 			}
 		},
 		"maxlength": {
@@ -41,7 +41,7 @@
 			],
 			"default": "",
 			"jfb": {
-				"rich": true
+				"rich-trusted": true
 			}
 		},
 		"label": {

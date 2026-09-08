@@ -78,6 +78,11 @@ function PhoneFieldData() {
 			formatAsYouType: true,
 			formatOnDisplay: true,
 			autoPlaceholder: 'aggressive',
+			validationNumberTypes: [
+				'MOBILE',
+				'FIXED_LINE',
+				'FIXED_LINE_OR_MOBILE',
+			],
 		};
 
 		// Only add arrays if they have items

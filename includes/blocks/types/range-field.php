@@ -124,6 +124,7 @@ class Range_Field extends Base {
 				'attributes'   => array(
 					'default' => array(
 						'value' => 5,
+						'unit'  => 'px',
 					),
 				),
 			)
@@ -176,6 +177,7 @@ class Range_Field extends Base {
 				'attributes'   => array(
 					'default' => array(
 						'value' => 18,
+						'unit'  => 'px',
 					),
 				),
 			)

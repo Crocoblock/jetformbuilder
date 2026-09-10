@@ -220,7 +220,7 @@ export default function MediaEdit(props) {
 							'jet-form-builder',
 						)}
 						value={attributes?.validation?.messages?.max_size ??
-							'Maximum file size: %max_size%'}
+							__('Maximum file size: %max_size%', 'jet-form-builder')}
 						onChange={val => {
 							setAttributes({
 								validation: {
@@ -282,7 +282,7 @@ export default function MediaEdit(props) {
 						<input type="file" className="jet-form-builder__field jet-form-builder-file-upload__input" tabIndex={-1} onClick={event => event.preventDefault()} aria-label={__('Upload file preview', 'jet-form-builder')} />
 					</div>
 					<div className="jet-form-builder-file-upload__message">
-						<small>{(attributes?.validation?.messages?.max_size ?? 'Maximum file size: %max_size%').replace('%max_size%', `${attributes.max_size || '…'} MB`)}</small>
+							<small>{(attributes?.validation?.messages?.max_size ?? __('Maximum file size: %max_size%', 'jet-form-builder')).replace('%max_size%', `${attributes.max_size || '…'} MB`)}</small>
 					</div>
 				</div>
 			</FieldWrapper>

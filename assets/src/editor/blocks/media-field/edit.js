@@ -33,20 +33,8 @@ const {
 	ToggleControl,
 	FormTokenField,
 	TextControl,
-	__experimentalNumberControl,
-	__experimentalInputControl,
 	PanelBody,
 } = wp.components;
-
-let { NumberControl, InputControl } = wp.components;
-
-if (typeof NumberControl === 'undefined') {
-	NumberControl = __experimentalNumberControl;
-}
-
-if (typeof InputControl === 'undefined') {
-	InputControl = __experimentalInputControl;
-}
 
 const localizeData = window.jetFormMediaFieldData;
 
@@ -279,12 +267,24 @@ export default function MediaEdit(props) {
 				key={uniqKey('FieldWrapper')}
 				{...props}
 			>
-				<InputControl
-					key={uniqKey('place_holder_block_new')}
-					type={'file'}
-					className="jet-form-builder__field-preview"
-					disabled={true}
-				/>
+				<div className="jet-form-builder__field-wrap jet-form-builder-file-upload">
+					<div className="jet-form-builder-file-upload__content">
+						<div className="jet-form-builder-file-upload__files">
+							<div className="jet-form-builder-file-upload__file">
+								<img
+									src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='100' viewBox='0 0 160 100'%3E%3Cpath fill='%23e2e8f0' d='M0 0h160v100H0z'/%3E%3Ccircle cx='120' cy='25' r='12' fill='%2394a3b8'/%3E%3Cpath fill='%2364748b' d='m0 100 50-65 40 45 25-25 45 45z'/%3E%3C/svg%3E"
+									alt={__('File preview', 'jet-form-builder')}
+								/>
+							</div>
+						</div>
+					</div>
+					<div className="jet-form-builder-file-upload__fields">
+						<input type="file" className="jet-form-builder__field jet-form-builder-file-upload__input" tabIndex={-1} onClick={event => event.preventDefault()} aria-label={__('Upload file preview', 'jet-form-builder')} />
+					</div>
+					<div className="jet-form-builder-file-upload__message">
+						<small>{(attributes?.validation?.messages?.max_size ?? 'Maximum file size: %max_size%').replace('%max_size%', `${attributes.max_size || '…'} MB`)}</small>
+					</div>
+				</div>
 			</FieldWrapper>
 		</div>,
 	];

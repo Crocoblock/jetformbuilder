@@ -34,12 +34,18 @@ class Upgrade_Database implements Base_Command_It {
 			\WP_CLI::success( 'Migrated successfully' );
 
 		} catch ( Migration_Incomplete_Exception $exception ) {
-			// Not a failure: a time-boxed migration (e.g. the SSR registry import) already
-			// committed its own partial progress and a resume cursor before throwing this —
-			// see its own docblock. There is nothing left to roll back here; running the
-			// command again resumes from that cursor.
+			// Not a data-loss failure: a time-boxed migration (e.g. the SSR registry
+			// import) already committed its own partial progress and a resume cursor
+			// before throwing this — see its own docblock. There is nothing left to roll
+			// back here; running the command again resumes from that cursor. It is,
+			// however, not "done" either — `WP_CLI::success()` here would exit 0, which
+			// automation polling this command's exit code would read as "migration
+			// complete" and never retry, silently leaving the site on partially-migrated
+			// data (review finding, issues-tracker #20361 follow-up). `WP_CLI::error()`
+			// gives it the same non-zero exit code as a genuine failure so such automation
+			// reliably re-invokes the command instead.
 			\WP_CLI::line();
-			\WP_CLI::success( 'Migration is still in progress. Run this command again to continue.' );
+			\WP_CLI::error( 'Migration is still in progress. Run this command again to continue.' );
 
 		} catch ( Migration_Exception $exception ) {
 			Execution_Builder::instance()->transaction_rollback();

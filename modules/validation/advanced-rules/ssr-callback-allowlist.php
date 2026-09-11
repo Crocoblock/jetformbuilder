@@ -109,9 +109,7 @@ class Ssr_Callback_Allowlist {
 		global $wpdb;
 
 		$progress  = get_option( self::REBUILD_PROGRESS_OPTION, array() );
-		$callbacks = is_array( $progress ) && isset( $progress['callbacks'] ) && is_array( $progress['callbacks'] )
-			? $progress['callbacks']
-			: array();
+		$callbacks = self::normalize_progress_callbacks( $progress );
 		$last_id   = is_array( $progress ) && isset( $progress['last_id'] ) ? (int) $progress['last_id'] : 0;
 
 		$started_at = microtime( true );
@@ -209,6 +207,56 @@ class Ssr_Callback_Allowlist {
 	 *
 	 * @throws \Jet_Form_Builder\Migrations\Migration_Incomplete_Exception Always.
 	 */
+	/**
+	 * Normalizes `$progress['callbacks']` into the `[ name => true ]` associative-set shape
+	 * this class has always used in memory, regardless of which on-disk shape produced it.
+	 *
+	 * The already-released 3.6.5.2 build persisted `callbacks` as a plain list of names
+	 * (`array( 'is_email', 'is_numeric' )`) and converted it back via
+	 * `array_fill_keys( $progress['callbacks'] ?? array(), true )` on load. A later revision
+	 * of this method (still on this branch, never released) started reading
+	 * `$progress['callbacks']` directly as if it were already the associative-set shape —
+	 * for a real 3.6.5.2 site whose rebuild was interrupted mid-scan (a resume cursor is
+	 * only persisted when the forms table doesn't fit in one time budget) and then updates
+	 * straight to this version, the persisted list's names become integer array keys, and
+	 * `array_values( array_keys( $callbacks ) )` at the end of `rebuild_from_all_forms()`
+	 * would silently store those integers as the "restored callback names" instead of the
+	 * actual names (review finding, issues-tracker #20361 follow-up). Accepting both shapes
+	 * here keeps that upgrade path correct without depending on which build a given site's
+	 * in-progress rebuild happened to start under.
+	 *
+	 * @since 3.6.5.3
+	 *
+	 * @param mixed $progress The raw `get_option( self::REBUILD_PROGRESS_OPTION )` result.
+	 *
+	 * @return array<string, bool>
+	 */
+	private static function normalize_progress_callbacks( $progress ): array {
+		if ( ! is_array( $progress ) || ! isset( $progress['callbacks'] ) || ! is_array( $progress['callbacks'] ) ) {
+			return array();
+		}
+
+		$raw = $progress['callbacks'];
+
+		// Associative-set shape (current/new format): every key is already a string name.
+		// A plain list (legacy 3.6.5.2 format) has only integer keys, so this check tells
+		// the two apart without needing to inspect a version flag that was never recorded.
+		if ( array_keys( $raw ) === array_keys( array_keys( $raw ) ) ) {
+			return array_fill_keys(
+				array_filter( $raw, 'is_string' ),
+				true
+			);
+		}
+
+		return array_filter(
+			$raw,
+			static function ( $key ) {
+				return is_string( $key );
+			},
+			ARRAY_FILTER_USE_KEY
+		);
+	}
+
 	private static function persist_progress_and_yield( int $last_id, array $callbacks ) {
 		update_option(
 			self::REBUILD_PROGRESS_OPTION,

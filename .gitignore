@@ -26,6 +26,9 @@ tests/*
 !tests/_data/
 tests/_data/*
 !tests/_data/late-ssr-callback.php
+!tests/_support/
+tests/_support/*
+!tests/_support/Ajax_Die_Signal.php
 !tests/wpunit/
 tests/wpunit/*
 !tests/wpunit/GeneratorContextSecurityTest.php
@@ -37,6 +40,8 @@ tests/wpunit/*
 !tests/wpunit/SsrCallbackMigrationBatchingTest.php
 !tests/wpunit/AutoMigratorTest.php
 !tests/wpunit/AutoMigratorTransactionTest.php
+!tests/wpunit/SsrBlockedCallbackUsagesTest.php
+!tests/wpunit/SsrCallbacksHandlerMigrationGuardTest.php
 !tests/wpunit/MediaFieldPreviewEscapingTest.php
 test-results/
 AGENTS.md

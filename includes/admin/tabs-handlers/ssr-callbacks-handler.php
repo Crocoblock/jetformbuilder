@@ -3,6 +3,7 @@
 
 namespace Jet_Form_Builder\Admin\Tabs_Handlers;
 
+use Jet_Form_Builder\Migrations\Auto_Migrator;
 use JFB_Modules\Validation\Advanced_Rules\Ssr_Callback_Registry;
 use JFB_Modules\Validation\Ssr\Ssr_Blocked_Callback_Usages;
 
@@ -26,9 +27,9 @@ class Ssr_Callbacks_Handler extends Base_Handler {
 
 	public function on_load() {
 		return array(
-			'callbacks' => implode( "\n", Ssr_Callback_Registry::get_allowed_callbacks() ),
-			'pending'   => Ssr_Callback_Registry::get_pending_callbacks(),
-			'blocked'   => $this->get_blocked_usages(),
+			'callbacks'           => implode( "\n", Ssr_Callback_Registry::get_allowed_callbacks() ),
+			'blocked'             => $this->get_blocked_usages(),
+			'migrationInProgress' => Auto_Migrator::instance()->is_migration_in_progress(),
 		);
 	}
 
@@ -68,20 +69,28 @@ class Ssr_Callbacks_Handler extends Base_Handler {
 	}
 
 	public function on_get_request() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- nonce verified in Base_Handler::on_raw_request(); each entry is sanitized via sanitize_text_field() below before use.
-		$approve = isset( $_POST['approve'] ) ? (array) wp_unslash( $_POST['approve'] ) : array();
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- nonce verified in Base_Handler::on_raw_request(); each entry is sanitized via sanitize_text_field() below before use.
-		$reject = isset( $_POST['reject'] ) ? (array) wp_unslash( $_POST['reject'] ) : array();
+		$migration_in_progress = Auto_Migrator::instance()->is_migration_in_progress();
 
-		$approved_result = ! empty( $approve )
-			? Ssr_Callback_Registry::approve_pending_callbacks( array_map( 'sanitize_text_field', $approve ) )
-			: array(
-				'approved' => array(),
-				'rejected' => array(),
+		// The legacy-migration import (`Version_3_6_5_3::up()`, via
+		// `Ssr_Callback_Registry::import_trusted_callbacks()`) does its own unlocked
+		// read-merge-write of `OPTION_KEY` once the scan across however many resumed
+		// requests it takes finally completes. A manual save from this tab in the middle of
+		// that window would race it: whichever of the two writes lands last silently
+		// discards the other's names. Refusing to save while the migration is still in
+		// progress removes the race outright, rather than only hiding it behind a UI that
+		// a direct AJAX request could still bypass (issues-tracker #20361 follow-up).
+		if ( $migration_in_progress ) {
+			wp_send_json_error(
+				array_merge(
+					$this->get_success_response_data(),
+					array(
+						'message'             => __( 'A server-side callback migration is still restoring previously used functions. Please wait for it to finish before editing this list.', 'jet-form-builder' ),
+						'migrationInProgress' => true,
+					)
+				)
 			);
 
-		if ( ! empty( $reject ) ) {
-			Ssr_Callback_Registry::discard_pending_callbacks( array_map( 'sanitize_text_field', $reject ) );
+			return;
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- nonce verified in Base_Handler::on_raw_request(); each line is validated/sanitized via Server_Side_Rule::sanitize_callback_name() inside Ssr_Callback_Registry::save_allowed_callbacks() below.
@@ -101,9 +110,9 @@ class Ssr_Callbacks_Handler extends Base_Handler {
 			array_merge(
 				$this->get_success_response_data(),
 				array(
-					'callbacks' => implode( "\n", $result['saved'] ),
-					'rejected'  => array_merge( $result['rejected'], $approved_result['rejected'] ),
-					'pending'   => Ssr_Callback_Registry::get_pending_callbacks(),
+					'callbacks'           => implode( "\n", $result['saved'] ),
+					'rejected'            => $result['rejected'],
+					'migrationInProgress' => false,
 				)
 			)
 		);

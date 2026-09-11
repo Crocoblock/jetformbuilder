@@ -25,7 +25,6 @@ class SsrCallbackMigrationBatchingTest extends \Codeception\TestCase\WPTestCase 
 		delete_option( Ssr_Callback_Allowlist::OPTION_KEY );
 		delete_option( Ssr_Callback_Allowlist::REBUILD_PROGRESS_OPTION );
 		delete_option( Ssr_Callback_Registry::OPTION_KEY );
-		delete_option( Ssr_Callback_Registry::PENDING_OPTION_KEY );
 		delete_option( Version_3_6_5_3::PROGRESS_OPTION );
 		delete_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION );
 		delete_option( Ssr_Blocked_Callback_Usages::OPTION_KEY );
@@ -38,7 +37,6 @@ class SsrCallbackMigrationBatchingTest extends \Codeception\TestCase\WPTestCase 
 		delete_option( Ssr_Callback_Allowlist::OPTION_KEY );
 		delete_option( Ssr_Callback_Allowlist::REBUILD_PROGRESS_OPTION );
 		delete_option( Ssr_Callback_Registry::OPTION_KEY );
-		delete_option( Ssr_Callback_Registry::PENDING_OPTION_KEY );
 		delete_option( Version_3_6_5_3::PROGRESS_OPTION );
 		delete_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION );
 		delete_option( Ssr_Blocked_Callback_Usages::OPTION_KEY );
@@ -142,23 +140,29 @@ class SsrCallbackMigrationBatchingTest extends \Codeception\TestCase\WPTestCase 
 		$this->assertArrayHasKey( 'last_id', $progress );
 		$this->assertGreaterThan( 0, $progress['last_id'] );
 
-		// A partial scan must never write the registry (pending or live) or create the
-		// review notice.
-		$this->assertSame( array(), Ssr_Callback_Registry::get_pending_callbacks() );
-		$this->assertSame( array(), Ssr_Callback_Registry::get_allowed_callbacks() );
+		// Writes happen once per completed batch, not once for the whole scan: the batch
+		// that hit the time budget already flushed its findings before persisting the
+		// resume cursor and throwing, so the registry reflects that batch's forms even
+		// though the overall scan is still incomplete (issues-tracker #20361 follow-up —
+		// see `up()`'s docblock for why per-batch, not per-scan or per-form). The
+		// migration notice, however, is only ever written once the entire scan finishes.
+		$this->assertSame(
+			array( 'is_email' ),
+			Ssr_Callback_Registry::get_allowed_callbacks()
+		);
 		$this->assertFalse( get_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION, false ) );
 
 		remove_all_filters( 'jet-form-builder/ssr-registry-migration/time-budget' );
 
 		$migration->up( $wpdb );
 
-		// Discovered names are queued as pending, not granted live trust — an admin must
-		// approve them in Settings before they become callable.
+		// Discovered names are merged directly into the trusted registry — restoring
+		// backward compatibility for forms that already relied on them before the update
+		// (issues-tracker #20361 follow-up), instead of requiring a manual admin approval.
 		$this->assertSame(
 			array( 'is_email' ),
-			Ssr_Callback_Registry::get_pending_callbacks()
+			Ssr_Callback_Registry::get_allowed_callbacks()
 		);
-		$this->assertSame( array(), Ssr_Callback_Registry::get_allowed_callbacks() );
 
 		$notice = get_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION );
 		$this->assertContains( 'is_email', $notice['imported'] );
@@ -192,9 +196,8 @@ class SsrCallbackMigrationBatchingTest extends \Codeception\TestCase\WPTestCase 
 
 		( new Version_3_6_5_3() )->up( $wpdb );
 
-		// A denylisted name must never enter the registry, pending or otherwise.
+		// A denylisted name must never enter the trusted registry.
 		$this->assertSame( array(), Ssr_Callback_Registry::get_allowed_callbacks() );
-		$this->assertSame( array(), Ssr_Callback_Registry::get_pending_callbacks() );
 
 		$usages = Ssr_Blocked_Callback_Usages::get_usages();
 

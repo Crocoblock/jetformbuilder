@@ -96,6 +96,21 @@ class Auto_Migrator {
 		return version_compare( $stored, JET_FORM_BUILDER_VERSION, '<' );
 	}
 
+	/**
+	 * Whether the auto-migration set (`migration_instances()`) has not yet fully completed
+	 * for this site. On a small site this is true for at most a single `admin_init` request;
+	 * on a large site it can span several requests while a time-boxed migration resumes
+	 * itself batch by batch. Exposed so UI that depends on the migrated data being complete
+	 * (e.g. the "Allowed Server-Side Callbacks" settings tab, whose `import_trusted_callbacks()`
+	 * only runs once the whole scan finishes) can disable editing and show a wait state
+	 * instead of racing a save against a migration batch still in flight.
+	 *
+	 * @since 3.6.5.3
+	 */
+	public function is_migration_in_progress(): bool {
+		return $this->needs_upgrade() && ! $this->all_installed();
+	}
+
 	protected function run() {
 		// Nothing outstanding (e.g. fresh install already stamped by table creation) →
 		// just record the version and skip touching the DB in a transaction.

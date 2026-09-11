@@ -4,7 +4,6 @@
 namespace JFB_Modules\Validation\Ssr;
 
 use Jet_Form_Builder\Admin\Pages\Pages_Manager;
-use JFB_Modules\Validation\Advanced_Rules\Ssr_Callback_Registry;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -12,19 +11,23 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Persistent admin notice shown after `Migrations\Versions\Version_3_6_5_3` imports one
- * or more legacy static SSR callback names into the global `Ssr_Callback_Registry` as
- * pending, unapproved entries, so every admin gets a chance to review them. These names
- * are not yet callable — only created when the import list is non-empty. Dismissal is
- * recorded per-admin (`update_user_meta`), matching
- * `JFB_Modules\Security\Restricted_Preset_Notice`.
+ * Persistent admin notice shown once, after `Migrations\Versions\Version_3_6_5_3` runs and
+ * the migration found at least one custom "Server-Side callback" name already in use on
+ * the site. It summarizes both migration outcomes in one place (issues-tracker #20361
+ * follow-up):
+ * - how many custom callback names were found safe and automatically kept allowed, so the
+ *   admin knows those forms keep working without any action;
+ * - how many forms use a callback name that is permanently denylisted and could not be
+ *   restored, so the admin knows exactly how many forms need a manual fix and can jump
+ *   straight to the settings tab to see which ones.
  *
- * The notice never prints the imported function names itself, only a count: a large legacy
- * site can import dozens of names, and the settings tab (not an admin notice) is the right
- * place to read them one by one. It also reads the *current* pending count from
- * `Ssr_Callback_Registry::get_pending_callbacks()` rather than the frozen import-time list, so
- * it reflects review progress and disappears once every imported name has been approved or
- * rejected, instead of continuing to reference an import list the admin already dealt with.
+ * Created only when the migration found something to report (`mark_imported()`); an update
+ * with nothing relevant in any existing form shows no notice at all. Dismissal is recorded
+ * per-admin (`update_user_meta`), matching `JFB_Modules\Security\Restricted_Preset_Notice`.
+ *
+ * The notice never prints the function/form names itself, only counts: a large legacy site
+ * can restore dozens of names or flag dozens of forms, and the settings tab (not an admin
+ * notice) is the right place to read and act on them one by one.
  *
  * @since 3.6.5.3
  */
@@ -48,18 +51,21 @@ class Ssr_Registry_Migration_Notice {
 	}
 
 	/**
-	 * @param string[] $imported Lowercased function names imported by the migration.
+	 * @param string[] $imported     Lowercased function names automatically kept allowed.
+	 * @param int      $blocked_forms_count Number of forms found using a denylisted callback
+	 *                                      name that could not be restored.
 	 */
-	public static function mark_imported( array $imported ) {
-		if ( empty( $imported ) ) {
+	public static function mark_imported( array $imported, int $blocked_forms_count = 0 ) {
+		if ( empty( $imported ) && $blocked_forms_count <= 0 ) {
 			return;
 		}
 
 		update_option(
 			self::NOTICE_OPTION,
 			array(
-				'token'    => wp_generate_uuid4(),
-				'imported' => array_values( $imported ),
+				'token'               => wp_generate_uuid4(),
+				'imported'            => array_values( $imported ),
+				'blocked_forms_count' => max( 0, $blocked_forms_count ),
 			),
 			false
 		);
@@ -83,11 +89,7 @@ class Ssr_Registry_Migration_Notice {
 
 		$notice = get_option( self::NOTICE_OPTION, array() );
 
-		if (
-			empty( $notice['imported'] ) ||
-			empty( $notice['token'] ) ||
-			$this->is_dismissed( (string) $notice['token'] )
-		) {
+		if ( ! $this->has_content( $notice ) || $this->is_dismissed( (string) $notice['token'] ) ) {
 			return;
 		}
 
@@ -106,22 +108,12 @@ class Ssr_Registry_Migration_Notice {
 
 		$notice = get_option( self::NOTICE_OPTION, array() );
 
-		if ( empty( $notice['imported'] ) || empty( $notice['token'] ) ) {
+		if ( ! $this->has_content( $notice ) || $this->is_dismissed( (string) $notice['token'] ) ) {
 			return;
 		}
 
-		if ( $this->is_dismissed( (string) $notice['token'] ) ) {
-			return;
-		}
-
-		$pending_count = count( Ssr_Callback_Registry::get_pending_callbacks() );
-
-		// Every imported name has already been approved or rejected on the settings tab:
-		// nothing left to review, so stop showing a notice that would otherwise keep
-		// pointing at an import list the admin already dealt with.
-		if ( 0 === $pending_count ) {
-			return;
-		}
+		$imported_count = count( $notice['imported'] );
+		$blocked_count  = (int) ( $notice['blocked_forms_count'] ?? 0 );
 
 		$settings_url = Pages_Manager::instance()->get_stable_url( 'jfb-settings' ) . '#ssr-callbacks-tab';
 		$dismiss_url  = wp_nonce_url(
@@ -129,33 +121,52 @@ class Ssr_Registry_Migration_Notice {
 			'jet_fb_dismiss_ssr_registry_notice'
 		);
 
+		$notice_class = $blocked_count > 0 ? 'notice-warning' : 'notice-info';
+
 		?>
-		<div class="notice notice-warning">
+		<div class="notice <?php echo esc_attr( $notice_class ); ?>">
 			<p>
-				<strong><?php esc_html_e( 'JetFormBuilder - Review Allowed Server-Side Callbacks', 'jet-form-builder' ); ?></strong>
+				<strong><?php esc_html_e( 'JetFormBuilder - Server-Side Callbacks Update Summary', 'jet-form-builder' ); ?></strong>
 			</p>
-			<p>
-				<?php
-				echo esc_html(
-					sprintf(
-						/* translators: %d: number of custom "Server-Side callback" function names awaiting review. */
-						_n(
-							'While updating, %d custom "Server-Side callback" function name already used in your existing forms was found and queued for review. It is not yet active — forms relying on it will not pass server-side validation until you approve it.',
-							'While updating, %d custom "Server-Side callback" function names already used in your existing forms were found and queued for review. They are not yet active — forms relying on them will not pass server-side validation until you approve them.',
-							$pending_count,
-							'jet-form-builder'
-						),
-						$pending_count
-					)
-				);
-				?>
-			</p>
-			<p>
-				<?php esc_html_e( 'Please review the pending callbacks and approve anything that should be allowed to run.', 'jet-form-builder' ); ?>
-			</p>
+			<?php if ( $imported_count > 0 ) : ?>
+				<p>
+					<?php
+					echo esc_html(
+						sprintf(
+							/* translators: %d: number of custom "Server-Side callback" function names restored. */
+							_n(
+								'%d custom "Server-Side callback" function name already used in your existing forms was found safe and automatically kept allowed — those forms keep passing server-side validation, no action needed.',
+								'%d custom "Server-Side callback" function names already used in your existing forms were found safe and automatically kept allowed — those forms keep passing server-side validation, no action needed.',
+								$imported_count,
+								'jet-form-builder'
+							),
+							$imported_count
+						)
+					);
+					?>
+				</p>
+			<?php endif; ?>
+			<?php if ( $blocked_count > 0 ) : ?>
+				<p>
+					<?php
+					echo esc_html(
+						sprintf(
+							/* translators: %d: number of forms using a permanently blocked callback function. */
+							_n(
+								'%d form uses a "Server-Side callback" function that is never allowed to run for security reasons. It could not be restored — that form will keep failing server-side validation until you edit it and remove or replace the rule.',
+								'%d forms use a "Server-Side callback" function that is never allowed to run for security reasons. They could not be restored — those forms will keep failing server-side validation until you edit them and remove or replace the rule.',
+								$blocked_count,
+								'jet-form-builder'
+							),
+							$blocked_count
+						)
+					);
+					?>
+				</p>
+			<?php endif; ?>
 			<p>
 				<a href="<?php echo esc_url( $settings_url ); ?>" class="button button-primary">
-					<?php esc_html_e( 'Review Pending Callbacks', 'jet-form-builder' ); ?>
+					<?php esc_html_e( 'Open Settings', 'jet-form-builder' ); ?>
 				</a>
 				<a href="<?php echo esc_url( $dismiss_url ); ?>" class="button button-secondary">
 					<?php esc_html_e( 'Dismiss', 'jet-form-builder' ); ?>
@@ -163,6 +174,20 @@ class Ssr_Registry_Migration_Notice {
 			</p>
 		</div>
 		<?php
+	}
+
+	/**
+	 * @param mixed $notice
+	 */
+	private function has_content( $notice ): bool {
+		if ( ! is_array( $notice ) || empty( $notice['token'] ) ) {
+			return false;
+		}
+
+		$has_imported = ! empty( $notice['imported'] );
+		$has_blocked  = (int) ( $notice['blocked_forms_count'] ?? 0 ) > 0;
+
+		return $has_imported || $has_blocked;
 	}
 
 	private function is_dismissed( string $token ): bool {

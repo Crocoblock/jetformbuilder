@@ -26,13 +26,11 @@ class SsrCallbackRegistryTest extends \Codeception\TestCase\WPTestCase {
 		parent::setUp();
 
 		delete_option( Ssr_Callback_Registry::OPTION_KEY );
-		delete_option( Ssr_Callback_Registry::PENDING_OPTION_KEY );
 		delete_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION );
 	}
 
 	public function tearDown(): void {
 		delete_option( Ssr_Callback_Registry::OPTION_KEY );
-		delete_option( Ssr_Callback_Registry::PENDING_OPTION_KEY );
 		delete_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION );
 
 		parent::tearDown();
@@ -240,54 +238,37 @@ class SsrCallbackRegistryTest extends \Codeception\TestCase\WPTestCase {
 		$this->assertSame( array( 'is_email' ), $result['saved'] );
 	}
 
+	// -- Registry import_trusted_callbacks() (legacy-migration restore path) ---------------
+
 	/**
-	 * Regression: an admin typing a pending name directly into the textarea is, in effect,
-	 * already approving it through a different path. It must not keep showing in Pending
-	 * Review as if still awaiting a decision (issues-tracker #20361 follow-up).
+	 * `import_trusted_callbacks()` (used only by `Version_3_6_5_3`) merges a name directly
+	 * into the trusted registry — restoring backward compatibility for a site where the
+	 * name was already relied upon before the update, without requiring a manual
+	 * `manage_options` approval (issues-tracker #20361 follow-up).
 	 */
-	public function testSavingTextareaClearsMatchingPendingEntry(): void {
-		Ssr_Callback_Registry::add_pending_callbacks( array( 'is_numeric', 'is_email' ) );
+	public function testImportTrustedCallbacksMergesValidNameDirectly(): void {
+		$result = Ssr_Callback_Registry::import_trusted_callbacks( array( 'is_email' ) );
 
-		$result = Ssr_Callback_Registry::save_allowed_callbacks( array( 'is_numeric' ) );
-
-		$this->assertSame( array( 'is_numeric' ), $result['saved'] );
-		$this->assertSame(
-			array( 'is_email' ),
-			Ssr_Callback_Registry::get_pending_callbacks(),
-			'Typing a pending name into the textarea must remove it from Pending Review; unrelated pending names must stay.'
-		);
-	}
-
-	public function testApprovePendingCallbackMovesItToTrusted(): void {
-		Ssr_Callback_Registry::add_pending_callbacks( array( 'is_email' ) );
-
-		$result = Ssr_Callback_Registry::approve_pending_callbacks( array( 'is_email' ) );
-
-		$this->assertSame( array( 'is_email' ), $result['approved'] );
+		$this->assertSame( array( 'is_email' ), $result['imported'] );
+		$this->assertSame( array(), $result['rejected'] );
 		$this->assertSame( array( 'is_email' ), Ssr_Callback_Registry::get_allowed_callbacks() );
-		$this->assertSame( array(), Ssr_Callback_Registry::get_pending_callbacks() );
 	}
 
-	/**
-	 * Regression for review finding (issues-tracker #20361 follow-up): a pending name that
-	 * fails re-validation at approval time (e.g. its function no longer exists) must stay in
-	 * the pending queue rather than being permanently discarded, so an admin who later fixes
-	 * the underlying cause can still find and approve it instead of it silently vanishing.
-	 */
-	public function testApprovingCallbackThatFailsRevalidationStaysPending(): void {
-		Ssr_Callback_Registry::add_pending_callbacks( array( 'jfb_20361_missing_fn' ) );
-		$this->assertSame( array( 'jfb_20361_missing_fn' ), Ssr_Callback_Registry::get_pending_callbacks() );
+	public function testImportTrustedCallbacksRejectsDenylistedName(): void {
+		$result = Ssr_Callback_Registry::import_trusted_callbacks( array( 'wp_delete_file' ) );
 
-		$result = Ssr_Callback_Registry::approve_pending_callbacks( array( 'jfb_20361_missing_fn' ) );
-
-		$this->assertSame( array(), $result['approved'] );
-		$this->assertArrayHasKey( 'jfb_20361_missing_fn', $result['rejected'] );
-		$this->assertSame(
-			array( 'jfb_20361_missing_fn' ),
-			Ssr_Callback_Registry::get_pending_callbacks(),
-			'A name that fails re-validation must stay in the pending queue, not vanish.'
-		);
+		$this->assertSame( array(), $result['imported'] );
+		$this->assertArrayHasKey( 'wp_delete_file', $result['rejected'] );
 		$this->assertSame( array(), Ssr_Callback_Registry::get_allowed_callbacks() );
+	}
+
+	public function testImportTrustedCallbacksDoesNotDowngradeOrDuplicateAlreadyTrustedName(): void {
+		update_option( Ssr_Callback_Registry::OPTION_KEY, array( 'is_email' ), false );
+
+		$result = Ssr_Callback_Registry::import_trusted_callbacks( array( 'is_email', 'is_numeric' ) );
+
+		$this->assertSame( array( 'is_numeric' ), $result['imported'] );
+		$this->assertSame( array( 'is_email', 'is_numeric' ), Ssr_Callback_Registry::get_allowed_callbacks() );
 	}
 
 	// -- Tab handler ------------------------------------------------------
@@ -326,20 +307,20 @@ class SsrCallbackRegistryTest extends \Codeception\TestCase\WPTestCase {
 
 		( new Version_3_6_5_3() )->up( $wpdb );
 
-		// Imported names are queued as pending, not granted live trust — they must not be
-		// callable until a manage_options admin approves them in Settings.
-		$this->assertContains( 'is_email', Ssr_Callback_Registry::get_pending_callbacks() );
-		$this->assertSame( array(), Ssr_Callback_Registry::get_allowed_callbacks() );
+		// Imported names are merged directly into the trusted registry: a custom callback
+		// already relied upon before the update keeps working without requiring a manual
+		// per-name admin approval (issues-tracker #20361 follow-up).
+		$this->assertContains( 'is_email', Ssr_Callback_Registry::get_allowed_callbacks() );
 
 		$notice = get_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION );
 		$this->assertContains( 'is_email', $notice['imported'] );
 
-		// Second run is a no-op: the pending queue is unchanged and stays deduped.
+		// Second run is a no-op: the trusted list is unchanged and stays deduped.
 		( new Version_3_6_5_3() )->up( $wpdb );
 
 		$this->assertSame(
 			array( 'is_email' ),
-			Ssr_Callback_Registry::get_pending_callbacks()
+			Ssr_Callback_Registry::get_allowed_callbacks()
 		);
 	}
 
@@ -359,8 +340,17 @@ class SsrCallbackRegistryTest extends \Codeception\TestCase\WPTestCase {
 
 		( new Version_3_6_5_3() )->up( $wpdb );
 
+		// wp_delete_file is denylisted, so it must never be imported; jfb_20361_missing_fn
+		// does not resolve to an existing function either. The migration notice, however,
+		// is written unconditionally once the scan completes — including when nothing was
+		// imported — so an admin also learns this form still fails SSR validation and needs
+		// a manual fix (issues-tracker #20361 follow-up; see `up()`'s docblock).
 		$this->assertSame( array(), Ssr_Callback_Registry::get_allowed_callbacks() );
-		$this->assertFalse( get_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION, false ) );
+
+		$notice = get_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION );
+		$this->assertIsArray( $notice );
+		$this->assertSame( array(), $notice['imported'] );
+		$this->assertSame( 1, $notice['blocked_forms_count'] );
 	}
 
 	public function testMigrationCreatesNoticeOnlyWhenSomethingWasImported(): void {

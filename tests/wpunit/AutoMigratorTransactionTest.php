@@ -38,7 +38,6 @@ class AutoMigratorTransactionTest extends \Codeception\TestCase\WPTestCase {
 		delete_option( Ssr_Callback_Allowlist::OPTION_KEY );
 		delete_option( Ssr_Callback_Allowlist::REBUILD_PROGRESS_OPTION );
 		delete_option( Ssr_Callback_Registry::OPTION_KEY );
-		delete_option( Ssr_Callback_Registry::PENDING_OPTION_KEY );
 		delete_option( Version_3_6_5_3::PROGRESS_OPTION );
 		delete_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION );
 	}
@@ -54,7 +53,6 @@ class AutoMigratorTransactionTest extends \Codeception\TestCase\WPTestCase {
 		delete_option( Ssr_Callback_Allowlist::OPTION_KEY );
 		delete_option( Ssr_Callback_Allowlist::REBUILD_PROGRESS_OPTION );
 		delete_option( Ssr_Callback_Registry::OPTION_KEY );
-		delete_option( Ssr_Callback_Registry::PENDING_OPTION_KEY );
 		delete_option( Version_3_6_5_3::PROGRESS_OPTION );
 		delete_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION );
 
@@ -184,10 +182,10 @@ class AutoMigratorTransactionTest extends \Codeception\TestCase\WPTestCase {
 		// Version_3_6_5_2 is still incomplete → version not stamped.
 		$this->assertFalse( get_option( Auto_Migrator::DB_VERSION_OPTION, false ) );
 
-		// Version_3_6_5_3 must not have run at all this request: nothing queued for review yet.
+		// Version_3_6_5_3 must not have run at all this request: nothing imported yet.
 		$this->assertSame(
 			array(),
-			Ssr_Callback_Registry::get_pending_callbacks(),
+			Ssr_Callback_Registry::get_allowed_callbacks(),
 			'Version_3_6_5_3 must not run in the same request as an incomplete Version_3_6_5_2, since the outer transaction is no longer intact.'
 		);
 
@@ -196,14 +194,14 @@ class AutoMigratorTransactionTest extends \Codeception\TestCase\WPTestCase {
 		Migrator::clear();
 		$this->invoke_run( new Auto_Migrator() );
 
-		// Version_3_6_5_3 queues discovered names as pending, not live trust — an admin must
-		// still approve them in Settings before they are callable.
+		// Version_3_6_5_3 merges discovered names directly into the trusted registry — a
+		// name already in use before the update is restored without requiring a manual
+		// per-name approval (issues-tracker #20361 follow-up).
 		$this->assertSame(
 			array( 'is_email' ),
-			Ssr_Callback_Registry::get_pending_callbacks(),
+			Ssr_Callback_Registry::get_allowed_callbacks(),
 			'Version_3_6_5_3 must run once Version_3_6_5_2 completes in a prior request.'
 		);
-		$this->assertSame( array(), Ssr_Callback_Registry::get_allowed_callbacks() );
 		$this->assertFalse( get_option( Version_3_6_5_3::PROGRESS_OPTION, false ) );
 	}
 

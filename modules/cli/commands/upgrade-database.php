@@ -5,6 +5,7 @@ namespace JFB_Modules\Cli\Commands;
 
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Migrations\Migration_Exception;
+use Jet_Form_Builder\Migrations\Migration_Incomplete_Exception;
 use Jet_Form_Builder\Migrations\Migrator;
 use Jet_Form_Builder\Migrations\Profilers\Cli_Migration_Profiler;
 
@@ -31,6 +32,14 @@ class Upgrade_Database implements Base_Command_It {
 
 			\WP_CLI::line();
 			\WP_CLI::success( 'Migrated successfully' );
+
+		} catch ( Migration_Incomplete_Exception $exception ) {
+			// Not a failure: a time-boxed migration (e.g. the SSR registry import) already
+			// committed its own partial progress and a resume cursor before throwing this —
+			// see its own docblock. There is nothing left to roll back here; running the
+			// command again resumes from that cursor.
+			\WP_CLI::line();
+			\WP_CLI::success( 'Migration is still in progress. Run this command again to continue.' );
 
 		} catch ( Migration_Exception $exception ) {
 			Execution_Builder::instance()->transaction_rollback();

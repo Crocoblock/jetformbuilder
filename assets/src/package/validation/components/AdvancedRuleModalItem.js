@@ -26,6 +26,7 @@ const {
 const {
 	      rule_types: ruleTypes,
 	      ssr_callbacks: ssrCallbacks,
+	      ssr_callbacks_settings_url: ssrCallbacksSettingsUrl,
       } = window.jetFormValidation;
 
 const ssrCallbacksKeys = ssrCallbacks.map( ( { value } ) => value );
@@ -128,6 +129,12 @@ addFilter(
 					value={ currentItem.value }
 					onChange={ value => changeCurrentItem( { value } ) }
 				/>
+				<Notice status="warning" isDismissible={ false }>
+					{ __( 'Custom functions must be added to Allowed Server-Side Callbacks in Settings before they will run.', 'jet-form-builder' ) + ' ' }
+					{ ssrCallbacksSettingsUrl && <a href={ ssrCallbacksSettingsUrl } target="_blank" rel="noreferrer">
+						{ __( 'Open Settings', 'jet-form-builder' ) }
+					</a> }
+				</Notice>
 				<BaseHelp>
 					{ __( 'Example of registering a function below.', 'jet-form-builder' ) + ' ' }
 					{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

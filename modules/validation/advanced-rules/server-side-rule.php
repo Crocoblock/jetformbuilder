@@ -206,6 +206,31 @@ class Server_Side_Rule extends Rule {
 	 */
 	const BUILTIN_ALLOWED = array();
 
+	/**
+	 * Small, immutable set of WordPress Core functions that are safe to call as a
+	 * "Server-Side callback" without any site configuration: each accepts exactly one
+	 * argument, returns `bool`, and performs no I/O or state changes. Available
+	 * unconditionally because the plugin's minimum supported WordPress version (see
+	 * `Requires at least` in the main plugin file) already guarantees all of them.
+	 *
+	 * @since 3.6.5.3
+	 */
+	const FIXED_SAFE = array(
+		'rest_is_boolean',
+		'rest_is_integer',
+		'rest_is_array',
+		'wp_is_numeric_array',
+		'is_serialized_string',
+		'wp_check_jsonp_callback',
+	);
+
+	/**
+	 * @var string[]|null Lazily built, request-scoped cache of built-in callback IDs.
+	 *
+	 * @since 3.6.5.3
+	 */
+	private static $builtin_callback_ids;
+
 	public function __construct() {
 		$this->rep_install();
 	}
@@ -214,16 +239,27 @@ class Server_Side_Rule extends Rule {
 	 * Whether $function_name resolves to one of the built-in callbacks (registered via
 	 * `rep_instances()`/`get_id()`), i.e. it will never be passed to `call_user_func()`.
 	 *
+	 * The built-in list is constant for the lifetime of a request (it only depends on hooks
+	 * already registered by the time SSR validation runs), so it is built once and cached
+	 * rather than reconstructing `self()` and all 4 callback objects, plus re-dispatching
+	 * `jet-form-builder/validation-callbacks`, on every call. This is called once per SSR
+	 * rule per form both in `Version_3_6_5_3`'s migration scan (up to 200 forms per batch)
+	 * and on every advanced-validation form render, so the uncached cost was not negligible.
+	 *
 	 * @since 3.6.5.2
+	 * @since 3.6.5.3 Cached for the request.
 	 */
 	public static function is_builtin_callback( string $function_name ): bool {
-		foreach ( ( new self() )->rep_instances() as $callback ) {
-			if ( $callback->get_id() === $function_name ) {
-				return true;
-			}
+		if ( null === self::$builtin_callback_ids ) {
+			self::$builtin_callback_ids = array_map(
+				static function ( $callback ) {
+					return $callback->get_id();
+				},
+				( new self() )->rep_instances()
+			);
 		}
 
-		return false;
+		return in_array( $function_name, self::$builtin_callback_ids, true );
 	}
 
 	public function rep_instances(): array {
@@ -304,40 +340,64 @@ class Server_Side_Rule extends Rule {
 			return false;
 		}
 
+		if ( in_array( strtolower( $name ), self::FIXED_SAFE, true ) ) {
+			return (bool) call_user_func( $name, $parser->get_value() );
+		}
+
 		return (bool) call_user_func( $name, $parser->get_value(), $parser->get_context() );
+	}
+
+	/**
+	 * Keeps only syntactically-valid function names, i.e. names that survive
+	 * `preg_replace('/[^\w]/i', '', ...)` unchanged. Shared between runtime validation
+	 * and the global registry so the two enforcement points can never drift.
+	 *
+	 * @since 3.6.5.3
+	 *
+	 * @return string Empty string if the name contains anything but word characters,
+	 *                lowercased name otherwise.
+	 */
+	public static function sanitize_callback_name( string $function_name ): string {
+		$name = preg_replace( '/[^\w]/i', '', $function_name );
+
+		if ( '' === $name || $name !== $function_name ) {
+			return '';
+		}
+
+		return strtolower( $name );
 	}
 
 	/**
 	 * Validate callback function name for security.
 	 *
-	 * Two checks apply, both must pass:
+	 * Checks applied, all must pass:
 	 * 1. Denylist (`NOT_ALLOWED`) — kept as defense in depth, blocks known-catastrophic
-	 *    functions outright even if the allowlist below is ever misconfigured.
+	 *    functions outright even if the allowlist below is ever misconfigured. Evaluated
+	 *    before the registry lookup, so it always takes priority.
 	 * 2. Allowlist — a function must be explicitly known-safe: either shipped with the
-	 *    plugin, collected from a form an editor actually saved with this callback
-	 *    configured (`Ssr_Callback_Allowlist`), or added by a site via the
+	 *    plugin, in the fixed-safe WordPress Core list, explicitly added by a site admin
+	 *    to the global `Ssr_Callback_Registry`, or added by a site via the
 	 *    `jet-form-builder/ssr-validation/allowed-callbacks` filter. A denylist alone
 	 *    cannot enumerate every dangerous function in PHP core + WordPress core + active
 	 *    plugins, so functions unknown to either list are rejected by default.
 	 *
 	 * @since 3.5.6.2 Denylist introduced.
 	 * @since 3.6.5.2 Allowlist enforcement added.
+	 * @since 3.6.5.3 Allowlist source moved from a per-form derived list to a single
+	 *                admin-managed global registry; lazy/autosave re-collection removed.
 	 *
 	 * @param string $function_name The function name to validate.
 	 *
 	 * @return string Empty string if invalid, function name if valid.
 	 */
 	protected function validate_callback( string $function_name ): string {
-		$name = preg_replace( '/[^\w]/i', '', $function_name );
+		$name = self::sanitize_callback_name( $function_name );
 
-		if ( $name !== $function_name ) {
+		if ( '' === $name ) {
 			return '';
 		}
 
-		// Case-insensitive checks (PHP function names are case-insensitive).
-		$name_lower = strtolower( $name );
-
-		if ( in_array( $name_lower, self::NOT_ALLOWED, true ) ) {
+		if ( in_array( $name, self::NOT_ALLOWED, true ) ) {
 			return '';
 		}
 
@@ -347,35 +407,24 @@ class Server_Side_Rule extends Rule {
 
 		$allowed = $this->get_allowed_callbacks();
 
-		if ( ! in_array( $name_lower, $allowed, true ) ) {
-			Ssr_Callback_Allowlist::refresh_allowed_callbacks_for_form(
-				(int) jet_fb_handler()->get_form_id()
-			);
-			$allowed = $this->get_allowed_callbacks();
-		}
-
-		return in_array( $name_lower, $allowed, true ) ? $name : '';
+		return in_array( $name, $allowed, true ) ? $name : '';
 	}
 
 	/**
-	 * Scoped to the form actually being submitted — a function name configured on one
-	 * form is never usable from another form, even though both may have been saved by
-	 * the same (already admin-gated) capability. See `Ssr_Callback_Allowlist` for why
-	 * this matters: the allowlist only records "some editor typed this name once", not
-	 * "this function is safe everywhere", so it must not widen past the form an editor
-	 * actually approved it on.
-	 *
 	 * @since 3.6.5.2
-	 * @since 3.6.5.3 Scoped per-form instead of site-wide.
+	 * @since 3.6.5.3 Scoped per-form instead of site-wide, then sourced from the single
+	 *                site-wide `Ssr_Callback_Registry` instead of a per-form derived list in
+	 *                the same release. The `$form_id` argument is still passed to the
+	 *                `jet-form-builder/ssr-validation/allowed-callbacks` filter for backward
+	 *                compatibility, even though the registry itself is no longer per-form.
 	 *
 	 * @return string[] Lowercased function names allowed to run via `call_user_func()`.
 	 */
 	protected function get_allowed_callbacks(): array {
 		$allowed = array_merge(
 			self::BUILTIN_ALLOWED,
-			Ssr_Callback_Allowlist::get_allowed_callbacks_for_form(
-				(int) jet_fb_handler()->get_form_id()
-			)
+			self::FIXED_SAFE,
+			Ssr_Callback_Registry::get_allowed_callbacks()
 		);
 
 		$allowed = (array) apply_filters(

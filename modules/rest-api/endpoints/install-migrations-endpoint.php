@@ -5,6 +5,7 @@ namespace JFB_Modules\Rest_Api\Endpoints;
 
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Migrations\Migration_Exception;
+use Jet_Form_Builder\Migrations\Migration_Incomplete_Exception;
 use Jet_Form_Builder\Migrations\Migrator;
 use JFB_Components\Rest_Api\Rest_Api_Endpoint_Base;
 
@@ -46,6 +47,17 @@ class Install_Migrations_Endpoint extends Rest_Api_Endpoint_Base {
 
 			Execution_Builder::instance()->transaction_commit();
 
+		} catch ( Migration_Incomplete_Exception $exception ) {
+			// Not a failure: a time-boxed migration (e.g. the SSR registry import) already
+			// committed its own partial progress and a resume cursor before throwing this —
+			// see its own docblock. There is nothing left to roll back here; calling this
+			// endpoint again resumes from that cursor.
+			return new \WP_REST_Response(
+				array(
+					'message'  => __( 'Migration is still in progress. Call this endpoint again to continue.', 'jet-form-builder' ),
+					'complete' => false,
+				)
+			);
 		} catch ( Migration_Exception $exception ) {
 			Execution_Builder::instance()->transaction_rollback();
 
@@ -60,7 +72,8 @@ class Install_Migrations_Endpoint extends Rest_Api_Endpoint_Base {
 
 		return new \WP_REST_Response(
 			array(
-				'message' => __( 'Successfully installed migrations.', 'jet-form-builder' ),
+				'message'  => __( 'Successfully installed migrations.', 'jet-form-builder' ),
+				'complete' => true,
 			)
 		);
 	}

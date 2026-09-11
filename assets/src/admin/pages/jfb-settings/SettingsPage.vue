@@ -57,6 +57,7 @@ import * as paymentGateways from './tabs/payments-gateways';
 import * as options from './tabs/options';
 import * as userJourney from './tabs/user-journey';
 import * as phoneField from './tabs/phone-field';
+import * as ssrCallbacks from './tabs/ssr-callbacks';
 import SettingsSideBar from './sidebar/SettingsSideBar';
 
 const { applyFilters, doAction } = wp.hooks;
@@ -84,6 +85,7 @@ const settingTabs = applyFilters( 'jet.fb.register.settings-page.tabs', [
 	phoneField,
 	mailchimp,
 	getResponse,
+	ssrCallbacks,
 ] );
 
 const changeHash = hash => {

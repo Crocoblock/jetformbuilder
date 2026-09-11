@@ -17,11 +17,17 @@ use JFB_Components\Module\Base_Module_Handle_Trait;
 use JFB_Components\Module\Base_Module_It;
 use JFB_Components\Module\Base_Module_Url_It;
 use JFB_Components\Module\Base_Module_Url_Trait;
+use Jet_Form_Builder\Admin\Pages\Pages_Manager;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Ssr_Callbacks_Handler;
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
-use JFB_Modules\Validation\Advanced_Rules\Ssr_Callback_Allowlist;
+use JFB_Modules\Validation\Advanced_Rules\Server_Side_Rule;
+use JFB_Modules\Validation\Advanced_Rules\Ssr_Callback_Registry;
 use JFB_Modules\Validation\Class_Validation_Handlers;
 use JFB_Modules\Validation\Handlers\Validation_Handler;
 use JFB_Modules\Validation\Rest_Api\Rest_Validation_Endpoint;
+use JFB_Modules\Validation\Ssr\Ssr_Blocked_Callback_Usages;
+use JFB_Modules\Validation\Ssr\Ssr_Registry_Migration_Notice;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -51,9 +57,9 @@ final class Module implements
 	private $settings;
 	private $inline_messages = array();
 	/**
-	 * @var Ssr_Callback_Allowlist
+	 * @var Ssr_Registry_Migration_Notice
 	 */
-	private $ssr_allowlist;
+	private $ssr_registry_migration_notice;
 
 	public function rep_item_id() {
 		return 'validation';
@@ -82,6 +88,8 @@ final class Module implements
 		/** @var \JFB_Modules\Rest_Api\Module $rest_api */
 		$rest_api = jet_form_builder()->module( 'rest-api' );
 		$rest_api->get_controller()->install( new Rest_Api\Rest_Validation_Endpoint() );
+
+		Tab_Handler_Manager::instance()->install( new Ssr_Callbacks_Handler() );
 	}
 
 	/**
@@ -98,6 +106,8 @@ final class Module implements
 		/** @var \JFB_Modules\Rest_Api\Module $rest_api */
 		$rest_api = jet_form_builder()->module( 'rest-api' );
 		$rest_api->get_controller()->uninstall( new Rest_Api\Rest_Validation_Endpoint() );
+
+		Tab_Handler_Manager::instance()->uninstall( 'ssr-callbacks-tab' );
 	}
 
 	public function init_hooks() {
@@ -131,8 +141,17 @@ final class Module implements
 			'jet-form-builder/editor-assets/before',
 			array( $this, 'localize_editor_config' )
 		);
+		add_action(
+			'save_post_jet-form-builder',
+			array( $this, 'refresh_blocked_callback_usages' )
+		);
+		add_action(
+			'delete_post',
+			array( $this, 'remove_blocked_callback_usages_for_deleted_form' )
+		);
 
-		$this->ssr_allowlist = new Ssr_Callback_Allowlist();
+		$this->ssr_registry_migration_notice = new Ssr_Registry_Migration_Notice();
+		$this->ssr_registry_migration_notice->init_hooks();
 	}
 
 	public function remove_hooks() {
@@ -165,9 +184,17 @@ final class Module implements
 			'jet-form-builder/editor-assets/before',
 			array( $this, 'localize_editor_config' )
 		);
+		remove_action(
+			'save_post_jet-form-builder',
+			array( $this, 'refresh_blocked_callback_usages' )
+		);
+		remove_action(
+			'delete_post',
+			array( $this, 'remove_blocked_callback_usages_for_deleted_form' )
+		);
 
-		if ( $this->ssr_allowlist ) {
-			$this->ssr_allowlist->remove_hooks();
+		if ( $this->ssr_registry_migration_notice ) {
+			$this->ssr_registry_migration_notice->remove_hooks();
 		}
 	}
 
@@ -236,6 +263,58 @@ final class Module implements
 		return $markup;
 	}
 
+	/**
+	 * Keeps `Ssr_Blocked_Callback_Usages` in sync with a form's current content: an admin
+	 * who edits a form to fix a denylisted "Server-Side callback" rule (issues-tracker
+	 * #20361 follow-up) should see it drop off the "Forms Using Blocked Functions" list
+	 * immediately, not have it linger as if nothing changed. Only ever removes/replaces
+	 * entries for the saved form's own ID — it never grants trust to anything (a denylisted
+	 * name can never be approved regardless of what this records), so it carries none of the
+	 * self-service allowlist risk the retired `Ssr_Callback_Allowlist` save-post hooks had.
+	 *
+	 * @since 3.6.5.3
+	 *
+	 * @param int $post_id
+	 */
+	public function refresh_blocked_callback_usages( int $post_id ) {
+		if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		$post = get_post( $post_id );
+
+		if ( ! $post instanceof \WP_Post ) {
+			return;
+		}
+
+		Ssr_Blocked_Callback_Usages::replace_for_form(
+			$post_id,
+			Ssr_Blocked_Callback_Usages::collect_from_content( $post->post_content )
+		);
+	}
+
+	/**
+	 * `refresh_blocked_callback_usages()` only ever runs on `save_post_jet-form-builder`, so
+	 * a form that is permanently deleted (not just trashed — `Ssr_Blocked_Callback_Usages`
+	 * should still list a trashed form, since it can still be restored) never gets its entry
+	 * removed: the settings tab would otherwise keep showing a phantom "Forms Using Blocked
+	 * Functions" row with a dead edit link forever (review finding, issues-tracker #20361
+	 * follow-up). `delete_post` fires for every post type, so this checks `post_type` itself
+	 * rather than relying on a `delete_post_{post_type}`-style hook, which WordPress does not
+	 * provide.
+	 *
+	 * @since 3.6.5.3
+	 *
+	 * @param int $post_id
+	 */
+	public function remove_blocked_callback_usages_for_deleted_form( int $post_id ) {
+		if ( 'jet-form-builder' !== get_post_type( $post_id ) ) {
+			return;
+		}
+
+		Ssr_Blocked_Callback_Usages::replace_for_form( $post_id, array() );
+	}
+
 	public function add_validation_block( Base $block ) {
 		/**
 		 * If in post meta enable Advanced validation
@@ -289,6 +368,27 @@ final class Module implements
 					// and JS reads it from there instead of duplicating it in this
 					// public JSON blob (https://github.com/Crocoblock/issues-tracker/issues/20361).
 					$rule['_sig_key'] = $signature_key;
+
+					// Security: replace a custom callback's clean name with a stable
+					// opaque ID in this public JSON blob only. The form itself (and
+					// $block->block_attrs) still stores the clean name — the server
+					// always resolves the callback from there, never from this ID or
+					// from the request. Built-ins and the fixed-safe WP Core list are
+					// safe by construction and are left in the clear.
+					$callback_name = (string) ( $rule['value'] ?? '' );
+
+					// PHP function names are case-insensitive, and is_builtin_callback()
+					// compares against lowercase IDs — lowercase here too (matching the
+					// FIXED_SAFE check just below) so a builtin saved with non-canonical
+					// casing is still recognized as built-in and left in the clear, rather
+					// than being needlessly masked behind an opaque registry ID.
+					if (
+						'' !== $callback_name
+						&& ! Server_Side_Rule::is_builtin_callback( strtolower( $callback_name ) )
+						&& ! in_array( strtolower( $callback_name ), Server_Side_Rule::FIXED_SAFE, true )
+					) {
+						$rule['value'] = Ssr_Callback_Registry::id_for_callback( $callback_name );
+					}
 				}
 			}
 			unset( $rule );
@@ -389,10 +489,11 @@ final class Module implements
 			Editor::EDITOR_PACKAGE_HANDLE,
 			'jetFormValidation',
 			array(
-				'messages'      => Array_Tools::to_array( $this->get_messages() ),
-				'ssr_callbacks' => Array_Tools::to_array( $this->get_rules()->get_ssr()->get_callbacks() ),
-				'formats'       => $this->formats(),
-				'rule_types'    => Array_Tools::to_array( $this->get_rules()->rep_get_values() ),
+				'messages'                   => Array_Tools::to_array( $this->get_messages() ),
+				'ssr_callbacks'              => Array_Tools::to_array( $this->get_rules()->get_ssr()->get_callbacks() ),
+				'formats'                    => $this->formats(),
+				'rule_types'                 => Array_Tools::to_array( $this->get_rules()->rep_get_values() ),
+				'ssr_callbacks_settings_url' => Pages_Manager::instance()->get_stable_url( 'jfb-settings' ) . '#ssr-callbacks-tab',
 			)
 		);
 	}

@@ -12,12 +12,12 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Starts a bounded backfill of the SSR "Server-Side callback" allowlist. The first batch
- * runs immediately and a capable admin page processes the remainder through a sequence
- * of short AJAX requests, resuming from a persisted form-ID cursor when needed. Forms
- * reached before the backfill completes initialize their own allowlist lazily from saved
- * content, so unattended updates do not interrupt existing custom validation. The
- * backfill does not depend on WP-Cron.
+ * Runs a time-boxed backfill of the SSR "Server-Side callback" allowlist
+ * (`Ssr_Callback_Allowlist::rebuild_from_all_forms()`). When the forms table is large
+ * enough that a full scan would exceed its time budget, progress (a form-ID cursor plus
+ * the partial callback accumulator) is persisted and the call throws, leaving this
+ * migration "not installed" so the next capable admin's `admin_init` request resumes the
+ * scan automatically. The backfill does not depend on WP-Cron or AJAX.
  *
  * @since 3.6.5.2
  */

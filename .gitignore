@@ -33,8 +33,10 @@ tests/wpunit/*
 !tests/wpunit/TrustedPriceResolverTest.php
 !tests/wpunit/PresetAccessControlTest.php
 !tests/wpunit/FormMessageShortcodeSecurityTest.php
-!tests/wpunit/SsrCallbackAllowlistTest.php
+!tests/wpunit/SsrCallbackRegistryTest.php
+!tests/wpunit/SsrCallbackMigrationBatchingTest.php
 !tests/wpunit/AutoMigratorTest.php
+!tests/wpunit/AutoMigratorTransactionTest.php
 !tests/wpunit/MediaFieldPreviewEscapingTest.php
 test-results/
 AGENTS.md

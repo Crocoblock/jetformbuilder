@@ -4,6 +4,7 @@ namespace JFB_Tests\Wpunit;
 
 use Jet_Form_Builder\Migrations\Auto_Migrator;
 use Jet_Form_Builder\Migrations\Versions\Version_3_6_5_2;
+use Jet_Form_Builder\Migrations\Versions\Version_3_6_5_3;
 
 /**
  * Coverage for the auto-run-migrations-on-update mechanism (`Auto_Migrator`), including
@@ -135,7 +136,7 @@ class AutoMigratorTest extends \Codeception\TestCase\WPTestCase {
 		};
 
 		$this->assertSame(
-			array( Version_3_6_5_2::class ),
+			array( Version_3_6_5_2::class, Version_3_6_5_3::class ),
 			$probe->migration_classes(),
 			'Auto migration must not execute the full historical Migrator registry.'
 		);

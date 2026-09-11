@@ -6,6 +6,7 @@ namespace Jet_Form_Builder\Migrations;
 use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Migrations\Versions\Version_3_6_5_2;
+use Jet_Form_Builder\Migrations\Versions\Version_3_6_5_3;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -28,10 +29,16 @@ if ( ! defined( 'WPINC' ) ) {
  * may skip the release that introduced `Version_3_6_5_2` and update directly to 3.7.0 (or
  * later): its stored DB version is still older than the running plugin, the auto-migrator
  * runs, and `Base_Migration::install()` executes every selected migration that is not yet
- * recorded in the migrations table. `Version_3_6_5_2` performs only one bounded batch in
- * this request; a capable admin page processes the remainder through short AJAX requests
- * using persisted progress, while per-form lazy initialization keeps frontend submissions
- * working in the meantime.
+ * recorded in the migrations table. `Version_3_6_5_2` and `Version_3_6_5_3` each run a
+ * time-boxed batch loop per request and persist a resume cursor when their time budget is
+ * exceeded; an incomplete pass throws so the migration stays "not installed" and the next
+ * capable admin's `admin_init` request continues it automatically from that cursor — no
+ * AJAX or manual admin-page step is involved. A migration signaling an incomplete batch also
+ * issues its own intermediate `COMMIT` before throwing (to persist the resume cursor), which
+ * ends the transaction this class started; `install_migrations()` therefore stops immediately
+ * on that signal rather than attempting a later migration outside any transaction. The next
+ * capable admin's request retries from the beginning of `migration_instances()`, skipping
+ * whatever already recorded itself as installed, until every migration completes.
  *
  * @since 3.6.5.2
  */
@@ -89,6 +96,21 @@ class Auto_Migrator {
 		return version_compare( $stored, JET_FORM_BUILDER_VERSION, '<' );
 	}
 
+	/**
+	 * Whether the auto-migration set (`migration_instances()`) has not yet fully completed
+	 * for this site. On a small site this is true for at most a single `admin_init` request;
+	 * on a large site it can span several requests while a time-boxed migration resumes
+	 * itself batch by batch. Exposed so UI that depends on the migrated data being complete
+	 * (e.g. the "Allowed Server-Side Callbacks" settings tab, whose `import_trusted_callbacks()`
+	 * only runs once the whole scan finishes) can disable editing and show a wait state
+	 * instead of racing a save against a migration batch still in flight.
+	 *
+	 * @since 3.6.5.3
+	 */
+	public function is_migration_in_progress(): bool {
+		return $this->needs_upgrade() && ! $this->all_installed();
+	}
+
 	protected function run() {
 		// Nothing outstanding (e.g. fresh install already stamped by table creation) →
 		// just record the version and skip touching the DB in a transaction.
@@ -133,7 +155,18 @@ class Auto_Migrator {
 	 * an old migration in this list is both safe and required for clients that skip the
 	 * release where it was introduced.
 	 *
+	 * A migration signaling an incomplete batch (`Migration_Incomplete_Exception`) stops the
+	 * loop immediately instead of continuing to the next migration. Time-boxed migrations
+	 * (e.g. `Version_3_6_5_2`, `Version_3_6_5_3`) persist their own progress by issuing an
+	 * intermediate `COMMIT` before throwing, so the outer transaction `run()` started is no
+	 * longer intact once one of them yields — a later migration run in that same request
+	 * would execute outside any transaction, and a genuine failure in it could no longer be
+	 * rolled back. Re-throwing right away still leaves `needs_upgrade()` true (via `run()`'s
+	 * catch block skipping `stamp_version()`) so the next capable admin request resumes the
+	 * interrupted migration, and only then attempts the ones after it.
+	 *
 	 * @throws \Jet_Form_Builder\Migrations\Migration_Exception
+	 * @throws \Jet_Form_Builder\Migrations\Migration_Incomplete_Exception
 	 */
 	protected function install_migrations() {
 		foreach ( $this->migration_instances() as $migration ) {
@@ -161,6 +194,7 @@ class Auto_Migrator {
 	protected function migration_instances(): array {
 		return array(
 			new Version_3_6_5_2(),
+			new Version_3_6_5_3(),
 		);
 	}
 

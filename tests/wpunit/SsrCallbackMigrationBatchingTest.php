@@ -27,7 +27,9 @@ class SsrCallbackMigrationBatchingTest extends \Codeception\TestCase\WPTestCase 
 		delete_option( Ssr_Callback_Registry::OPTION_KEY );
 		delete_option( Version_3_6_5_3::PROGRESS_OPTION );
 		delete_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION );
-		delete_option( Ssr_Blocked_Callback_Usages::OPTION_KEY );
+
+		global $wpdb;
+		$wpdb->delete( $wpdb->postmeta, array( 'meta_key' => Ssr_Blocked_Callback_Usages::META_KEY ) );
 	}
 
 	public function tearDown(): void {
@@ -39,11 +41,13 @@ class SsrCallbackMigrationBatchingTest extends \Codeception\TestCase\WPTestCase 
 		delete_option( Ssr_Callback_Registry::OPTION_KEY );
 		delete_option( Version_3_6_5_3::PROGRESS_OPTION );
 		delete_option( Ssr_Registry_Migration_Notice::NOTICE_OPTION );
-		delete_option( Ssr_Blocked_Callback_Usages::OPTION_KEY );
 
 		global $wpdb;
+		$wpdb->delete( $wpdb->postmeta, array( 'meta_key' => Ssr_Blocked_Callback_Usages::META_KEY ) );
 
 		// The forms this test created via create_ssr_forms() must not leak into a later test.
+		// A direct SQL DELETE (not wp_delete_post()) does not cascade to wp_postmeta, so the
+		// META_KEY cleanup above must happen before or alongside this, not rely on it.
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->posts} WHERE post_type = %s", 'jet-form-builder' ) );
 
 		// `rebuild_from_all_forms()`/`Version_3_6_5_3::up()` issue their own `COMMIT` mid-run

@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.5.3
+* FIX: Secure SSR callbacks with admin-managed registry
+
 ## 3.6.5.2
 * FIX: Advanced Choices compatibility with WordPress 7.1
 * FIX: Harden preset access checks

@@ -7,11 +7,11 @@ const label = {
 
 const help = {
 	callbacks: __(
-		'One PHP function name per line. Only functions listed here (or shipped with JetFormBuilder) can be used as a "Server-Side callback" validation rule. Saving a form never adds a function to this list — it must be added here first. Changes here are not saved automatically — click Save when you are done editing.',
+		'Enter custom PHP function names here (one per line) to allow them in your forms. Built-in functions are already allowed. Always click "Save" to apply changes.',
 		'jet-form-builder',
 	),
 	blocked: __(
-		'These forms use a function that is never allowed to run as a "Server-Side callback," for security reasons. It cannot be approved — edit each form and remove or replace the rule, or the field will keep failing validation. This list includes forms found during the update scan as well as any form saved since then that still uses a blocked function; a form drops off automatically once it is resaved without one.',
+		'These forms use unsafe validation rules that are strictly blocked. To fix them, edit the form and change or remove the Server-Side callback function. The form will automatically disappear from this list once saved.',
 		'jet-form-builder',
 	),
 	migrationInProgress: __(

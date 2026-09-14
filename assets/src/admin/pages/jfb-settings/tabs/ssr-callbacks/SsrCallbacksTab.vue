@@ -28,13 +28,15 @@
 					<span slot="label">{{ __( 'Save', 'jet-form-builder' ) }}</span>
 				</cx-vui-button>
 			</cx-vui-component-wrapper>
-			<p v-if="hasRejected" class="jfb-ssr-callbacks-rejected">
+			<div v-if="hasRejected" class="jfb-ssr-callbacks-rejected">
 				<strong>{{ __( 'Not saved:', 'jet-form-builder' ) }}</strong>
-				<span
-					v-for="( reason, name ) in rejected"
-					:key="name"
-				>{{ name }} — {{ reason }}; </span>
-			</p>
+				<ul class="jfb-ssr-callbacks-rejected__list">
+					<li
+						v-for="name in rejectedNames"
+						:key="name"
+					>{{ name }} — {{ rejected[ name ] }}</li>
+				</ul>
+			</div>
 			<cx-vui-component-wrapper
 				v-if="blocked.length"
 				:label="`${label.blocked} (${blocked.length})`"
@@ -105,6 +107,14 @@ export default {
 	computed: {
 		hasRejected() {
 			return Object.keys( this.rejected ).length > 0;
+		},
+		// `rejected` is a plain object, so a trailing "; " baked into each rendered item
+		// (rather than joined between items) left a stray "; " after the last — and only —
+		// entry whenever exactly one name was rejected (review finding, issues-tracker
+		// #20361 follow-up). Listing names separately lets the template only add the
+		// separator between items, not after the final one.
+		rejectedNames() {
+			return Object.keys( this.rejected );
 		},
 		// Gates the Save button: saving only happens on an explicit click now (no
 		// blur-triggered autosave), specifically so an accidental select-all-and-delete in
@@ -234,6 +244,24 @@ export default {
 	font-size: 14px;
 	padding: 0 20px;
 	margin: -10px 0 20px;
+}
+
+.jfb-ssr-callbacks-rejected__list {
+	margin: 4px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.jfb-ssr-callbacks-rejected__list li {
+	margin-bottom: 2px;
+	padding-left: 14px;
+	position: relative;
+}
+
+.jfb-ssr-callbacks-rejected__list li::before {
+	content: '–';
+	position: absolute;
+	left: 0;
 }
 
 .jfb-ssr-blocked__list {

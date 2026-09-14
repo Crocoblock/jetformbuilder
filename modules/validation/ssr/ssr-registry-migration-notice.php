@@ -126,17 +126,17 @@ class Ssr_Registry_Migration_Notice {
 		?>
 		<div class="notice <?php echo esc_attr( $notice_class ); ?>">
 			<p>
-				<strong><?php esc_html_e( 'JetFormBuilder - Server-Side Callbacks Update Summary', 'jet-form-builder' ); ?></strong>
+				<strong><?php esc_html_e( 'JetFormBuilder: Server-Side Validation Update', 'jet-form-builder' ); ?></strong>
 			</p>
 			<?php if ( $imported_count > 0 ) : ?>
 				<p>
 					<?php
-					echo esc_html(
+					echo '✅ ' . esc_html( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						sprintf(
 							/* translators: %d: number of custom "Server-Side callback" function names restored. */
 							_n(
-								'%d custom "Server-Side callback" function name already used in your existing forms was found safe and automatically kept allowed — those forms keep passing server-side validation, no action needed.',
-								'%d custom "Server-Side callback" function names already used in your existing forms were found safe and automatically kept allowed — those forms keep passing server-side validation, no action needed.',
+								'%d custom function used in your forms was automatically approved. No action needed.',
+								'%d custom functions used in your forms were automatically approved. No action needed.',
 								$imported_count,
 								'jet-form-builder'
 							),
@@ -149,12 +149,12 @@ class Ssr_Registry_Migration_Notice {
 			<?php if ( $blocked_count > 0 ) : ?>
 				<p>
 					<?php
-					echo esc_html(
+					echo '⚠️ ' . esc_html( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						sprintf(
 							/* translators: %d: number of forms using a permanently blocked callback function. */
 							_n(
-								'%d form uses a "Server-Side callback" function that is never allowed to run for security reasons. It could not be restored — that form will keep failing server-side validation until you edit it and remove or replace the rule.',
-								'%d forms use a "Server-Side callback" function that is never allowed to run for security reasons. They could not be restored — those forms will keep failing server-side validation until you edit them and remove or replace the rule.',
+								'%d form uses an insecure function that is now blocked. You must edit this form and replace the validation rule, otherwise it will fail to submit.',
+								'%d forms use insecure functions that are now blocked. You must edit these forms and replace the validation rule, otherwise they will fail to submit.',
 								$blocked_count,
 								'jet-form-builder'
 							),

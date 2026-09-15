@@ -28,15 +28,29 @@ function CalculatedData() {
 	};
 	this.setValue    = function () {
 		const formula = new CalculatedFormula( this, { forceFunction: true } );
+		let lastResult;
 
 		formula.observe( this.formula );
-		formula.setResult       = () => {
-			if ( 'date' === this.valueTypeProp ) {
-				const date_formula = formula.calculate();
-				this.value.current = convertMillisToDateString( date_formula, this.dateFormat );
-			} else {
-				this.value.current = formula.calculate();
+		formula.setResult       = ( beforeSubmit = false ) => {
+			const calculated = formula.calculate();
+			const result = 'date' === this.valueTypeProp
+			               ? convertMillisToDateString( calculated, this.dateFormat )
+			               : calculated;
+
+			// Compare formula results, not the formatted value or a manual override.
+			if ( beforeSubmit && Object.is( lastResult, result ) ) {
+				return;
 			}
+
+			lastResult = result;
+
+			if ( beforeSubmit ) {
+				this.value.silence();
+				this.value.current = null;
+				this.value.silence();
+			}
+
+			this.value.current = result;
 		};
 		formula.relatedCallback = ( input ) => {
 			const value = applyFilters(
@@ -76,11 +90,7 @@ function CalculatedData() {
 		this.value.current = this.value.applySanitizers( this.value.current );
 
 		this.beforeSubmit( ( resolve ) => {
-			this.value.silence();
-			this.value.current = null;
-			this.value.silence();
-
-			formula.setResult();
+			formula.setResult( true );
 			resolve();
 		}, this );
 	};

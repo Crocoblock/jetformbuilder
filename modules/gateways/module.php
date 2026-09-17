@@ -274,7 +274,36 @@ class Module implements
 	public function save_gateways_form_data( $data ) {
 		$id = $data['gateway'];
 
-		$this->gateways_form_data = $this->with_global_settings( $data, $id );
+		$this->gateways_form_data = self::with_gateway_price_field( $this->with_global_settings( $data, $id ), $id );
+	}
+
+	/**
+	 * Resolve the selected gateway's price field in a runtime copy only.
+	 * Missing keys retain the legacy form-wide value; explicit empty values do not.
+	 */
+	public static function with_gateway_price_field( array $settings, string $gateway_id ): array {
+		if ( ! self::uses_individual_price_fields( $settings ) ) {
+			return $settings;
+		}
+
+		$gateway = $settings[ $gateway_id ] ?? array();
+
+		if ( is_array( $gateway ) && array_key_exists( 'price_field', $gateway ) ) {
+			$settings['price_field'] = $gateway['price_field'];
+		}
+
+		return $settings;
+	}
+
+	public static function uses_individual_price_fields( array $settings ): bool {
+		$uses_stripe = 'manual' === ( $settings['mode'] ?? 'single' )
+			? ! empty( $settings['stripe']['show_on_front'] )
+			: 'stripe' === ( $settings['gateway'] ?? '' );
+
+		return ! $uses_stripe || (
+			defined( 'JET_FB_STRIPE_INDIVIDUAL_PRICE_FIELDS' )
+			&& JET_FB_STRIPE_INDIVIDUAL_PRICE_FIELDS
+		);
 	}
 
 	/**

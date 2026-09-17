@@ -8,6 +8,15 @@ const { addFilter, applyFilters } = wp.hooks;
 
 const gatewayID = 'paypal';
 
+// Presence of this function also signals support to updated gateway add-ons.
+JetFBActions.useIndividualPriceFields = function ( settings ) {
+	const usesStripe = settings?.mode === 'manual'
+		? !!settings?.stripe?.show_on_front
+		: settings?.gateway === 'stripe';
+
+	return !usesStripe || !!window.JetFormEditorData?.gateways?.stripe_individual_price_fields;
+};
+
 function getValidationData() {
 	return window?.JetFormEditorData?.gateways?.validation || {};
 }

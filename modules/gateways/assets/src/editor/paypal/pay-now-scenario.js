@@ -78,10 +78,17 @@ function PayNowScenario( {
 			<SelectControl
 				label={ globalGatewayLabel( 'price_field' ) }
 				key={ 'form_fields_price_field' }
-				value={ gatewayGeneral.price_field }
+				value={ JetFBActions.useIndividualPriceFields?.( gatewayGeneral )
+					&& Object.prototype.hasOwnProperty.call( gatewaySpecific, 'price_field' )
+					? gatewaySpecific.price_field
+					: gatewayGeneral.price_field }
 				labelPosition='side'
 				onChange={ price_field => {
-					setGateway( { price_field } );
+					if ( JetFBActions.useIndividualPriceFields?.( gatewayGeneral ) ) {
+						setGatewaySpecific( { price_field } );
+					} else {
+						setGateway( { price_field } );
+					}
 				} }
 				options={ formFields }
 			/>

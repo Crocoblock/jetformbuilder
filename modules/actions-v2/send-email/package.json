@@ -10,6 +10,8 @@
 		"dev": "npx webpack build --mode development -w"
 	},
 	"dependencies": {
+		"@linaria/react": "^6.2.1",
+		"@wordpress/icons": "^9.43.0",
 		"jet-form-builder-components": "*",
 		"jet-form-builder-data": "*",
 		"jet-form-builder-actions": "*",

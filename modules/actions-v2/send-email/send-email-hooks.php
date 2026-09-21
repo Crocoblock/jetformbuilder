@@ -47,14 +47,12 @@ class Send_Email_Hooks {
 	}
 
 	public static function basic_content_formatting( Send_Email_Action $email ) {
-		$message = $email->get_content();
-
-		if ( $email->is_html() && empty( $email->settings['disable_format'] ) ) {
-			$message = make_clickable( wpautop( $message ) );
-		}
-
 		$email->set_content(
-			str_replace( '&#038;', '&amp;', $message )
+			Content_Formatter::format(
+				$email->get_content(),
+				$email->is_html(),
+				! empty( $email->settings['disable_format'] )
+			)
 		);
 	}
 

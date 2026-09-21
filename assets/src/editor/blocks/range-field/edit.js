@@ -30,6 +30,7 @@ const {
 	      __experimentalInputControl,
       } = wp.components;
 const {
+	      useEffect,
 	      useState,
       } = wp.element;
 
@@ -58,6 +59,22 @@ export default function RangeEdit( props ) {
 		      setAttributes,
 		      editProps: { uniqKey, attrHelp },
 	      } = props;
+
+	useEffect( () => {
+		const styles = { ...attributes.crocoblock_styles };
+		let changed = false;
+
+		[ 'range_height', 'slider_size' ].forEach( key => {
+			if ( /^-?(?:\d+\.?\d*|\.\d+)$/.test( styles[ key ] ) ) {
+				styles[ key ] += 'px';
+				changed = true;
+			}
+		} );
+
+		if ( changed ) {
+			setAttributes( { crocoblock_styles: styles } );
+		}
+	}, [ attributes.crocoblock_styles, setAttributes ] );
 
 	if ( attributes.isPreview ) {
 		return <div style={ {

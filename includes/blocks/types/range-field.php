@@ -39,6 +39,45 @@ class Range_Field extends Base {
 		return 'range-field';
 	}
 
+	/**
+	 * Initialize style manager for the block.
+	 *
+	 * @param object $style_manager Style manager instance.
+	 */
+	public function maybe_init_style_manager( $style_manager ) {
+		parent::maybe_init_style_manager( $style_manager );
+
+		add_filter( 'render_block_data', array( $this, 'normalize_legacy_style_units' ) );
+	}
+
+	/**
+	 * Add pixels to unitless range styles saved by 3.6.0.
+	 *
+	 * @param array $parsed_block Parsed block data.
+	 * @return array
+	 */
+	public function normalize_legacy_style_units( $parsed_block ) {
+
+		if ( $this->block_name() !== ( $parsed_block['blockName'] ?? '' ) ) {
+			return $parsed_block;
+		}
+
+		$styles = $parsed_block['attrs']['crocoblock_styles'] ?? null;
+		if ( ! is_array( $styles ) ) {
+			return $parsed_block;
+		}
+
+		foreach ( array( 'range_height', 'slider_size' ) as $style_key ) {
+			if ( isset( $styles[ $style_key ] ) && is_numeric( $styles[ $style_key ] ) ) {
+				$styles[ $style_key ] .= 'px';
+			}
+		}
+
+		$parsed_block['attrs']['crocoblock_styles'] = $styles;
+
+		return $parsed_block;
+	}
+
 	public function style_slider( $style_line ) {
 		return array(
 			'{{WRAPPER}} ' . $this->css_scheme['front-field'] . '::-webkit-slider-thumb' => $style_line,

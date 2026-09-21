@@ -1,5 +1,3 @@
-import { __ } from '@wordpress/i18n';
-
 // Keep email styles in their own document, with no active content or navigation.
 function previewDocument( content ) {
 	const preview = new DOMParser().parseFromString( content, 'text/html' );
@@ -27,7 +25,7 @@ function previewDocument( content ) {
 			image.setAttribute( 'src', assetsUrl + 'img/image-placeholder.jpg' );
 			image.removeAttribute( 'srcset' );
 			image.removeAttribute( 'sizes' );
-			image.setAttribute( 'title', `${ __( 'Dynamic image', 'jet-form-builder' ) }: ${ source }` );
+			image.setAttribute( 'title', source );
 			if ( 'PICTURE' === image.parentElement?.tagName ) {
 				image.parentElement.querySelectorAll( 'source' ).forEach( element => element.remove() );
 			}

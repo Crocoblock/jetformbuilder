@@ -39,7 +39,8 @@ function ContentRow( { settings, onChangeSettingObj } ) {
 					macroScope="send-email.content"
 					withCurrent
 				/>
-				<EmailPreview settings={ settings }/>
+				{ ( !settings.content_type || 'text/html' === settings.content_type ) &&
+					<EmailPreview settings={ settings }/> }
 			</LabelWithActions>
 			<RowControlEnd hasError={ hasError }>
 				<StyledTextareaControl

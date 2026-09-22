@@ -351,6 +351,19 @@ function createFormulaLexicalContext() {
 						templateExpressionDepths[
 							templateExpressionDepths.length - 1
 						]++;
+
+						// `{` is itself a significant token (e.g. it can
+						// open a nested block/function body inside `${...}`,
+						// not just increase interpolation depth) - track it
+						// like any other punctuation so a `/` right after a
+						// nested `}` closing that block is still correctly
+						// classified relative to it, instead of stale state
+						// left over from before this `{`.
+						if ( sawWhitespaceSinceSignificant ) {
+							wordBeforePrevious = previousSignificant;
+						}
+						previousSignificant = current;
+						sawWhitespaceSinceSignificant = false;
 					}
 					else if ( '}' === current ) {
 						const depthIndex = templateExpressionDepths.length - 1;
@@ -358,6 +371,20 @@ function createFormulaLexicalContext() {
 						if ( 0 === --templateExpressionDepths[ depthIndex ] ) {
 							templateExpressionDepths.pop();
 							state = 'template';
+						}
+						else if ( sawWhitespaceSinceSignificant ) {
+							wordBeforePrevious = previousSignificant;
+						}
+
+						// Same as `{` above: a nested `}` (closing a block/
+						// function body inside `${...}`, not the `${...}`
+						// itself) is a real token that the regex-vs-division
+						// heuristic must see, so a macro-adjacent `/` right
+						// after it is escaped as regex content rather than
+						// falling back to stale pre-`{` state.
+						if ( 'template-expression' === state ) {
+							previousSignificant = current;
+							sawWhitespaceSinceSignificant = false;
 						}
 					}
 					else if ( !/\s/.test( current ) ) {
@@ -920,6 +947,7 @@ CalculatedFormula.prototype = {
 
 			const normalizedResult = (
 				       null === result ||
+				       undefined === result ||
 				       '' === result ||
 				       Number.isNaN( result )
 			       ) ? this.emptyValue() : result;
@@ -1023,15 +1051,34 @@ CalculatedFormula.prototype = {
 				// the value instead of preserving it.
 				const hasLeadingZero = /^[+-]?0\d/.test( trimmedResult );
 
-				// Emit the already-validated literal as-is rather than
-				// canonicalizing it through Number()/parseFloat(): that
-				// would collapse a signed zero (e.g. "-0") to "0" and
-				// change the formula's arithmetic result.
-				replacement = !hasLeadingZero
+				const isNumericLiteral = !hasLeadingZero
 					&& NUMERIC_LITERAL_RE.test( trimmedResult )
-					&& Number.isFinite( parseFloat( trimmedResult ) )
-					? trimmedResult
-					: JSON.stringify( String( result ) );
+					&& Number.isFinite( parseFloat( trimmedResult ) );
+
+				if ( isNumericLiteral ) {
+					// Emit the already-validated literal as-is rather than
+					// canonicalizing it through Number()/parseFloat(): that
+					// would collapse a signed zero (e.g. "-0") to "0" and
+					// change the formula's arithmetic result.
+					replacement = trimmedResult;
+				}
+				else if ( 'true' === trimmedResult || 'false' === trimmedResult ) {
+					// A field whose raw value is literally the text "true"/
+					// "false" (e.g. a select/radio/checkbox option, or a
+					// preset-populated text field mirroring a boolean) needs
+					// to keep behaving like the boolean it represents in
+					// code position (`%field% ? a : b`), same as an actual
+					// boolean macro result just above. Emitting it
+					// JSON-quoted would make it a non-empty, always-truthy
+					// *string* instead, silently flipping every such
+					// condition. `trimmedResult` is one of exactly two fixed
+					// literal words here, so this is always safe to emit
+					// bare - it can never carry attacker-controlled syntax.
+					replacement = trimmedResult;
+				}
+				else {
+					replacement = JSON.stringify( String( result ) );
+				}
 			}
 
 			lexicalContext.consume( replacement );

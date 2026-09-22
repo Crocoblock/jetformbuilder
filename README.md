@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.5.4
+* FIX: Prevent XSS in Calculated Field formulas
+
 ## 3.6.5.3
 * FIX: Secure SSR callbacks with admin-managed registry
 

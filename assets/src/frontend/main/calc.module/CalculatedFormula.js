@@ -136,8 +136,14 @@ function updatePreviousSignificant( previousSignificant, current, sawWhitespaceS
 	// Track `++`/`--` as a pair so canStartRegexLiteral() can tell the
 	// postfix-increment/decrement operator apart from a single unary
 	// `+`/`-`, which affects whether a following `/` divides or opens a
-	// regex literal.
-	if ( ( '+' === current || '-' === current ) && current === previousSignificant ) {
+	// regex literal. Gated on no whitespace/comment in between: `1+ +/re/`
+	// or `1+/*c*/+/re/` are two SEPARATE `+` tokens (unary plus of a regex-
+	// derived expression), not a postfix `++` - merging them anyway would
+	// misclassify the following `/` as division instead of a regex opener.
+	if ( ( '+' === current || '-' === current )
+		&& current === previousSignificant
+		&& !sawWhitespaceSinceSignificant
+	) {
 		return current + current;
 	}
 
@@ -225,6 +231,12 @@ function createFormulaLexicalContext() {
 				if ( 'line-comment' === state ) {
 					if ( '\r' === current || '\n' === current ) {
 						state = commentReturnState;
+						// A comment separates tokens exactly like whitespace
+						// does: `1+/*c*/+/re/` is two distinct `+` tokens,
+						// not a postfix `++`, so the operator/identifier
+						// accumulation in updatePreviousSignificant() must
+						// not bridge across it.
+						sawWhitespaceSinceSignificant = true;
 					}
 					continue;
 				}
@@ -234,6 +246,7 @@ function createFormulaLexicalContext() {
 						state = commentReturnState;
 						normalized += next;
 						index++;
+						sawWhitespaceSinceSignificant = true;
 					}
 					continue;
 				}

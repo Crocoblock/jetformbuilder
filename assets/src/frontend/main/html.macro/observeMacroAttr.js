@@ -12,8 +12,12 @@ function observeMacroAttr( node, attrName, root ) {
 		return null;
 	}
 
+	const macroValue = 'placeholder' === attrName && /^<!--(JFB_FIELD::.+)-->$/.test( nodeValue )
+		? nodeValue.slice( 4, -3 )
+		: nodeValue;
+
 	const formula = new CalculatedHtmlString( root );
-	formula.observe( nodeValue );
+	formula.observe( macroValue );
 
 	formula.setResult = () => {
 		node[ attrName ] = formula.calculateString();

@@ -80,6 +80,11 @@ function PhoneFieldData() {
 			autoPlaceholder: 'aggressive',
 		};
 
+		const placeholder = node.getAttribute( 'placeholder' );
+		if ( placeholder ) {
+			config.customPlaceholder = () => placeholder;
+		}
+
 		// Only add arrays if they have items
 		if ( preferredCountries.length ) {
 			config.countryOrder = preferredCountries;

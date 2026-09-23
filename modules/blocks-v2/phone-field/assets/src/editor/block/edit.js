@@ -196,7 +196,7 @@ export default function IntlPhoneEdit( props ) {
 				<PhoneFieldVisualPreview
 					separateDialCode={ attributes.separate_dial_code }
 					globeIcon={globeIcon}
-					placeholder={ attributes.default }
+					placeholder={ attributes.placeholder || attributes.default }
 				/>
 			</FieldWrapper>
 		</div>,

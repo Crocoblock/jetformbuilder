@@ -12,6 +12,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * FIX: Limit AI form generation prompt length to prevent 403
 * FIX: Preserve JetEngine listing styles after dynamic option updates
 * FIX: Support BOOKING_UNITS macro in calculated fields
+* ADD: Additional Style Settings for Media Field in New Style Manager
+* FIX: Phone field block rejects all landline (fixed-line) numbers as invalid
+* FIX: Form style is not applied in the dynamic popup
+* ADD: Add notice to Media field
+* ADD: Form Preset using source that is JetformBuilder Record
 
 ## 3.6.5.4
 * FIX: Prevent XSS in Calculated Field formulas

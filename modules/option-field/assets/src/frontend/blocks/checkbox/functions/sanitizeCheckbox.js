@@ -41,12 +41,12 @@ function sanitizeCheckbox( value, input ) {
 
 				// value has been removed
 				if ( undefined === currentValue ) {
-					currentNode.closest( '.custom-option' ).remove();
+					input.removeCustomOption( currentNode );
 				}
 			}
 		}
 
-		return;
+		return value;
 	}
 
 	const limit = Math.max( customNodes.length, copyValue.length );
@@ -58,7 +58,7 @@ function sanitizeCheckbox( value, input ) {
 		// value has been removed
 		if ( null === currentValue || undefined === currentValue ) {
 			if ( currentNode ) {
-				currentNode.closest( '.custom-option' ).remove();
+				input.removeCustomOption( currentNode );
 			}
 
 			continue;
@@ -76,6 +76,7 @@ function sanitizeCheckbox( value, input ) {
 		}
 
 		const inputNode    = getCustomCheckboxInput( currentNode );
+		currentNode.checked = false !== currentValue;
 		inputNode.disabled = false === currentValue;
 
 		// add 1 if custom option not deselected, not with empty value

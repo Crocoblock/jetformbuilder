@@ -28,6 +28,7 @@ class Preset_Manager {
 
 	protected $data     = null;
 	protected $source   = null;
+	protected $form_id  = 0;
 	protected $defaults = array(
 		'enabled'    => false,
 		'from'       => 'post',
@@ -56,27 +57,8 @@ class Preset_Manager {
 		if ( ! $form_id ) {
 			return $this;
 		}
-
-		// General_Preset is not unique (Preset_Manager::general() always
-		// returns the same shared instance), and Base_Preset::set_init_data()
-		// merges into any existing $data rather than replacing it. Reset the
-		// instance's $data before loading the current form's preset config,
-		// otherwise a page rendering multiple forms could leak one form's
-		// `restricted` flag (or other preset config) into another form's
-		// permission evaluation via array_merge() carrying over keys the
-		// current form's own config doesn't set - see issues-tracker #20359.
-		//
-		// trust_restriction_flag( true ) is set unconditionally here, not
-		// saved/restored like the equivalent call in get_field_value(): this
-		// form's config is always admin-authored (post meta), so General
-		// Preset's own default already resolves to trusted
-		// (trusts_restriction_flag_by_default()). The explicit call exists
-		// only to document that intent at the call site, not to override a
-		// caller-supplied value - unlike get_field_value(), nothing calls
-		// set_form_id() expecting an untrusted evaluation afterwards.
-		$this->general()
-			->trust_restriction_flag( true )
-			->reset_init_data( $this->general()->preset_source( $form_id ) );
+		$this->form_id = absint( $form_id );
+		$this->general()->set_init_data( $this->general()->preset_source( $form_id ) );
 
 		try {
 			$this->general()->get_source();
@@ -85,6 +67,10 @@ class Preset_Manager {
 		}
 
 		return $this;
+	}
+
+	public function get_form_id(): int {
+		return $this->form_id;
 	}
 
 	/**
@@ -141,6 +127,7 @@ class Preset_Manager {
 				new Sources\Preset_Source_User(),
 				new Sources\Preset_Source_Query_Var(),
 				new Sources\Preset_Source_Term(),
+				new Sources\Preset_Source_Form_Record(),
 			)
 		);
 

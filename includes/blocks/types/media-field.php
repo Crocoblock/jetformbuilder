@@ -42,32 +42,46 @@ class Media_Field extends Base {
 		$message = $wrap . '__message';
 
 		$this->media_style_section( 'layout', __( 'Media Layout', 'jet-form-builder' ) );
-		$this->media_style_choose( 'position', __( 'Upload Button Position', 'jet-form-builder' ), array(
-			'"fields" "content" / minmax(0, 1fr)' => __( 'Top', 'jet-form-builder' ),
-			'"content" "fields" / minmax(0, 1fr)' => __( 'Bottom', 'jet-form-builder' ),
-			'"fields content" / auto minmax(0, 1fr)' => __( 'Left', 'jet-form-builder' ),
-			'"content fields" / minmax(0, 1fr) auto' => __( 'Right', 'jet-form-builder' ),
-		), array(
-			$wrap => 'display: grid; grid-template: {{VALUE}};',
-			$wrap . '__fields' => 'grid-area: fields; min-width: 0;',
-			$wrap . '__content' => 'grid-area: content; min-width: 0;',
-			$message => 'grid-column: 1 / -1;',
-			$wrap . '__errors' => 'grid-column: 1 / -1;',
-		) );
+		$this->media_style_choose(
+			'position',
+			__( 'Upload Button Position', 'jet-form-builder' ),
+			array(
+				'"fields" "content" / minmax(0, 1fr)' => __( 'Top', 'jet-form-builder' ),
+				'"content" "fields" / minmax(0, 1fr)' => __( 'Bottom', 'jet-form-builder' ),
+				'"fields content" / auto minmax(0, 1fr)' => __( 'Left', 'jet-form-builder' ),
+				'"content fields" / minmax(0, 1fr) auto' => __( 'Right', 'jet-form-builder' ),
+			),
+			array(
+				$wrap => 'display: grid; grid-template: {{VALUE}};',
+				$wrap . '__fields' => 'grid-area: fields; min-width: 0;',
+				$wrap . '__content' => 'grid-area: content; min-width: 0;',
+				$message => 'grid-column: 1 / -1;',
+				$wrap . '__errors' => 'grid-column: 1 / -1;',
+			)
+		);
 		$this->media_style_range( 'layout_gap', __( 'Gap', 'jet-form-builder' ), array( $wrap => 'gap: {{VALUE}}{{UNIT}};' ) );
-		$this->media_style_choose( 'alignment', __( 'Vertical Alignment', 'jet-form-builder' ), array(
-			'start' => __( 'Top', 'jet-form-builder' ),
-			'center' => __( 'Center', 'jet-form-builder' ),
-			'end' => __( 'Bottom', 'jet-form-builder' ),
-		), array( $wrap => 'align-items: {{VALUE}};' ) );
+		$this->media_style_choose(
+			'alignment',
+			__( 'Vertical Alignment', 'jet-form-builder' ),
+			array(
+				'start' => __( 'Top', 'jet-form-builder' ),
+				'center' => __( 'Center', 'jet-form-builder' ),
+				'end' => __( 'Bottom', 'jet-form-builder' ),
+			),
+			array( $wrap => 'align-items: {{VALUE}};' )
+		);
 		$this->controls_manager->end_section();
 
 		$this->media_style_section( 'button', __( 'Upload Button', 'jet-form-builder' ) );
-		$this->media_style_range( 'button_width', __( 'Width', 'jet-form-builder' ), array(
-			$button => 'width: {{VALUE}}{{UNIT}}; max-width: 100%; box-sizing: border-box;',
-			$wrap . '__fields' => 'width: {{VALUE}}{{UNIT}};',
-			$input => 'max-width: 100%;',
-		) );
+		$this->media_style_range(
+			'button_width',
+			__( 'Width', 'jet-form-builder' ),
+			array(
+				$button => 'width: {{VALUE}}{{UNIT}}; max-width: 100%; box-sizing: border-box;',
+				$wrap . '__fields' => 'width: {{VALUE}}{{UNIT}};',
+				$input => 'max-width: 100%;',
+			)
+		);
 		$this->media_style_range( 'button_height', __( 'Height', 'jet-form-builder' ), array( $button => 'height: {{VALUE}}{{UNIT}};' ) );
 		$this->media_style_control( 'button_padding', 'dimensions', __( 'Padding', 'jet-form-builder' ), $button, 'padding: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};' );
 		$this->media_style_typography( 'button_typography', $button );
@@ -90,46 +104,77 @@ class Media_Field extends Base {
 		$this->controls_manager->end_section();
 
 		$this->media_style_section( 'preview', __( 'File Preview', 'jet-form-builder' ) );
-		$this->media_style_range( 'preview_width', __( 'Width', 'jet-form-builder' ), array(
-			$file => 'width: {{VALUE}}{{UNIT}}; box-sizing: border-box;',
-			$wrap . ' .sortable-placeholder' => 'width: {{VALUE}}{{UNIT}}; flex-basis: {{VALUE}}{{UNIT}};',
-			$wrap . '__content' => 'min-width: {{VALUE}}{{UNIT}};',
-		) );
-		$this->media_style_range( 'preview_height', __( 'Height', 'jet-form-builder' ), array(
-			$file => 'height: {{VALUE}}{{UNIT}}; box-sizing: border-box;',
-			$wrap . ' .sortable-placeholder' => 'height: {{VALUE}}{{UNIT}};',
-			$wrap . '__content' => 'min-height: {{VALUE}}{{UNIT}};',
-		) );
+		$this->media_style_range(
+			'preview_width',
+			__( 'Width', 'jet-form-builder' ),
+			array(
+				$file => 'width: {{VALUE}}{{UNIT}}; box-sizing: border-box;',
+				$wrap . ' .sortable-placeholder' => 'width: {{VALUE}}{{UNIT}}; flex-basis: {{VALUE}}{{UNIT}};',
+				$wrap . '__content' => 'min-width: {{VALUE}}{{UNIT}};',
+			)
+		);
+		$this->media_style_range(
+			'preview_height',
+			__( 'Height', 'jet-form-builder' ),
+			array(
+				$file => 'height: {{VALUE}}{{UNIT}}; box-sizing: border-box;',
+				$wrap . ' .sortable-placeholder' => 'height: {{VALUE}}{{UNIT}};',
+				$wrap . '__content' => 'min-height: {{VALUE}}{{UNIT}};',
+			)
+		);
 		// Keep the sortable placeholder and the loading overlay aligned with the cards.
-		$this->media_style_range( 'preview_column_gap', __( 'Horizontal Gap', 'jet-form-builder' ), array(
-			$wrap . '__files' => 'column-gap: {{VALUE}}{{UNIT}};',
-			$file => 'margin-right: 0;',
-			$wrap . ' .sortable-placeholder' => 'margin-right: 0;',
-			$wrap . '__loader' => 'right: 0;',
-		) );
-		$this->media_style_range( 'preview_row_gap', __( 'Vertical Gap', 'jet-form-builder' ), array(
-			$wrap . '__files' => 'row-gap: {{VALUE}}{{UNIT}};',
-			$file => 'margin-bottom: 0;',
-			$wrap . ' .sortable-placeholder' => 'margin-bottom: 0;',
-			$wrap . '__loader' => 'bottom: 0;',
-		) );
+		$this->media_style_range(
+			'preview_column_gap',
+			__( 'Horizontal Gap', 'jet-form-builder' ),
+			array(
+				$wrap . '__files' => 'column-gap: {{VALUE}}{{UNIT}};',
+				$file => 'margin-right: 0;',
+				$wrap . ' .sortable-placeholder' => 'margin-right: 0;',
+				$wrap . '__loader' => 'right: 0;',
+			)
+		);
+		$this->media_style_range(
+			'preview_row_gap',
+			__( 'Vertical Gap', 'jet-form-builder' ),
+			array(
+				$wrap . '__files' => 'row-gap: {{VALUE}}{{UNIT}};',
+				$file => 'margin-bottom: 0;',
+				$wrap . ' .sortable-placeholder' => 'margin-bottom: 0;',
+				$wrap . '__loader' => 'bottom: 0;',
+			)
+		);
 		$this->media_style_control( 'preview_border', 'border', __( 'Border', 'jet-form-builder' ), $file, 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};' );
-		$this->media_style_choose( 'preview_clip', __( 'Clip Preview to Border', 'jet-form-builder' ), array(
-			'hidden' => __( 'Yes', 'jet-form-builder' ),
-			'visible' => __( 'No', 'jet-form-builder' ),
-		), array( $file => 'overflow: {{VALUE}};' ) );
+		$this->media_style_choose(
+			'preview_clip',
+			__( 'Clip Preview to Border', 'jet-form-builder' ),
+			array(
+				'hidden' => __( 'Yes', 'jet-form-builder' ),
+				'visible' => __( 'No', 'jet-form-builder' ),
+			),
+			array( $file => 'overflow: {{VALUE}};' )
+		);
 		$this->media_style_control( 'preview_background', 'color-picker', __( 'Background', 'jet-form-builder' ), $file, 'background-color: {{VALUE}};' );
-		$this->media_style_choose( 'preview_fit', __( 'Image Fit', 'jet-form-builder' ), array(
-			'cover' => __( 'Cover', 'jet-form-builder' ),
-			'contain' => __( 'Contain', 'jet-form-builder' ),
-		), array( $file . ' img' => 'object-fit: {{VALUE}};' ) );
+		$this->media_style_choose(
+			'preview_fit',
+			__( 'Image Fit', 'jet-form-builder' ),
+			array(
+				'cover' => __( 'Cover', 'jet-form-builder' ),
+				'contain' => __( 'Contain', 'jet-form-builder' ),
+			),
+			array( $file . ' img' => 'object-fit: {{VALUE}};' )
+		);
 		$this->controls_manager->end_section();
 
 		$this->media_style_section( 'message', __( 'File Size Message', 'jet-form-builder' ) );
-		$this->media_style_choose( 'message_display', __( 'Visibility', 'jet-form-builder' ), array(
-			'block' => __( 'Show', 'jet-form-builder' ),
-			'none' => __( 'Hide', 'jet-form-builder' ),
-		), array( $message => 'display: {{VALUE}};' ) );
+		$this->media_style_choose(
+			'message_display',
+			__( 'Visibility', 'jet-form-builder' ),
+			array(
+				'block' => __( 'Show', 'jet-form-builder' ),
+				'none' => __( 'Hide', 'jet-form-builder' ),
+			),
+			array( $message => 'display: {{VALUE}};' )
+		);
 		$this->media_style_typography( 'message_typography', $message . ' small' );
 		$this->media_style_control( 'message_color', 'color-picker', __( 'Text Color', 'jet-form-builder' ), $message, 'color: {{VALUE}};' );
 		$this->media_style_control( 'message_margin', 'dimensions', __( 'Margin', 'jet-form-builder' ), $message, 'margin: {{TOP}} {{RIGHT}} {{BOTTOM}} {{LEFT}};' );
@@ -137,50 +182,63 @@ class Media_Field extends Base {
 	}
 
 	private function media_style_section( $id, $title ) {
-		$this->controls_manager->start_section( 'style_controls', array(
-			'id' => 'media_' . $id . '_style',
-			'title' => $title,
-			'initialOpen' => false,
-		) );
+		$this->controls_manager->start_section(
+			'style_controls',
+			array(
+				'id' => 'media_' . $id . '_style',
+				'title' => $title,
+				'initialOpen' => false,
+			)
+		);
 	}
 
 	private function media_style_control( $id, $type, $label, $selector, $css ) {
-		$this->controls_manager->add_control( array(
-			'id' => 'media_' . $id,
-			'type' => $type,
-			'label' => $label,
-			'is_responsive' => true,
-			'css_selector' => array( $selector => $css ),
-		) );
+		$this->controls_manager->add_control(
+			array(
+				'id' => 'media_' . $id,
+				'type' => $type,
+				'label' => $label,
+				'is_responsive' => true,
+				'css_selector' => array( $selector => $css ),
+			)
+		);
 	}
 
 	private function media_style_range( $id, $label, $selectors ) {
-		$this->controls_manager->add_control( array(
-			'id' => 'media_' . $id,
-			'type' => 'range',
-			'label' => $label,
-			'is_responsive' => true,
-			'units' => array( array( 'value' => 'px', 'intervals' => array( 'min' => 0, 'max' => 1000, 'step' => 1 ) ) ),
-			'css_selector' => $selectors,
-		) );
+		$this->controls_manager->add_control(
+			array(
+				'id' => 'media_' . $id,
+				'type' => 'range',
+				'label' => $label,
+				'is_responsive' => true,
+				'units' => array( array( 'value' => 'px', 'intervals' => array( 'min' => 0, 'max' => 1000, 'step' => 1 ) ) ),
+				'css_selector' => $selectors,
+			)
+		);
 	}
 
 	private function media_style_choose( $id, $label, $options, $selectors ) {
 		foreach ( $options as $value => $title ) {
 			$options[ $value ] = array( 'label' => $title, 'shortcut' => $title );
 		}
-		$this->controls_manager->add_control( array(
-			'id' => 'media_' . $id,
-			'type' => 'choose',
-			'label' => $label,
-			'is_responsive' => true,
-			'options' => $options,
-			'css_selector' => $selectors,
-		) );
+		$this->controls_manager->add_control(
+			array(
+				'id' => 'media_' . $id,
+				'type' => 'choose',
+				'label' => $label,
+				'is_responsive' => true,
+				'options' => $options,
+				'css_selector' => $selectors,
+			)
+		);
 	}
 
 	private function media_style_typography( $id, $selector ) {
-		$this->media_style_control( $id, 'typography', __( 'Typography', 'jet-form-builder' ), $selector,
+		$this->media_style_control(
+			$id,
+			'typography',
+			__( 'Typography', 'jet-form-builder' ),
+			$selector,
 			'font-family: {{FAMILY}}; font-weight: {{WEIGHT}}; text-transform: {{TRANSFORM}}; font-style: {{STYLE}}; text-decoration: {{DECORATION}}; line-height: {{LINEHEIGHT}}{{LH_UNIT}}; letter-spacing: {{LETTERSPACING}}{{LS_UNIT}}; font-size: {{SIZE}}{{S_UNIT}};'
 		);
 	}

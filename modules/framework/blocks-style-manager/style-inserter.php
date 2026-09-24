@@ -91,13 +91,14 @@ class Style_Inserter {
 			}
 
 			if ( ! Style_Cache::get_instance()->is_printed( $this->class_name ) ) {
-				if ( ! did_action( 'wp_head' ) ) {
+				if ( ! did_action( 'wp_head' ) && ! wp_doing_ajax() ) {
 					// If the wp_head action isn't called yet, we will add the styles to the head.
 					add_action( 'wp_head', function() use ( $styles ) {
 						echo self::styles_with_tag( $styles );
 					} );
 				} else {
-					// If the wp_head action is already called, we will add the styles to the content.
+					// If the wp_head action is already called or this is an AJAX request,
+					// we will add the styles to the content.
 					$content = self::styles_with_tag( $styles ) . $content;
 				}
 			}

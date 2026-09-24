@@ -38,7 +38,7 @@ trait Gateways_Editor_Data {
 				),
 				'protect_price_field_safe'  => array(
 					'valid'   => _x(
-						'Calculated Field, Hidden Field (Render in HTML disabled), Select/Radio/Checkbox fields with calculate values, Booking price macros (e.g. %ADVANCED_PRICE::...%).',
+						'Calculated Field, Hidden Field (Render in HTML disabled), Select/Radio/Checkbox fields with calculate values, JetBooking price macros (e.g. %ADVANCED_PRICE::...%, %BOOKING_UNITS::...%).',
 						'Gateways editor data',
 						'jet-form-builder'
 					),

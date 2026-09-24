@@ -91,7 +91,20 @@ class Editor {
 									'value' => 'term',
 									'label' => __( 'Term', 'jet-form-builder' ),
 								),
+								array(
+									'value' => 'form_record',
+									'label' => __( 'JetFormBuilder Record', 'jet-form-builder' ),
+								),
 							)
+						),
+					),
+					array(
+						'name'      => 'record_query_var',
+						'label'     => __( 'Record ID query variable:', 'jet-form-builder' ),
+						'type'      => 'text',
+						'condition' => array(
+							'field' => 'from',
+							'value' => 'form_record',
 						),
 					),
 					array(

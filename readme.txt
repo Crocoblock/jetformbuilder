@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 3.6.5.2
+Stable tag: 3.6.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,22 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.6.6**
+- FIX: Limit AI form generation prompt length to prevent 403
+- FIX: Preserve JetEngine listing styles after dynamic option updates
+- FIX: Support BOOKING_UNITS macro in calculated fields
+- ADD: Additional Style Settings for Media Field in New Style Manager
+- FIX: Phone field block rejects all landline (fixed-line) numbers as invalid
+- FIX: Form style is not applied in the dynamic popup
+- ADD: Add notice to Media field
+- ADD: Form Preset using source that is JetformBuilder Record
+
+**3.6.5.4**
+- FIX: Prevent XSS in Calculated Field formulas
+
+**3.6.5.3**
+- FIX: Secure SSR callbacks with admin-managed registry
 
 **3.6.5.2**
 - FIX: Advanced Choices compatibility with WordPress 7.1

@@ -2,7 +2,7 @@
 /**
  * Blocks Style Manager
  *
- * Version: 2.1.21
+ * Version: 2.1.22
  */
 namespace Crocoblock\Blocks_Style;
 
@@ -31,7 +31,7 @@ class Manager {
 	 *
 	 * @var string
 	 */
-	protected $version = '2.1.21';
+	protected $version = '2.1.22';
 
 	public static $migrator_registered = false;
 

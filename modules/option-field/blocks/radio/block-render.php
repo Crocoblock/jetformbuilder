@@ -114,6 +114,18 @@ class Block_Render extends Base {
 	}
 
 	protected function render_custom_option(): string {
+		$default    = (string) ( $this->args['default'] ?? '' );
+		$use_custom = '' !== $default && ! jet_form_builder()->regexp->has_macro( $default );
+
+		foreach ( $this->args['field_options'] ?? array() as $value => $option ) {
+			$val = is_array( $option ) ? ( $option['value'] ?? $value ) : $value;
+
+			if ( (string) $val === $default ) {
+				$use_custom = false;
+				break;
+			}
+		}
+
 		$html       = '<div class="jet-form-builder__field-wrap radio-wrap checkradio-wrap custom-option">';
 		$class_name = $this->args['class_name'] ?? '';
 
@@ -126,6 +138,7 @@ class Block_Render extends Base {
 					array( 'name', esc_attr( $this->block_type->get_field_name() ) ),
 					array( 'data-field-name', esc_attr( $this->args['name'] ) ),
 					array( 'data-custom', 1 ),
+					array( 'checked', $use_custom ? 'checked' : '' ),
 					array(
 						'class',
 						'jet-form-builder__field radio-field checkradio-field' . ( $class_name ? " {$class_name}" : '' ),
@@ -140,7 +153,8 @@ class Block_Render extends Base {
 						array( 'name', esc_attr( $this->block_type->get_field_name() ) ),
 						array( 'data-field-name', esc_attr( $this->args['name'] ) ),
 						array( 'class', 'jet-form-builder__field text-field' ),
-						array( 'disabled', 'disabled' ),
+						array( 'value', $use_custom ? esc_attr( $default ) : '' ),
+						array( 'disabled', $use_custom ? '' : 'disabled' ),
 						array( 'required', $this->block_type->get_required_val() ),
 					)
 				)

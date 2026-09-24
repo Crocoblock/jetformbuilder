@@ -152,26 +152,21 @@ class Block_Render extends Base {
 	}
 
 	protected function render_custom_option(): string {
-		$html       = '<div class="jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap custom-option">';
-		$class_name = $this->args['class_name'] ?? '';
+		$html        = '<div class="jet-form-builder__field-wrap checkboxes-wrap checkradio-wrap custom-option">';
+		$has_options = ! empty( $this->args['field_options'] );
 
 		$name     = esc_attr( $this->block_type->get_field_name() . $this->get_name_suffix() );
 		$checkbox = sprintf(
-			'<input %1$s value="">',
+			'<input %1$s %2$s value="">',
 			Builder_Helper::attrs(
 				array(
 					array( 'type', 'checkbox' ),
-					array( 'checked', 'checked' ),
+					array( 'checked', $has_options ? 'checked' : '' ),
 					array( 'data-field-name', esc_attr( $this->args['name'] ) ),
 					array( 'data-custom', 1 ),
-					array(
-						'class',
-						'jet-form-builder__field checkboxes-field checkradio-field' . (
-						$class_name ? " {$class_name}" : ''
-						),
-					),
 				)
-			)
+			),
+			$this->get_attributes_string_save()
 		);
 
 		$input = sprintf(
@@ -207,13 +202,20 @@ class Block_Render extends Base {
 			$html . $item_template . '</div>'
 		);
 
+		if ( ! $has_options ) {
+			return $html . $item_template . '</div>' . $html . $button . '</div>';
+		}
+
 		$html .= $button . '</div>';
 
 		return $html;
 	}
 
 	public function get_name_suffix(): string {
-		return count( $this->args['field_options'] ) > 1 ? '[]' : '';
+		return (
+			count( $this->args['field_options'] ) > 1
+			|| ! empty( $this->args['custom_option']['allow'] )
+		) ? '[]' : '';
 	}
 
 	/**

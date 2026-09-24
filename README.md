@@ -8,6 +8,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.6
+* FIX: Limit AI form generation prompt length to prevent 403
+* FIX: Preserve JetEngine listing styles after dynamic option updates
+* FIX: Support BOOKING_UNITS macro in calculated fields
+
 ## 3.6.5.4
 * FIX: Prevent XSS in Calculated Field formulas
 

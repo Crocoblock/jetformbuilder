@@ -62,7 +62,7 @@ trait Process_Meta_Boxes_Trait {
 			return array();
 		}
 
-		if ( ! class_exists( 'Cherry_X_Post_Meta' ) || ! function_exists( 'jet_engine' ) ) {
+		if ( ! class_exists( 'Cherry_X_Post_Meta' ) || ! function_exists( 'jet_engine' ) || ! class_exists( 'Jet_Engine_CPT_Meta' ) ) {
 			return array();
 		}
 

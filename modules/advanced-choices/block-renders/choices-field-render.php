@@ -49,21 +49,29 @@ class Choices_Field_Render extends Base {
 				)
 		);
 
-		$attrs = get_block_wrapper_attributes(
-			array(
-				'class'         => 'jet-form-builder-choice',
-				'data-jfb-sync' => '1',
-			)
+		$default = $this->block_type->block_attrs['default'] ?? array();
+		$wrapper_attrs = array(
+			'class'         => 'jet-form-builder-choice',
+			'data-jfb-sync' => '1',
 		);
+
+		foreach ( (array) $default as $value ) {
+			if ( ! is_string( $value ) || ! jet_form_builder()->regexp->has_macro( $value ) ) {
+				continue;
+			}
+
+			// Keep the formula for the browser, where calculated field values are available.
+			$values = array_values( (array) $default );
+			$wrapper_attrs['data-default-val'] = ! $this->block_type->is_allowed_multiple() || 1 === count( $values )
+				? $values[0]
+				: wp_json_encode( $values );
+			break;
+		}
+
+		$attrs = get_block_wrapper_attributes( $wrapper_attrs );
 
 		$content   = '';
 		$full_name = $this->block_type->get_field_name() . ( $this->block_type->is_allowed_multiple() ? '[]' : '' );
-
-		$default = $this->block_type->block_attrs['default'] ?? array();
-
-		if ( is_array( $default ) ) {
-			$default = array_map( array( $this, 'maybe_resolve_default_macro' ), $default );
-		}
 
 		foreach ( $wp_block['innerBlocks'] as $inner_block ) {
 
@@ -95,28 +103,6 @@ class Choices_Field_Render extends Base {
 		$module->remove_native_layout();
 
 		return parent::render( null, $html );
-	}
-
-	protected function maybe_resolve_default_macro( $default ) {
-		if ( ! is_string( $default ) ) {
-			return $default;
-		}
-		$raw_default = $default;
-		$default     = trim( $default );
-		$default     = trim( $default, '\'"' );
-		if ( ! preg_match( '/^%(.+?)%$/', $default, $matches ) ) {
-			return $raw_default;
-		}
-		$field_name = $matches[1];
-
-		$blocks     = jet_fb_live()->blocks ?? array();
-		foreach ( $blocks as $block ) {
-			if ( empty( $block['attrs']['name'] ) || $field_name !== $block['attrs']['name'] ) {
-				continue;
-			}
-			return $block['attrs']['default'] ?? $raw_default;
-		}
-		return $raw_default;
 	}
 
 	/**

@@ -83,6 +83,23 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 			throw new Upload_Exception( esc_html( $attachment->get_error_message() ) );
 		}
 
+		update_post_meta( $attachment, '_jfb_uploaded_by_form', 1 );
+
+		/**
+		 * Records who actually uploaded this attachment, so a later request
+		 * can't take credit for someone else's upload just because it also
+		 * carries the `_jfb_uploaded_by_form` marker.
+		 *
+		 * A target post ID is deliberately NOT recorded here: at upload time
+		 * (field/request parsing) no post has been authorized yet - the Insert
+		 * Post action's `ID` property (which would map to a real post) is only
+		 * resolved and capability-checked later, when that action itself runs.
+		 * Binding to a not-yet-authorized `pid` value from the same request
+		 * would just persist the attacker-controlled value the field-level
+		 * check exists to distrust.
+		 */
+		update_post_meta( $attachment, '_jfb_uploaded_by_user', get_current_user_id() );
+
 		wp_update_attachment_metadata(
 			$attachment,
 			wp_generate_attachment_metadata( $attachment, $this->get_file() )

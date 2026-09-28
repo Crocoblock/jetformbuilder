@@ -43,6 +43,7 @@ tests/wpunit/*
 !tests/wpunit/SsrBlockedCallbackUsagesTest.php
 !tests/wpunit/SsrCallbacksHandlerMigrationGuardTest.php
 !tests/wpunit/MediaFieldPreviewEscapingTest.php
+!tests/wpunit/SelectStoredXssTest.php
 test-results/
 AGENTS.md
 .env.e2e

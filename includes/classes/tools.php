@@ -541,10 +541,29 @@ class Tools {
 		$result = array();
 
 		foreach ( $source as $key => $value ) {
+			$key = is_string( $key ) ? self::sanitize_array_key( $key ) : $key;
+
+			// When sanitized keys collide, keep the first value.
+			if ( array_key_exists( $key, $result ) ) {
+				continue;
+			}
+
 			$result[ $key ] = self::sanitize_recursive( $value );
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Strips tags from an array key. Keys without tags stay unchanged,
+	 * preserving whitespace and percent-encoded sequences in field names.
+	 *
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	public static function sanitize_array_key( string $key ): string {
+		return false === strpos( $key, '<' ) ? $key : wp_strip_all_tags( $key, false );
 	}
 
 	public static function maybe_recursive_sanitize( $source = null ) {
@@ -595,6 +614,12 @@ class Tools {
 
 		$result = array();
 		foreach ( $source as $key => $value ) {
+			$key = is_string( $key ) ? self::sanitize_array_key( $key ) : $key;
+
+			if ( array_key_exists( $key, $result ) ) {
+				continue;
+			}
+
 			$result[ $key ] = self::sanitize_recursive( $value );
 		}
 

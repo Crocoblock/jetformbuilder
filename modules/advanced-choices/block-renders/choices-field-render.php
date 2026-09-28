@@ -50,6 +50,7 @@ class Choices_Field_Render extends Base {
 		);
 
 		$default = $this->block_type->block_attrs['default'] ?? array();
+		$render_default = $default;
 		$wrapper_attrs = array(
 			'class'         => 'jet-form-builder-choice',
 			'data-jfb-sync' => '1',
@@ -65,6 +66,9 @@ class Choices_Field_Render extends Base {
 			$wrapper_attrs['data-default-val'] = ! $this->block_type->is_allowed_multiple() || 1 === count( $values )
 				? $values[0]
 				: wp_json_encode( $values );
+			if ( $this->block_type->is_allowed_multiple() ) {
+				$render_default = array();
+			}
 			break;
 		}
 
@@ -80,7 +84,7 @@ class Choices_Field_Render extends Base {
 				$this->block_type->block_context + array(
 					Choices_Field::CONTEXT_RAW_NAME => $this->block_type->block_attrs['name'] ?? '',
 					Choices_Field::CONTEXT_NAME     => $full_name,
-					Choices_Field::CONTEXT_DEFAULT  => $default,
+					Choices_Field::CONTEXT_DEFAULT  => $render_default,
 					Choices_Field::CONTEXT_MULTIPLE => $this->block_type->is_allowed_multiple(),
 					Choices_Field::CONTEXT_REQUIRED => $this->block_type->block_attrs['required'] ?? false,
 				)

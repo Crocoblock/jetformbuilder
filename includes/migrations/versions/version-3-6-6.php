@@ -630,8 +630,6 @@ class Version_3_6_6 extends Base_Migration {
 			return false;
 		}
 
-		update_post_meta( $attachment_id, '_jfb_uploaded_by_form', 1 );
-
 		$uploader_id = absint( $attachment->post_author );
 
 		/**
@@ -672,9 +670,21 @@ class Version_3_6_6 extends Base_Migration {
 		 * it is demonstrably still attached to (`$owning_post_id`, only ever supplied by
 		 * `delete_attachments()`) clean it up despite the guess, without granting that same
 		 * exception to a live, ground-truth-bound upload.
+		 *
+		 * Written BEFORE `_jfb_uploaded_by_form` (below), same reasoning as
+		 * `Uploaded_File::add_attachment()`: the latter is the trust gate
+		 * `is_owned_by_current_actor()` reads to decide an attachment is plugin-owned at
+		 * all. If this migration were interrupted between the two writes (a failed request,
+		 * a fatal error further down the batch), an attachment left with the trust gate set
+		 * but no uploader identity would fall into that check's unconditional-allow branch -
+		 * recreating this fix's own target vulnerability for exactly the attachments this
+		 * migration is backfilling. Writing the identity first means an interruption
+		 * instead leaves the attachment with neither marker, to be picked up again by a
+		 * later resumed run of this same phase (see `run_backfill_phase()`'s docblock).
 		 */
 		update_post_meta( $attachment_id, '_jfb_uploaded_by_user', $uploader_id );
 		update_post_meta( $attachment_id, '_jfb_uploaded_by_user_heuristic', 1 );
+		update_post_meta( $attachment_id, '_jfb_uploaded_by_form', 1 );
 
 		return true;
 	}

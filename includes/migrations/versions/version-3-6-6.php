@@ -154,15 +154,15 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Version_3_6_6 extends Base_Migration {
 
-	const FORM_BATCH_SIZE       = 200;
-	const ATTACHMENT_BATCH_SIZE = 500;
+	const FORM_BATCH_SIZE         = 200;
+	const ATTACHMENT_BATCH_SIZE   = 500;
 	const RECORD_FIELD_BATCH_SIZE = 500;
 
 	const PROGRESS_OPTION     = 'jet_fb_media_ownership_migration_progress';
 	const TIME_BUDGET_SECONDS = 25;
 
-	const PHASE_COLLECT_KEYS   = 'collect_keys';
-	const PHASE_BACKFILL       = 'backfill';
+	const PHASE_COLLECT_KEYS    = 'collect_keys';
+	const PHASE_BACKFILL        = 'backfill';
 	const PHASE_RECORD_BACKFILL = 'record_backfill';
 
 	/**
@@ -170,7 +170,7 @@ class Version_3_6_6 extends Base_Migration {
 	 *         budget is exceeded before all phases complete.
 	 */
 	public function up( \wpdb $wpdb ) {
-		$progress = $this->load_progress();
+		$progress   = $this->load_progress();
 		$started_at = microtime( true );
 
 		if ( self::PHASE_COLLECT_KEYS === $progress['phase'] ) {
@@ -414,6 +414,12 @@ class Version_3_6_6 extends Base_Migration {
 		$placeholders = implode( ',', array_fill( 0, count( $meta_keys ), '%s' ) );
 
 		while ( true ) {
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+			// $placeholders is a fixed, code-generated run of `%s` tokens (one per $meta_keys
+			// entry), not user input - the sniff does not special-case an IN() clause combined
+			// with trailing %d placeholders, so both its interpolation and placeholder-count
+			// checks are disabled for this call; the actual values are still bound entirely
+			// through prepare()'s own arguments below.
 			$rows = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 				$wpdb->prepare(
 					"SELECT meta_id, meta_value FROM {$wpdb->postmeta}
@@ -424,6 +430,7 @@ class Version_3_6_6 extends Base_Migration {
 					array_merge( $meta_keys, array( $progress['last_meta_id'], self::ATTACHMENT_BATCH_SIZE ) )
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
 
 			if ( empty( $rows ) ) {
 				break;
@@ -513,7 +520,7 @@ class Version_3_6_6 extends Base_Migration {
 		$records_table = Record_Model::table();
 
 		if ( ! $progress['record_field_max_id'] ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $fields_table is this model's own table name (Base_Db_Model::table()), not user input.
 			$progress['record_field_max_id'] = (int) $wpdb->get_var( "SELECT MAX(id) FROM {$fields_table}" );
 		}
 
@@ -521,6 +528,10 @@ class Version_3_6_6 extends Base_Migration {
 			$range_start = $progress['last_record_field_id'];
 			$range_end   = $range_start + self::RECORD_FIELD_BATCH_SIZE;
 
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// $fields_table/$records_table are these models' own table names
+			// (Base_Db_Model::table()), not user input; the actual values are still bound
+			// entirely through prepare()'s own arguments below.
 			$rows = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->prepare(
 					"SELECT rf.id, rf.field_name, rf.field_value, rf.field_attrs, r.form_id
@@ -535,6 +546,7 @@ class Version_3_6_6 extends Base_Migration {
 					$range_end
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 			foreach ( $rows as $row ) {
 				$form_id           = (int) $row->form_id;
@@ -727,14 +739,14 @@ class Version_3_6_6 extends Base_Migration {
 
 		return array_merge(
 			array(
-				'phase'                 => self::PHASE_COLLECT_KEYS,
-				'last_form_id'          => 0,
-				'meta_keys'             => array(),
-				'field_names_by_form'   => array(),
-				'last_meta_id'          => 0,
-				'last_record_field_id'  => 0,
-				'record_field_max_id'   => 0,
-				'backfilled_count'      => 0,
+				'phase'                => self::PHASE_COLLECT_KEYS,
+				'last_form_id'         => 0,
+				'meta_keys'            => array(),
+				'field_names_by_form'  => array(),
+				'last_meta_id'         => 0,
+				'last_record_field_id' => 0,
+				'record_field_max_id'  => 0,
+				'backfilled_count'     => 0,
 			),
 			$stored
 		);

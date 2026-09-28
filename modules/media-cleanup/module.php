@@ -349,7 +349,7 @@ class Module implements Base_Module_It {
 			return Tools::is_webhook() || $owning_post_id > 0;
 		}
 
-		if ( $uploader_id === get_current_user_id() || Tools::is_webhook() ) {
+		if ( get_current_user_id() === $uploader_id || Tools::is_webhook() ) {
 			return true;
 		}
 

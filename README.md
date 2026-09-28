@@ -21,6 +21,8 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * FIX: Apply Twig listing styles to checkbox and radio templates
 * FIX: Clear stale Calculated Field watchers on recalculation
 * FIX: Restore Range field rendering in Chrome
+* FIX: Unauthenticated arbitrary Media Library attachment deletion
+* FIX: Prevent XSS in Select field
 
 ## 3.6.5.4
 * FIX: Prevent XSS in Calculated Field formulas

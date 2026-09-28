@@ -420,12 +420,6 @@ class Version_3_6_6 extends Base_Migration {
 				$progress['last_meta_id'] = max( $progress['last_meta_id'], (int) $row->meta_id );
 
 				foreach ( $this->extract_attachment_ids( $row->meta_value ) as $attachment_id ) {
-					if ( isset( $progress['seen_attachment_ids'][ $attachment_id ] ) ) {
-						continue;
-					}
-
-					$progress['seen_attachment_ids'][ $attachment_id ] = true;
-
 					if ( $this->maybe_backfill_attachment( $attachment_id ) ) {
 						++$progress['backfilled_count'];
 					}
@@ -473,6 +467,22 @@ class Version_3_6_6 extends Base_Migration {
 	 * is the only reliable proof a given record row's value actually came from an
 	 * attachment-holding field of ITS OWN form.
 	 *
+	 * `records_fields` has no index on `field_type` (adding one is a schema change on the
+	 * plugin's own table, out of scope for this fix), only on its primary key `id` and on
+	 * `record_id`. Paginating by "rows matched" (`WHERE field_type = ... LIMIT N`, as Phase
+	 * 1/2 do against `wp_postmeta`, which DOES index `meta_key`) would let MySQL scan an
+	 * unbounded number of physical rows per call while it looks for `N` matches: on a site
+	 * with years of Form Record history dominated by non-media fields, a single
+	 * `$wpdb->get_results()` could scan most or all of the remaining table before the
+	 * `LIMIT` is satisfied, and the time-budget check between loop iterations cannot
+	 * interrupt a single already-running query. Pagination here is therefore by a FIXED `id`
+	 * range instead: `record_field_max_id` (the table's highest `id` at the start of this
+	 * phase, captured once) bounds how many pages will ever be walked, and each page's
+	 * `WHERE id > :cursor AND id <= :cursor + RECORD_FIELD_BATCH_SIZE` scans at most
+	 * `RECORD_FIELD_BATCH_SIZE` physical rows no matter how few (or none) are `media-field` -
+	 * trading a possibly-larger number of small, bounded queries for the guarantee that no
+	 * single query's cost depends on how sparse matching rows are.
+	 *
 	 * @param \wpdb $wpdb
 	 * @param array $progress By reference; mutated in place and persisted on yield.
 	 * @param float $started_at
@@ -487,7 +497,15 @@ class Version_3_6_6 extends Base_Migration {
 		$fields_table  = Record_Field_Model::table();
 		$records_table = Record_Model::table();
 
-		while ( true ) {
+		if ( ! $progress['record_field_max_id'] ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$progress['record_field_max_id'] = (int) $wpdb->get_var( "SELECT MAX(id) FROM {$fields_table}" );
+		}
+
+		while ( $progress['last_record_field_id'] < $progress['record_field_max_id'] ) {
+			$range_start = $progress['last_record_field_id'];
+			$range_end   = $range_start + self::RECORD_FIELD_BATCH_SIZE;
+
 			$rows = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->prepare(
 					"SELECT rf.id, rf.field_name, rf.field_value, rf.field_attrs, r.form_id
@@ -495,23 +513,15 @@ class Version_3_6_6 extends Base_Migration {
 					INNER JOIN {$records_table} r ON r.id = rf.record_id
 					WHERE rf.field_type = %s
 					AND rf.id > %d
-					ORDER BY rf.id ASC
-					LIMIT %d",
+					AND rf.id <= %d
+					ORDER BY rf.id ASC",
 					'media-field',
-					$progress['last_record_field_id'],
-					self::RECORD_FIELD_BATCH_SIZE
+					$range_start,
+					$range_end
 				)
 			);
 
-			if ( empty( $rows ) ) {
-				break;
-			}
-
-			$is_last_page = count( $rows ) < self::RECORD_FIELD_BATCH_SIZE;
-
 			foreach ( $rows as $row ) {
-				$progress['last_record_field_id'] = max( $progress['last_record_field_id'], (int) $row->id );
-
 				$form_id           = (int) $row->form_id;
 				$allowed_field_set = $progress['field_names_by_form'][ $form_id ] ?? array();
 
@@ -520,25 +530,23 @@ class Version_3_6_6 extends Base_Migration {
 				}
 
 				foreach ( $this->extract_record_field_attachment_ids( $row ) as $attachment_id ) {
-					if ( isset( $progress['seen_attachment_ids'][ $attachment_id ] ) ) {
-						continue;
-					}
-
-					$progress['seen_attachment_ids'][ $attachment_id ] = true;
-
 					if ( $this->maybe_backfill_attachment( $attachment_id ) ) {
 						++$progress['backfilled_count'];
 					}
 				}
 
+				// A mid-range timeout deliberately does NOT advance
+				// `last_record_field_id` past `$range_start` (set below, only once the
+				// whole range is done) - persisting a cursor inside a partially-processed
+				// range would skip this range's remaining rows forever on resume.
+				// `maybe_backfill_attachment()` is idempotent, so redoing the same range
+				// from its start next time is safe, just not free.
 				if ( $this->time_budget_exceeded( $started_at ) ) {
 					$this->persist_progress_and_yield( $progress );
 				}
 			}
 
-			if ( $is_last_page ) {
-				break;
-			}
+			$progress['last_record_field_id'] = $range_end;
 
 			if ( $this->time_budget_exceeded( $started_at ) ) {
 				$this->persist_progress_and_yield( $progress );
@@ -590,27 +598,17 @@ class Version_3_6_6 extends Base_Migration {
 	}
 
 	/**
-	 * Only backfills `_jfb_uploaded_by_user` when `post_author` is a real (non-zero) user:
-	 * `Uploaded_File::add_attachment()` never passes an explicit `post_author` to
-	 * `wp_insert_attachment()`, so for a genuinely plugin-uploaded attachment WordPress
-	 * core itself fills it in from `get_current_user_id()` at upload time - the same source
-	 * the fixed code now reads into `_jfb_uploaded_by_user` going forward, making a
-	 * non-zero `post_author` a reliable stand-in for a real logged-in uploader.
-	 *
-	 * A `post_author` of `0` is deliberately left unbackfilled (no `_jfb_uploaded_by_user`
-	 * meta written at all) rather than explicitly set to `0`: `post_author = 0` is not
-	 * proof this was a genuine anonymous form upload - it is also what an attachment
-	 * created via import, WP-CLI, or any other programmatic path with no current user
-	 * ends up with, for reasons unrelated to this plugin. Before this migration, such an
-	 * attachment had no uploader marker at all and so fell into `is_deletable_by_current_user()`
-	 * / `is_allowed_submitted_attachment()`'s lenient "no marker" branch (edit_post-gated).
-	 * Writing an explicit `0` here would move it into the strict "anonymous uploader"
-	 * branch instead, which only `Tools::is_webhook()` satisfies - silently taking away a
-	 * logged-in editor's previously-working ability to delete or reattach it. Leaving the
-	 * meta absent preserves the pre-migration (lenient) behavior for exactly the cases this
-	 * migration cannot tell apart from a real anonymous upload, while attachments genuinely
-	 * uploaded anonymously through the fixed plugin code going forward still get their `0`
-	 * marker written directly by `Uploaded_File::add_attachment()`, not by this migration.
+	 * Backfills `_jfb_uploaded_by_user` from `post_author` regardless of whether it is zero
+	 * or a real user ID, and always pairs it with `_jfb_uploaded_by_user_heuristic = 1` so
+	 * `Media_Cleanup::is_owned_by_current_actor()` can tell this guessed value apart from a
+	 * live upload's ground-truth uploader ID. See this class's own docblock (search for
+	 * "PHASE 2 IS A HEURISTIC") for why leaving `post_author = 0` unbackfilled was itself a
+	 * security bug this method used to have, and why writing an explicit `0` here is what
+	 * closes it: an unbackfilled attachment falls into `is_owned_by_current_actor()`'s
+	 * unconditional-allow "no uploader meta at all" branch, which - combined with this
+	 * migration also granting `_jfb_uploaded_by_form` to the same attachment - let any
+	 * authenticated user claim or delete it via any post they control, the same primitive
+	 * issues-tracker #20547 exists to close.
 	 *
 	 * @param int $attachment_id
 	 *
@@ -696,7 +694,7 @@ class Version_3_6_6 extends Base_Migration {
 				'field_names_by_form'   => array(),
 				'last_meta_id'          => 0,
 				'last_record_field_id'  => 0,
-				'seen_attachment_ids'   => array(),
+				'record_field_max_id'   => 0,
 				'backfilled_count'      => 0,
 			),
 			$stored

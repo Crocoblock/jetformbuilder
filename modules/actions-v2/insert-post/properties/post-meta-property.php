@@ -152,15 +152,46 @@ class Post_Meta_Property extends Base_Object_Property implements
 			update_post_meta( $id, $key, $value );
 		}
 
-		// JetEngine meta boxes processing.
-		$this->process_meta_boxes( $id, $modifier );
-
-		$new_attachment_ids = Media_Cleanup::collect_post_meta_attachment_ids(
+		/**
+		 * Snapshot what the form itself just wrote, before process_meta_boxes() below can
+		 * touch the same meta key. A JetEngine meta box can be configured to write the same
+		 * post meta key a media-cleanup-enabled field uses (fields_map allows any meta key
+		 * to be shared); Cherry_X_Post_Meta::save_meta_option() may overwrite, transform, or
+		 * (per filter_meta_box_fields_by_values()) leave that key untouched depending on
+		 * what it finds in $this->value - there is no guarantee it reproduces exactly what
+		 * the form submitted.
+		 *
+		 * @see https://github.com/Crocoblock/issues-tracker/issues/20547
+		 */
+		$form_written_attachment_ids = Media_Cleanup::collect_post_meta_attachment_ids(
 			$id,
 			$meta_keys_for_cleanup
 		);
 
-		Media_Cleanup::maybe_delete_attachments( $old_attachment_ids, $new_attachment_ids );
+		// JetEngine meta boxes processing.
+		$this->process_meta_boxes( $id, $modifier );
+
+		/**
+		 * The final "new" snapshot is taken AFTER process_meta_boxes(), since that is what
+		 * the post's meta actually ends up persisted as - but it is unioned with what the
+		 * form itself wrote rather than used alone. Using only the post-meta-box value would
+		 * let a meta box silently drop an attachment ID the submitter's own field still
+		 * legitimately included (e.g. by overwriting the shared key with a stale or
+		 * differently-shaped value), causing maybe_delete_attachments() below to delete an
+		 * attachment the saved post still actually needs. Since the diff below only deletes
+		 * IDs that are absent from BOTH snapshots would ever fail to catch, this union can
+		 * only ever cause an attachment to be kept when in doubt, never wrongly deleted -
+		 * the same fail-closed-on-deletion posture the rest of this fix uses throughout
+		 * (see Media_Cleanup::delete_attachments()' own docblock).
+		 */
+		$new_attachment_ids = array_unique(
+			array_merge(
+				$form_written_attachment_ids,
+				Media_Cleanup::collect_post_meta_attachment_ids( $id, $meta_keys_for_cleanup )
+			)
+		);
+
+		Media_Cleanup::maybe_delete_attachments( $old_attachment_ids, $new_attachment_ids, $id );
 	}
 
 	public function set_meta( array $meta ) {

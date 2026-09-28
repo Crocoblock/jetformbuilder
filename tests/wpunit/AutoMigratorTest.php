@@ -5,6 +5,7 @@ namespace JFB_Tests\Wpunit;
 use Jet_Form_Builder\Migrations\Auto_Migrator;
 use Jet_Form_Builder\Migrations\Versions\Version_3_6_5_2;
 use Jet_Form_Builder\Migrations\Versions\Version_3_6_5_3;
+use Jet_Form_Builder\Migrations\Versions\Version_3_6_6;
 
 /**
  * Coverage for the auto-run-migrations-on-update mechanism (`Auto_Migrator`), including
@@ -128,7 +129,16 @@ class AutoMigratorTest extends \Codeception\TestCase\WPTestCase {
 		$this->assertSame( JET_FORM_BUILDER_VERSION, get_option( Auto_Migrator::DB_VERSION_OPTION ) );
 	}
 
-	public function testOnlyExplicitSsrAllowlistMigrationIsSelectedForAutoRun(): void {
+	/**
+	 * `migration_instances()` is a hand-picked, explicit allow-list, not a reflection of
+	 * every migration `Migrator` knows about historically - each entry here must be added
+	 * deliberately when a new migration needs to auto-run on `admin_init`.
+	 * `Version_3_6_6` (issues-tracker #20547's media-ownership backfill) is included
+	 * alongside the SSR allowlist migrations for the same reason: without an
+	 * activation-hook trigger, it would otherwise never run for a site that only updates
+	 * plugin files without deactivating/reactivating.
+	 */
+	public function testOnlyExplicitAllowlistMigrationsAreSelectedForAutoRun(): void {
 		$probe = new class() extends Auto_Migrator {
 			public function migration_classes(): array {
 				return array_map( 'get_class', $this->migration_instances() );
@@ -136,7 +146,7 @@ class AutoMigratorTest extends \Codeception\TestCase\WPTestCase {
 		};
 
 		$this->assertSame(
-			array( Version_3_6_5_2::class, Version_3_6_5_3::class ),
+			array( Version_3_6_5_2::class, Version_3_6_5_3::class, Version_3_6_6::class ),
 			$probe->migration_classes(),
 			'Auto migration must not execute the full historical Migrator registry.'
 		);

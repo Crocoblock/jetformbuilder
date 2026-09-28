@@ -16,6 +16,7 @@ use Jet_Form_Builder\Migrations\Versions\Version_2_1_7;
 use Jet_Form_Builder\Migrations\Versions\Version_2_1_8;
 use Jet_Form_Builder\Migrations\Versions\Version_3_6_5_2;
 use Jet_Form_Builder\Migrations\Versions\Version_3_6_5_3;
+use Jet_Form_Builder\Migrations\Versions\Version_3_6_6;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -51,6 +52,7 @@ class Migrator {
 			new Version_3_6_1(),
 			new Version_3_6_5_2(),
 			new Version_3_6_5_3(),
+			new Version_3_6_6(),
 		);
 	}
 

@@ -335,7 +335,22 @@ class Version_3_6_6 extends Base_Migration {
 		$meta_keys = array();
 
 		foreach ( $actions as $action ) {
-			if ( ! is_array( $action ) || 'insert_post' !== ( $action['type'] ?? '' ) ) {
+			if (
+				! is_array( $action )
+				|| 'insert_post' !== ( $action['type'] ?? '' )
+				// `Action_Handler::save_form_action()` refuses to even construct a
+				// disabled action ($form_action['is_execute'] === false throws before the
+				// action object exists), so a disabled Insert Post action never ran
+				// `Post_Meta_Property`/wrote any legacy meta under its `fields_map` keys.
+				// `jet_form_builder()->post_type->get_actions()` above reads the raw
+				// `_jf_actions` record directly, bypassing that guard, so this method must
+				// apply it itself - otherwise a meta key that only ever existed in a
+				// disabled action's config (never actually written by this form) enters
+				// Phase 2's site-wide scan and can mark unrelated attachments as
+				// plugin-owned purely because some other post happens to reuse that key
+				// name.
+				|| ! ( $action['is_execute'] ?? true )
+			) {
 				continue;
 			}
 
@@ -681,9 +696,23 @@ class Version_3_6_6 extends Base_Migration {
 		 * migration is backfilling. Writing the identity first means an interruption
 		 * instead leaves the attachment with neither marker, to be picked up again by a
 		 * later resumed run of this same phase (see `run_backfill_phase()`'s docblock).
+		 *
+		 * The trust gate is published only once `metadata_exists()` confirms the identity
+		 * write actually landed - same reasoning as `Uploaded_File::add_attachment()`:
+		 * `update_post_meta()` can be silently short-circuited by a filter on
+		 * `update_post_meta`/`add_post_meta` (WP core lets either return non-null to skip
+		 * the write) even without any interruption. Without this check, the migration could
+		 * still publish `_jfb_uploaded_by_form` on top of a swallowed identity write, and
+		 * `get_post_meta( ..., '_jfb_uploaded_by_form', true )` above already prevents a
+		 * retried run from correcting a half-migrated attachment on its own.
 		 */
 		update_post_meta( $attachment_id, '_jfb_uploaded_by_user', $uploader_id );
 		update_post_meta( $attachment_id, '_jfb_uploaded_by_user_heuristic', 1 );
+
+		if ( ! metadata_exists( 'post', $attachment_id, '_jfb_uploaded_by_user' ) ) {
+			return false;
+		}
+
 		update_post_meta( $attachment_id, '_jfb_uploaded_by_form', 1 );
 
 		return true;

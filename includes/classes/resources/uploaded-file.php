@@ -106,9 +106,23 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 		 * close. Writing the identity first means an interruption instead
 		 * leaves the attachment with neither marker: not yet plugin-owned by
 		 * anyone, exactly like an ordinary, unrelated attachment.
+		 *
+		 * Order alone is not enough, though: `update_post_meta()` is not
+		 * guaranteed to persist just because it was called - a plugin hooked
+		 * on the `update_post_meta`/`add_post_meta` filters (WP core lets any
+		 * of them short-circuit the write by returning non-null) could silently
+		 * swallow the identity write while the second call still succeeds. The
+		 * explicit `metadata_exists()` check below confirms the identity is
+		 * actually there before the trust gate is published; if it is not,
+		 * this attachment is left exactly as an ordinary, non-plugin-owned one
+		 * (no `_jfb_uploaded_by_form` either), rather than risk a trust gate
+		 * with nothing behind it.
 		 */
 		update_post_meta( $attachment, '_jfb_uploaded_by_user', get_current_user_id() );
-		update_post_meta( $attachment, '_jfb_uploaded_by_form', 1 );
+
+		if ( metadata_exists( 'post', $attachment, '_jfb_uploaded_by_user' ) ) {
+			update_post_meta( $attachment, '_jfb_uploaded_by_form', 1 );
+		}
 
 		wp_update_attachment_metadata(
 			$attachment,

@@ -21,7 +21,8 @@ class Product_Image_Property extends Post_Thumbnail_Property {
 		$id      = $modifier->get( 'ID' );
 		$product = $id->get_product();
 
-		$product->set_image_id( $this->value );
+		// WooCommerce stores -1 as an image ID; use an empty string to clear the thumbnail.
+		$product->set_image_id( -1 === $this->value ? '' : $this->value );
 	}
 
 	public function get_related(): array {

@@ -23,9 +23,11 @@ const CursoredIcon = styled( Icon )`
 
 const FlexActionButtons = styled( Flex )`
 	position: absolute;
+	direction: ltr;
 	opacity: 0;
 	transition: 0.2s ease-in-out;
 	top: 0;
+	left: auto;
 	right: 0;
 	height: 100%;
 	background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 15%);
@@ -35,10 +37,6 @@ const FlexActionButtons = styled( Flex )`
 		width: auto;
 	}
 
-	.rtl & {
-		left: 0;
-		padding: 0 25px 0 4px;
-	}
 `;
 
 const ActionCardBody = styled( CardBody )`

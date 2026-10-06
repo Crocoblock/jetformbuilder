@@ -65,6 +65,11 @@ class Post_Meta_Property extends Base_Object_Property implements
 			return;
 		}
 
+		// A locked Media field keeps its stored value, so a Default Field for the same key must not overwrite it.
+		foreach ( $modifier->locked_targets as $locked_key ) {
+			unset( $this->value[ $locked_key ] );
+		}
+
 		/**
 		 * @see https://github.com/Crocoblock/issues-tracker/issues/16657
 		 */

@@ -39,10 +39,11 @@ class Post_Id_Property extends Base_Object_Property {
 
 		$post = get_post( (int) $value );
 
+		// post_author 0 (anonymous post) must not match a logged-out visitor, whose user ID is also 0.
 		if (
 			! is_a( $post, \WP_Post::class )
 			|| (
-				absint( $post->post_author ) !== get_current_user_id()
+				! ( is_user_logged_in() && absint( $post->post_author ) === get_current_user_id() )
 				&& ! current_user_can( 'edit_post', $post->ID )
 				&& ! Tools::is_webhook()
 			)

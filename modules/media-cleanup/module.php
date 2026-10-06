@@ -385,6 +385,55 @@ class Module implements Base_Module_It {
 		}
 	}
 
+	/**
+	 * Names of Media fields (any value format) that the current user is not allowed to
+	 * change, because they lack the field's "user access" capability.
+	 *
+	 * File_Uploader checks that capability only when a file is uploaded, so a submission without
+	 * a file would otherwise still be able to write attachment IDs. The value is not emptied:
+	 * a permission failure must never turn an unchanged field into a removal request, so callers
+	 * skip these fields entirely and leave the stored meta (and its attachments) untouched.
+	 * Other fields mapped to the same target are not affected.
+	 *
+	 * @param object $modifier Insert/Update Post modifier (uses `fields_map`).
+	 *
+	 * @return string[] Field names.
+	 */
+	public static function get_locked_media_field_names( $modifier ): array {
+		$form_id = jet_fb_action_handler()->get_form_id();
+		if ( ! $form_id || empty( $modifier->fields_map ) ) {
+			return array();
+		}
+		$names = array();
+		foreach ( $modifier->fields_map as $field_name => $meta_key ) {
+			if ( empty( $field_name ) || empty( $meta_key ) ) {
+				continue;
+			}
+			$field = jet_form_builder()->form->get_field_by_name(
+				$form_id,
+				$field_name
+			);
+			if ( self::is_media_field_locked( $field ) ) {
+				$names[] = $field_name;
+			}
+		}
+		return $names;
+	}
+
+	/**
+	 * @param mixed $field Parsed block array.
+	 *
+	 * @return bool
+	 */
+	public static function is_media_field_locked( $field ): bool {
+		if ( ! is_array( $field ) || 'jet-forms/media-field' !== ( $field['blockName'] ?? '' ) ) {
+			return false;
+		}
+		// Regardless of value format / insert_attachment: without a file the parser passes the
+		// submitted value (a URL included) through as is, so the capability applies to every format.
+		return ! \JFB_Modules\Block_Parsers\File_Uploader::is_permitted( $field['attrs'] ?? array() );
+	}
+
 	public static function get_post_meta_keys_for_cleanup( $modifier ): array {
 		$form_id = jet_fb_action_handler()->get_form_id();
 		if ( ! $form_id || empty( $modifier->fields_map ) ) {

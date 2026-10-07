@@ -35,6 +35,7 @@ tests/wpunit/*
 !tests/wpunit/PaypalPayNowTransactionTest.php
 !tests/wpunit/TrustedPriceResolverTest.php
 !tests/wpunit/PresetAccessControlTest.php
+!tests/wpunit/PresetSourceQueryVarSanitizationTest.php
 !tests/wpunit/FormMessageShortcodeSecurityTest.php
 !tests/wpunit/SsrCallbackRegistryTest.php
 !tests/wpunit/SsrCallbackMigrationBatchingTest.php

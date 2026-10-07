@@ -45,9 +45,52 @@ function isSafeUrl( value ) {
 	);
 }
 
-function isSafeStyle( value ) {
-	return ! /expression\s*\(|url\s*\(|javascript:|@import|behavio?r\s*:|-moz-binding/i
-		.test( String( value ).replace( /\\/g, '' ) );
+// Only plain presentational properties survive; everything else (position,
+// content, behavior, @-rules...) is dropped. Values cannot contain url() or any
+// other function (see SAFE_STYLE_VALUE), so even `background` cannot load a resource.
+const ALLOWED_STYLE_PROPS = new Set( [
+	'color', 'background-color', 'font-weight', 'font-style', 'font-size',
+	'font-family', 'text-align', 'text-decoration', 'text-indent',
+	'text-transform', 'line-height', 'letter-spacing', 'vertical-align',
+	'list-style-type', 'white-space', 'width', 'height', 'max-width',
+	'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+	'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+	'display', 'float', 'opacity', 'box-sizing', 'object-fit', 'word-break',
+	'overflow-wrap', 'list-style', 'min-width', 'min-height', 'max-height',
+	'background', 'border', 'border-top', 'border-right', 'border-bottom',
+	'border-left', 'border-color', 'border-style', 'border-width',
+	'border-radius',
+] );
+
+// Plain tokens only: no backslash escapes (they can spell `url(`), no comments,
+// no quotes, and no function other than the colour ones.
+const SAFE_STYLE_VALUE = /^[a-z0-9#%.,\s+-]*(?:(?:rgb|rgba|hsl|hsla)\([0-9.,%\s/+-]*\)[a-z0-9#%.,\s+-]*)*$/i;
+
+/**
+ * Rebuilds the style attribute from validated declarations instead of
+ * pattern-matching a string the browser will interpret differently.
+ */
+function cleanStyle( value ) {
+	return String( value )
+		.split( ';' )
+		.map( ( declaration ) => {
+			const index = declaration.indexOf( ':' );
+
+			if ( index < 1 ) {
+				return '';
+			}
+
+			const prop = declaration.slice( 0, index ).trim().toLowerCase();
+			const val  = declaration.slice( index + 1 ).trim();
+
+			return (
+				ALLOWED_STYLE_PROPS.has( prop ) &&
+				val &&
+				SAFE_STYLE_VALUE.test( val )
+			) ? `${ prop }: ${ val }` : '';
+		} )
+		.filter( Boolean )
+		.join( '; ' );
 }
 
 function cleanNode( node ) {
@@ -86,14 +129,27 @@ function cleanNode( node ) {
 
 			if (
 				! ALLOWED_ATTRS.has( name ) ||
-				( URL_ATTRS.has( name ) && ! isSafeUrl( attr.value ) ) ||
-				( 'style' === name && ! isSafeStyle( attr.value ) )
+				( URL_ATTRS.has( name ) && ! isSafeUrl( attr.value ) )
 			) {
 				child.removeAttribute( attr.name );
+
+				return;
+			}
+
+			if ( 'style' === name ) {
+				const style = cleanStyle( attr.value );
+
+				if ( style ) {
+					child.setAttribute( 'style', style );
+				} else {
+					child.removeAttribute( 'style' );
+				}
 			}
 		} );
 
-		if ( '_blank' === child.getAttribute( 'target' ) ) {
+		// browsing-context names are case-insensitive and any named target keeps
+		// window.opener, so every target gets noopener (replacing a supplied rel)
+		if ( child.hasAttribute( 'target' ) ) {
 			child.setAttribute( 'rel', 'noopener noreferrer' );
 		}
 	} );

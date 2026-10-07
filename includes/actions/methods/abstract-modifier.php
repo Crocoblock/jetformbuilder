@@ -209,14 +209,15 @@ abstract class Abstract_Modifier {
 
 		if ( ! $revert ) {
 			$this->fields_map = $fields_map;
-
-			return $this;
+		} else {
+			$this->fields_map = array_combine(
+				array_values( $fields_map ),
+				array_keys( $fields_map )
+			);
 		}
 
-		$this->fields_map = array_combine(
-			array_values( $fields_map ),
-			array_keys( $fields_map )
-		);
+		// The request may have been set before the map (see set_request()).
+		$this->strip_locked_fields();
 
 		return $this;
 	}
@@ -224,7 +225,8 @@ abstract class Abstract_Modifier {
 	public function set_request( $request ): Abstract_Modifier {
 		$this->request = array_merge( $this->request, $request );
 
-		// Done here too, not only in run(): modifiers set properties that read raw request
+		// Done here too, not only in run() (and in set_fields_map(), for the opposite setter order):
+		// modifiers set properties that read raw request
 		// values (see Base_Object_Property::set_related()) while they are still preparing.
 		$this->strip_locked_fields();
 

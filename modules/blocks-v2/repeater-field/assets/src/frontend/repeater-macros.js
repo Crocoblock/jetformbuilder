@@ -1,3 +1,5 @@
+import sanitizeHtml from '../../../../../../assets/src/frontend/main/html.macro/sanitizeHtml';
+
 const { applyFilters } = JetPlugins.hooks;
 
 const MACRO_FORMAT_OPTION_LABEL = 'option-label';
@@ -184,7 +186,7 @@ function collectRepeaterLinesFromTemplate(fieldNode, templateHtml) {
 				);
 			}
 
-			node.innerHTML = String(
+			node.innerHTML = sanitizeHtml(
 				valuesByFormat[macroFormat][macroName] ?? ''
 			);
 		});
@@ -244,7 +246,7 @@ function collectRepeaterLinesPlain(fieldNode, macros, macroFormat = '') {
 				macroFormat
 			);
 
-			lines.push(`${name}: ${value}`);
+			lines.push(`${sanitizeHtml(name)}: ${sanitizeHtml(value)}`);
 		});
 	});
 

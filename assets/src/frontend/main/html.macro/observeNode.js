@@ -43,7 +43,7 @@ function observeNode( node, root ) {
 	node.dataset.jfbObserved = 1;
 
 	formula.setResult = () => {
-		let html = String( formula.calculateString() );
+		let html = String( formula.calculateHtml() );
 
 		const hasTextarea = node.querySelector?.( 'textarea' );
 

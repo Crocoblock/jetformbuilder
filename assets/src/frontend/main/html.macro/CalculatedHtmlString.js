@@ -1,6 +1,8 @@
 import CalculatedFormula from '../calc.module/CalculatedFormula';
 import getFilters from '../calc.module/getFilters';
 import applyValueFilters from '../calc.module/applyFilters';
+import { SafeHtml } from './escapeHtml';
+import sanitizeHtml from './sanitizeHtml';
 
 const { applyFilters } = JetPlugins.hooks;
 
@@ -50,6 +52,10 @@ function getInputOptionLabels(input) {
 
 }
 
+function unwrapSafeHtml( value ) {
+	return value instanceof SafeHtml ? value.toString() : value;
+}
+
 function CalculatedHtmlString(
 	root,
 	{ 
@@ -91,7 +97,7 @@ function CalculatedHtmlString(
 			: fieldValue;
 
 		if (false !== fieldValue) {
-			return fieldValue;
+			return new SafeHtml( fieldValue );
 		}
 
 		if (MACRO_FORMAT_OPTION_LABEL === this.macroFormat) {
@@ -150,7 +156,7 @@ CalculatedHtmlString.prototype.observeMacro = function ( current ) {
 		return () => {
 			if ( 'repeater' === relatedInput.inputType && filtersList?.length ) {
 				// Preserve repeater macro side effects like inner input change binding.
-				const relatedValue = this.relatedCallback( relatedInput );
+				const relatedValue = unwrapSafeHtml( this.relatedCallback( relatedInput ) );
 				relatedInput.reQueryValue?.();
 
 				return applyValueFilters(
@@ -160,10 +166,15 @@ CalculatedHtmlString.prototype.observeMacro = function ( current ) {
 				);
 			}
 
-			return applyValueFilters(
-				this.relatedCallback( relatedInput ),
-				filtersList,
-			);
+			const value = this.relatedCallback( relatedInput );
+
+			if ( value instanceof SafeHtml && ! filtersList?.length ) {
+				return value;
+			}
+
+			// filters get the original value type (null, false, array...), only the
+			// SafeHtml marker is dropped
+			return applyValueFilters( unwrapSafeHtml( value ), filtersList );
 		};
 	}
 
@@ -185,8 +196,8 @@ CalculatedHtmlString.prototype.observeMacro = function ( current ) {
 	return () => applyValueFilters( htmlAttr.value.current, filtersList );
 };
 
-CalculatedHtmlString.prototype.calculateString = function () {
-	if ( !this.parts.length ) {
+CalculatedHtmlString.prototype.mapParts = function ( mapValue ) {
+	if ( ! this.parts.length ) {
 		return this.formula;
 	}
 
@@ -198,9 +209,34 @@ CalculatedHtmlString.prototype.calculateString = function () {
 
 			const result = current();
 
-			return ( null === result || '' === result ) ? '' : result;
+			if ( null === result || undefined === result || '' === result ) {
+				return '';
+			}
+
+			return mapValue( result );
 		} )
 		.join( '' );
+};
+
+/**
+ * Plain string, for assigning to element properties (href, value, title...),
+ * where nothing is parsed as HTML.
+ */
+CalculatedHtmlString.prototype.calculateString = function () {
+	return this.mapParts( ( result ) => String( result ) );
+};
+
+/**
+ * For `innerHTML` sinks. Field values are user-controlled (typed text,
+ * query_var presets, ...), so they are sanitized; markup already built by
+ * trusted macro handlers (SafeHtml) and the author's static text are kept.
+ */
+CalculatedHtmlString.prototype.calculateHtml = function () {
+	return this.mapParts(
+		( result ) => result instanceof SafeHtml
+			? result.toString()
+			: sanitizeHtml( result ),
+	);
 };
 
 export default CalculatedHtmlString;

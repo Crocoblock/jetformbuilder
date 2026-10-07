@@ -48,7 +48,7 @@ function observeComment( comment, root ) {
 	);
 
 	formula.setResult = () => {
-		prevSibling.innerHTML = formula.calculateString();
+		prevSibling.innerHTML = formula.calculateHtml();
 	};
 	formula.setResult();
 	comment.jfbObserved = true;

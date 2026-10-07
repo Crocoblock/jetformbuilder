@@ -7,6 +7,13 @@ function escapeHtml( value ) {
 		.replaceAll( "'", '&#039;' );
 }
 
+function isSafeLinkUrl( url ) {
+	// eslint-disable-next-line no-control-regex
+	const clean = String( url ).replace( /[\u0000-\u0020\u007f-\u009f]/g, '' );
+
+	return ! /^(javascript|vbscript|data):/i.test( clean );
+}
+
 function isMediaField( fieldNode ) {
 	if ( ! fieldNode ) {
 		return false;
@@ -51,7 +58,7 @@ function renderImageItem( url, name = '' ) {
 function renderFileItem( url, name = '' ) {
 	const label = name || url || 'File';
 
-	if ( url ) {
+	if ( url && isSafeLinkUrl( url ) ) {
 		return `
 			<li style="list-style:none; margin:0 0 10px 0;">
 				<a

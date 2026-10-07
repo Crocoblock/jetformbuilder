@@ -44,6 +44,12 @@ tests/wpunit/*
 !tests/wpunit/SsrCallbacksHandlerMigrationGuardTest.php
 !tests/wpunit/MediaFieldPreviewEscapingTest.php
 !tests/wpunit/SelectStoredXssTest.php
+!tests/wpunit/Actions/
+!tests/wpunit/Actions/InsertPost/
+!tests/wpunit/Actions/InsertPost/LockedMediaFieldModifierTest.php
+!tests/wpunit/Modules/
+!tests/wpunit/Modules/BlockParsers/
+!tests/wpunit/Modules/BlockParsers/MediaFieldCapabilityTest.php
 test-results/
 AGENTS.md
 .env.e2e

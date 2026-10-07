@@ -15,17 +15,23 @@ class PostStatusPropertyTest extends \Codeception\TestCase\WPTestCase {
 	private $action;
 	private $modifier;
 	private $post_id;
+	private $user_id;
 
 	protected function setUp(): void {
 		parent::setUp();
 
 		$this->modifier = new Post_Modifier();
 
+		// Anonymous posts (post_author = 0) can't be updated by a logged-out visitor anymore.
+		$this->user_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $this->user_id );
+
 		$this->post_id = wp_insert_post(
 			array(
 				'post_type'   => 'post',
 				'post_status' => 'publish',
 				'post_title'  => 'Temporary post',
+				'post_author' => $this->user_id,
 			)
 		);
 

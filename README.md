@@ -8,6 +8,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.6.1
+* FIX: unauthenticated update/trash of anonymous posts and Media field access check
+* FIX: Prevent reflected DOM XSS through HTML macros
+
 ## 3.6.6
 * FIX: Limit AI form generation prompt length to prevent 403
 * FIX: Preserve JetEngine listing styles after dynamic option updates

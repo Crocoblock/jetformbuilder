@@ -3,6 +3,7 @@
 
 namespace JFB_Modules\Verification\Rest_Api\Endpoints;
 
+use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Components\Rest_Api\Rest_Api_Endpoint_Base;
 use JFB_Modules\Jobs\Module;
@@ -23,7 +24,9 @@ class Verify_Manually extends Rest_Api_Endpoint_Base {
 	}
 
 	public function check_permission(): bool {
-		return current_user_can( 'manage_options' );
+		$capability = Tab_Handler_Manager::get_manual_verification_capability();
+
+		return current_user_can( 'manage_options' ) || current_user_can( $capability );
 	}
 
 	/**

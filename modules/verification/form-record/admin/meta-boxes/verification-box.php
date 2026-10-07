@@ -9,6 +9,7 @@ use Jet_Form_Builder\Admin\Table_Views\Column_Base;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use JFB_Modules\Form_Record\Admin\Pages\Single_Form_Record_Page;
 use JFB_Modules\Verification\Form_Record\Admin\Meta_Boxes\Actions\Verify_Manually_Action;
+use JFB_Modules\Verification\Rest_Api\Endpoints\Verify_Manually;
 use JFB_Modules\Webhook\Form_Record\Db\Models\Tokens_To_Records_Model;
 use JFB_Modules\Webhook\Form_Record\Db\Views\Token_By_Record_View;
 use JFB_Modules\Verification\Form_Record\Admin\Columns\Expire_At_Column;
@@ -42,7 +43,10 @@ class Verification_Box extends Base_List_Box {
 	}
 
 	public function get_actions(): array {
-		if ( ! is_a( jet_fb_current_page(), Single_Form_Record_Page::class ) ) {
+		if (
+			! is_a( jet_fb_current_page(), Single_Form_Record_Page::class ) ||
+			! ( new Verify_Manually() )->check_permission()
+		) {
 			return array();
 		}
 

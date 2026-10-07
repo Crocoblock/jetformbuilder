@@ -133,5 +133,10 @@ final class Tab_Handler_Manager {
 		return ! empty( $capability ) ? $capability : 'manage_options';
 	}
 
+	public static function get_manual_verification_capability() {
+		$capability = self::get_options( 'options-tab' )['manual_verification_capability'] ?? '';
+		return ! empty( $capability ) ? $capability : 'manage_options';
+	}
+
 
 }

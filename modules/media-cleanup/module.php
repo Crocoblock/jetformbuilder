@@ -404,6 +404,11 @@ class Module implements Base_Module_It {
 		if ( ! $form_id || empty( $modifier->fields_map ) ) {
 			return array();
 		}
+		// Parse the form once: get_field_by_name() reparses it on every call without $blocks.
+		$blocks = \Jet_Form_Builder\Blocks\Block_Helper::get_blocks_by_post( $form_id );
+		if ( empty( $blocks ) ) {
+			return array();
+		}
 		$names = array();
 		foreach ( $modifier->fields_map as $field_name => $meta_key ) {
 			if ( empty( $field_name ) || empty( $meta_key ) ) {
@@ -411,7 +416,8 @@ class Module implements Base_Module_It {
 			}
 			$field = jet_form_builder()->form->get_field_by_name(
 				$form_id,
-				$field_name
+				$field_name,
+				$blocks
 			);
 			if ( self::is_media_field_locked( $field ) ) {
 				$names[] = $field_name;

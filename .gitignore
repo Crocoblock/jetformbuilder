@@ -47,6 +47,9 @@ tests/wpunit/*
 !tests/wpunit/Actions/
 !tests/wpunit/Actions/InsertPost/
 !tests/wpunit/Actions/InsertPost/LockedMediaFieldModifierTest.php
+!tests/wpunit/Modules/
+!tests/wpunit/Modules/BlockParsers/
+!tests/wpunit/Modules/BlockParsers/MediaFieldCapabilityTest.php
 test-results/
 AGENTS.md
 .env.e2e

@@ -8,6 +8,29 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.7
+* FIX: JFB_FIELD macro parsing in field placeholders
+
+## 3.6.6.1
+* FIX: unauthenticated update/trash of anonymous posts and Media field access check
+* FIX: Prevent reflected DOM XSS through HTML macros
+
+## 3.6.6
+* FIX: Limit AI form generation prompt length to prevent 403
+* FIX: Preserve JetEngine listing styles after dynamic option updates
+* FIX: Support BOOKING_UNITS macro in calculated fields
+* ADD: Additional Style Settings for Media Field in New Style Manager
+* FIX: Phone field block rejects all landline (fixed-line) numbers as invalid
+* FIX: Form style is not applied in the dynamic popup
+* ADD: Add notice to Media field
+* ADD: Form Preset using source that is JetformBuilder Record
+* FIX: Checkbox custom options with zero or one predefined option
+* FIX: Apply Twig listing styles to checkbox and radio templates
+* FIX: Clear stale Calculated Field watchers on recalculation
+* FIX: Restore Range field rendering in Chrome
+* FIX: Unauthenticated arbitrary Media Library attachment deletion
+* FIX: Prevent XSS in Select field
+
 ## 3.6.5.4
 * FIX: Prevent XSS in Calculated Field formulas
 

@@ -177,6 +177,7 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 		}
 
 		$verify_manually_action = $this->get_verification_action();
+		$can_verify             = ( new Verify_Manually() )->check_permission();
 
 		foreach ( $list as &$record ) {
 			if ( empty( $record['actions']['value'] ) ||
@@ -191,7 +192,7 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 
 			$record['status']['value'] = $column_status;
 
-			if ( Admin\Columns\Status_Column::PENDING !== $column_status['status'] ) {
+			if ( ! $can_verify || Admin\Columns\Status_Column::PENDING !== $column_status['status'] ) {
 				continue;
 			}
 
@@ -208,6 +209,10 @@ final class Inner_Module implements Base_Module_It, Base_Module_Handle_It {
 	}
 
 	public function add_actions_for_records_page( array $config ): array {
+		if ( ! ( new Verify_Manually() )->check_permission() ) {
+			return $config;
+		}
+
 		$delete_action = array_pop( $config['actions'] );
 
 		array_push(

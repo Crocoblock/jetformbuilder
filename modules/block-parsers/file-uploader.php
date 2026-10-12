@@ -122,21 +122,33 @@ class File_Uploader {
 	 * @throws Upload_Permission_Exception
 	 */
 	protected function sanitize_permissions() {
-		$cap = ! empty( $this->settings['allowed_user_cap'] ) ? $this->settings['allowed_user_cap'] : 'upload_files';
-
-		// phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped
-		if ( 'any_user' !== $cap && ! is_user_logged_in() ) {
+		if ( ! self::is_permitted( $this->settings ) ) {
 			throw new Upload_Permission_Exception(
-				__( 'You are not allowed to upload files', 'jet-form-builder' )
+				__( 'You are not allowed to upload files', 'jet-form-builder' ) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			);
+		}
+	}
+
+	/**
+	 * Whether the current user satisfies the field's "user access" capability.
+	 * Public so that a submission without a file can be checked the same way.
+	 *
+	 * @param array $settings Media field settings.
+	 *
+	 * @return bool
+	 */
+	public static function is_permitted( array $settings ): bool {
+		$cap = ! empty( $settings['allowed_user_cap'] ) ? $settings['allowed_user_cap'] : 'upload_files';
+
+		if ( 'any_user' !== $cap && ! is_user_logged_in() ) {
+			return false;
 		}
 
 		if ( ! in_array( $cap, array( 'all', 'any_user' ), true ) && ! current_user_can( $cap ) ) {
-			throw new Upload_Permission_Exception(
-				__( 'You are not allowed to upload files', 'jet-form-builder' )
-			);
+			return false;
 		}
-		// phpcs:enable WordPress.Security.EscapeOutput.ExceptionNotEscaped
+
+		return true;
 	}
 
 	/**

@@ -83,6 +83,47 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 			throw new Upload_Exception( esc_html( $attachment->get_error_message() ) );
 		}
 
+		/**
+		 * Records who actually uploaded this attachment, so a later request
+		 * can't take credit for someone else's upload just because it also
+		 * carries the `_jfb_uploaded_by_form` marker.
+		 *
+		 * A target post ID is deliberately NOT recorded here: at upload time
+		 * (field/request parsing) no post has been authorized yet - the Insert
+		 * Post action's `ID` property (which would map to a real post) is only
+		 * resolved and capability-checked later, when that action itself runs.
+		 * Binding to a not-yet-authorized `pid` value from the same request
+		 * would just persist the attacker-controlled value the field-level
+		 * check exists to distrust.
+		 *
+		 * Written BEFORE `_jfb_uploaded_by_form` (below), not after: the latter
+		 * is the trust gate `Media_Cleanup::is_owned_by_current_actor()` reads
+		 * to decide an attachment is plugin-owned at all. If this request were
+		 * interrupted between the two writes, an attachment left with the
+		 * trust gate set but no uploader identity would fall into that check's
+		 * unconditional-allow "legacy, predates the marker system" branch -
+		 * recreating the same unrestricted-trust primitive this fix exists to
+		 * close. Writing the identity first means an interruption instead
+		 * leaves the attachment with neither marker: not yet plugin-owned by
+		 * anyone, exactly like an ordinary, unrelated attachment.
+		 *
+		 * Order alone is not enough, though: `update_post_meta()` is not
+		 * guaranteed to persist just because it was called - a plugin hooked
+		 * on the `update_post_meta`/`add_post_meta` filters (WP core lets any
+		 * of them short-circuit the write by returning non-null) could silently
+		 * swallow the identity write while the second call still succeeds. The
+		 * explicit `metadata_exists()` check below confirms the identity is
+		 * actually there before the trust gate is published; if it is not,
+		 * this attachment is left exactly as an ordinary, non-plugin-owned one
+		 * (no `_jfb_uploaded_by_form` either), rather than risk a trust gate
+		 * with nothing behind it.
+		 */
+		update_post_meta( $attachment, '_jfb_uploaded_by_user', get_current_user_id() );
+
+		if ( metadata_exists( 'post', $attachment, '_jfb_uploaded_by_user' ) ) {
+			update_post_meta( $attachment, '_jfb_uploaded_by_form', 1 );
+		}
+
 		wp_update_attachment_metadata(
 			$attachment,
 			wp_generate_attachment_metadata( $attachment, $this->get_file() )

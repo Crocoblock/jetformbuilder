@@ -16,6 +16,8 @@ const {
 function CalculatedData() {
 	InputData.call( this );
 
+	this.calculatedFormula = null;
+
 	this.formula        = '';
 	this.precision      = 0;
 	this.sepDecimal     = '';
@@ -27,7 +29,9 @@ function CalculatedData() {
 		return isCalculated( node );
 	};
 	this.setValue    = function () {
+		this.calculatedFormula?.clearWatchers();
 		const formula = new CalculatedFormula( this, { forceFunction: true } );
+		this.calculatedFormula = formula;
 
 		formula.observe( this.formula );
 		formula.setResult       = () => {

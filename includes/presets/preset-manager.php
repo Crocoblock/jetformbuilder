@@ -28,6 +28,7 @@ class Preset_Manager {
 
 	protected $data     = null;
 	protected $source   = null;
+	protected $form_id  = 0;
 	protected $defaults = array(
 		'enabled'    => false,
 		'from'       => 'post',
@@ -56,6 +57,7 @@ class Preset_Manager {
 		if ( ! $form_id ) {
 			return $this;
 		}
+		$this->form_id = absint( $form_id );
 
 		// General_Preset is not unique (Preset_Manager::general() always
 		// returns the same shared instance), and Base_Preset::set_init_data()
@@ -85,6 +87,10 @@ class Preset_Manager {
 		}
 
 		return $this;
+	}
+
+	public function get_form_id(): int {
+		return $this->form_id;
 	}
 
 	/**
@@ -141,6 +147,7 @@ class Preset_Manager {
 				new Sources\Preset_Source_User(),
 				new Sources\Preset_Source_Query_Var(),
 				new Sources\Preset_Source_Term(),
+				new Sources\Preset_Source_Form_Record(),
 			)
 		);
 

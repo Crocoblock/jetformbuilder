@@ -134,7 +134,8 @@ CheckboxData.prototype.setNode = function ( node ) {
 	this.nodes = node.getElementsByClassName(
 		'jet-form-builder__field checkboxes-field' );
 
-	this.rawName   = this.nodes[ 0 ].name;
+	const firstNode = this.nodes[ 0 ];
+	this.rawName   = firstNode.name || getCustomCheckboxInput( firstNode ).name;
 	this.name      = getParsedName( this.rawName );
 	this.inputType = 'checkbox';
 
@@ -186,6 +187,9 @@ CheckboxData.prototype.processValueFormSingleChoice = function ( node, value ) {
 	const input = getCustomCheckboxInput( node );
 
 	if ( !node.checked && !input.value ) {
+		if ( this.nodes.length === 1 ) {
+			return;
+		}
 		value.push( null );
 		return;
 	}
@@ -239,6 +243,19 @@ CheckboxData.prototype.getCustomNodes = function () {
 	return [ ...this.nodes ].filter(
 		node => node.dataset.custom && node.nextElementSibling,
 	);
+};
+
+CheckboxData.prototype.removeCustomOption = function ( node ) {
+	// Keep one empty input when there are no predefined options.
+	if ( this.nodes.length === 1 ) {
+		const input = getCustomCheckboxInput( node );
+		node.checked = false;
+		input.value = '';
+		input.disabled = true;
+		return;
+	}
+
+	node.closest( '.custom-option' ).remove();
 };
 
 export default CheckboxData;

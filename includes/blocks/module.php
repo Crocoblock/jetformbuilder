@@ -242,6 +242,7 @@ final class Module implements Base_Module_It {
 							'src',
 							'alt',
 							'title',
+							'placeholder',
 						),
 					),
 					$options

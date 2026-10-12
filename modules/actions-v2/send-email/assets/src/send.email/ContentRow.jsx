@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
 import { TextareaControl } from '@wordpress/components';
 import { useActionValidatorProvider } from 'jet-form-builder-actions';
 import { styled } from '@linaria/react';
+import EmailPreview from './EmailPreview';
 
 const StyledTextareaControl = styled(TextareaControl)`
 	.components-base-control__field {
@@ -38,6 +39,8 @@ function ContentRow( { settings, onChangeSettingObj } ) {
 					macroScope="send-email.content"
 					withCurrent
 				/>
+				{ ( !settings.content_type || 'text/html' === settings.content_type ) &&
+					<EmailPreview settings={ settings }/> }
 			</LabelWithActions>
 			<RowControlEnd hasError={ hasError }>
 				<StyledTextareaControl

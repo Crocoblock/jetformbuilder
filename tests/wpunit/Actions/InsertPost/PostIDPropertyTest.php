@@ -16,6 +16,7 @@ class PostIDPropertyTest extends \Codeception\TestCase\WPTestCase {
 	private $user_id;
 	private $post_id;
 	private $guest_post_id;
+	private $admin_post_id;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -33,6 +34,15 @@ class PostIDPropertyTest extends \Codeception\TestCase\WPTestCase {
 				'post_status' => 'publish',
 				'post_title'  => 'Temporary post',
 				'post_author' => $this->user_id,
+			)
+		);
+
+		$this->admin_post_id = wp_insert_post(
+			array(
+				'post_type'   => 'post',
+				'post_status' => 'publish',
+				'post_title'  => 'Temporary post by admin',
+				'post_author' => 1,
 			)
 		);
 
@@ -68,21 +78,43 @@ class PostIDPropertyTest extends \Codeception\TestCase\WPTestCase {
 		} );
 	}
 
-	public function testGuestCanUpdateHisPost() {
+	/**
+	 * Anonymous posts have post_author = 0, which equals the user ID of every logged-out visitor.
+	 * That must not be treated as ownership.
+	 */
+	public function testGuestCantUpdateAnonymousPost() {
 		/** @var Post_Id_Property $id */
-		$id = $this->modifier->get( 'ID' );
+		$id            = $this->modifier->get( 'ID' );
+		$guest_post_id = $this->guest_post_id;
 
-		$this->assertTrue( $id->can_attach( '', $this->guest_post_id ) );
+		$this->assertSame( 0, (int) get_post( $guest_post_id )->post_author );
+
+		$this->assertThrows( Action_Exception::class, static function () use ( $id, $guest_post_id ) {
+			$id->can_attach( '', $guest_post_id );
+		} );
+	}
+
+	public function testSubscriberCantUpdateAnonymousPost() {
+		/** @var Post_Id_Property $id */
+		$id            = $this->modifier->get( 'ID' );
+		$guest_post_id = $this->guest_post_id;
+
+		wp_set_current_user( $this->user_id );
+
+		$this->assertThrows( Action_Exception::class, static function () use ( $id, $guest_post_id ) {
+			$id->can_attach( '', $guest_post_id );
+		} );
 	}
 
 	public function testSubscriberCantUpdateSomeoneElsePost() {
 		/** @var Post_Id_Property $id */
-		$id = $this->modifier->get( 'ID' );
+		$id            = $this->modifier->get( 'ID' );
+		$admin_post_id = $this->admin_post_id;
 
 		wp_set_current_user( $this->user_id );
 
-		$this->assertThrows( Action_Exception::class, static function () use ( $id ) {
-			$id->can_attach( '', 14 ); // post exist, but subscriber can't edit it (see in dump.sql)
+		$this->assertThrows( Action_Exception::class, static function () use ( $id, $admin_post_id ) {
+			$id->can_attach( '', $admin_post_id ); // post exist, but subscriber can't edit it
 		} );
 	}
 
@@ -103,7 +135,7 @@ class PostIDPropertyTest extends \Codeception\TestCase\WPTestCase {
 		wp_set_current_user( 1 );
 
 		// admin can update his post
-		$this->assertTrue( $id->can_attach( '', 14 ) );
+		$this->assertTrue( $id->can_attach( '', $this->admin_post_id ) );
 		// admin can update someone's else post
 		$this->assertTrue( $id->can_attach( '', $this->post_id ) );
 		$this->assertTrue( $id->can_attach( '', $this->guest_post_id ) );

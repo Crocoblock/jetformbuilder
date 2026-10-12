@@ -6,6 +6,7 @@ use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Arrayable\Collection;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Silence_Exception;
+use JFB_Modules\Media_Cleanup\Module as Media_Cleanup;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -16,6 +17,14 @@ abstract class Abstract_Modifier {
 
 	public $source_arr = array();
 	public $fields_map = array();
+
+	/**
+	 * Targets (meta keys, property ids) of locked Media fields that no other submitted field writes to.
+	 * Anything else aimed at them, e.g. a Default Field value, must be discarded too.
+	 *
+	 * @var string[]
+	 */
+	public $locked_targets = array();
 	protected $request = array();
 
 	/** @var Object_Properties_Collection */
@@ -47,9 +56,22 @@ abstract class Abstract_Modifier {
 		 */
 		do_action( 'jet-form-builder/modifier/before-run', $this );
 
+		// Media fields the current user may not change: see strip_locked_fields().
+		$locked_fields = $this->strip_locked_fields();
+
+		$written_targets = array();
+
 		foreach ( $this->request as $key => $value ) {
+			$written_targets[] = $this->get_field_key( $key );
 			$this->attach_item( $key, $value );
 		}
+
+		$this->locked_targets = array_values(
+			array_diff(
+				array_map( array( $this, 'get_field_key' ), array_keys( $locked_fields ) ),
+				$written_targets
+			)
+		);
 
 		$this->attach_properties();
 		$this->do_action();
@@ -187,14 +209,15 @@ abstract class Abstract_Modifier {
 
 		if ( ! $revert ) {
 			$this->fields_map = $fields_map;
-
-			return $this;
+		} else {
+			$this->fields_map = array_combine(
+				array_values( $fields_map ),
+				array_keys( $fields_map )
+			);
 		}
 
-		$this->fields_map = array_combine(
-			array_values( $fields_map ),
-			array_keys( $fields_map )
-		);
+		// The request may have been set before the map (see set_request()).
+		$this->strip_locked_fields();
 
 		return $this;
 	}
@@ -202,7 +225,34 @@ abstract class Abstract_Modifier {
 	public function set_request( $request ): Abstract_Modifier {
 		$this->request = array_merge( $this->request, $request );
 
+		// Done here too, not only in run() (and in set_fields_map(), for the opposite setter order):
+		// modifiers set properties that read raw request
+		// values (see Base_Object_Property::set_related()) while they are still preparing.
+		$this->strip_locked_fields();
+
 		return $this;
+	}
+
+	/**
+	 * Removes Media fields the current user has no "user access" capability for from the request.
+	 *
+	 * File_Uploader only checks that capability when a file is uploaded, so a submission without
+	 * a file would otherwise still write the submitted value (an attachment ID or URL) into
+	 * whatever property the field is mapped to. Dropping the field from the request itself
+	 * covers every property (post meta, thumbnail, content, ID, user fields, ...) and every
+	 * way of reading it, leaves the stored value untouched (never emptied, so media cleanup
+	 * can't treat it as a removal) and doesn't affect other fields mapped to the same target.
+	 *
+	 * @return array Locked field names as keys.
+	 */
+	private function strip_locked_fields(): array {
+		$locked_fields = array_flip( Media_Cleanup::get_locked_media_field_names( $this ) );
+
+		if ( ! empty( $locked_fields ) ) {
+			$this->request = array_diff_key( $this->request, $locked_fields );
+		}
+
+		return $locked_fields;
 	}
 
 	/**

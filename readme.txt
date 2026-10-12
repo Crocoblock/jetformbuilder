@@ -276,7 +276,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 == Changelog ==
 
 **3.6.7**
+- ADD: Manual Verification Capability setting for Form Records
+- ADD: HTML email preview in the Send Email action
 - FIX: JFB_FIELD macro parsing in field placeholders
+- FIX: Dynamic default values in the Advanced Choices field
+- FIX: Handle empty product images in WooCommerce integration
 
 **3.6.6.1**
 - FIX: unauthenticated update/trash of anonymous posts and Media field access check

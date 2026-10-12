@@ -357,6 +357,7 @@ if ( !window[ OBSERVER_FLAG ] ) {
 						'select',
 						'radio',
 						'checkbox',
+						'choice',
 					].includes( input.inputType )
 				) {
 					continue;

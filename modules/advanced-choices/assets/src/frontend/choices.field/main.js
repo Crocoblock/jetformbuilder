@@ -1,5 +1,6 @@
 import ChoicesData from './input';
 import SignalChoices from './signal';
+import '../../../../../option-field/assets/src/frontend/default-value/main';
 
 const { addFilter } = JetPlugins.hooks;
 

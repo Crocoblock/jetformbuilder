@@ -22,6 +22,7 @@ function ChoicesData() {
 
 	this.setNode = function ( node ) {
 		node.jfbSync   = this;
+		this.wrapper  = node;
 		this.nodes     = Array.from(
 			node.querySelectorAll( '.jet-form-builder-choice--item input' ),
 		);

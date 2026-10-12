@@ -28,6 +28,16 @@
 			:disabled="isLoading"
 			@input="changeVal( 'form_records_access_capability', $event )"
 		/>
+		<cx-vui-input
+			name="manual_verification_capability"
+			:wrapper-css="[ 'equalwidth' ]"
+			:size="'fullwidth'"
+			:label="loading.manual_verification_capability ? `${label.manual_verification_capability} (loading...)` : label.manual_verification_capability"
+			:description="help.manual_verification_capability"
+			:value="storage.hasOwnProperty( 'manual_verification_capability' ) ? storage.manual_verification_capability : 'manage_options'"
+			:disabled="isLoading"
+			@input="changeVal( 'manual_verification_capability', $event )"
+		/>
 		<cx-vui-select
 			name="ssr_validation_method"
 			:wrapper-css="[ 'equalwidth' ]"
@@ -174,6 +184,7 @@ export default {
 				enable_dev_mode,
 				clear_on_uninstall,
 				form_records_access_capability,
+				manual_verification_capability,
 				ssr_validation_method,
 				self_promotable_roles,
 				disable_next_button,
@@ -187,6 +198,7 @@ export default {
 				enable_dev_mode,
 				clear_on_uninstall,
 				form_records_access_capability,
+				manual_verification_capability,
 				ssr_validation_method,
 				self_promotable_roles: Array.isArray( self_promotable_roles ) && ! self_promotable_roles.length
 					? [ '' ]

@@ -17,6 +17,7 @@ class Options_Handler extends Base_Handler {
 		'scroll_on_next'        => false,
 		'auto_focus'            => false,
 		'form_records_access_capability' => 'manage_options',
+		'manual_verification_capability' => 'manage_options',
 		'gfb_request_args_key'  => '',
 		'gfb_request_args_value' => '',
 		'ssr_validation_method' => 'rest',

@@ -19,6 +19,10 @@ const label = {
 		'Form Records Access Capability',
 		'jet-form-builder',
 	),
+	manual_verification_capability: __(
+		'Manual Verification Capability',
+		'jet-form-builder',
+	),
 	ssr_validation_method: __(
 		'Server side validation method',
 		'jet-form-builder',
@@ -52,6 +56,10 @@ const help = {
 	),
 	form_records_access_capability: __(
 		'By default any Form Records available only for users with `manage_options` capability. Here you can overwrite it with any capability you want. More about capabilities <a href="https://wordpress.org/support/article/roles-and-capabilities/" target="_blank">here</a>',
+		'jet-form-builder',
+	),
+	manual_verification_capability: __(
+		'By default, only users with the `manage_options` capability can manually verify submissions in Form Records. Here you can overwrite it with any capability you want. More about capabilities <a href="https://wordpress.org/support/article/roles-and-capabilities/" target="_blank">here</a>',
 		'jet-form-builder',
 	),
 	ssr_validation_method: __(

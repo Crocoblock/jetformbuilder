@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.7
+* FIX: JFB_FIELD macro parsing in field placeholders
+
 ## 3.6.6.1
 * FIX: unauthenticated update/trash of anonymous posts and Media field access check
 * FIX: Prevent reflected DOM XSS through HTML macros

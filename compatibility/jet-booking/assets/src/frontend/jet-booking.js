@@ -57,10 +57,10 @@ addFilter(
 	'jet-form-builder/booking-compatibility',
 	function ( nodeExists, fieldName, formula ) {
 
-		const matches = fieldName.match( /ADVANCED_PRICE::([\w\-]+)/ );
+		const matches = fieldName.match( /(ADVANCED_PRICE|BOOKING_UNITS)::([\w\-]+)/ );
 
 		if ( matches && matches?.length ) {
-			nodeExists = formula.root.rootNode[ matches[1] ];
+			nodeExists = formula.root.rootNode[ matches[2] ];
 		}
 
 		return nodeExists;
@@ -84,14 +84,14 @@ addFilter(
 			return macroPart;
 		}
 
-		const matches = macroPart.match( /(ADVANCED_PRICE|BOOKING_TIME)::([\w\-]+)/ );
+		const matches = macroPart.match( /(ADVANCED_PRICE|BOOKING_TIME|BOOKING_UNITS)::([\w\-]+)/ );
 
 		if ( ! matches?.length ) {
 			return macroPart;
 		}
 		const [ , macros, fieldName ] = matches;
 
-		if ( 'ADVANCED_PRICE' === macros ) {
+		if ( [ 'ADVANCED_PRICE', 'BOOKING_UNITS' ].includes( macros ) ) {
 			const checkoutField = formula.input.root.getInput( fieldName );
 
 			if ( ! checkoutField ) {

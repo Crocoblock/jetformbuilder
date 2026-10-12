@@ -100,7 +100,7 @@ if (
 				$additional_attrs .= ' selected';
 			}
 			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-			printf( '<option value="" %1$s>%2$s</option>', $additional_attrs, $placeholder );
+			printf( '<option value="" %1$s>%2$s</option>', $additional_attrs, esc_html( $placeholder ) );
 		}
 
 		if ( ! empty( $args['field_options'] ) ) {
@@ -128,7 +128,7 @@ if (
 					$calc = ' data-calculate="' . esc_attr( $option['calculate'] ) . '"';
 				}
 
-				printf( '<option value="%1$s" %3$s%4$s>%2$s</option>', $val, $label, $selected, $calc );
+				printf( '<option value="%1$s" %3$s%4$s>%2$s</option>', esc_attr( $val ), esc_html( $label ), $selected, $calc );
 
 			}
 		}

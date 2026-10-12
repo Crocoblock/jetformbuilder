@@ -23,6 +23,37 @@ class Generate_Form_Endpoint extends Rest_Api_Private_Endpoint_Base {
 		return \WP_REST_Server::CREATABLE;
 	}
 
+	public function get_common_args(): array {
+		return array(
+			'prompt' => array(
+				'type'              => 'string',
+				'required'          => true,
+				'validate_callback' => array( $this, 'validate_prompt' ),
+			),
+		);
+	}
+
+	/**
+	 * @param mixed $value
+	 *
+	 * @return bool|\WP_Error
+	 */
+	public function validate_prompt( $value ) {
+		if ( mb_strlen( (string) $value, 'UTF-8' ) > Generate_Form_Action::MAX_PROMPT_LENGTH ) {
+			return new \WP_Error(
+				'rest_invalid_param',
+				sprintf(
+				/* translators: %d: maximum allowed prompt length */
+					__( 'Prompt is too long. Maximum length is %d characters.', 'jet-form-builder' ),
+					Generate_Form_Action::MAX_PROMPT_LENGTH
+				),
+				array( 'status' => 400 )
+			);
+		}
+
+		return true;
+	}
+
 	public function run_callback( \WP_REST_Request $request ) {
 		$action = new Generate_Form_Action();
 		$action->set_prompt(

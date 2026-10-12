@@ -57,6 +57,10 @@ class Builder_Helper {
 			'jet-listing-dynamic-post-' . $object_id,
 		);
 
+		if ( 'twig' === jet_engine()->listings->data->get_listing_type( $listing_id ) ) {
+			$classes[] = 'jet-listing-grid--' . $listing_id;
+		}
+
 		if ( $checked ) {
 			$classes[] = 'jet-form-builder__field-template--checked';
 		}

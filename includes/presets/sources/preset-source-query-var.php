@@ -4,6 +4,7 @@
 namespace Jet_Form_Builder\Presets\Sources;
 
 // If this file is called directly, abort.
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Preset_Exception;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -31,12 +32,45 @@ class Preset_Source_Query_Var extends Base_Source {
 
 	public function get_result_on_prop() {
 		if ( isset( $this->src()[ $this->prop ] ) ) {
-			return $this->src()[ $this->prop ];
+			return $this->sanitize_query_value( wp_unslash( $this->src()[ $this->prop ] ) );
 		}
 
 		throw new Preset_Exception(
 			'$_GET does not have ' . esc_attr( $this->prop ) . '  field'
 		);
+	}
+
+	/**
+	 * The query string is attacker-controlled and lands in a field default,
+	 * which frontend macros can later echo. Only values that contain
+	 * something a browser would parse as a tag are filtered, so plain text
+	 * such as "5 < 6", URLs, e-mails and line breaks reach the field
+	 * unchanged.
+	 *
+	 * @param mixed $value
+	 *
+	 * @return mixed
+	 */
+	private function sanitize_query_value( $value ) {
+		if ( is_array( $value ) ) {
+			$result = array();
+
+			foreach ( $value as $key => $item ) {
+				$key = is_string( $key ) ? Tools::sanitize_array_key( $key ) : $key;
+
+				if ( ! array_key_exists( $key, $result ) ) {
+					$result[ $key ] = $this->sanitize_query_value( $item );
+				}
+			}
+
+			return $result;
+		}
+
+		if ( is_string( $value ) && preg_match( '/<[a-z!\/?]/i', $value ) ) {
+			return Tools::sanitize_text_field( $value );
+		}
+
+		return $value;
 	}
 
 	/**

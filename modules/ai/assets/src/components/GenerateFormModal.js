@@ -22,6 +22,9 @@ const promptsExamples = [
 	'Quiz form with 5 questions with choices about math',
 ];
 
+// Keep in sync with JFB_Modules\Ai\External_Api\Generate_Form_Action::MAX_PROMPT_LENGTH
+const MAX_PROMPT_LENGTH = 4000;
+
 function GenerateFormModal( {
 	setShowModal,
 	footer: Footer = () => 'Here may be buttons',
@@ -33,7 +36,13 @@ function GenerateFormModal( {
 	const [ usage, setUsage ]         = useState( 0 );
 	const [ limit, setLimit ]         = useState( 0 );
 
+	const isTooLong = prompt.length > MAX_PROMPT_LENGTH;
+
 	const generateForm = () => {
+		if ( isTooLong ) {
+			return;
+		}
+
 		setIsLoading( true );
 		apiFetch( {
 			path: '/jet-form-builder/v1/ai/generate',
@@ -156,15 +165,30 @@ function GenerateFormModal( {
 					  'jet-form-builder' ) }
 				  value={ prompt }
 				  onChange={ setPrompt }
-				  help={ __(
-					  'Prompt example: Simple contact form',
-					  'jet-form-builder',
+				  maxLength={ MAX_PROMPT_LENGTH }
+				  help={ sprintf(
+					  __(
+						  'Prompt example: Simple contact form. %1$d/%2$d characters',
+						  'jet-form-builder',
+					  ),
+					  prompt.length,
+					  MAX_PROMPT_LENGTH,
 				  ) }
 			  />
+			  { isTooLong && <Notice status="warning" isDismissible={ false }>
+				  { sprintf(
+					  __(
+						  'Prompt is too long by %1$d characters. Maximum length is %2$d characters.',
+						  'jet-form-builder',
+					  ),
+					  prompt.length - MAX_PROMPT_LENGTH,
+					  MAX_PROMPT_LENGTH,
+				  ) }
+			  </Notice> }
 			  { Boolean( prompt.length ) && <Button
 				  variant="primary"
 				  isBusy={ isLoading }
-				  disabled={ isLoading }
+				  disabled={ isLoading || isTooLong }
 				  onClick={ generateForm }
 			  >
 				  { __( 'Generate', 'jet-form-builder' ) }

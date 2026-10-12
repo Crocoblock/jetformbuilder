@@ -280,6 +280,46 @@ function observeDefaultValue( input, defaultValue ) {
 	} );
 }
 
+function restoreMixedCheckboxDefault( input, defaultValue ) {
+	if (
+		'checkbox' !== input.inputType ||
+		!input.addNewButton ||
+		!Array.isArray( defaultValue ) ||
+		hasMacroValue( defaultValue ) ||
+		!defaultValue.every( value => 'string' === typeof value )
+	) {
+		return false;
+	}
+
+	const nodes = [ ...input.nodes ];
+
+	// Only complete the selection rendered by PHP, never an edited selection.
+	if ( nodes.some( node => node.dataset.custom || node.checked !== node.defaultChecked ) ) {
+		return false;
+	}
+
+	const selected = nodes.filter( node => node.defaultChecked ).map( node => node.value );
+	const current = input.value.current;
+	const regularDefaults = defaultValue.filter(
+		value => nodes.some( node => node.value === value ),
+	);
+
+	if (
+		!selected.length ||
+		regularDefaults.length === defaultValue.length ||
+		regularDefaults.length !== selected.length ||
+		!regularDefaults.every( value => selected.includes( value ) ) ||
+		!Array.isArray( current ) ||
+		current.length !== selected.length ||
+		!current.every( value => selected.includes( value ) )
+	) {
+		return false;
+	}
+
+	input.value.current = [ ...defaultValue ];
+	return true;
+}
+
 function applyOptionFieldDefault( input ) {
 	const [ node ] = input.nodes;
 	const fieldWrapper = input.wrapper ?? node;
@@ -291,6 +331,10 @@ function applyOptionFieldDefault( input ) {
 	const defaultValue = parseDefaultValue( rawDefault );
 
 	if ( !shouldHandleDefaultValue( rawDefault, defaultValue ) ) {
+		return;
+	}
+
+	if ( restoreMixedCheckboxDefault( input, defaultValue ) ) {
 		return;
 	}
 

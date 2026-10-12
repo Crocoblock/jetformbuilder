@@ -147,7 +147,7 @@ class Generator_Update_Endpoint extends Rest_Api_Endpoint_Base {
 					$object_id = $option['object_id'] ?? $option['value'] ?? null;
 					if ( $object_id ) {
 						$raw_html = $builder_helper->get_custom_template( $object_id, $block_attrs );
-						$option['html'] = wp_kses_post( $raw_html );
+						$option['html'] = wp_kses( $raw_html, $this->get_allowed_template_html() );
 					}
 				}
 				unset( $option );
@@ -392,5 +392,27 @@ class Generator_Update_Endpoint extends Rest_Api_Endpoint_Base {
 		}
 
 		return $values;
+	}
+
+	/**
+	 * Allowed HTML for sanitizing server-rendered Custom Template markup.
+	 *
+	 * Extends the default post allowlist with a bare `style` tag so that
+	 * inline `<style>` blocks emitted by JetEngine listing templates
+	 * (used for widget positioning/layout) survive sanitization, matching
+	 * the unsanitized initial page-render path for this same trusted,
+	 * admin-configured template source.
+	 *
+	 * @return array
+	 */
+	private function get_allowed_template_html(): array {
+		return array_merge(
+			wp_kses_allowed_html( 'post' ),
+			array(
+				'style' => array(
+					'type' => true,
+				),
+			)
+		);
 	}
 }

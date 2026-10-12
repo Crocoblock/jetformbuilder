@@ -5,6 +5,7 @@
  */
 import applyFilters from './applyFilters';
 import getFilters from './getFilters';
+import { escapeHtml } from '../html.macro/escapeHtml';
 import attachConstNamespace from './attachConstNamespace';
 import InputData from '../inputs/InputData';
 import { __, sprintf } from '@wordpress/i18n';
@@ -497,16 +498,8 @@ function escapeMacroForStringLiteral( result, state, hasPendingEscape = false ) 
 	return escaped;
 }
 
-const HTML_ESCAPE_MAP = {
-	'&': '&amp;',
-	'<': '&lt;',
-	'>': '&gt;',
-	'"': '&quot;',
-	'\'': '&#039;',
-};
-
 function escapeMacroForHtml( result ) {
-	return String( result ).replace( /[&<>"']/g, char => HTML_ESCAPE_MAP[ char ] );
+	return escapeHtml( result );
 }
 
 function escapeMacroForRegexLiteral( result, hasPendingEscape = false, inCharacterClass = false ) {

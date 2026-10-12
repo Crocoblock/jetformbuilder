@@ -7,6 +7,7 @@ use Jet_Form_Builder\Classes\Instance_Trait;
 use Jet_Form_Builder\Db_Queries\Execution_Builder;
 use Jet_Form_Builder\Migrations\Versions\Version_3_6_5_2;
 use Jet_Form_Builder\Migrations\Versions\Version_3_6_5_3;
+use Jet_Form_Builder\Migrations\Versions\Version_3_6_6;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -195,6 +196,7 @@ class Auto_Migrator {
 		return array(
 			new Version_3_6_5_2(),
 			new Version_3_6_5_3(),
+			new Version_3_6_6(),
 		);
 	}
 

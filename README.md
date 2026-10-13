@@ -14,6 +14,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * FIX: JFB_FIELD macro parsing in field placeholders
 * FIX: Dynamic default values in the Advanced Choices field
 * FIX: Handle empty product images in WooCommerce integration
+* ADD: Custom placeholder support for the Phone field
+* FIX: Payment gateways use the same Price Field value despite having separate settings
+* FIX: UI elements overlap after a WordPress update
+* FIX: Input Mask does not work with Advanced Validation
+* FIX: Default field values override user-entered values
 
 ## 3.6.6.1
 * FIX: unauthenticated update/trash of anonymous posts and Media field access check

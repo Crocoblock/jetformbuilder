@@ -193,6 +193,8 @@ trait Gateways_Editor_Data {
 
 		$result = array(
 			'allowed'    => true,
+			'stripe_individual_price_fields' => defined( 'JET_FB_STRIPE_INDIVIDUAL_PRICE_FIELDS' )
+				&& JET_FB_STRIPE_INDIVIDUAL_PRICE_FIELDS,
 			'labels'     => $this->labels(),
 			'list'       => $this->gateways_for_js(),
 			'messages'   => $this->default_messages(),

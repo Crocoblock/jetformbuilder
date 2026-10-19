@@ -1,4 +1,4 @@
-import { useEffect, useRef } from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
 
 const {
 	BaseControl,
@@ -45,12 +45,12 @@ function insertStyles() {
 		}
 
 		.${CONTROL_CLASS} .jet-fb-macros-inline-popover {
-			position: absolute;
-			left: 0;
-			right: 0;
-			top: calc(100% + 4px);
 			width: 100%;
 			z-index: 99999;
+		}
+
+		.${CONTROL_CLASS} .jet-fb-macros-inline-popover .components-popover__content {
+			width: 100%;
 			background: #fff;
 			border: 1px solid #ddd;
 			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -78,6 +78,7 @@ function insertAtCursor(input, value, insertValue) {
 
 function MessageControl({ label, value, onChange }) {
 	const inputRef = useRef(null);
+	const [ controlElement, setControlElement ] = useState(null);
 	const MacrosFields = window?.JetFBComponents?.MacrosFields;
 
 	useEffect(() => {
@@ -86,7 +87,7 @@ function MessageControl({ label, value, onChange }) {
 
 	return (
 		<BaseControl label={label}>
-			<div className={CONTROL_CLASS}>
+			<div ref={setControlElement} className={CONTROL_CLASS}>
 				<input
 					ref={inputRef}
 					type="text"
@@ -98,7 +99,16 @@ function MessageControl({ label, value, onChange }) {
 				{MacrosFields ? (
 					<MacrosFields
 						withCurrent
-						inlinePopover
+						popoverProps={{
+							inline: true,
+							anchor: controlElement,
+							position: undefined,
+							placement: 'bottom-start',
+							offset: 4,
+							noArrow: true,
+							variant: undefined,
+							className: 'jet-fb-macros-inline-popover',
+						}}
 						className={`${CONTROL_CLASS}__macro`}
 						onClick={macroName => {
 							const nextValue = insertAtCursor(

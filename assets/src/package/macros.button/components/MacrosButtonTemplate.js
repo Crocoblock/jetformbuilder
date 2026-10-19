@@ -12,6 +12,7 @@ const {
 function MacrosButtonTemplate({
 	children,
 	inlinePopover = false,
+	popoverProps = {},
 	...props
 }) {
 	const [showPopover, setShowPopover] = useState(false);
@@ -48,6 +49,7 @@ function MacrosButtonTemplate({
 					}
 				}}
 				onClose={() => setShowPopover(false)}
+				{...popoverProps}
 			>
 				{children}
 			</Popover>

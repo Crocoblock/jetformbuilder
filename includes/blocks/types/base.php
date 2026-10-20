@@ -508,7 +508,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			return $custom_value;
 		}
 
-		$this->default_from_source = array_key_exists( $name, $row );
+		$this->default_from_source = isset( $row[ $name ] );
 
 		$value = ( $row[ $name ] ?? $this->get_field_value( $attributes ) );
 

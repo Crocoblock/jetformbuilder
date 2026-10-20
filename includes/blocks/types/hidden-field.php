@@ -134,6 +134,9 @@ class Hidden_Field extends Base {
 			$from_src = 'manual_input' !== $call_field_value;
 		} elseif ( is_callable( $custom_cb ) ) {
 			$value = call_user_func( $custom_cb );
+
+			// Custom callbacks usually read request / user / post data.
+			$from_src = true;
 		}
 
 		if ( ! $this->is_empty( $value ) ) {

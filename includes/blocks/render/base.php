@@ -281,19 +281,15 @@ abstract class Base {
 	}
 
 	/**
-	 * Macro syntax inside a value that came from a preset source: it has to
-	 * be shown as text, never handed to the frontend calculator. Unlike
-	 * has_dynamic_default() it says nothing about plain "[...]" lists, which
-	 * the option fields parse as JSON without evaluating anything.
-	 *
-	 * @param mixed $value
-	 *
-	 * @return bool
+	 * Marks a data-default-val that came from a preset source: the frontend
+	 * restores it literally (JSON list or plain text) and never passes it
+	 * to the formula calculator. Checking the serialized macro syntax on the
+	 * server is not a trust boundary (JSON escapes such as \u0025).
 	 */
-	public function is_source_macro( $value ): bool {
-		return $this->block_type
-			&& $this->block_type->is_default_from_source()
-			&& jet_form_builder()->regexp->has_macro( $value );
+	public function mark_default_literal() {
+		if ( $this->block_type && $this->block_type->is_default_from_source() ) {
+			$this->add_attribute( 'data-default-literal', '1' );
+		}
 	}
 
 	protected function set_value() {

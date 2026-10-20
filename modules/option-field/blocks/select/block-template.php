@@ -49,7 +49,7 @@ $is_array_like_string = static function ( $value ) {
 };
 
 if (
-	is_string( $default ) && ! $this->is_source_macro( $default ) && (
+	is_string( $default ) && (
 		jet_form_builder()->regexp->has_macro( $default ) ||
 		$is_array_like_string( $default )
 	)
@@ -57,6 +57,7 @@ if (
 	$has_dynamic_default = true;
 	wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
 	$this->add_attribute( 'data-default-val', $default );
+	$this->mark_default_literal();
 } elseif ( is_array( $default ) ) {
 	$normalized_default = array_values( $default );
 	$single_default     = $normalized_default[0] ?? '';
@@ -72,7 +73,7 @@ if (
 	}
 
 	if (
-		is_string( $dynamic_default ) && ! $this->is_source_macro( $dynamic_default ) && (
+		is_string( $dynamic_default ) && (
 			jet_form_builder()->regexp->has_macro( $dynamic_default ) ||
 			$is_array_like_string( $dynamic_default )
 		)
@@ -80,6 +81,7 @@ if (
 		$has_dynamic_default = true;
 		wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
 		$this->add_attribute( 'data-default-val', $dynamic_default );
+		$this->mark_default_literal();
 	}
 }
 ?>

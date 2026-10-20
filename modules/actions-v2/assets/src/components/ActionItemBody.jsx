@@ -14,6 +14,7 @@ import { isChildAction } from '../helpers/actionRelations';
 const CursoredIcon = styled( Icon )`
 	cursor: not-allowed;
 	opacity: 0.3;
+	flex-shrink: 0;
 
 	.jet-form-action.draggable & {
 		cursor: grab;
@@ -22,39 +23,36 @@ const CursoredIcon = styled( Icon )`
 `;
 
 const FlexActionButtons = styled( Flex )`
-	position: absolute;
-	direction: ltr;
-	opacity: 0;
-	transition: 0.2s ease-in-out;
-	top: 0;
-	left: auto;
-	right: 0;
-	height: 100%;
-	background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 15%);
-	padding: 0 4px 0 25px;
+	flex-shrink: 0;
 
 	&& {
+		display: none;
 		width: auto;
 	}
-
 `;
 
 const ActionCardBody = styled( CardBody )`
-	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 4px;
 
 	&:hover:not([data-title-editing="true"]) {
 		${ FlexActionButtons } {
-			opacity: 1;
-			pointer-events: auto;
+			display: flex;
 		}
 	}
 
 	&[data-title-editing="true"] {
 		${ FlexActionButtons } {
-			opacity: 0;
-			pointer-events: none;
+			display: none;
 		}
 	}
+`;
+
+const ActionContent = styled( Flex )`
+	flex: 1;
+	min-width: 0;
+	min-height: 40px;
 `;
 
 const ActionTitleWrap = styled( Flex )`
@@ -78,7 +76,7 @@ function ActionItemBody() {
 		</Flex> }
 
 		{ undefined !== actionType && <>
-			<Flex align="center" justify="flex-start" gap={ 1 }>
+			<ActionContent align="center" justify="flex-start" gap={ 1 }>
 				{ !isChild && <CursoredIcon
 					className={ 'jfb-action-handle' }
 					icon={ dragHandle }
@@ -86,7 +84,7 @@ function ActionItemBody() {
 				<ActionTitleWrap align="center" justify="flex-start">
 					<ActionTitle onEditingChange={ setIsTitleEditing }/>
 				</ActionTitleWrap>
-			</Flex>
+			</ActionContent>
 
 			<FlexActionButtons justify="flex-end">
 				<EditActionSettingsButton/>

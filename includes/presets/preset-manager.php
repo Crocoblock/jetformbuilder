@@ -260,9 +260,13 @@ class Preset_Manager {
 		try {
 			$source = $manager->get_source( $args );
 
+			// result() runs public filters that may call get_field_value() again
+			// and reset the flag, so publish it only after the result is captured.
+			$value = $source->result();
+
 			$this->last_value_from_source = true;
 
-			return $source->result();
+			return $value;
 		} catch ( Preset_Exception $exception ) {
 			return '';
 		} finally {

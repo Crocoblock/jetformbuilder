@@ -45,7 +45,7 @@ class Block_Render extends Base {
 		$dynamic_default = null;
 
 		if (
-			is_string( $default ) && (
+			is_string( $default ) && ! $this->is_source_macro( $default ) && (
 				jet_form_builder()->regexp->has_macro( $default ) ||
 				$is_array_like_string( $default )
 			)
@@ -67,7 +67,7 @@ class Block_Render extends Base {
 		}
 
 		if (
-			is_string( $dynamic_default ) && (
+			is_string( $dynamic_default ) && ! $this->is_source_macro( $dynamic_default ) && (
 				jet_form_builder()->regexp->has_macro( $dynamic_default ) ||
 				$is_array_like_string( $dynamic_default )
 			)

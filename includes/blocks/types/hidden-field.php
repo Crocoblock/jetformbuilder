@@ -117,21 +117,34 @@ class Hidden_Field extends Base {
 		$static_value     = $this->block_attrs['_static_value'] ?? false;
 
 		if ( $static_value ) {
+			$this->default_from_source = false;
+
 			return $call_field_value;
 		}
 
 		$custom_cb = apply_filters( 'jet-form-builder/fields/hidden-field/value-cb', false, $call_field_value, $this );
 		$value     = '';
+		$from_src  = false;
 
 		if ( is_callable( array( $this, $call_field_value ) ) ) {
 			$value = call_user_func( array( $this, $call_field_value ) );
+
+			// Everything except the author's own "Manual Input" is read from
+			// content others can write (post title/meta, user meta, query var...).
+			$from_src = 'manual_input' !== $call_field_value;
 		} elseif ( is_callable( $custom_cb ) ) {
 			$value = call_user_func( $custom_cb );
 		}
 
-		return ( ! $this->is_empty( $value ) )
-			? $value
-			: $this->block_attrs['default'];
+		if ( ! $this->is_empty( $value ) ) {
+			// Provenance of the value actually returned, not of the preset it replaces.
+			$this->default_from_source = $from_src;
+
+			return $value;
+		}
+
+		// Falling back to the default keeps the provenance set by set_preset().
+		return $this->block_attrs['default'];
 	}
 
 	private function manual_input() {

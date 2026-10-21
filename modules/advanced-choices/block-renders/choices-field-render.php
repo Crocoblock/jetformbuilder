@@ -56,7 +56,7 @@ class Choices_Field_Render extends Base {
 			'data-jfb-sync' => '1',
 		);
 
-		foreach ( (array) $default as $value ) {
+		foreach ( $this->block_type->is_default_from_source() ? array() : (array) $default as $value ) {
 			if ( ! is_string( $value ) || ! jet_form_builder()->regexp->has_macro( $value ) ) {
 				continue;
 			}

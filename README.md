@@ -8,6 +8,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+
+## 3.6.7.1
+* FIX: Prevent stored XSS through preset values evaluated as macros
+
 ## 3.6.7
 * ADD: Manual Verification Capability setting for Form Records
 * ADD: HTML email preview in the Send Email action

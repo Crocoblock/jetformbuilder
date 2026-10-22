@@ -54,6 +54,7 @@ class Macros_Parser {
 	 */
 	public function macros_replace(): string {
 		Constants_Manager::instance();
+		Field_Label_Macro::instance();
 
 		$content = preg_replace_callback(
 			'/%([\w\-].*?\S?)%/',
@@ -148,7 +149,7 @@ class Macros_Parser {
 		return $value;
 	}
 
-	protected function has_replace( string $name ): bool {
+	public function has_replace( string $name ): bool {
 		if ( ! empty( $this->replacements ) ) {
 			return isset( $this->replacements[ $name ] );
 		}
@@ -156,7 +157,7 @@ class Macros_Parser {
 		return jet_fb_context()->has_field( $name );
 	}
 
-	protected function get_replace( string $name ) {
+	public function get_replace( string $name ) {
 		if ( ! empty( $this->replacements ) ) {
 			return $this->replacements[ $name ] ?? '';
 		}

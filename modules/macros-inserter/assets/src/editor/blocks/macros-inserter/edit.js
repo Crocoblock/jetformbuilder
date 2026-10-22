@@ -2,9 +2,15 @@ import { Fragment, useEffect, useRef } from '@wordpress/element';
 import { useBlockProps, BlockControls } from '@wordpress/block-editor';
 
 const MACRO_FORMAT_OPTION_LABEL = 'option-label';
+const MACRO_LABEL_SUFFIX = '::label';
 
 function toHtmlMacro( name, field, format ) {
-	const macro = String( name ).replace( /^%|%$/g, '' ).trim();
+	let macro = String( name ).replace( /^%|%$/g, '' ).trim();
+
+	if ( macro.endsWith( MACRO_LABEL_SUFFIX ) ) {
+		macro = macro.slice( 0, -MACRO_LABEL_SUFFIX.length );
+		format = MACRO_FORMAT_OPTION_LABEL;
+	}
 
 	let repeaterNote = '';
 

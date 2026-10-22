@@ -23,6 +23,8 @@ function MacroFieldItem( { onClick } ) {
 	const prefix = isChild ? '- ' : '';
 
 	if (field.supports_option_label) {
+		const labelValue = value.replace( /%$/, '::label%' );
+
 		return (
 			<div className="jet-fb-macro-field-item" style={{ whiteSpace: 'nowrap' }}>
 				<div className="jet-fb-macro-field-item__label">
@@ -37,7 +39,7 @@ function MacroFieldItem( { onClick } ) {
 					</Button> <br/>
 					- <Button
 						isLink
-						onClick={() => onClick(value, field, 'option-label')}
+						onClick={() => onClick(labelValue, field, 'option-label')}
 					>
 						Format: label value
 					</Button>

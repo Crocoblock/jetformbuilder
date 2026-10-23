@@ -3,6 +3,20 @@ import PopoverItem from '../context/PopoverItem';
 const { useContext } = wp.element;
 const { Button } = wp.components;
 
+/**
+ * Field help could be a string with HTML or a function,
+ * the native tooltip needs a plain text.
+ */
+function getHelpText( help ) {
+	const text = 'function' === typeof help ? help() : help;
+
+	if ( 'string' !== typeof text ) {
+		return undefined;
+	}
+
+	return text.replace( /<[^>]*>/g, '' ).trim() || undefined;
+}
+
 function MacroFieldItem( { onClick } ) {
 	const field = useContext( PopoverItem );
 
@@ -13,6 +27,8 @@ function MacroFieldItem( { onClick } ) {
 	const baseLabel = typeof field.label === 'function'
 		? field.label()
 		: ( field.label || value );
+
+	const title = getHelpText( field.help );
 
 	const isRepeater = Boolean( field.is_repeater );
 	const isChild    = Boolean( field.is_repeater_child );
@@ -51,6 +67,7 @@ function MacroFieldItem( { onClick } ) {
 		{ prefix }
 			<Button
 				style={{ whiteSpace: 'nowrap' }}
+				title={ title }
 				isLink
 				onClick={ () => onClick( value, field ) }
 			>

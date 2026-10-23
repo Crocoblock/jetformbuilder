@@ -29,6 +29,7 @@ class Preset_Manager {
 	protected $data     = null;
 	protected $source   = null;
 	protected $form_id  = 0;
+	protected $last_value_from_source = false;
 	protected $defaults = array(
 		'enabled'    => false,
 		'from'       => 'post',
@@ -87,6 +88,18 @@ class Preset_Manager {
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Whether the value returned by the last get_field_value() call was
+	 * read from a preset source (post meta, user, form record, query var...)
+	 * rather than typed by the form author as a plain default. Such values
+	 * can originate from a visitor and must never be treated as a formula.
+	 *
+	 * @return bool
+	 */
+	public function is_last_value_from_source(): bool {
+		return $this->last_value_from_source;
 	}
 
 	public function get_form_id(): int {
@@ -219,6 +232,8 @@ class Preset_Manager {
 	 * @return [type] [description]
 	 */
 	public function get_field_value( $args = array() ) {
+		$this->last_value_from_source = false;
+
 		if ( empty( $args['name'] ) ) {
 			return '';
 		}
@@ -243,7 +258,15 @@ class Preset_Manager {
 		$manager->trust_restriction_flag( true );
 
 		try {
-			return $manager->get_source( $args )->result();
+			$source = $manager->get_source( $args );
+
+			// result() runs public filters that may call get_field_value() again
+			// and reset the flag, so publish it only after the result is captured.
+			$value = $source->result();
+
+			$this->last_value_from_source = true;
+
+			return $value;
 		} catch ( Preset_Exception $exception ) {
 			return '';
 		} finally {

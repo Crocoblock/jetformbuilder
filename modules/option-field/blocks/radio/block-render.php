@@ -35,7 +35,7 @@ class Block_Render extends Base {
 		$this->add_attribute( 'required', $required );
 		if (
 			is_string( $default ) &&
-			jet_form_builder()->regexp->has_macro( $default )
+			$this->has_dynamic_default( $default )
 		) {
 			wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
 			$this->add_attribute( 'data-default-val', $default );
@@ -115,7 +115,7 @@ class Block_Render extends Base {
 
 	protected function render_custom_option(): string {
 		$default    = (string) ( $this->args['default'] ?? '' );
-		$use_custom = '' !== $default && ! jet_form_builder()->regexp->has_macro( $default );
+		$use_custom = '' !== $default && ! $this->has_dynamic_default( $default );
 
 		foreach ( $this->args['field_options'] ?? array() as $value => $option ) {
 			$val = is_array( $option ) ? ( $option['value'] ?? $value ) : $value;

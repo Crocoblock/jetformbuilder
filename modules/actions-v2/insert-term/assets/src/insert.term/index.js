@@ -1,5 +1,14 @@
 import InsertTermRender from './render';
+import DynamicInsertedTermID from './DynamicInsertedTermID';
+import DynamicInsertedTermTitle from './DynamicInsertedTermTitle';
 import { __ } from '@wordpress/i18n';
+
+const {
+	      addComputedField,
+      } = JetFBActions;
+
+addComputedField( DynamicInsertedTermID );
+addComputedField( DynamicInsertedTermTitle );
 
 export default {
 	type: 'insert_term',

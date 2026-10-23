@@ -37,6 +37,7 @@ const FlexActionButtons = styled( Flex )`
 
 	.rtl & {
 		left: 0;
+		right: auto;
 		padding: 0 25px 0 4px;
 	}
 `;

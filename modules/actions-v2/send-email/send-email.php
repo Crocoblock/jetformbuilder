@@ -22,6 +22,7 @@ class Send_Email implements Action_Integration_Interface {
 
 		// register basic hook for formatting settings
 		Send_Email_Hooks::register();
+		add_action( 'rest_api_init', array( new Preview_Endpoint(), 'register' ) );
 	}
 
 	public function on_install() {

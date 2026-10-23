@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 3.6.6.1
+Stable tag: 3.6.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,21 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.6.7.1**
+- FIX: Prevent stored XSS through preset values evaluated as macros
+
+**3.6.7**
+- ADD: Manual Verification Capability setting for Form Records
+- ADD: HTML email preview in the Send Email action
+- FIX: JFB_FIELD macro parsing in field placeholders
+- FIX: Dynamic default values in the Advanced Choices field
+- FIX: Handle empty product images in WooCommerce integration
+- ADD: Custom placeholder support for the Phone field
+- FIX: Payment gateways use the same Price Field value despite having separate settings
+- FIX: UI elements overlap after a WordPress update
+- FIX: Input Mask does not work with Advanced Validation
+- FIX: Default field values override user-entered values
 
 **3.6.6.1**
 - FIX: unauthenticated update/trash of anonymous posts and Media field access check

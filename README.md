@@ -8,6 +8,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.8
+* ADD: Ability to use ID and title of the term created by Insert/Update Term in macros of the following actions
+* FIX: Bricks AJAX popup not opening when form field uses custom template
+* FIX: Number field shows a stale min error and a min value with extra digits when min/max is set by a formula
 
 ## 3.6.7.1
 * FIX: Prevent stored XSS through preset values evaluated as macros

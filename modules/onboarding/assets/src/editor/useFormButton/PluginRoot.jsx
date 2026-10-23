@@ -1,7 +1,8 @@
-import { PluginSidebar } from '@wordpress/editor';
+import { Button, SlotFillProvider } from '@wordpress/components';
+import { createPortal, useEffect, useState } from '@wordpress/element';
 import { next } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import {
 	ResponsiveModal,
 	UseFormRoot,
@@ -14,7 +15,46 @@ const {
       } = JetFBHooks;
 
 function PluginRoot() {
-	const { closeGeneralSidebar } = useDispatch( 'core/edit-post' );
+	const [ isOpen, setIsOpen ] = useState( false );
+	const [ buttonContainer, setButtonContainer ] = useState( null );
+
+	useEffect( () => {
+		const container = document.createElement( 'div' );
+		container.classList.add( 'jfb-use-form-wrapper' );
+
+		const appendButton = () => {
+			// Support both the old and the WordPress 6.6+ editor header.
+			const header = document.querySelector(
+				'.edit-post-header__settings, .editor-header__settings',
+			);
+
+			if ( !header ) {
+				return false;
+			}
+
+			header.insertBefore(
+				container,
+				header.querySelector( '.editor-post-publish-button__button' ),
+			);
+			setButtonContainer( container );
+			return true;
+		};
+
+		const observer = new MutationObserver( () => {
+			if ( appendButton() ) {
+				observer.disconnect();
+			}
+		} );
+
+		if ( !appendButton() ) {
+			observer.observe( document.body, { childList: true, subtree: true } );
+		}
+
+		return () => {
+			observer.disconnect();
+			container.remove();
+		};
+	}, [] );
 
 	const formId = useSelect( select => (
 		select( store ).getEditedPostAttribute( 'id' )
@@ -22,22 +62,29 @@ function PluginRoot() {
 
 	const [ args ] = useMetaState( '_jf_args' );
 
-	return <PluginSidebar
-		icon={ next }
-		name="sidebar"
-		title={ __( 'Use the form', 'jet-form-builder' ) }
-	>
-		<ResponsiveModal
+	if ( !buttonContainer ) {
+		return null;
+	}
+
+	return createPortal( <SlotFillProvider>
+		<Button
+			className="jfb-use-form-button"
+			icon={ next }
+			label={ __( 'Use the form', 'jet-form-builder' ) }
+			aria-haspopup="dialog"
+			onClick={ () => setIsOpen( true ) }
+		/>
+		{ isOpen && <ResponsiveModal
 			title={ __( 'Use the form', 'jet-form-builder' ) }
-			onRequestClose={ closeGeneralSidebar }
+			onRequestClose={ () => setIsOpen( false ) }
 		>
 			<FormAttributesContext.Provider
 				value={ { formId, args, shouldUpdateForm: true } }
 			>
 				<UseFormRoot/>
 			</FormAttributesContext.Provider>
-		</ResponsiveModal>
-	</PluginSidebar>;
+		</ResponsiveModal> }
+	</SlotFillProvider>, buttonContainer );
 }
 
 export default PluginRoot;

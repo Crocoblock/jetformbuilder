@@ -13,6 +13,7 @@ function TextFieldMaskedData() {
 
 	this.maskOptions   = {};
 	this.clearOnSubmit = false;
+	this.isMaskValidation = false;
 
 	this.isSupported = function ( node ) {
 		return (
@@ -28,9 +29,9 @@ function TextFieldMaskedData() {
 		node.addEventListener('input', this.handleAutofill.bind(this, node));
 		addEyeIconListeners( this );
 	};
-	this.handleAutofill = function(node) {
-		if (node && node.inputmask) { 
-			node.inputmask.setValue(node.value);
+	this.handleAutofill = function( node ) {
+		if ( node && node.inputmask ) {
+			// Inputmask already handles typing, paste and autofill on input.
 			this.maskValidation();
 		}
 	};
@@ -38,18 +39,30 @@ function TextFieldMaskedData() {
 		const [ node ] = this.nodes;
 		const { value } = node;
 
-		this.value.current = node.inputmask.unmaskedvalue();
+		const unmaskedValue = this.changeStateMaskValidation();
 
 		setTimeout( () => {
 			this.reporting.validateOnBlur();
 		}, 0 );
 
-		this.silenceSet( value );
+		// A fixed prefix and placeholders do not satisfy required validation.
+		this.silenceSet( unmaskedValue ? value : '' );
 	};
 	this.changeStateMaskValidation = function() {
 		const [ node ] = this.nodes;
+		const unmaskedValue = node.inputmask.unmaskedvalue();
+		const wasMaskValidation = this.isMaskValidation;
 
-		this.value.current = node.inputmask.unmaskedvalue();
+		// Validate without rewriting the field and resetting the caret.
+		this.isMaskValidation = true;
+		try {
+			this.value.current = unmaskedValue;
+		}
+		finally {
+			this.isMaskValidation = wasMaskValidation;
+		}
+
+		return unmaskedValue;
 	};
 	this.setNode      = function ( node ) {
 		InputData.prototype.setNode.call( this, node );
@@ -60,6 +73,7 @@ function TextFieldMaskedData() {
 
 		inputMaskOpts.oncomplete   = this.maskValidation.bind( this );
 		inputMaskOpts.onincomplete = this.maskValidation.bind( this );
+		inputMaskOpts.oncleared    = this.maskValidation.bind( this );
 
 		const options = applyFilters( 'jet.fb.inputmask.options', inputMaskOpts, this );
 
@@ -84,7 +98,7 @@ function TextFieldMaskedData() {
 	};
 	this.removeMask   = function ( resolve ) {
 		const $maskedField = jQuery( this.nodes[ 0 ] );
-		this.maskOptions   = $maskedField[0].inputmask.opts;
+		this.maskOptions   = $maskedField[ 0 ].inputmask.opts;
 
 		// Remove mask if empty value
 		if ( !this.value.current || this.clearOnSubmit ) {
@@ -113,5 +127,18 @@ function TextFieldMaskedData() {
 }
 
 TextFieldMaskedData.prototype = Object.create( InputData.prototype );
+
+TextFieldMaskedData.prototype.onChange = function ( prevValue ) {
+	if ( !this.isMaskValidation ) {
+		InputData.prototype.onChange.call( this, prevValue );
+		return;
+	}
+
+	if ( this.isResetCalcValue ) {
+		this.calcValue = this.value.current;
+	}
+
+	this.report();
+};
 
 export default TextFieldMaskedData;

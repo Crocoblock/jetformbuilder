@@ -279,6 +279,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 - ADD: Ability to use ID and title of the term created by Insert/Update Term in macros of the following actions
 - FIX: Bricks AJAX popup not opening when form field uses custom template
 - FIX: Number field shows a stale min error and a min value with extra digits when min/max is set by a formula
+- FIX: Password visibility toggle does not work with Input Mask
+- FIX: Cursor gets stuck after entering a leading zero in a masked field
+- FIX: Select field padding is not applied correctly in Elementor with Blocksy and OceanWP themes
+- FIX: Locale-dependent PHP warning during database migrations
+- FIX: Restrict validation rules to supported field types
 
 **3.6.7.1**
 - FIX: Prevent stored XSS through preset values evaluated as macros

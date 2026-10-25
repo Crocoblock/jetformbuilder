@@ -121,6 +121,27 @@ function PluginGateways( props ) {
 		setEditGateway( null );
 	};
 
+	const saveGatewaySettings = () => {
+		const gateway = gatewayGeneral.gateway;
+		const specific = { ...( gatewayGeneral[ gateway ] || {} ) };
+
+		// Persist the displayed legacy fallback only when this gateway is saved.
+		if (
+			JetFBActions.useIndividualPriceFields( gatewayGeneral )
+			&& ( gatewayScenario.id || 'PAY_NOW' ) === 'PAY_NOW'
+			&& [ 'paypal', 'stripe' ].includes( gateway )
+			&& !Object.prototype.hasOwnProperty.call( specific, 'price_field' )
+			&& Object.prototype.hasOwnProperty.call( gatewayGeneral, 'price_field' )
+		) {
+			specific.price_field = gatewayGeneral.price_field;
+		}
+
+		closeModal( {
+			...gatewayGeneral,
+			[ gateway ]: { ...specific, scenario: gatewayScenario },
+		} );
+	};
+
 	const options = [
 		{ label: 'None', value: 'none' },
 		...gatewaysData.list,
@@ -317,13 +338,7 @@ function PluginGateways( props ) {
 					classNames={ [ 'width-60' ] }
 					onRequestClose={ () => closeModal() }
 					onCancelClick={ () => closeModal() }
-					onUpdateClick={ () => closeModal( {
-						...gatewayGeneral,
-						[ gatewayGeneral.gateway ]: {
-							...( gatewayGeneral[ gatewayGeneral.gateway ] || {} ),
-							scenario: gatewayScenario,
-						},
-					} ) }
+					onUpdateClick={ saveGatewaySettings }
 					title={ `Edit ${ getGatewayLabel( editGateway || meta?.gateway ) } Settings` }
 				>
 					<GatewaysEditor/>

@@ -286,7 +286,7 @@ class Secure_Price_Notice {
 
 		if (
 			! $this->has_explicit_price_protection_setting( $settings )
-			&& $this->has_safe_static_price_source( $form_id, $settings )
+			&& $this->has_safe_gateway_price_sources( $form_id, $settings, $gateways )
 			&& $this->enable_price_protection( $form_id, $settings )
 		) {
 			return array();
@@ -319,6 +319,18 @@ class Secure_Price_Notice {
 		}
 
 		return false;
+	}
+
+	private function has_safe_gateway_price_sources( int $form_id, array $settings, array $gateways ): bool {
+		foreach ( $gateways as $gateway_id ) {
+			$resolved = Module::with_gateway_price_field( $settings, $gateway_id );
+
+			if ( ! $this->has_safe_static_price_source( $form_id, $resolved ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private function has_safe_static_price_source( int $form_id, array $settings ): bool {

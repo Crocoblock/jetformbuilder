@@ -1,3 +1,5 @@
+import { addEyeIconListeners } from '../field/TextFieldData';
+
 const { applyFilters } = JetPlugins.hooks;
 
 const {
@@ -24,7 +26,8 @@ function TextFieldMaskedData() {
 
 		this.enterKey = new ReactiveHook();
 		node.addEventListener( 'keydown', this.handleEnterKey.bind( this ) );
-		node.addEventListener( 'input', this.handleAutofill.bind( this, node ) );
+		node.addEventListener('input', this.handleAutofill.bind(this, node));
+		addEyeIconListeners( this );
 	};
 	this.handleAutofill = function( node ) {
 		if ( node && node.inputmask ) {

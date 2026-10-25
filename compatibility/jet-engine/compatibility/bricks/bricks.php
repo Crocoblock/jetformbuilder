@@ -15,6 +15,10 @@ class Bricks {
 			'jet-form-builder/before-start-form-row',
 			array( $this, 'set_query_on_render_choice_listing' )
 		);
+		add_action(
+			'jet-form-builder/after-end-form-row',
+			array( $this, 'destroy_query_after_render_choice_listing' )
+		);
 		add_filter(
 			'jet-form-builder/custom-template-content',
 			array( $this, 'add_css_class_for_wrapper' ),
@@ -48,6 +52,21 @@ class Bricks {
 		jet_engine()->bricks_views->listing->render->set_bricks_query(
 			$block->block_attrs['custom_item_template_id']
 		);
+	}
+
+	/**
+	 * Bricks query created for the field template must be removed from the global
+	 * store once the field is rendered. Otherwise Bricks keeps treating the rest of
+	 * the page as "looping", e.g. AJAX popups are not output in the footer at all.
+	 */
+	public function destroy_query_after_render_choice_listing( Base $block ) {
+		$listing_id = absint( $block->block_attrs['custom_item_template_id'] ?? 0 );
+
+		if ( ! ( $block->block_attrs['custom_item_template'] ?? '' ) || ! $listing_id ) {
+			return;
+		}
+
+		jet_engine()->bricks_views->listing->render->destroy_bricks_query_for_listing( $listing_id );
 	}
 
 	public function add_css_class_for_wrapper( string $content, $object_id, $listing_id ): string {

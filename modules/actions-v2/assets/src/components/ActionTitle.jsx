@@ -84,7 +84,7 @@ function ActionNameEditor( {
 	/>;
 }
 
-function ActionNameButton( { displayName, startEditing } ) {
+function ActionNameButton( { displayName, actionId, startEditing } ) {
 	return <ActionButton
 		type="button"
 		onClick={ startEditing }
@@ -94,7 +94,7 @@ function ActionNameButton( { displayName, startEditing } ) {
 			displayName,
 		) }
 	>
-		<ActionLabel title={ displayName }>
+		<ActionLabel title={ `${ displayName } (${ actionId })` }>
 			{ displayName }
 		</ActionLabel>
 	</ActionButton>;
@@ -201,6 +201,7 @@ function ActionTitle( { onEditingChange = () => {} } ) {
 
 		{ !renameProps.isEditing && <ActionNameButton
 			displayName={ renameProps.displayName }
+			actionId={ action.id }
 			startEditing={ renameProps.startEditing }
 		/> }
 	</ActionTitleWrap>;

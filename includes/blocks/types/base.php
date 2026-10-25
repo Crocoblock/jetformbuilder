@@ -30,6 +30,8 @@ if ( ! defined( 'WPINC' ) ) {
  */
 abstract class Base extends Base_Module implements Repository_Item_Instance_Trait {
 
+	protected $default_from_source = false;
+
 	const PRESET_RAW     = 'raw';
 	const PRESET_ARRAY   = 'array';
 	const PRESET_EXACTLY = 'exactly';
@@ -349,11 +351,26 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	}
 
 	public function set_preset() {
+		$this->default_from_source = false;
+
 		if ( ! $this->use_preset() ) {
 			return;
 		}
 
 		$this->block_attrs['default'] = $this->get_prepared_default( $this->get_default_from_preset() );
+	}
+
+	/**
+	 * Whether the current default came from a preset source (post meta,
+	 * user, form record, query var...) instead of the form author's own
+	 * "Default Value". Such a value is data that can originate from a
+	 * visitor, so frontend must keep it literal and never evaluate it as
+	 * a calculated formula.
+	 *
+	 * @return bool
+	 */
+	public function is_default_from_source(): bool {
+		return $this->default_from_source;
 	}
 
 	/**
@@ -473,7 +490,11 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		$index = $this->get_repeater_index();
 
 		if ( ! $this->get_repeater_name() || - 1 === $index ) {
-			return $this->get_field_value( $attributes );
+			$value = $this->get_field_value( $attributes );
+
+			$this->default_from_source = Preset_Manager::instance()->is_last_value_from_source();
+
+			return $value;
 		}
 
 		$name = $this->block_attrs['name'] ?? '';
@@ -482,10 +503,18 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		$custom_value = $this->get_value_from_repeater( $row, $name );
 
 		if ( false !== $custom_value ) {
+			$this->default_from_source = true;
+
 			return $custom_value;
 		}
 
+		$this->default_from_source = isset( $row[ $name ] );
+
 		$value = ( $row[ $name ] ?? $this->get_field_value( $attributes ) );
+
+		if ( ! $this->default_from_source ) {
+			$this->default_from_source = Preset_Manager::instance()->is_last_value_from_source();
+		}
 
 		return Preset_Manager::instance()->prepare_result( $this->get_name(), $value );
 	}

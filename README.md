@@ -8,6 +8,26 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.8
+* ADD: Ability to use ID and title of the term created by Insert/Update Term in macros of the following actions
+* FIX: Bricks AJAX popup not opening when form field uses custom template
+* FIX: Number field shows a stale min error and a min value with extra digits when min/max is set by a formula
+
+## 3.6.7.1
+* FIX: Prevent stored XSS through preset values evaluated as macros
+
+## 3.6.7
+* ADD: Manual Verification Capability setting for Form Records
+* ADD: HTML email preview in the Send Email action
+* FIX: JFB_FIELD macro parsing in field placeholders
+* FIX: Dynamic default values in the Advanced Choices field
+* FIX: Handle empty product images in WooCommerce integration
+* ADD: Custom placeholder support for the Phone field
+* FIX: Payment gateways use the same Price Field value despite having separate settings
+* FIX: UI elements overlap after a WordPress update
+* FIX: Input Mask does not work with Advanced Validation
+* FIX: Default field values override user-entered values
+
 ## 3.6.6.1
 * FIX: unauthenticated update/trash of anonymous posts and Media field access check
 * FIX: Prevent reflected DOM XSS through HTML macros

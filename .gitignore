@@ -19,6 +19,7 @@ package-lock.json
 /vendor/composer/installed.json
 /.artifacts
 
+.claude/
 .codex/
 tests/
 !tests/
@@ -36,6 +37,7 @@ tests/wpunit/*
 !tests/wpunit/TrustedPriceResolverTest.php
 !tests/wpunit/PresetAccessControlTest.php
 !tests/wpunit/PresetSourceQueryVarSanitizationTest.php
+!tests/wpunit/PresetProvenanceTest.php
 !tests/wpunit/FormMessageShortcodeSecurityTest.php
 !tests/wpunit/SsrCallbackRegistryTest.php
 !tests/wpunit/SsrCallbackMigrationBatchingTest.php

@@ -266,8 +266,34 @@ abstract class Base {
 		return ( new Builder_Helper() )->get_custom_template( $object_id, $args, $checked );
 	}
 
+	/**
+	 * A default that came from a preset source is data, not a formula:
+	 * it may have been submitted by a visitor, so it must never be routed
+	 * to the frontend calculator even if it looks like a macro.
+	 *
+	 * @param mixed $value
+	 *
+	 * @return bool
+	 */
+	public function has_dynamic_default( $value ): bool {
+		return ! ( $this->block_type && $this->block_type->is_default_from_source() ) &&
+			jet_form_builder()->regexp->has_macro( $value );
+	}
+
+	/**
+	 * Marks a data-default-val that came from a preset source: the frontend
+	 * restores it literally (JSON list or plain text) and never passes it
+	 * to the formula calculator. Checking the serialized macro syntax on the
+	 * server is not a trust boundary (JSON escapes such as \u0025).
+	 */
+	public function mark_default_literal() {
+		if ( $this->block_type && $this->block_type->is_default_from_source() ) {
+			$this->add_attribute( 'data-default-literal', '1' );
+		}
+	}
+
 	protected function set_value() {
-		if ( ! jet_form_builder()->regexp->has_macro( $this->args['default'] ) ) {
+		if ( ! $this->has_dynamic_default( $this->args['default'] ) ) {
 			$this->add_attribute( 'value', $this->args['default'] );
 
 			return;

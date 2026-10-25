@@ -280,12 +280,12 @@ function observeDefaultValue( input, defaultValue ) {
 	} );
 }
 
-function restoreMixedCheckboxDefault( input, defaultValue ) {
+function restoreMixedCheckboxDefault( input, defaultValue, isLiteral = false ) {
 	if (
 		'checkbox' !== input.inputType ||
 		!input.addNewButton ||
 		!Array.isArray( defaultValue ) ||
-		hasMacroValue( defaultValue ) ||
+		( !isLiteral && hasMacroValue( defaultValue ) ) ||
 		!defaultValue.every( value => 'string' === typeof value )
 	) {
 		return false;
@@ -334,7 +334,24 @@ function applyOptionFieldDefault( input ) {
 		return;
 	}
 
-	if ( restoreMixedCheckboxDefault( input, defaultValue ) ) {
+	// The default came from a preset source (data, not a formula):
+	// restore it literally, never through the calculator.
+	const isLiteral = (
+		fieldWrapper?.dataset?.defaultLiteral ??
+		node?.dataset?.defaultLiteral
+	);
+
+	if ( restoreMixedCheckboxDefault( input, defaultValue, !!isLiteral ) ) {
+		return;
+	}
+
+	if ( isLiteral ) {
+		const values = Array.isArray( defaultValue ) ? defaultValue : [ defaultValue ];
+
+		if ( values.length && values.every( isResolved ) ) {
+			applyResolvedValue( input, defaultValue );
+		}
+
 		return;
 	}
 
@@ -357,6 +374,7 @@ if ( !window[ OBSERVER_FLAG ] ) {
 						'select',
 						'radio',
 						'checkbox',
+						'choice',
 					].includes( input.inputType )
 				) {
 					continue;

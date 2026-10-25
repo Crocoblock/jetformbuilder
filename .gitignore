@@ -43,6 +43,7 @@ tests/wpunit/*
 !tests/wpunit/SsrCallbackMigrationBatchingTest.php
 !tests/wpunit/AutoMigratorTest.php
 !tests/wpunit/AutoMigratorTransactionTest.php
+!tests/wpunit/BaseMigrationTimingTest.php
 !tests/wpunit/SsrBlockedCallbackUsagesTest.php
 !tests/wpunit/SsrCallbacksHandlerMigrationGuardTest.php
 !tests/wpunit/MediaFieldPreviewEscapingTest.php

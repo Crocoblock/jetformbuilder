@@ -17,6 +17,13 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * FIX: Select field padding is not applied correctly in Elementor with Blocksy and OceanWP themes
 * FIX: Locale-dependent PHP warning during database migrations
 * FIX: Restrict validation rules to supported field types
+* FIX: Actions do not work correctly in RTL languages
+* ADD: Ability to check whether a field is hidden by a Conditional Block
+* FIX: Calculated field displays a date one day earlier than the selected date in certain time zones
+* FIX: Phone field dial code displays incorrectly in RTL layouts
+* FIX: Checkbox labels containing links wrap incorrectly on tablet and mobile devices
+* FIX: Actions disappear after restoring a revision
+
 
 ## 3.6.7.1
 * FIX: Prevent stored XSS through preset values evaluated as macros

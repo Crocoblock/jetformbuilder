@@ -19,7 +19,7 @@ const ActionButton = styled.button`
 	padding: 0;
 	border: none;
 	background: transparent;
-	text-align: left;
+	text-align: start;
 	cursor: text;
 `;
 
@@ -29,6 +29,7 @@ const ActionLabel = styled.span`
 	line-height: 1.4;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	white-space: nowrap;
 `;
 
 const ActionNameInput = styled.input`

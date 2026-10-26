@@ -30,7 +30,7 @@ class File_Tools {
 	}
 
 	protected static function is_same_file( File $file, Uploaded_File $uploaded_file ): bool {
-		$preset_path = $uploaded_file->get_attachment_file();
+		$preset_path = $uploaded_file->get_verified_attachment_file();
 
 		if ( ! $preset_path ) {
 			return false;

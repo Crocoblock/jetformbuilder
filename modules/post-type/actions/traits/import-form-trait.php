@@ -147,9 +147,17 @@ trait Import_Form_Trait {
 		$render         = Render_State::instance();
 		$current_states = $render->get_states();
 		$existing       = wp_list_pluck( $current_states, 'value' );
+		$reserved       = array_merge(
+			jet_fb_events()->rep_get_keys(),
+			$render->rep_get_keys()
+		);
 
 		foreach ( $slugs as $slug ) {
 			if ( in_array( $slug, $existing, true ) ) {
+				continue;
+			}
+
+			if ( in_array( $slug, $reserved, true ) ) {
 				continue;
 			}
 

@@ -364,16 +364,22 @@ class Module implements Base_Module_It {
 		 * same meta key from `post_author` as a best-effort GUESS for pre-fix attachments,
 		 * not an observed fact, and marks that with `_jfb_uploaded_by_user_heuristic` (see
 		 * that method's docblock for why `post_author` can be stale/reassigned and is not
-		 * reliable enough to lock an attachment to forever). Without this exception, a
-		 * legacy attachment whose `post_author` no longer matches its post's actual current
-		 * editor would become permanently unmanageable by anyone but that one guessed user
-		 * or a webhook - worse than the pre-fix state, where an unmarked attachment was
-		 * freely manageable by any `edit_post`-authorized editor of its post. For a
-		 * heuristic value specifically, the same verified-identity `$owning_post_id`
-		 * exception the anonymous branch above uses also applies here.
+		 * reliable enough to lock an attachment to forever).
+		 *
+		 * Original compatibility rationale (historical behavior): without this exception,
+		 * a legacy attachment whose `post_author` no longer matched its post's current
+		 * editor could only be managed by the guessed uploader or a webhook. For heuristic
+		 * ownership, a verified editor of `$owning_post_id` was therefore allowed to delete
+		 * the attachment even when the uploader did not match.
+		 *
+		 * UPDATE: a carrier post ID is not proof of attachment ownership: a previous
+		 * submission may have injected the attachment ID into that post's meta. This branch
+		 * now requires current_user_can( 'delete_post', $attachment_id ) instead of returning
+		 * true unconditionally. Matching uploaders and webhooks still pass the check above;
+		 * editing the carrier post alone no longer authorizes deletion of a heuristic attachment.
 		 */
 		if ( $owning_post_id > 0 && get_post_meta( $attachment_id, '_jfb_uploaded_by_user_heuristic', true ) ) {
-			return true;
+			return current_user_can( 'delete_post', $attachment_id );
 		}
 
 		return false;

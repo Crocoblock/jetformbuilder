@@ -13,6 +13,8 @@ use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Query_Builder_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
+use JFB_Modules\Actions_V2\Register_User\Register_User_Action;
+use JFB_Modules\Form_Record\Query_Views\Record_View;
 use JFB_Modules\Jobs\Async_Job;
 use JFB_Modules\Jobs;
 use JFB_Modules\Webhook;
@@ -44,7 +46,9 @@ class Verify_Manually extends Async_Job implements
 
 	/**
 	 * @param $record_id
-	 * @param $user_id
+	 * @param $user_id ID of the admin/verifier who approved the record. Kept for
+	 *                 backward-compatible job args and logging only; it is never
+	 *                 used as the identity the stored submission replays under.
 	 *
 	 * @throws Repository_Exception
 	 */
@@ -78,14 +82,47 @@ class Verify_Manually extends Async_Job implements
 		// Disable base verification process
 		remove_action( 'jet-form-builder/webhook/verification', array( $verification, 'on_verification' ) );
 
-		$this->set_user( $user_id );
+		// Replay the held submission as whoever originally submitted it - never
+		// as the admin who is only approving it. The admin's elevated
+		// capabilities must not leak into the attacker-controlled stored request.
+		$this->set_user( $this->get_submitter_id( $record_id ) );
 
 		$webhooks->set_token_id( (int) $token_row['id'] );
 		$webhooks->set_token( Security\Csrf\Csrf_Tools::generate() );
 		$webhooks->set_check_hash( false );
-		$webhooks->confirm();
+
+		try {
+			$webhooks->confirm();
+		} finally {
+			// confirm() can return early (e.g. expired token) without firing the
+			// verification hook, so the verifier must be restored here.
+			$this->reset_user();
+
+			// Scope the replay hooks to this record: a later Register User in the
+			// same request must not be treated as an approved registration.
+			remove_action( 'jet-form-builder/webhook/verification', array( $this, 'execute_actions' ) );
+			remove_action( 'jet-form-builder/before-do-action/register_user', array( $this, 'modify_register_user' ) );
+		}
 	}
 
+	/**
+	 * Resolves the identity the held record's actions must be replayed under:
+	 * the user who originally submitted the form (0 for a guest submission),
+	 * read from the record itself - never the verifying admin.
+	 *
+	 * @param int|string $record_id
+	 *
+	 * @return int
+	 */
+	protected function get_submitter_id( $record_id ): int {
+		try {
+			$record = Record_View::findById( absint( $record_id ) );
+		} catch ( Query_Builder_Exception $exception ) {
+			return 0;
+		}
+
+		return absint( $record['user_id'] ?? 0 );
+	}
 
 	/**
 	 * @param Webhook\Module $webhooks
@@ -118,15 +155,21 @@ class Verify_Manually extends Async_Job implements
 			/* translators: %d - id of the form record */
 				sprintf( __( 'Undefined record by webhook-ID: %d', 'jet-form-builder' ), $webhooks->get_token_id() )
 			);
-		} finally {
-			$this->reset_user();
 		}
 	}
 
+	/**
+	 * The admin's approval stands in for can_register()'s role gate (guest,
+	 * any role, or no role on this site) without borrowing the verifier's
+	 * identity; the form's allow_register=false path still applies. The new
+	 * user's role still comes only from the form settings.
+	 */
 	public function modify_register_user( Base $action ) {
-		$action->settings['allow_register']    = true;
-		$action->settings['role_can_register'] = wp_get_current_user()->roles[0];
-		$action->settings['log_in']            = false;
+		if ( $action instanceof Register_User_Action ) {
+			$action->mark_approved_registration();
+		}
+
+		$action->settings['log_in'] = false;
 	}
 
 	protected function set_user( $user_id ) {

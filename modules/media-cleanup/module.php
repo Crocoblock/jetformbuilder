@@ -346,7 +346,15 @@ class Module implements Base_Module_It {
 		$uploader_id = (int) get_post_meta( $attachment_id, '_jfb_uploaded_by_user', true );
 
 		if ( ! $uploader_id ) {
-			return Tools::is_webhook() || $owning_post_id > 0;
+			if ( Tools::is_webhook() ) {
+				return true;
+			}
+
+			if ( $owning_post_id > 0 ) {
+				return current_user_can( 'delete_post', $attachment_id );
+			}
+
+			return false;
 		}
 
 		if ( get_current_user_id() === $uploader_id || Tools::is_webhook() ) {

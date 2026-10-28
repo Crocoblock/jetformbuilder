@@ -93,6 +93,10 @@ class Elementor implements
 	}
 
 	public function init_widgets() {
+		if ( null !== $this->types ) {
+			return;
+		}
+
 		$this->types = array(
 			new Widgets\Form(),
 		);
@@ -135,6 +139,9 @@ class Elementor implements
 	}
 
 	public function register_widgets( $manager ) {
+		// Widgets may be registered before Elementor fires elementor/init.
+		$this->init_widgets();
+
 		foreach ( $this->types as $widget ) {
 			// compatibility with 3.7
 			if ( method_exists( $manager, 'register' ) ) {

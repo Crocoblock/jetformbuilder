@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 3.6.7.1
+Stable tag: 3.6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,22 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.6.8**
+- ADD: Ability to use ID and title of the term created by Insert/Update Term in macros of the following actions
+- FIX: Bricks AJAX popup not opening when form field uses custom template
+- FIX: Number field shows a stale min error and a min value with extra digits when min/max is set by a formula
+- FIX: Password visibility toggle does not work with Input Mask
+- FIX: Cursor gets stuck after entering a leading zero in a masked field
+- FIX: Select field padding is not applied correctly in Elementor with Blocksy and OceanWP themes
+- FIX: Locale-dependent PHP warning during database migrations
+- FIX: Restrict validation rules to supported field types
+- FIX: Actions do not work correctly in RTL languages
+- ADD: Ability to check whether a field is hidden by a Conditional Block
+- FIX: Calculated field displays a date one day earlier than the selected date in certain time zones
+- FIX: Phone field dial code displays incorrectly in RTL layouts
+- FIX: Checkbox labels containing links wrap incorrectly on tablet and mobile devices
+- FIX: Actions disappear after restoring a revision
 
 **3.6.7.1**
 - FIX: Prevent stored XSS through preset values evaluated as macros

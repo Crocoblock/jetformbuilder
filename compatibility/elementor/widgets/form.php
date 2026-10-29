@@ -1832,6 +1832,10 @@ class Form extends Widget_Base implements Widget_Base_It {
 				'size_units' => array( 'px', '%', 'em', 'rem', 'custom' ),
 				'selectors'  => array(
 					$this->selector( $simple_input ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					// Blocksy: let selects expand with padding while preserving the theme's minimum height.
+					'body.wp-theme-blocksy ' . $this->selector( '__field.select-field', 'select' ) => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}; height: auto; min-height: var(--has-height, var(--theme-form-field-height, 40px));',
+					// OceanWP: override the !important rule that removes vertical select padding.
+					'body.wp-theme-oceanwp ' . $this->selector( '__field.select-field', 'select' ) => 'padding-top: {{TOP}}{{UNIT}} !important; padding-bottom: {{BOTTOM}}{{UNIT}} !important; height: auto;',
 				),
 			)
 		);

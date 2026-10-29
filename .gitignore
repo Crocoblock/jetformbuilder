@@ -19,6 +19,7 @@ package-lock.json
 /vendor/composer/installed.json
 /.artifacts
 
+.claude/
 .codex/
 tests/
 !tests/
@@ -42,12 +43,14 @@ tests/wpunit/*
 !tests/wpunit/SsrCallbackMigrationBatchingTest.php
 !tests/wpunit/AutoMigratorTest.php
 !tests/wpunit/AutoMigratorTransactionTest.php
+!tests/wpunit/BaseMigrationTimingTest.php
 !tests/wpunit/SsrBlockedCallbackUsagesTest.php
 !tests/wpunit/SsrCallbacksHandlerMigrationGuardTest.php
 !tests/wpunit/MediaFieldPreviewEscapingTest.php
 !tests/wpunit/SelectStoredXssTest.php
 !tests/wpunit/SendEmailMacroShortcodeSecurityTest.php
 !tests/wpunit/MacroShortcodeNoticeTest.php
+!tests/wpunit/RenderStateRequestExecutionTest.php
 !tests/wpunit/Actions/
 !tests/wpunit/Actions/InsertPost/
 !tests/wpunit/Actions/InsertPost/LockedMediaFieldModifierTest.php

@@ -30,6 +30,7 @@ tests/_data/*
 !tests/_support/
 tests/_support/*
 !tests/_support/Ajax_Die_Signal.php
+!tests/_support/Record_Tables.php
 !tests/wpunit/
 tests/wpunit/*
 !tests/wpunit/GeneratorContextSecurityTest.php

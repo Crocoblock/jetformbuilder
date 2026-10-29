@@ -13,6 +13,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+require_once __DIR__ . '/../_support/Record_Tables.php';
+
 /**
  * Companion coverage for issues-tracker #20720.
  *
@@ -37,6 +39,14 @@ class VerifyManuallyWebhookBypassIsolationTest extends \Codeception\TestCase\WPT
 	/** @var int[] record IDs created by a test, cleaned up in tearDown() */
 	private $created_record_ids = array();
 
+	protected function setUp(): void {
+		parent::setUp();
+
+		// Never depend on what earlier test files left in the (temporary)
+		// records/token tables - see Record_Tables.
+		Record_Tables::reset();
+	}
+
 	protected function tearDown(): void {
 		foreach ( $this->created_record_ids as $record_id ) {
 			try {
@@ -46,6 +56,8 @@ class VerifyManuallyWebhookBypassIsolationTest extends \Codeception\TestCase\WPT
 			}
 		}
 		$this->created_record_ids = array();
+
+		Record_Tables::drop();
 
 		wp_set_current_user( 0 );
 

@@ -14,6 +14,18 @@ use Jet_Form_Builder\Exceptions\Action_Exception;
  */
 class Register_User_Action extends Base {
 
+	/**
+	 * Set only in code (never from form settings), e.g. when an admin has
+	 * approved a held registration via "Verify manually".
+	 *
+	 * @var bool
+	 */
+	private $approved_registration = false;
+
+	public function mark_approved_registration() {
+		$this->approved_registration = true;
+	}
+
 	public function get_name() {
 		return __( 'Register User', 'jet-form-builder' );
 	}
@@ -29,14 +41,18 @@ class Register_User_Action extends Base {
 		$allow_register    = $this->settings['allow_register'] ?? false;
 		$role_can_register = $this->settings['role_can_register'] ?? false;
 
-		if ( $allow_register && ! $role_can_register ) {
+		// An approved registration skips only the "who may register users"
+		// role gate; the allow_register=false (existing-user) path is kept.
+		$check_role = $allow_register && ! $this->approved_registration;
+
+		if ( $check_role && ! $role_can_register ) {
 			throw new Action_Exception( 'failed', '`role_can_register` is empty' );
 		}
 
 		if ( is_user_logged_in() ) {
 			$user = wp_get_current_user();
 
-			if ( $allow_register && ! in_array( $role_can_register, $user->roles, true ) ) {
+			if ( $check_role && ! in_array( $role_can_register, $user->roles, true ) ) {
 				throw new Action_Exception( 'not_enough_cap' );
 			}
 
@@ -49,7 +65,7 @@ class Register_User_Action extends Base {
 
 				throw new Action_Exception( 'already_logged_in' );
 			}
-		} elseif ( $allow_register ) {
+		} elseif ( $check_role ) {
 			throw new Action_Exception( 'not_logged_in' );
 		}
 

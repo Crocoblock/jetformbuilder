@@ -48,6 +48,11 @@ class Module implements
 	 */
 	private $record;
 
+	/**
+	 * @var Manual_Verification_Identity_Notice
+	 */
+	private $manual_verification_identity_notice;
+
 	public function rep_item_id() {
 		return 'verification';
 	}
@@ -104,6 +109,9 @@ class Module implements
 		);
 
 		$this->record->init_hooks();
+
+		$this->manual_verification_identity_notice = new Manual_Verification_Identity_Notice();
+		$this->manual_verification_identity_notice->init_hooks();
 	}
 
 	public function remove_hooks() {
@@ -121,6 +129,10 @@ class Module implements
 		);
 
 		$this->record->remove_hooks();
+
+		if ( $this->manual_verification_identity_notice ) {
+			$this->manual_verification_identity_notice->remove_hooks();
+		}
 	}
 
 	public function enqueue_editor_assets() {

@@ -120,7 +120,7 @@ class Macros_Parser {
 					// return value, so nothing this branch calls can run a nested
 					// parse_macros() on this same shared instance and clobber the
 					// flag before it is read for THIS match.
-					$final                = Filters_Manager::instance()->apply( $value, $filters );
+					$final               = Filters_Manager::instance()->apply( $value, $filters );
 					$this->resolved_last = true;
 
 					return $final;

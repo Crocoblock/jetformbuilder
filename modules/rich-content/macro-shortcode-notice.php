@@ -67,7 +67,14 @@ class Macro_Shortcode_Notice {
 				<strong><?php esc_html_e( 'JetFormBuilder: shortcodes typed into form fields are no longer executed', 'jet-form-builder' ); ?></strong>
 			</p>
 			<p>
-				<?php esc_html_e( 'Field macros such as %field_name% in Send Email, Call Webhook, Redirect To Page and Media field limits work as before: the submitted value is inserted as text. Shortcodes you write in these settings yourself still run, including ones that use a field macro inside, for example [gallery ids="%field_name%"].', 'jet-form-builder' ); ?>
+				<?php
+				printf(
+					/* translators: 1: field macro example, e.g. %field_name%; 2: shortcode that uses a field macro, e.g. [gallery ids="%field_name%"] */
+					esc_html__( 'Field macros such as %1$s in Send Email, Call Webhook, Redirect To Page and Media field limits work as before: the submitted value is inserted as text. Shortcodes you write in these settings yourself still run, including ones that use a field macro inside, for example %2$s.', 'jet-form-builder' ),
+					esc_html( '%field_name%' ),
+					esc_html( '[gallery ids="%field_name%"]' )
+				);
+				?>
 			</p>
 			<p>
 				<?php esc_html_e( 'What changed: if a visitor types shortcode syntax, such as [gallery] or [audio src="..."], into a form field, it is no longer executed on your server. It now appears as plain text in the email, webhook or redirect URL. Nothing needs to be changed unless you relied on visitors\' input running as shortcodes.', 'jet-form-builder' ); ?>

@@ -199,6 +199,7 @@ class Module implements Base_Module_It {
 	 * @param bool $without_preset
 	 *
 	 * @return string
+	 * @throws \Throwable Rethrows whatever a callback of this pass threw, after unwinding.
 	 */
 	private static function apply_pass_filter(
 		string $value,
@@ -206,7 +207,7 @@ class Module implements Base_Module_It {
 		string $trusted_content,
 		bool $without_preset
 	): string {
-		$module = function_exists( 'jet_form_builder' ) && jet_form_builder()->has_module( 'rich-content' )
+		$module       = function_exists( 'jet_form_builder' ) && jet_form_builder()->has_module( 'rich-content' )
 			? jet_form_builder()->module( 'rich-content' )
 			: null;
 		$module       = $module instanceof self ? $module : null;
@@ -411,20 +412,20 @@ class Module implements Base_Module_It {
 
 		$tokenized = preg_replace_callback(
 			Macros_Parser::MACRO_PATTERN,
-			function ( array $match ) use ( $parser, $content, $runtime_values ) {
-				$resolved = $parser->parse_macros( $match[0] );
+			function ( array $macro_match ) use ( $parser, $content, $runtime_values ) {
+				$resolved = $parser->parse_macros( $macro_match[0] );
 
 				// Unresolved macro syntax (no matching field/custom-macro) comes back
 				// unchanged from parse_macros() - it is template text, not
 				// request-derived data, so it must not be tokenized away. Checked
 				// through the parser's own has_resolved_last() flag, not by
-				// comparing $resolved to $match[0]: a submitted value that happens
+				// comparing $resolved to $macro_match[0]: a submitted value that happens
 				// to equal its own `%name%` syntax (e.g. field `jfbname` submitted
 				// with the literal value `%jfbname%`) would otherwise look
 				// byte-identical to "nothing matched" and skip tokenization even
 				// though it is real request-derived data.
 				if ( ! $parser->has_resolved_last() ) {
-					return $match[0];
+					return $macro_match[0];
 				}
 
 				$token = Runtime_Shortcode_Renderer::generate_token( $content, $runtime_values->all() );
@@ -675,6 +676,7 @@ class Module implements Base_Module_It {
 	 * @param callable $callback
 	 *
 	 * @return mixed
+	 * @throws \Throwable Rethrows whatever $callback threw, after unwinding.
 	 */
 	private function guard_pass( callable $callback ) {
 		// A direct method call outside any active pass owns no entry.
@@ -719,7 +721,9 @@ class Module implements Base_Module_It {
 	 * @param int $depth
 	 */
 	private function unwind_passes( int $depth ) {
-		while ( count( $this->pass_stack ) > max( 0, $depth ) ) {
+		$depth = max( 0, $depth );
+
+		for ( $count = count( $this->pass_stack ); $count > $depth; $count-- ) {
 			$this->pop_pass();
 		}
 	}

@@ -49,28 +49,28 @@ class Runtime_Shortcode_Renderer {
 			return $do_shortcode( $content );
 		}
 
-		$interceptor = function ( $return, $tag, $attributes, $match ) use ( $values ) {
-			if ( false !== $return || ! self::contains_token( $match, $values ) ) {
-				return $return;
+		$interceptor = function ( $pre, $tag, $attributes, $shortcode_match ) use ( $values ) {
+			if ( false !== $pre || ! self::contains_token( $shortcode_match, $values ) ) {
+				return $pre;
 			}
 
 			global $shortcode_tags;
 
 			if ( empty( $shortcode_tags[ $tag ] ) || ! is_callable( $shortcode_tags[ $tag ] ) ) {
-				return $return;
+				return $pre;
 			}
 
 			$resolved_attributes = self::restore_callback_values( $attributes, $values );
-			$enclosed            = $match[5] ?? null;
+			$enclosed            = $shortcode_match[5] ?? null;
 			$resolved_enclosed   = is_null( $enclosed )
 				? null
 				: self::restore_callback_values( $enclosed, $values );
-			$output              = $match[1] . call_user_func(
+			$output              = $shortcode_match[1] . call_user_func(
 				$shortcode_tags[ $tag ],
 				$resolved_attributes,
 				$resolved_enclosed,
 				$tag
-			) . $match[6];
+			) . $shortcode_match[6];
 
 			// Core skips do_shortcode_tag after a pre_do_shortcode_tag short circuit.
 			return apply_filters(
@@ -78,7 +78,7 @@ class Runtime_Shortcode_Renderer {
 				$output,
 				$tag,
 				$resolved_attributes,
-				$match
+				$shortcode_match
 			);
 		};
 

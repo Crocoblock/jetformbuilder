@@ -26,6 +26,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * SECURITY: Prevent privilege escalation through manual verification of held submissions
 * SECURITY: Allow render states to trigger only their own actions
 * SECURITY: Prevent shortcode execution through submitted field macros
+* SECURITY: Prevent arbitrary file deletion through media fields
 
 ## 3.6.7.1
 * FIX: Prevent stored XSS through preset values evaluated as macros

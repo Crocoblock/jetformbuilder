@@ -50,6 +50,9 @@ tests/wpunit/*
 !tests/wpunit/SelectStoredXssTest.php
 !tests/wpunit/VerifyManuallyReplayIdentityTest.php
 !tests/wpunit/VerifyManuallyWebhookBypassIsolationTest.php
+!tests/wpunit/SendEmailMacroShortcodeSecurityTest.php
+!tests/wpunit/MacroShortcodeNoticeTest.php
+!tests/wpunit/RenderStateRequestExecutionTest.php
 !tests/wpunit/Actions/
 !tests/wpunit/Actions/InsertPost/
 !tests/wpunit/Actions/InsertPost/LockedMediaFieldModifierTest.php

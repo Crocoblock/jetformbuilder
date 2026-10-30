@@ -23,6 +23,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * FIX: Phone field dial code displays incorrectly in RTL layouts
 * FIX: Checkbox labels containing links wrap incorrectly on tablet and mobile devices
 * FIX: Actions disappear after restoring a revision
+* FIX: Prevent Repeater data loss when updating posts
 * SECURITY: Prevent privilege escalation through manual verification of held submissions
 * SECURITY: Allow render states to trigger only their own actions
 * SECURITY: Prevent shortcode execution through submitted field macros

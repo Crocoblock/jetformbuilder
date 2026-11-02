@@ -38,7 +38,7 @@ trait Base_Attributes_Trait {
 	}
 
 	public function render_attributes_string_save() {
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- every value is escaped with esc_attr() in get_attributes_string_save().
 		echo Tools::esc_template_string( $this->get_attributes_string_save() );
 	}
 

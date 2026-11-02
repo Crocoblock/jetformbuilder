@@ -63,7 +63,7 @@ class Install_Migrations_Endpoint extends Rest_Api_Endpoint_Base {
 
 			return new \WP_REST_Response(
 				array(
-					'message' => $exception->getMessage(),
+					'message' => wp_kses_post( $exception->getMessage() ), // shown with v-html in admin notices
 					'version' => $exception->get_version(),
 				),
 				400

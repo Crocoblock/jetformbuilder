@@ -212,8 +212,8 @@ class Form_Builder {
 	private function get_inline_styles(): string {
 		return sprintf(
 			'<style id="jet-form-builder-%s-inline-css">%s</style>',
-			$this->form_id,
-			Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id )
+			(int) $this->form_id,
+			Tools::safe_inline_css( (string) Plugin::instance()->post_type->maybe_get_jet_sm_ready_styles( $this->form_id ) )
 		);
 	}
 

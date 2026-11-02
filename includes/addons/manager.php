@@ -74,6 +74,13 @@ class Manager {
 
 				$plugin_slug = $plugin_data['slug'];
 
+				// The description comes from the remote add-ons API and is
+				// printed with v-html on the Add-ons page: keep formatting and
+				// links, drop active markup.
+				if ( isset( $plugin_data['desc'] ) && is_string( $plugin_data['desc'] ) ) {
+					$plugin_data['desc'] = wp_kses_post( $plugin_data['desc'] );
+				}
+
 				if ( array_key_exists( $plugin_slug, $user_plugin_list ) ) {
 					$plugin_data = wp_parse_args( $plugin_data, $user_plugin_list[ $plugin_slug ] );
 				} else {
@@ -391,7 +398,7 @@ class Manager {
 			wp_send_json(
 				array(
 					'success' => false,
-					'message' => $activate->get_error_message(),
+					'message' => wp_kses_post( $activate->get_error_message() ),
 					'data'    => array(),
 				)
 			);

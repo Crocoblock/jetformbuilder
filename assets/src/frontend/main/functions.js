@@ -107,6 +107,16 @@ function resetInputHtmlAttrsRegistry() {
 	inputHtmlAttrs = [];
 }
 
+/**
+ * Parses an HTML string into a DocumentFragment. Public API
+ * (JetFormBuilderFunctions.toHTML), not used by the plugin itself.
+ *
+ * The string is parsed as HTML: never pass field values or other visitor
+ * data here unescaped - use textContent or sanitizeHtml() for such values.
+ *
+ * @param  text {string}
+ * @return {DocumentFragment}
+ */
 function toHTML( text ) {
 	const template     = document.createElement( 'template' );
 	template.innerHTML = text.trim();

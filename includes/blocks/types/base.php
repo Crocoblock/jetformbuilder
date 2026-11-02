@@ -168,7 +168,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 		if ( ! $block ) {
 			_doing_it_wrong(
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- developer notice: class and method name only.
 				static::class . '::' . __FUNCTION__,
 				esc_html__(
 					'Unsuccessful field (block) registration.
@@ -412,8 +412,10 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		}
 
 		if ( $rich ) {
-			// immediately return, because rich method also parsing preset and shortcodes
-			return Rich_Content\Module::rich( $value );
+			// immediately return, because rich method also parsing preset and shortcodes.
+			// rich_html(): these attributes are printed into the page, so a preset
+			// result inside them must not be expanded as a shortcode.
+			return Rich_Content\Module::rich_html( $value );
 		}
 
 		/**

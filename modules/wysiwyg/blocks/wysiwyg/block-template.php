@@ -5,6 +5,7 @@
  */
 
 use Jet_Form_Builder\Blocks\Render\Base;
+use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -14,6 +15,19 @@ if ( ! defined( 'WPINC' ) ) {
 if ( empty( $args['default'] ) ) {
 	$args['default'] = '';
 }
+
+/**
+ * A preset value is visitor data: wp_editor() prints it inside a <textarea>,
+ * where a later do_shortcode() pass over the page would expand it. The
+ * brackets are encoded in the final textarea content, after WordPress has
+ * escaped it for the editor (format_for_editor()), so the browser decodes
+ * them back and the editor - visual or plain textarea - gets plain "[" and
+ * "]". The author's own Default Value is left as is.
+ */
+$neutralize_preset = is_string( $args['default'] ) && $this->block_type && $this->block_type->is_default_from_source();
+$neutralize_cb     = static function ( $content ) {
+	return is_string( $content ) ? Tools::neutralize_shortcodes( $content ) : $content;
+};
 
 $keep_format = $this->args['keep_format'] ?? false;
 
@@ -59,7 +73,15 @@ if ( is_rtl() ) {
 	<div class="jet-form-builder__field-wrap">
 		<div <?php $this->render_attributes_string(); ?>>
 			<?php
-			wp_editor( $args['default'], $editor_id, $editor );
+			if ( $neutralize_preset ) {
+				add_filter( 'the_editor_content', $neutralize_cb, PHP_INT_MAX );
+			}
+
+			try {
+				wp_editor( $args['default'], $editor_id, $editor );
+			} finally {
+				remove_filter( 'the_editor_content', $neutralize_cb, PHP_INT_MAX );
+			}
 			?>
 		</div>
 	</div>

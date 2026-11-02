@@ -51,7 +51,7 @@ class Export_Page implements Action_Page_It, Wp_Nonce_It {
 		} catch ( \Exception $exception ) {
 			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 			wp_die(
-				$exception->getMessage(),
+				esc_html( $exception->getMessage() ),
 				__( 'Error', 'jet-form-builder' )
 			);
 			// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

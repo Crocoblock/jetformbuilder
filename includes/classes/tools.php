@@ -578,10 +578,276 @@ class Tools {
 		return self::sanitize_text_field( $source );
 	}
 
+	/**
+	 * Makes CSS safe to print inside a <style> element: only the sequence
+	 * that would close the element ("</style", any case) is changed, to
+	 * "<\/style". Inside a CSS string "\/" is just "/", and outside strings
+	 * the sequence is not valid CSS anyway, so stylesheets are unaffected.
+	 *
+	 * @param string $css
+	 *
+	 * @return string
+	 */
+	public static function safe_inline_css( string $css ): string {
+		return (string) preg_replace( '#</(style)#i', '<\\\\/$1', $css );
+	}
+
+	/**
+	 * Pattern of server-side macros in a Calculated Field formula
+	 * (%FIELD::name%, %META::key%, macros added by integrations).
+	 */
+	const FORMULA_MACRO_PATTERN = '/%([a-zA-Z-_]+)::([a-zA-Z0-9-_]+)%/';
+
+	/**
+	 * Turns a stored value into a token for a Calculated Field formula.
+	 *
+	 * The formula (data-formula) is executed as JavaScript in the browser,
+	 * and a value read from a record (post meta) may have been written by a
+	 * visitor, e.g. through a public Insert Post form. So the value is data,
+	 * never code:
+	 *
+	 * - in code position a plain number or the word true/false is inserted
+	 *   bare, anything else becomes a JavaScript string literal;
+	 * - inside a string the author wrote ('%META::name%') only the escaped
+	 *   characters are inserted, so the string keeps its own quotes.
+	 *
+	 * Every character except A-Z, a-z, 0-9 and "_" is written as a \uXXXX
+	 * escape. In a string it means the same character. Outside a string it
+	 * cannot form an operator, a call or a quote, so even a wrongly detected
+	 * position cannot turn the value into code. It also removes "%", which the
+	 * browser would read as the start of a %macro%.
+	 *
+	 * @param mixed $value
+	 * @param bool  $in_string Whether the macro stands inside a string literal.
+	 *
+	 * @return string
+	 */
+	public static function to_formula_literal( $value, bool $in_string = false ): string {
+		if ( is_int( $value ) || is_float( $value ) ) {
+			$value = is_finite( (float) $value ) ? (string) $value : '';
+		}
+
+		if ( ! is_string( $value ) ) {
+			return '';
+		}
+
+		if ( $in_string ) {
+			return self::escape_formula_chars( $value );
+		}
+
+		$trimmed = trim( $value );
+
+		if (
+			'' === $trimmed
+			|| 'true' === $trimmed
+			|| 'false' === $trimmed
+			|| preg_match( '/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/', $trimmed )
+		) {
+			return $trimmed;
+		}
+
+		return '"' . self::escape_formula_chars( $value ) . '"';
+	}
+
+	/**
+	 * Writes every character except A-Z, a-z, 0-9 and "_" as a JavaScript
+	 * \uXXXX escape (UTF-16 code units, as JSON does).
+	 *
+	 * @param string $value
+	 *
+	 * @return string
+	 */
+	private static function escape_formula_chars( string $value ): string {
+		$json = wp_json_encode( $value );
+
+		if ( ! is_string( $json ) || strlen( $json ) < 2 ) {
+			return '';
+		}
+
+		$simple = array(
+			'"'  => '"',
+			'\\' => '\\',
+			'/'  => '/',
+			'b'  => "\x08",
+			'f'  => "\f",
+			'n'  => "\n",
+			'r'  => "\r",
+			't'  => "\t",
+		);
+
+		return (string) preg_replace_callback(
+			'/\\\\u[0-9a-fA-F]{4}|\\\\(.)|[^A-Za-z0-9_]/',
+			static function ( $match ) use ( $simple ) {
+				if ( 6 === strlen( $match[0] ) && 'u' === $match[0][1] ) {
+					return strtolower( $match[0] );
+				}
+
+				$char = isset( $match[1] ) ? ( $simple[ $match[1] ] ?? $match[1] ) : $match[0];
+
+				return sprintf( '\\u%04x', ord( $char ) );
+			},
+			substr( $json, 1, -1 )
+		);
+	}
+
+	/**
+	 * For every match of FORMULA_MACRO_PATTERN in the formula, in order:
+	 * whether it stands inside a string literal ('…', "…" or `…` outside
+	 * ${…}). Comments are skipped. Regular expression literals are not
+	 * recognised; to_formula_literal() stays inert when this guess is wrong.
+	 *
+	 * @param string $formula
+	 *
+	 * @return bool[]
+	 */
+	public static function formula_macro_string_contexts( string $formula ): array {
+		if ( ! preg_match_all( self::FORMULA_MACRO_PATTERN, $formula, $matches, PREG_OFFSET_CAPTURE ) ) {
+			return array();
+		}
+
+		$offsets  = array_column( $matches[0], 1 );
+		$total    = count( $offsets );
+		$contexts = array();
+		$state    = 'code';
+		$escaped  = false;
+		$depth    = array();
+		$length   = strlen( $formula );
+		$next     = 0;
+
+		for ( $i = 0; $i <= $length && $next < $total; $i++ ) {
+			while ( $next < $total && $offsets[ $next ] === $i ) {
+				$contexts[] = in_array( $state, array( "'", '"', '`' ), true );
+				++$next;
+			}
+
+			if ( $i === $length ) {
+				break;
+			}
+
+			$char = $formula[ $i ];
+			$peek = $formula[ $i + 1 ] ?? '';
+
+			switch ( $state ) {
+				case 'line':
+					if ( "\n" === $char ) {
+						$state = 'code';
+					}
+					break;
+				case 'block':
+					if ( '*' === $char && '/' === $peek ) {
+						$state = 'code';
+						++$i;
+					}
+					break;
+				case "'":
+				case '"':
+				case '`':
+					if ( $escaped ) {
+						$escaped = false;
+					} elseif ( '\\' === $char ) {
+						$escaped = true;
+					} elseif ( $char === $state ) {
+						$state = 'code';
+					} elseif ( '`' === $state && '$' === $char && '{' === $peek ) {
+						$depth[] = 0;
+						$state   = 'code';
+						++$i;
+					}
+					break;
+				default:
+					if ( in_array( $char, array( "'", '"', '`' ), true ) ) {
+						$state = $char;
+					} elseif ( '/' === $char && '/' === $peek ) {
+						$state = 'line';
+						++$i;
+					} elseif ( '/' === $char && '*' === $peek ) {
+						$state = 'block';
+						++$i;
+					} elseif ( $depth && '{' === $char ) {
+						++$depth[ count( $depth ) - 1 ];
+					} elseif ( $depth && '}' === $char ) {
+						if ( 0 === end( $depth ) ) {
+							array_pop( $depth );
+							$state = '`';
+						} else {
+							--$depth[ count( $depth ) - 1 ];
+						}
+					}
+			}
+		}
+
+		return $contexts;
+	}
+
+	/**
+	 * Value of the %META::key% macro of a Calculated Field formula (the
+	 * Calculated Field block and the Repeater formula).
+	 *
+	 * @param int|string $post_id
+	 * @param string     $key
+	 * @param bool       $in_string Whether the macro stands inside a string literal.
+	 *
+	 * @return string
+	 */
+	public static function calculated_meta_value( $post_id, string $key, bool $in_string = false ): string {
+		$raw = get_post_meta( $post_id, $key, true );
+
+		/**
+		 * Filters the formula token of %META::key%. By default the value is
+		 * inserted as data: a number, or text in a string literal. Return $raw
+		 * to insert the stored text as formula code, only for a key that
+		 * visitors cannot write (for example, a formula fragment kept in meta
+		 * by the site owner).
+		 *
+		 * @param string     $value     Safe token.
+		 * @param mixed      $raw       Stored meta value.
+		 * @param string     $key       Meta key.
+		 * @param int|string $post_id   Post ID.
+		 * @param bool       $in_string Whether the macro stands inside a string literal.
+		 */
+		return (string) apply_filters( 'jet-form-builder/calculated-field/meta-value', self::to_formula_literal( $raw, $in_string ), $raw, $key, $post_id, $in_string );
+	}
+
+	/**
+	 * Encodes square brackets as HTML entities so a value printed as element
+	 * text cannot be expanded as a shortcode later. WordPress runs
+	 * do_shortcode() over the whole rendered page (the_content, the
+	 * [jet_fb_form] shortcode, page builders), after the form block has
+	 * already been rendered.
+	 *
+	 * Hexadecimal entities are used on purpose: do_shortcode() ends with
+	 * unescape_invalid_shortcodes(), which turns the decimal "&#91;"/"&#93;"
+	 * back into brackets, so a second do_shortcode() pass (theme, page
+	 * builder) would expand them. The browser decodes both forms the same
+	 * way, so the visible text and the submitted value stay exactly the same.
+	 *
+	 * @param string $value Already escaped HTML text.
+	 *
+	 * @return string
+	 */
+	public static function neutralize_shortcodes( string $value ): string {
+		return str_replace( array( '[', ']' ), array( '&#x5B;', '&#x5D;' ), $value );
+	}
+
 	public static function is_url( $url ) {
 		return wp_http_validate_url( $url );
 	}
 
+	/**
+	 * Input-side cleanup of a submitted string.
+	 *
+	 * NOT an output escaping function and not an XSS defence on its own:
+	 * markup is filtered with wp_kses_post() only when the string contains
+	 * "<", so quotes, "&", line breaks and URL schemes pass unchanged (they
+	 * are legitimate text in form values). Every place that prints a value
+	 * must escape it for its context (esc_attr, esc_html, esc_url,
+	 * wp_kses_post...). See tests/wpunit/ToolsSanitizeInvariantsTest.php.
+	 *
+	 * @param mixed $source
+	 * @param bool  $replace_enqueue Run wp_kses_post() when markup is present.
+	 *
+	 * @return string
+	 */
 	public static function sanitize_text_field( $source, $replace_enqueue = true ) {
 		$str = (string) $source;
 

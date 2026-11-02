@@ -1,6 +1,6 @@
 <template>
 	<a
-		:href="parsedJson.href"
+		:href="safeHref"
 		:target="target"
 		:class="{
 			'row-title': parsedJson.primary,
@@ -32,7 +32,19 @@ export default {
 		},
 		target() {
 			return this.parsedJson.target ?? '_self';
-		}
+		},
+		/**
+		 * Link columns are shared with add-ons and may carry stored URLs.
+		 * Script-like schemes never become a live link; every other URL
+		 * (admin pages, permalinks, mailto:, custom app schemes) is kept.
+		 */
+		safeHref() {
+			const href  = this.parsedJson.href;
+			// eslint-disable-next-line no-control-regex
+			const clean = String( href ?? '' ).replace( /[\u0000- \u007f-\u009f]/g, '' );
+
+			return /^(javascript|vbscript|data):/i.test( clean ) ? undefined : href;
+		},
 	},
 }
 </script>

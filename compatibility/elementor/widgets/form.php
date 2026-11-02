@@ -3889,7 +3889,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 		wp_print_styles( 'wp-block-library' );
 		$settings = $this->get_settings_for_display();
 
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped form HTML from the form renderer (see FieldRenderEscapingTest).
 		echo jet_fb_render_form( $settings );
 	}
 

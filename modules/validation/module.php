@@ -239,7 +239,8 @@ final class Module implements
 
 	public function add_validation_messages_global( string $markup, bool $force = false ): string {
 		$this->settings = $this->get_settings();
-		$form_id        = jet_fb_live()->form_id;
+		// Printed into inline JS as an object key; one type for the dedup check too.
+		$form_id = (int) jet_fb_live()->form_id;
 
 		if (
 			( ! $this->is_advanced_form() && ! $force ) ||

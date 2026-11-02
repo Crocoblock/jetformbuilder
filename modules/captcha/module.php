@@ -391,7 +391,7 @@ final class Module implements
 	 * @return bool
 	 */
 	public function add_inline_config( $config, string $handle = '' ): bool {
-		$form_id = jet_fb_live()->form_id;
+		$form_id = (int) jet_fb_live()->form_id; // Printed into inline JS.
 
 		if ( ! is_string( $config ) ) {
 			$config = Tools::encode_json( $config );

@@ -788,10 +788,17 @@ class PresetAccessControlTest extends \Codeception\TestCase\WPTestCase {
 		/** @var Rich_Content_Module $rich */
 		$rich = jet_form_builder()->module( 'rich-content' );
 
+		// A preset result is data and is not expanded as a shortcode
+		// by default (see PresetRichPipelineShortcodeTest). This test is about
+		// callback ORDER, so it uses the backward compatibility opt-in that
+		// restores expansion of preset results.
+		add_filter( 'jet-form-builder/rich-content/allow-preset-shortcodes', '__return_true' );
+
 		try {
 			$this->assertSame( 'expanded-after-preset', $rich->rich_trusted( $json ) );
 			$this->assertSame( 'expanded-after-preset', Rich_Content_Module::rich( $json ) );
 		} finally {
+			remove_filter( 'jet-form-builder/rich-content/allow-preset-shortcodes', '__return_true' );
 			remove_shortcode( 'jfb_rich_order_test' );
 		}
 	}

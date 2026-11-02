@@ -56,7 +56,7 @@ class Execution_Builder {
 			// Fool protection
 			if ( get_class( $constraint->get_model() ) === get_class( $model ) ) {
 				_doing_it_wrong(
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- developer notice: model class name and static text.
 					get_class( $model ) . '::foreign_relations',
 					'You have a logical error. A model cannot be dependent on itself.',
 					'2.0.0'

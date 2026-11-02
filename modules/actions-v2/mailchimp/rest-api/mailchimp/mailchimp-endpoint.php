@@ -47,7 +47,7 @@ class Mailchimp_Endpoint implements Endpoint_Interface {
 			return new \WP_REST_Response(
 				array(
 					'code'    => 'not_found_lists',
-					'message' => $exception->getMessage(),
+					'message' => wp_kses_post( $exception->getMessage() ), // shown with v-html in admin notices
 				),
 				404
 			);

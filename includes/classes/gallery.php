@@ -97,14 +97,14 @@ class Gallery {
 			echo '<div class="jet-engine-gallery-slider__item">';
 
 			if ( $args['lightbox'] ) {
-				echo '<a href="' . esc_attr( $img_full ) . '" class="jet-engine-gallery-slider__item-wrap jet-engine-gallery-item-wrap is-lightbox" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="' . esc_attr( $gallery_id ) . '">';
+				echo '<a href="' . esc_url( $img_full ) . '" class="jet-engine-gallery-slider__item-wrap jet-engine-gallery-item-wrap is-lightbox" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="' . esc_attr( $gallery_id ) . '">';
 			} else {
 				echo '<span class="jet-engine-gallery-slider__item-wrap jet-engine-gallery-item-wrap">';
 			}
 
 			$alt = get_post_meta( $img_id, '_wp_attachment_image_alt', true );
 
-			echo '<img src="' . esc_attr( $img_url ) . '" alt="' . esc_attr( $alt ) . '" class="jet-engine-gallery-slider__item-img">';
+			echo '<img src="' . esc_url( $img_url ) . '" alt="' . esc_attr( $alt ) . '" class="jet-engine-gallery-slider__item-img">';
 
 			if ( $args['lightbox'] ) {
 				echo '</a>';
@@ -173,14 +173,14 @@ class Gallery {
 			echo '<div class="jet-engine-gallery-grid__item">';
 
 			if ( $args['lightbox'] ) {
-				echo '<a href="' . esc_attr( $img_full ) . '" class="jet-engine-gallery-grid__item-wrap jet-engine-gallery-item-wrap is-lightbox" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="' . esc_attr( $gallery_id ) . '">';
+				echo '<a href="' . esc_url( $img_full ) . '" class="jet-engine-gallery-grid__item-wrap jet-engine-gallery-item-wrap is-lightbox" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="' . esc_attr( $gallery_id ) . '">';
 			} else {
 				echo '<span class="jet-engine-gallery-grid__item-wrap jet-engine-gallery-item-wrap">';
 			}
 
 			$alt = get_post_meta( $img_id, '_wp_attachment_image_alt', true );
 
-			echo '<img src="' . esc_attr( $img_url ) . '" alt="' . esc_attr( $alt ) . '" class="jet-engine-gallery-grid__item-img">';
+			echo '<img src="' . esc_url( $img_url ) . '" alt="' . esc_attr( $alt ) . '" class="jet-engine-gallery-grid__item-img">';
 
 			if ( $args['lightbox'] ) {
 				echo '</a>';

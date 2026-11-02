@@ -130,7 +130,13 @@ if (
 					$calc = ' data-calculate="' . esc_attr( $option['calculate'] ) . '"';
 				}
 
-				printf( '<option value="%1$s" %3$s%4$s>%2$s</option>', esc_attr( $val ), esc_html( $label ), $selected, $calc );
+				printf(
+					'<option value="%1$s" %3$s%4$s>%2$s</option>',
+					esc_attr( $val ),
+					$this->neutralize_generated_option_label( esc_html( $label ) ),
+					$selected,
+					$calc
+				);
 
 			}
 		}

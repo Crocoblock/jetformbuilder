@@ -16,5 +16,5 @@ if ( isset( $args['type'] ) && 'heading-field' === $args['type'] ) {
 	$format = '<div class="%1$s"><small>%2$s</small></div>';
 }
 
-// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $format is one of two fixed strings, values escaped.
 printf( $format, esc_attr( $class ), wp_kses_post( $args['desc'] ) );

@@ -39,8 +39,32 @@ function isCalculated( node ) {
  * @param {string} format — format string
  * @returns {string|number}
  */
+/**
+ * The formula result is already evaluated, so only a number (or a numeric
+ * string) is a timestamp. Anything else is data - possibly typed by the
+ * visitor - and must never be executed; it is treated as "no date".
+ *
+ * @param  input {*}
+ * @return {number}
+ */
+function toMillis( input ) {
+	if ( 'number' === typeof input ) {
+		return input;
+	}
+
+	if ( 'string' !== typeof input ) {
+		return Number( input );
+	}
+
+	const trimmed = input.trim();
+
+	return /^[-+]?\d+(\.\d+)?(e[-+]?\d+)?$/i.test( trimmed )
+		? Number( trimmed )
+		: NaN;
+}
+
 function convertMillisToDateString( millisInput, format = 'YYYY-MM-DD' ) {
-	const millis = eval( millisInput );
+	const millis = toMillis( millisInput );
 
 	if ( !millis || isNaN( millis ) || null === millis || 0 === millis ) {
 		return 0;

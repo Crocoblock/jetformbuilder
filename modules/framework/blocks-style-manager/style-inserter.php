@@ -165,6 +165,6 @@ class Style_Inserter {
 	 * @return string
 	 */
 	public static function styles_with_tag( $css = '' ) {
-		return '<style>' . $css . '</style>';
+		return '<style>' . \Jet_Form_Builder\Classes\Tools::safe_inline_css( (string) $css ) . '</style>';
 	}
 }

@@ -186,17 +186,27 @@ SignalMapField.prototype.removeMarker = function () {
 };
 
 SignalMapField.prototype.setPreview = function ( position ) {
-	let positionText;
+	/**
+	 * The position comes from the field value (preset, geocoder address),
+	 * so it is built as DOM text instead of an HTML string. The markup is
+	 * the same as before: <span title="Lat">…</span>, <span title="Lng">…</span>.
+	 */
+	this.position.textContent = '';
 
 	if ( position && position.lat && position.lng ) {
-		positionText = '<span title="Lat">' + position.lat +
-			'</span>, <span title="Lng">' + position.lng + '</span>';
+		const lat = document.createElement( 'span' );
+		const lng = document.createElement( 'span' );
+
+		lat.title       = 'Lat';
+		lat.textContent = String( position.lat );
+		lng.title       = 'Lng';
+		lng.textContent = String( position.lng );
+
+		this.position.append( lat, ', ', lng );
 	}
 	else {
-		positionText = position;
+		this.position.textContent = position ?? '';
 	}
-
-	this.position.innerHTML    = positionText;
 	this.preview.style.display = position ? 'flex' : 'none';
 };
 

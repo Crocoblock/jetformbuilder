@@ -45,7 +45,7 @@ class Get_Response_Endpoint implements Endpoint_Interface {
 		} catch ( Gateway_Exception $exception ) {
 			return new \WP_REST_Response(
 				array(
-					'message' => $exception->getMessage(),
+					'message' => wp_kses_post( $exception->getMessage() ), // shown with v-html in admin notices
 					'data'    => $exception->get_additional(),
 				),
 				400

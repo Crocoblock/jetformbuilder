@@ -98,9 +98,9 @@ if ( ! empty( $args['separate_dial_code'] ) ) {
 
 	<input
 		type="tel"
-		name="<?php echo $this->block_type->get_field_name( $args['name'] . '_intl' ); ?>"
-		data-field-name="<?php echo $args['name'] . '_intl'; ?>"
-		class="jet-form-builder__field phone-field-intl <?php echo $args['class_name']; ?> "
+		name="<?php echo esc_attr( $this->block_type->get_field_name( $args['name'] . '_intl' ) ); ?>"
+		data-field-name="<?php echo esc_attr( $args['name'] . '_intl' ); ?>"
+		class="jet-form-builder__field phone-field-intl <?php echo esc_attr( $args['class_name'] ); ?> "
 		value=""
 		autocomplete="tel"
 	>

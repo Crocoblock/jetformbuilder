@@ -51,13 +51,11 @@ class Action_Pages_Manager {
 			/** @var Action_Page_It $page */
 			$page = $this->rep_get_item( $slug );
 		} catch ( Repository_Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die( $exception->getMessage() );
+			wp_die( esc_html( $exception->getMessage() ) );
 		}
 
 		if ( ! $page->check_permission() ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die( __( 'You do not have access to view this page', 'jet-form-builder' ) );
+			wp_die( esc_html__( 'You do not have access to view this page', 'jet-form-builder' ) );
 		}
 
 		Pages_Manager::instance()->set_current_page_raw( $page );
@@ -65,8 +63,7 @@ class Action_Pages_Manager {
 		try {
 			$page->render_page();
 		} catch ( Not_Found_Page_Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die( $exception->getMessage() );
+			wp_die( esc_html( $exception->getMessage() ) );
 		}
 	}
 

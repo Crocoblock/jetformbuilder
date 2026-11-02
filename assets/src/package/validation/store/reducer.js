@@ -1,5 +1,6 @@
 import dispatchers from './dispatchers';
 import humanReadablePreset from '../../preset/helpers/humanReadablePreset';
+import escapeText from '../../preset/helpers/escapeText';
 
 const {
 	      select,
@@ -37,7 +38,7 @@ const DEFAULT_STATE = {
 		ssr ( rule ) {
 			return [
 				__( 'Function:', 'jet-form-builder' ),
-				rule?.value,
+				escapeText( rule?.value ),
 			].join( ' ' );
 		},
 	},

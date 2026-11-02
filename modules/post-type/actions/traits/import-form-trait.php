@@ -88,8 +88,7 @@ trait Import_Form_Trait {
 		);
 
 		if ( is_wp_error( $post_id ) ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die( $post_id->get_error_message(), 'Error' );
+			wp_die( esc_html( $post_id->get_error_message() ), 'Error' );
 		}
 
 		return $post_id;

@@ -115,7 +115,7 @@ class Media_Ownership_Migration_Notice {
 			</p>
 			<p>
 				<?php
-				echo '✅ ' . esc_html( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '✅ ' . esc_html( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- emoji literal + esc_html().
 					sprintf(
 						/* translators: %d: number of existing Media Library attachments reconciled. */
 						_n(

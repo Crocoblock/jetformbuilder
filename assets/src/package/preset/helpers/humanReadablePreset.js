@@ -1,4 +1,5 @@
 import isPresetString from './isPresetString';
+import escapeText from './escapeText';
 
 const {
 	      __,
@@ -7,13 +8,14 @@ const {
 function humanReadablePreset( value, highlight = 'code' ) {
 	value = value ?? '';
 
+	// Returns HTML: plain values and the preset source are escaped.
 	if ( !isPresetString( value ) ) {
-		return value;
+		return escapeText( value );
 	}
 
 	const parsedPreset = JSON.parse( value );
 	const label        = __( 'Preset from', 'jet-form-builder' );
-	const from         = parsedPreset?.from ?? '(empty)';
+	const from         = escapeText( parsedPreset?.from ?? '(empty)' );
 
 	let highlightedFrom;
 

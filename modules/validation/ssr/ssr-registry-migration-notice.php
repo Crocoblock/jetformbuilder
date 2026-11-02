@@ -131,7 +131,7 @@ class Ssr_Registry_Migration_Notice {
 			<?php if ( $imported_count > 0 ) : ?>
 				<p>
 					<?php
-					echo '✅ ' . esc_html( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo '✅ ' . esc_html( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- emoji literal + esc_html().
 						sprintf(
 							/* translators: %d: number of custom "Server-Side callback" function names restored. */
 							_n(
@@ -149,7 +149,7 @@ class Ssr_Registry_Migration_Notice {
 			<?php if ( $blocked_count > 0 ) : ?>
 				<p>
 					<?php
-					echo '⚠️ ' . esc_html( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo '⚠️ ' . esc_html( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- emoji literal + esc_html().
 						sprintf(
 							/* translators: %d: number of forms using a permanently blocked callback function. */
 							_n(

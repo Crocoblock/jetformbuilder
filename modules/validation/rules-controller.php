@@ -64,8 +64,7 @@ class Rules_Controller implements Repository_Pattern_Interface {
 			/** @var Advanced_Rules\Server_Side_Rule $rule */
 			$rule = $this->get_item( Advanced_Rules\Server_Side_Rule::class );
 		} catch ( Repository_Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die( $exception->getMessage() );
+			wp_die( esc_html( $exception->getMessage() ) );
 		}
 
 		return $rule;

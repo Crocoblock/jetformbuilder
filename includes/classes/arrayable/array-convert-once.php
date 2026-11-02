@@ -115,7 +115,7 @@ class Array_Convert_Once {
 			return $item::rep_item_id();
 		}
 
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static text and class name.
 		wp_die( 'Invalid element. Item must an instance of ' . Repository_Item_Instance_Trait::class );
 	}
 

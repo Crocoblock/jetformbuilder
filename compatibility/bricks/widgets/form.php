@@ -2714,10 +2714,10 @@ class Form extends Base {
 			$settings['form_id_custom'] = bricks_render_dynamic_data( $settings['form_id_custom'] );
 		}
 
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Bricks render_attributes() escapes.
 		echo "<div {$this->render_attributes( '_root' )}>";
 		$content = do_shortcode( $blocks->get_form_class()->render_callback_field( $settings ) );
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped form HTML from the form renderer.
 		echo $content;
 		echo '</div>';
 	}

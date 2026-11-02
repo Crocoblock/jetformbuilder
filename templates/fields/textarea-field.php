@@ -7,6 +7,7 @@
 
 use Jet_Form_Builder\Blocks\Dynamic_Value;
 use Jet_Form_Builder\Classes\Regexp_Tools;
+use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -36,11 +37,22 @@ if ( ! empty( $args['maxlength'] ) ) {
 	$this->add_attribute( 'maxlength', $args['maxlength'] );
 }
 
+$textarea_content = $this->has_attribute( 'data-value' ) ? '' : esc_textarea( $args['default'] );
+
+/**
+ * A preset value (query var, post meta, form record...) is visitor data:
+ * keep it from being expanded as a shortcode by a later do_shortcode() pass
+ * over the page. The author's own Default Value is left as is.
+ */
+if ( $this->block_type && $this->block_type->is_default_from_source() ) {
+	$textarea_content = Tools::neutralize_shortcodes( $textarea_content );
+}
+
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 ?>
 <div class="jet-form-builder__field-wrap">
 	<?php do_action( 'jet-form-builder/before-field', $this ); ?>
-	<textarea <?php $this->render_attributes_string(); ?>><?php echo $this->has_attribute( 'data-value' ) ? '' : esc_textarea( $args['default'] ); ?></textarea>
+	<textarea <?php $this->render_attributes_string(); ?>><?php echo $textarea_content; ?></textarea>
 	<?php do_action( 'jet-form-builder/after-field', $this ); ?>
 </div>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

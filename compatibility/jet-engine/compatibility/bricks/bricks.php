@@ -78,6 +78,7 @@ class Bricks {
 		$html = new \WP_HTML_Tag_Processor( $content );
 		$html->next_tag();
 		$html->add_class( 'jet-listing-base' );
+		$html->add_class( 'brxe-jet-listing' );
 
 		return $html->get_updated_html();
 	}

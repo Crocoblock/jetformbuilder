@@ -12,6 +12,49 @@ const {
 	      applyFilters: deprecatedApplyFilters = false,
       } = window?.JetFormBuilderMain?.filters ?? {};
 
+function normalizeNumberFieldMacro( input, value ) {
+	const [ relatedNode ] = input.nodes;
+	const isNumberField = 'number' === relatedNode?.type;
+	const isEmptyOrInvalidNumber = null === value
+		|| undefined === value
+		|| ( 'string' === typeof value && !value.trim() )
+		|| Number.isNaN( Number( value ) );
+
+	return isNumberField && isEmptyOrInvalidNumber ? 0 : value;
+}
+
+function getCalculatedMacroValue( input, valueType, calculatedField ) {
+	const value = applyFilters(
+		'jet.fb.calculated.callback',
+		false,
+		input,
+		calculatedField,
+	);
+
+	if ( false !== value ) {
+		return value;
+	}
+
+	const response = 'number' === valueType
+		? input.calcValue
+		: input.value.current;
+	const normalizedResponse = normalizeNumberFieldMacro( input, response );
+
+	if ( false === deprecatedApplyFilters ) {
+		return normalizedResponse;
+	}
+
+	const filterResult = deprecatedApplyFilters(
+		'forms/calculated-field-value',
+		input.value.current,
+		jQuery( input.nodes[ 0 ] ),
+	);
+
+	return filterResult === input.value.current
+		? normalizedResponse
+		: filterResult;
+}
+
 // eslint-disable-next-line max-lines-per-function
 function CalculatedData() {
 	InputData.call( this );
@@ -56,40 +99,13 @@ function CalculatedData() {
 
 			this.value.current = result;
 		};
-		formula.relatedCallback = ( input ) => {
-			const value = applyFilters(
-				'jet.fb.calculated.callback',
-				false,
-				input,
-				this,
-			);
+		formula.relatedCallback = input => getCalculatedMacroValue(
+			input,
+			this.valueTypeProp,
+			this,
+		);
 
-			if ( false !== value ) {
-				return value;
-			}
-
-			const response = 'number' === this.valueTypeProp
-			                 ? input.calcValue
-			                 : input.value.current;
-
-			if ( false === deprecatedApplyFilters ) {
-				return response;
-			}
-
-			const filterResult = deprecatedApplyFilters(
-				'forms/calculated-field-value',
-				input.value.current,
-				jQuery( input.nodes[ 0 ] ),
-			);
-
-			return filterResult === input.value.current
-			       ? response
-			       : filterResult;
-		};
-
-		formula.emptyValue = () => 'number' === this.valueTypeProp
-		                           ? 0
-		                           : '';
+		formula.emptyValue = () => '';
 		formula.setResult();
 		this.value.current = this.value.applySanitizers( this.value.current );
 

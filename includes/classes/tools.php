@@ -825,6 +825,38 @@ class Tools {
 	 *
 	 * @return string
 	 */
+	/**
+	 * Removes data-jfb-* attributes (data-jfb-macro, data-jfb-sync...) from
+	 * HTML that came from site data rather than from the form author. The
+	 * frontend script treats such attributes as its own instructions: a
+	 * data-jfb-macro element inside the form is rendered as an HTML macro.
+	 * wp_kses_post() keeps data-* attributes, so it does not stop this.
+	 *
+	 * Only attributes inside tags are touched; text such as "data-jfb-macro"
+	 * outside a tag stays. Expects kses-normalized HTML (no ">" inside a tag).
+	 *
+	 * @param string $html
+	 *
+	 * @return string
+	 */
+	public static function strip_macro_attributes( string $html ): string {
+		if ( false === stripos( $html, 'data-jfb-' ) ) {
+			return $html;
+		}
+
+		return (string) preg_replace_callback(
+			'/<[a-z][^>]*>/i',
+			static function ( $tag ) {
+				return (string) preg_replace(
+					'/\s+data-jfb-[a-z0-9_-]*(?:\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s"\'>]+))?/i',
+					'',
+					$tag[0]
+				);
+			},
+			$html
+		);
+	}
+
 	public static function neutralize_shortcodes( string $value ): string {
 		return str_replace( array( '[', ']' ), array( '&#x5B;', '&#x5D;' ), $value );
 	}

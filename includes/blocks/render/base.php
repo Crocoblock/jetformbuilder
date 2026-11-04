@@ -296,8 +296,11 @@ abstract class Base {
 	 * Option labels generated from site data (posts, terms, meta, generators,
 	 * JetEngine queries...) can be written by visitors, e.g. through an
 	 * Insert Post action. Core do_shortcode() runs over the rendered page, so
-	 * their brackets are encoded; the browser shows them unchanged. Labels the
-	 * form author typed in ("Manual Input") are left as they are.
+	 * their brackets are encoded; the browser shows them unchanged. The
+	 * frontend script reads data-jfb-* attributes inside the form as its own
+	 * instructions (data-jfb-macro is rendered as an HTML macro), so they are
+	 * removed. Labels the form author typed in ("Manual Input") are left as
+	 * they are.
 	 *
 	 * @param string $label Already escaped label HTML.
 	 *
@@ -306,7 +309,11 @@ abstract class Base {
 	protected function neutralize_generated_option_label( string $label ): string {
 		$from = $this->args['field_options_from'] ?? 'manual_input';
 
-		return 'manual_input' === $from ? $label : Tools::neutralize_shortcodes( $label );
+		if ( 'manual_input' === $from ) {
+			return $label;
+		}
+
+		return Tools::neutralize_shortcodes( Tools::strip_macro_attributes( $label ) );
 	}
 
 	protected function set_value() {

@@ -801,6 +801,12 @@ class Module implements Base_Module_It {
 			$result = self::escape_email_preset_result( $result, $preset_json );
 		}
 
+		if ( $runtime_values->should_neutralize_preset_brackets() ) {
+			// Printed into the form: the frontend script would treat a
+			// data-jfb-macro element from the preset value as an HTML macro.
+			$result = Tools::strip_macro_attributes( $result );
+		}
+
 		if ( false === strpos( $result, '[' ) ) {
 			return $result;
 		}

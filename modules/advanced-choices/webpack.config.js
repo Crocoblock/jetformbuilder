@@ -28,8 +28,14 @@ module.exports = {
 			{
 				test: /\.js(x)?$/,
 				use: [
-					'babel-loader',
-					'@wyw-in-js/webpack-loader',
+					{
+						loader: 'babel-loader',
+						options: { configFile: path.resolve( __dirname, '../../.babelrc' ) },
+					},
+					{
+						loader: '@wyw-in-js/webpack-loader',
+						options: { babelOptions: { configFile: path.resolve( __dirname, '../../.babelrc' ) } },
+					},
 				],
 				exclude: /node_modules/,
 			},

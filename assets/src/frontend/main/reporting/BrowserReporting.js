@@ -9,12 +9,20 @@ function BrowserReporting() {
 		return true;
 	};
 
-	this.reportRaw   = function () {
-	};
-	this.reportFirst = function () {
-		const node = this.getNode();
+	this.reportRaw   = function ( errors = [] ) {
+		const message = errors.find( error => typeof error.getMessage === 'function' )?.getMessage();
 
-		node.reportValidity();
+		this.reportedInline = Boolean(
+			message && typeof this.input.showError === 'function' && this.input.showError( message ) !== false,
+		);
+		return this.reportedInline;
+	};
+	this.reportFirst = function ( errors = [] ) {
+		if ( this.reportRaw( errors ) ) {
+			return;
+		}
+
+		this.getNode().reportValidity();
 	};
 
 	this.setRestrictions  = function () {
@@ -23,7 +31,8 @@ function BrowserReporting() {
 		createDefaultRestrictions( this, node );
 	};
 	this.clearReport      = function () {
-		// browser automatically hide tooltip messages
+		this.reportedInline = false;
+		this.input.clearError?.();
 	};
 	this.validateOnChange = function () {
 		this.getErrors().then( errors => {
@@ -47,7 +56,7 @@ function BrowserReporting() {
 	};
 
 	this.hasAutoScroll = function () {
-		return this.input.hasAutoScroll();
+		return !this.reportedInline && this.input.hasAutoScroll();
 	};
 
 	/**
@@ -59,5 +68,6 @@ function BrowserReporting() {
 }
 
 BrowserReporting.prototype = Object.create( ReportingInterface.prototype );
+BrowserReporting.prototype.reportedInline = false;
 
 export default BrowserReporting;

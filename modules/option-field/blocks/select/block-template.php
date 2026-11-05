@@ -28,6 +28,10 @@ $this->add_attribute(
 );
 $this->add_attribute( 'data-jfb-sync' );
 
+foreach ( \JFB_Modules\Option_Field\Selection_Limit::get_attributes( $args, 'select-field' ) as $key => $value ) {
+	$this->add_attribute( $key, $value );
+}
+
 // Add auto-update data attributes if configured
 if ( ! empty( $args['_jfb_data_attrs'] ) ) {
 	foreach ( $args['_jfb_data_attrs'] as $attr_key => $attr_value ) {

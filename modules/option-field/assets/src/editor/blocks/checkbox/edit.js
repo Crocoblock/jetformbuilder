@@ -1,4 +1,5 @@
 import preview from './preview';
+import SelectionLimitsControls, { SelectionLimitsValidationControls } from '../../components/SelectionLimitsControls';
 import { SelectRadioCheckPlaceholder } from '../../components/SelectRadioCheckPlaceholder';
 import SelectRadioCheck from '../../components/SelectRadioCheck';
 import CustomTemplateControls from '../../components/CustomTemplateControls';
@@ -108,6 +109,7 @@ export default function CheckboxEdit( props ) {
 			</PanelBody>
 			<PanelBody title={ __( 'Value', 'jet-form-builder' ) }>
 				<BlockAdvancedValue/>
+				<SelectionLimitsControls { ...props }/>
 				{ attributes.custom_option.allow && <>
 					<hr/>
 					<TextControl
@@ -124,6 +126,7 @@ export default function CheckboxEdit( props ) {
 				</> }
 			</PanelBody>
 			<AdvancedFields/>
+			<SelectionLimitsValidationControls { ...props }/>
 		</InspectorControls>
 		<div { ...blockProps } key={ uniqKey( 'viewBlock' ) }>
 			<SelectRadioCheckPlaceholder

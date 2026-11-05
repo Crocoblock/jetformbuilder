@@ -1,3 +1,4 @@
+import '../../../../../option-field/assets/src/frontend/selection-limit/main';
 import ChoicesData from './input';
 import SignalChoices from './signal';
 import '../../../../../option-field/assets/src/frontend/default-value/main';

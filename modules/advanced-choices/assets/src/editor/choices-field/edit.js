@@ -1,3 +1,4 @@
+import SelectionLimitsControls, { SelectionLimitsValidationControls } from '../../../../../option-field/assets/src/editor/components/SelectionLimitsControls';
 import Placeholder from './placeholder';
 import ChoicesFieldContext from './context';
 import AddChoiceButton from './AddChoiceButton';
@@ -166,6 +167,7 @@ to select multiple options`,
 						allow_multiple => setAttributes( { allow_multiple } )
 					}
 				/>
+				{ attributes.allow_multiple && <SelectionLimitsControls { ...props }/> }
 				<BlockAdvancedValue
 					help={ attributes.allow_multiple && __(
 						`You should list the choice 
@@ -175,6 +177,7 @@ is not the case when you use a dynamic value using a preset, macros, etc.`,
 					) }
 				/>
 			</PanelBody>
+			<SelectionLimitsValidationControls { ...props }/>
 		</InspectorControls>
 		<InspectorControls group="styles">
 			<StylePanel

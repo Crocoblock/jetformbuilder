@@ -1,3 +1,4 @@
+import '../../selection-limit/main';
 import MultiSelectData from './input';
 import SignalSelect from './signal';
 import '../../default-value/main';

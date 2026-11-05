@@ -77,6 +77,11 @@ class Block_Render extends Base {
 			$this->mark_default_literal();
 		}
 
+		$this->args['_jfb_data_attrs'] = array_merge(
+			$this->args['_jfb_data_attrs'] ?? array(),
+			\JFB_Modules\Option_Field\Selection_Limit::get_attributes( $this->args, $this->get_name() )
+		);
+
 		$auto_update_attrs = Html_Attributes_Injector::render_data_attributes( $this->args );
 		$auto_update_attrs = $auto_update_attrs ? ' ' . $auto_update_attrs : '';
 

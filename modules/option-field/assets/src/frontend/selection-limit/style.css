@@ -1,0 +1,11 @@
+[data-jfb-max-selections] .checkboxes-field:disabled + span,
+[data-jfb-max-selections] .add-custom-option:disabled,
+[data-jfb-max-selections] .jet-form-builder-choice--item.is-disabled {
+	opacity: 0.5;
+}
+
+[data-jfb-max-selections] .add-custom-option:disabled,
+[data-jfb-max-selections] .jet-form-builder-choice--item.is-disabled,
+[data-jfb-max-selections] .jet-form-builder-choice--item.is-disabled * {
+	cursor: not-allowed;
+}

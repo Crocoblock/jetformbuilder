@@ -1,4 +1,5 @@
 import preview from './preview';
+import SelectionLimitsControls, { SelectionLimitsValidationControls } from '../../components/SelectionLimitsControls';
 import { SelectRadioCheckPlaceholder } from '../../components/SelectRadioCheckPlaceholder';
 import SelectRadioCheck from '../../components/SelectRadioCheck';
 
@@ -79,6 +80,7 @@ export default function SelectEdit( props ) {
 			</PanelBody>
 			<PanelBody title={ __( 'Value', 'jet-form-builder' ) }>
 				<BlockAdvancedValue/>
+				{ attributes.multiple && <SelectionLimitsControls { ...props }/> }
 			</PanelBody>
 			<PanelBody
 				title={ __( 'Advanced', 'jet-form-builder' ) }
@@ -98,6 +100,7 @@ export default function SelectEdit( props ) {
 				<BlockVisibility/>
 				<BlockClassName/>
 			</PanelBody>
+			<SelectionLimitsValidationControls { ...props }/>
 		</InspectorControls> }
 		<div key={ uniqKey( 'viewBlock' ) } { ...blockProps }>
 			<SelectRadioCheckPlaceholder

@@ -16,6 +16,8 @@ const {
 function SingleFileRestriction() {
 	AdvancedRestriction.call( this );
 
+	this.invalidRestriction = null;
+
 	this.isSupported = function ( node ) {
 		return (
 			'file' === node?.type
@@ -35,6 +37,11 @@ SingleFileRestriction.prototype = Object.create(
  */
 SingleFileRestriction.prototype.singleFileRestrictions = [];
 
+SingleFileRestriction.prototype.getMessage = function () {
+	// Macro values can change while reporting reuses the cached validation error.
+	return this.invalidRestriction?.getMessage() ?? '';
+};
+
 SingleFileRestriction.prototype.setReporting = function ( reporting ) {
 	AdvancedRestriction.prototype.setReporting.call( this, reporting );
 
@@ -43,6 +50,9 @@ SingleFileRestriction.prototype.setReporting = function ( reporting ) {
 
 // eslint-disable-next-line max-lines-per-function
 SingleFileRestriction.prototype.validatePromise = async function () {
+	// Clear the previous failure even when the last file has been removed.
+	this.invalidRestriction = null;
+
 	/**
 	 * @type {SignalFile}
 	 */
@@ -98,6 +108,8 @@ SingleFileRestriction.prototype.validatePromise = async function () {
 	}
 
 	const results = await allRejected( fieldCallbacks );
+
+	this.invalidRestriction = results[ 0 ]?.rejected[ 0 ] ?? null;
 
 	for ( const fileCurrent of current ) {
 		const fileNode = callable.getFileNode( fileCurrent.name );

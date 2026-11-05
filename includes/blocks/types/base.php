@@ -374,6 +374,25 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	}
 
 	/**
+	 * Min/max set to a dynamic preset. The browser runs min/max as formulas,
+	 * so its preset result is checked with Tools::preset_limit_value().
+	 *
+	 * @param string $name  Attribute name.
+	 * @param mixed  $value Attribute value written by the form author.
+	 *
+	 * @return bool
+	 */
+	private function is_preset_limit( string $name, $value ): bool {
+		if ( ! in_array( $name, array( 'min', 'max' ), true ) || ! is_string( $value ) ) {
+			return false;
+		}
+
+		$preset = json_decode( $value, true );
+
+		return is_array( $preset ) && ! empty( $preset['jet_preset'] );
+	}
+
+	/**
 	 * @param string $name
 	 *
 	 * @return mixed
@@ -408,7 +427,11 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			$rich_module = jet_form_builder()->module( 'rich-content' );
 
 			// immediately return, because rich method also parsing preset and shortcodes
-			return $rich_module->rich_trusted( $value );
+			$result = $rich_module->rich_trusted( $value );
+
+			return $this->is_preset_limit( $name, $value )
+				? Tools::preset_limit_value( $result )
+				: $result;
 		}
 
 		if ( $rich ) {

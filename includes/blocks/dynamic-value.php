@@ -84,19 +84,56 @@ class Dynamic_Value {
 		wp_enqueue_script( self::HANDLE );
 
 		foreach ( $groups as &$group ) {
-			// Groups come from the block's own attributes (admin-authored).
-			$group['to_set'] = jet_fb_parse_dynamic_trusted( $group['to_set'] ?? '' );
+			// Groups come from the block's own attributes (admin-authored), but a
+			// dynamic preset replaces the value with data from its source (post
+			// or user meta, query var...), which visitors can write. The browser
+			// runs "to_set" and condition values as formulas, so a value that
+			// came from a preset is marked to be used as plain data.
+			$to_set          = $group['to_set'] ?? '';
+			$group['to_set'] = jet_fb_parse_dynamic_trusted( $to_set );
 
-			if ( ! isset( $group['conditions'] ) ) {
+			if ( $group['to_set'] !== $to_set ) {
+				$group['to_set']             = $this->preset_number_to_string( $group['to_set'] );
+				$group['to_set_from_preset'] = true;
+			}
+
+			if ( ! isset( $group['conditions'] ) || ! is_array( $group['conditions'] ) ) {
 				continue;
 			}
 
 			foreach ( $group['conditions'] as &$condition ) {
-				$condition['value'] = jet_fb_parse_dynamic_trusted( $condition['value'] ?? '' );
+				$value              = $condition['value'] ?? '';
+				$condition['value'] = jet_fb_parse_dynamic_trusted( $value );
+
+				// Same flag as Condition_Field_Item: the value is not a formula.
+				if ( $condition['value'] !== $value ) {
+					$condition['value']      = $this->preset_number_to_string( $condition['value'] );
+					$condition['use_preset'] = true;
+				}
 			}
+			unset( $condition );
 		}
+		unset( $group );
 
 		return Tools::encode_json( $groups );
+	}
+
+	/**
+	 * A preset can return a number or a list of numbers (user, post or term
+	 * IDs). Field values and condition values are compared as strings in the
+	 * browser, so numbers - also inside a list - are sent as strings. The
+	 * shape of the value and other items are kept.
+	 *
+	 * @param mixed $value
+	 *
+	 * @return mixed
+	 */
+	private function preset_number_to_string( $value ) {
+		if ( is_array( $value ) ) {
+			return array_map( array( $this, 'preset_number_to_string' ), $value );
+		}
+
+		return ( is_int( $value ) || is_float( $value ) ) ? (string) $value : $value;
 	}
 
 }

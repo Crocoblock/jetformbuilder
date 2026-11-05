@@ -12,6 +12,11 @@ function ValueItem() {
 
 ValueItem.prototype = {
 	to_set: '',
+	/**
+	 * "to_set" came from a dynamic preset (post/user meta, query var...):
+	 * it is data that visitors may write, never a formula.
+	 */
+	fromPreset: false,
 	prevResult: null,
 	prevValue: null,
 	/**
@@ -35,6 +40,7 @@ ValueItem.prototype = {
 	observe(
 		{
 			to_set: toSet,
+			to_set_from_preset: fromPreset = false,
 			conditions = [],
 			set_on_empty: setOnEmpty = false,
 			frequency = 'on_change',
@@ -47,9 +53,15 @@ ValueItem.prototype = {
 		this.prevResult   = null;
 		this.prevValue    = null;
 		this.to_set       = toSet;
+		this.fromPreset   = !!fromPreset;
 		this.formulas     = [];
 
-		this.observeSetValue( conditions, input );
+		if ( this.fromPreset ) {
+			this.setLiteralValue();
+		}
+		else {
+			this.observeSetValue( conditions, input );
+		}
 
 		const list = new ConditionsList( conditions, input.root );
 
@@ -57,6 +69,13 @@ ValueItem.prototype = {
 			list.onChangeRelated = () => this.applyValue( list );
 			list.observe();
 			list.onChangeRelated();
+
+			return;
+		}
+
+		if ( this.fromPreset ) {
+			// No formula to report a result: apply the value once now.
+			this.applyValue( false, true );
 
 			return;
 		}
@@ -70,6 +89,15 @@ ValueItem.prototype = {
 			};
 			formula.setResult();
 		}
+	},
+	/**
+	 * A preset value is used as it is, as a string - like the formula path
+	 * returns it - so conditions comparing the field keep matching.
+	 */
+	setLiteralValue() {
+		this.to_set = null === this.to_set || undefined === this.to_set
+		              ? ''
+		              : '' + this.to_set;
 	},
 	observeSetValue( conditions, input ) {
 		const formula = new CalculatedFormula( input );

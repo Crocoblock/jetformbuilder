@@ -809,6 +809,26 @@ class Tools {
 	}
 
 	/**
+	 * Min/max of Number, Range, Date and Time fields are run as calculated
+	 * formulas in the browser (dynamic.value BaseReactiveProperty), so a
+	 * value with "%field%" macros there is code. When min/max comes from a
+	 * dynamic preset (post or user meta, query var...), it is data that
+	 * visitors can write: a value with "%" is dropped. A real number, date
+	 * or time never contains "%"; other values are returned unchanged.
+	 *
+	 * @param mixed $value Preset result for a min/max attribute.
+	 *
+	 * @return mixed
+	 */
+	public static function preset_limit_value( $value ) {
+		if ( is_string( $value ) && false !== strpos( $value, '%' ) ) {
+			return '';
+		}
+
+		return $value;
+	}
+
+	/**
 	 * Removes data-jfb-* attributes (data-jfb-macro, data-jfb-sync...) from
 	 * HTML that came from site data rather than from the form author. The
 	 * frontend script treats such attributes as its own instructions: a

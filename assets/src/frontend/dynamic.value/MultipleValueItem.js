@@ -13,6 +13,13 @@ MultipleValueItem.prototype = Object.create( ValueItem.prototype );
 MultipleValueItem.prototype.isSupported     = function ( input ) {
 	return input.isArray();
 };
+MultipleValueItem.prototype.setLiteralValue = function () {
+	const toSet = Array.isArray( this.to_set )
+	              ? this.to_set
+	              : String( this.to_set ?? '' ).split( ',' );
+
+	this.to_set = toSet.map( item => String( item ).trim() ).filter( Boolean );
+};
 MultipleValueItem.prototype.observeSetValue = function ( conditions, input ) {
 	let toSet = [];
 

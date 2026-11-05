@@ -72,6 +72,11 @@ class Choices_Field_Render extends Base {
 			break;
 		}
 
+		$wrapper_attrs = array_merge(
+			$wrapper_attrs,
+			\JFB_Modules\Option_Field\Selection_Limit::get_attributes( $this->block_type->block_attrs, $this->get_name() )
+		);
+
 		$attrs = get_block_wrapper_attributes( $wrapper_attrs );
 
 		$content   = '';

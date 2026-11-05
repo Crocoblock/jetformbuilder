@@ -66,6 +66,9 @@ final class Module implements
 			0
 		);
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
+		add_action( 'jet-form-builder/validate-field', array( Selection_Limit::class, 'validate' ) );
+
+		add_action( 'jet-form-builder/before-start-form-row', array( $this, 'enqueue_selection_limit_assets' ) );
 
 		// Initialize HTML attributes injector for auto-update
 		$this->html_injector = new Html_Attributes_Injector();
@@ -81,7 +84,9 @@ final class Module implements
 			array( $this, 'on_set_in_block' ),
 			0
 		);
+		remove_action( 'jet-form-builder/before-start-form-row', array( $this, 'enqueue_selection_limit_assets' ) );
 		remove_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
+		remove_action( 'jet-form-builder/validate-field', array( Selection_Limit::class, 'validate' ) );
 	}
 
 	public function add_blocks_types( array $block_types ): array {
@@ -103,6 +108,19 @@ final class Module implements
 			return;
 		}
 		$block->block_attrs['field_options'] = iterator_to_array( $block->get_query()->fetch() );
+	}
+
+	public function enqueue_selection_limit_assets( Base $block ) {
+		if (
+			! Selection_Limit::get_limit( $block->block_attrs, $block->get_name() ) &&
+			! Selection_Limit::get_limit( $block->block_attrs, $block->get_name(), 'min' )
+		) {
+			return;
+		}
+
+		if ( jet_form_builder()->module( 'validation' )->is_advanced( $block->block_attrs ) ) {
+			wp_enqueue_script( $this->get_handle( 'selection-limit-advanced' ) );
+		}
 	}
 
 	public function enqueue_admin_assets() {
@@ -224,6 +242,15 @@ final class Module implements
 			$this->get_url( 'assets/build/radio.css' ),
 			array(),
 			$script_asset['version']
+		);
+
+		$selection_asset = require $this->get_dir( 'assets/build/selection-limit-advanced.asset.php' );
+		wp_register_script(
+			$this->get_handle( 'selection-limit-advanced' ),
+			$this->get_url( 'assets/build/selection-limit-advanced.js' ),
+			array_merge( $selection_asset['dependencies'], array( \JFB_Modules\Validation\Module::HANDLE ) ),
+			$selection_asset['version'],
+			true
 		);
 
 		// auto-update

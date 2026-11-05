@@ -781,6 +781,8 @@ final class Module implements
 				new Messages\Is_Number_Max(),
 				new Messages\Is_Char_Min(),
 				new Messages\Is_Char_Max(),
+				new Messages\Is_Selections_Min(),
+				new Messages\Is_Selections_Max(),
 				new Messages\Is_Not_Valid_Email(),
 				new Messages\Is_Not_Valid_Url(),
 				new Messages\Is_Not_Complete_Mask(),

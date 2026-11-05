@@ -1,3 +1,5 @@
+import { showSelectionError, clearSelectionError } from '../../selection-limit/functions';
+
 const {
 	      InputData,
 	      ReactiveHook,
@@ -58,5 +60,8 @@ function MultiSelectData() {
 }
 
 MultiSelectData.prototype = Object.create( InputData.prototype );
+
+MultiSelectData.prototype.showError = showSelectionError;
+MultiSelectData.prototype.clearError = clearSelectionError;
 
 export default MultiSelectData;

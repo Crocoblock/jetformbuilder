@@ -14,6 +14,7 @@ module.exports = {
 		'editor': './editor/main.js',
 		'select': './frontend/blocks/select/main.js',
 		'checkbox': './frontend/blocks/checkbox/main.js',
+		'selection-limit-advanced': './frontend/selection-limit/advanced.js',
 		'radio': './frontend/blocks/radio/main.js',
 		'custom.options.restrictions': './frontend/custom.options.restrictions/main.js',
 		'auto-update': './frontend/auto-update/index.js',

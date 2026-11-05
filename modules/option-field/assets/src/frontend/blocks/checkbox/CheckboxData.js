@@ -1,5 +1,6 @@
 import getCustomCheckboxInput from './functions/getCustomCheckboxInput';
 import sanitizeCheckbox from './functions/sanitizeCheckbox';
+import { showSelectionError, clearSelectionError } from '../../selection-limit/functions';
 
 const {
 	InputData,
@@ -54,6 +55,18 @@ function CheckboxData() {
 }
 
 CheckboxData.prototype = Object.create( InputData.prototype );
+
+CheckboxData.prototype.showError = showSelectionError;
+CheckboxData.prototype.clearError = clearSelectionError;
+
+CheckboxData.prototype.focusRaw = function () {
+	const node = Array.from( this.nodes ).find( item => !item.disabled );
+	if ( !node ) {
+		return;
+	}
+	const target = node.dataset.custom ? getCustomCheckboxInput( node ) : node;
+	target?.focus( { preventScroll: true } );
+};
 
 CheckboxData.prototype.wrapper = null;
 

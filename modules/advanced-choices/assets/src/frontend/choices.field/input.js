@@ -1,4 +1,5 @@
 import { getWrapper, isChoicesField } from './functions';
+import { showSelectionError, clearSelectionError } from '../../../../../option-field/assets/src/frontend/selection-limit/functions';
 
 const {
 	      InputData,
@@ -115,6 +116,9 @@ function ChoicesData() {
 	};
 
 	this.toggleChoice = function ( node, event ) {
+		if ( node.disabled ) {
+			return;
+		}
 		/**
 		 * We should skip event, if it triggered via element,
 		 * which inside <label> element.
@@ -146,10 +150,13 @@ function ChoicesData() {
 	};
 
 	this.focusRaw = function () {
-		const [ node ] = this.nodes;
+		const node = Array.from( this.nodes ).find( item => !item.disabled );
+		if ( !node ) {
+			return;
+		}
 
 		if ( this.isNativeControl( node ) ) {
-			InputData.prototype.focusRaw.call( this );
+			node.focus( { preventScroll: true } );
 
 			return;
 		}
@@ -161,6 +168,9 @@ function ChoicesData() {
 }
 
 ChoicesData.prototype = Object.create( InputData.prototype );
+
+ChoicesData.prototype.showError = showSelectionError;
+ChoicesData.prototype.clearError = clearSelectionError;
 
 ChoicesData.prototype.getReactive = function () {
 	return new ReactiveSet();

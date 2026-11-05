@@ -1,3 +1,4 @@
+import './selectionLimit';
 import DynamicCheckboxData from './DynamicCheckboxData';
 
 const { addFilter } = JetPlugins.hooks;

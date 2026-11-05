@@ -79,6 +79,7 @@ tests/wpunit/*
 !tests/wpunit/Actions/
 !tests/wpunit/Actions/InsertPost/
 !tests/wpunit/Actions/InsertPost/LockedMediaFieldModifierTest.php
+!tests/wpunit/Actions/InsertPost/PostTermsCreationTest.php
 !tests/wpunit/Modules/
 !tests/wpunit/Modules/BlockParsers/
 !tests/wpunit/Modules/BlockParsers/MediaFieldCapabilityTest.php

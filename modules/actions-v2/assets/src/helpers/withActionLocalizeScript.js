@@ -5,6 +5,12 @@ import { getLocalizedFullPack } from './legacyLocalize';
 // eslint-disable-next-line max-lines-per-function
 function withActionLocalizeScript( actionType, ActionInstance ) {
 	const localizedData = getLocalizedFullPack( actionType );
+	// eslint-disable-next-line @wordpress/no-unused-vars-before-return
+	const CustomSettings = withFilters(
+		`jet.fb.render.action.${ actionType }`,
+	)(
+		() => null,
+	);
 
 	return props => {
 		const onChangeSetting = ( value, key ) => {
@@ -51,12 +57,6 @@ function withActionLocalizeScript( actionType, ActionInstance ) {
 		};
 
 		const resultProps = { ...props, ...localizedData, ...additionalProps };
-
-		const CustomSettings = withFilters(
-			`jet.fb.render.action.${ actionType }`,
-		)(
-			() => null,
-		);
 
 		return <CurrentActionEditContext.Provider value={ resultProps }>
 			<ActionInstance { ...resultProps } />

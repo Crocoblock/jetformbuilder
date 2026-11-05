@@ -273,14 +273,16 @@ class Module implements Base_Module_It {
 	 * Value callback for Macros_Parser in a text/html e-mail pass.
 	 *
 	 * @param mixed  $value   Field value before macro filters and formatting.
-	 * @param string $name    Field name.
+	 * @param string $name    Field name or a repeater child path ('rows.0.title').
 	 * @param array  $filters Macro filters, e.g. `format_date(d.m.Y)`.
 	 *
 	 * @return mixed
 	 */
 	public static function escape_email_field_value( $value, string $name, array $filters = array() ) {
 		foreach ( $filters as $filter ) {
-			if ( preg_match( '/^[-\w]+/', (string) $filter, $match ) && in_array( $match[0], self::RAW_INPUT_FILTERS, true ) ) {
+			// Same name rule as Filters_Manager::apply_single(), which also
+			// accepts leading spaces ("%field| md5%").
+			if ( preg_match( '/[-\w]+/', (string) $filter, $match ) && in_array( $match[0], self::RAW_INPUT_FILTERS, true ) ) {
 				return $value;
 			}
 		}
@@ -298,7 +300,7 @@ class Module implements Base_Module_It {
 		 *
 		 * @param bool         $escape Default: true, except WYSIWYG and the author's static value of a hidden field.
 		 * @param string|array $value  The value, before macro filters.
-		 * @param string       $name   Field name.
+		 * @param string       $name   Field name; for a repeater row value the child's path, e.g. 'rows.0.title'.
 		 * @param string       $type   Field type, e.g. 'hidden-field'.
 		 */
 		$escape = apply_filters( 'jet-form-builder/send-email/escape-field-value', $escape, $value, $name, $type );
@@ -807,7 +809,9 @@ class Module implements Base_Module_It {
 			$result = Tools::strip_macro_attributes( $result );
 		}
 
-		if ( false === strpos( $result, '[' ) ) {
+		// "&#91;" counts too: do_shortcode() turns it back into "[" on its way
+		// out (unescape_invalid_shortcodes()), so a later pass would expand it.
+		if ( false === strpos( $result, '[' ) && false === strpos( $result, '&#91;' ) ) {
 			return $result;
 		}
 

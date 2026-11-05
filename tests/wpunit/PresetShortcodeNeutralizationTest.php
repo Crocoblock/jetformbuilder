@@ -183,6 +183,36 @@ class PresetShortcodeNeutralizationTest extends \Codeception\TestCase\WPTestCase
 		}
 	}
 
+	/**
+	 * A preset value that already holds decimal bracket entities, printed
+	 * without escaping (WYSIWYG when the visual editor is off): the first
+	 * do_shortcode() pass turns "&#91;" into "[", so the entities must be
+	 * converted too, or a second pass expands the shortcode.
+	 */
+	public function testDecimalBracketEntitiesInWysiwygPresetAreNotExpanded(): void {
+		$form_id = $this->create_form(
+			$this->block(
+				'wysiwyg-field',
+				array(
+					'name'    => 'body',
+					'default' => $this->query_var_preset( 'body' ),
+				)
+			)
+		);
+
+		$_GET['body'] = 'Hello &#91;' . self::MARKER_TAG . '&#93;';
+
+		add_filter( 'user_can_richedit', '__return_false' );
+
+		try {
+			$html = do_shortcode( '[jet_fb_form form_id="' . $form_id . '"]' );
+		} finally {
+			remove_filter( 'user_can_richedit', '__return_false' );
+		}
+
+		$this->assertStringNotContainsString( self::MARKER_OUTPUT, do_shortcode( do_shortcode( $html ) ) );
+	}
+
 	public function richEditProvider(): array {
 		return array(
 			'visual editor'  => array( true ),

@@ -90,6 +90,31 @@ class PresetRichAttributeShortcodeTest extends \Codeception\TestCase\WPTestCase 
 	}
 
 	/**
+	 * Decimal bracket entities in the preset value: do_shortcode() turns
+	 * "&#91;" back into "[" on its way out, so a later pass must still not
+	 * expand them. (Here kses also pads them to "&#091;", which the core does
+	 * not unescape; this test guards the result, the raw path is covered by
+	 * PresetShortcodeNeutralizationTest.)
+	 *
+	 * @dataProvider attributeProvider
+	 */
+	public function testDecimalBracketEntitiesSurviveRepeatedPasses( string $attribute ): void {
+		$form_id   = $this->create_form( array( $attribute => $this->preset() ) );
+		$_GET['f'] = wp_slash( 'Hello &#91;' . self::MARKER_TAG . '&#93;' );
+
+		foreach ( $this->render_paths( $form_id ) as $path => $html ) {
+			$this->assertStringNotContainsString( self::MARKER_OUTPUT, do_shortcode( do_shortcode( $html ) ), $path );
+		}
+	}
+
+	public function testNeutralizeShortcodesConvertsDecimalEntities(): void {
+		$this->assertSame(
+			'&#x5B;a&#x5D; &#x5B;b&#x5D;',
+			\Jet_Form_Builder\Classes\Tools::neutralize_shortcodes( '[a] &#91;b&#93;' )
+		);
+	}
+
+	/**
 	 * Backward compatibility: a preset result without brackets is unchanged.
 	 */
 	public function testPresetResultWithoutBracketsIsUnchanged(): void {

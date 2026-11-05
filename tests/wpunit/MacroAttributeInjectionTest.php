@@ -176,6 +176,76 @@ class MacroAttributeInjectionTest extends \Codeception\TestCase\WPTestCase {
 		$this->assertSame( array( 'name', 'name', 'name' ), $this->macro_elements( $xpath ) );
 	}
 
+	/**
+	 * Attributes of every element as the browser sees them.
+	 */
+	private function dom_attributes( string $html ): array {
+		$dom = new \DOMDocument();
+		libxml_use_internal_errors( true );
+		$dom->loadHTML( '<?xml encoding="utf-8"?><div id="root">' . $html . '</div>' );
+		libxml_clear_errors();
+
+		$result = array();
+
+		foreach ( ( new \DOMXPath( $dom ) )->query( '//*[@id="root"]//*' ) as $node ) {
+			$attributes = array();
+
+			foreach ( $node->attributes as $attribute ) {
+				$attributes[ $attribute->name ] = $attribute->value;
+			}
+
+			$result[] = array( $node->nodeName, $attributes );
+		}
+
+		return $result;
+	}
+
+	public function kses6OutputProvider(): array {
+		return array(
+			// WordPress before 7.0 keeps single-quoted values as they are.
+			'macro name inside a single-quoted value' => array(
+				'<a title=\'p data-jfb-x="\' href="http://x">Z</a><abbr title=\' onmouseover=window.__JFB_XSS=1 x\'>Y</abbr>',
+			),
+			'macro name inside a double-quoted value' => array(
+				'<span title=" data-jfb-a=\'x" id=\'y\'>City</span><i title=\'"\'>i</i>',
+			),
+			'real macro attribute between quoted values' => array(
+				'<span title=\'a "b" data-jfb-z="\' data-jfb-macro=\'z%x%z\' class="c">City</span><b title=\'x\'>B</b>',
+			),
+		);
+	}
+
+	/**
+	 * Removing macro attributes never changes how the browser reads the rest:
+	 * the same elements with the same attributes, minus data-jfb-* ones.
+	 *
+	 * @dataProvider kses6OutputProvider
+	 */
+	public function testStripMacroAttributesKeepsQuotesBalanced( string $html ): void {
+		$expected = array_map(
+			static function ( $element ) {
+				$element[1] = array_filter(
+					$element[1],
+					static function ( $name ) {
+						return 0 !== stripos( $name, 'data-jfb-' );
+					},
+					ARRAY_FILTER_USE_KEY
+				);
+
+				return $element;
+			},
+			$this->dom_attributes( $html )
+		);
+
+		$this->assertSame( $expected, $this->dom_attributes( Tools::strip_macro_attributes( $html ) ) );
+	}
+
+	public function testStripMacroAttributesLeavesValuesUntouched(): void {
+		$html = '<a title=\'p data-jfb-x="\' href="http://x">Z</a>';
+
+		$this->assertSame( $html, Tools::strip_macro_attributes( $html ) );
+	}
+
 	public function testStripMacroAttributes(): void {
 		$this->assertSame(
 			'<span class="c" data-tooltip="t">City</span> data-jfb-macro text',

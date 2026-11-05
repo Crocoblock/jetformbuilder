@@ -218,7 +218,9 @@ class Macros_Parser {
 				$label = jet_fb_context()->get_setting( 'label', array( $name, $index, $key ) );
 
 				if ( $this->value_callback ) {
-					$value = call_user_func( $this->value_callback, $value, $name, array() );
+					// The child's own path, so its type and settings are used
+					// (WYSIWYG keeps its markup), not the repeater's.
+					$value = call_user_func( $this->value_callback, $value, $name . '.' . $index . '.' . $key, array() );
 				}
 
 				$item_data[] = sprintf(

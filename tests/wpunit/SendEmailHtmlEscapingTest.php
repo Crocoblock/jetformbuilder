@@ -290,6 +290,8 @@ class SendEmailHtmlEscapingTest extends \Codeception\TestCase\WPTestCase {
 	public function testValueSensitiveFiltersAreUnchanged(): void {
 		$this->submit( 'text-field', "o'brien+tag@example.com" );
 		$this->assertSame( md5( "o'brien+tag@example.com" ), $this->body( '%f|md5%' ) );
+		// The filter manager also accepts a space before the filter name.
+		$this->assertSame( md5( "o'brien+tag@example.com" ), $this->body( '%f| md5%' ) );
 
 		$this->submit( 'text-field', '2026-05-01' );
 		$this->assertSame( date_i18n( 'd.m.Y', strtotime( '2026-05-01' ) ), $this->body( '%f|format_date(d.m.Y)%' ) );
@@ -354,6 +356,32 @@ class SendEmailHtmlEscapingTest extends \Codeception\TestCase\WPTestCase {
 		$this->assertStringNotContainsString( '<b>', $body );
 		$this->assertStringContainsString( 'Hi &lt;b&gt;there&lt;/b&gt; &amp; bye;<br>', $body );
 		$this->assertStringContainsString( 'Plain;<br>', $body );
+	}
+
+	/**
+	 * Repeater rows: each child value is checked against the child field
+	 * itself - a WYSIWYG child keeps its markup, a text child is escaped.
+	 */
+	public function testRepeaterChildFieldsUseTheirOwnType(): void {
+		$this->submit_blocks(
+			'<!-- wp:jet-forms/repeater-field {"name":"f"} -->'
+			. '<!-- wp:jet-forms/wysiwyg-field {"name":"bio"} /-->'
+			. '<!-- wp:jet-forms/text-field {"name":"title"} /-->'
+			. '<!-- /wp:jet-forms/repeater-field -->',
+			array(
+				'f' => array(
+					array(
+						'bio'   => '<p><b>formatted</b></p>',
+						'title' => self::VALUE,
+					),
+				),
+			)
+		);
+
+		$body = $this->body( '%f%' );
+
+		$this->assertStringContainsString( '<b>formatted</b>', $body );
+		$this->assertStringContainsString( 'Hi &lt;b&gt;there&lt;/b&gt; &amp; bye', $body );
 	}
 
 	/**

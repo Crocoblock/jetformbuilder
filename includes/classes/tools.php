@@ -809,6 +809,61 @@ class Tools {
 	}
 
 	/**
+	 * Removes data-jfb-* attributes (data-jfb-macro, data-jfb-sync...) from
+	 * HTML that came from site data rather than from the form author. The
+	 * frontend script treats such attributes as its own instructions: a
+	 * data-jfb-macro element inside the form is rendered as an HTML macro.
+	 * wp_kses_post() keeps data-* attributes, so it does not stop this.
+	 *
+	 * Expects kses output. Attributes are read with wp_kses_hair(), the same
+	 * parser kses used to build them, so text inside a quoted value (e.g.
+	 * title='a data-jfb-x="') is never taken for an attribute and the quotes
+	 * stay balanced. A tag is rebuilt only when it really has a data-jfb-*
+	 * attribute; all other tags and text are left byte for byte.
+	 *
+	 * @param string $html Output of wp_kses_post() or similar.
+	 *
+	 * @return string
+	 */
+	public static function strip_macro_attributes( string $html ): string {
+		if ( false === stripos( $html, 'data-jfb-' ) ) {
+			return $html;
+		}
+
+		// kses output: a tag never contains ">" (wp_kses_split() ends it there).
+		return (string) preg_replace_callback(
+			'/<([a-z][a-z0-9-]*)(\s[^>]*?)?(\/?)>/i',
+			static function ( $tag ) {
+				$attributes = $tag[2] ?? '';
+
+				if ( '' === $attributes || false === stripos( $attributes, 'data-jfb-' ) ) {
+					return $tag[0];
+				}
+
+				$parsed  = wp_kses_hair( $attributes, wp_allowed_protocols() );
+				$kept    = array();
+				$removed = false;
+
+				foreach ( $parsed as $name => $attribute ) {
+					if ( 0 === stripos( (string) $name, 'data-jfb-' ) ) {
+						$removed = true;
+						continue;
+					}
+
+					$kept[] = $attribute['whole'];
+				}
+
+				if ( ! $removed ) {
+					return $tag[0];
+				}
+
+				return '<' . $tag[1] . ( $kept ? ' ' . implode( ' ', $kept ) : '' ) . ( '' !== $tag[3] ? ' /' : '' ) . '>';
+			},
+			$html
+		);
+	}
+
+	/**
 	 * Encodes square brackets as HTML entities so a value printed as element
 	 * text cannot be expanded as a shortcode later. WordPress runs
 	 * do_shortcode() over the whole rendered page (the_content, the
@@ -818,47 +873,21 @@ class Tools {
 	 * Hexadecimal entities are used on purpose: do_shortcode() ends with
 	 * unescape_invalid_shortcodes(), which turns the decimal "&#91;"/"&#93;"
 	 * back into brackets, so a second do_shortcode() pass (theme, page
-	 * builder) would expand them. The browser decodes both forms the same
-	 * way, so the visible text and the submitted value stay exactly the same.
+	 * builder) would expand them. For the same reason decimal entities that
+	 * are already in the value are converted too. The browser decodes all
+	 * these forms the same way, so the visible text and the submitted value
+	 * stay exactly the same.
 	 *
 	 * @param string $value Already escaped HTML text.
 	 *
 	 * @return string
 	 */
-	/**
-	 * Removes data-jfb-* attributes (data-jfb-macro, data-jfb-sync...) from
-	 * HTML that came from site data rather than from the form author. The
-	 * frontend script treats such attributes as its own instructions: a
-	 * data-jfb-macro element inside the form is rendered as an HTML macro.
-	 * wp_kses_post() keeps data-* attributes, so it does not stop this.
-	 *
-	 * Only attributes inside tags are touched; text such as "data-jfb-macro"
-	 * outside a tag stays. Expects kses-normalized HTML (no ">" inside a tag).
-	 *
-	 * @param string $html
-	 *
-	 * @return string
-	 */
-	public static function strip_macro_attributes( string $html ): string {
-		if ( false === stripos( $html, 'data-jfb-' ) ) {
-			return $html;
-		}
-
-		return (string) preg_replace_callback(
-			'/<[a-z][^>]*>/i',
-			static function ( $tag ) {
-				return (string) preg_replace(
-					'/\s+data-jfb-[a-z0-9_-]*(?:\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s"\'>]+))?/i',
-					'',
-					$tag[0]
-				);
-			},
-			$html
-		);
-	}
-
 	public static function neutralize_shortcodes( string $value ): string {
-		return str_replace( array( '[', ']' ), array( '&#x5B;', '&#x5D;' ), $value );
+		return str_replace(
+			array( '[', ']', '&#91;', '&#93;' ),
+			array( '&#x5B;', '&#x5D;', '&#x5B;', '&#x5D;' ),
+			$value
+		);
 	}
 
 	public static function is_url( $url ) {

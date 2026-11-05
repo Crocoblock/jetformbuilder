@@ -2225,6 +2225,19 @@ class Form extends Base {
 			'active-page' => $this->css_selector( '-progress-pages__item--wrapper.active-page' ),
 		);
 
+		/**
+		 * Stronger selectors for rules that compete with the default progress styles
+		 * (frontend/main.css). Bricks prepends the global class to the selector
+		 * (".my-class.brxe-jet-form-builder-form ..."), which gives the same specificity
+		 * as the default rules, and the plugin stylesheet is loaded later and wins.
+		 * Extra parent classes from the progress markup raise the specificity,
+		 * so styles set through a global class are applied the same way as styles set by element ID.
+		 */
+		$css_selectors['wrapper-strong']     = $this->css_selector( '-progress-pages ' ) . $css_selectors['wrapper'];
+		$css_selectors['circle-strong']      = $css_selectors['wrapper'] . ' ' . $css_selectors['item'] . ' ' . $css_selectors['circle'];
+		$css_selectors['circle-passed-page'] = $css_selectors['passed-page'] . ' ' . $css_selectors['item'] . ' ' . $css_selectors['circle'];
+		$css_selectors['circle-active-page'] = $css_selectors['active-page'] . ' ' . $css_selectors['item'] . ' ' . $css_selectors['circle'];
+
 		$this->register_jet_control(
 			'jet_fb_progress_wrapper_typography',
 			array(
@@ -2234,7 +2247,7 @@ class Form extends Base {
 				'css'   => array(
 					array(
 						'property' => 'typography',
-						'selector' => $css_selectors['wrapper'],
+						'selector' => $css_selectors['wrapper-strong'],
 					),
 				),
 			)
@@ -2327,7 +2340,7 @@ class Form extends Base {
 				'css'   => array(
 					array(
 						'property' => 'border',
-						'selector' => $css_selectors['circle'],
+						'selector' => $css_selectors['circle-strong'],
 					),
 				),
 			)
@@ -2414,7 +2427,7 @@ class Form extends Base {
 				'css'   => array(
 					array(
 						'property' => 'border-color',
-						'selector' => '.passed-page ' . $css_selectors['circle'],
+						'selector' => $css_selectors['circle-passed-page'],
 					),
 				),
 			)
@@ -2501,7 +2514,7 @@ class Form extends Base {
 				'css'   => array(
 					array(
 						'property' => 'border-color',
-						'selector' => '.active-page ' . $css_selectors['circle'],
+						'selector' => $css_selectors['circle-active-page'],
 					),
 				),
 			)

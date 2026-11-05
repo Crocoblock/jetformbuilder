@@ -46,9 +46,10 @@ export function toDateTime( date, isUtc = false ) {
 
 /**
  * @param  timeOrDate {String|Number}
+ * @param  localDateOnly {boolean} Parse YYYY-MM-DD as local midnight
  * @return {{time: number, type: string}}
  */
-export function getTimestamp( timeOrDate ) {
+export function getTimestamp( timeOrDate, localDateOnly = false ) {
 	if ( !Number.isNaN( +timeOrDate ) ) {
 		return { time: +timeOrDate, type: 'number' };
 	}
@@ -58,7 +59,12 @@ export function getTimestamp( timeOrDate ) {
 	const dateParts = timeOrDate.split( '-' );
 
 	if ( dateParts.length > 1 ) {
-		const date = new Date( timeOrDate );
+		const dateOnly = localDateOnly
+		                 ? /^(\d{4})-(\d{2})-(\d{2})$/.exec( timeOrDate )
+		                 : null;
+		const date = dateOnly
+		             ? new Date( +dateOnly[ 1 ], +dateOnly[ 2 ] - 1, +dateOnly[ 3 ] )
+		             : new Date( timeOrDate );
 
 		return {
 			time: date.getTime(),

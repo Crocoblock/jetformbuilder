@@ -11,7 +11,7 @@ function TimestampFilter() {
 		if ( !value ) {
 			return 0;
 		}
-		const { time } = getTimestamp( value );
+		const { time } = getTimestamp( value, true );
 
 		return time;
 	};

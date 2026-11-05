@@ -115,7 +115,24 @@ class File_Uploader {
 			return false;
 		}
 
-		return File_Tools::get_uploaded( $file, $this->preset );
+		$preset  = $this->preset instanceof Uploaded_File ? array( $this->preset ) : $this->preset;
+		$stored  = $this->parser ? Stored_Media_Field::attachment_ids( $this->parser ) : array();
+		$user_id = get_current_user_id();
+
+		$preset = array_filter(
+			$preset,
+			static function ( Uploaded_File $uploaded ) use ( $stored, $user_id ): bool {
+				$id = absint( $uploaded->get_attachment_id() );
+
+				return $user_id > 0
+					&& in_array( $id, $stored, true )
+					&& 'attachment' === get_post_type( $id )
+					&& get_post_meta( $id, '_jfb_uploaded_by_form', true )
+					&& (int) get_post_meta( $id, '_jfb_uploaded_by_user', true ) === $user_id;
+			}
+		);
+
+		return File_Tools::get_uploaded( $file, $preset );
 	}
 
 	/**

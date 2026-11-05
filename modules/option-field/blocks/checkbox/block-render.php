@@ -74,6 +74,7 @@ class Block_Render extends Base {
 		) {
 			wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
 			$this->add_attribute( 'data-default-val', $dynamic_default );
+			$this->mark_default_literal();
 		}
 
 		$this->args['_jfb_data_attrs'] = array_merge(

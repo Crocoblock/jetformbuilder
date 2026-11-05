@@ -163,6 +163,12 @@ class Autoloader {
 			return;
 		}
 
+		foreach ( $parts as $part ) {
+			if ( '' === $part || 1 !== preg_match( '/^[A-Za-z0-9_]+$/', $part ) ) {
+				return;
+			}
+		}
+
 		list( $prefix, $parts, $relative ) = self::get_class_parts( $parts );
 
 		$has_alias = isset( self::DEPRECATED_CLASSMAP[ $prefix . $relative ] );

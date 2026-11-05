@@ -53,7 +53,7 @@ class Delete_Render_States_Endpoint extends Rest_Api_Endpoint_Base {
 		$to_delete = $body['list'] ?? array();
 
 		foreach ( $states as $index => $current ) {
-			if ( ! in_array( $current['value'], $to_delete, true ) ) {
+			if ( ! in_array( $current['value'] ?? '', $to_delete, true ) ) {
 				continue;
 			}
 			unset( $states[ $index ] );

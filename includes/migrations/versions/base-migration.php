@@ -74,13 +74,13 @@ abstract class Base_Migration implements Repository_Static_Item_It {
 	final protected function run_up() {
 		global $wpdb;
 
-		timer_start();
+		$start = microtime( true );
 		$this->up( $wpdb );
 
-		$timer_stop = timer_stop();
-		$time       = $timer_stop * 1000;
+		$elapsed = microtime( true ) - $start;
+		$time    = (int) round( $elapsed * 1000 );
 
-		$this->profiler->on_up_end( $this, $timer_stop );
+		$this->profiler->on_up_end( $this, number_format_i18n( $elapsed, 3 ) );
 
 		if ( $wpdb->last_error ) {
 			throw new Migration_Exception( esc_html( $wpdb->last_error ) );
@@ -95,11 +95,11 @@ abstract class Base_Migration implements Repository_Static_Item_It {
 	final public function run_down() {
 		global $wpdb;
 
-		timer_start();
+		$start = microtime( true );
 		$this->down( $wpdb );
-		$timer_stop = timer_stop();
+		$elapsed = microtime( true ) - $start;
 
-		$this->profiler->on_down_end( $this, $timer_stop );
+		$this->profiler->on_down_end( $this, number_format_i18n( $elapsed, 3 ) );
 
 		if ( $wpdb->last_error ) {
 			throw new Migration_Exception( esc_html( $wpdb->last_error ) );

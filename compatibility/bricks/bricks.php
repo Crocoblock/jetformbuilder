@@ -55,6 +55,8 @@ class Bricks implements
 		add_action( 'init', array( $this, 'register_elements' ), 10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'editor_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ), 20 );
+		add_filter( 'jet-form-builder/form-action-url', array( $this, 'fix_popup_form_action_url' ) );
+		add_filter( 'jet-form-builder/form-refer-url', array( $this, 'fix_popup_form_refer_url' ) );
 
 		$this->get_onboarding_builder()->init_hooks();
 	}
@@ -63,6 +65,51 @@ class Bricks implements
 		remove_action( 'init', array( $this, 'register_elements' ) );
 		remove_action( 'wp_enqueue_scripts', array( $this, 'editor_styles' ) );
 		remove_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ), 20 );
+		remove_filter( 'jet-form-builder/form-action-url', array( $this, 'fix_popup_form_action_url' ) );
+		remove_filter( 'jet-form-builder/form-refer-url', array( $this, 'fix_popup_form_refer_url' ) );
+	}
+
+	/**
+	 * Form inside the Bricks AJAX popup is rendered during the REST request,
+	 * so the action URL must be based on the page where the popup was opened.
+	 * Request router args (hook key & method) are kept.
+	 */
+	public function fix_popup_form_action_url( $action ) {
+		$page_url = $this->get_popup_page_url();
+
+		if ( ! $page_url ) {
+			return $action;
+		}
+
+		$query = array();
+
+		wp_parse_str( (string) wp_parse_url( $action, PHP_URL_QUERY ), $query );
+
+		return add_query_arg( $query, $page_url );
+	}
+
+	public function fix_popup_form_refer_url( $refer ) {
+		return $this->get_popup_page_url() ?: $refer;
+	}
+
+	/**
+	 * @return string URL of the page where the AJAX popup was opened,
+	 *                or empty string if it is not the Bricks AJAX popup request
+	 */
+	private function get_popup_page_url(): string {
+		if ( ! class_exists( '\Bricks\Api' ) || ! \Bricks\Api::is_current_endpoint( 'load_popup_content' ) ) {
+			return '';
+		}
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$referer = wp_validate_redirect( esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ?? '' ) ), '' );
+
+		if ( ! $referer ) {
+			$data    = json_decode( file_get_contents( 'php://input' ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+			$referer = (string) get_permalink( absint( $data['postId'] ?? 0 ) );
+		}
+
+		return remove_query_arg( array( 'values', 'status', 'fields' ), strtok( $referer, '#' ) ?: '' );
 	}
 
 	public function register_elements() {

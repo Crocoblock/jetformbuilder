@@ -25,6 +25,7 @@ import ToYearInMsFilter from './filters/ToYearInMsFilter';
 import ToHourInMsFilter from './filters/ToHourInMsFilter';
 import ToMinuteInMsFilter from './filters/ToMinuteInMsFilter';
 import ToWeekInMsFilter from './filters/ToWeekInMsFilter';
+import IsConditionalHiddenFilter from './filters/IsConditionalHiddenFilter';
 const { applyFilters } = JetPlugins.hooks;
 
 /**
@@ -60,6 +61,7 @@ const coreFilterItems = [
 	ToHourInMsFilter,
 	ToMinuteInMsFilter,
 	ToWeekInMsFilter,
+	IsConditionalHiddenFilter,
 ];
 
 const getFilterItems = () => applyFilters(

@@ -31,9 +31,16 @@ class On_Dynamic_State_Event extends Base_Event implements Repository_Item_Dynam
 	 * @return false|string
 	 */
 	public function create_dynamic_id( string $name ) {
-		if ( 0 === stripos( $name, self::ID_PREFIX ) ) {
-			$name = str_replace( self::ID_PREFIX, '', $name );
+		/**
+		 * A bare id of a registered event (e.g. GATEWAY.SUCCESS saved in an
+		 * action's events) always means that event, even if a custom render
+		 * state with the same value exists.
+		 */
+		if ( 0 !== stripos( $name, self::ID_PREFIX ) && jet_fb_events()->rep_isset_item( $name ) ) {
+			return false;
 		}
+
+		$name = self::strip_prefix( $name );
 
 		try {
 			$state = Render_State::instance()->get_item( $name );
@@ -64,6 +71,21 @@ class On_Dynamic_State_Event extends Base_Event implements Repository_Item_Dynam
 		}
 
 		return false;
+	}
+
+	/**
+	 * Removes a single leading `ON.` (case-insensitive).
+	 *
+	 * @param string $name
+	 *
+	 * @return string
+	 */
+	public static function strip_prefix( string $name ): string {
+		if ( 0 === stripos( $name, self::ID_PREFIX ) ) {
+			return substr( $name, strlen( self::ID_PREFIX ) );
+		}
+
+		return $name;
 	}
 
 	public function set_dynamic_id( string $id ) {

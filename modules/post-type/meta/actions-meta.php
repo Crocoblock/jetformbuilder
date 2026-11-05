@@ -22,6 +22,13 @@ class Actions_Meta extends Base_Meta_Type {
 		return '[]';
 	}
 
+	public function to_array(): array {
+		$args                      = parent::to_array();
+		$args['revisions_enabled'] = true;
+
+		return $args;
+	}
+
 	public function query( $form_id ) {
 		$response = parent::query( $form_id );
 

@@ -10,6 +10,10 @@
 		display: inline-block;
 	}
 
+	.phone-field-intl {
+		direction: ltr !important;
+	}
+
 	.iti--allow-dropdown .iti__country-container:not(:has(+ input[disabled])):not(:has(+ input[readonly])) .iti__selected-country-primary:hover,
 	.iti--allow-dropdown .iti__country-container:not(:has(+ input[disabled])):not(:has(+ input[readonly])) .iti__selected-country:has(+ .iti__dropdown-content:hover) .iti__selected-country-primary {
 		background-color: rgba(0, 0, 0, 0.05);

@@ -19,6 +19,7 @@ package-lock.json
 /vendor/composer/installed.json
 /.artifacts
 
+.claude/
 .codex/
 tests/
 !tests/
@@ -29,6 +30,7 @@ tests/_data/*
 !tests/_support/
 tests/_support/*
 !tests/_support/Ajax_Die_Signal.php
+!tests/_support/Record_Tables.php
 !tests/wpunit/
 tests/wpunit/*
 !tests/wpunit/GeneratorContextSecurityTest.php
@@ -36,15 +38,22 @@ tests/wpunit/*
 !tests/wpunit/TrustedPriceResolverTest.php
 !tests/wpunit/PresetAccessControlTest.php
 !tests/wpunit/PresetSourceQueryVarSanitizationTest.php
+!tests/wpunit/PresetProvenanceTest.php
 !tests/wpunit/FormMessageShortcodeSecurityTest.php
 !tests/wpunit/SsrCallbackRegistryTest.php
 !tests/wpunit/SsrCallbackMigrationBatchingTest.php
 !tests/wpunit/AutoMigratorTest.php
 !tests/wpunit/AutoMigratorTransactionTest.php
+!tests/wpunit/BaseMigrationTimingTest.php
 !tests/wpunit/SsrBlockedCallbackUsagesTest.php
 !tests/wpunit/SsrCallbacksHandlerMigrationGuardTest.php
 !tests/wpunit/MediaFieldPreviewEscapingTest.php
 !tests/wpunit/SelectStoredXssTest.php
+!tests/wpunit/VerifyManuallyReplayIdentityTest.php
+!tests/wpunit/VerifyManuallyWebhookBypassIsolationTest.php
+!tests/wpunit/SendEmailMacroShortcodeSecurityTest.php
+!tests/wpunit/MacroShortcodeNoticeTest.php
+!tests/wpunit/RenderStateRequestExecutionTest.php
 !tests/wpunit/Actions/
 !tests/wpunit/Actions/InsertPost/
 !tests/wpunit/Actions/InsertPost/LockedMediaFieldModifierTest.php

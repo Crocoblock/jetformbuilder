@@ -117,7 +117,12 @@ trait Process_Meta_Boxes_Trait {
 				}
 
 				if ( isset( $meta_field['fields'] ) && is_array( $meta_field['fields'] ) ) {
-					$result[ $meta_field['name'] ]['fields'] = $this->convert_meta_fields_structure( $meta_field['fields'], $fields_map );
+					// A selected Repeater needs its registered child schema, not separately mapped children.
+					$child_fields_map = 'repeater' === ( $meta_field['type'] ?? '' )
+						? array_column( $meta_field['fields'], 'name' )
+						: $fields_map;
+
+					$result[ $meta_field['name'] ]['fields'] = $this->convert_meta_fields_structure( $meta_field['fields'], $child_fields_map );
 				}
 			}
 		}

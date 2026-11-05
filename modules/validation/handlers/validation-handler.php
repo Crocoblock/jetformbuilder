@@ -148,6 +148,15 @@ class Validation_Handler {
 			);
 		}
 
+		/** @var Module $module */
+		$module = jet_form_builder()->module( 'validation' );
+
+		if ( ! $module->get_rules()->supports_block_type( $parser->get_type() ) ) {
+			return array(
+				'result' => false,
+			);
+		}
+
 		$validation = $parser->get_setting( 'validation' );
 		$ssr_attrs = Array_Tools::get(
 			$validation,
@@ -161,8 +170,6 @@ class Validation_Handler {
 			);
 		}
 
-		/** @var Module $module */
-		$module = jet_form_builder()->module( 'validation' );
 		$ssr_rule = $module->get_rules()->get_ssr();
 
 		$ssr_rule->set_settings( $ssr_attrs );

@@ -61,6 +61,7 @@ if (
 	$has_dynamic_default = true;
 	wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
 	$this->add_attribute( 'data-default-val', $default );
+	$this->mark_default_literal();
 } elseif ( is_array( $default ) ) {
 	$normalized_default = array_values( $default );
 	$single_default     = $normalized_default[0] ?? '';
@@ -84,6 +85,7 @@ if (
 		$has_dynamic_default = true;
 		wp_enqueue_script( \Jet_Form_Builder\Blocks\Dynamic_Value::HANDLE );
 		$this->add_attribute( 'data-default-val', $dynamic_default );
+		$this->mark_default_literal();
 	}
 }
 ?>

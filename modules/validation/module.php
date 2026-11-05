@@ -584,7 +584,9 @@ final class Module implements
 		$this->add_validation_messages_global( '', true );
 
 		$type  = $block->block_attrs['validation']['type'] ?? '';
-		$rules = $block->block_attrs['validation']['rules'] ?? array();
+		$rules = $this->get_rules()->supports_block_type( $block->get_name() )
+			? ( $block->block_attrs['validation']['rules'] ?? array() )
+			: array();
 
 		$block->add_attribute( 'data-validation-type', $type ?: 'inherit' );
 

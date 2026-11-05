@@ -10,10 +10,11 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 
-	protected $file          = '';
-	protected $url           = '';
-	protected $type          = '';
-	protected $attachment_id = '';
+	protected $file              = '';
+	protected $url               = '';
+	protected $type              = '';
+	protected $attachment_id     = '';
+	protected $invalid_file_path = false;
 
 	/**
 	 * @param File $file
@@ -137,11 +138,12 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 
 	public function set_from_array( array $upload ): Uploaded_File {
 		if ( isset( $upload['file'] ) ) {
-			$file = wp_normalize_path( (string) $upload['file'] );
+			$file                    = wp_normalize_path( (string) $upload['file'] );
+			$this->invalid_file_path = '' === self::normalize_allowed_upload_file_path( $file );
 
 			// Validate the path against uploads, but keep the original non-realpath
 			// value so WordPress can correctly relativize symlinked upload paths.
-			if ( '' !== self::normalize_allowed_upload_file_path( $file ) ) {
+			if ( ! $this->invalid_file_path ) {
 				$this->file = $file;
 			}
 		}
@@ -252,6 +254,46 @@ class Uploaded_File implements Media_Block_Value, Uploaded_File_Path {
 		}
 
 		return self::normalize_allowed_upload_file_path( $file );
+	}
+
+	/**
+	 * Resolve an attachment for reuse without trusting a request-supplied path.
+	 * Presets without an attachment ID retain the existing path/URL resolution.
+	 * An explicitly invalid path must not silently fall back to the attachment ID.
+	 */
+	public function get_verified_attachment_file(): string {
+		$id = absint( $this->get_attachment_id() );
+		if ( ! $id ) {
+			return $this->get_attachment_file();
+		}
+
+		if ( $this->invalid_file_path ) {
+			return '';
+		}
+
+		if ( 'attachment' !== get_post_type( $id ) ) {
+			return '';
+		}
+
+		$stored_path = get_attached_file( $id );
+		if ( ! is_string( $stored_path ) ) {
+			return '';
+		}
+
+		$stored_path = self::normalize_allowed_upload_file_path( $stored_path );
+		if ( '' === $stored_path ) {
+			return '';
+		}
+
+		$supplied_path = $this->get_file();
+		if ( '' !== $supplied_path ) {
+			$supplied_path = self::normalize_allowed_upload_file_path( $supplied_path );
+			if ( $supplied_path !== $stored_path ) {
+				return '';
+			}
+		}
+
+		return $stored_path;
 	}
 
 	/**

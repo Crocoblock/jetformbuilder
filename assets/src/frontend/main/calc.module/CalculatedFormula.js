@@ -861,6 +861,35 @@ CalculatedFormula.prototype = {
 			return applyFilters( customValue, filtersList );
 		}
 
+		for ( const filter of filtersList ?? [] ) {
+			if ( 'isConditionalHidden' === filter.getSlug() ) {
+				filter.setInput( relatedInput );
+
+				let active = true;
+				const unsubscribers = [];
+				const observeBlocks = () => {
+					if ( !active ) {
+						return;
+					}
+					const blocks = filter.getBlocks();
+
+					for ( const block of blocks ) {
+						unsubscribers.push( block.isRight.watch( () => this.setResult() ) );
+					}
+					if ( blocks.length ) {
+						this.setResult();
+					}
+				};
+
+				// Conditional blocks initialize after the input formulas.
+				Promise.resolve().then( observeBlocks );
+				this.watchers.push( () => {
+					active = false;
+					unsubscribers.forEach( unsubscribe => unsubscribe() );
+				} );
+			}
+		}
+
 		if ( !this.related.includes( relatedInput.name ) ) {
 			this.related.push( relatedInput.name );
 

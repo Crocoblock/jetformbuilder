@@ -29,7 +29,7 @@ if ( empty( $this->args['_static_value'] ) ) {
 	$this->add_attribute( 'data-jfb-sync' );
 }
 
-if ( ! jet_form_builder()->regexp->has_macro( $this->args['field_value'] ) ) {
+if ( ! $this->has_dynamic_default( $this->args['field_value'] ) ) {
 	$this->add_attribute( 'value', $this->args['field_value'] );
 } else {
 	wp_enqueue_script( Dynamic_Value::HANDLE );

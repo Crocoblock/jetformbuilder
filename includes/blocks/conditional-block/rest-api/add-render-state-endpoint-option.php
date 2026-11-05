@@ -51,12 +51,30 @@ class Add_Render_State_Endpoint_Option extends Rest_Api_Endpoint_Base {
 			);
 		}
 
+		$reserved = array_merge(
+			jet_fb_events()->rep_get_keys(),
+			Render_State::instance()->rep_get_keys()
+		);
+
+		if ( in_array( $value, $reserved, true ) ) {
+			return new \WP_REST_Response(
+				array(
+					'message' => sprintf(
+					/* translators: %s - name of render state */
+						__( 'Render state with name "%s" is already exist', 'jet-form-builder' ),
+						$value
+					),
+				),
+				400
+			);
+		}
+
 		$saved = Tools::decode_json( get_option( Render_State::OPTION_KEY, '[]' ) );
 
 		$find = array_filter(
 			$saved,
 			function ( $item ) use ( $value ) {
-				return $item['value'] === $value;
+				return ( $item['value'] ?? '' ) === $value;
 			}
 		);
 

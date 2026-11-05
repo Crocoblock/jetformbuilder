@@ -124,7 +124,15 @@ AdvancedReporting.prototype.observeAttrs = function () {
 
 		attr.value.watch( () => {
 			this.valuePrev = null;
-			this.validateOnBlur();
+
+			/**
+			 * The attr (e.g. `min`) and the value of the field can be changed
+			 * one after another by formulas. An immediate validation here
+			 * sets `isProcess`, so the following value change is skipped and
+			 * the error from the outdated value stays on the screen.
+			 * The debounce validates the final state.
+			 */
+			this.input.debouncedReport();
 		} );
 	}
 };

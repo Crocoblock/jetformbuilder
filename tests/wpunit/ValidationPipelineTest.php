@@ -2,6 +2,8 @@
 
 namespace JFB_Tests\Wpunit;
 
+require_once __DIR__ . '/../_support/Record_Tables.php';
+
 use Jet_Form_Builder\Request\Parser_Context;
 use JFB_Modules\Advanced_Choices\Block_Parsers\Choices_Field_Parser;
 use JFB_Modules\Block_Parsers\Fields\Default_Parser;
@@ -20,6 +22,14 @@ class ValidationPipelineTest extends \Codeception\TestCase\WPTestCase {
 		parent::setUp();
 
 		$this->create_record_tables();
+	}
+
+	public function tearDown(): void {
+		// The tables are temporary and outlive the test transaction; don't
+		// leave them behind for whichever test file runs next.
+		Record_Tables::drop();
+
+		parent::tearDown();
 	}
 
 	/**
@@ -440,37 +450,10 @@ class ValidationPipelineTest extends \Codeception\TestCase\WPTestCase {
 	}
 
 	private function create_record_tables(): void {
-		global $wpdb;
-
-		$charset_collate = $wpdb->get_charset_collate();
-
 		// The wpunit bootstrap does not run JetFormBuilder's database installer.
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.DirectDatabaseQuery.DirectQuery
-		$wpdb->query(
-			"CREATE TABLE IF NOT EXISTS {$wpdb->prefix}jet_fb_records (
-				id bigint(20) NOT NULL AUTO_INCREMENT,
-				form_id bigint(20) UNSIGNED NOT NULL,
-				user_id bigint(20),
-				from_content_id bigint(20) NOT NULL,
-				from_content_type varchar(20) NOT NULL,
-				status varchar(255),
-				submit_type varchar(20),
-				PRIMARY KEY (id)
-			) {$charset_collate}"
-		);
-		$wpdb->query(
-			"CREATE TABLE IF NOT EXISTS {$wpdb->prefix}jet_fb_records_fields (
-				id bigint(20) NOT NULL AUTO_INCREMENT,
-				record_id bigint(20) NOT NULL,
-				field_name varchar(100) NOT NULL,
-				field_value longtext,
-				field_type varchar(40) NOT NULL,
-				field_attrs longtext,
-				PRIMARY KEY (id),
-				KEY record_id (record_id)
-			) {$charset_collate}"
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.DirectDatabaseQuery.DirectQuery
+		// Build the tables from the plugin's own schema, so that tests running
+		// after this file never inherit a reduced copy of them.
+		Record_Tables::reset();
 	}
 
 	private function make_repeater_parser( string $value ): Text_Field_Parser {

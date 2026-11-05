@@ -14,9 +14,39 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Macros_Parser {
 
+	/**
+	 * The one, canonical definition of `%field_name%`/custom-macro/
+	 * filter-chain macro syntax. Module::tokenize_submit_macros() (which
+	 * must tokenize every segment this class would resolve, before
+	 * do_shortcode() runs - see issues-tracker #20703) references this
+	 * constant instead of its own copy of the pattern, so the two can never
+	 * drift out of sync - a drift that could otherwise let a macro
+	 * Macros_Parser still resolves slip past tokenization and reopen that
+	 * same injection.
+	 */
+	const MACRO_PATTERN = '/%([\w\-].*?\S?)%/';
+
 	private $content       = '';
 	private $replacements  = array();
 	private $current_macro = '';
+
+	/**
+	 * Whether the most recent parse_macros() call actually substituted at
+	 * least one `%...%` occurrence for a field/custom-macro value, as opposed
+	 * to returning the content unchanged because nothing matched it.
+	 *
+	 * Callers that need to tell "resolved to a value identical to its own
+	 * `%name%` syntax" apart from "left untouched, no matching field/macro"
+	 * must use this flag instead of comparing the input/output strings -
+	 * see Module::tokenize_submit_macros(), which tokenizes a submitted
+	 * value before do_shortcode() and would otherwise skip tokenizing (and
+	 * so skip neutralizing) a submitted value that happens to equal its own
+	 * macro syntax, e.g. a field named `jfbname` submitted with the literal
+	 * value `%jfbname%`.
+	 *
+	 * @var bool
+	 */
+	private $resolved_last = false;
 
 	public function set_content( $content ): Macros_Parser {
 		if ( is_array( $content ) ) {
@@ -39,12 +69,22 @@ class Macros_Parser {
 
 	public function parse_macros( $content = false, $replacements = false ): string {
 		$this->set_content( $content )->set_replacements( $replacements );
+		$this->resolved_last = false;
 
 		if ( ! $this->content || ( ! $this->replacements && ! jet_fb_context()->has_request() ) ) {
 			return $this->content ?: '';
 		}
 
 		return $this->macros_replace();
+	}
+
+	/**
+	 * @see $resolved_last
+	 *
+	 * @return bool
+	 */
+	public function has_resolved_last(): bool {
+		return $this->resolved_last;
 	}
 
 	/**
@@ -56,7 +96,7 @@ class Macros_Parser {
 		Constants_Manager::instance();
 
 		$content = preg_replace_callback(
-			'/%([\w\-].*?\S?)%/',
+			self::MACRO_PATTERN,
 			function ( $replace_match ) {
 				$filters = explode( '|', $replace_match[1] );
 				$name    = $filters[0];
@@ -74,7 +114,16 @@ class Macros_Parser {
 						return $replace_match[0];
 					}
 
-					return Filters_Manager::instance()->apply( $value, $filters );
+					// Set after apply() (which runs formatting filters, not another
+					// parse_macros() pass, but may still run arbitrary third-party
+					// code via Filters_Manager) has already produced the final
+					// return value, so nothing this branch calls can run a nested
+					// parse_macros() on this same shared instance and clobber the
+					// flag before it is read for THIS match.
+					$final               = Filters_Manager::instance()->apply( $value, $filters );
+					$this->resolved_last = true;
+
+					return $final;
 				}
 
 				if ( ! $this->has_replace( $name ) ) {
@@ -82,22 +131,27 @@ class Macros_Parser {
 				}
 
 				$this->current_macro = $name;
+				$value               = $this->get_replace( $name );
 
-				$value = $this->get_replace( $name );
-
+				// $final is computed in full - running whichever of these branches
+				// applies, including any third-party code a formatting filter or
+				// Filters_Manager::apply() runs - before resolved_last is set, same
+				// reasoning as the custom-macro branch above: nothing between here
+				// and the return below gets a chance to run a nested parse_macros()
+				// on this same shared instance and clobber the flag first.
 				if ( ! empty( $filters ) ) {
-					return Filters_Manager::instance()->apply( $value, $filters );
-				}
-
-				if ( ! is_array( $value ) ) {
-					return $value;
-				}
-
-				if ( 'repeater-field' === jet_fb_context()->get_field_type( $name ) ) {
-					return $this->verbose_repeater( $value, $name );
+					$final = Filters_Manager::instance()->apply( $value, $filters );
+				} elseif ( ! is_array( $value ) ) {
+					$final = $value;
+				} elseif ( 'repeater-field' === jet_fb_context()->get_field_type( $name ) ) {
+					$final = $this->verbose_repeater( $value, $name );
 				} else {
-					return implode( ', ', $value );
+					$final = implode( ', ', $value );
 				}
+
+				$this->resolved_last = true;
+
+				return $final;
 			},
 			$this->content
 		);

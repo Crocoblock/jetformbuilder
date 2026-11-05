@@ -34,6 +34,10 @@ class Rules_Controller implements Repository_Pattern_Interface {
 	}
 
 	public function validate_block( Field_Data_Parser $parser ) {
+		if ( ! $this->supports_block_type( $parser->get_type() ) ) {
+			return;
+		}
+
 		$validation = $parser->get_setting( 'validation' );
 		$rules      = $validation['rules'] ?? array();
 
@@ -49,6 +53,10 @@ class Rules_Controller implements Repository_Pattern_Interface {
 			$rule->set_settings( $rule_attrs );
 			$rule->validate_field( $parser );
 		}
+	}
+
+	public function supports_block_type( string $block_type ): bool {
+		return in_array( $block_type, array( 'text-field', 'textarea-field' ), true );
 	}
 
 	public function get_ssr(): Advanced_Rules\Server_Side_Rule {

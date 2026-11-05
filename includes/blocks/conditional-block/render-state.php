@@ -5,6 +5,7 @@ namespace Jet_Form_Builder\Blocks\Conditional_Block;
 
 use Jet_Form_Builder\Actions\Events\Base_Event;
 use Jet_Form_Builder\Actions\Events\Default_Process\Default_Process_Event;
+use Jet_Form_Builder\Actions\Events\On_Dynamic_State\On_Dynamic_State_Event;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Base_Render_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Default_State;
 use Jet_Form_Builder\Blocks\Conditional_Block\Render_States\Render_State_Replace_Exception;
@@ -71,8 +72,76 @@ class Render_State implements Arrayable {
 		$render_states = self::get_from_request();
 
 		foreach ( $render_states as $state ) {
+			if ( ! is_string( $state ) || '' === $state ) {
+				continue;
+			}
+
+			if ( ! $this->is_allowed_dynamic_state_id( $state ) ) {
+				continue;
+			}
+
+			try {
+				$event = jet_fb_events()->get_event( $state );
+			} catch ( Repository_Exception $exception ) {
+				continue;
+			}
+
+			// Only render-state pseudo-events can be triggered from the request.
+			if ( ! ( $event instanceof On_Dynamic_State_Event ) ) {
+				continue;
+			}
+
 			jet_fb_events()->execute( $state );
 		}
+	}
+
+	/**
+	 * Allow-list check performed BEFORE the submitted render-state value
+	 * is ever passed to the events repository resolver.
+	 *
+	 * Only values that are a built-in render state id (e.g. `DEFAULT.STATE`),
+	 * or a registered custom render state `value` (with or without the
+	 * `On_Dynamic_State_Event::ID_PREFIX` prefix), are accepted. Everything
+	 * else is rejected here, so it never reaches `jet_fb_events()->execute()`:
+	 * - reserved event ids such as `GATEWAY.SUCCESS`, even when a custom
+	 *   render state with the same value exists (created before this check,
+	 *   imported, or created while the add-on registering the event was
+	 *   inactive), because the action's own `GATEWAY.SUCCESS` event would
+	 *   resolve to the same `ON.GATEWAY.SUCCESS` pseudo-event;
+	 * - any value that is not an exact match of a known state id, e.g. class
+	 *   names and path-like values.
+	 *
+	 * No character restriction is applied: both lists are exact matches against
+	 * trusted data (code-registered states, admin-saved states), and custom
+	 * states created before 3.1.8 or through form import may contain any
+	 * characters (e.g. `STEP/2`).
+	 *
+	 * @param string $state
+	 *
+	 * @return bool
+	 */
+	private function is_allowed_dynamic_state_id( string $state ): bool {
+		$name = On_Dynamic_State_Event::strip_prefix( $state );
+
+		if ( '' === $name ) {
+			return false;
+		}
+
+		if ( in_array( $name, jet_fb_events()->rep_get_keys(), true ) ) {
+			return false;
+		}
+
+		if ( in_array( $name, $this->rep_get_keys(), true ) ) {
+			return true;
+		}
+
+		foreach ( self::get_states() as $item ) {
+			if ( ( $item['value'] ?? '' ) === $name ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public function add_built_in_states_to_script( array $localize_data ): array {
@@ -207,9 +276,11 @@ class Render_State implements Arrayable {
 	}
 
 	public static function get_states(): array {
-		return Tools::decode_json(
+		$states = Tools::decode_json(
 			get_option( self::OPTION_KEY, '[]' )
 		);
+
+		return is_array( $states ) ? $states : array();
 	}
 
 	public static function update_states( array $states ): bool {

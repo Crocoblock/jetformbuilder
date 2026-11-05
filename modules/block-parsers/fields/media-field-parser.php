@@ -8,6 +8,7 @@ use Jet_Form_Builder\Classes\Resources\Media_Block_Value;
 use Jet_Form_Builder\Exceptions\Request_Exception;
 use Jet_Form_Builder\Request\Exceptions\Sanitize_Value_Exception;
 use Jet_Form_Builder\Classes\Resources\Upload_Exception;
+use Jet_Form_Builder\Classes\Tools;
 use JFB_Modules\Block_Parsers\Field_Data_Parser;
 use JFB_Modules\Block_Parsers\File_Uploader;
 
@@ -51,6 +52,14 @@ class Media_Field_Parser extends Field_Data_Parser {
 		}
 		do_action( 'jet-form-builder/media-field/before-upload', $this );
 
+		// The upload branch also accepts existing attachments through its JSON preset.
+		// Validate those IDs regardless of the field's output format, before the uploader
+		// can reuse a preset instead of creating a new attachment.
+
+		$this->value = Tools::encode_json(
+			$this->sanitize_upload_preset( Tools::decode_json( $this->get_value() ) )
+		);
+
 		$uploader = ( new File_Uploader() )->set_context( $this );
 
 		try {
@@ -79,6 +88,35 @@ class Media_Field_Parser extends Field_Data_Parser {
 		return empty( $this->settings['insert_attachment'] )
 			? 'url'
 			: ( $this->settings['value_format'] ?? 'url' );
+	}
+
+	/**
+	 * Preserve path-only uploads, but reject any supplied attachment ID that the
+	 * current actor cannot claim. Keep the uploader's single/list preset shapes.
+	 *
+	 * @param mixed $preset Decoded upload preset.
+	 * @return array
+	 */
+	protected function sanitize_upload_preset( $preset ): array {
+		if ( ! is_array( $preset ) || empty( $preset ) ) {
+			return array();
+		}
+
+		$is_single = ! isset( $preset[0] );
+		$items     = $is_single ? array( $preset ) : $preset;
+		$allowed   = array();
+
+		foreach ( $items as $item ) {
+			if ( ! is_array( $item ) ) {
+				continue;
+			}
+			if ( array_key_exists( 'id', $item ) && ! $this->is_allowed_submitted_attachment( $item ) ) {
+				continue;
+			}
+			$allowed[] = $item;
+		}
+
+		return $is_single ? ( $allowed[0] ?? array() ) : $allowed;
 	}
 
 	/**

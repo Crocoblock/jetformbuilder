@@ -4,7 +4,7 @@ Tags: blocks, forms, form builder, contact form, gutenberg, gutenberg forms, mul
 Requires at least: 6.1
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 3.6.8
+Stable tag: 3.6.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,24 @@ Once you set the <a href="https://jetformbuilder.com/features/how-to-use-store-f
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/jetformbuilder)
 
 == Changelog ==
+
+**3.6.8.1**
+- SECURITY: Prevent stored XSS through post meta values used in Calculated field formulas
+- SECURITY: Prevent stored XSS through dynamic preset values in Dynamic Value, conditions and validation rules
+- SECURITY: Prevent XSS through HTML macro attributes in option labels and preset labels
+- SECURITY: Prevent XSS through unclosed tags and service attributes in labels built from site data
+- SECURITY: Prevent reflected DOM XSS through date results of Calculated field
+- SECURITY: Prevent shortcode execution through preset values in fields, labels, emails and redirects
+- SECURITY: Prevent shortcode execution through square brackets in field attributes and page URL
+- SECURITY: Treat shortcode output in Default Value, Min and Max as data instead of a formula
+- SECURITY: Prevent term creation from tampered choice field values in Insert/Update Post
+- SECURITY: Allow only offered and registered post statuses from form fields in Insert/Update Post
+- SECURITY: Require permission to edit the target user in Update User action
+- SECURITY: Block unsafe URL schemes in JFB_FIELD links and Redirect To Page custom URL
+- SECURITY: Escape visitor HTML in HTML emails
+- SECURITY: Sanitize admin table cells, editor descriptions and AI-generated forms
+- SECURITY: Escape inline CSS, Map field preview, Progress Bar, Phone field and Choice labels
+- SECURITY: Hide internal error details in REST responses and error pages
 
 **3.6.8**
 - ADD: Ability to use ID and title of the term created by Insert/Update Term in macros of the following actions

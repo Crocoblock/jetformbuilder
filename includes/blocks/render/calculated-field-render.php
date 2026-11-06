@@ -45,15 +45,21 @@ class Calculated_Field_Render extends Base {
 			return '';
 		}
 
+		$in_string = Tools::formula_macro_string_contexts( (string) $args['calc_formula'] );
+		$index     = 0;
+
 		$formula = preg_replace_callback(
-			'/%([a-zA-Z-_]+)::([a-zA-Z0-9-_]+)%/',
-			function ( $matches ) {
+			Tools::FORMULA_MACRO_PATTERN,
+			function ( $matches ) use ( $in_string, &$index ) {
+				$is_string = $in_string[ $index++ ] ?? false;
+
 				switch ( strtolower( $matches[1] ) ) {
 					case 'field':
 						return '%' . $matches[2] . '%';
 
 					case 'meta':
-						return get_post_meta( Live_Form::instance()->post->ID, $matches[2], true );
+						// The value may be written by visitors: insert it as data.
+						return Tools::calculated_meta_value( Live_Form::instance()->post->ID, $matches[2], $is_string );
 
 					default:
 						$macros_name = $matches[1];

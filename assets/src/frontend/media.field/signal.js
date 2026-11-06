@@ -18,7 +18,10 @@ function escapeAttr( value ) {
 		.replaceAll( '&', '&amp;' )
 		.replaceAll( '<', '&lt;' )
 		.replaceAll( '>', '&gt;' )
-		.replaceAll( '"', '&quot;' );
+		.replaceAll( '"', '&quot;' )
+		// Keeps the value safe even if a custom preview template quotes the
+		// placeholder with single quotes.
+		.replaceAll( '\'', '&#039;' );
 }
 
 /**

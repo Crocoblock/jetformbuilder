@@ -15,8 +15,12 @@ const nodeParsers = {
 };
 
 function parseHTMLtoBlocks( content ) {
-	const element     = document.createElement( 'div' );
-	element.innerHTML = content;
+	// <template> content is inert: images do not load and handlers do not
+	// run while the (possibly AI-generated) HTML is parsed.
+	const template     = document.createElement( 'template' );
+	template.innerHTML = content;
+
+	const element = template.content;
 
 	const blocks = [];
 

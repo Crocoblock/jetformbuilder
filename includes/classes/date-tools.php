@@ -16,11 +16,14 @@ class Date_Tools {
 
 	public static function time_to_string( string $value, int $stamp_format = self::DATE ): string {
 		// Min/max come from the field block's own attributes (admin-authored).
-		$value = jet_fb_parse_dynamic_trusted( $value );
+		$parsed = jet_fb_parse_dynamic_trusted( $value );
 
-		if ( ! is_scalar( $value ) ) {
+		if ( ! is_scalar( $parsed ) ) {
 			return '';
 		}
+
+		// A preset result is data, never a formula.
+		$value = $parsed !== $value ? Tools::preset_limit_value( $parsed ) : $parsed;
 
 		if ( self::TIME === $stamp_format ) {
 			return $value;

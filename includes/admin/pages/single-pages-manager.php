@@ -35,8 +35,7 @@ class Single_Pages_Manager {
 
 			$page->make();
 		} catch ( Not_Found_Page_Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die( 'Invalid request: ' . $exception->getMessage() );
+			wp_die( esc_html( 'Invalid request: ' . $exception->getMessage() ) );
 		}
 
 		try {
@@ -46,8 +45,7 @@ class Single_Pages_Manager {
 			$framework = jet_form_builder()->module( 'framework' );
 
 		} catch ( Repository_Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die( 'Something wen\'t wrong: ' . $exception->getMessage() );
+			wp_die( esc_html( 'Something wen\'t wrong: ' . $exception->getMessage() ) );
 		}
 
 		$header = new Header();

@@ -38,7 +38,7 @@ trait Base_Attributes_Trait {
 	}
 
 	public function render_attributes_string_save() {
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- every value is escaped with esc_attr() in get_attributes_string_save().
 		echo Tools::esc_template_string( $this->get_attributes_string_save() );
 	}
 
@@ -54,11 +54,14 @@ trait Base_Attributes_Trait {
 			);
 		}
 
+		// Square brackets are encoded, see Tools::neutralize_attribute_shortcodes().
 		foreach ( $attrs as $attr => $value ) {
 			if ( is_array( $value ) ) {
 				$value = implode( ' ', $value );
 			}
-			$response .= sprintf( ' %1$s="%2$s"', $attr, esc_attr( $value ) );
+			$value = Tools::neutralize_attribute_shortcodes( (string) $attr, esc_attr( $value ) );
+
+			$response .= sprintf( ' %1$s="%2$s"', $attr, $value );
 		}
 
 		return $response;

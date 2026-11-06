@@ -1,5 +1,6 @@
 import dispatchers from './dispatchers';
 import humanReadablePreset from '../../preset/helpers/humanReadablePreset';
+import escapeText from '../../preset/helpers/escapeText';
 
 const {
 	      select,
@@ -15,7 +16,7 @@ const emptyCondition = function ( condition ) {
 	if ( !operatorOptions ) {
 		return '';
 	}
-	const field = condition?.field || '(no field)';
+	const field = escapeText( condition?.field || '(no field)' );
 
 	return [
 		`<code>${ field }</code>`,
@@ -34,7 +35,7 @@ const DEFAULT_STATE = {
 			if ( !operatorOptions ) {
 				return '';
 			}
-			const field = condition?.field || '(no field)';
+			const field = escapeText( condition?.field || '(no field)' );
 			const value = (
 				humanReadablePreset( condition.value, 'b' ) || '(no value)'
 			);
@@ -51,7 +52,7 @@ const DEFAULT_STATE = {
 			const states = (
 				condition?.render_state ?? []
 			).map(
-				current => `<code>${ current }</code>`,
+				current => `<code>${ escapeText( current ) }</code>`,
 			);
 
 			const label = 1 === states.length

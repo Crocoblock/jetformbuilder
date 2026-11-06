@@ -89,6 +89,46 @@ class Redirect_To_Page_Action extends Base {
 		return add_query_arg( urlencode_deep( $redirect_args ), $url );
 	}
 
+	/**
+	 * The custom URL may be built from field macros or a dynamic preset, i.e.
+	 * from visitor data, and the AJAX response assigns it to window.location.
+	 * A scheme is accepted when WordPress allows it in links (filter
+	 * `kses_allowed_protocols`) or when the form author typed that scheme into
+	 * the Redirect URL setting.
+	 *
+	 * The scheme is read the way browsers read it: "localhost:8080/path" or
+	 * "javascript:1;..." both start with a scheme ("localhost", "javascript"),
+	 * a digit after the colon does not make it a port. A host with a port
+	 * needs "http://" or "//" in front, as it always did in the browser.
+	 *
+	 * @param string $url
+	 *
+	 * @return bool
+	 */
+	public function is_allowed_redirect_scheme( $url ): bool {
+		$scheme = self::get_url_scheme( (string) $url );
+
+		if ( '' === $scheme || in_array( $scheme, wp_allowed_protocols(), true ) ) {
+			return true;
+		}
+
+		$template = Tools::to_string( $this->settings['redirect_url'] ?? '' );
+
+		return 'custom_url' === ( $this->settings['redirect_type'] ?? '' )
+			&& self::get_url_scheme( $template ) === $scheme;
+	}
+
+	private static function get_url_scheme( string $url ): string {
+		// Browsers ignore whitespace and control characters inside the scheme.
+		$clean = preg_replace( '/[\x00-\x20\x7f]/', '', $url );
+
+		if ( ! preg_match( '/^([a-z][a-z0-9+.\-]*):/i', (string) $clean, $match ) ) {
+			return '';
+		}
+
+		return strtolower( $match[1] );
+	}
+
 	public function get_completed_redirect_url( $url = '' ) {
 		if ( ! $url ) {
 			$url = $this->get_redirect_url();
@@ -114,6 +154,11 @@ class Redirect_To_Page_Action extends Base {
 		}
 
 		$to_url = $this->get_completed_redirect_url( $to_url );
+
+		if ( ! $this->is_allowed_redirect_scheme( $to_url ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+			throw new Action_Exception( 'failed', $this->settings );
+		}
 
 		$handler->response_data['open_in_new_tab'] = ! empty( $this->settings['open_in_new_tab'] );
 

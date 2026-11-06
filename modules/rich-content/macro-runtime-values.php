@@ -29,6 +29,43 @@ class Macro_Runtime_Values {
 
 	private $values = array();
 
+	/**
+	 * Set by Module::rich_html(): the pass renders a block attribute into
+	 * page HTML, so a dynamic preset result (visitor data) gets its square
+	 * brackets encoded before any shortcode parser can see it.
+	 *
+	 * @var bool
+	 */
+	private $neutralize_preset_brackets = false;
+
+	public function neutralize_preset_brackets( bool $neutralize = true ): Macro_Runtime_Values {
+		$this->neutralize_preset_brackets = $neutralize;
+
+		return $this;
+	}
+
+	public function should_neutralize_preset_brackets(): bool {
+		return $this->neutralize_preset_brackets;
+	}
+
+	/**
+	 * Set by Module::rich_email_html(): the pass builds the body of a
+	 * text/html e-mail, so plain-text field values are HTML-escaped.
+	 *
+	 * @var bool
+	 */
+	private $escape_html_field_values = false;
+
+	public function escape_html_field_values( bool $escape = true ): Macro_Runtime_Values {
+		$this->escape_html_field_values = $escape;
+
+		return $this;
+	}
+
+	public function should_escape_html_field_values(): bool {
+		return $this->escape_html_field_values;
+	}
+
 	public function set( string $token, string $value ) {
 		$this->values[ $token ] = $value;
 	}

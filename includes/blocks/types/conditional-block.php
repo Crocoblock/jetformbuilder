@@ -146,11 +146,25 @@ class Conditional_Block extends Base {
 			$content = $break->maybe_start_page( true ) . $content . $break->maybe_end_page( true );
 		}
 
+		// A condition value from a preset is data that visitors can write: core
+		// do_shortcode() over the page would run a shortcode from it. Only such
+		// values are marked; author values keep their shortcodes.
+		$tokens = Tools::json_bracket_tokens();
+
+		foreach ( $conditions as &$condition ) {
+			if ( is_array( $condition ) && ! empty( $condition['use_preset'] ) && isset( $condition['value'] ) ) {
+				$condition['value'] = Tools::mark_json_brackets( $condition['value'], $tokens );
+			}
+		}
+		unset( $condition );
+
+		$conditions_attr = htmlspecialchars( Tools::encode_json_marked( $conditions, $tokens, 0 ) );
+
 		return sprintf(
 			'<div class="%2$s" data-jfb-conditional="%3$s" data-jfb-func="%4$s">%1$s</div>',
 			$content,
 			'jet-form-builder__conditional ' . esc_attr( $class_name ),
-			htmlspecialchars( wp_json_encode( $conditions ) ),
+			$conditions_attr,
 			esc_attr( $func_type )
 		);
 	}

@@ -343,26 +343,31 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 
 		$shipping = $payment['purchase_units'][0]['shipping'] ?? array();
 
+		/**
+		 * Payer and shipping data come from the PayPal account of the payer,
+		 * i.e. from outside the site. Stored as plain text (second layer: the
+		 * admin tables escape on output as well, see Column_Base).
+		 */
 		$payer_id = Payer_Model::insert_or_update(
 			array(
 				'user_id'    => $this->get_scenario_row( 'user_id' ),
-				'payer_id'   => $payment['payer']['payer_id'] ?? '',
-				'first_name' => $payment['payer']['name']['given_name'] ?? '',
-				'last_name'  => $payment['payer']['name']['surname'] ?? '',
-				'email'      => $payment['payer']['email_address'] ?? '',
+				'payer_id'   => self::clean( $payment['payer']['payer_id'] ?? '' ),
+				'first_name' => self::clean( $payment['payer']['name']['given_name'] ?? '' ),
+				'last_name'  => self::clean( $payment['payer']['name']['surname'] ?? '' ),
+				'email'      => self::clean( $payment['payer']['email_address'] ?? '' ),
 			)
 		);
 
 		$payer_ship_id = ( new Payer_Shipping_Model() )->insert(
 			array(
 				'payer_id'       => $payer_id,
-				'full_name'      => $shipping['name']['full_name'] ?? '',
-				'address_line_1' => $shipping['address']['address_line_1'] ?? '',
-				'address_line_2' => $shipping['address']['address_line_2'] ?? '',
-				'admin_area_2'   => $shipping['address']['admin_area_2'] ?? '',
-				'admin_area_1'   => $shipping['address']['admin_area_1'] ?? '',
-				'postal_code'    => $shipping['address']['postal_code'] ?? '',
-				'country_code'   => $shipping['address']['country_code'] ?? '',
+				'full_name'      => self::clean( $shipping['name']['full_name'] ?? '' ),
+				'address_line_1' => self::clean( $shipping['address']['address_line_1'] ?? '' ),
+				'address_line_2' => self::clean( $shipping['address']['address_line_2'] ?? '' ),
+				'admin_area_2'   => self::clean( $shipping['address']['admin_area_2'] ?? '' ),
+				'admin_area_1'   => self::clean( $shipping['address']['admin_area_1'] ?? '' ),
+				'postal_code'    => self::clean( $shipping['address']['postal_code'] ?? '' ),
+				'country_code'   => self::clean( $shipping['address']['country_code'] ?? '' ),
 			)
 		);
 
@@ -372,6 +377,15 @@ class Pay_Now extends Scenario_Logic_Base implements With_Resource_It {
 				'payer_shipping_id' => $payer_ship_id,
 			)
 		);
+	}
+
+	/**
+	 * @param mixed $value
+	 *
+	 * @return string
+	 */
+	private static function clean( $value ): string {
+		return is_scalar( $value ) ? sanitize_text_field( (string) $value ) : '';
 	}
 
 	/**

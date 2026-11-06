@@ -48,7 +48,7 @@ class Active_Campaign_Endpoint implements Endpoint_Interface {
 			return new \WP_REST_Response(
 				array(
 					'action'  => Retrieve_Custom_Fields_Action::class,
-					'message' => $exception->getMessage(),
+					'message' => wp_kses_post( $exception->getMessage() ), // shown with v-html in admin notices
 					'data'    => $exception->get_additional(),
 				),
 				400
@@ -68,7 +68,7 @@ class Active_Campaign_Endpoint implements Endpoint_Interface {
 			return new \WP_REST_Response(
 				array(
 					'action'  => Retrieve_Lists_Action::class,
-					'message' => $exception->getMessage(),
+					'message' => wp_kses_post( $exception->getMessage() ), // shown with v-html in admin notices
 					'data'    => $exception->get_additional(),
 				),
 				400

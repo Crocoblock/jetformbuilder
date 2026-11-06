@@ -23,8 +23,11 @@ class Send_Email_Hooks {
 	}
 
 	public static function basic_formatting( Send_Email_Action $email ) {
+		// HTML body: plain-text field values are escaped (see rich_email_html()).
 		$email->set_content(
-			Rich_Content\Module::rich( $email->get_content() )
+			$email->is_html()
+				? Rich_Content\Module::rich_email_html( $email->get_content() )
+				: Rich_Content\Module::rich( $email->get_content() )
 		);
 		$email->set_subject(
 			Rich_Content\Module::rich( $email->get_subject() )

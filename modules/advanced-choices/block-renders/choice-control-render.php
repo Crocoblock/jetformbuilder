@@ -68,10 +68,12 @@ class Choice_Control_Render extends Base {
 			array( 'class', 'jet-form-builder__label' ),
 		);
 
+		// Same as every other field label: formatting from the editor's
+		// RichText is kept, active markup is not.
 		return sprintf(
 			'<label %1$s>%2$s</label>',
 			Builder_Helper::attrs( $attributes ),
-			$this->block_type->block_attrs['label']
+			wp_kses_post( $this->block_type->block_attrs['label'] )
 		);
 	}
 

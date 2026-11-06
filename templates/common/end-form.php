@@ -9,7 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 if ( isset( $form_id ) ) :
-	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- form id via absint(). ?>
 	<div class="jet-form-builder-messages-wrap" data-form-id="<?php echo absint( $form_id ); ?>"></div>
 <?php endif; ?>
 </form>

@@ -65,10 +65,21 @@ class Media_Field_Render extends Base {
 				$file = $file['id'];
 			}
 			$file_url = isset( $file['url'] ) ? $file['url'] : wp_get_attachment_url( $file );
-			$updated = str_replace( '%file_url%', esc_attr( $file_url ), $preview );
+
+			/**
+			 * The preview wrappers are <div>s, whose data-* attributes core
+			 * do_shortcode() expands when the page is rendered. A preset value
+			 * (query var, meta) must stay data, so brackets are encoded; the
+			 * browser decodes them back, dataset/URL values are unchanged.
+			 */
+			$updated = str_replace(
+				'%file_url%',
+				Tools::neutralize_shortcodes( esc_attr( $file_url ) ),
+				$preview
+			);
 			$updated = str_replace(
 				'%file_name%',
-				esc_attr( $this->get_name_from_file( $file['url'] ) ),
+				Tools::neutralize_shortcodes( esc_attr( $this->get_name_from_file( $file['url'] ) ) ),
 				$updated
 			);
 
@@ -79,7 +90,10 @@ class Media_Field_Render extends Base {
 			$img_ext_preg = '!\.(' . join( '|', $image_ext ) . ')$!i';
 
 			if ( preg_match( $img_ext_preg, $file['url'] ) ) {
-				$replace = sprintf( '<img src="%s" alt="" width="100px" height="100px">', esc_url( $file['url'] ) );
+				$replace = sprintf(
+					'<img src="%s" alt="" width="100px" height="100px">',
+					Tools::neutralize_shortcodes( esc_url( $file['url'] ) )
+				);
 
 				$updated = str_replace( '<!-- preview -->', $replace, $updated );
 			}

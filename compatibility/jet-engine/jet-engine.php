@@ -315,8 +315,12 @@ class Jet_Engine implements
 		}
 
 		if ( isset( $_REQUEST[ $request_key ] ) ) {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-			return $_REQUEST[ $request_key ];
+			// Same handling as Base_Field_Context_Macro::sanitize_value():
+			// numbers (object IDs) and arrays are kept, strings are cleaned.
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized on the next line by type.
+			$value = wp_unslash( $_REQUEST[ $request_key ] );
+
+			return ( is_array( $value ) || is_numeric( $value ) ) ? $value : sanitize_text_field( (string) $value );
 		}
 
 		if ( isset( $GLOBALS[ $request_key ] ) ) {

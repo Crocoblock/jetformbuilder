@@ -3,6 +3,7 @@
 namespace JFB_Modules\Blocks_V2\Repeater_Field;
 
 use Jet_Form_Builder\Blocks\Types\Base;
+use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
 use JFB_Modules\Blocks_V2\Interfaces\Block_Type_With_Assets_Interface;
 use JFB_Modules\Blocks_V2\Module;
@@ -418,9 +419,13 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 			return '';
 		}
 
+		$in_string = Tools::formula_macro_string_contexts( (string) $this->block_attrs['calc_formula'] );
+		$index     = 0;
+
 		$formula = preg_replace_callback(
-			'/%([a-zA-Z-_]+)::([a-zA-Z0-9-_]+)%/',
-			function ( $matches ) use ( &$listen_fields ) {
+			Tools::FORMULA_MACRO_PATTERN,
+			function ( $matches ) use ( &$listen_fields, $in_string, &$index ) {
+				$is_string = $in_string[ $index++ ] ?? false;
 
 				switch ( strtolower( $matches[1] ) ) {
 					case 'field':
@@ -433,7 +438,8 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 							return '';
 						}
 
-						return get_post_meta( $post->ID, $matches[2], true );
+						// The value may be written by visitors: insert it as data.
+						return Tools::calculated_meta_value( $post->ID, $matches[2], $is_string );
 
 					default:
 						$macros_name = $matches[1];

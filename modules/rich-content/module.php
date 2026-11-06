@@ -5,6 +5,7 @@ namespace JFB_Modules\Rich_Content;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
 use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Presets\Types\Dynamic_Preset;
+use JFB_Modules\Block_Parsers\Fields\Hidden_Field_Parser;
 use JFB_Components\Module\Base_Module_It;
 
 // If this file is called directly, abort.
@@ -175,6 +176,209 @@ class Module implements Base_Module_It {
 	}
 
 	/**
+	 * Same pipeline as rich(), for a block attribute that is printed into the
+	 * page HTML (label, description, prefix...). A dynamic preset inside it
+	 * resolves to visitor-controlled data (query var, meta), so the preset
+	 * result is kept from being expanded as a shortcode - both by this pass
+	 * and by core do_shortcode() over the rendered page. Brackets are encoded
+	 * as entities, so the visible text stays the same.
+	 *
+	 * Not used for redirect/webhook URLs or e-mail fields, where HTML
+	 * entities would change the value.
+	 *
+	 * @param string $value
+	 *
+	 * @return string
+	 */
+	public static function rich_html( string $value ): string {
+		return self::apply_pass_filter(
+			$value,
+			false,
+			'',
+			false,
+			( new Macro_Runtime_Values() )->neutralize_preset_brackets()
+		);
+	}
+
+	/**
+	 * Field types whose value is HTML on purpose. In a text/html e-mail body
+	 * every other field value is escaped (see rich_email_html()). WYSIWYG
+	 * content is sanitized with wp_kses_post() when it is submitted.
+	 */
+	const HTML_FIELD_TYPES = array(
+		'wysiwyg-field',
+	);
+
+	/**
+	 * Macro filters that need the exact value and never return it as is, so
+	 * the value is passed to them unescaped:
+	 * - md5: the result is a hex hash;
+	 * - embed_url: the value is a URL for wp_oembed_get() ("&" must stay "&");
+	 *   the result is the embed HTML, or empty when the URL has no embed, and
+	 *   it is sanitized with wp_kses_post() (Base_Multiple_Filter).
+	 */
+	const RAW_INPUT_FILTERS = array(
+		'md5',
+		'embed_url',
+	);
+
+	/**
+	 * Dynamic preset results kept as rich HTML in a text/html e-mail body
+	 * (through wp_kses_post()): source => post fields. These core post fields
+	 * are sanitized by WordPress on save for authors without unfiltered_html.
+	 * Every other result (post meta, user, term, options page, query var,
+	 * form record, add-on sources) can be written by visitors through forms
+	 * and is escaped.
+	 */
+	const RICH_PRESET_FIELDS = array(
+		'post' => array( 'post_content', 'post_title', 'post_excerpt' ),
+	);
+
+	/**
+	 * Same pipeline as rich(), for the body of a text/html e-mail. Request
+	 * data cannot add markup to the notification:
+	 *
+	 * - `%field%` values are HTML-escaped, except fields that are HTML on
+	 *   purpose (HTML_FIELD_TYPES) and the author's static value of a hidden
+	 *   field with "Render in HTML" off (is_author_static_hidden_value());
+	 * - with macro filters (`%field|filter%`) the value is escaped before the
+	 *   filters run: IDs, dates and lists are not changed by escaping, so
+	 *   galleries, links and titles built by filters stay the same, and a
+	 *   filter that returns its input cannot return markup;
+	 * - repeater rows keep their `<br>` layout, the values inside are escaped;
+	 * - custom macros (`%Name::macro%`) are code of the site, kept as they are;
+	 * - dynamic preset results are escaped, except core post fields
+	 *   (RICH_PRESET_FIELDS) that pass through wp_kses_post().
+	 *
+	 * Markup written by the author in the template is kept. Filters
+	 * `jet-form-builder/send-email/escape-field-value` and
+	 * `jet-form-builder/send-email/escape-preset-value` (bool) decide per
+	 * value.
+	 *
+	 * @param string $value
+	 *
+	 * @return string
+	 */
+	public static function rich_email_html( string $value ): string {
+		return self::apply_pass_filter(
+			$value,
+			false,
+			'',
+			false,
+			( new Macro_Runtime_Values() )->escape_html_field_values()
+		);
+	}
+
+	/**
+	 * Value callback for Macros_Parser in a text/html e-mail pass.
+	 *
+	 * @param mixed  $value   Field value before macro filters and formatting.
+	 * @param string $name    Field name or a repeater child path ('rows.0.title').
+	 * @param array  $filters Macro filters, e.g. `format_date(d.m.Y)`.
+	 *
+	 * @return mixed
+	 */
+	public static function escape_email_field_value( $value, string $name, array $filters = array() ) {
+		foreach ( $filters as $filter ) {
+			// Same name rule as Filters_Manager::apply_single(), which also
+			// accepts leading spaces ("%field| md5%").
+			if ( preg_match( '/[-\w]+/', (string) $filter, $match ) && in_array( $match[0], self::RAW_INPUT_FILTERS, true ) ) {
+				return $value;
+			}
+		}
+
+		$type     = jet_fb_context()->get_field_type( $name );
+		$settings = '' === $type ? array() : jet_fb_context()->get_settings( $name );
+		$escape   = ! in_array( $type, self::HTML_FIELD_TYPES, true );
+
+		if ( 'hidden-field' === $type && self::is_author_static_hidden_value( $name, $settings ) ) {
+			$escape = false;
+		}
+
+		/**
+		 * Whether to HTML-escape a field value inserted into a text/html e-mail.
+		 *
+		 * @param bool         $escape Default: true, except WYSIWYG and the author's static value of a hidden field.
+		 * @param string|array $value  The value, before macro filters.
+		 * @param string       $name   Field name; for a repeater row value the child's path, e.g. 'rows.0.title'.
+		 * @param string       $type   Field type, e.g. 'hidden-field'.
+		 */
+		$escape = apply_filters( 'jet-form-builder/send-email/escape-field-value', $escape, $value, $name, $type );
+
+		return $escape ? self::esc_html_deep( $value ) : $value;
+	}
+
+	/**
+	 * A hidden field with "Render in HTML" off is computed on the server and
+	 * the value sent by the browser is ignored (Hidden_Field_Parser). Only a
+	 * value the author set is trusted. The check uses the provenance of the
+	 * value the parser actually returned, not the field settings: an empty
+	 * Manual Input falls back to the default, which a preset may fill from a
+	 * query var, and other sources (post or user meta, referer URL, custom
+	 * callbacks) read data that visitors can write.
+	 *
+	 * @param string $name     Field name.
+	 * @param array  $settings Hidden field block attributes.
+	 *
+	 * @return bool
+	 */
+	private static function is_author_static_hidden_value( string $name, array $settings ): bool {
+		if ( false !== ( $settings['render'] ?? true ) ) {
+			return false;
+		}
+
+		try {
+			$parser = jet_fb_context()->resolve_parser( $name );
+		} catch ( \Exception $exception ) {
+			return false;
+		}
+
+		return $parser instanceof Hidden_Field_Parser && ! $parser->is_value_from_source();
+	}
+
+	/**
+	 * @param mixed $value
+	 *
+	 * @return mixed
+	 */
+	private static function esc_html_deep( $value ) {
+		if ( is_array( $value ) ) {
+			return array_map( array( self::class, 'esc_html_deep' ), $value );
+		}
+
+		return is_string( $value ) ? esc_html( $value ) : $value;
+	}
+
+	/**
+	 * Dynamic preset result in a text/html e-mail body.
+	 *
+	 * @param string $result      Preset source value.
+	 * @param string $preset_json Preset JSON the result was resolved from.
+	 *
+	 * @return string
+	 */
+	private static function escape_email_preset_result( string $result, string $preset_json ): string {
+		$preset = json_decode( $preset_json, true );
+		$preset = is_array( $preset ) ? $preset : array();
+		$source = (string) ( $preset['from'] ?? '' );
+		$field  = (string) ( $preset['current_field_prop'] ?? '' );
+		$escape = ! in_array( $field, self::RICH_PRESET_FIELDS[ $source ] ?? array(), true );
+
+		/**
+		 * Whether to HTML-escape a dynamic preset result inserted into a
+		 * text/html e-mail. When false the result passes through wp_kses_post().
+		 *
+		 * @param bool   $escape Default: false for post content, title and excerpt, true otherwise.
+		 * @param string $result Preset source value.
+		 * @param string $source Preset source, e.g. 'query_var', 'post'.
+		 * @param string $field  Source field, e.g. 'post_content', 'post_meta'.
+		 */
+		$escape = apply_filters( 'jet-form-builder/send-email/escape-preset-value', $escape, $result, $source, $field );
+
+		return $escape ? esc_html( $result ) : wp_kses_post( $result );
+	}
+
+	/**
 	 * Runs one pass of this filter and, if anything inside it throws, drops
 	 * the pass_stack entries it left behind before rethrowing - including an
 	 * exception from a third-party callback on this filter, which the guards
@@ -197,6 +401,7 @@ class Module implements Base_Module_It {
 	 * @param bool $trusted
 	 * @param string $trusted_content
 	 * @param bool $without_preset
+	 * @param Macro_Runtime_Values|null $runtime_values Flags for this pass (escaping, preset brackets).
 	 *
 	 * @return string
 	 * @throws \Throwable Rethrows whatever a callback of this pass threw, after unwinding.
@@ -205,7 +410,8 @@ class Module implements Base_Module_It {
 		string $value,
 		bool $trusted,
 		string $trusted_content,
-		bool $without_preset
+		bool $without_preset,
+		$runtime_values = null
 	): string {
 		$module       = function_exists( 'jet_form_builder' ) && jet_form_builder()->has_module( 'rich-content' )
 			? jet_form_builder()->module( 'rich-content' )
@@ -221,7 +427,7 @@ class Module implements Base_Module_It {
 				$trusted,
 				$trusted_content,
 				$without_preset,
-				new Macro_Runtime_Values()
+				$runtime_values instanceof Macro_Runtime_Values ? $runtime_values : new Macro_Runtime_Values()
 			);
 		} catch ( \Throwable $exception ) {
 			if ( $module ) {
@@ -413,7 +619,20 @@ class Module implements Base_Module_It {
 		$tokenized = preg_replace_callback(
 			Macros_Parser::MACRO_PATTERN,
 			function ( array $macro_match ) use ( $parser, $content, $runtime_values ) {
-				$resolved = $parser->parse_macros( $macro_match[0] );
+				// The parser instance is shared: set this pass's value callback
+				// for this one call and restore whatever a caller had set.
+				$previous = $parser->get_value_callback();
+				$parser->set_value_callback(
+					$runtime_values->should_escape_html_field_values()
+						? array( self::class, 'escape_email_field_value' )
+						: null
+				);
+
+				try {
+					$resolved = $parser->parse_macros( $macro_match[0] );
+				} finally {
+					$parser->set_value_callback( $previous );
+				}
 
 				// Unresolved macro syntax (no matching field/custom-macro) comes back
 				// unchanged from parse_macros() - it is template text, not
@@ -468,7 +687,13 @@ class Module implements Base_Module_It {
 				// values. A trusted parse is safe only when the content is still the
 				// exact admin-authored string passed to rich_trusted().
 				if ( $trusted && $content === $trusted_content ) {
-					return $this->apply_dynamic_preset_trusted( $content );
+					$result = $this->apply_dynamic_preset_trusted( $content );
+
+					// The attribute is admin-authored, but the preset SOURCE
+					// value it resolves to is still data.
+					return $result === $content
+						? $result
+						: $this->protect_preset_result( $result, $this->current_pass(), $content );
 				}
 
 				return $this->parse_dynamic_preset_json( $content );
@@ -521,14 +746,9 @@ class Module implements Base_Module_It {
 	 * @return string
 	 */
 	private function parse_dynamic_preset_json( string $content ): string {
-		$pass   = $this->current_pass();
-		$values = $pass ? $pass['runtime_values']->all() : array();
-
-		if ( ! $values ) {
-			return Tools::to_string( $this->get_dynamic_preset()->parse_json( $content ) );
-		}
-
-		$untokenized = Runtime_Shortcode_Renderer::restore( $content, $values );
+		$pass        = $this->current_pass();
+		$values      = $pass ? $pass['runtime_values']->all() : array();
+		$untokenized = $values ? Runtime_Shortcode_Renderer::restore( $content, $values ) : $content;
 		$parsed      = Tools::to_string( $this->get_dynamic_preset()->parse_json( $untokenized ) );
 
 		if ( $parsed === $untokenized ) {
@@ -542,7 +762,80 @@ class Module implements Base_Module_It {
 			return $content;
 		}
 
-		return $parsed;
+		return $this->protect_preset_result( $parsed, $pass, $untokenized );
+	}
+
+	/**
+	 * A dynamic preset result is the SOURCE's own value (query var, post /
+	 * user meta, form record...), i.e. data that visitors can control. It must
+	 * never be parsed as shortcode syntax by apply_shortcodes() later in this
+	 * pass:
+	 *
+	 * - rich_html() passes (block attributes printed into the page) encode
+	 *   the brackets, because core do_shortcode() runs over the page again
+	 *   after the pass has finished;
+	 * - every other pass (e-mail fields, redirect and webhook URLs) gets the
+	 *   result as a runtime token, the same way `%field%` macro values are
+	 *   handled, and restore_runtime_tokens() puts the exact value back at
+	 *   the end of the pass - so the final string is unchanged.
+	 *
+	 * Outside an own pass (a direct third-party call of the callback) there
+	 * is nothing to restore a token, so the result is returned as before.
+	 *
+	 * In a text/html e-mail pass the result is escaped or sanitized first,
+	 * see escape_email_preset_result().
+	 *
+	 * @param string $result
+	 * @param array|null $pass
+	 * @param string $preset_json Preset JSON the result was resolved from.
+	 *
+	 * @return string
+	 */
+	private function protect_preset_result( string $result, $pass, string $preset_json = '' ): string {
+		if ( ! $pass ) {
+			return $result;
+		}
+
+		/** @var Macro_Runtime_Values $runtime_values */
+		$runtime_values = $pass['runtime_values'];
+
+		if ( $runtime_values->should_escape_html_field_values() ) {
+			$result = self::escape_email_preset_result( $result, $preset_json );
+		}
+
+		if ( $runtime_values->should_neutralize_preset_brackets() ) {
+			// Printed into the form: the frontend script reads data-* attributes,
+			// plugin classes and JFB_FIELD macros in the markup as its own
+			// instructions, and an unclosed tag would wrap the next fields.
+			$result = Tools::sanitize_data_html( $result );
+		}
+
+		// "&#91;" counts too: do_shortcode() turns it back into "[" on its way
+		// out (unescape_invalid_shortcodes()), so a later pass would expand it.
+		if ( false === strpos( $result, '[' ) && false === strpos( $result, '&#91;' ) ) {
+			return $result;
+		}
+
+		/**
+		 * Backward compatibility opt-in: before 3.6.8.1 a shortcode contained in a
+		 * dynamic preset result was expanded. Return true only for sources that
+		 * visitors can never write (the query var source is always writable).
+		 *
+		 * @param bool   $allow  Default false.
+		 * @param string $result Preset source value.
+		 */
+		if ( apply_filters( 'jet-form-builder/rich-content/allow-preset-shortcodes', false, $result ) ) {
+			return $result;
+		}
+
+		if ( $runtime_values->should_neutralize_preset_brackets() ) {
+			return Tools::neutralize_shortcodes( $result );
+		}
+
+		$token = Runtime_Shortcode_Renderer::generate_token( $result, $runtime_values->all() );
+		$runtime_values->set( $token, $result );
+
+		return $token;
 	}
 
 	public function apply_dynamic_preset_trusted( string $content ): string {

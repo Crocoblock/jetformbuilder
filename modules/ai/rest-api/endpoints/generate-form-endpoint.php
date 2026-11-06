@@ -66,7 +66,7 @@ class Generate_Form_Endpoint extends Rest_Api_Private_Endpoint_Base {
 		} catch ( Gateway_Exception $exception ) {
 			return new \WP_REST_Response(
 				array(
-					'message' => $exception->getMessage(),
+					'message' => wp_kses_post( $exception->getMessage() ), // shown with v-html in admin notices
 					'data'    => $exception->get_additional(),
 				),
 				400

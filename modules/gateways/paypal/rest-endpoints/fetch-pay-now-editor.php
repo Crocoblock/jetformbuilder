@@ -47,7 +47,7 @@ class Fetch_Pay_Now_Editor extends Rest_Api_Endpoint_Base {
 		} catch ( Gateway_Exception $exception ) {
 			return new \WP_REST_Response(
 				array(
-					'message' => $exception->getMessage(),
+					'message' => wp_kses_post( $exception->getMessage() ), // shown with v-html in admin notices
 					'data'    => $exception->get_additional(),
 				),
 				500

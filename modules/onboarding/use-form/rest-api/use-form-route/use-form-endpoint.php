@@ -46,7 +46,7 @@ class Use_Form_Endpoint implements Endpoint_Interface {
 		} catch ( Use_Form_Exception $exception ) {
 			return new \WP_REST_Response(
 				array(
-					'message' => $exception->getMessage(),
+					'message' => wp_kses_post( $exception->getMessage() ), // shown with v-html in admin notices
 				),
 				400
 			);

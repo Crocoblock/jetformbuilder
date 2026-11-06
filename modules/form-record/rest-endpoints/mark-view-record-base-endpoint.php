@@ -52,7 +52,7 @@ abstract class Mark_View_Record_Base_Endpoint extends Rest_Api_Endpoint_Base {
 			if ( ! $this->check_is_updated( $where ) ) {
 				return new \WP_REST_Response(
 					array(
-						'message' => $exception->getMessage(),
+						'message' => wp_kses_post( $exception->getMessage() ), // shown with v-html in admin notices
 						'data'    => $exception->get_additional(),
 					),
 					503

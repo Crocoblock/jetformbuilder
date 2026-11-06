@@ -143,8 +143,8 @@ class Form_Break {
 
 		return sprintf(
 			'<div class="%1$s" data-type="%2$s">%3$s</div>',
-			implode( ' ', $classes ),
-			$type,
+			esc_attr( implode( ' ', $classes ) ),
+			esc_attr( $type ),
 			$content
 		);
 	}

@@ -27,6 +27,11 @@ abstract class Abstract_Modifier {
 	public $locked_targets = array();
 	protected $request = array();
 
+	/**
+	 * @var string Field being attached, see get_current_field_name().
+	 */
+	protected $current_field_name = '';
+
 	/** @var Object_Properties_Collection */
 	public $properties;
 
@@ -97,19 +102,36 @@ abstract class Abstract_Modifier {
 			return;
 		}
 
-		/** @var Base_Object_Property $property */
-		foreach ( $this->properties->get_by_id( $key ) as $property ) {
-			$property->set_value( $key, $value, $this );
-		}
+		$this->current_field_name = (string) $field_name;
 
-		if ( $this->properties->has_by_id( $key ) ) {
-			return;
-		}
+		try {
+			/** @var Base_Object_Property $property */
+			foreach ( $this->properties->get_by_id( $key ) as $property ) {
+				$property->set_value( $key, $value, $this );
+			}
 
-		/** @var Base_Object_Property $item */
-		foreach ( $this->properties->get_dynamic() as $item ) {
-			$item->set_value( $key, $value, $this );
+			if ( $this->properties->has_by_id( $key ) ) {
+				return;
+			}
+
+			/** @var Base_Object_Property $item */
+			foreach ( $this->properties->get_dynamic() as $item ) {
+				$item->set_value( $key, $value, $this );
+			}
+		} finally {
+			$this->current_field_name = '';
 		}
+	}
+
+	/**
+	 * Name of the form field whose value is being attached right now (empty
+	 * outside attach_item(), e.g. when a property is set directly). Lets a
+	 * property take the source field's settings into account.
+	 *
+	 * @return string
+	 */
+	public function get_current_field_name(): string {
+		return $this->current_field_name;
 	}
 
 	protected function attach_properties() {

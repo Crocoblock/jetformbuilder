@@ -55,7 +55,7 @@ abstract class Base_Page_Updater extends Rest_Api_Endpoint_Base {
 
 			return new \WP_REST_Response(
 				array(
-					'message' => $exception->getMessage(),
+					'message' => wp_kses_post( $exception->getMessage() ), // shown with v-html in admin notices
 					'data'    => $exception->get_additional(),
 				),
 				503

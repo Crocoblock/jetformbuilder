@@ -292,6 +292,30 @@ abstract class Base {
 		}
 	}
 
+	/**
+	 * Option labels generated from site data (posts, terms, meta, generators,
+	 * JetEngine queries...) can be written by visitors, e.g. through an
+	 * Insert Post action. Core do_shortcode() runs over the rendered page, so
+	 * their brackets are encoded; the browser shows them unchanged. Markup the
+	 * frontend script would read as its own instructions (data-* attributes,
+	 * plugin classes, JFB_FIELD macros, unclosed tags) is cleaned with
+	 * Tools::sanitize_data_html(). Labels the form author typed in ("Manual
+	 * Input") are left as they are.
+	 *
+	 * @param string $label Already escaped label HTML.
+	 *
+	 * @return string
+	 */
+	protected function neutralize_generated_option_label( string $label ): string {
+		$from = $this->args['field_options_from'] ?? 'manual_input';
+
+		if ( 'manual_input' === $from ) {
+			return $label;
+		}
+
+		return Tools::neutralize_shortcodes( Tools::sanitize_data_html( $label ) );
+	}
+
 	protected function set_value() {
 		if ( ! $this->has_dynamic_default( $this->args['default'] ) ) {
 			$this->add_attribute( 'value', $this->args['default'] );

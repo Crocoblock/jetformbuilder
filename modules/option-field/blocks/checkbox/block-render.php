@@ -136,7 +136,7 @@ class Block_Render extends Base {
 			<input %1$s %2$s><span>%3$s</span></label>',
 			Builder_Helper::attrs( $attrs ),
 			$this->get_attributes_string_save(),
-			wp_kses_post( $label )
+			$this->neutralize_generated_option_label( wp_kses_post( $label ) )
 		);
 
 		$html .= apply_filters(

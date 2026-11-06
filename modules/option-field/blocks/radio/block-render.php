@@ -94,7 +94,7 @@ class Block_Render extends Base {
 				)
 			),
 			$this->get_attributes_string_save(),
-			wp_kses_post( $label )
+			$this->neutralize_generated_option_label( wp_kses_post( $label ) )
 		);
 
 		/**

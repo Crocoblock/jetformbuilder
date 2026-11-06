@@ -103,14 +103,37 @@ abstract class Column_Base {
 				return (array) $value;
 			case 'string':
 				if ( is_array( $value ) && array_key_exists( 'text', $value ) ) {
-					return (string) $value['text'];
+					return self::to_safe_cell_html( (string) $value['text'] );
 				}
 
-				return (string) $value;
+				return self::to_safe_cell_html( (string) $value );
 			case 'rawArray':
 			default:
 				return $value;
 		}
+	}
+
+	/**
+	 * A `string` column has no dedicated Vue component, so the admin tables
+	 * (EntryColumnsTable.vue / EntryColumnList.vue) insert it with `v-html`.
+	 * Many of these values come from visitors or external APIs (payer data,
+	 * error messages, page titles), so markup in them is limited to what
+	 * WordPress allows in post content.
+	 *
+	 * Only a "<" can open markup inside innerHTML, so strings without it are
+	 * returned untouched: entities such as "&#8211;" from get_the_title() or
+	 * values already passed through esc_html() keep rendering exactly as before.
+	 *
+	 * @param string $value
+	 *
+	 * @return string
+	 */
+	public static function to_safe_cell_html( string $value ): string {
+		if ( false === strpos( $value, '<' ) ) {
+			return $value;
+		}
+
+		return wp_kses_post( $value );
 	}
 
 	public function set_type( string $type ): Column_Base {

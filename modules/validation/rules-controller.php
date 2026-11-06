@@ -64,20 +64,34 @@ class Rules_Controller implements Repository_Pattern_Interface {
 			/** @var Advanced_Rules\Server_Side_Rule $rule */
 			$rule = $this->get_item( Advanced_Rules\Server_Side_Rule::class );
 		} catch ( Repository_Exception $exception ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			wp_die( $exception->getMessage() );
+			wp_die( esc_html( $exception->getMessage() ) );
 		}
 
 		return $rule;
 	}
 
+	/**
+	 * @param array $rules
+	 *
+	 * @return array Keys of the rules whose value a dynamic preset replaced.
+	 */
 	public function prepare_rules( array &$rules ) {
-		foreach ( $rules as &$rule ) {
+		$from_preset = array();
+
+		foreach ( $rules as $key => &$rule ) {
 			// Rules live in the form's own blocks (post_content), writable only
 			// with `edit_post` - never taken from the request, even on the REST
 			// validation route, which reloads them via Block_Helper::get_blocks_by_post().
-			$rule['value'] = jet_fb_parse_dynamic_trusted( $rule['value'] ?? '' );
+			$value         = $rule['value'] ?? '';
+			$rule['value'] = jet_fb_parse_dynamic_trusted( $value );
+
+			if ( $rule['value'] !== $value ) {
+				$from_preset[] = $key;
+			}
 		}
+		unset( $rule );
+
+		return $from_preset;
 	}
 
 	/**

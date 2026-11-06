@@ -39,7 +39,7 @@ abstract class Rest_Api_Controller_Base {
 			if ( ! $result ) {
 				_doing_it_wrong(
 					__METHOD__,
-					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- developer notice: internal route name.
 					"Error on register REST API route: {$route::get_namespace()}/{$route::get_rest_base()}",
 					'1.4.0'
 				);

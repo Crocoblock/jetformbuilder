@@ -221,7 +221,7 @@ class Query_Conditions_Builder {
 		$type      = $condition['type'] ?? false;
 
 		if ( ! $type || ! in_array( $type, array_keys( $this->get_types() ), true ) ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- developer notice: internal condition type.
 			_doing_it_wrong( __METHOD__, "Undefined condition type: $type", '2.0.0' );
 			wp_die();
 		}

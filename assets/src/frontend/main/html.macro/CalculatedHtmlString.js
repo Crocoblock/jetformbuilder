@@ -227,15 +227,43 @@ CalculatedHtmlString.prototype.calculateString = function () {
 };
 
 /**
- * For `innerHTML` sinks. Field values are user-controlled (typed text,
- * query_var presets, ...), so they are sanitized; markup already built by
- * trusted macro handlers (SafeHtml) and the author's static text are kept.
+ * For `innerHTML` sinks.
+ *
+ * - Field values are user-controlled (typed text, query_var presets, ...),
+ *   so each value is sanitized on its own.
+ * - The template text around the macros is sanitized too: it is read from a
+ *   data-jfb-macro attribute or an HTML comment, and such an element can
+ *   come from site data printed inside the form (e.g. an option label
+ *   generated from post meta), not only from the form author. The browser
+ *   has already decoded entities in the attribute, so "&lt;img onerror&gt;"
+ *   there would otherwise become a live element. The whole string is
+ *   sanitized at once, so tags opened and closed around a macro stay intact.
+ * - Markup built by trusted macro handlers (SafeHtml) is kept as is: it is
+ *   swapped for a random placeholder while the rest is sanitized.
  */
 CalculatedHtmlString.prototype.calculateHtml = function () {
-	return this.mapParts(
-		( result ) => result instanceof SafeHtml
-			? result.toString()
-			: sanitizeHtml( result ),
+	const trusted = [];
+	const marker  = 'jfbsafe' + Math.random().toString( 36 ).slice( 2 ) + 'x';
+
+	const html = this.mapParts( ( result ) => {
+		if ( result instanceof SafeHtml ) {
+			trusted.push( result.toString() );
+
+			return marker + ( trusted.length - 1 ) + marker;
+		}
+
+		return sanitizeHtml( result );
+	} );
+
+	const clean = sanitizeHtml( html );
+
+	if ( ! trusted.length ) {
+		return clean;
+	}
+
+	return clean.replace(
+		new RegExp( marker + '(\\d+)' + marker, 'g' ),
+		( match, index ) => trusted[ Number( index ) ] ?? '',
 	);
 };
 

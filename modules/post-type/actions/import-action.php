@@ -92,7 +92,7 @@ class Import_Action extends Base_Form_Action {
 		}
 
 		if ( $wp_error->has_errors() ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WP_Error with static plugin messages.
 			wp_die( $wp_error );
 		}
 

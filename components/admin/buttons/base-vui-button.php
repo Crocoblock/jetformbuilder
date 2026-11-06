@@ -109,7 +109,7 @@ class Base_Vui_Button implements Arrayable {
 		$presets = $this->get_presets();
 
 		if ( ! isset( $presets[ $preset ] ) || ! is_callable( $presets[ $preset ] ) ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static text and class name.
 			wp_die( 'Undefined style preset in ' . static::class );
 		}
 		call_user_func( $presets[ $preset ] );

@@ -244,6 +244,13 @@ final class Module implements Base_Module_It {
 							'title',
 							'placeholder',
 						),
+						/**
+						 * URL schemes a field value may introduce into a
+						 * href/src macro (JFB_FIELD::). The same list WordPress
+						 * uses for links in post content, so it can be
+						 * extended with the core `kses_allowed_protocols` filter.
+						 */
+						'allowedProtocols' => array_values( wp_allowed_protocols() ),
 					),
 					$options
 				)

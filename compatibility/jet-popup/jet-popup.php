@@ -6,6 +6,7 @@ use Jet_Form_Builder\Blocks\Module as Blocks_Module;
 use JFB_Modules\Validation\Module as Validation_Module;
 use JFB_Modules\Validation\Post_Type\Validation_Meta;
 use JFB_Components\Module\Base_Module_It;
+use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -585,7 +586,7 @@ class Jet_Popup implements Base_Module_It {
 				'<style id="%1$s-inline-style-%2$d">%3$s</style>',
 				esc_attr( $inline_style['handle'] ),
 				(int) $inline_style['index'],
-				$inline_style['content']
+				Tools::safe_inline_css( (string) $inline_style['content'] )
 			);
 		}
 

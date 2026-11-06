@@ -1,0 +1,34 @@
+{
+	"description": "Shared URL corpus for the visitor-value URL guards: PHP Redirect_To_Page_Action::is_allowed_redirect_scheme() (RedirectUrlSchemeTest) and JS macroUrl.js isAllowedMacroUrl() (docs/security/audit_XSS/tools/js-harness/macroUrl.check.mjs). The whole URL comes from a visitor value; the author template adds no scheme. 'browser_scheme' is what the WHATWG URL parser reports as the protocol (new URL(url, 'https://example.test/form').protocol without ':'), '' for relative URLs.",
+	"cases": [
+		{ "url": "javascript:void(0)", "allowed": false, "browser_scheme": "javascript", "note": "script scheme" },
+		{ "url": "JavaScript:void(0)", "allowed": false, "browser_scheme": "javascript", "note": "any case" },
+		{ "url": "java\tscript:void(0)", "allowed": false, "browser_scheme": "javascript", "note": "tab inside scheme" },
+		{ "url": "java\nscript:void(0)", "allowed": false, "browser_scheme": "javascript", "note": "newline inside scheme" },
+		{ "url": " javascript:void(0)", "allowed": false, "browser_scheme": "javascript", "note": "leading space" },
+		{ "url": "\u0001javascript:void(0)", "allowed": false, "browser_scheme": "javascript", "note": "leading control char" },
+		{ "url": "javascript:1;jfbMarker()", "allowed": false, "browser_scheme": "javascript", "note": "digit after colon is still a scheme, not host:port" },
+		{ "url": "javascript:0;jfbMarker()", "allowed": false, "browser_scheme": "javascript", "note": "zero after colon" },
+		{ "url": "javascript:1//%0AjfbMarker()", "allowed": false, "browser_scheme": "javascript", "note": "digit, comment and encoded newline" },
+		{ "url": "data:text/html,hello", "allowed": false, "browser_scheme": "data", "note": "data scheme" },
+		{ "url": "vbscript:x", "allowed": false, "browser_scheme": "vbscript", "note": "vbscript scheme" },
+		{ "url": "localhost:8080/path", "allowed": false, "browser_scheme": "localhost", "note": "browsers read 'localhost' as a scheme; never worked as an http redirect" },
+		{ "url": "whatsapp://send?phone=1", "allowed": false, "browser_scheme": "whatsapp", "note": "scheme not in wp_allowed_protocols() from a value" },
+
+		{ "url": "https://example.com/thanks/?id=5#done", "allowed": true, "browser_scheme": "https", "note": "https" },
+		{ "url": "http://example.com", "allowed": true, "browser_scheme": "http", "note": "http" },
+		{ "url": "http://localhost:8080/path", "allowed": true, "browser_scheme": "http", "note": "host with port, written correctly" },
+		{ "url": "//localhost:8080/path", "allowed": true, "browser_scheme": "", "note": "protocol-relative with port" },
+		{ "url": "//example.com/page", "allowed": true, "browser_scheme": "", "note": "protocol relative" },
+		{ "url": "/thank-you/", "allowed": true, "browser_scheme": "", "note": "relative path" },
+		{ "url": "thank-you", "allowed": true, "browser_scheme": "", "note": "relative, no slash" },
+		{ "url": "/search/?q=a:b", "allowed": true, "browser_scheme": "", "note": "colon in query" },
+		{ "url": "?step=2", "allowed": true, "browser_scheme": "", "note": "query only" },
+		{ "url": "#section", "allowed": true, "browser_scheme": "", "note": "hash only" },
+		{ "url": "mailto:team@example.com", "allowed": true, "browser_scheme": "mailto", "note": "mailto" },
+		{ "url": "tel:+380001112233", "allowed": true, "browser_scheme": "tel", "note": "tel" },
+		{ "url": "sms:+380001112233", "allowed": true, "browser_scheme": "sms", "note": "sms" },
+		{ "url": "ftp://example.com/file", "allowed": true, "browser_scheme": "ftp", "note": "ftp" },
+		{ "url": "", "allowed": true, "browser_scheme": "", "note": "empty" }
+	]
+}

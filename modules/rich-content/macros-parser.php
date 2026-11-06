@@ -48,6 +48,36 @@ class Macros_Parser {
 	 */
 	private $resolved_last = false;
 
+	/**
+	 * Optional callback for a field value before macro filters and array
+	 * formatting: fn( $value, string $name, array $filters ) => $value.
+	 * For a repeater without filters it is applied to every value inside the
+	 * rows instead, so the row layout stays. Module::rich_email_html() uses
+	 * it to escape request data in text/html e-mails. Custom macros
+	 * (`Name::macro`) are not passed to it.
+	 *
+	 * @var callable|null
+	 */
+	private $value_callback = null;
+
+	/**
+	 * @param callable|null $callback
+	 *
+	 * @return Macros_Parser
+	 */
+	public function set_value_callback( $callback ): Macros_Parser {
+		$this->value_callback = is_callable( $callback ) ? $callback : null;
+
+		return $this;
+	}
+
+	/**
+	 * @return callable|null
+	 */
+	public function get_value_callback() {
+		return $this->value_callback;
+	}
+
 	public function set_content( $content ): Macros_Parser {
 		if ( is_array( $content ) ) {
 			$content = $content[0] ?? '';
@@ -132,6 +162,11 @@ class Macros_Parser {
 
 				$this->current_macro = $name;
 				$value               = $this->get_replace( $name );
+				$is_repeater         = is_array( $value ) && 'repeater-field' === jet_fb_context()->get_field_type( $name );
+
+				if ( $this->value_callback && ( ! empty( $filters ) || ! $is_repeater ) ) {
+					$value = call_user_func( $this->value_callback, $value, $name, $filters );
+				}
 
 				// $final is computed in full - running whichever of these branches
 				// applies, including any third-party code a formatting filter or
@@ -143,7 +178,7 @@ class Macros_Parser {
 					$final = Filters_Manager::instance()->apply( $value, $filters );
 				} elseif ( ! is_array( $value ) ) {
 					$final = $value;
-				} elseif ( 'repeater-field' === jet_fb_context()->get_field_type( $name ) ) {
+				} elseif ( $is_repeater ) {
 					$final = $this->verbose_repeater( $value, $name );
 				} else {
 					$final = implode( ', ', $value );
@@ -181,6 +216,12 @@ class Macros_Parser {
 
 			foreach ( $item as $key => $value ) {
 				$label = jet_fb_context()->get_setting( 'label', array( $name, $index, $key ) );
+
+				if ( $this->value_callback ) {
+					// The child's own path, so its type and settings are used
+					// (WYSIWYG keeps its markup), not the repeater's.
+					$value = call_user_func( $this->value_callback, $value, $name . '.' . $index . '.' . $key, array() );
+				}
 
 				$item_data[] = sprintf(
 					'%1$s: %2$s',

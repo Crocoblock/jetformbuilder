@@ -195,7 +195,14 @@ class Builder_Helper {
 			if ( Tools::is_empty( $value ) ) {
 				continue;
 			}
-			$attributes_stack[] = sprintf( '%1$s="%2$s"', $name, $value );
+			// Only square brackets are encoded here (see
+			// Tools::neutralize_attribute_shortcodes()); escaping the value
+			// with esc_attr() is up to the caller.
+			$attributes_stack[] = sprintf(
+				'%1$s="%2$s"',
+				$name,
+				Tools::neutralize_attribute_shortcodes( (string) $name, (string) $value )
+			);
 		}
 
 		return $attributes_stack;

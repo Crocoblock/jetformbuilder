@@ -83,6 +83,10 @@ class Dynamic_Value {
 
 		wp_enqueue_script( self::HANDLE );
 
+		// A value from a preset must not bring a shortcode into the attribute;
+		// shortcodes the author wrote in other values keep working.
+		$tokens = Tools::json_bracket_tokens();
+
 		foreach ( $groups as &$group ) {
 			// Groups come from the block's own attributes (admin-authored), but a
 			// dynamic preset replaces the value with data from its source (post
@@ -93,7 +97,10 @@ class Dynamic_Value {
 			$group['to_set'] = jet_fb_parse_dynamic_trusted( $to_set );
 
 			if ( $group['to_set'] !== $to_set ) {
-				$group['to_set']             = $this->preset_number_to_string( $group['to_set'] );
+				$group['to_set']             = Tools::mark_json_brackets(
+					$this->preset_number_to_string( $group['to_set'] ),
+					$tokens
+				);
 				$group['to_set_from_preset'] = true;
 			}
 
@@ -107,7 +114,10 @@ class Dynamic_Value {
 
 				// Same flag as Condition_Field_Item: the value is not a formula.
 				if ( $condition['value'] !== $value ) {
-					$condition['value']      = $this->preset_number_to_string( $condition['value'] );
+					$condition['value']      = Tools::mark_json_brackets(
+						$this->preset_number_to_string( $condition['value'] ),
+						$tokens
+					);
 					$condition['use_preset'] = true;
 				}
 			}
@@ -115,7 +125,7 @@ class Dynamic_Value {
 		}
 		unset( $group );
 
-		return Tools::encode_json( $groups );
+		return Tools::encode_json_marked( $groups, $tokens );
 	}
 
 	/**

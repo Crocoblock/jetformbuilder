@@ -592,7 +592,7 @@ final class Module implements
 		$block->add_attribute( 'data-validation-type', $type ?: 'inherit' );
 
 		if ( ! empty( $rules ) ) {
-			$this->get_rules()->prepare_rules( $rules );
+			$from_preset = $this->get_rules()->prepare_rules( $rules );
 
 			// Security: Add signatures for SSR validation rules
 			// For repeater fields, we include the repeater name in the signature
@@ -653,10 +653,18 @@ final class Module implements
 			}
 			unset( $rule );
 
-			$block->add_attribute(
-				'data-validation-rules',
-				Tools::encode_json( $rules )
-			);
+			// A rule value from a preset is data that visitors can write: core
+			// do_shortcode() over the page would run a shortcode from it. Only
+			// such values are marked; author rules keep their shortcodes.
+			$tokens = Tools::json_bracket_tokens();
+
+			foreach ( (array) $from_preset as $key ) {
+				if ( isset( $rules[ $key ]['value'] ) ) {
+					$rules[ $key ]['value'] = Tools::mark_json_brackets( $rules[ $key ]['value'], $tokens );
+				}
+			}
+
+			$block->add_attribute( 'data-validation-rules', Tools::encode_json_marked( $rules, $tokens ) );
 		}
 
 		/**

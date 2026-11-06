@@ -67,6 +67,11 @@ tests/wpunit/*
 !tests/wpunit/MacroAttributeInjectionTest.php
 !tests/wpunit/DynamicValuePresetLiteralTest.php
 !tests/wpunit/FieldLimitPresetTest.php
+!tests/wpunit/DataHtmlSanitizeTest.php
+!tests/wpunit/AttributeShortcodeTest.php
+!tests/wpunit/UpdateUserTargetCapabilityTest.php
+!tests/wpunit/PostStatusFromFieldTest.php
+!tests/wpunit/DefaultShortcodeDataTest.php
 !tests/wpunit/AdminColumnsFuzzTest.php
 !tests/wpunit/AddonsDescriptionSanitizationTest.php
 !tests/wpunit/InlineCssEscapingTest.php

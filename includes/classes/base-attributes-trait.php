@@ -54,11 +54,31 @@ trait Base_Attributes_Trait {
 			);
 		}
 
+		/*
+		 * Core do_shortcode() over the page runs a shortcode found in an
+		 * attribute value of any tag (the output is kept only for some tags,
+		 * but the shortcode runs). Field values, the referrer URL, option
+		 * values and similar attributes can hold visitor data, so their square
+		 * brackets are encoded; the browser decodes them, values do not change.
+		 *
+		 * These attributes are left as they are: they hold settings the form
+		 * author may write with a shortcode on purpose (a formula, Dynamic
+		 * Value, validation rules). Values a preset put into them are marked
+		 * where the JSON is built, see Tools::mark_json_brackets().
+		 */
+		$author_shortcode_attributes = array( 'data-formula', 'data-value', 'data-dynamic-value', 'data-validation-rules' );
+
 		foreach ( $attrs as $attr => $value ) {
 			if ( is_array( $value ) ) {
 				$value = implode( ' ', $value );
 			}
-			$response .= sprintf( ' %1$s="%2$s"', $attr, esc_attr( $value ) );
+			$value = esc_attr( $value );
+
+			if ( ! in_array( $attr, $author_shortcode_attributes, true ) ) {
+				$value = Tools::neutralize_shortcodes( $value );
+			}
+
+			$response .= sprintf( ' %1$s="%2$s"', $attr, $value );
 		}
 
 		return $response;

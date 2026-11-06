@@ -43,12 +43,18 @@ class User_Id_Property extends Base_Object_Property {
 			throw new Action_Exception( 'sanitize_user' );
 		}
 
+		/*
+		 * A user can edit himself. Editing another user needs the right to edit
+		 * THAT user (meta capability "edit_user"), not just the general
+		 * "edit_users": core and plugins limit the targets through
+		 * map_meta_cap (multisite super admins, WooCommerce lets a shop manager
+		 * edit customers only).
+		 */
 		if (
 			get_current_user_id() !== $this->value &&
-			! current_user_can( 'edit_users' ) &&
+			! current_user_can( 'edit_user', $this->value ) &&
 			! Tools::is_webhook()
 		) {
-			// Only users with appropriate capabilities can edit other users, also user can edit himself
 			throw new Action_Exception( 'internal_error' );
 		}
 

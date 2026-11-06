@@ -32,6 +32,14 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 
 	protected $default_from_source = false;
 
+	/**
+	 * Whether rich content (a shortcode, a third-party filter) changed the
+	 * "Default Value" while the block data was set, see apply_attribute().
+	 *
+	 * @var bool
+	 */
+	protected $default_from_rich_content = false;
+
 	const PRESET_RAW     = 'raw';
 	const PRESET_ARRAY   = 'array';
 	const PRESET_EXACTLY = 'exactly';
@@ -326,7 +334,8 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	 * @throws Repository_Exception
 	 */
 	public function set_block_data( $attributes, $content = null, $wp_block = null ) {
-		$this->block_content = $content;
+		$this->default_from_rich_content = false;
+		$this->block_content             = $content;
 		$this->block_attrs   = array_merge(
 			$this->get_default_attributes(),
 			$attributes
@@ -351,13 +360,17 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	}
 
 	public function set_preset() {
-		$this->default_from_source = false;
+		$this->default_from_source = $this->default_from_rich_content;
 
 		if ( ! $this->use_preset() ) {
 			return;
 		}
 
 		$this->block_attrs['default'] = $this->get_prepared_default( $this->get_default_from_preset() );
+
+		if ( $this->default_from_rich_content ) {
+			$this->default_from_source = true;
+		}
 	}
 
 	/**
@@ -374,22 +387,119 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 	}
 
 	/**
-	 * Min/max set to a dynamic preset. The browser runs min/max as formulas,
-	 * so its preset result is checked with Tools::preset_limit_value().
+	 * Min/max set to a dynamic preset, or changed by a shortcode: the result is
+	 * data (post meta, a query var...). The browser runs min/max as formulas,
+	 * so such a result is checked with Tools::preset_limit_value().
 	 *
-	 * @param string $name  Attribute name.
-	 * @param mixed  $value Attribute value written by the form author.
+	 * @param string $name   Attribute name.
+	 * @param mixed  $value  Attribute value written by the form author.
+	 * @param mixed  $result Value after rich content.
 	 *
 	 * @return bool
 	 */
-	private function is_preset_limit( string $name, $value ): bool {
+	private function is_preset_limit( string $name, $value, $result ): bool {
 		if ( ! in_array( $name, array( 'min', 'max' ), true ) || ! is_string( $value ) ) {
 			return false;
+		}
+
+		if ( $result !== $value ) {
+			return true;
 		}
 
 		$preset = json_decode( $value, true );
 
 		return is_array( $preset ) && ! empty( $preset['jet_preset'] );
+	}
+
+	/**
+	 * A "Default Value" changed by a shortcode holds data (post meta printed
+	 * by a shortcode, for example), not a formula written by the form author.
+	 * It is used as a literal value, like a value from a preset.
+	 *
+	 * @param string $name   Attribute name.
+	 * @param mixed  $value  Attribute value written by the form author.
+	 * @param mixed  $result Value after rich content.
+	 */
+	private function mark_default_from_rich_content( string $name, $value, $result, bool $numbers_only ) {
+		if ( 'default' !== $name || $result === $value ) {
+			return;
+		}
+
+		/**
+		 * Whether a "Default Value" changed by a shortcode is data, used as is,
+		 * rather than a formula. Return false to calculate it as before.
+		 *
+		 * @since 3.6.9
+		 *
+		 * @param bool   $is_data Default true; false when every shortcode
+		 *                        printed a plain number (or nothing), e.g.
+		 *                        "%qty% * [rate]" with rate "0.9".
+		 * @param mixed  $result  Value after the shortcode.
+		 * @param string $value   Value written by the form author.
+		 * @param Base   $block   Field block.
+		 */
+		$this->default_from_rich_content = (bool) apply_filters(
+			'jet-form-builder/fields/default-shortcode-is-data',
+			! $numbers_only,
+			$result,
+			$value,
+			$this
+		);
+	}
+
+	/**
+	 * Runs rich content over an attribute written by the form author and
+	 * tells whether the result is that text with shortcodes replaced by plain
+	 * numbers ("5", "-0.9") or by nothing - and no other change.
+	 *
+	 * A number cannot add code or a %field% macro to a formula, so such a
+	 * result can still be calculated as the author's formula
+	 * ("%qty% * [jet_engine_data key=rate]"). Anything else a shortcode
+	 * printed is data from the site and is used as is.
+	 *
+	 * @param callable $run   Rich content method.
+	 * @param string   $value Value written by the form author.
+	 *
+	 * @return array Result and the "numbers only" flag.
+	 */
+	private function apply_rich_watching_shortcodes( callable $run, string $value ): array {
+		$printed  = array();
+		$recorder = static function ( $output, $tag, $attr, $m ) use ( &$printed ) {
+			$printed[] = array( (string) ( $m[0] ?? '' ), $output );
+
+			return $output;
+		};
+
+		add_filter( 'do_shortcode_tag', $recorder, PHP_INT_MAX, 4 );
+
+		try {
+			$result = $run( $value );
+		} finally {
+			remove_filter( 'do_shortcode_tag', $recorder, PHP_INT_MAX );
+		}
+
+		if ( $result === $value || ! $printed ) {
+			return array( $result, false );
+		}
+
+		$rebuilt = $value;
+
+		foreach ( $printed as list( $source, $output ) ) {
+			$position = '' === $source ? false : strpos( $rebuilt, $source );
+
+			// A shortcode run inside another one: only the outer output is in the result.
+			if ( false === $position ) {
+				continue;
+			}
+
+			if ( ! is_string( $output ) || ! preg_match( '/^\s*(-?\d+(\.\d+)?)?\s*\z/', $output ) ) {
+				return array( $result, false );
+			}
+
+			$rebuilt = substr_replace( $rebuilt, $output, $position, strlen( $source ) );
+		}
+
+		return array( $result, $rebuilt === $result );
 	}
 
 	/**
@@ -426,10 +536,18 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			/** @var Rich_Content\Module $rich_module */
 			$rich_module = jet_form_builder()->module( 'rich-content' );
 
-			// immediately return, because rich method also parsing preset and shortcodes
-			$result = $rich_module->rich_trusted( $value );
+			if ( ! in_array( $name, array( 'min', 'max' ), true ) || ! is_string( $value ) ) {
+				// immediately return, because rich method also parsing preset and shortcodes
+				return $rich_module->rich_trusted( $value );
+			}
 
-			return $this->is_preset_limit( $name, $value )
+			list( $result, $numbers_only ) = $this->apply_rich_watching_shortcodes(
+				array( $rich_module, 'rich_trusted' ),
+				$value
+			);
+
+			// The author's formula with shortcodes that printed numbers works as before.
+			return ( ! $numbers_only && $this->is_preset_limit( $name, $value, $result ) )
 				? Tools::preset_limit_value( $result )
 				: $result;
 		}
@@ -449,8 +567,19 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 			/** @var Rich_Content\Module $rich */
 			$rich = jet_form_builder()->module( 'rich-content' );
 
-			// immediately return, because rich method also parsing preset and shortcodes
-			return $rich->rich_without_preset( $value );
+			if ( 'default' !== $name || ! is_string( $value ) ) {
+				// immediately return, because rich method also parsing preset and shortcodes
+				return $rich->rich_without_preset( $value );
+			}
+
+			list( $result, $numbers_only ) = $this->apply_rich_watching_shortcodes(
+				array( $rich, 'rich_without_preset' ),
+				$value
+			);
+
+			$this->mark_default_from_rich_content( $name, $value, $result, $numbers_only );
+
+			return $result;
 		}
 
 		// backward compatibility

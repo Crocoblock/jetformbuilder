@@ -804,9 +804,10 @@ class Module implements Base_Module_It {
 		}
 
 		if ( $runtime_values->should_neutralize_preset_brackets() ) {
-			// Printed into the form: the frontend script would treat a
-			// data-jfb-macro element from the preset value as an HTML macro.
-			$result = Tools::strip_macro_attributes( $result );
+			// Printed into the form: the frontend script reads data-* attributes,
+			// plugin classes and JFB_FIELD macros in the markup as its own
+			// instructions, and an unclosed tag would wrap the next fields.
+			$result = Tools::sanitize_data_html( $result );
 		}
 
 		// "&#91;" counts too: do_shortcode() turns it back into "[" on its way

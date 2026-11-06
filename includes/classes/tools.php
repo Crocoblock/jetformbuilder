@@ -884,6 +884,269 @@ class Tools {
 	}
 
 	/**
+	 * Cleans HTML that came from site data (a preset source, option labels
+	 * generated from posts, terms or meta...) before it is printed inside a
+	 * form. Visitors can write such data, e.g. through an Insert Post action.
+	 *
+	 * The frontend script finds its own instructions in the form markup:
+	 * data-* attributes (data-jfb-macro, data-jfb-conditional, data-formula,
+	 * data-value, data-validation-rules...), wrappers found by class
+	 * (closest('.jet-form-builder__calculated-field')), "JFB_FIELD::" macros
+	 * in attributes and in HTML comments. wp_kses_post() keeps all of them
+	 * and does not close tags, so an unclosed <div> from the data would wrap
+	 * the next fields of the form. Square brackets inside attribute values
+	 * are decoded back by kses on WordPress 7+ and expanded by core
+	 * do_shortcode() over the page.
+	 *
+	 * The value is parsed with wp_kses_post() - the same parser that prints
+	 * it - then: tags are balanced, comments are removed, and from every tag
+	 * service data-* attributes (see is_service_data_attribute(); other
+	 * data-* attributes are kept), id, name and form attributes, attributes
+	 * holding "JFB_FIELD::",
+	 * class names of the plugin (jet-form-builder*, jet-fb-*, jfb-*) and
+	 * square brackets in attribute values are removed (in URLs they are
+	 * percent-encoded). Text, formatting tags, links and images are kept.
+	 * Square brackets in text are left to neutralize_shortcodes().
+	 *
+	 * A value without markup is returned unchanged.
+	 *
+	 * @param string $html HTML from site data.
+	 *
+	 * @return string
+	 */
+	public static function sanitize_data_html( string $html ): string {
+		// Only "<" followed by something a parser can take for a tag or a
+		// comment ("<b", "< b", "</", "<!--", "<?"...): "5 < 6" stays as is.
+		if ( ! preg_match( '/<[\x00-\x20]*[\/!?]?[\x00-\x20]*[a-z!?\/]/i', $html ) ) {
+			return $html;
+		}
+
+		$html = force_balance_tags( wp_kses_post( $html ) );
+		$html = (string) preg_replace( '/<!--.*?(?:-->|$)/s', '', $html );
+
+		return (string) preg_replace_callback(
+			'/<([a-z][a-z0-9-]*)(\s[^>]*?)?(\/?)>/i',
+			static function ( $tag ) {
+				$attributes = $tag[2] ?? '';
+
+				if ( '' === trim( $attributes ) ) {
+					return $tag[0];
+				}
+
+				$parsed  = wp_kses_hair( $attributes, wp_allowed_protocols() );
+				$kept    = array();
+				$changed = false;
+
+				foreach ( $parsed as $name => $attribute ) {
+					$value = self::clean_data_html_attribute( strtolower( (string) $name ), $attribute );
+
+					if ( null === $value ) {
+						$changed = true;
+						continue;
+					}
+
+					if ( $value !== $attribute['value'] ) {
+						$changed = true;
+						$kept[]  = $name . '="' . esc_attr( $value ) . '"';
+						continue;
+					}
+
+					$kept[] = $attribute['whole'];
+				}
+
+				if ( ! $changed ) {
+					return $tag[0];
+				}
+
+				return '<' . $tag[1] . ( $kept ? ' ' . implode( ' ', $kept ) : '' ) . ( '' !== $tag[3] ? ' /' : '' ) . '>';
+			},
+			$html
+		);
+	}
+
+	/**
+	 * Whether a data-* attribute is one the scripts of JetFormBuilder, its
+	 * add-ons or integrations read from the form markup (data-jfb-*,
+	 * data-jet-*, data-formula, data-value, data-field-name, data-args...).
+	 * Other data-* attributes (data-tooltip, data-src of a lazy image,
+	 * data-bs-toggle...) belong to the site and are kept.
+	 *
+	 * A name is a service one when it starts with "data-jfb" or "data-jet",
+	 * or is "data-{stem}" or "data-{stem}-..." / "data-{stem}_..." for a stem
+	 * from the list below. The list can be changed with the
+	 * jet-form-builder/data-html/service-data-attributes filter.
+	 *
+	 * @param string $name Lowercase attribute name.
+	 *
+	 * @return bool
+	 */
+	public static function is_service_data_attribute( string $name ): bool {
+		if ( 0 !== strpos( $name, 'data-' ) ) {
+			return false;
+		}
+
+		if ( preg_match( '/^data-(jfb|jet)/', $name ) ) {
+			return true;
+		}
+
+		static $stems_cache = array();
+
+		$stems = array(
+			// Core: fields, conditions, calculations, validation, repeater, pages.
+			'args', 'attrs', 'block', 'cache', 'calc', 'calculate', 'clear', 'custom',
+			'default', 'dynamic', 'editor', 'empty', 'field', 'file', 'form', 'formula',
+			'generator', 'index', 'inputmask', 'is', 'items', 'layout', 'listen',
+			'manage', 'max', 'min', 'name', 'normalizer', 'page', 'precision',
+			'repeater', 'require', 'required', 'save', 'sep', 'settings', 'switch',
+			'type', 'update', 'validation', 'value',
+			// Core: date, phone and map fields.
+			'country', 'date', 'dial', 'exclude', 'intl', 'ipinfo', 'keep', 'lat',
+			'lng', 'map', 'only', 'preferred', 'separate',
+			// Integrations and add-ons (popups, booking, appointments, uploads,
+			// hierarchical select, autocomplete, tokens...).
+			'ajax', 'allowed', 'attachment', 'calendar', 'choice', 'config', 'display',
+			'editable', 'fb', 'format', 'i', 'id', 'if', 'image', 'insert', 'level',
+			'minimum', 'original-text', 'placeholder', 'popup', 'post', 'select',
+			'slot', 'sortable', 'step', 'suggestions', 'taxonomy', 'term', 'token',
+			'unit', 'units', 'upload',
+		);
+
+		/**
+		 * Stems of data-* attribute names that scripts on the form page read
+		 * as their own settings. Such attributes are removed from HTML that
+		 * came from site data (preset results, generated option labels).
+		 *
+		 * @param string[] $stems
+		 */
+		$stems = (array) apply_filters( 'jet-form-builder/data-html/service-data-attributes', $stems );
+		$key   = implode( '|', $stems );
+
+		if ( ! isset( $stems_cache[ $key ] ) ) {
+			$quoted = array_map(
+				static function ( $stem ) {
+					return preg_quote( strtolower( (string) $stem ), '/' );
+				},
+				array_filter( $stems, 'strlen' )
+			);
+
+			$stems_cache = array(
+				$key => $quoted ? '/^data-(' . implode( '|', $quoted ) . ')([-_]|$)/' : '',
+			);
+		}
+
+		return '' !== $stems_cache[ $key ] && (bool) preg_match( $stems_cache[ $key ], $name );
+	}
+
+	/**
+	 * One attribute of sanitize_data_html().
+	 *
+	 * @param string $name      Lowercase attribute name.
+	 * @param array  $attribute Item of wp_kses_hair().
+	 *
+	 * @return string|null New value, or null to remove the attribute.
+	 */
+	private static function clean_data_html_attribute( string $name, array $attribute ) {
+		if (
+			in_array( $name, array( 'id', 'name', 'form' ), true ) ||
+			self::is_service_data_attribute( $name )
+		) {
+			return null;
+		}
+
+		$value   = (string) $attribute['value'];
+		$decoded = html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+
+		if ( false !== stripos( $decoded, 'JFB_FIELD::' ) ) {
+			return null;
+		}
+
+		if ( 'class' === $name ) {
+			$classes = preg_split( '/\s+/', trim( $value ) );
+			$classes = array_filter(
+				$classes,
+				static function ( $class_name ) {
+					return '' !== $class_name && ! preg_match( '/^(jet-form-builder|jet-fb-|jfb-|jfb_)/i', $class_name );
+				}
+			);
+
+			return $classes ? implode( ' ', $classes ) : null;
+		}
+
+		if ( false === strpbrk( $decoded, '[]' ) ) {
+			return $value;
+		}
+
+		// A URL keeps working with percent-encoded brackets.
+		if ( in_array( $name, array( 'href', 'src', 'cite', 'srcset' ), true ) ) {
+			return str_replace( array( '[', ']' ), array( '%5B', '%5D' ), $decoded );
+		}
+
+		return null;
+	}
+
+	/**
+	 * Marks square brackets in a value that will be put into JSON printed in
+	 * an HTML attribute (Dynamic Value groups, Conditional Block conditions,
+	 * validation rules). Core do_shortcode() over the page runs a shortcode
+	 * found in an attribute value, so a value from a preset (data visitors
+	 * can write) must not carry raw brackets there, while values the form
+	 * author wrote in the same JSON may hold a shortcode on purpose.
+	 *
+	 * Brackets of the value become the tokens, and encode_json_marked()
+	 * writes them as the JSON escapes \u005B / \u005D: the attribute has no
+	 * raw bracket, and JSON.parse() in the browser returns the same value.
+	 *
+	 * @param mixed $value  String, or a list of strings (other values as is).
+	 * @param array $tokens See json_bracket_tokens().
+	 *
+	 * @return mixed
+	 */
+	public static function mark_json_brackets( $value, array $tokens ) {
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $item ) {
+				$value[ $key ] = self::mark_json_brackets( $item, $tokens );
+			}
+
+			return $value;
+		}
+
+		return is_string( $value ) ? strtr( $value, $tokens ) : $value;
+	}
+
+	/**
+	 * Tokens for mark_json_brackets(): random per call, so text in the data
+	 * cannot be taken for a token.
+	 *
+	 * @return array{"[": string, "]": string}
+	 */
+	public static function json_bracket_tokens(): array {
+		$id = wp_generate_password( 16, false );
+
+		return array(
+			'[' => 'jfbLsqb' . $id,
+			']' => 'jfbRsqb' . $id,
+		);
+	}
+
+	/**
+	 * JSON of $data where the tokens of mark_json_brackets() are written as
+	 * the JSON escapes \u005B / \u005D.
+	 *
+	 * @param mixed $data
+	 * @param array $tokens See json_bracket_tokens().
+	 * @param int   $flags  wp_json_encode() flags, as encode_json() by default.
+	 *
+	 * @return string
+	 */
+	public static function encode_json_marked( $data, array $tokens, int $flags = JSON_UNESCAPED_UNICODE ): string {
+		return str_replace(
+			array( $tokens['['], $tokens[']'] ),
+			array( '\u005B', '\u005D' ),
+			(string) wp_json_encode( $data, $flags )
+		);
+	}
+
+	/**
 	 * Encodes square brackets as HTML entities so a value printed as element
 	 * text cannot be expanded as a shortcode later. WordPress runs
 	 * do_shortcode() over the whole rendered page (the_content, the

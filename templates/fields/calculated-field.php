@@ -7,6 +7,7 @@
  */
 
 use Jet_Form_Builder\Blocks\Render\Calculated_Field_Render;
+use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -49,7 +50,7 @@ $this->add_attribute( 'class', $is_hidden ? 'jet-form-builder__calculated-field-
 	<input type="hidden"
 			name="<?php echo esc_attr( $name ); ?>"
 			id="<?php echo esc_attr( $id_attr ); ?>"
-			value="<?php echo esc_attr( $default_value ); ?>"
+			value="<?php echo Tools::neutralize_shortcodes( esc_attr( $default_value ) ); ?>"
 			class="jet-form-builder__calculated-field-input jet-form-builder__field"
 			data-field-name="<?php echo esc_attr( $args['name'] ); ?>"
 			data-jfb-sync

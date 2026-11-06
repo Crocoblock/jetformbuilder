@@ -817,7 +817,7 @@ class Module implements Base_Module_It {
 		}
 
 		/**
-		 * Backward compatibility opt-in: before 3.6.9 a shortcode contained in a
+		 * Backward compatibility opt-in: before 3.6.8.1 a shortcode contained in a
 		 * dynamic preset result was expanded. Return true only for sources that
 		 * visitors can never write (the query var source is always writable).
 		 *

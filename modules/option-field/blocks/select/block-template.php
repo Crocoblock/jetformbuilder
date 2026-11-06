@@ -7,6 +7,7 @@
  */
 
 use JFB_Modules\Option_Field\Blocks\Select\Block_Render;
+use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -127,12 +128,13 @@ if (
 				}
 
 				if ( is_array( $option ) && isset( $option['calculate'] ) ) {
-					$calc = ' data-calculate="' . esc_attr( $option['calculate'] ) . '"';
+					$calc = ' data-calculate="' . Tools::neutralize_shortcodes( esc_attr( $option['calculate'] ) ) . '"';
 				}
 
 				printf(
 					'<option value="%1$s" %3$s%4$s>%2$s</option>',
-					esc_attr( $val ),
+					// Option values can come from site data: core do_shortcode() must not run them.
+					Tools::neutralize_shortcodes( esc_attr( $val ) ),
 					$this->neutralize_generated_option_label( esc_html( $label ) ),
 					$selected,
 					$calc

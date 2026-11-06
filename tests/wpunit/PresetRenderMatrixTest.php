@@ -15,12 +15,24 @@ class PresetRenderMatrixTest extends \Codeception\TestCase\WPTestCase {
 	const MARKER_OUTPUT = 'JFB_TEST_MARKER_EXPANDED';
 	const PREFIX        = 'jfbq';
 
+	/**
+	 * Calls of the marker shortcode. Core runs a shortcode found in an
+	 * <input> attribute but drops its output, so the calls are counted, not
+	 * only the output.
+	 *
+	 * @var int
+	 */
+	private static $hits = 0;
+
 	protected function setUp(): void {
 		parent::setUp();
 
+		self::$hits = 0;
 		add_shortcode(
 			self::MARKER_TAG,
-			function () {
+			static function () {
+				++self::$hits;
+
 				return self::MARKER_OUTPUT;
 			}
 		);
@@ -106,6 +118,7 @@ class PresetRenderMatrixTest extends \Codeception\TestCase\WPTestCase {
 	public function testPresetValueStaysData( string $block, array $attrs, bool $use_preset = true ): void {
 		$html = $this->render( $block, $attrs, $use_preset );
 
+		$this->assertSame( 0, self::$hits, 'preset shortcode callback was executed' );
 		$this->assertStringNotContainsString( self::MARKER_OUTPUT, $html, 'expanded as shortcode' );
 		$this->assertStringNotContainsString( self::PREFIX . '"', $html, 'left its attribute' );
 	}

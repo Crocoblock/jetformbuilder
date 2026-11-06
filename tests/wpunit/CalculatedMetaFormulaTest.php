@@ -220,7 +220,49 @@ class CalculatedMetaFormulaTest extends \Codeception\TestCase\WPTestCase {
 			'block comment'    => array( '/* "x */ %META::a%', array( false ) ),
 			'nested braces'    => array( '`${ { a: 1 }.a } %META::a%` + %META::b%', array( true, false ) ),
 			'field macro'      => array( "'%FIELD::x%' + %META::a%", array( true, false ) ),
+			'regex with quotes' => array( "/['\"]/.test('%META::a%') ? 1 : 0", array( true ) ),
+			'regex class slash' => array( "/[/']/.test('%META::a%') + %META::b%", array( true, false ) ),
+			'regex escaped'    => array( "/\\/'/.test(\"%META::a%\")", array( true ) ),
+			'regex after ('    => array( "(/'/).test(%META::a%)", array( false ) ),
+			'regex after return' => array( "return /'/.test('%META::a%')", array( true ) ),
+			'macro in regex'   => array( '/^%META::a%$/i.test(%FIELD::x%)', array( true, false ) ),
+			'division'         => array( "%META::a% / 2 + '%META::b%' / 4 + (1) / %META::c%", array( false, true, false ) ),
+			'division by name' => array( "x / 2 / '%META::a%'.length", array( true ) ),
+			'field divided'    => array( '%price% / %META::rate%', array( false ) ),
+			'field then more'  => array( '%price% / 2 * %META::rate%', array( false ) ),
+			'field, slash str' => array( '%a% /2 + "/" + %META::b%', array( false ) ),
+			'postfix'          => array( 'x++ / %META::a% + y-- / %META::b%', array( false, false ) ),
+			'prefix'           => array( '++x / %META::a%', array( false ) ),
+			'trailing dot'     => array( '1./%META::a% + 1.5 / %META::b%', array( false, false ) ),
+			'name like word'   => array( 'of / %META::a%', array( false ) ),
 		);
+	}
+
+	/**
+	 * Backward compatibility: a field divided by a meta value is calculated.
+	 */
+	public function testFieldDividedByMeta(): void {
+		$formulas = $this->formulas( $this->calculated( '%units% / %META::rate%' ), array( 'rate' => '2.5' ) );
+
+		$this->assertSame( array( '%units% / 2.5' ), $formulas );
+
+		self::$e2e[] = array( 'calculated: field divided by meta (compat)', $formulas[0], false, 1.2 );
+	}
+
+	/**
+	 * A quote inside a regular expression literal does not open a string:
+	 * the macro in the author's quotes after it gets the plain value.
+	 */
+	public function testQuoteInRegexLiteral(): void {
+		$formulas = $this->formulas( $this->calculated( "/['\"]/.test('%META::name%') ? 1 : 0" ), array( 'name' => 'Alice' ) );
+
+		$this->assertSame( array( "/['\"]/.test('Alice') ? 1 : 0" ), $formulas );
+
+		self::$e2e[] = array( 'calculated: quote in regex literal', $formulas[0], false, 0 );
+
+		$formulas = $this->formulas( $this->repeater( "/['\"]/.test('%META::name%') ? 1 : 0" ), array( 'name' => 'Alice' ) );
+
+		$this->assertSame( "/['\"]/.test('Alice') ? 1 : 0", (string) end( $formulas ) );
 	}
 
 	/**
@@ -290,9 +332,8 @@ class CalculatedMetaFormulaTest extends \Codeception\TestCase\WPTestCase {
 	}
 
 	/**
-	 * A regular expression literal with a quote is not recognised, so the
-	 * macro after it is taken for one inside a string. The value still
-	 * cannot run: outside a string the escapes are not valid code.
+	 * A macro in code after a regular expression literal with a quote: the
+	 * value is inserted as data and cannot run.
 	 */
 	public function testWrongContextGuessStaysInert(): void {
 		$formulas = $this->formulas(

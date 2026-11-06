@@ -171,6 +171,50 @@ class AttributeShortcodeTest extends \Codeception\TestCase\WPTestCase {
 		$this->assertSame( self::MARKER, $this->attr( $xpath, '//input[@name="city"]', 'value' ) );
 	}
 
+	/**
+	 * Attributes built with Builder_Helper::attrs() (option inputs, the
+	 * custom option of Radio and Checkbox, Repeater, Advanced Choices) follow
+	 * the same rule: brackets are encoded, a formula keeps the author's
+	 * shortcode.
+	 */
+	public function testBuilderHelperAttributes(): void {
+		$this->assertSame(
+			'value="&#x5B;jfb_attr_marker&#x5D;" data-formula="[jfb_attr_marker]"',
+			\Jet_Form_Builder\Classes\Builder_Helper::attrs(
+				array(
+					array( 'value', esc_attr( self::MARKER ) ),
+					array( 'data-formula', esc_attr( self::MARKER ) ),
+				)
+			)
+		);
+	}
+
+	/**
+	 * Option values of Select (they can be generated from site data) are
+	 * not run by the page; the browser gets the same value.
+	 */
+	public function testSelectOptionValue(): void {
+		$xpath = $this->render(
+			$this->block(
+				'select-field',
+				array(
+					'name'          => 'city',
+					'field_options' => array(
+						array(
+							'value'     => self::MARKER,
+							'label'     => 'City',
+							'calculate' => self::MARKER,
+						),
+					),
+				)
+			)
+		);
+
+		$this->assertSame( 0, self::$hits );
+		$this->assertSame( self::MARKER, $this->attr( $xpath, '//option[@data-calculate]', 'value' ) );
+		$this->assertSame( self::MARKER, $this->attr( $xpath, '//option[@data-calculate]', 'data-calculate' ) );
+	}
+
 	public function testReferrerQueryString(): void {
 		$_SERVER['QUERY_STRING'] = 'q=' . self::MARKER;
 

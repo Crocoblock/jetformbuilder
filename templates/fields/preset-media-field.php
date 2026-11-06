@@ -16,6 +16,6 @@ if ( ! defined( 'WPINC' ) ) {
 <input class="jet-form-builder-file-upload__value"
 		type="hidden"
 		name="<?php echo esc_attr( $this->block_type->get_field_name() ); ?>"
-		value="<?php echo esc_attr( Tools::encode_json( $file ) ); ?>"
+		value="<?php echo Tools::neutralize_shortcodes( esc_attr( Tools::encode_json( $file ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_attr(), brackets encoded. ?>"
 />
 <?php

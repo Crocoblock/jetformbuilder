@@ -429,7 +429,7 @@ abstract class Base extends Base_Module implements Repository_Item_Instance_Trai
 		 * Whether a "Default Value" changed by a shortcode is data, used as is,
 		 * rather than a formula. Return false to calculate it as before.
 		 *
-		 * @since 3.6.9
+		 * @since 3.6.8.1
 		 *
 		 * @param bool   $is_data Default true; false when every shortcode
 		 *                        printed a plain number (or nothing), e.g.

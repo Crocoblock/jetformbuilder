@@ -72,7 +72,7 @@ class Post_Status_Property extends Base_Object_Property {
 		/**
 		 * Whether a post status sent by a form field may be used.
 		 *
-		 * @since 3.6.9
+		 * @since 3.6.8.1
 		 *
 		 * @param bool   $allowed Registered, non-internal status (or "trash") offered by the field.
 		 * @param mixed  $value   Submitted status.

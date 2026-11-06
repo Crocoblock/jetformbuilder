@@ -693,8 +693,17 @@ class Tools {
 	/**
 	 * For every match of FORMULA_MACRO_PATTERN in the formula, in order:
 	 * whether it stands inside a string literal ('…', "…" or `…` outside
-	 * ${…}). Comments are skipped. Regular expression literals are not
-	 * recognised; to_formula_literal() stays inert when this guess is wrong.
+	 * ${…}) or a regular expression literal (/…/). Comments are skipped.
+	 *
+	 * "/" is a division after an operand: a number, a name, ")", "]", a
+	 * string, a regular expression, any %macro% (%price%, %META::key%) or a
+	 * postfix ++/--. Elsewhere (at the start, after an operator, "(", ",", or
+	 * a keyword such as return) it starts a regular expression. Inside a
+	 * regular expression a "/" in [...] or after "\" does not end it. In a
+	 * regular expression the value is inserted as escaped characters, which
+	 * match the value literally.
+	 *
+	 * to_formula_literal() stays inert even when this guess is wrong.
 	 *
 	 * @param string $formula
 	 *
@@ -706,6 +715,7 @@ class Tools {
 		}
 
 		$offsets  = array_column( $matches[0], 1 );
+		$lengths  = array_map( 'strlen', array_column( $matches[0], 0 ) );
 		$total    = count( $offsets );
 		$contexts = array();
 		$state    = 'code';
@@ -713,15 +723,35 @@ class Tools {
 		$depth    = array();
 		$length   = strlen( $formula );
 		$next     = 0;
+		// Last token of code: "operand", "word" (a name, number or keyword
+		// in $word), "" (start), or the punctuation character itself.
+		$prev       = '';
+		$word       = '';
+		$word_end   = -2;
+		$keywords   = array( 'return', 'typeof', 'instanceof', 'in', 'new', 'delete', 'void', 'throw', 'case', 'do', 'else' );
+		$is_operand = static function () use ( &$prev, &$word, $keywords ) {
+			return in_array( $prev, array( 'operand', ')', ']' ), true )
+				|| ( 'word' === $prev && ! in_array( $word, $keywords, true ) );
+		};
 
 		for ( $i = 0; $i <= $length && $next < $total; $i++ ) {
+			$macro = 0;
+
 			while ( $next < $total && $offsets[ $next ] === $i ) {
-				$contexts[] = in_array( $state, array( "'", '"', '`' ), true );
+				$contexts[] = in_array( $state, array( "'", '"', '`', 'regex', 'class' ), true );
+				$macro      = $lengths[ $next ];
 				++$next;
 			}
 
 			if ( $i === $length ) {
 				break;
+			}
+
+			// A macro in code is a value: skip it, so its "%" is not an operator.
+			if ( 'code' === $state && ( $macro || ( '%' === $formula[ $i ] && preg_match( '/\G%[A-Za-z_][\w:.\-]*%/', $formula, $plain, 0, $i ) ) ) ) {
+				$i   += ( $macro ? $macro : strlen( $plain[0] ) ) - 1;
+				$prev = 'operand';
+				continue;
 			}
 
 			$char = $formula[ $i ];
@@ -748,10 +778,31 @@ class Tools {
 						$escaped = true;
 					} elseif ( $char === $state ) {
 						$state = 'code';
+						$prev  = 'operand';
 					} elseif ( '`' === $state && '$' === $char && '{' === $peek ) {
 						$depth[] = 0;
 						$state   = 'code';
+						$prev    = '{';
 						++$i;
+					}
+					break;
+				case 'regex':
+				case 'class':
+					if ( $escaped ) {
+						$escaped = false;
+					} elseif ( '\\' === $char ) {
+						$escaped = true;
+					} elseif ( "\n" === $char ) {
+						// Not a valid regular expression: read on as code.
+						$state = 'code';
+						$prev  = '';
+					} elseif ( 'regex' === $state && '[' === $char ) {
+						$state = 'class';
+					} elseif ( 'class' === $state && ']' === $char ) {
+						$state = 'regex';
+					} elseif ( 'regex' === $state && '/' === $char ) {
+						$state = 'code';
+						$prev  = 'operand';
 					}
 					break;
 				default:
@@ -763,15 +814,34 @@ class Tools {
 					} elseif ( '/' === $char && '*' === $peek ) {
 						$state = 'block';
 						++$i;
+					} elseif ( '/' === $char ) {
+						$state = $is_operand() ? 'code' : 'regex';
+						$prev  = '/';
+					} elseif ( preg_match( '/[\w$]/', $char ) ) {
+						// A name or a number; "1." keeps its dot below.
+						$word     = ( 'word' === $prev && $word_end === $i - 1 ) ? $word . $char : $char;
+						$word_end = $i;
+						$prev     = 'word';
+					} elseif ( '.' === $char && 'word' === $prev && $word_end === $i - 1 && ctype_digit( $word[0] ) ) {
+						$word    .= '.';
+						$word_end = $i;
+					} elseif ( ( '+' === $char || '-' === $char ) && $peek === $char ) {
+						// Postfix x++ keeps the operand; prefix ++x is an operator.
+						$prev = $is_operand() ? 'operand' : $char;
+						++$i;
 					} elseif ( $depth && '{' === $char ) {
 						++$depth[ count( $depth ) - 1 ];
+						$prev = '{';
 					} elseif ( $depth && '}' === $char ) {
 						if ( 0 === end( $depth ) ) {
 							array_pop( $depth );
 							$state = '`';
 						} else {
 							--$depth[ count( $depth ) - 1 ];
+							$prev = '}';
 						}
+					} elseif ( ! ctype_space( $char ) ) {
+						$prev = $char;
 					}
 			}
 		}
@@ -1144,6 +1214,35 @@ class Tools {
 			array( '\u005B', '\u005D' ),
 			(string) wp_json_encode( $data, $flags )
 		);
+	}
+
+	/**
+	 * Attributes that hold settings the form author may write with a
+	 * shortcode on purpose (a formula, Dynamic Value, validation rules).
+	 * Values a preset put into them are marked where the JSON is built, see
+	 * mark_json_brackets().
+	 */
+	const AUTHOR_SHORTCODE_ATTRIBUTES = array( 'data-formula', 'data-value', 'data-dynamic-value', 'data-validation-rules' );
+
+	/**
+	 * Square brackets of an escaped attribute value, for an attribute printed
+	 * in a form. Core do_shortcode() over the page runs a shortcode found in
+	 * an attribute value of any tag (the output is kept only for some tags,
+	 * but the callback runs), and field values, option values, the referrer
+	 * URL can hold visitor data. The browser decodes the entities, so the
+	 * value does not change. AUTHOR_SHORTCODE_ATTRIBUTES are left as they are.
+	 *
+	 * @param string $name  Attribute name.
+	 * @param string $value Value escaped with esc_attr().
+	 *
+	 * @return string
+	 */
+	public static function neutralize_attribute_shortcodes( string $name, string $value ): string {
+		if ( in_array( $name, self::AUTHOR_SHORTCODE_ATTRIBUTES, true ) ) {
+			return $value;
+		}
+
+		return self::neutralize_shortcodes( $value );
 	}
 
 	/**

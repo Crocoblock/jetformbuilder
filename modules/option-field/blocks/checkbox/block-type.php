@@ -316,7 +316,7 @@ class Block_Type extends Base implements Support_Option_Query_It {
 				'separator'    => 'after',
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input:checked'        => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-					'{{WRAPPER}} ' . $this->css_scheme['option-label'] . ' :checked + span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					'{{WRAPPER}} ' . $this->css_scheme['option-label'] . '.jet-form-builder__field-label :checked + span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				),
 			)
 		);
@@ -333,7 +333,7 @@ class Block_Type extends Base implements Support_Option_Query_It {
 				),
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input:checked'        => 'background-color: {{VALUE}}',
-					'{{WRAPPER}} ' . $this->css_scheme['option-label'] . ' :checked + span::before' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} ' . $this->css_scheme['option-label'] . '.jet-form-builder__field-label :checked + span::before' => 'background-color: {{VALUE}}',
 				),
 			)
 		);

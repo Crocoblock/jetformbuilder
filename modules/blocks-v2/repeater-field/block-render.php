@@ -6,6 +6,7 @@ namespace JFB_Modules\Blocks_V2\Repeater_Field;
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Blocks\Render\Base;
 use Jet_Form_Builder\Classes\Builder_Helper;
+use JFB_Modules\Jet_Style\Style_Manager;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -82,14 +83,40 @@ class Block_Render extends Base {
 				continue;
 			}
 
-			yield Block_Helper::render_with_context(
-				$row,
-				$this->block_type->block_context + array(
-					Block_Type::CONTEXT_NAME         => $this->block_type->block_attrs['name'] ?? '',
-					Block_Type::CONTEXT_MANAGE_ITEMS => $this->block_type->manage_items,
-				)
+			$context = $this->block_type->block_context + array(
+				Block_Type::CONTEXT_NAME         => $this->block_type->block_attrs['name'] ?? '',
+				Block_Type::CONTEXT_MANAGE_ITEMS => $this->block_type->manage_items,
 			);
+
+			if ( empty( $row['attrs']['isTemplate'] ) ) {
+				yield Block_Helper::render_with_context( $row, $context );
+
+				continue;
+			}
+
+			yield $this->render_template_row( $row, $context );
 		}
+	}
+
+	/**
+	 * Render the row <template>, keeping its block styles outside of it.
+	 *
+	 * Styles inside <template> are inert: they don't apply on page load
+	 * and get duplicated into every row added with "Add New".
+	 *
+	 * @param array $row
+	 * @param array $context
+	 *
+	 * @return string
+	 */
+	protected function render_template_row( array $row, array $context ): string {
+		list( $content, $styles ) = Style_Manager::capture_styles(
+			function () use ( $row, $context ) {
+				return Block_Helper::render_with_context( $row, $context );
+			}
+		);
+
+		return $styles . $content;
 	}
 
 	protected function populate_blocks_or_html( $wp_block ): \Generator {

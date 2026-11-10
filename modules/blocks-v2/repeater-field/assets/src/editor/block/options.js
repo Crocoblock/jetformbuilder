@@ -22,7 +22,23 @@ const manageItemsCount = [
 	}
 ];
 
+const descriptionPositions = [
+	{
+		value: 'auto',
+		label: __( 'Default', 'jet-form-builder' ),
+	},
+	{
+		value: 'after-label',
+		label: __( 'After field label', 'jet-form-builder' ),
+	},
+	{
+		value: 'after-fields',
+		label: __( 'After repeater fields', 'jet-form-builder' ),
+	},
+];
+
 export {
 	calcType,
-	manageItemsCount
+	manageItemsCount,
+	descriptionPositions,
 };

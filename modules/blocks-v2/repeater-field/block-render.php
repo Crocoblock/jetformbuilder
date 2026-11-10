@@ -73,6 +73,10 @@ class Block_Render extends Base {
 		return parent::render( null, $html );
 	}
 
+	protected function get_description_position(): string {
+		return $this->block_type->block_attrs['desc_position'] ?? 'auto';
+	}
+
 	protected function iterate_rows_html( $wp_block ): \Generator {
 		foreach ( $this->populate_blocks_or_html( $wp_block ) as $row ) {
 			// just html

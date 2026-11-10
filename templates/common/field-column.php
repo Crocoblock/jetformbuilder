@@ -5,6 +5,7 @@
  * @var $template
  * @var $label
  * @var $desc
+ * @var string $desc_position
  * @var Base $this
  */
 
@@ -26,8 +27,15 @@ if ( ! defined( 'WPINC' ) ) {
  * $desc     - './field-description.php'
  * $template - '../fields/{$field_type}.php' ( takes place at the level of a separate field template )
  */
+$desc_after_label = 'after-label' === ( $desc_position ?? 'auto' );
+
 echo Tools::esc_template_string( $label );
+if ( $desc_after_label ) {
+	echo Tools::esc_template_string( $desc );
+}
 echo Tools::esc_template_string( $template, false );
-echo Tools::esc_template_string( $desc );
+if ( ! $desc_after_label ) {
+	echo Tools::esc_template_string( $desc );
+}
 
 //phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped

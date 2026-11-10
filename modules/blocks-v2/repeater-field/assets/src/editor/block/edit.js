@@ -1,5 +1,6 @@
 import {
 	calcType,
+	descriptionPositions,
 	manageItemsCount,
 } from './options';
 import preview from './preview';
@@ -64,6 +65,7 @@ export default function RepeaterEdit( props ) {
 	      } = props;
 
 	const formFields = useFields( { excludeCurrent: true } );
+	const hasDescription = Boolean( attributes.desc?.trim() );
 
 	const insertMacros = ( macros ) => {
 		const formula = attributes.calc_formula || '';
@@ -120,6 +122,13 @@ export default function RepeaterEdit( props ) {
 				title={ __( 'Field', 'jet-form-builder' ) }
 				key={ uniqKey( 'PanelBody' ) }
 			>
+				{ hasDescription && <SelectControl
+					label={ __( 'Description position', 'jet-form-builder' ) }
+					labelPosition="top"
+					value={ attributes.desc_position }
+					options={ descriptionPositions }
+					onChange={ position => setAttributes( { desc_position: position } ) }
+				/> }
 				<SelectControl
 					key="manage_items_count"
 					label={ __( 'Manage repeater items count',
@@ -206,8 +215,9 @@ export default function RepeaterEdit( props ) {
 				</div> }
 			<FieldWrapper
 				key={ uniqKey( 'FieldWrapper' ) }
-				childrenPosition="bottom"
 				{ ...props }
+				childrenPosition={ 'after-label' === attributes.desc_position ? 'bottom' : 'between' }
+				descriptionInRowContent={ 'after-fields' === attributes.desc_position }
 			>
 				<div className="jet-form-builder-repeater__row">
 					<InnerBlocks

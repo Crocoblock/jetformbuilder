@@ -40,6 +40,7 @@ function FieldWrapper( props ) {
 		      valueIfEmptyLabel = '',
 		      setAttributes,
 		      childrenPosition  = 'between',
+		      descriptionInRowContent = false,
 	      } = props;
 
 	const uniqKey = useUniqKey();
@@ -128,10 +129,12 @@ function FieldWrapper( props ) {
 			{ 'row' === args.fields_layout && <>
 				<div className="jet-form-builder-row__flex--label">
 					{ renderLabel() }
-					{ renderDescription() }
+					{ ! descriptionInRowContent && renderDescription() }
 				</div>
-				<div
-					className="jet-form-builder-row__flex--content">{ children }</div>
+				<div className="jet-form-builder-row__flex--content">
+					{ children }
+					{ descriptionInRowContent && renderDescription() }
+				</div>
 			</> }
 		</BaseControl>
 	);

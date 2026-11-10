@@ -185,6 +185,10 @@ abstract class Base {
 	public function before_render( $args ) {
 	}
 
+	protected function get_description_position(): string {
+		return 'auto';
+	}
+
 	/**
 	 * @param null $wp_block
 	 * @param null $template
@@ -195,9 +199,10 @@ abstract class Base {
 		$args     = $this->get_default_args_with_filter();
 		$template = $this->render_without_layout( $template, $args );
 
-		$label  = $this->get_field_label();
-		$desc   = $this->get_field_desc();
-		$layout = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';
+		$label         = $this->get_field_label();
+		$desc          = $this->get_field_desc();
+		$desc_position = $this->get_description_position();
+		$layout        = $this->live_form ? $this->live_form->spec_data->fields_layout : 'column';
 
 		if ( 'column' === $layout ) {
 			ob_start();

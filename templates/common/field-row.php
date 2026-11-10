@@ -5,6 +5,7 @@
  * @var $template
  * @var $label
  * @var $desc
+ * @var string $desc_position
  * @var Base $this
  */
 
@@ -16,7 +17,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-$fullwidth = ' content-fullwidth';
+$fullwidth         = ' content-fullwidth';
+$desc_after_fields = 'after-fields' === ( $desc_position ?? 'auto' );
 
 //phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -30,12 +32,14 @@ $fullwidth = ' content-fullwidth';
  */
 
 ?>
-<?php if ( $this->get_field_label() || $this->get_field_desc() ) : ?>
+<?php if ( $this->get_field_label() || ( ! $desc_after_fields && $this->get_field_desc() ) ) : ?>
 	<div class="jet-form-builder-col__start">
 		<?php
 		// Read the comment above.
 		echo Tools::esc_template_string( $label );
-		echo Tools::esc_template_string( $desc );
+		if ( ! $desc_after_fields ) {
+			echo Tools::esc_template_string( $desc );
+		}
 
 		// Reset fullwidth content if we have label or description for field.
 		$fullwidth = '';
@@ -47,6 +51,9 @@ $fullwidth = ' content-fullwidth';
 	<?php
 	// Read the comment above.
 	echo Tools::esc_template_string( $template, false );
+	if ( $desc_after_fields ) {
+		echo Tools::esc_template_string( $desc );
+	}
 
 	//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 	?>

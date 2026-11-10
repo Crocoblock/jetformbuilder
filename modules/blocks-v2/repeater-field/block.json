@@ -60,6 +60,11 @@
 				"rich": true
 			}
 		},
+		"desc_position": {
+			"type": "string",
+			"enum": [ "auto", "after-label", "after-fields" ],
+			"default": "auto"
+		},
 		"default": {
 			"type": "string",
 			"default": ""

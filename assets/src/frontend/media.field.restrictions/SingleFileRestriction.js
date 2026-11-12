@@ -1,4 +1,5 @@
 import { getFileRestrictions } from './functions';
+import { escapeHtml } from '../main/html.macro/escapeHtml';
 
 const {
 	      allRejected,
@@ -16,7 +17,7 @@ const {
 function SingleFileRestriction() {
 	AdvancedRestriction.call( this );
 
-	this.invalidRestriction = null;
+	this.invalidRestrictions = [];
 
 	this.isSupported = function ( node ) {
 		return (
@@ -39,7 +40,23 @@ SingleFileRestriction.prototype.singleFileRestrictions = [];
 
 SingleFileRestriction.prototype.getMessage = function () {
 	// Macro values can change while reporting reuses the cached validation error.
-	return this.invalidRestriction?.getMessage() ?? '';
+	for ( const { file, restriction } of this.invalidRestrictions ) {
+		const message = restriction.getMessage();
+
+		if ( message?.length ) {
+			if ( this.getValue()?.length > 1 ) {
+				const format = this.getMessageBySlug( 'file_error_format' ) || '%error_message%';
+
+				return format.replace( /%file_name%|%error_message%/g, macro => (
+					'%file_name%' === macro ? escapeHtml( file.name ) : message
+				) );
+			}
+
+			return message;
+		}
+	}
+
+	return '';
 };
 
 SingleFileRestriction.prototype.setReporting = function ( reporting ) {
@@ -50,8 +67,8 @@ SingleFileRestriction.prototype.setReporting = function ( reporting ) {
 
 // eslint-disable-next-line max-lines-per-function
 SingleFileRestriction.prototype.validatePromise = async function () {
-	// Clear the previous failure even when the last file has been removed.
-	this.invalidRestriction = null;
+	// Clear the previous failures even when the last file has been removed.
+	this.invalidRestrictions = [];
 
 	/**
 	 * @type {SignalFile}
@@ -109,7 +126,9 @@ SingleFileRestriction.prototype.validatePromise = async function () {
 
 	const results = await allRejected( fieldCallbacks );
 
-	this.invalidRestriction = results[ 0 ]?.rejected[ 0 ] ?? null;
+	this.invalidRestrictions = results.flatMap( ( { file, rejected } ) => (
+		rejected.map( restriction => ( { file, restriction } ) )
+	) );
 
 	for ( const fileCurrent of current ) {
 		const fileNode = callable.getFileNode( fileCurrent.name );

@@ -54,6 +54,9 @@ export default function MediaEdit(props) {
 
 	const isUserAccessEmpty = !attributes.allowed_user_cap;
 	const attachmentIdFormats = ['id', 'ids', 'both'];
+	const maxFiles = Number(attributes.max_files ?? 1);
+	// Dynamic limits are resolved when the form is rendered.
+	const canUploadMultipleFiles = Number.isNaN(maxFiles) || maxFiles > 1;
 
 	const canDeleteUploadedAttachment = attributes.insert_attachment &&
 		attachmentIdFormats.includes(attributes.value_format);
@@ -253,6 +256,9 @@ export default function MediaEdit(props) {
 						<ValidationBlockMessage name="file_max_size" />
 						{Boolean(attributes.allowed_mimes.length) && (
 							<ValidationBlockMessage name="file_ext" />
+						)}
+						{canUploadMultipleFiles && (
+							<ValidationBlockMessage name="file_error_format" />
 						)}
 					</>}
 				</PanelBody>

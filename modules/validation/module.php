@@ -789,6 +789,7 @@ final class Module implements
 				new Messages\Is_Files_Max(),
 				new Messages\Is_File_Size(),
 				new Messages\Is_File_Ext(),
+				new Messages\File_Error_Format(),
 				new Messages\Is_Date_Min(),
 				new Messages\Is_Date_Max(),
 			)

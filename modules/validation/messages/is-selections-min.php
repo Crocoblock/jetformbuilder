@@ -29,6 +29,6 @@ class Is_Selections_Min extends Base_Message {
 	}
 
 	public function get_initial(): string {
-		return __( 'Please select at least %this(min_selections)% options.', 'jet-form-builder' );
+		return __( 'Minimum number of selected options: %this(min_selections)%.', 'jet-form-builder' );
 	}
 }

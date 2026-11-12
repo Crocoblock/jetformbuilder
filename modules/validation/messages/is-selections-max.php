@@ -29,6 +29,6 @@ class Is_Selections_Max extends Base_Message {
 	}
 
 	public function get_initial(): string {
-		return __( 'You can select up to %this(max_selections)% options.', 'jet-form-builder' );
+		return __( 'Maximum number of selected options: %this(max_selections)%.', 'jet-form-builder' );
 	}
 }

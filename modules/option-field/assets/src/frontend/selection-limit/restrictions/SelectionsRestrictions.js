@@ -1,4 +1,4 @@
-import { countSelected, getDefaultMessage, getLimits } from '../functions';
+import { countSelected, getDefaultMessage, getLimits, validateMinSelections } from '../functions';
 
 const { Restriction } = JetFormBuilderAbstract;
 
@@ -8,10 +8,7 @@ export function MinSelectionsRestriction() {
 
 	this.isSupported = ( node, reporting ) => getLimits( reporting.input ).min > 0;
 	this.getMessage = () => getDefaultMessage( this.reporting.input, 'min' );
-	this.validate = () => {
-		const input = this.reporting.input;
-		return countSelected( input, 'min' ) >= getLimits( input ).min;
-	};
+	this.validate = () => validateMinSelections( this.reporting.input );
 }
 
 MinSelectionsRestriction.prototype = Object.create( Restriction.prototype );

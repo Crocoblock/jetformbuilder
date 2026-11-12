@@ -31,6 +31,10 @@ export function countSelected( input, bound = 'max' ) {
 	} ).length;
 }
 
+export function validateMinSelections( input ) {
+	return !countSelected( input ) || countSelected( input, 'min' ) >= getLimits( input ).min;
+}
+
 export function getDefaultMessage( input, bound ) {
 	const wrapper = getWrapper( input );
 	return bound === 'min' ? wrapper.dataset.jfbMinSelectionsMessage : wrapper.dataset.jfbMaxSelectionsMessage;

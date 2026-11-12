@@ -62,6 +62,18 @@ class Selection_Limit {
 		}
 
 		$value  = $parser->get_value();
+		foreach ( (array) $value as $option ) {
+			if ( null !== $option && ! is_scalar( $option ) ) {
+				$parser->collect_error( 'invalid_value' );
+				return;
+			}
+		}
+
+		// Match the core validator: visibility of conditional fields is only known in the browser.
+		if ( $parser->is_inside_conditional() ) {
+			return;
+		}
+
 		$values = array_filter(
 			'' === $value ? array() : (array) $value,
 			static function ( $value ) use ( $type ) {
@@ -80,8 +92,7 @@ class Selection_Limit {
 			}
 		);
 
-		// Conditional fields may be absent from the request when their block is hidden.
-		if ( count( $filled ) < $minimum && ! ( ! $values && $parser->is_inside_conditional() ) ) {
+		if ( $values && count( $filled ) < $minimum ) {
 			$parser->collect_error( 'too_few_selections', self::get_min_message( $minimum ) );
 		}
 	}

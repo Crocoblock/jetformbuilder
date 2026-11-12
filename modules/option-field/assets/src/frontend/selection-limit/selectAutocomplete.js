@@ -1,18 +1,21 @@
 import { clearSelectionError, countSelected, getLimits, showSelectionError } from './functions';
 
 const namespace = 'jet-form-builder/selection-limits';
+const { addAction, hasAction } = JetPlugins.hooks;
 
-JetPlugins.hooks.addAction( 'jet.fb.observe.before', namespace, () => {
-	const hooks = window.wp?.hooks;
-	if ( !hooks || hooks.hasFilter( 'jet.fb.select_autocomplete.options', namespace ) ) {
-		return;
-	}
-	hooks.addFilter( 'jet.fb.select_autocomplete.options', namespace, ( options, field ) => {
-		const node = field[ 0 ];
-		const maximum = Number( node?.dataset.jfbMaxSelections );
-		return node?.multiple && maximum > 0 ? { ...options, maximumSelectionLength: maximum } : options;
+if ( !hasAction( 'jet.fb.observe.before', namespace ) ) {
+	addAction( 'jet.fb.observe.before', namespace, () => {
+		const hooks = window.wp?.hooks;
+		if ( !hooks || hooks.hasFilter( 'jet.fb.select_autocomplete.options', namespace ) ) {
+			return;
+		}
+		hooks.addFilter( 'jet.fb.select_autocomplete.options', namespace, ( options, field ) => {
+			const node = field[ 0 ];
+			const maximum = Number( node?.dataset.jfbMaxSelections );
+			return node?.multiple && maximum > 0 ? { ...options, maximumSelectionLength: maximum } : options;
+		} );
 	} );
-} );
+}
 
 export default function observeSelectAutocomplete( controller ) {
 	const { input, wrapper } = controller;

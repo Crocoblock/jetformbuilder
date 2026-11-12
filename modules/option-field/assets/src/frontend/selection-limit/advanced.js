@@ -1,7 +1,8 @@
-import { countSelected, getLimits } from './functions';
+import { countSelected, getLimits, validateMinSelections } from './functions';
 
-const { addFilter } = JetPlugins.hooks;
+const { addFilter, hasFilter } = JetPlugins.hooks;
 const { AdvancedRestriction } = JetFormBuilderAbstract;
+const namespace = 'jet-form-builder/selection-limits';
 
 function MinSelectionsAdvancedRestriction() {
 	AdvancedRestriction.call( this );
@@ -9,7 +10,7 @@ function MinSelectionsAdvancedRestriction() {
 	this.watchedAttrs.push( 'min_selections' );
 
 	this.isSupported = ( node, reporting ) => getLimits( reporting.input ).min > 0;
-	this.validate = () => countSelected( this.reporting.input, 'min' ) >= getLimits( this.reporting.input ).min;
+	this.validate = () => validateMinSelections( this.reporting.input );
 	this.getRawMessage = () => this.getMessageBySlug( 'min_selections' );
 }
 
@@ -27,8 +28,10 @@ function MaxSelectionsAdvancedRestriction() {
 
 MaxSelectionsAdvancedRestriction.prototype = Object.create( AdvancedRestriction.prototype );
 
-addFilter(
-	'jet.fb.restrictions',
-	'jet-form-builder/selection-limits',
-	restrictions => [ MinSelectionsAdvancedRestriction, MaxSelectionsAdvancedRestriction, ...restrictions ],
-);
+if ( !hasFilter( 'jet.fb.restrictions', namespace ) ) {
+	addFilter(
+		'jet.fb.restrictions',
+		namespace,
+		restrictions => [ MinSelectionsAdvancedRestriction, MaxSelectionsAdvancedRestriction, ...restrictions ],
+	);
+}

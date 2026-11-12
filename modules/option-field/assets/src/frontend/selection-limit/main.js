@@ -3,8 +3,9 @@ import SelectionLimit from './SelectionLimit';
 import { getLimits, getWrapper } from './functions';
 import { MinSelectionsRestriction, MaxSelectionsRestriction } from './restrictions/SelectionsRestrictions';
 
-const { addAction, addFilter } = JetPlugins.hooks;
+const { addAction, addFilter, hasAction, hasFilter } = JetPlugins.hooks;
 const { BaseHtmlAttr } = JetFormBuilderAbstract;
+const namespace = 'jet-form-builder/selection-limits';
 
 function SelectionLimitAttr( bound ) {
 	BaseHtmlAttr.call( this );
@@ -33,28 +34,34 @@ function MaxSelectionsAttr() {
 }
 MaxSelectionsAttr.prototype = Object.create( SelectionLimitAttr.prototype );
 
-addFilter(
-	'jet.fb.input.html.attrs',
-	'jet-form-builder/selection-limits',
-	attrs => [ ...attrs, MinSelectionsAttr, MaxSelectionsAttr ],
-);
+if ( !hasFilter( 'jet.fb.input.html.attrs', namespace ) ) {
+	addFilter(
+		'jet.fb.input.html.attrs',
+		namespace,
+		attrs => [ ...attrs, MinSelectionsAttr, MaxSelectionsAttr ],
+	);
+}
 
-addFilter(
-	'jet.fb.restrictions.default',
-	'jet-form-builder/selection-limits',
-	restrictions => [ MinSelectionsRestriction, MaxSelectionsRestriction, ...restrictions ],
-);
+if ( !hasFilter( 'jet.fb.restrictions.default', namespace ) ) {
+	addFilter(
+		'jet.fb.restrictions.default',
+		namespace,
+		restrictions => [ MinSelectionsRestriction, MaxSelectionsRestriction, ...restrictions ],
+	);
+}
 
-addAction(
-	'jet.fb.input.makeReactive',
-	'jet-form-builder/selection-limits',
-	input => {
-		const limits = getLimits( input );
-		if ( !limits.min && !limits.max ) {
-			return;
-		}
-		const wrapper = getWrapper( input );
-		wrapper.jfbSelectionLimit?.destroy();
-		wrapper.jfbSelectionLimit = new SelectionLimit( input );
-	},
-);
+if ( !hasAction( 'jet.fb.input.makeReactive', namespace ) ) {
+	addAction(
+		'jet.fb.input.makeReactive',
+		namespace,
+		input => {
+			const limits = getLimits( input );
+			if ( !limits.min && !limits.max ) {
+				return;
+			}
+			const wrapper = getWrapper( input );
+			wrapper.jfbSelectionLimit?.destroy();
+			wrapper.jfbSelectionLimit = new SelectionLimit( input );
+		},
+	);
+}

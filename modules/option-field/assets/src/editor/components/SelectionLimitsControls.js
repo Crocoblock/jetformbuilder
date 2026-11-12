@@ -13,16 +13,15 @@ export default function SelectionLimitsControls( { attributes, setAttributes } )
 		<TextControl
 			type="number"
 			label={ __( 'Minimum selections', 'jet-form-builder' ) }
-			help={ __( 'Minimum number of options that must be selected. Use 0 for no minimum.', 'jet-form-builder' ) }
+			help={ __( 'Minimum number of options when a selection is made. Use 0 for no minimum.', 'jet-form-builder' ) }
 			min={ 0 }
 			step={ 1 }
 			value={ minimum }
-			onChange={ value => {
-				const min = limitValue( value );
-				setAttributes( {
-					min_selections: min,
-					max_selections: maximum ? Math.max( maximum, min ) : 0,
-				} );
+			onChange={ value => setAttributes( { min_selections: limitValue( value ) } ) }
+			onBlur={ () => {
+				if ( maximum && minimum > maximum ) {
+					setAttributes( { max_selections: minimum } );
+				}
 			} }
 		/>
 		<TextControl
@@ -32,12 +31,11 @@ export default function SelectionLimitsControls( { attributes, setAttributes } )
 			min={ 0 }
 			step={ 1 }
 			value={ maximum }
-			onChange={ value => {
-				const max = limitValue( value );
-				setAttributes( {
-					max_selections: max,
-					min_selections: max ? Math.min( minimum, max ) : minimum,
-				} );
+			onChange={ value => setAttributes( { max_selections: limitValue( value ) } ) }
+			onBlur={ () => {
+				if ( maximum && minimum > maximum ) {
+					setAttributes( { min_selections: maximum } );
+				}
 			} }
 		/>
 	</div>;
@@ -48,14 +46,16 @@ export function SelectionLimitsValidationControls( { attributes } ) {
 	const { ValidationBlockMessage, ValidationToggleGroup } = JetFBComponents;
 	const isAdvanced = useIsAdvancedValidation();
 	const enabled = attributes.multiple ?? attributes.allow_multiple ?? true;
+	const hasLimits = enabled && ( attributes.min_selections > 0 || attributes.max_selections > 0 );
+	const validationType = attributes.validation?.type;
 
-	if ( !enabled || ( !attributes.min_selections && !attributes.max_selections ) ) {
+	if ( !hasLimits && ( !validationType || validationType === 'inherit' ) ) {
 		return null;
 	}
 
 	return <PanelBody title={ __( 'Validation', 'jet-form-builder' ) }>
 		<ValidationToggleGroup/>
-		{ isAdvanced && <>
+		{ isAdvanced && hasLimits && <>
 			{ attributes.min_selections > 0 && <ValidationBlockMessage name="min_selections"/> }
 			{ attributes.max_selections > 0 && <ValidationBlockMessage name="max_selections"/> }
 		</> }

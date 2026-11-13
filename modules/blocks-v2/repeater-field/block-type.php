@@ -432,7 +432,8 @@ class Block_Type extends Base implements Block_Type_With_Assets_Interface {
 						return '%' . $matches[2] . '%';
 
 					case 'meta':
-						$post = get_post();
+						// Only a post the visitor may use as form context.
+						$post = \Jet_Form_Builder\Live_Form::instance()->post;
 
 						if ( ! isset( $post->ID ) ) {
 							return '';

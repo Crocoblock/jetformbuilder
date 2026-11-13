@@ -106,6 +106,7 @@ final class Module implements
 	public function rep_instances(): array {
 		return array(
 			new Form_Shortcode(),
+			new Post_Context_Shortcode(),
 		);
 	}
 

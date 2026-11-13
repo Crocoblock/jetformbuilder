@@ -9,6 +9,7 @@ use Jet_Form_Builder\Admin\Tabs_Handlers\Tab_Handler_Manager;
 use Jet_Form_Builder\Admin\Tabs_Handlers\Options_Handler;
 use Jet_Form_Builder\Blocks\Block_Helper;
 use Jet_Form_Builder\Classes\Tools;
+use Jet_Form_Builder\Classes\Security\Submitted_Post_Context;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
 use Jet_Form_Builder\Exceptions\Not_Router_Request;
@@ -57,6 +58,27 @@ class Form_Handler {
 	 */
 	public $request_handler;
 
+	private $submitted_post_context       = false;
+	private $valid_submitted_post_context = false;
+
+	/**
+	 * Why the submitted post context was not accepted: missing, invalid or
+	 * unreadable. Empty when it was accepted.
+	 *
+	 * @var string
+	 */
+	private $post_context_rejection = '';
+
+	/**
+	 * Post ID sent in the post context field (0 when absent or "no post").
+	 *
+	 * @var int
+	 */
+	private $submitted_post_id = 0;
+
+	/** @var int */
+	private $accepted_post_id = 0;
+
 
 	/**
 	 * Constructor for the class
@@ -65,6 +87,9 @@ class Form_Handler {
 		$this->set_jfb_request_args();
 		$this->action_handler  = new Action_Handler();
 		$this->request_handler = new Request_Handler();
+
+		add_filter( 'jet-form-builder/message-types', array( Submitted_Post_Context::class, 'add_message_type' ) );
+		add_filter( 'jet-engine/listings/data/default-object', array( Submitted_Post_Context::class, 'pin_jet_engine_object' ), 20 );
 	}
 
 	public function call_form() {
@@ -101,7 +126,7 @@ class Form_Handler {
 					'callback' => array( $this, 'set_referrer' ),
 				),
 				$this->post_id_key => array(
-					'callback' => array( Tools::class, 'set_current_post' ),
+					'callback' => array( $this, 'set_current_post' ),
 				),
 				$this->user_journey_key => array(
 					'callback' => array( $this, 'set_user_journey_data' ),
@@ -160,6 +185,57 @@ class Form_Handler {
 		return $this->form_id;
 	}
 
+	public function has_submitted_post_context(): bool {
+		return $this->submitted_post_context;
+	}
+
+	/**
+	 * Post accepted as the context of this submission (signature or proof).
+	 *
+	 * @return int 0 when there is none.
+	 */
+	public function get_accepted_post_id(): int {
+		return $this->submitted_post_context && $this->valid_submitted_post_context ? $this->accepted_post_id : 0;
+	}
+
+	/**
+	 * @return string Empty when no context was submitted or it was accepted;
+	 *                otherwise missing | invalid | unreadable.
+	 */
+	public function get_post_context_rejection(): string {
+		return $this->submitted_post_context && ! $this->valid_submitted_post_context
+			? $this->post_context_rejection
+			: '';
+	}
+
+	/**
+	 * Request-selected context must have been rendered for this form and remain
+	 * readable by the submitter. The generic Tools setter remains server-side API.
+	 *
+	 * @param mixed $post_id Submitted post ID.
+	 */
+	public function set_current_post( $post_id ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- This field is an HMAC, not a nonce; verify it below.
+		$signature = sanitize_text_field( wp_unslash( $_POST[ Submitted_Post_Context::SIGNATURE_FIELD ] ?? '' ) );
+
+		$this->submitted_post_id = is_scalar( $post_id ) && preg_match( '/^[0-9]+$/D', (string) $post_id ) ? (int) $post_id : 0;
+
+		if ( '' === $signature ) {
+			$this->post_context_rejection = 'missing';
+		} elseif ( ! Submitted_Post_Context::verify( $this->form_id, $post_id, $signature ) ) {
+			$this->post_context_rejection = 'invalid';
+		} elseif ( (int) $post_id > 0 && ! Submitted_Post_Context::can_read_post( $post_id, Submitted_Post_Context::PAGE ) ) {
+			$this->post_context_rejection = 'unreadable';
+		} else {
+			$this->post_context_rejection = '';
+		}
+
+		$this->valid_submitted_post_context = '' === $this->post_context_rejection;
+		$this->accepted_post_id             = $this->valid_submitted_post_context ? max( 0, $this->submitted_post_id ) : 0;
+
+		Tools::set_current_post( $this->valid_submitted_post_context ? $post_id : 0 );
+	}
+
 	/**
 	 * Is ajax form processing or not
 	 *
@@ -189,6 +265,14 @@ class Form_Handler {
 			return;
 		}
 
+		// Missing core fields must not retain a previous global or AJAX referer.
+		$this->submitted_post_context       = true;
+		$this->valid_submitted_post_context = false;
+		$this->post_context_rejection       = 'missing';
+		$this->submitted_post_id            = 0;
+		$this->accepted_post_id             = 0;
+		Tools::set_current_post( 0 );
+
 		$fields = $this->core_fields();
 
 		foreach ( $fields as $field_name => $options ) {
@@ -200,6 +284,9 @@ class Form_Handler {
 			Tools::call( $options['callback'] ?? false, $_POST[ $field_name ] );
 			// phpcs:enable WordPress.Security
 		}
+
+		// Before anything reads the post: parsers, add-ons, records.
+		$this->recover_post_context();
 	}
 
 	private function get_response_manager() {
@@ -314,6 +401,8 @@ class Form_Handler {
 			throw new Request_Exception( 'failed' );
 		}
 
+		$this->check_submitted_post_context();
+
 		$this->action_handler->set_form_id( $this->form_id );
 		$this->request_handler->set_form_data();
 
@@ -327,6 +416,71 @@ class Form_Handler {
 		$this->is_success = true;
 	}
 
+
+	/**
+	 * A rejected context is already empty (no global post, no Live_Form post).
+	 * A form that does not read the post goes on without it. A form that does
+	 * would compute empty server values, so it stops before parsing and actions.
+	 *
+	 * @throws Request_Exception
+	 */
+	private function check_submitted_post_context() {
+		if ( ! $this->submitted_post_context || $this->valid_submitted_post_context ) {
+			return;
+		}
+
+		if ( Submitted_Post_Context::form_requires_post_context( $this->form_id ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Status key, not output.
+			throw new Request_Exception( Submitted_Post_Context::EXPIRED_STATUS );
+		}
+	}
+
+	/**
+	 * A form without a signature (page cached before signatures existed) gets
+	 * its post back only with an equivalent proof: the post is open to the
+	 * visitor and the form is placed in its content, so any guest receives this
+	 * exact pair with a valid signature. A changed ID next to a signature
+	 * (invalid) or a closed post (unreadable) is never recovered.
+	 *
+	 * The same proof restores the referring page for an AJAX submission of a
+	 * form rendered without a post, as before signatures.
+	 *
+	 * @return bool Whether a post context was recovered.
+	 */
+	private function recover_post_context(): bool {
+		$missing = ! $this->valid_submitted_post_context && 'missing' === $this->post_context_rejection;
+		$no_post = $this->valid_submitted_post_context && $this->submitted_post_id <= 0;
+
+		if ( ! $missing && ! $no_post ) {
+			return false;
+		}
+
+		$candidates = array();
+
+		if ( $missing && $this->submitted_post_id > 0 ) {
+			$candidates[] = $this->submitted_post_id;
+		} elseif ( wp_doing_ajax() ) {
+			foreach ( array( $this->refer, wp_get_raw_referer() ) as $url ) {
+				$candidates[] = is_string( $url ) && '' !== $url ? url_to_postid( $url ) : 0;
+			}
+		}
+
+		foreach ( array_unique( array_filter( $candidates ) ) as $post_id ) {
+			if ( ! Submitted_Post_Context::can_read_post( $post_id, Submitted_Post_Context::STRICT ) ||
+				! Submitted_Post_Context::form_is_placed_in( $this->form_id, $post_id ) ) {
+				continue;
+			}
+
+			Tools::set_current_post( $post_id );
+			$this->accepted_post_id             = (int) $post_id;
+			$this->valid_submitted_post_context = true;
+			$this->post_context_rejection       = '';
+
+			return true;
+		}
+
+		return false;
+	}
 
 	/**
 	 * Add new properties into response data

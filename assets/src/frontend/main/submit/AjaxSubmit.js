@@ -1,6 +1,7 @@
 import BaseSubmit from './BaseSubmit';
 import ReactiveVar from '../reactive/ReactiveVar';
 import { isSuccessStatus } from './functions';
+import { POST_CONTEXT_EXPIRED, refreshPostContext } from './postContext';
 
 // eslint-disable-next-line max-lines-per-function
 function AjaxSubmit( form ) {
@@ -11,6 +12,9 @@ function AjaxSubmit( form ) {
 
 	this.submit        = function () {
 		const $form            = jQuery( this.form.observable.rootNode );
+
+		// One automatic retry per submission (see onDone).
+		this.contextRefreshed = false;
 		const { applyFilters } = JetPlugins.hooks;
 
 		Promise.all(
@@ -51,19 +55,38 @@ function AjaxSubmit( form ) {
 			contentType: false,
 			processData: false,
 		} ).done(
-			response => {
-				this.onSuccess( response );
-				const $form = jQuery( rootNode );
-
-				callbacks.forEach( cb => {
-					if ( 'function' === typeof cb ) {
-						cb.call( $form, response );
-					}
-				} );
-			},
+			response => this.onDone( response, callbacks ),
 		).fail(
 			this.onFail.bind( this ),
 		);
+	};
+	this.onDone        = function ( response, callbacks ) {
+		const { rootNode } = this.form.observable;
+
+		// A page cached before the update: take a fresh signature of the same
+		// form and post and send the same data again, once.
+		if ( POST_CONTEXT_EXPIRED === response?.status && !this.contextRefreshed ) {
+			this.contextRefreshed = true;
+
+			refreshPostContext( rootNode, this.form.getFormId() ).then(
+				refreshed => (
+					refreshed
+					? this.runSubmit( callbacks )
+					: this.onDone( response, callbacks )
+				),
+			);
+
+			return;
+		}
+
+		this.onSuccess( response );
+		const $form = jQuery( rootNode );
+
+		callbacks.forEach( cb => {
+			if ( 'function' === typeof cb ) {
+				cb.call( $form, response );
+			}
+		} );
 	};
 	this.onSuccess     = function ( response ) {
 		this.form.toggle();

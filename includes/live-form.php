@@ -8,6 +8,7 @@ use Jet_Form_Builder\Classes\Arguments\Form_Arguments;
 use Jet_Form_Builder\Classes\Attributes_Trait;
 use Jet_Form_Builder\Classes\Get_Template_Trait;
 use Jet_Form_Builder\Classes\Instance_Trait;
+use Jet_Form_Builder\Classes\Security\Submitted_Post_Context;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -209,13 +210,34 @@ class Live_Form {
 	private function current_post() {
 		global $post;
 
+		// Once submission setup ran, an empty context must stay empty. In
+		// particular, a forged AJAX referer cannot replace a rejected signature.
+		if ( jet_fb_handler()->has_submitted_post_context() ) {
+			$accepted = jet_fb_handler()->get_accepted_post_id();
+
+			// The accepted post was checked with its signature (or proof). Any
+			// other global post set later is checked as a client-chosen one.
+			if ( $post instanceof \WP_Post && $accepted && $accepted === $post->ID ) {
+				return Submitted_Post_Context::can_read_post( $post, Submitted_Post_Context::PAGE ) ? $post : null;
+			}
+
+			return Submitted_Post_Context::can_read_post( $post ) ? $post : null;
+		}
+
 		if ( wp_doing_ajax() && empty( $post->ID ) && ! $this->ajax_post_id ) {
 			$url = wp_get_referer();
 
 			$this->ajax_post_id = url_to_postid( $url );
 		}
 
-		return $this->ajax_post_id ? get_post( $this->ajax_post_id ) : $post;
+		if ( $this->ajax_post_id ) {
+			// The client chose this post: only what the visitor could open anyway.
+			$referer_post = get_post( $this->ajax_post_id );
+
+			return Submitted_Post_Context::can_read_post( $referer_post, Submitted_Post_Context::STRICT ) ? $referer_post : null;
+		}
+
+		return Submitted_Post_Context::can_read_post( $post, Submitted_Post_Context::render_mode() ) ? $post : null;
 	}
 
 }

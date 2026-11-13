@@ -59,7 +59,7 @@ class Calculated_Field_Render extends Base {
 
 					case 'meta':
 						// The value may be written by visitors: insert it as data.
-						return Tools::calculated_meta_value( Live_Form::instance()->post->ID, $matches[2], $is_string );
+						return Tools::calculated_meta_value( Live_Form::instance()->post->ID ?? 0, $matches[2], $is_string );
 
 					default:
 						$macros_name = $matches[1];

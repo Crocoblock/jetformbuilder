@@ -23,11 +23,13 @@ class Meta_Query implements Option_Query_It {
 
 		$key = $this->get_query( 'meta_key' );
 
-		if ( ! $key ) {
+		$post = jet_fb_live()->post;
+
+		if ( ! $key || empty( $post->ID ) ) {
 			return;
 		}
 
-		$options = get_post_meta( jet_fb_live()->post->ID, $key, true );
+		$options = get_post_meta( $post->ID, $key, true );
 
 		if ( empty( $options ) ) {
 			return;

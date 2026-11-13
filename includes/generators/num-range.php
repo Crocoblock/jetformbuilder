@@ -84,7 +84,8 @@ class Num_Range extends Base_V2 {
 			return $result;
 		}
 
-		$meta_value = get_post_meta( get_the_ID(), $meta_key, true );
+		$post_id    = \Jet_Form_Builder\Live_Form::instance()->post->ID ?? 0;
+		$meta_value = $post_id ? get_post_meta( $post_id, $meta_key, true ) : '';
 		$meta_value = absint( $meta_value );
 
 		if ( ! $meta_value ) {

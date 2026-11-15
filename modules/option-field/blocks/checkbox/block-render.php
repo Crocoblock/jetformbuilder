@@ -16,8 +16,24 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Block_Render extends Base {
 
+	private const CHECK_MARK = '<span class="jet-form-builder__checkbox-mark" aria-hidden="true"></span>';
+
 	public function get_name() {
 		return 'checkbox-field';
+	}
+
+	private function get_check_mark(): string {
+		$styles = $this->args['crocoblock_styles'] ?? array();
+
+		foreach ( array( '', '__desktop', '__tablet', '__mobile' ) as $device ) {
+			$values = $device ? ( $styles[ $device ] ?? array() ) : $styles;
+
+			if ( ! empty( $values['checkbox_checked_mark_color'] ) ) {
+				return self::CHECK_MARK;
+			}
+		}
+
+		return '';
 	}
 
 	public function render_without_layout( $template = null, $args = array() ) {
@@ -80,7 +96,8 @@ class Block_Render extends Base {
 		$auto_update_attrs = Html_Attributes_Injector::render_data_attributes( $this->args );
 		$auto_update_attrs = $auto_update_attrs ? ' ' . $auto_update_attrs : '';
 
-		$html = '<div class="jet-form-builder__fields-group checkradio-wrap" data-jfb-sync' . $auto_update_attrs . '>';
+		$check_mark_attr = $this->get_check_mark() ? ' data-jfb-checkbox-mark' : '';
+		$html            = '<div class="jet-form-builder__fields-group checkradio-wrap" data-jfb-sync' . $check_mark_attr . $auto_update_attrs . '>';
 
 		if ( ! empty( $this->args['field_options'] ) ) {
 			foreach ( $this->args['field_options'] as $value => $option ) {
@@ -136,7 +153,7 @@ class Block_Render extends Base {
 			<input %1$s %2$s><span>%3$s</span></label>',
 			Builder_Helper::attrs( $attrs ),
 			$this->get_attributes_string_save(),
-			$this->neutralize_generated_option_label( wp_kses_post( $label ) )
+			$this->get_check_mark() . $this->neutralize_generated_option_label( wp_kses_post( $label ) )
 		);
 
 		$html .= apply_filters(
@@ -190,7 +207,7 @@ class Block_Render extends Base {
 			sprintf(
 				'<label class="jet-form-builder__field-label for-checkbox">%1$s<span>%2$s</span><label>',
 				$checkbox,
-				$input
+				$this->get_check_mark() . $input
 			)
 		);
 

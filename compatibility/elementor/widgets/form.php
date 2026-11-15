@@ -362,6 +362,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			$booking_form,
 			'builder__checkbox_state--checked__border',
 			$this->selector( '__field-wrap label.for-checkbox :checked + span::before' )
+			. ', ' . $this->selector( '__field-wrap label.for-checkbox :checked + span > .jet-form-builder__checkbox-mark::before' )
 		);
 		$booking_form->add_control(
 			'builder__checkbox_state--checked__bg_color',
@@ -1751,6 +1752,7 @@ class Form extends Widget_Base implements Widget_Base_It {
 			$this,
 			'tab__checkradio_control_border__checked',
 			$this->selector( '__field-wrap label :checked + span::before' )
+			. ', ' . $this->selector( '__field-wrap label.for-checkbox :checked + span > .jet-form-builder__checkbox-mark::before' )
 		);
 
 		$this->add_control(

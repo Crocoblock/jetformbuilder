@@ -37,6 +37,7 @@ class Block_Type extends Base implements Support_Option_Query_It {
 			'option-label'    => '.jet-form-builder__field-wrap label',
 			'checkbox-editor' => '.jet-form-builder__field-wrap .components-checkbox-control__input-container',
 			'checkbox-front'  => '.jet-form-builder__field-wrap .jet-form-builder__field-label.for-checkbox>span::before',
+			'checkbox-mark'   => '.jet-form-builder__field-wrap .jet-form-builder__field-label.for-checkbox > span > :where(.jet-form-builder__checkbox-mark)::before',
 			'wrapper'         => '.jet-form-builder__fields-group',
 		);
 	}
@@ -207,6 +208,13 @@ class Block_Type extends Base implements Support_Option_Query_It {
 			)
 		);
 
+		$checkbox_editor_mark   = '{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' svg.components-checkbox-control__checked';
+		$checkbox_front_checked = '{{WRAPPER}} ' . $this->css_scheme['option-label'] . '.for-checkbox > input:checked + span';
+		$checkbox_front_marker  = $checkbox_front_checked . ' > .jet-form-builder__checkbox-mark';
+		$checkbox_front_mark    = $checkbox_front_marker . '::before';
+		$checkbox_mark          = '{{WRAPPER}} ' . $this->css_scheme['checkbox-mark'];
+		$checkbox_border_style  = 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};';
+
 		$this->controls_manager->add_control(
 			array(
 				'id'           => 'show_checkbox_decorator',
@@ -225,6 +233,7 @@ class Block_Type extends Base implements Support_Option_Query_It {
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] => 'display: {{VALUE}};',
 					'{{WRAPPER}} ' . $this->css_scheme['checkbox-front']  => 'display: {{VALUE}};',
+					$checkbox_mark                                        => 'display: {{VALUE}};',
 				),
 			)
 		);
@@ -249,6 +258,8 @@ class Block_Type extends Base implements Support_Option_Query_It {
 					'{{WRAPPER}} ' . $this->css_scheme['checkbox-front']             => 'font-size: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}}; height: {{VALUE}}{{UNIT}};',
 					'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor']            => 'height: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}};',
 					'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input' => 'height: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}}; min-width: {{VALUE}}{{UNIT}};',
+					$checkbox_editor_mark                                            => 'width: {{VALUE}}{{UNIT}}; height: {{VALUE}}{{UNIT}};',
+					$checkbox_mark                                                   => 'font-size: {{VALUE}}{{UNIT}}; width: {{VALUE}}{{UNIT}}; height: {{VALUE}}{{UNIT}};',
 				),
 			)
 		);
@@ -275,8 +286,9 @@ class Block_Type extends Base implements Support_Option_Query_It {
 				'label'        => __( 'Border', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['checkbox-front']             => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-					'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					'{{WRAPPER}} ' . $this->css_scheme['checkbox-front']             => $checkbox_border_style,
+					'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input' => $checkbox_border_style,
+					$checkbox_mark                                                   => $checkbox_border_style,
 				),
 			)
 		);
@@ -308,6 +320,8 @@ class Block_Type extends Base implements Support_Option_Query_It {
 			)
 		);
 
+		$checked_border = '{{WRAPPER}} ' . $this->css_scheme['option-label'] . '.jet-form-builder__field-label :checked + span';
+
 		$this->controls_manager->add_control(
 			array(
 				'id'           => 'checkbox_checked_border',
@@ -315,8 +329,9 @@ class Block_Type extends Base implements Support_Option_Query_It {
 				'label'        => __( 'Border', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'css_selector' => array(
-					'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input:checked'        => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
-					'{{WRAPPER}} ' . $this->css_scheme['option-label'] . '.jet-form-builder__field-label :checked + span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input:checked'               => $checkbox_border_style,
+					$checked_border . '::before'                                                           => $checkbox_border_style,
+					$checked_border . ' > :where(.jet-form-builder__checkbox-mark)::before'                => $checkbox_border_style,
 				),
 			)
 		);
@@ -334,6 +349,21 @@ class Block_Type extends Base implements Support_Option_Query_It {
 				'css_selector' => array(
 					'{{WRAPPER}} ' . $this->css_scheme['checkbox-editor'] . ' input:checked'        => 'background-color: {{VALUE}}',
 					'{{WRAPPER}} ' . $this->css_scheme['option-label'] . '.jet-form-builder__field-label :checked + span::before' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->controls_manager->add_control(
+			array(
+				'id'           => 'checkbox_checked_mark_color',
+				'type'         => 'color-picker',
+				'label'        => __( 'Check Mark', 'jet-form-builder' ),
+				'css_selector' => array(
+					$checkbox_editor_mark                 => 'fill: {{VALUE}};',
+					$checkbox_front_marker                => 'display: flex;',
+					$checkbox_front_mark                  => 'content: ""; background-color: {{VALUE}};',
+					$checkbox_front_checked               => 'position: relative;',
+					$checkbox_front_checked . '::before'  => 'background-image: none;',
 				),
 			)
 		);

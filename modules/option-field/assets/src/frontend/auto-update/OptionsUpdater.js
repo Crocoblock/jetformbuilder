@@ -285,6 +285,13 @@ class OptionsUpdater {
 			const spanElement = document.createElement( 'span' );
 			spanElement.textContent = label;
 
+			if ( fieldType === 'checkbox' && containerElement.hasAttribute( 'data-jfb-checkbox-mark' ) ) {
+				const mark = document.createElement( 'span' );
+				mark.className = 'jet-form-builder__checkbox-mark';
+				mark.setAttribute( 'aria-hidden', 'true' );
+				spanElement.prepend( mark );
+			}
+
 			const labelElement = document.createElement( 'label' );
 			labelElement.className = `jet-form-builder__field-label ${ labelClass }`;
 			labelElement.appendChild( inputElement );

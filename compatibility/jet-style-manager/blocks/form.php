@@ -836,7 +836,8 @@ class Form implements Style_Block_It {
 				'label'        => __( 'Border', 'jet-form-builder' ),
 				'separator'    => 'after',
 				'css_selector' => array(
-					$this->selector( 'front-label' ) . ' :checked + span::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					$this->selector( 'front-label' ) . ' :checked + span::before'                                                                 => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
+					$this->selector( 'front-label' ) . ':where(.for-checkbox) :checked + span > :where(.jet-form-builder__checkbox-mark)::before' => 'border-style:{{STYLE}};border-width:{{WIDTH}};border-radius:{{RADIUS}};border-color:{{COLOR}};',
 				),
 			)
 		);

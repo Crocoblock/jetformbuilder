@@ -777,6 +777,10 @@ class Form extends Base {
 						'property' => 'border',
 						'selector' => $this->css_selector( '__field-label > span::before' ),
 					),
+					array(
+						'property' => 'border',
+						'selector' => $this->css_selector( '__field-label.for-checkbox > span > .jet-form-builder__checkbox-mark::before' ),
+					),
 				),
 			)
 		);

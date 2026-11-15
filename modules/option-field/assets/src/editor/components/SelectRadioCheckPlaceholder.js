@@ -9,8 +9,20 @@ const {
 	      SelectControl,
 	      RadioControl,
       } = wp.components;
+const { useState } = wp.element;
 
 const DELIMITER = ' - ';
+
+function CheckboxPlaceholder( { label } ) {
+	const [ checked, setChecked ] = useState( false );
+
+	return <CheckboxControl
+		className="jet-form-builder__field-wrap checkboxes-wrap"
+		label={ label }
+		checked={ checked }
+		onChange={ setChecked }
+	/>;
+}
 
 export function SelectRadioCheckPlaceholder( props ) {
 
@@ -21,12 +33,9 @@ export function SelectRadioCheckPlaceholder( props ) {
 	      } = props;
 
 	const getCheckbox = ( label, index = 1 ) => {
-		return <CheckboxControl
-			className={ 'jet-form-builder__field-wrap checkboxes-wrap' }
+		return <CheckboxPlaceholder
 			key={ `check_place_holder_block_${ label + index }` }
 			label={ label }
-			onChange={ () => {
-			} }
 		/>;
 	};
 

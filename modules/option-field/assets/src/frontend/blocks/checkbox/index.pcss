@@ -8,24 +8,47 @@
 
     .jet-form-builder__field-label.for-checkbox {
 
+        & > span::before,
+        & > span > :where(.jet-form-builder__checkbox-mark)::before {
+            width: 1.2em;
+            height: 1.2em;
+            border: 1px solid transparent;
+        }
+
         & > span::before {
             content: '';
             display: inline-block;
-            width: 1.2em;
-            height: 1.2em;
             flex-shrink: 0;
             flex-grow: 0;
-            border: 1px solid #adb5bd;
+            border-color: #adb5bd;
             background-repeat: no-repeat;
             background-position: center center;
             background-size: 50% 50%;
             border-radius: 10%;
         }
 
-        :checked + span::before {
-            border-color: #0b76ef;
-            background-color: #0b76ef;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+        :checked + span {
+            --jfb-checkbox-check-mark: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+
+            &::before {
+                border-color: #0b76ef;
+                background-color: #0b76ef;
+                background-image: var(--jfb-checkbox-check-mark);
+            }
+        }
+
+        & > span > .jet-form-builder__checkbox-mark {
+            display: none;
+            position: absolute;
+            inset-inline-start: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: var(--jfb-checkradio-fz, inherit);
+
+            &::before {
+                mask: var(--jfb-checkbox-check-mark) center / 50% 50% no-repeat padding-box;
+            }
         }
 
         :focus:not(:checked) + span::before {
@@ -44,5 +67,11 @@
         :disabled + span::before {
             background-color: #e9ecef;
         }
+    }
+}
+
+@media (forced-colors: active) {
+    .field-type-checkbox-field .jet-form-builder__checkbox-mark::before {
+        background-color: CanvasText !important;
     }
 }

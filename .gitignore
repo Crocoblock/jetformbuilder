@@ -79,6 +79,7 @@ tests/wpunit/*
 !tests/wpunit/FormArgumentsEscapingTest.php
 !tests/wpunit/EscapeOutputSuppressionsTest.php
 !tests/wpunit/VerifyManuallyReplayIdentityTest.php
+!tests/wpunit/VerificationReplayIdentityTest.php
 !tests/wpunit/VerifyManuallyWebhookBypassIsolationTest.php
 !tests/wpunit/SendEmailMacroShortcodeSecurityTest.php
 !tests/wpunit/MacroShortcodeNoticeTest.php

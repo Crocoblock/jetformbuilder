@@ -9,6 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 use Jet_Form_Builder\Actions\Manager;
+use Jet_Form_Builder\Classes\Security\Submitter_Identity;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Exceptions\Action_Exception;
 use Jet_Form_Builder\Exceptions\Handler_Exception;
@@ -232,24 +233,48 @@ class Module implements
 		// setup referrer for redirect actions
 		jet_fb_handler()->set_referrer( $record['referrer'] );
 
-		// setup fields & request for them
-		Tools::apply_context( $record );
+		// The stored request was written by the submitter; whoever opens the
+		// confirmation link (possibly a logged-in administrator) must not lend
+		// it their capabilities, nor have their session replaced by Register
+		// User (see Submitter_Identity::run()).
+		// A failed check is reachable by anyone who knows a token id: it runs
+		// as a guest, never with the stored submitter's capabilities.
+		$replayer = $module->is_verified() ? Submitter_Identity::of_record( $record ) : 0;
 
-		$record_id = $record['id'] ?? 0;
+		$this->replay_record( $module, $record, $replayer );
+	}
 
-		jet_fb_context()->set_field_type( 'text-field', Verification::TOKEN );
-		jet_fb_context()->update_request( $module->get_token(), Verification::TOKEN );
-		jet_fb_context()->make_secure( Verification::TOKEN );
+	/**
+	 * @param Webhook\Module $module
+	 * @param array          $record
+	 * @param int            $user_id Identity of the replay.
+	 *
+	 * @throws Sql_Exception
+	 */
+	private function replay_record( Webhook\Module $module, array $record, int $user_id ) {
+		Submitter_Identity::run(
+			$user_id,
+			static function () use ( $record, $module ) {
+				// setup fields & request for them
+				Tools::apply_context( $record );
 
-		try {
-			jet_fb_events()->execute(
-				$module->is_verified()
-					? Events\Verification_Success\Event::class
-					: Events\Verification_Failed\Event::class
-			);
-		} finally {
-			Tools::update_record( $record_id );
-		}
+				$record_id = $record['id'] ?? 0;
+
+				jet_fb_context()->set_field_type( 'text-field', Verification::TOKEN );
+				jet_fb_context()->update_request( $module->get_token(), Verification::TOKEN );
+				jet_fb_context()->make_secure( Verification::TOKEN );
+
+				try {
+					jet_fb_events()->execute(
+						$module->is_verified()
+							? Events\Verification_Success\Event::class
+							: Events\Verification_Failed\Event::class
+					);
+				} finally {
+					Tools::update_record( $record_id );
+				}
+			}
+		);
 	}
 
 	public function get_redirect_url( $args ): string {

@@ -8,6 +8,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.8.2
+* SECURITY: Prevent server-side form values from reading posts the visitor cannot access
+* SECURITY: Run confirmed and paid submissions as the original submitter, not as the user who opens the link
+
 ## 3.6.8.1
 * SECURITY: Prevent stored XSS through post meta values used in Calculated field formulas
 * SECURITY: Prevent stored XSS through dynamic preset values in Dynamic Value, conditions and validation rules

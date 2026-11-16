@@ -1423,7 +1423,7 @@ class Tools {
 		global $post;
 
 		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$post = get_post( absint( $post_id ) );
+		$post = is_scalar( $post_id ) && (int) $post_id > 0 ? get_post( (int) $post_id ) : null;
 	}
 
 	public static function prepare_repeater_value( $value, $fields_map ): array {

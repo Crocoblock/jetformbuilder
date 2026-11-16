@@ -20,8 +20,15 @@ class Hidden_Field extends Base {
 	public $use_style_manager = false;
 	private $rendering         = true;
 
+	/**
+	 * Live_Form already returns only a post the visitor may use as context.
+	 *
+	 * @return \WP_Post|null
+	 */
 	private function current_post() {
-		return Live_Form::instance()->post;
+		$post = Live_Form::instance()->post;
+
+		return $post instanceof \WP_Post ? $post : null;
 	}
 
 	/**
@@ -376,7 +383,9 @@ class Hidden_Field extends Base {
 
 		global $authordata;
 
-		if ( $authordata ) {
+		// The queried author of an author archive. Elsewhere $authordata follows
+		// setup_postdata(), which add-ons may call for a client-chosen post.
+		if ( ! jet_fb_handler()->has_submitted_post_context() && is_author() && $authordata ) {
 			return get_the_author_meta( $key );
 		}
 

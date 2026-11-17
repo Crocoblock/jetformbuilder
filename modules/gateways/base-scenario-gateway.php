@@ -4,6 +4,7 @@
 namespace JFB_Modules\Gateways;
 
 use Jet_Form_Builder\Actions\Action_Handler;
+use Jet_Form_Builder\Classes\Security\Submitter_Identity;
 use Jet_Form_Builder\Db_Queries\Exceptions\Skip_Exception;
 use Jet_Form_Builder\Exceptions\Gateway_Exception;
 use Jet_Form_Builder\Exceptions\Repository_Exception;
@@ -69,18 +70,26 @@ abstract class Base_Scenario_Gateway extends \Jet_Form_Builder\Gateways\Base_Gat
 			return;
 		}
 
-		/**
-		 * Init actions for correct migrating
-		 *
-		 * Later should be deprecated
-		 */
-		$scenario->init_request();
-		$scenario->init_actions();
+		// The stored request is replayed in the request of whoever opens the
+		// payment return link: run it as the user who submitted the form,
+		// without replacing the session of whoever is logged in there.
+		Submitter_Identity::run(
+			Submitter_Identity::of_record( $scenario->get_scenario_row( 'record', array() ) ),
+			function () use ( $scenario ) {
+				/**
+				 * Init actions for correct migrating
+				 *
+				 * Later should be deprecated
+				 */
+				$scenario->init_request();
+				$scenario->init_actions();
 
-		/** set to $this->gateways_meta */
-		$this->set_form_gateways_meta();
+				/** set to $this->gateways_meta */
+				$this->set_form_gateways_meta();
 
-		$scenario->on_catch();
+				$scenario->on_catch();
+			}
+		);
 	}
 
 	// statuses from scenario

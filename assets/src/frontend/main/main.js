@@ -43,6 +43,7 @@ import observeComment from './html.macro/observeComment';
 import observeMacroAttr from './html.macro/observeMacroAttr';
 import RequiredRestriction from './reporting/restrictions/RequiredRestriction';
 import { resetSignalRegistry } from './signals/functions';
+import { setPostContext, refreshPostContext } from './submit/postContext';
 
 function resetRuntimeRegistries() {
 	resetInputHtmlAttrsRegistry();
@@ -93,6 +94,8 @@ window.JetFormBuilderFunctions = {
 	getScrollParent,
 	isUA,
 	resetRuntimeRegistries,
+	setPostContext,
+	refreshPostContext,
 };
 
 document.addEventListener( 'DOMContentLoaded', applyUserAgents );

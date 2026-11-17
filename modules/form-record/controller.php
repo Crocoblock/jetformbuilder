@@ -12,6 +12,7 @@ use Jet_Form_Builder\Classes\Tools;
 use Jet_Form_Builder\Db_Queries\Exceptions\Sql_Exception;
 use Jet_Form_Builder\Dev_Mode\Logger;
 use Jet_Form_Builder\Live_Form;
+use Jet_Form_Builder\Classes\Security\Submitted_Post_Context;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -81,14 +82,22 @@ class Controller {
 	 * @throws Sql_Exception
 	 */
 	public function save_record(): int {
-		$args    = jet_form_builder()->form_handler->get_response_args();
+		$args   = jet_form_builder()->form_handler->get_response_args();
+		$source = Live_Form::instance()->post;
+
+		// Old cached page or rejected context: keep "submitted from" for a
+		// page the visitor could open anyway. Nothing is read from it.
+		if ( ! $source && '' !== jet_fb_handler()->get_post_context_rejection() ) {
+			$source = Submitted_Post_Context::public_post_from_url( jet_fb_handler()->refer );
+		}
+
 		$columns = array(
 			'form_id'           => jet_fb_handler()->get_form_id(),
 			'referrer'          => jet_fb_handler()->refer,
 			'submit_type'       => jet_form_builder()->form_handler->is_ajax() ? 'ajax' : 'reload',
 			'user_id'           => get_current_user_id(),
-			'from_content_id'   => Live_Form::instance()->post->ID ?? 0,
-			'from_content_type' => Live_Form::instance()->post->post_type ?? '', /* it can be replaced by CCT slug */
+			'from_content_id'   => $source->ID ?? 0,
+			'from_content_type' => $source->post_type ?? '', /* it can be replaced by CCT slug */
 			'status'            => $args['status'] ?? '',
 		);
 

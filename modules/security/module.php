@@ -40,6 +40,11 @@ class Module implements
 	 */
 	private $restricted_preset_notice;
 
+	/**
+	 * @var Post_Context_Cache_Notice
+	 */
+	private $post_context_cache_notice;
+
 	public function rep_item_id() {
 		return 'security';
 	}
@@ -70,11 +75,18 @@ class Module implements
 	public function init_hooks() {
 		$this->restricted_preset_notice = new Restricted_Preset_Notice();
 		$this->restricted_preset_notice->init_hooks();
+
+		$this->post_context_cache_notice = new Post_Context_Cache_Notice();
+		$this->post_context_cache_notice->init_hooks();
 	}
 
 	public function remove_hooks() {
 		if ( $this->restricted_preset_notice ) {
 			$this->restricted_preset_notice->remove_hooks();
+		}
+
+		if ( $this->post_context_cache_notice ) {
+			$this->post_context_cache_notice->remove_hooks();
 		}
 	}
 

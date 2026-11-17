@@ -11,6 +11,8 @@
 
 namespace Jet_Form_Builder\Generators;
 
+use Jet_Form_Builder\Live_Form;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -464,17 +466,7 @@ class Get_Related_Posts extends Base_V2 {
 	 * @return int
 	 */
 	private function get_current_post_id(): int {
-		global $post;
-
-		if ( ! empty( $post->ID ) ) {
-			return absint( $post->ID );
-		}
-
-		if ( wp_doing_ajax() ) {
-			return absint( url_to_postid( wp_get_referer() ) );
-		}
-
-		return 0;
+		return absint( Live_Form::instance()->post->ID ?? 0 );
 	}
 
 	/**

@@ -2,20 +2,25 @@ import BaseAction from '../abstract/BaseAction';
 import { useSelect } from '@wordpress/data';
 import { STORE_NAME } from '../store';
 
-function useActionErrors( action ) {
+function useActionErrors( action, includeEditorErrors = false ) {
 	action = new BaseAction( action );
 
-	const validators = useSelect( select => {
+	const { validators, editorFieldErrors } = useSelect( select => {
 			const actionType = select( STORE_NAME ).getAction(
 				action.type,
 			);
 
-			return actionType?.validators ? actionType.validators : [];
+			return {
+				validators: actionType?.validators ?? [],
+				editorFieldErrors: includeEditorErrors
+					? select( STORE_NAME ).getEditorFieldErrors()
+					: undefined,
+			};
 		},
-		[ action.type ],
+		[ action.type, includeEditorErrors ],
 	);
 
-	const errors = [];
+	const errors = Object.values( editorFieldErrors ?? {} );
 
 	for ( const validator of validators ) {
 		const error = validator( { settings: action.selfSettings } );

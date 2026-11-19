@@ -60,7 +60,7 @@ function InsertPostRender( props ) {
 		      label,
 	      } = props;
 
-	const formFields = convertListToFieldsMap( useFields() );
+	const formFields = useFields();
 
 	const [ properties, setProperties ] = useState( () => {
 		const id = getActionModifierId( settings );
@@ -151,7 +151,7 @@ function InsertPostRender( props ) {
 			<WideLine/>
 			<ActionFieldsMap
 				label={ label( 'fields_map' ) }
-				fields={ formFields }
+				fields={ convertListToFieldsMap( formFields ) }
 			>
 				<WrapperRequiredControl>
 					<DynamicPropertySelect
@@ -163,7 +163,10 @@ function InsertPostRender( props ) {
 							: 'meta_input'
 						) }
 					>
-						<PostPropertySelect/>
+						<PostPropertySelect
+							metaKeyOptions={ formFields }
+							reservedKeys={ source.reservedKeys?.[ getActionModifierId( settings ) ] ?? [] }
+						/>
 					</DynamicPropertySelect>
 				</WrapperRequiredControl>
 			</ActionFieldsMap>

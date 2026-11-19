@@ -93,6 +93,10 @@ export function getMetaIndex( state ) {
 	return state.meta?.index;
 }
 
+export function getEditorFieldErrors( state ) {
+	return state.meta?.editorFieldErrors;
+}
+
 export function getErrorVisibility( state ) {
 	return state.meta?.errorsShow;
 }

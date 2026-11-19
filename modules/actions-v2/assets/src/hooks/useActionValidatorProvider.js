@@ -24,6 +24,7 @@ function useActionValidatorProvider( { isSupported } ) {
 		)
 		? currentAction
 		: { type: false },
+		isShowLocalError || isShowErrors,
 	);
 
 	const hasSupportedError = errors.some( isSupported );

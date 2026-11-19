@@ -1,7 +1,7 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { Button, Flex } from '@wordpress/components';
-import { IconText, StickyModalActions } from 'jet-form-builder-components';
+import { IconText, ModalFooterStyle, StickyModalActions } from 'jet-form-builder-components';
 import { useActionErrors } from 'jet-form-builder-actions';
 /* eslint-disable import/no-extraneous-dependencies */
 import { Icon } from '@wordpress/icons';
@@ -57,7 +57,8 @@ function EditSettingsModal() {
 		[ currentAction.type ],
 	);
 
-	const errors = useActionErrors( isSettingsModal ? currentAction : {} );
+	const errors = useActionErrors( isSettingsModal ? currentAction : {}, isSettingsModal );
+	const hasBlockingErrors = errors.some( error => error.blocking );
 
 	if ( !isSettingsModal ) {
 		return null;
@@ -72,11 +73,17 @@ function EditSettingsModal() {
 	);
 
 	return <ActionModal
+		className={ ModalFooterStyle }
 		size="large"
 		__experimentalHideHeader
 		onRequestClose={ clearCurrent }
 		onCancelClick={ clearCurrent }
 		onUpdateClick={ () => {
+			if ( hasBlockingErrors ) {
+				editMeta( { errorsShow: true } );
+				return;
+			}
+
 			updateAction( currentAction );
 			clearCurrent();
 		} }
@@ -115,6 +122,7 @@ function EditSettingsModal() {
 				>
 					<Button
 						isPrimary
+						isDestructive={ showErrors && hasBlockingErrors }
 						onClick={ () => {
 							if ( !errors?.length ) {
 								updateClick();
@@ -139,7 +147,7 @@ function EditSettingsModal() {
 						) }
 					</IconText> }
 				</Flex>
-				{ showErrors && <Button
+				{ showErrors && !hasBlockingErrors && <Button
 					variant="tertiary"
 					onClick={ updateClick }
 				>

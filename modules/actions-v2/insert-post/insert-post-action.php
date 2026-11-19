@@ -7,6 +7,7 @@ use JFB_Modules\Actions_V2\Insert_Post\Properties\Abstract_Post_Modifier;
 use JFB_Modules\Actions_V2\Insert_Post\Properties\Post_Modifier;
 use Jet_Form_Builder\Actions\Types\Base;
 use Jet_Form_Builder\Classes\Arrayable\Array_Tools;
+use Jet_Form_Builder\Classes\Arrayable\Collection_Item_Interface;
 use Jet_Form_Builder\Classes\Tools;
 
 // If this file is called directly, abort.
@@ -104,12 +105,24 @@ class Insert_Post_Action extends Base {
 	 * @return [type] [description]
 	 */
 	public function action_data() {
-		$properties = array();
-		$modifiers  = $this->get_modifiers();
+		$properties    = array();
+		$modifiers     = $this->get_modifiers();
+		$reserved_keys = array();
 
 		foreach ( $modifiers as $modifier ) {
-			$properties[ $modifier->get_id() ] = Tools::with_placeholder(
-				Array_Tools::to_array( $modifier->properties->all() )
+			$id                  = $modifier->get_id();
+			$modifier_properties = $modifier->properties->all();
+
+			$reserved_keys[ $id ] = array();
+
+			foreach ( $modifier_properties as $property ) {
+				if ( $property instanceof Collection_Item_Interface ) {
+					$reserved_keys[ $id ][] = $property->get_id();
+				}
+			}
+
+			$properties[ $id ] = Tools::with_placeholder(
+				Array_Tools::to_array( $modifier_properties )
 			);
 		}
 
@@ -118,6 +131,7 @@ class Insert_Post_Action extends Base {
 			'taxonomies'   => Tools::get_taxonomies_for_modify(),
 			'postStatuses' => $this->get_post_statuses_for_options(),
 			'properties'   => $properties,
+			'reservedKeys' => $reserved_keys,
 		);
 	}
 

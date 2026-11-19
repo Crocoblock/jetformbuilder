@@ -34,6 +34,20 @@ export function editMeta( item ) {
 	};
 }
 
+export function setEditorFieldError( property, error ) {
+	return ( { select, dispatch } ) => {
+		const editorFieldErrors = { ...select.getEditorFieldErrors() };
+
+		if ( error ) {
+			editorFieldErrors[ property ] = error;
+		} else {
+			delete editorFieldErrors[ property ];
+		}
+
+		dispatch.editMeta( { editorFieldErrors } );
+	};
+}
+
 export function clearCurrent() {
 	return { type: CLEAR_CURRENT };
 }

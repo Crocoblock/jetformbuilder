@@ -28,14 +28,17 @@ ReactiveVar.prototype = {
 			return true;
 		}
 
-		this.signals.push( {
+		const subscription = {
 			signal: callable,
 			trace: new Error().stack,
-		} );
+		};
+		this.signals.push( subscription );
 
-		const index = this.signals.length - 1;
+		return () => {
+			const index = this.signals.indexOf( subscription );
 
-		return () => this.signals.splice( index, 1 );
+			return index < 0 ? [] : this.signals.splice( index, 1 );
+		};
 	},
 	sanitize ( callable ) {
 		if ( 'function' !== typeof callable ) {

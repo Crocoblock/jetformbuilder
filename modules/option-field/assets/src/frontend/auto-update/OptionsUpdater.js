@@ -311,6 +311,16 @@ class OptionsUpdater {
 			}
 		}
 
+		// An empty group has no radio input to re-register. Clear the current
+		// RadioData through its live node collection so its subscribers update.
+		if ( 'radio' === fieldType && ! options.length && ! customOptionRow ) {
+			const input = containerElement.jfbSync;
+			if ( 'radio' === input?.inputType ) {
+				input.setValue();
+			}
+			return;
+		}
+
 		const reInited = this.reInitField( containerElement, formNode );
 
 		if ( ! reInited ) {

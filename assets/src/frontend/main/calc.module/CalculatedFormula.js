@@ -580,6 +580,7 @@ function CalculatedFormula(
 	this.parts        = [];
 	this.related      = [];
 	this.relatedAttrs = [];
+	this.referencedFields = new Set();
 	this.regexp       = /%([\w\-].*?\S?)%/g;
 	this.watchers     = [];
 
@@ -647,6 +648,17 @@ CalculatedFormula.prototype = {
 		value.forEach( item => {
 			this.observeItem( item );
 		} );
+	},
+	rebindField( fieldName, formula ) {
+		if ( ! this.referencedFields.has( fieldName ) ) {
+			return;
+		}
+
+		this.clearWatchers();
+		this.parts = [];
+		this.referencedFields.clear();
+		this.observe( formula );
+		this.setResult();
 	},
 	/**
 	 * @private
@@ -783,11 +795,14 @@ CalculatedFormula.prototype = {
 
 		if (name.includes('::')) {
 			const [possibleFieldName, ...possibleParams] = name.split('::');
+			this.referencedFields.add( possibleFieldName );
 			if (this.root.getInput(possibleFieldName)) {
 				fieldName = possibleFieldName;
 				params = possibleParams;
 			}
 		}
+
+		this.referencedFields.add( fieldName );
 
 		/**
 		 * @see   https://github.com/Crocoblock/issues-tracker/issues/13730

@@ -8,6 +8,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 ## ChangeLog
 
+## 3.6.8.3
+* SECURITY: Read field settings only from markup inside the field's own form
+
 ## 3.6.8.2
 * SECURITY: Prevent server-side form values from reading posts the visitor cannot access
 * SECURITY: Run confirmed and paid submissions as the original submitter, not as the user who opens the link

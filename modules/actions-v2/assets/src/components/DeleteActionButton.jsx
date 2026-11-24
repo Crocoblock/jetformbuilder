@@ -28,6 +28,7 @@ function DeleteActionButton() {
 			icon={ trash }
 			label={ __( 'Delete action', 'jet-form-builder' ) }
 			tooltipPosition="top"
+			aria-expanded={ showPopover }
 			onClick={ () => setShowPopover( prev => !prev ) }
 		/>
 		{ showPopover && <PopoverStandard

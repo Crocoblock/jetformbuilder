@@ -36,7 +36,7 @@ const ActionCardBody = styled( CardBody )`
 	align-items: center;
 	gap: 4px;
 
-	&:hover:not([data-title-editing="true"]) {
+	&:is(:hover, :has(${ FlexActionButtons } > [aria-expanded="true"])):not([data-title-editing="true"]) {
 		${ FlexActionButtons } {
 			display: flex;
 		}

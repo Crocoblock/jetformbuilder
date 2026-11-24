@@ -1,4 +1,4 @@
-import { isCalculated } from './functions';
+import CalculatedData from './input';
 
 const {
 	      BaseSignal,
@@ -10,8 +10,8 @@ const {
 function SignalCalculated() {
 	BaseSignal.call( this );
 
-	this.isSupported = function ( node ) {
-		return isCalculated( node );
+	this.isSupported = function ( node, input ) {
+		return input instanceof CalculatedData && input.nodes[ 0 ] === node;
 	};
 
 	this.baseSignal = function () {

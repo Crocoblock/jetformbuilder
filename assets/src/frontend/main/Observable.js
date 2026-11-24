@@ -1,4 +1,5 @@
 import { createInput, populateInputs } from './inputs/functions';
+import findFieldWrapper from './inputs/findFieldWrapper';
 import FormSubmit from './submit/FormSubmit';
 import queryByAttrValue from './html.macro/queryByAttrValue';
 import iterateJfbComments from './html.macro/iterateJfbComments';
@@ -212,9 +213,11 @@ Observable.prototype = {
 		// prevent saving inputs from preset repeater items in root object
 		// those inputs would saved in ObservableRow object
 
-		if ( !this.parent &&
-			node.parentElement.closest( '.jet-form-builder-repeater' )
-		) {
+		if ( !this.parent && findFieldWrapper(
+			node.parentElement,
+			'.jet-form-builder-repeater',
+			this.rootNode,
+		) ) {
 			return;
 		}
 

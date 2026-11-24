@@ -15,6 +15,7 @@ import ServerSideCallback from './restrictions/ServerSideCallback';
 import MustEqual from './restrictions/MustEqual';
 import TooEarlyTimestamp from './restrictions/TooEarlyTimestamp';
 import TooLateTimestamp from './restrictions/TooLateTimestamp';
+import findFieldWrapper from '../main/inputs/findFieldWrapper';
 
 const {
 	      applyFilters,
@@ -93,17 +94,19 @@ function getPreparedRules( rules, reporting ) {
 }
 
 /**
- * @param node {HTMLElement}
+ * @param node  {HTMLElement}
+ * @param input {InputData}
  */
-function getWrapper( node ) {
-	return node.closest( '.jet-form-builder-row' );
+function getWrapper( node, input ) {
+	return findFieldWrapper( node, '.jet-form-builder-row', input.root?.rootNode );
 }
 
 /**
- * @param node {HTMLElement}
+ * @param node  {HTMLElement}
+ * @param input {InputData}
  */
-function getNodeValidationType( node ) {
-	const wrapper                 = getWrapper( node );
+function getNodeValidationType( node, input ) {
+	const wrapper                 = getWrapper( node, input );
 	const { validationType = '' } = wrapper?.dataset ?? {};
 
 	return validationType;
@@ -125,8 +128,8 @@ function getInheritValidationType( input ) {
 	return type;
 }
 
-function getValidationMessages( node ) {
-	const wrapper                       = getWrapper( node );
+function getValidationMessages( node, input ) {
+	const wrapper                       = getWrapper( node, input );
 	const { validationMessages = '{}' } = wrapper?.dataset ?? {};
 
 	return JSON.parse( validationMessages );

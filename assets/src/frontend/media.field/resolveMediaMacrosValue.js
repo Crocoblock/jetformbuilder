@@ -1,3 +1,5 @@
+import findFieldWrapper from '../main/inputs/findFieldWrapper';
+
 function escapeHtml( value ) {
 	return String( value ?? '' )
 		.replaceAll( '&', '&amp;' )
@@ -14,12 +16,22 @@ function isSafeLinkUrl( url ) {
 	return ! /^(javascript|vbscript|data):/i.test( clean );
 }
 
-function isMediaField( fieldNode ) {
-	if ( ! fieldNode ) {
-		return false;
-	}
+/**
+ * Media field row of the field, only inside the field's own form.
+ *
+ * @param  fieldNode {Element}
+ * @return {Element|null}
+ */
+function getMediaWrapper( fieldNode ) {
+	return findFieldWrapper(
+		fieldNode,
+		'.field-type-media-field',
+		fieldNode?.closest?.( 'form.jet-form-builder' ),
+	);
+}
 
-	return !! fieldNode.closest( '.field-type-media-field' );
+function isMediaField( fieldNode ) {
+	return !! getMediaWrapper( fieldNode );
 }
 
 function renderImageItem( url, name = '' ) {
@@ -116,7 +128,7 @@ function wrapItems( items ) {
 }
 
 function collectMediaFromDom( fieldNode ) {
-	const wrapper = fieldNode.closest( '.field-type-media-field' );
+	const wrapper = getMediaWrapper( fieldNode );
 
 	if ( ! wrapper ) {
 		return '';
@@ -159,7 +171,7 @@ function collectMediaFromDom( fieldNode ) {
 }
 
 function getObservedContainer( fieldNode ) {
-	const wrapper = fieldNode.closest( '.field-type-media-field' );
+	const wrapper = getMediaWrapper( fieldNode );
 
 	if ( ! wrapper ) {
 		return null;
@@ -187,7 +199,7 @@ function bindRemoveHandler( fieldNode ) {
 		return;
 	}
 
-	const wrapper = fieldNode.closest( '.field-type-media-field' );
+	const wrapper = getMediaWrapper( fieldNode );
 
 	if ( ! wrapper ) {
 		return;

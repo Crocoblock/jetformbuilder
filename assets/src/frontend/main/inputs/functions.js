@@ -41,7 +41,7 @@ function createInput( node, observable ) {
 	for ( const dataType of getPreparedDataTypes() ) {
 		const current = new dataType();
 
-		if ( !current.isSupported( node ) ) {
+		if ( !current.isSupported( node, observable ) ) {
 			continue;
 		}
 		current.setRoot( observable );

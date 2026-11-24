@@ -1,14 +1,27 @@
-function getCalculatedWrapper( node ) {
-	return node.closest( '.jet-form-builder__calculated-field' );
+import findFieldWrapper from '../main/inputs/findFieldWrapper';
+
+function getLegacyScope( node ) {
+	const form = node.closest( 'form' );
+
+	if ( !form?.matches( '.jet-form-builder' ) ) {
+		return null;
+	}
+
+	return findFieldWrapper( node, '.jet-form-builder-repeater__row', form ) ?? form;
 }
 
-/**
- * @param  node {HTMLElement}
- * @return {boolean}
- */
-function isCalculated( node ) {
-	return !!(
-		getCalculatedWrapper( node )?.dataset?.formula?.length ?? ''
+function getCalculatedWrapper( node, observable ) {
+	if ( !node.matches( 'input[type="hidden"].jet-form-builder__calculated-field-input' ) ) {
+		return null;
+	}
+
+	// Cached versions of the input registry pass only the node to isSupported.
+	const root = undefined === observable ? getLegacyScope( node ) : observable?.rootNode;
+
+	return findFieldWrapper(
+		node.parentElement,
+		'.jet-form-builder__calculated-field',
+		root,
 	);
 }
 
@@ -135,4 +148,4 @@ function convertMillisToDateString( millisInput, format = 'YYYY-MM-DD' ) {
 	return formatted;
 }
 
-export { isCalculated, getCalculatedWrapper, convertMillisToDateString };
+export { getCalculatedWrapper, convertMillisToDateString };

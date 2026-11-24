@@ -53,7 +53,7 @@ AdvancedReporting.prototype.setRestrictions = function () {
 };
 
 AdvancedReporting.prototype.isSupported = function ( node, input ) {
-	this.type = getNodeValidationType( node );
+	this.type = getNodeValidationType( node, input );
 
 	const inherit = 'inherit' === this.type
 	                ? getInheritValidationType( input )
@@ -105,7 +105,7 @@ AdvancedReporting.prototype.reportRaw = function ( validationErrors ) {
 	this.insertError( message );
 };
 AdvancedReporting.prototype.setInput = function ( input ) {
-	this.messages = getValidationMessages( input.nodes[ 0 ] );
+	this.messages = getValidationMessages( input.nodes[ 0 ], input );
 
 	ReportingInterface.prototype.setInput.call( this, input );
 };
@@ -138,7 +138,7 @@ AdvancedReporting.prototype.observeAttrs = function () {
 };
 AdvancedReporting.prototype.clearReport = function () {
 	const inner = () => {
-		const node = getWrapper( this.getNode() );
+		const node = getWrapper( this.getNode(), this.input );
 
 		if ( !node ) {
 			return;
@@ -159,7 +159,12 @@ AdvancedReporting.prototype.clearReport = function () {
 };
 AdvancedReporting.prototype.insertError = function ( message ) {
 	const inner = () => {
-		const node  = getWrapper( this.getNode() );
+		const node = getWrapper( this.getNode(), this.input );
+
+		if ( !node ) {
+			return;
+		}
+
 		const error = this.createError( node, message );
 
 		node.classList.add( 'field-has-error' );
@@ -202,11 +207,12 @@ AdvancedReporting.prototype.createError = function (
 };
 
 AdvancedReporting.prototype.makeInvalid = function () {
-	const wrapper   = getWrapper( this.getNode() );
-	const errorNode = getErrorNode( wrapper );
+	const node      = this.getNode();
+	const wrapper   = getWrapper( node, this.input );
+	const errorNode = wrapper ? getErrorNode( wrapper ) : null;
 
-	this.getNode().setAttribute( 'aria-invalid', 'true' );
-	this.getNode().setAttribute(
+	node.setAttribute( 'aria-invalid', 'true' );
+	node.setAttribute(
 		'aria-describedby',
 		errorNode?.id ?? false,
 	);

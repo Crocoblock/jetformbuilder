@@ -1,6 +1,7 @@
 import ValueItem from './ValueItem';
 import MultipleValueItem from './MultipleValueItem';
 import ReactiveValue from './ReactiveValue';
+import findFieldWrapper from '../main/inputs/findFieldWrapper';
 
 const { applyFilters } = JetPlugins.hooks;
 
@@ -47,7 +48,7 @@ function createValues( json, input ) {
 
 function parseInput( input ) {
 	const [ node ] = input.nodes;
-	const wrapper  = node.closest( '.jet-form-builder-row' );
+	const wrapper  = findFieldWrapper( node, '.jet-form-builder-row', input.root?.rootNode );
 
 	if ( wrapper && wrapper.dataset.hasOwnProperty( 'value' ) ) {
 		createValues( wrapper.dataset.value, input );

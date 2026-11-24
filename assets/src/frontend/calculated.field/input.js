@@ -1,4 +1,4 @@
-import { getCalculatedWrapper, isCalculated, convertMillisToDateString } from './functions';
+import { getCalculatedWrapper, convertMillisToDateString } from './functions';
 
 const {
 	      InputData,
@@ -25,8 +25,8 @@ function CalculatedData() {
 	this.visibleValNode = null;
 	this.valueTypeProp  = 'number';
 
-	this.isSupported = function ( node ) {
-		return isCalculated( node );
+	this.isSupported = function ( node, observable ) {
+		return Boolean( getCalculatedWrapper( node, observable )?.dataset.formula );
 	};
 	this.setValue    = function () {
 		this.calculatedFormula?.clearWatchers();
@@ -110,7 +110,7 @@ function CalculatedData() {
 			      valueType,
 			      sepThousands,
 			      dateFormat,
-		      } = getCalculatedWrapper( node ).dataset;
+		      } = getCalculatedWrapper( node, this.root ).dataset;
 
 		this.formula        = formula;
 		this.precision      = +precision;

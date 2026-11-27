@@ -3087,9 +3087,9 @@ class Form extends Widget_Base implements Widget_Base_It {
 		$this->add_responsive_control(
 			'booking_form_submit_alignment',
 			array(
-				'label'     => esc_html__( 'Alignment', 'jet-form-builder' ),
-				'type'      => Controls_Manager::CHOOSE,
-				'options'   => array(
+				'label'                => esc_html__( 'Alignment', 'jet-form-builder' ),
+				'type'                 => Controls_Manager::CHOOSE,
+				'options'              => array(
 					'flex-start' => array(
 						'title' => esc_html__( 'Start', 'jet-form-builder' ),
 						'icon'  => ! is_rtl() ? 'eicon-h-align-left' : 'eicon-h-align-right',
@@ -3107,22 +3107,15 @@ class Form extends Widget_Base implements Widget_Base_It {
 						'icon'  => 'eicon-h-align-stretch',
 					),
 				),
-				'selectors' => array(
-					$this->selector( '__submit-wrap' ) => 'justify-content: {{VALUE}}; align-items: {{VALUE}};',
+				'selectors_dictionary' => array(
+					'flex-start' => 'justify-content: flex-start; align-items: flex-start; --jfb-submit-grow: 0;',
+					'center'     => 'justify-content: center; align-items: center; --jfb-submit-grow: 0;',
+					'flex-end'   => 'justify-content: flex-end; align-items: flex-end; --jfb-submit-grow: 0;',
+					'stretch'    => 'justify-content: stretch; align-items: stretch; --jfb-submit-grow: 1;',
 				),
-			)
-		);
-
-		$this->add_control(
-			'booking_form_submit_alignment_hidden',
-			array(
-				'type'      => Controls_Manager::HIDDEN,
-				'default'   => 'style',
-				'selectors' => array(
-					$this->selector( '__submit-wrap > .%s__submit' ) => 'width: 100%',
-				),
-				'condition' => array(
-					'booking_form_submit_alignment' => 'stretch',
+				'selectors'            => array(
+					$this->selector( '__submit-wrap' )              => '{{VALUE}}',
+					$this->selector( '__submit-wrap > .%s__submit' ) => 'flex-grow: var(--jfb-submit-grow);',
 				),
 			)
 		);
